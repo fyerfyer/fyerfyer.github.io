@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(3.5\)&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;(\(Interpreters\;for\;Languages\;with\;Abstraction\)) &#x2003;&#x2003;&#x5148;&#x524D;Calcualtor&#x7684;&#x5B9E;&#x73B0;&#x5E76;&#x672A;&#x7ED9;&#x51FA;&#x5B9A;&#x4E49;&#x65B0;&#x64CD;&#x4F5C;&#x3001;&#x7ED9;&#x53D8;&#x91CF;&#x547D;&#x540D;&#x3001;&#x8868;&#x8FBE;&#x8BA1;&#x7B97;&#x7684;&#x4E00;&#x822C;&#x65B9;&#x6CD5;&#x7B49;&#x7684;&#x5B9E;&#x73B0;&#x3002;&#x4E0B;&#x9762;&#x7ED9;&#x51FA;&#x63CF;&#x8FF0;&#x6027;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;&#xFF1A; 1.&#x7ED3;&#x6784; &#x2003;&#x2003;&#x4E00;&#x4E2A;\(scheme\)&#x89E3;&#x91CA;&#x5668;&#x548C;&#x5148;&#x524D;&#x7684;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;&#x5668;&#x6709;&#x5F88;&#x591A;&#x76F8;&#x4F3C;&#x7684;&#x7ED3;&#x6784;&#xFF1A;  &#x5206;&#x6790;&#x5668;&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;(\(evalua">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3.5.&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(3.5\)&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;(\(Interpreters\;for\;Languages\;with\;Abstraction\)) &#x2003;&#x2003;&#x5148;&#x524D;Calcualtor&#x7684;&#x5B9E;&#x73B0;&#x5E76;&#x672A;&#x7ED9;&#x51FA;&#x5B9A;&#x4E49;&#x65B0;&#x64CD;&#x4F5C;&#x3001;&#x7ED9;&#x53D8;&#x91CF;&#x547D;&#x540D;&#x3001;&#x8868;&#x8FBE;&#x8BA1;&#x7B97;&#x7684;&#x4E00;&#x822C;&#x65B9;&#x6CD5;&#x7B49;&#x7684;&#x5B9E;&#x73B0;&#x3002;&#x4E0B;&#x9762;&#x7ED9;&#x51FA;&#x63CF;&#x8FF0;&#x6027;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;&#xFF1A; 1.&#x7ED3;&#x6784; &#x2003;&#x2003;&#x4E00;&#x4E2A;\(scheme\)&#x89E3;&#x91CA;&#x5668;&#x548C;&#x5148;&#x524D;&#x7684;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;&#x5668;&#x6709;&#x5F88;&#x591A;&#x76F8;&#x4F3C;&#x7684;&#x7ED3;&#x6784;&#xFF1A;  &#x5206;&#x6790;&#x5668;&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;(\(evalua">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/image-3.png">
+<meta property="article:published_time" content="2024-05-31T09:48:59.000Z">
+<meta property="article:modified_time" content="2024-06-02T07:42:33.650Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/image-3.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/","path":"2024/05/31/3.5.包含抽象的语言的解释器/","title":"3.5.包含抽象的语言的解释器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3.5.&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668; | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(3.5\)&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;(\(Interpreters\;for\;Languages\;with\;Abstraction\))</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.&#x7ED3;&#x6784;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)&#x89E3;&#x6790;(\(Parsing\))</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)&#x8BA1;&#x7B97;(\(evaluation\))</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(c.\)&#x8FC7;&#x7A0B;&#x8C03;&#x7528;(\(Procedure\;application\))</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(d.\)&#x9012;&#x5F52;&#x8C03;&#x7528;&#x4E0E;&#x8BA1;&#x7B97;(\(Eval/apply\;recursion\))</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.&#x73AF;&#x5883;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)&#x57FA;&#x672C;&#x7ED3;&#x6784;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)binding&#x548C;define</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.&#x4F5C;&#x4E3A;&#x7A0B;&#x5E8F;&#x7684;&#x6570;&#x636E;</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3.5.&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668; | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3.5.&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 15:42:33" itemprop="dateModified" datetime="2024-06-02T15:42:33+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SICP-in-python/" itemprop="url" rel="index"><span itemprop="name">SICP in python</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SICP-in-python/Chapter-3-Interpreting-Computer-Programs/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Interpreting Computer Programs</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1><span id="35&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;interpretersforlanguageswithabstraction"><span class="math inline">\(3.5\)</span>&#x5305;&#x542B;&#x62BD;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;(<span class="math inline">\(Interpreters\;for\;Languages\;with\;Abstraction\)</span>)</span></h1>
+<p>&#x2003;&#x2003;&#x5148;&#x524D;<code>Calcualtor</code>&#x7684;&#x5B9E;&#x73B0;&#x5E76;&#x672A;&#x7ED9;&#x51FA;&#x5B9A;&#x4E49;&#x65B0;&#x64CD;&#x4F5C;&#x3001;&#x7ED9;&#x53D8;&#x91CF;&#x547D;&#x540D;&#x3001;&#x8868;&#x8FBE;&#x8BA1;&#x7B97;&#x7684;&#x4E00;&#x822C;&#x65B9;&#x6CD5;&#x7B49;&#x7684;&#x5B9E;&#x73B0;&#x3002;&#x4E0B;&#x9762;&#x7ED9;&#x51FA;&#x63CF;&#x8FF0;&#x6027;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<h3><span id="1&#x7ED3;&#x6784;">1.&#x7ED3;&#x6784;</span></h3>
+<p>&#x2003;&#x2003;&#x4E00;&#x4E2A;<span class="math inline">\(scheme\)</span>&#x89E3;&#x91CA;&#x5668;&#x548C;&#x5148;&#x524D;&#x7684;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;&#x5668;&#x6709;&#x5F88;&#x591A;&#x76F8;&#x4F3C;&#x7684;&#x7ED3;&#x6784;&#xFF1A;</p>
+<ul>
+<li><strong>&#x5206;&#x6790;&#x5668;</strong>&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x5668;&#x89E3;&#x91CA;(<span class="math inline">\(evaluator\;interpretation\)</span>)&#x6765;<strong>&#x4EA7;&#x751F;&#x4E00;&#x4E2A;&#x8868;&#x8FBE;&#x5F0F;</strong>&#x3002;</li>
+<li><strong>&#x8BA1;&#x7B97;&#x51FD;&#x6570;&#x4FA6;&#x6D4B;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x5F62;&#x5F0F;</strong>&#xFF1B;&#x5BF9;&#x4E8E;<strong>&#x8C03;&#x7528;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;&#x5B83;&#x4F1A;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7528;&#x4E8E;&#x5904;&#x7406;&#x67D0;&#x4E9B;&#x53C2;&#x6570;</strong>&#x3002;</li>
+</ul>
+<p>&#x2003;&#x2003;&#x4E24;&#x8005;&#x7684;&#x8BA1;&#x7B97;&#x5668;(<span class="math inline">\(evaluator\)</span>)&#x7684;&#x533A;&#x522B;&#x5B58;&#x5728;&#x4E8E;&#x7279;&#x6B8A;&#x7684;&#x5F62;&#x5F0F;(<span class="math inline">\(special\;form\)</span>)&#xFF0C;&#x7528;&#x6237;&#x5B9A;&#x4E49;&#x51FD;&#x6570;(<span class="math inline">\(user-defined\;function\)</span>)&#x548C;&#x5B9E;&#x73B0;&#x8BA1;&#x7B97;&#x6240;&#x9700;&#x7684;&#x73AF;&#x5883;&#x6A21;&#x578B;(<span class="math inline">\(the\;environment\;model\;of\;computation\)</span>)&#x3002;</p>
+<h4><span id="a&#x89E3;&#x6790;parsing">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&#x89E3;&#x6790;(<span class="math inline">\(Parsing\)</span>)</span></h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; read_line(&quot;(car &apos;(1 . 2))&quot;)</span><br><span class="line">Pair(&apos;car&apos;, Pair(Pair(&apos;quote&apos;, Pair(Pair(1, 2), nil)), nil))</span><br></pre></td></tr></table></figure>
+<h4><span id="b&#x8BA1;&#x7B97;evaluation">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>&#x8BA1;&#x7B97;(<span class="math inline">\(evaluation\)</span>)</span></h4>
+<p>&#x2003;&#x2003;<span class="math inline">\(Scheme\)</span>&#x6BCF;&#x6B21;&#x8BA1;&#x7B97;&#x4E00;&#x4E2A;&#x8868;&#x8FBE;&#x5F0F;&#x3002;&#x6BCF;&#x4E2A;<strong>&#x901A;&#x8FC7;<code>scheme_read</code>&#x8FD4;&#x56DE;&#x7684;&#x8868;&#x8FBE;&#x5F0F;</strong>&#x90FD;<strong>&#x4F20;&#x9012;&#x7ED9;<code>scheme_eval</code>&#x51FD;&#x6570;</strong>&#xFF0C;&#x5B83;&#x4F1A;&#x5728;&#x5F53;&#x524D;&#x73AF;&#x5883;<code>env</code>&#x4E2D;&#x8BA1;&#x7B97;&#x8868;&#x8FBE;&#x5F0F;<code>expr</code>&#x3002;</p>
+<p>&#x2003;&#x2003;<code>scheme_eval</code>&#x51FD;&#x6570;&#x4F1A;&#x8BA1;&#x7B97;<span class="math inline">\(Scheme\)</span>&#x4E2D;&#x7684;&#x4E0D;&#x540C;&#x8868;&#x8FBE;&#x5F0F;&#x7C7B;&#x578B;&#xFF1A;&#x521D;&#x59CB;&#x578B;(<span class="math inline">\(primitive\)</span>)&#xFF0C;&#x7279;&#x6B8A;&#x578B;(<span class="math inline">\(special\;form\)</span>)&#x548C;&#x8C03;&#x7528;&#x8868;&#x8FBE;&#x5F0F;(<span class="math inline">\(call\;expression\)</span>)&#x3002;&#x6BCF;&#x79CD;&#x5F62;&#x5F0F;&#x90FD;&#x6709;&#x5B83;&#x4EEC;&#x5BF9;&#x5E94;&#x7684;&#x8BA1;&#x7B97;&#x6CD5;&#x5219;&#xFF1A;
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">scheme_eval</span>(<span class="params">expr, env</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Evaluate Scheme expression expr in environment env.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> scheme_symbolp(expr):</span><br><span class="line">            <span class="keyword">return</span> env[expr]</span><br><span class="line">        <span class="keyword">elif</span> scheme_atomp(expr):</span><br><span class="line">            <span class="keyword">return</span> expr</span><br><span class="line">        first, rest = expr.first, expr.second</span><br><span class="line">        <span class="keyword">if</span> first == <span class="string">&quot;lambda&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> do_lambda_form(rest, env)</span><br><span class="line">        <span class="keyword">elif</span> first == <span class="string">&quot;define&quot;</span>:</span><br><span class="line">            do_define_form(rest, env)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            procedure = scheme_eval(first, env)</span><br><span class="line">            args = rest.<span class="built_in">map</span>(<span class="keyword">lambda</span> operand: scheme_eval(operand, env))</span><br><span class="line">            <span class="keyword">return</span> scheme_apply(procedure, args, env)</span><br></pre></td></tr></table></figure></p>
+<h4><span id="c&#x8FC7;&#x7A0B;&#x8C03;&#x7528;procedureapplication">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>&#x8FC7;&#x7A0B;&#x8C03;&#x7528;(<span class="math inline">\(Procedure\;application\)</span>)</span></h4>
+<p>&#x2003;&#x2003;&#x8FC7;&#x7A0B;&#x8C03;&#x7528;&#x901A;&#x8FC7;<code>scheme_apply</code>&#x5B9E;&#x73B0;&#x3002;&#x5B83;&#x6BD4;&#x8D77;&#x5148;&#x524D;&#x7684;<code>calc_apply</code>&#x66F4;&#x5177;&#x666E;&#x904D;&#x6027;&#x3002;&#x5B83;&#x63A5;&#x53D7;&#x4E24;&#x7C7B;&#x53C2;&#x6570;&#xFF1A;<code>PrimitiveProcedure</code>&#x6216;<code>LambdaProcedure</code>&#x3002;</p>
+<p>&#x2003;&#x2003;<code>PrimitiveProcedure</code>&#x662F;&#x5728;<span class="math inline">\(python\)</span>&#x4E2D;&#x5B9E;&#x73B0;&#x7684;&#xFF0C;&#x5B83;&#x6709;&#x4E00;&#x4E2A;<code>fn</code>&#x7684;&#x5B9E;&#x4F8B;&#x5C5E;&#x6027;(<span class="math inline">\(instance\;attribute\)</span>)&#xFF0C;<strong>&#x6BCF;&#x5F53;&#x8FC7;&#x7A0B;&#x88AB;&#x8C03;&#x7528;&#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x5C31;&#x88AB;&#x8C03;&#x7528;</strong>&#x3002;</p>
+<p>&#x2003;&#x2003;<code>LambdaProcedure</code>&#x662F;&#x5728;<span class="math inline">\(scheme\)</span>&#x4E2D;&#x5B9E;&#x73B0;&#x7684;&#x3002;&#x5B83;&#x6709;&#x4E00;&#x4E2A;<code>body</code>&#x5C5E;&#x6027;&#xFF0C;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;<span class="math inline">\(scheme\)</span>&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;<strong>&#x6BCF;&#x5F53;&#x8FC7;&#x7A0B;&#x88AB;&#x8C03;&#x7528;&#x5B83;&#x5C31;&#x88AB;&#x8C03;&#x7528;</strong>&#x3002;&#x4E3A;&#x4E86;&#x5C06;&#x8BE5;&#x8FC7;&#x7A0B;&#x7528;&#x4E8E;&#x4E00;&#x7CFB;&#x5217;&#x53C2;&#x6570;&#xFF0C;<code>body</code>&#x8868;&#x8FBE;&#x5F0F;<strong>&#x4F1A;&#x5728;&#x4E00;&#x4E2A;&#x65B0;&#x73AF;&#x5883;&#x91CC;&#x88AB;&#x8C03;&#x7528;</strong>&#x3002;&#x4E3A;&#x4E86;&#x642D;&#x5EFA;&#x73AF;&#x5883;&#xFF0C;<strong>&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x6846;&#x67B6;&#x88AB;&#x52A0;&#x5165;&#x8FDB;&#x73AF;&#x5883;&#x4E2D;&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x6846;&#x67B6;&#x4E2D;&#xFF0C;&#x8FC7;&#x7A0B;&#x7684;&#x5F62;&#x5F0F;&#x53C2;&#x6570;(<span class="math inline">\(formal\;parameters\)</span>)&#x4E0E;&#x53D8;&#x91CF;(<span class="math inline">\(argument\)</span>)&#x7ED1;&#x5B9A;</strong>&#x3002;<code>body</code><strong>&#x901A;&#x8FC7;<code>scheme_eval</code>&#x8BA1;&#x7B97;</strong>&#x3002;</p>
+<h4><span id="d&#x9012;&#x5F52;&#x8C03;&#x7528;&#x4E0E;&#x8BA1;&#x7B97;evalapplyrecursion">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>&#x9012;&#x5F52;&#x8C03;&#x7528;&#x4E0E;&#x8BA1;&#x7B97;(<span class="math inline">\(Eval/apply\;recursion\)</span>)</span></h4>
+<p>&#x2003;&#x2003;&#x5B9E;&#x73B0;&#x8BA1;&#x7B97;&#x8FC7;&#x7A0B;&#x7684;<code>scheme_eval</code>&#x548C;<code>scheme_apply</code>&#x662F;<strong>&#x76F8;&#x4E92;&#x9012;&#x5F52;</strong>&#x7684;(<span class="math inline">\(mutually\;recursive\)</span>)&#x3002;<strong>&#x6BCF;&#x5F53;&#x4E00;&#x4E2A;&#x8C03;&#x7528;&#x8868;&#x8FBE;&#x5F0F;&#x88AB;&#x8BA1;&#x7B97;&#xFF0C;&#x8BA1;&#x7B97;&#x51FD;&#x6570;&#x90FD;&#x9700;&#x8981;&#x88AB;&#x8C03;&#x7528;</strong>&#x3002;&#x800C;<strong>&#x5E94;&#x7528;&#x51FD;&#x6570;&#x4F7F;&#x7528;&#x8BA1;&#x7B97;&#x51FD;&#x6570;&#x5C06;&#x64CD;&#x4F5C;&#x5143;&#x8868;&#x8FBE;&#x5F0F;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;&#x5E76;&#x8BA1;&#x7B97;&#x7528;&#x6237;&#x5B9A;&#x4E49;&#x7684;&#x8FC7;&#x7A0B;&#x8FD9;&#x4E00;&#x90E8;&#x5206;(<span class="math inline">\(user-defined\;procedures\)</span>)</strong>&#x3002;&#x8FD9;&#x4E00;&#x76F8;&#x4E92;&#x9012;&#x5F52;&#x7684;&#x8FC7;&#x7A0B;&#x662F;&#x7531;&#x4E0B;&#x9762;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x51B3;&#x5B9A;&#x7684;&#xFF1A;&#x8BA1;&#x7B97;&#x51FD;&#x6570;&#x662F;&#x901A;&#x8FC7;(<span class="math inline">\(in\;terms\;of\)</span>)&#x5E94;&#x7528;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#x7684;&#xFF0C;&#x800C;&#x5E94;&#x7528;&#x51FD;&#x6570;&#x53C8;&#x662F;&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#x7684;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x9012;&#x5F52;&#x7684;&#x5FAA;&#x73AF;<strong>&#x4EE5;&#x8BED;&#x8A00;&#x539F;&#x8BED;(<span class="math inline">\(language\;primitive\)</span>)&#x7ED3;&#x675F;</strong>&#x3002;&#x8BA1;&#x7B97;&#x51FD;&#x6570;<strong>&#x6709;&#x4E00;&#x4E2A;&#x7528;&#x4E8E;&#x8BA1;&#x7B97;&#x57FA;&#x672C;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x57FA;&#x672C;&#x60C5;&#x51B5;</strong>&#x3002;&#x4E00;&#x4E9B;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;(<span class="math inline">\(special\;form\)</span>)&#x4E5F;&#x662F;&#x4E0D;&#x9700;&#x8981;&#x9012;&#x5F52;&#x8C03;&#x7528;&#x7684;&#x57FA;&#x672C;&#x60C5;&#x51B5;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x79CD;<strong>&#x5904;&#x7406;&#x8868;&#x8FBE;&#x5F0F;&#x5F62;&#x5F0F;(<span class="math inline">\(expression\;form\)</span>)</strong> &#x7684;<span class="math inline">\(eval\)</span>&#x51FD;&#x6570;&#x4E0E;<strong>&#x5904;&#x7406;&#x51FD;&#x6570;&#x53CA;&#x5176;&#x53C2;&#x6570;</strong>&#x7684;<span class="math inline">\(apply\)</span>&#x51FD;&#x6570;&#x76F8;&#x4E92;&#x9012;&#x5F52;&#x8C03;&#x7528;&#x7684;&#x7ED3;&#x6784;&#x7EC4;&#x6210;&#x4E86;&#x8BA1;&#x7B97;&#x8FC7;&#x7A0B;&#x7684;&#x6838;&#x5FC3;&#x3002;</p>
+<h3><span id="2&#x73AF;&#x5883;">2.&#x73AF;&#x5883;</span></h3>
+<h4><span id="a&#x57FA;&#x672C;&#x7ED3;&#x6784;">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&#x57FA;&#x672C;&#x7ED3;&#x6784;</span></h4>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;<code>Frame</code>&#x7C7B;&#x6765;&#x6784;&#x5EFA;&#x73AF;&#x5883;&#x3002;<strong>&#x6BCF;&#x4E2A;<code>Frame</code>&#x7684;&#x5B9E;&#x4F8B;&#x90FD;&#x4EE3;&#x8868;&#x4E00;&#x4E2A;&#x73AF;&#x5883;</strong>&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x5B9E;&#x4F8B;&#x4E2D;&#xFF0C;<strong>&#x6807;&#x8BB0;(<span class="math inline">\(symbol\)</span>)&#x4E0E;&#x503C;(<span class="math inline">\(value\)</span>)&#x76F8;&#x7ED1;&#x5B9A;</strong>&#x3002;</p>
+<p>&#x2003;&#x2003;<code>Frame</code>&#x5B9E;&#x4F8B;&#x7531;<strong>&#x4E00;&#x4E2A;<code>binding</code>&#x5B57;&#x5178;&#x548C;<code>parant</code>&#x6846;&#x67B6;</strong>&#x6784;&#x6210;&#x3002;&#x5BF9;&#x4E8E;<span class="math inline">\(Global\)</span>&#x6846;&#x67B6;&#xFF0C;<code>parent=None</code>&#x3002;</p>
+<h4><span id="bbinding&#x548C;define">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>binding</code>&#x548C;<code>define</code></span></h4>
+<p>&#x2003;&#x2003;<code>binding</code>&#x5E76;&#x4E0D;&#x662F;&#x76F4;&#x63A5;&#x8BBF;&#x95EE;&#x7684;&#xFF0C;&#x5B83;&#x901A;&#x8FC7;&#x4E24;&#x4E2A;<code>Frame</code>&#x65B9;&#x6CD5;&#x8BBF;&#x95EE;&#xFF1A;<code>lookup</code>&#x548C;<code>define</code>&#x3002;<code>lookup</code>&#x8FC7;&#x7A0B;&#x4F1A;&#x5728;<strong>&#x6211;&#x4EEC;&#x7684;&#x73AF;&#x5883;&#x6A21;&#x578B;&#x4E2D;&#x6267;&#x884C;<span class="math inline">\(lookup\)</span>&#x8FC7;&#x7A0B;</strong>&#x3002;&#x7136;&#x540E;<strong>&#x7B26;&#x53F7;&#x4E0E;&#x5F53;&#x524D;<code>frame</code>&#x7684;<code>binding</code>&#x76F8;&#x5339;&#x914D;</strong>&#x3002;&#x5982;&#x679C;&#x5B83;<strong>&#x627E;&#x5230;&#x4E86;&#xFF0C;&#x5B83;&#x76F8;&#x5173;&#x8054;&#x7684;&#x503C;&#x5C31;&#x88AB;&#x8FD4;&#x56DE;</strong>&#xFF1B;&#x5426;&#x5219;&#xFF0C;<code>lookup</code>&#x8FC7;&#x7A0B;&#x4F1A;<strong>&#x5728;<code>parent frame</code>&#x7EE7;&#x7EED;&#x8BE5;&#x8FC7;&#x7A0B;</strong>&#x3002;&#x800C;<code>define</code>&#x65B9;&#x6CD5;<strong>&#x5728;&#x5F53;&#x524D;<code>frame</code>&#x4E2D;&#x5C06;&#x6807;&#x8BB0;&#x4E0E;&#x503C;&#x76F8;&#x7ED1;&#x5B9A;</strong>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x8003;&#x8651;&#x4E0B;&#x9762;&#x7684;&#x7A0B;&#x5E8F;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(define (factorial n)</span><br><span class="line">  (if (= n 0) 1 (* n (factorial (- n 1)))))</span><br></pre></td></tr></table></figure> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(factorial 5)</span><br><span class="line">120</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x5B9A;&#x4E49;&#x8FD9;&#x6837;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x6709;&#x4EE5;&#x4E0B;&#x6B65;&#x9AA4;&#xFF1A;</p>
+<ol type="1">
+<li><strong>&#x68C0;&#x67E5;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x683C;&#x5F0F;(<span class="math inline">\(format\)</span>)</strong>&#xFF0C;&#x786E;&#x4FDD;<strong>&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x5B8C;&#x5907;&#x7684;<span class="math inline">\(Scheme\)</span>&#x5217;&#x8868;&#xFF0C;&#x81F3;&#x5C11;&#x6709;&#x4E24;&#x4E2A;&#x5143;&#x7D20;&#x4E0E;&#x5173;&#x952E;&#x5B57;<span class="math inline">\(define\)</span></strong>&#x3002;</li>
+<li><strong>&#x5206;&#x6790;&#x7B2C;&#x4E00;&#x4E2A;&#x5143;&#x7D20;</strong>&#x3002;&#x5728;&#x672C;&#x4F8B;&#x4E2D;&#xFF0C;&#x5BFB;&#x627E;&#x51FD;&#x6570;&#x540D;&#x79F0;<span class="math inline">\(factorial\)</span>&#x548C;&#x5F62;&#x5F0F;&#x53C2;&#x6570;<span class="math inline">\(list(n)\)</span>&#x3002;</li>
+<li><strong>&#x7528;&#x63D0;&#x4F9B;&#x7684;&#x5F62;&#x5F0F;&#x53C2;&#x6570;&#x521B;&#x9020;&#x4E00;&#x4E2A;<code>LambdaProcedure</code>&#xFF0C;<code>body</code>&#x548C;<code>parent</code>&#x73AF;&#x5883;</strong>&#x3002;</li>
+<li><strong>&#x5728;&#x5F53;&#x524D;&#x73AF;&#x5883;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;<code>frame</code>&#x4E2D;&#xFF0C;&#x5C06;<span class="math inline">\(factorial\)</span>&#x6807;&#x5FD7;&#x4E0E;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x7ED1;&#x5B9A;</strong>&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x7B2C;&#x4E8C;&#x4E2A;&#x8F93;&#x5165;&#x662F;&#x4E00;&#x4E2A;&#x8C03;&#x7528;&#x8868;&#x8FBE;&#x5F0F;&#x3002;&#x4F20;&#x7ED9;<code>scheme_apply</code>&#x7684;&#x8FC7;&#x7A0B;&#x662F;&#x4E0E;<span class="math inline">\(factorial\)</span>&#x76F8;&#x7ED1;&#x5B9A;&#x7684;<code>LambdaProcedure</code>&#x3002;<strong>&#x4E3A;&#x4E86;&#x5E94;&#x7528;&#x8FD9;&#x4E00;&#x8FC7;&#x7A0B;&#xFF0C;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x6846;&#x67B6;&#x521B;&#x5EFA;&#x4E86;&#xFF0C;&#x6269;&#x5C55;&#x4E86;&#x539F;&#x6765;&#x7684;&#x7236;&#x6846;&#x67B6;</strong>&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x6846;&#x67B6;&#x4E2D;&#xFF0C;&#x6807;&#x5FD7;<span class="math inline">\(n\)</span>&#x4E0E;&#x503C;<span class="math inline">\(5\)</span>&#x7ED1;&#x5B9A;&#x3002;&#x7136;&#x540E;&#xFF0C;<span class="math inline">\(factorial\)</span>&#x7684;<code>body</code>&#x90E8;&#x5206;&#x5728;&#x8FD9;&#x4E2A;&#x73AF;&#x5883;&#x4E2D;&#x88AB;&#x8BA1;&#x7B97;&#xFF0C;&#x5B83;&#x7684;&#x503C;&#x4E5F;&#x88AB;&#x8FD4;&#x56DE;&#x3002;</p>
+<h3><span id="3&#x4F5C;&#x4E3A;&#x7A0B;&#x5E8F;&#x7684;&#x6570;&#x636E;">3.&#x4F5C;&#x4E3A;&#x7A0B;&#x5E8F;&#x7684;&#x6570;&#x636E;</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4ECE;&#x6A21;&#x62DF;(<span class="math inline">\(analogy\)</span>)&#x7684;&#x89D2;&#x5EA6;&#x6765;&#x770B;&#x5F85;&#x7A0B;&#x5E8F;&#x3002;&#x5BF9;&#x7A0B;&#x5E8F;&#x542B;&#x4E49;&#x7684;&#x64CD;&#x4F5C;&#x89C2;&#x70B9;(<span class="math inline">\(optional\;view\)</span>)&#x8BA4;&#x4E3A;&#xFF1A;<strong>&#x7A0B;&#x5E8F;&#x662F;&#x5BF9;&#x4E00;&#x4E2A;&#x62BD;&#x8C61;&#x673A;&#x5668;&#x7684;&#x63CF;&#x8FF0;</strong>&#x3002;&#x4EE5;&#x5148;&#x524D;&#x7684;&#x51FD;&#x6570;&#x4E3A;&#x4F8B;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(define (factorial n)</span><br><span class="line">  (if (= n 0) 1 (* n (factorial (- n 1)))))</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x8FD9;&#x4E2A;&#x7A0B;&#x5E8F;&#x770B;&#x4F5C;&#x5BF9;&#x4E00;&#x4E2A;&#x673A;&#x5668;&#x7684;&#x63CF;&#x8FF0;&#xFF0C;&#x8FD9;&#x4E2A;&#x673A;&#x5668;&#x5305;&#x62EC;&#x51CF;&#x6CD5;&#x3001;&#x4E58;&#x6CD5;&#x3001;&#x76F8;&#x7B49;&#x6027;&#x6D4B;&#x8BD5;&#x3001;&#x53CC;&#x5411;&#x5F00;&#x5173;&#x548C;&#x53E6;&#x4E00;&#x4E2A;<span class="math inline">\(factorial\)</span>&#x673A;&#x5668;(&#x7531;&#x4E8E;&#x4E00;&#x4E2A;&#x673A;&#x5668;&#x5185;&#x90E8;&#x53EF;&#x4EE5;&#x5D4C;&#x5957;&#x53E6;&#x4E00;&#x4E2A;&#x673A;&#x5668;&#xFF0C;&#x8FD9;&#x4E2A;&#x673A;&#x5668;&#x662F;<strong>&#x65E0;&#x9650;&#x7684;</strong>)&#xFF1A;</p>
+<p><img src="/2024/05/31/3.5.%E5%8C%85%E5%90%AB%E6%8A%BD%E8%B1%A1%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/image-3.png"></p>
+<p>&#x2003;&#x2003;&#x76F8;&#x4F3C;&#x5730;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;<span class="math inline">\(Scheme\)</span>&#x89E3;&#x91CA;&#x5668;&#x89C6;&#x4E3A;&#x4E00;&#x4E2A;&#x7279;&#x522B;&#x7684;&#x673A;&#x5668;&#xFF0C;<strong>&#x5B83;&#x5C06;&#x4E00;&#x4E2A;&#x5BF9;&#x673A;&#x5668;&#x7684;&#x63CF;&#x8FF0;&#x4F5C;&#x4E3A;&#x8F93;&#x5165;&#x3002;&#x5BF9;&#x4E8E;&#x8FD9;&#x4E2A;&#x8F93;&#x5165;&#xFF0C;&#x89E3;&#x91CA;&#x5668;&#x914D;&#x7F6E;&#x597D;&#x81EA;&#x5DF1;&#x6765;&#x6A21;&#x62DF;&#x8FD9;&#x4E2A;&#x63CF;&#x8FF0;&#x7684;&#x673A;&#x5668;</strong>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4ECE;&#x8FD9;&#x4E2A;&#x89D2;&#x5EA6;&#xFF0C;&#x6211;&#x4EEC;&#x7684;<span class="math inline">\(Scheme\)</span>&#x89E3;&#x91CA;&#x5668;&#x662F;&#x4E00;&#x79CD;&#x5177;&#x6709;&#x666E;&#x904D;&#x6027;&#x7684;&#x673A;&#x5668;&#x3002;<strong>&#x5F53;&#x5176;&#x5B83;&#x673A;&#x5668;&#x5728;<span class="math inline">\(Scheme\)</span>&#x7A0B;&#x5E8F;&#x4E2D;&#x88AB;&#x63CF;&#x8FF0;&#x65F6;&#xFF0C;&#x89E3;&#x91CA;&#x5668;&#x4F1A;&#x6A21;&#x62DF;&#x8FD9;&#x4E9B;&#x673A;&#x5668;&#x3002;&#x5B83;&#x626E;&#x6F14;&#x7740;&#x88AB;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x64CD;&#x7EB5;&#x7684;&#x6570;&#x636E;&#x5BF9;&#x8C61;&#x548C;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x672C;&#x8EAB;&#x4E4B;&#x95F4;&#x7684;&#x6865;&#x6881;</strong>&#x3002;&#x5BF9;&#x4E8E;&#x7528;&#x6237;&#x7684;&#x8F93;&#x5165;&#xFF0C;&#x89E3;&#x91CA;&#x5668;&#x5C06;&#x5176;&#x89C6;&#x4E3A;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x53E5;&#x5B50;&#xFF0C;&#x5E76;&#x901A;&#x8FC7;&#x4E00;&#x7CFB;&#x5217;&#x5B8C;&#x5907;&#x89C4;&#x5219;&#x64CD;&#x4F5C;&#x5B83;&#x4EEC;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x8BA1;&#x7B97;&#x4F5C;&#x4E3A;&#x6267;&#x884C;&#x8FC7;&#x7A0B;&#x4E00;&#x90E8;&#x5206;&#x7684;&#x8868;&#x8FBE;&#x5F0F;&#x662F;&#x4E00;&#x4E2A;&#x6709;&#x6D3B;&#x529B;&#x7684;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x6240;&#x5177;&#x7684;&#x7279;&#x70B9;&#x3002;&#x5728;&#x7A0B;&#x5E8F;&#x7684;&#x6267;&#x884C;&#x8FC7;&#x7A0B;&#x4E2D;&#x521B;&#x5EFA;&#x5E76;&#x8BA1;&#x7B97;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x80FD;&#x529B;&#x662F;&#x4E00;&#x4E2A;&#x6709;&#x529B;&#x7684;&#x5DE5;&#x5177;&#x3002;</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/31/3.4.%E5%B8%A6%E6%9C%89%E7%BB%84%E5%90%88%E7%9A%84%E8%AF%AD%E8%A8%80%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8/" rel="next" title="3.4.&#x5E26;&#x6709;&#x7EC4;&#x5408;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668;">
+                  3.4.&#x5E26;&#x6709;&#x7EC4;&#x5408;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x89E3;&#x91CA;&#x5668; <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
