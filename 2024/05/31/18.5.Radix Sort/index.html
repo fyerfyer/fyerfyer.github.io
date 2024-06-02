@@ -22,27 +22,33 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(1.2.\)Boolean function construction 1.Basic method &#x2003;&#x2003;Our goal is to create a boolean function that fits in the given truth table. To achieve this, we can do the following steps:  Select the lin">
+    <meta name="description" content="\(18.6.\)Radix Sort 1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of \(\Theta(n\log n)\).However, what if we don&apos;t compare at">
 <meta property="og:type" content="article">
-<meta property="og:title" content="1.2.&#x5E03;&#x5C14;&#x51FD;&#x6570;&#x5408;&#x6210;">
-<meta property="og:url" content="https://fyerfyer.github.io.com/2024/05/31/1.2.%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/index.html">
+<meta property="og:title" content="18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F;">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(1.2.\)Boolean function construction 1.Basic method &#x2003;&#x2003;Our goal is to create a boolean function that fits in the given truth table. To achieve this, we can do the following steps:  Select the lin">
+<meta property="og:description" content="\(18.6.\)Radix Sort 1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of \(\Theta(n\log n)\).However, what if we don&apos;t compare at">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-9.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-10.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-11.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-12.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-13.png">
 <meta property="article:published_time" content="2024-05-31T09:48:59.000Z">
-<meta property="article:modified_time" content="2024-06-02T13:51:22.595Z">
+<meta property="article:modified_time" content="2024-06-02T14:02:34.585Z">
 <meta property="article:author" content="fyerfyer">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-9.png">
 
 
-<link rel="canonical" href="https://fyerfyer.github.io.com/2024/05/31/1.2.%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/">
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/05/31/1.2.%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/","path":"2024/05/31/1.2.布尔函数合成/","title":"1.2.布尔函数合成"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/","path":"2024/05/31/18.5.Radix Sort/","title":"18.6.基数排序"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>1.2.&#x5E03;&#x5C14;&#x51FD;&#x6570;&#x5408;&#x6210; | fyerfyer</title>
+<title>18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F; | fyerfyer</title>
   
 
 
@@ -115,7 +121,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(1.2.\)Boolean function construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Basic method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Simplify the system</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(18.6.\)Radix
+Sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Counting Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.LSD Radix Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.MSD Radix Sort</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -129,13 +136,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -174,7 +181,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.2.%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -187,12 +194,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="1.2.&#x5E03;&#x5C14;&#x51FD;&#x6570;&#x5408;&#x6210; | fyerfyer">
+      <meta itemprop="name" content="18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F; | fyerfyer">
       <meta itemprop="description" content>
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          1.2.&#x5E03;&#x5C14;&#x51FD;&#x6570;&#x5408;&#x6210;
+          18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F;
         </h1>
 
         <div class="post-meta-container">
@@ -210,7 +217,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:51:22" itemprop="dateModified" datetime="2024-06-02T21:51:22+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:02:34" itemprop="dateModified" datetime="2024-06-02T22:02:34+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -218,11 +225,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/object-Object/" itemprop="url" rel="index"><span itemprop="name">[object Object]</span></a>
+          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
         </span>
     </span>
 
@@ -242,63 +249,49 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="12boolean-function-construction"><span class="math inline">\(1.2.\)</span>Boolean function construction</span></h1>
-<h3><span id="1basic-method">1.Basic method</span></h3>
-<p>&#x2003;&#x2003;Our goal is to create a boolean function that fits in the given
-truth table. To achieve this, we can do the following steps:</p>
+    <div class="post-body" itemprop="articleBody"><h1><span id="186radixsort"><span class="math inline">\(18.6.\)</span>Radix
+Sort</span></h1>
+<h3><span id="1counting-sort">1.Counting Sort</span></h3>
+<p>&#x2003;&#x2003; In the previous text, we have proved that sorting using comparison
+has a worst case running time of <span class="math inline">\(\Theta(n\log n)\)</span>.However, what if we don&apos;t
+compare at all?</p>
+<p>&#x2003;&#x2003;Suppose we have a couple of characters, saying <span class="math inline">\(acdsjlfkm\)</span>, we can sort them in alphabet
+order through the following steps:</p>
 <ol type="1">
-<li>Select the line that has the bool value <code>0</code>and
-<code>1</code> separately.</li>
-<li>For each line that has the bool value <code>0</code>, create a
-function that is able to get the value.</li>
-<li>Combine these functions with <code>or</code>, thus get a new
-function(say <code>f1</code>).</li>
-<li>Do the same thing for bool value <code>1</code>&#xFF0C;and get a new
-function <code>f2</code>.</li>
-<li>Combine the two function with <code>and</code> :
-<code>f1 and f2</code>.</li>
+<li>Creat an array with the same size of an alphabet(<span class="math inline">\(26\)</span>).</li>
+<li>For each character, put it in the <span class="math inline">\(ch-&apos;a&apos;\)</span> index.</li>
+<li>Scan the whole array, and the former character are always less than
+the latter. Insert the character into a new array in order, then we get
+a sorted array.</li>
 </ol>
-<p>&#x2003;&#x2003;Take this truth table as an example:</p>
-<p>![[Pasted image 20240330093650.png]]</p>
-<ul>
-<li>For line 1, 3, 5 that equal <code>1</code>, we each get:
-<code>NOT x</code>, <code>NOT x</code>, <code>NOT y</code>.</li>
-<li>Thus the new function for <code>1</code> is
-<code>NOT x OR NOT x OR NOT y</code>.(Actually, it could have multiple
-forms)</li>
-<li>For line 2, 4, 6, 7, 8, we each get: <code>NOT z</code>,
-<code>NOT y</code>, <code>NOT x</code>, <code>NOT x</code>,
-<code>NOT x</code>, <code>NOT x</code>.</li>
-<li>Thus the new function for <code>0</code> is
-<code>NOT x OR NOT y OR NOT x OR NOT x OR NOT x OR NOT x OR NOT x OR NOT x</code>.</li>
-<li>Combine the two new functions, we get the final result:
-<code>(NOT x OR NOT x OR NOT y) AND (NOT x OR NOT y OR NOT x OR NOT x OR NOT x OR NOT x OR NOT x OR NOT x)</code>.</li>
-</ul>
-<p>&#x2003;&#x2003;Once we get the final result, we can use boolean function
-calculation to simplify it.</p>
-<h3><span id="2simplify-the-system">2.Simplify the system</span></h3>
-<p>&#x2003;&#x2003;Actually, we don&apos;t need <code>OR</code> to join the process, we can
-complete the task only by <code>AND</code> and <code>NOT</code>. This is
-because the <em>De Morgan&apos;s laws</em> allow us to transform an
-<code>OR</code> into <code>AND</code> clause.</p>
-<p>&#x2003;&#x2003;Furthermore, we define <code>NAND</code> as <code>NOT AND</code>.
-For example, <code>x NAND y</code> is equal to <code>NOT x AND y</code>.
-We can prove that every boolean function can be represented by only the
-<code>NAND</code> statement.</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(proof:\)</span>Since we are able to
-represent all boolean functions by <code>AND</code> and
-<code>NOT</code>, we only need to represent <code>AND</code> and
-<code>NOT</code> using <code>NAND</code>:</p>
-<ul>
-<li><code>NOT x</code> can be represented by <code>x NAND x</code>, this
-is obvious.</li>
-<li><code>x AND y</code> can be represent by
-<code>(x NAND y)NAND(x NAND y)</code>. We can rewrite the statement as
-<code>NOT(NOT x AND y)</code>, the statement in the parentheses is
-<code>x NAND y</code> itself, so it is transform into
-<code>NOT x NAND y</code>. Using <code>NOT</code> representation again,
-and we get the result.</li>
-</ul>
+<p>&#x2003;&#x2003;This kind of sorting method is called counting sort. If the length
+of data is <span class="math inline">\(N\)</span>, and the size of
+alphabet is <span class="math inline">\(R\)</span>, then the runtime of
+counting sort is <span class="math inline">\(\Theta(N+R)\)</span>. It&apos;s
+liner runtime!</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-9.png"></p>
+<p>&#x2003;&#x2003;However, the algorithm falls to sort hard-to-count items like
+String, so we need improvement.</p>
+<h3><span id="2lsd-radix-sort">2.LSD Radix Sort</span></h3>
+<p>&#x2003;&#x2003;The LSD(Least Significant Digit) radix sort sort each digit of the
+item independently form rightmost digit towards left, take the below
+table as example:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-10.png"></p>
+<p>&#x2003;&#x2003;The runtime of LSD radix sort is <span class="math inline">\(\Theta(WN+WR)\)</span>,where N is Number of items,
+R is size of alphabet, and W is the maximun length of these items.</p>
+<p>&#x2003;&#x2003;What if the length of each item isn&apos;t same? We can treat empty
+spaces as less than all other characters:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-11.png"></p>
+<h3><span id="3msd-radix-sort">3.MSD Radix Sort</span></h3>
+<p>&#x2003;&#x2003;The MSD(Most Significant Digit) radix sort is similiar to LSD radix
+sort. However, it sorts from the left digit to the right.</p>
+<p>&#x2003;&#x2003;After first sorting process, we may get items as below:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-12.png"></p>
+<p>&#x2003;&#x2003;The items are not in correct order yet! To solve this, we can treat
+items with same left digit as a group, and compare the next left
+character within groups:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png"></p>
+<p>&#x2003;&#x2003;The runtime of MSD radix sort is the same as LSD radix sort.</p>
 
     </div>
 
@@ -312,13 +305,13 @@ and we get the result.</li>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/05/31/1.5.%E7%A1%AC%E4%BB%B6%E6%A8%A1%E6%8B%9F/" rel="prev" title="1.5.&#x786C;&#x4EF6;&#x6A21;&#x62DF;">
-                  <i class="fa fa-angle-left"></i> 1.5.&#x786C;&#x4EF6;&#x6A21;&#x62DF;
+                <a href="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/" rel="prev" title="2.1.Java&#x8BED;&#x8A00;&#x7279;&#x6027;">
+                  <i class="fa fa-angle-left"></i> 2.1.Java&#x8BED;&#x8A00;&#x7279;&#x6027;
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/05/31/1.4.%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/" rel="next" title="1.4.&#x786C;&#x4EF6;&#x63CF;&#x8FF0;&#x8BED;&#x8A00;">
-                  1.4.&#x786C;&#x4EF6;&#x63CF;&#x8FF0;&#x8BED;&#x8A00; <i class="fa fa-angle-right"></i>
+                <a href="/2024/05/31/18.4.Insertion%20Sort/" rel="next" title="18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;">
+                  18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F; <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
