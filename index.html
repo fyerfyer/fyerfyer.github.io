@@ -396,6 +396,172 @@ environment.</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.4.%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/1.4.%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/" class="post-title-link" itemprop="url">1.4.&#x786C;&#x4EF6;&#x63CF;&#x8FF0;&#x8BED;&#x8A00;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:56:43" itemprop="dateModified" datetime="2024-06-02T21:56:43+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/object-Object/" itemprop="url" rel="index"><span itemprop="name">[object Object]</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="14hardware-description-language"><span class="math inline">\(1.4.\)</span>Hardware description language</span></h1>
+<h3><span id="1logic-gate">1.Logic gate</span></h3>
+<ul>
+<li>An <em>elementary logic gate</em> is an elementary chip which is
+designed to deliver a well-defined functionality.</li>
+<li>A <em>composite logic gate</em> is one which is made up from
+elementary logic gate and other composite logic gates. &#x2003;&#x2003;The
+<code>AND</code> gate, <code>OR</code> gate and <code>NOT</code> gate
+can be represented by these diagrams:</li>
+</ul>
+<p>![[Pasted image 20240330141854.png]]</p>
+<p>![[Pasted image 20240330141927.png]]</p>
+<p>&#x2003;&#x2003;By connecting the elementary gate together, we can get composite
+gates that have more complicated funtionality. For example:</p>
+<p>![[Pasted image 20240330145315.png]]</p>
+<h3><span id="2hdl">2.HDL</span></h3>
+<h4><span id="aintro">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Intro</span></h4>
+<p>&#x2003;&#x2003;We can actually build and implement the logic gates using a
+formalism called <em>Hardware Description Language</em> or HDL. Once you
+build a logic gate in HDL,you can actually simulate it, test it.And
+finally,build it in hardware.</p>
+<p>&#x2003;&#x2003;The hardware description of a logic gate contains these
+structure:</p>
+<ul>
+<li><em>Interface</em>: It describe what the chip takes in as input and
+the output.</li>
+<li><em>Implementation</em>: It describe how the chip achieves its
+functionality.</li>
+</ul>
+<p>&#x2003;&#x2003;For example the gate below can be describe as :</p>
+<p>![[Pasted image 20240330150710.png]]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CHIP Xor {</span><br><span class="line">	IN a, b;</span><br><span class="line">	OUT out;</span><br><span class="line">	</span><br><span class="line">	PARTS:</span><br><span class="line">	Not (in = a, out = nota);</span><br><span class="line">	Not (in = b, out = notb);</span><br><span class="line">	And (a = a, b = notb, out = aAndNotb);</span><br><span class="line">	And (a = nota, b = b, out = NotaAndb);</span><br><span class="line">	Or (a = aAndNotb, b = NotaAndb, out = out);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h4><span id="bdiagram-development">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Diagram development</span></h4>
+<p>&#x2003;&#x2003;Then how can we develop a diagram through its functionality
+description? The following steps might help:</p>
+<ol type="1">
+<li><p><em>draw the boundary of the chip diagram.</em></p>
+<ul>
+<li>we use this dash to outline for this purpose and what remains
+outside the boundary is the user&apos;s view of this gate. In other
+word,the,the gate interface.All the users knows is that he or she has a
+gate that has two inputs,a and b,an output called out and
+altogether.They somehow, this chip as if by magic,delivers Xor
+functionality</li>
+</ul></li>
+</ol>
+<p>![[Pasted image 20240330152242.png]]</p>
+<ol start="2" type="1">
+<li><p>Notice how the a signal is being copied and sent simultaneously
+into two different destinations.Take a as an example, one of them is
+sent to <code>And</code> gate and the other <code>Not</code>
+gate.</p></li>
+<li><p>Whenever you use an off-the-shelf gate,you are bound to <em>use
+the names of the gate&apos;s input and output as advertised.</em></p>
+<ul>
+<li>In other words, the gate comes along with what can be called the
+gate&apos;s signature or the gate&apos;s APl. So we have no degrees of freedom
+here.</li>
+</ul></li>
+<li><p>The red connections are use to <em>connect the different chip
+parts together</em>. The rule is that every one of these connections
+<em>has to be named</em> and it&apos;s our responsibility to come up with
+self-descriptive names.</p></li>
+</ol>
+<h4><span id="csomefeatures">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Some
+features</span></h4>
+<ul>
+<li><p>The interface of one chip is <strong>unique</strong>. That&apos;s
+because there&apos;s only one way to describe the chip.</p></li>
+<li><p>The implementation of one chip is not unique, however.</p></li>
+<li><p>HDL is a <em>functional or declarative language</em>. There is no
+procedure going on.There&apos;s no program execution going on. It is nothing
+more than <em>a static description of the gate diagram</em>.</p>
+<ul>
+<li>So because HDL is a functional language,we can actually write those
+HDL statements <em>in any order that we wish</em>.</li>
+</ul></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.2.%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -541,172 +707,6 @@ and we get the result.</li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.4.%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/1.4.%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/" class="post-title-link" itemprop="url">1.4.&#x4F2;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:51:21" itemprop="dateModified" datetime="2024-06-02T21:51:21+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/object-Object/" itemprop="url" rel="index"><span itemprop="name">[object Object]</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="14hardware-description-language"><span class="math inline">\(1.4.\)</span>Hardware description language</span></h1>
-<h3><span id="1logic-gate">1.Logic gate</span></h3>
-<ul>
-<li>An <em>elementary logic gate</em> is an elementary chip which is
-designed to deliver a well-defined functionality.</li>
-<li>A <em>composite logic gate</em> is one which is made up from
-elementary logic gate and other composite logic gates. &#x2003;&#x2003;The
-<code>AND</code> gate, <code>OR</code> gate and <code>NOT</code> gate
-can be represented by these diagrams:</li>
-</ul>
-<p>![[Pasted image 20240330141854.png]]</p>
-<p>![[Pasted image 20240330141927.png]]</p>
-<p>&#x2003;&#x2003;By connecting the elementary gate together, we can get composite
-gates that have more complicated funtionality. For example:</p>
-<p>![[Pasted image 20240330145315.png]]</p>
-<h3><span id="2hdl">2.HDL</span></h3>
-<h4><span id="aintro">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Intro</span></h4>
-<p>&#x2003;&#x2003;We can actually build and implement the logic gates using a
-formalism called <em>Hardware Description Language</em> or HDL. Once you
-build a logic gate in HDL,you can actually simulate it, test it.And
-finally,build it in hardware.</p>
-<p>&#x2003;&#x2003;The hardware description of a logic gate contains these
-structure:</p>
-<ul>
-<li><em>Interface</em>: It describe what the chip takes in as input and
-the output.</li>
-<li><em>Implementation</em>: It describe how the chip achieves its
-functionality.</li>
-</ul>
-<p>&#x2003;&#x2003;For example the gate below can be describe as :</p>
-<p>![[Pasted image 20240330150710.png]]</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CHIP Xor {</span><br><span class="line">	IN a, b;</span><br><span class="line">	OUT out;</span><br><span class="line">	</span><br><span class="line">	PARTS:</span><br><span class="line">	Not (in = a, out = nota);</span><br><span class="line">	Not (in = b, out = notb);</span><br><span class="line">	And (a = a, b = notb, out = aAndNotb);</span><br><span class="line">	And (a = nota, b = b, out = NotaAndb);</span><br><span class="line">	Or (a = aAndNotb, b = NotaAndb, out = out);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4><span id="bdiagram-development">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Diagram development</span></h4>
-<p>&#x2003;&#x2003;Then how can we develop a diagram through its functionality
-description? The following steps might help:</p>
-<ol type="1">
-<li><p><em>draw the boundary of the chip diagram.</em></p>
-<ul>
-<li>we use this dash to outline for this purpose and what remains
-outside the boundary is the user&apos;s view of this gate. In other
-word,the,the gate interface.All the users knows is that he or she has a
-gate that has two inputs,a and b,an output called out and
-altogether.They somehow, this chip as if by magic,delivers Xor
-functionality</li>
-</ul></li>
-</ol>
-<p>![[Pasted image 20240330152242.png]]</p>
-<ol start="2" type="1">
-<li><p>Notice how the a signal is being copied and sent simultaneously
-into two different destinations.Take a as an example, one of them is
-sent to <code>And</code> gate and the other <code>Not</code>
-gate.</p></li>
-<li><p>Whenever you use an off-the-shelf gate,you are bound to <em>use
-the names of the gate&apos;s input and output as advertised.</em></p>
-<ul>
-<li>In other words, the gate comes along with what can be called the
-gate&apos;s signature or the gate&apos;s APl. So we have no degrees of freedom
-here.</li>
-</ul></li>
-<li><p>The red connections are use to <em>connect the different chip
-parts together</em>. The rule is that every one of these connections
-<em>has to be named</em> and it&apos;s our responsibility to come up with
-self-descriptive names.</p></li>
-</ol>
-<h4><span id="csomefeatures">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Some
-features</span></h4>
-<ul>
-<li><p>The interface of one chip is <strong>unique</strong>. That&apos;s
-because there&apos;s only one way to describe the chip.</p></li>
-<li><p>The implementation of one chip is not unique, however.</p></li>
-<li><p>HDL is a <em>functional or declarative language</em>. There is no
-procedure going on.There&apos;s no program execution going on. It is nothing
-more than <em>a static description of the gate diagram</em>.</p>
-<ul>
-<li>So because HDL is a functional language,we can actually write those
-HDL statements <em>in any order that we wish</em>.</li>
-</ul></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.5.%E7%A1%AC%E4%BB%B6%E6%A8%A1%E6%8B%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -725,7 +725,7 @@ HDL statements <em>in any order that we wish</em>.</li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/1.5.%E7%A1%AC%E4%BB%B6%E6%A8%A1%E6%8B%9F/" class="post-title-link" itemprop="url">1.5.&#x4F2;&#xFFFD;&#xFFFD;&#x123;&#xFFFD;&#xFFFD;</a>
+          <a href="/2024/05/31/1.5.%E7%A1%AC%E4%BB%B6%E6%A8%A1%E6%8B%9F/" class="post-title-link" itemprop="url">1.5.&#x786C;&#x4EF6;&#x6A21;&#x62DF;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -743,7 +743,7 @@ HDL statements <em>in any order that we wish</em>.</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:51:22" itemprop="dateModified" datetime="2024-06-02T21:51:22+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:56:56" itemprop="dateModified" datetime="2024-06-02T21:56:56+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
