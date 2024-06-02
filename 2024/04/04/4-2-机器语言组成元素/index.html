@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(4.2.\)The Elements of Machine Language 1.Machine language  The machine language is a most important interface between hardware and software. It&apos;s exactly the way software can control hardware.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.2.&#x673A;&#x5668;&#x8BED;&#x8A00;&#x7EC4;&#x6210;&#x5143;&#x7D20;">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(4.2.\)The Elements of Machine Language 1.Machine language  The machine language is a most important interface between hardware and software. It&apos;s exactly the way software can control hardware.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-3.png">
+<meta property="article:published_time" content="2024-04-04T09:14:31.000Z">
+<meta property="article:modified_time" content="2024-06-02T15:02:12.612Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/","path":"2024/04/04/4-2-机器语言组成元素/","title":"4.2.机器语言组成元素"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>4.2.&#x673A;&#x5668;&#x8BED;&#x8A00;&#x7EC4;&#x6210;&#x5143;&#x7D20; | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(4.2.\)The Elements of Machine Language</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Machine language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Registers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Addressing modes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Dealing with input and
+output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">6.Flow control</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="4.2.&#x673A;&#x5668;&#x8BED;&#x8A00;&#x7EC4;&#x6210;&#x5143;&#x7D20; | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4.2.&#x673A;&#x5668;&#x8BED;&#x8A00;&#x7EC4;&#x6210;&#x5143;&#x7D20;
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 17:14:31" itemprop="dateCreated datePublished" datetime="2024-04-04T17:14:31+08:00">2024-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 23:02:12" itemprop="dateModified" datetime="2024-06-02T23:02:12+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-4-Machine-Language/" itemprop="url" rel="index"><span itemprop="name">Module 4. Machine Language</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1><span id="42the-elements-of-machine-language"><span class="math inline">\(4.2.\)</span>The Elements of Machine Language</span></h1>
+<h3><span id="1machine-language">1.Machine language</span></h3>
+<ul>
+<li><p>The machine language is a most important <em>interface between
+hardware and software</em>. It&apos;s exactly the way software can control
+hardware.</p>
+<ul>
+<li>What are the supported operations?</li>
+<li>What do they operate on?</li>
+<li>How is the program controlled?</li>
+</ul></li>
+<li><p>This kind of interface is done in a almost one-to-one
+correspondence with the actual hardware implementation. The idea is that
+the hardware is built in a way that directly corresponds to <em>the type
+of functionality that is provided by the software layer above
+it</em>.</p></li>
+<li><p>When we actually go to design a machine language, the basic
+element is a <em>cost-performance tradeoff</em>. The more sophisticated
+operations that we want to give our machine language, the more <em>large
+or sophisticated data types</em> it operates on, the more
+<em>costly</em> it will be to actually build this.</p></li>
+<li><p>Each machine language defines a set of operations which fall into
+several categories:</p>
+<ul>
+<li><strong>Arithmetic Operations</strong>: add, subtract, ...</li>
+<li><strong>Logical Operations</strong>: <code>And</code>,
+<code>Or</code>, ...</li>
+<li><strong>Flow Control</strong>: <code>goto instructionX</code>,
+<code>if C then goto instruction Y</code></li>
+</ul></li>
+</ul>
+<h3><span id="2memory">2.Memory</span></h3>
+<ul>
+<li><p>accessing memory is an expensive operation in at least two
+related points of view :</p>
+<ol type="1">
+<li>If you have a large memory, specifying what part of memory you want
+to work with requires a large amount of bits.</li>
+<li>It&apos;s going to be wasteful in terms of instruction, for accessing a
+value from a large memory takes relatively long time.</li>
+</ol></li>
+</ul>
+<p>&#x2003;&#x2003;To solve this, we introduce memory hierarchy*:</p>
+<ul>
+<li><p>The basic idea is instead of having just one large block of
+memory, we&apos;re going to have a whole sequence of memories that
+<strong>are getting bigger and bigger</strong>.</p>
+<ul>
+<li><p>The smallest memories are going to be very easy to access.
+Because:</p>
+<ol type="1">
+<li>We don&apos;t have to specify large address space because there are only
+going to be a very few of them.</li>
+<li>The amount of them is small, so we can get information from them
+very quickly.</li>
+</ol></li>
+<li><p>Then, there is going to be slight larger memories called
+<em>cache</em>.</p></li>
+<li><p>And even big memory, called <em>main memory</em>.</p></li>
+<li><p>And maybe even even larger memory called <em>disk</em>.</p></li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image.png"></p>
+<ul>
+<li>At each time we get farther away from the arithmetic unit itself,
+our memory gets bigger, accessing it becomes harder both in terms of
+giving a larger, wider address, and in terms of the time we need to wait
+until we get the value. But we have more information there.</li>
+</ul>
+<h3><span id="3registers">3.Registers</span></h3>
+<ul>
+<li><p>Almost every CPU has a few <em>easy-accessed registers</em> that
+are located inside the CPU. Since there are so few of them and
+everything requires very few bits, getting the information of them is
+extremely quickly.</p></li>
+<li><p>There are two kinds of register:</p>
+<ol type="1">
+<li><p><em>Data Registers</em>: We can put numbers, etc, in the
+register. And when we are saying something like add the register 1 to
+register 2, what will happen is <strong>the contents of register
+1</strong> will be added to <strong>the contents of register
+2</strong>.</p></li>
+<li><p><em>Address Register</em>: We can put into the register an
+address into main memory. It allow us to specify at which part of the
+bigger memory we want to access for operations.</p>
+<ul>
+<li>For example, say we have a operation like storing the contents of
+register 1 into memory address that is specified by that register called
+A. Once we actually perform this operation in the hardware, the number
+77 will be written into the main memory.</li>
+</ul></li>
+</ol></li>
+</ul>
+<p><img src="/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-1.png"></p>
+<h3><span id="4addressing-modes">4.Addressing modes</span></h3>
+<ul>
+<li><em>Register</em>: <span class="math inline">\(e.g.\)</span><code>Add R1 R2</code> means adding
+R2 to R1.</li>
+<li><em>Direct</em>: We can have direct access to memory.<span class="math inline">\(e.g.\)</span> <code>Add R1 M[200]</code> means
+adding R1 to memory location <code>200</code>.</li>
+<li><em>Indirect</em>: This is a example we had previously for using the
+A register where the <code>@A</code> memory address that we access is
+not specified as part of instruction, but rather is already written
+inside <em>the address register</em> that <strong>was previously loaded
+inside the CPU with some correct value</strong>.<span class="math inline">\(e.g.\)</span> <code>Add R1 @A</code></li>
+<li><em>Immediate</em>: <span class="math inline">\(e.g.\)</span>
+<code>Add R1 73</code></li>
+</ul>
+<h3><span id="5dealing-with-input-andoutput">5.Dealing with input and
+output</span></h3>
+<ul>
+<li><p>One way to actually access these input or output
+devices(keyboard, for example) is to actually <strong>connect the
+registers which control these output devices as part of your
+memory</strong>.</p>
+<ul>
+<li>For example, we may have a mouse that is connected in a way that
+whenever the user moves the mouse, the last movement is written into
+some kind of a register. And that register is accessible by the computer
+in a certain address as part of the memory. This gives us access to
+input and output as though we are accessing the memory itself.</li>
+</ul></li>
+<li><p>Software are usually part of the <strong>drivers</strong> in an
+operating system. It must know exactly not only <strong>what are the
+addresses to which this input or output device is connected</strong>,but
+also <strong>how to speak with it</strong>.</p></li>
+</ul>
+<h3><span id="6flow-control">6.Flow control</span></h3>
+<ul>
+<li>Sometimes we need to &quot;jump&quot; unconditionally to another location, for
+example:</li>
+</ul>
+<p><img src="/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-2.png"></p>
+<ul>
+<li>Sometimes we need to jump only if some condition is met, for
+example:</li>
+</ul>
+<p><img src="/2024/04/04/4-2-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E7%BB%84%E6%88%90%E5%85%83%E7%B4%A0/image-3.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/04/4-3-%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80/" rel="prev" title="4.3.&#x673A;&#x5668;&#x8BED;&#x8A00;">
+                  <i class="fa fa-angle-left"></i> 4.3.&#x673A;&#x5668;&#x8BED;&#x8A00;
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/" rel="next" title="3.2.&#x89E6;&#x53D1;&#x5668;">
+                  3.2.&#x89E6;&#x53D1;&#x5668; <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

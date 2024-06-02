@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(5.3.\)Central Processing Unit 1.Abstraction &#x2003;&#x2003;We can view CPU as a 16-bit processor, designed to:  Execute the current instruction.  This turns the static code into reality.  Figure out whi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.3.CPU">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(5.3.\)Central Processing Unit 1.Abstraction &#x2003;&#x2003;We can view CPU as a 16-bit processor, designed to:  Execute the current instruction.  This turns the static code into reality.  Figure out whi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-3.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-4.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-5.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-6.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-7.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image-8.png">
+<meta property="article:published_time" content="2024-04-06T01:44:54.000Z">
+<meta property="article:modified_time" content="2024-06-02T15:41:19.842Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/","path":"2024/04/06/5-3-CPU/","title":"5.3.CPU"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5.3.CPU | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(5.3.\)Central Processing Unit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Abstraction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Hack CPU interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.CPU implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)A
+instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\) C
+instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(c.\)ALU
+Operation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(d.\)Control abstraction</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(i.\)PC
+abstraction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(ii.\)Control implementation</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5.3.CPU | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5.3.CPU
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-06 09:44:54" itemprop="dateCreated datePublished" datetime="2024-04-06T09:44:54+08:00">2024-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 23:41:19" itemprop="dateModified" datetime="2024-06-02T23:41:19+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-5-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">Module 5. Computer Architecture</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1><span id="53central-processing-unit"><span class="math inline">\(5.3.\)</span>Central Processing Unit</span></h1>
+<h3><span id="1abstraction">1.Abstraction</span></h3>
+<p>&#x2003;&#x2003;We can view CPU as <strong>a 16-bit</strong> processor, designed
+to:</p>
+<ul>
+<li><p>Execute the current instruction.</p>
+<ul>
+<li>This turns the static code into reality.</li>
+</ul></li>
+<li><p>Figure out which instruction to execute next.</p></li>
+</ul>
+<h3><span id="2hack-cpu-interface">2.Hack CPU interface</span></h3>
+<p><img src="/2024/04/06/5-3-CPU/image.png"></p>
+<ul>
+<li>CPU is connected both to the <em>instruction memory</em> and to the
+<em>data memory</em>.</li>
+</ul>
+<p>&#x2003;&#x2003;here is the specific input and output connections of the CPU:</p>
+<p><img src="/2024/04/06/5-3-CPU/image-1.png"></p>
+<ul>
+<li><p>We have three inputs coming from three completely different
+sources.</p>
+<ul>
+<li><p>A 16-bit <em>data value</em>, which is the value of <strong>the
+currently selected data memory register</strong>. This is the value CPU
+is going to operate on.</p></li>
+<li><p>A 16-bit <em>instruction value</em>, which is the value of
+<strong>the selected instruction memory register</strong>.</p>
+<ul>
+<li>Remember that at any given point of time, there is always <strong>a
+selected register in the instruction memory</strong>, and a
+<strong>selected memory register in the data memory</strong>. So always
+something comes into the CPU.</li>
+</ul></li>
+<li><p>A 1-bit <em>input</em>, which we <strong>decide to call the
+reset</strong>.</p></li>
+</ul></li>
+<li><p>On the right hand side we see the outputs of ALU:</p>
+<ul>
+<li><p>The ALU specifies 3 different things to write something to the
+data memory:</p>
+<ol type="1">
+<li><em>outM</em>: What we want to write.</li>
+<li><em>writeM</em>: A <strong>load bit</strong> that enables the data
+memory to write operations.</li>
+<li><em>address</em>: Where do we want to write it.</li>
+<li><em>pc</em>: It holds the <strong>address of the next
+instruction</strong> that has to be fetched and executed in the next
+cycle of this computer.</li>
+</ol></li>
+</ul></li>
+</ul>
+<h3><span id="3cpu-implementation">3.CPU implementation</span></h3>
+<p>&#x2003;&#x2003;The whole CPU hardware diagram is as below:</p>
+<p><img src="/2024/04/06/5-3-CPU/image-2.png"></p>
+<h4><span id="aainstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>A
+instruction</span></h4>
+<p><img src="/2024/04/06/5-3-CPU/image-3.png"></p>
+<p>&#x2003;&#x2003;This section contains:</p>
+<ul>
+<li><em>A register</em> called A.</li>
+<li><em>An A-instruction input</em> that connects to this register
+through a <em>multiplexer</em>.</li>
+</ul>
+<p>&#x2003;&#x2003;We see that this instruction seeks to load the value
+<code>3001</code> into a register. In order to carry out this
+instruction, the CPU do:</p>
+<ol type="1">
+<li>Decode the instruction into <strong>op-code + 15-bit
+value</strong>.</li>
+<li>Noticing that it is a A instruction, CPU <strong>stores the 15-bit
+value in the A-register</strong>.</li>
+<li>Take the output of A register and admit it outside.</li>
+</ol>
+<h4><span id="b-cinstruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span> C
+instruction</span></h4>
+<p><img src="/2024/04/06/5-3-CPU/image-4.png"></p>
+<p>&#x2003;&#x2003;This section contains:</p>
+<ul>
+<li>A register.</li>
+<li>C instruction.</li>
+</ul>
+<p>&#x2003;&#x2003;Others is the same as above.</p>
+<ul>
+<li><p>Say we want to gain an A instruction, we can use the
+<em>Mux16</em>:</p>
+<ul>
+<li>If the instruction input is with an op-code <code>0</code>, we
+choose the instruction input.</li>
+<li>Otherwise, we choose the ALU input.</li>
+</ul></li>
+</ul>
+<h4><span id="caluoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>ALU
+Operation</span></h4>
+<p><img src="/2024/04/06/5-3-CPU/image-5.png"></p>
+<ul>
+<li><p>The inputs of ALU come from:</p>
+<ol type="1">
+<li><p><em>D register</em></p></li>
+<li><p>Either the value of <em>A register</em> or <em>selected memory
+register</em>.</p></li>
+<li><p><em>Multiplexer</em> takes care of this decision, and the control
+bit of it is <strong>one of the bits in the instruction</strong>.</p>
+<ul>
+<li>The CPU designer has to <strong>choose this bit</strong>, and then
+ALU gets the correct input.</li>
+</ul></li>
+</ol></li>
+<li><p>ALU also has <em>6 control bits taken together</em> to
+<strong>tell or specify the ALU which operation we want to carry
+out</strong>.</p></li>
+</ul>
+<p><img src="/2024/04/06/5-3-CPU/image-6.png"></p>
+<ul>
+<li><p>The output of ALU is <strong>simultaneously</strong> fed
+into:</p>
+<ol type="1">
+<li><p><em>D register</em></p></li>
+<li><p><em>A register</em></p></li>
+<li><p><em>M register</em></p>
+<ul>
+<li>It goes through a <em>Multiplexer</em>.</li>
+</ul></li>
+</ol></li>
+</ul>
+<p>&#x2003;&#x2003;The same ALU is fanned out into 3 different places, so we have the
+same ALU output knocking on three different doors. The programmer has to
+decide which door to be opened. The decision is made by next field of
+bits &#x2014;&#x2014; <em>destination bits</em>:</p>
+<ul>
+<li>We have 3 destination bits, which decide whether or not open the
+<em>D register</em>, <em>A register</em>, <em>M register</em> and the
+<em>data memory</em> to accept the ALU output.</li>
+</ul>
+<h4><span id="dcontrol-abstraction">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Control abstraction</span></h4>
+<p>&#x2003;&#x2003;The computer is loaded with some program, when you push
+<code>reset</code>, <strong>the program starts running</strong>.</p>
+<p>&#x2003;&#x2003;In our previous chapter, we know that the last three bits of the
+instruction is <em>jump bits</em>, which a <code>1</code> represents
+unconditional <code>goto</code>. CPU realizes this functionality by
+<em>program counter</em></p>
+<h5><span id="ipcabstraction">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>PC
+abstraction</span></h5>
+<ul>
+<li><p>Emits <strong>the address of the next instruction</strong>:</p>
+<ul>
+<li>To start / restart the program&apos;s execution: <code>PC = 0</code>(for
+we want to execute the first instruction of the program).</li>
+<li>no jump: <code>PC++</code></li>
+<li>unconditional <code>goto</code>: <code>PC = A</code></li>
+<li>conditional <code>goto</code>: if true <code>PC = A</code> else
+<code>PC++</code></li>
+</ul></li>
+</ul>
+<h5><span id="iicontrol-implementation">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Control implementation</span></h5>
+<p><img src="/2024/04/06/5-3-CPU/image-7.png"></p>
+<p><img src="/2024/04/06/5-3-CPU/image-8.png"></p>
+<ul>
+<li><p>if <code>reset == 1</code>, <code>PC=0</code></p></li>
+<li><p>else</p>
+<ul>
+<li><p>We have to look at the <strong>jump bits</strong> and
+simultaneously look at the <strong>ALU output</strong> to decide if we
+want to carry out the jump.</p></li>
+<li><p><code>load = f(jump bits, ALU control outputs)</code></p>
+<ul>
+<li>if <code>load == 1</code>, <code>PC = A</code></li>
+<li>else <code>PC++</code></li>
+</ul></li>
+</ul></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/" rel="prev" title="5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF;">
+                  <i class="fa fa-angle-left"></i> 5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF;
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="next" title="5.4.Hack&#x8BA1;&#x7B97;&#x673A;">
+                  5.4.Hack&#x8BA1;&#x7B97;&#x673A; <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

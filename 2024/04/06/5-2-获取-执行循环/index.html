@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(5.2.\)The Fetch-Execute Cycle  Fetch an instruction from the program memory Execute it  1.Fetching  The next instruction is located at the program memory, the program memory is in the memory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF;">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(5.2.\)The Fetch-Execute Cycle  Fetch an instruction from the program memory Execute it  1.Fetching  The next instruction is located at the program memory, the program memory is in the memory">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-3.png">
+<meta property="article:published_time" content="2024-04-06T01:44:54.000Z">
+<meta property="article:modified_time" content="2024-06-02T15:36:00.767Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/","path":"2024/04/06/5-2-获取-执行循环/","title":"5.2.获取-执行循环"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF; | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(5.2.\)The Fetch-Execute Cycle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Fetching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Execute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.The clash</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF; | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF;
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-06 09:44:54" itemprop="dateCreated datePublished" datetime="2024-04-06T09:44:54+08:00">2024-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 23:36:00" itemprop="dateModified" datetime="2024-06-02T23:36:00+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-5-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">Module 5. Computer Architecture</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1><span id="52the-fetch-execute-cycle"><span class="math inline">\(5.2.\)</span>The Fetch-Execute Cycle</span></h1>
+<ul>
+<li><em>Fetch an instruction from the program memory</em></li>
+<li><em>Execute</em> it</li>
+</ul>
+<h3><span id="1fetching">1.Fetching</span></h3>
+<ul>
+<li><p>The next instruction is located at the <em>program memory</em>,
+the program memory is in the <em>memory</em>, and its address is
+specified by the <em>program counter</em>.</p></li>
+<li><p>We need to basically <strong>put the location of the next
+instruction into the &quot;address&quot; of the program memory</strong>. Then we
+need to read the contents at that location and then will get the basic
+instructions we need to execute.</p></li>
+<li><p>We usually put the address of the next instruction into the
+address input of the program memory by <em>program
+counter</em>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The hardware cycle of executing the fetch operation is as
+below:</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png"></p>
+<ul>
+<li>When we need to jump into a new location, we <strong>manipulate the
+program counter</strong> so that it will have the address of the next
+instruction.</li>
+<li>The output of the program counter feeds into the address
+specification of program memory.</li>
+<li>The program memory output comes the actual instruction code that we
+need to execute.</li>
+</ul>
+<h3><span id="2execute">2.Execute</span></h3>
+<ul>
+<li><p>The instruction code specifies &quot;what to do&quot;</p>
+<ul>
+<li>Which arithmetie or logical instruction.</li>
+<li>What memory to access (read/write).</li>
+<li>If/where to jump.</li>
+</ul></li>
+<li><p><em>Bit aspect</em>: Execute current instruction means
+<strong>taking the bits from the instruction code that specifies what to
+do</strong>, and do what needs to be done.</p>
+<ul>
+<li>Often, different subsets of the bits control different aspects of
+the operation</li>
+</ul></li>
+<li><p><em>Hardware aspect</em>:</p></li>
+</ul>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-1.png"></p>
+<ul>
+<li><p><em>control bus</em>:</p>
+<ul>
+<li><p>tells the ALU what instruction to compute,</p></li>
+<li><p>tells where do the data pieces come from,</p></li>
+</ul></li>
+</ul>
+<h3><span id="2the-clash">2.The clash</span></h3>
+<p>&#x2003;&#x2003;There&apos;s a clash in the cycle above:</p>
+<ul>
+<li>For <em>fetch</em>, we need to put into the address of the memory
+<strong>the address of the next instruction</strong> to get the
+instruction output.</li>
+<li>For <em>execute</em>, we need to put into the address of the memory
+<strong>the address of the data pieces</strong> that we want to operate
+on to access data.</li>
+<li>But we only have a single memory, so <strong>should we put into the
+memory the address of data or instructions</strong>?</li>
+</ul>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-2.png"></p>
+<p>&#x2003;&#x2003;To solve this problem, we will do <strong>one after
+another</strong>. We will achieve this through a
+<em>Multiplexer</em>:</p>
+<ul>
+<li>In the first part, the <em>fetch cycle</em>, the multiplexer set the
+memory to point into <strong>the program counter that is the location of
+the next instruction</strong>.</li>
+<li>While in the <em>execute cycle</em>, the multiplexer will set the
+memory to point into <strong>the data address that we need to
+access</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;So how do we do this together?</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-3.png"></p>
+<ul>
+<li>When we are in a <em>fetch cycle</em>, we get the next instruction,
+and then we need to <strong>remember it inside an instruction
+register</strong>.</li>
+<li><strong>That instruction register is exactly what is remains holding
+the value of the instruction that we are now executing in the execute
+cycle.</strong> Then in the <em>execute cycle</em> we have the
+instruction already stored in this register, so we can work with all the
+information we need for the cycle.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/" rel="prev" title="4.8.&#x6307;&#x9488;&#xFF0C;&#x8F93;&#x5165;&#x4E0E;&#x8F93;&#x51FA;&#x63A7;&#x5236;">
+                  <i class="fa fa-angle-left"></i> 4.8.&#x6307;&#x9488;&#xFF0C;&#x8F93;&#x5165;&#x4E0E;&#x8F93;&#x51FA;&#x63A7;&#x5236;
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/06/5-3-CPU/" rel="next" title="5.3.CPU">
+                  5.3.CPU <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
