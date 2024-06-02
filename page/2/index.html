@@ -126,13 +126,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -170,7 +170,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.1.The%20introduction%20of%20Hashing/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.3.%20B-Tree%20invariants/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -188,7 +188,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/12.1.The%20introduction%20of%20Hashing/" class="post-title-link" itemprop="url">12.1.Hashing&#x7684;&#x5F15;&#x5165;</a>
+          <a href="/2024/05/31/11.3.%20B-Tree%20invariants/" class="post-title-link" itemprop="url">11.3.B-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -206,7 +206,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:40" itemprop="dateModified" datetime="2024-06-02T18:25:40+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:11:21" itemprop="dateModified" datetime="2024-06-02T18:11:21+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -218,7 +218,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
+          <a href="/categories/CS61B-DataStructure/11-Balanced-Trees/" itemprop="url" rel="index"><span itemprop="name">11.Balanced Trees</span></a>
         </span>
     </span>
 
@@ -232,25 +232,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="121hashing&#x7684;&#x5F15;&#x5165;"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5F15;&#x5165;</span></h1>
-<h3><span id="1hasing&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(Hasing\)</span>&#x7684;&#x5F15;&#x5165;</span></h3>
-<p>&#x2003;&#x2003;&#x5728;&#x5148;&#x524D;&#x7684;&#x6811;&#x7ED3;&#x6784;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x5BF9;&#x6570;&#x636E;&#x7684;&#x9AD8;&#x6548;&#x67E5;&#x627E;&#x3002;&#x4F46;&#x6811;&#x7684;&#x4F7F;&#x7528;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x9650;&#x5236;&#xFF1A;</p>
-<ol type="1">
-<li>&#x6811;&#x9700;&#x8981;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x53EF;&#x6BD4;&#x8F83;&#x6027;(<span class="math inline">\(comparable\)</span>)&#x3002;&#x5BF9;&#x4E8E;&#x67D0;&#x4E9B;&#x5143;&#x7D20;(&#x6BD4;&#x5982;&#x5B57;&#x7B26;&#x4E32;)&#xFF0C;&#x5B83;&#x4EEC;&#x4E0D;&#x80FD;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x65E0;&#x6CD5;&#x63D2;&#x5165;<span class="math inline">\(BST\)</span>&#x4E2D;&#x4E86;&#x3002;</li>
-<li><span class="math inline">\(BST\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x4E3A;<span class="math inline">\(\Theta(\log
-N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F18;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x5B9E;&#x73B0;&#x5BF9;&#x6574;&#x6570;&#x7684;&#x67E5;&#x627E;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x68C0;&#x6D4B;&#x6570;&#x7EC4;&#x7B2C;<span class="math inline">\(i\)</span>&#x4F4D;&#x662F;&#x5426;&#x4E3A;<span class="math inline">\(1\)</span>&#xFF0C;&#x4ECE;&#x800C;&#x5F97;&#x5230;&#x8BE5;&#x6574;&#x6570;&#x662F;&#x5426;&#x5B58;&#x5728;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5982;&#x4E0B;&#x5B9E;&#x73B0;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> {</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    }</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x67E5;&#x627E;&#x4E0E;&#x63D2;&#x5165;&#x90FD;&#x53EA;&#x9700;&#x8981;<span class="math inline">\(\Theta(1)\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x5B83;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
-<ol type="1">
-<li>&#x7A7A;&#x95F4;&#x6D6A;&#x8D39;&#x8F83;&#x5927;&#x3002;</li>
-<li>&#x4E0D;&#x5177;&#x6709;&#x666E;&#x9002;&#x6027;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x53EA;&#x9002;&#x7528;&#x4E8E;&#x6574;&#x6570;&#x3002;</li>
-</ol>
-<h3><span id="2&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;">2.&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;</span></h3>
-<p>&#x2003;&#x2003;&#x4EE5;&#x5B57;&#x7B26;&#x4E32;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;&#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x6309;&#x5982;&#x4E0B;&#x7684;&#x65B9;&#x5F0F;&#x8F6C;&#x6362;&#x6210;&#x4E00;&#x4E2A;&#x6574;&#x6570;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &apos;a&apos; -&gt; 1, &apos;b&apos; -&gt; 2, &apos;z&apos; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&apos;a&apos;</span>) || (ithChar &gt; <span class="string">&apos;z&apos;</span>)) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&apos;a&apos;</span> + <span class="number">1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) {</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5B9E;&#x73B0;&#x4E86;&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x8FD9;&#x5E76;&#x672A;&#x89E3;&#x51B3;&#x6211;&#x4EEC;&#x63D0;&#x51FA;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
+          <h1><span id="113b-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;</span></h1>
+<h3><span id="1b-&#x6811;&#x7684;&#x6027;&#x8D28;">1.<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6027;&#x8D28;</span></h3>
+<p>&#x2003;&#x2003;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>-&#x6811;&#x4F1A;&#x5728;&#x53F6;&#x5B50;&#x5BB9;&#x91CF;&#x8FC7;&#x5927;&#x65F6;&#x5C06;&#x53F6;&#x5B50;&#x5BF9;&#x534A;&#x5206;&#x5F00;&#x3001;&#x7136;&#x540E;&#x91CD;&#x6784;&#x5B50;&#x6811;&#xFF0C;&#x8FD9;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4EE5;&#x4EFB;&#x610F;&#x6B21;&#x5E8F;&#x63D2;&#x5165;&#x5143;&#x7D20;&#xFF0C;&#x800C;&#x4E0D;&#x7528;&#x62C5;&#x5FC3;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x53D1;&#x751F;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E00;&#x68F5;<span class="math inline">\(B\)</span>-&#x6811;&#x5177;&#x6709;&#x5982;&#x4E0B;&#x6709;&#x7528;&#x7684;&#x6027;&#x8D28;&#xFF1A;</p>
+<ul>
+<li>&#x6BCF;&#x4E2A;&#x53F6;&#x5B50;&#x5230;&#x5B83;&#x7684;&#x6E90;&#x5934;(<span class="math inline">\(source\)</span>)&#x7684;&#x8DDD;&#x79BB;&#x5FC5;&#x987B;&#x76F8;&#x7B49;&#x3002;</li>
+<li>&#x4E00;&#x4E2A;&#x6709;<span class="math inline">\(k\)</span>&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x975E;&#x53F6;&#x5B50;&#x8282;&#x70B9;&#xFF0C;&#x5B83;&#x5FC5;&#x987B;&#x6709;<span class="math inline">\(k+1\)</span>&#x4E2A;&#x5B69;&#x5B50;&#x3002;</li>
+</ul>
+<h3><span id="2b-&#x6811;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5206;&#x6790;">2.<span class="math inline">\(B\)</span>-&#x6811;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5206;&#x6790;</span></h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x60C5;&#x51B5;&#x662F;&#xFF1A;&#x5728;&#x6811;&#x7684;&#x5E95;&#x90E8;&#x7684;&#x53F6;&#x5B50;&#x7684;&#x6700;&#x53F3;&#x4FA7;&#x7684;&#x8282;&#x70B9;&#x627E;&#x5230;&#x67D0;&#x4E2A;&#x5143;&#x7D20;&#x3002;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6784;&#x9020;&#x65B9;&#x5F0F;&#xFF0C;&#x6811;&#x7684;&#x6DF1;&#x5EA6;<span class="math inline">\(O(\log
+n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E86;&#x6BCF;&#x4E2A;&#x53F6;&#x5B50;&#x7ED3;&#x70B9;&#x627F;&#x8F7D;&#x5143;&#x7D20;&#x7684;&#x6570;&#x91CF;&#xFF0C;&#x56E0;&#x6B64;&#x4ECE;&#x53F6;&#x5B50;&#x5DE6;&#x7AEF;&#x5230;&#x53F3;&#x7AEF;&#x7684;&#x641C;&#x7D22;&#x65F6;&#x95F4;&#x4E3A;&#x5E38;&#x6570;&#x3002;&#x5219;&#x603B;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x4E3A;<span class="math inline">\(O(\log n)\)</span>&#x3002;</p>
 
       
     </div>
@@ -277,7 +269,7 @@ N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.4.Rotating%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -295,7 +287,7 @@ N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/" class="post-title-link" itemprop="url">12.3.Hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(2)</a>
+          <a href="/2024/05/31/11.4.Rotating%20Trees/" class="post-title-link" itemprop="url">11.4.&#x6811;&#x7684;&#x65CB;&#x8F6C;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -313,7 +305,7 @@ N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:09" itemprop="dateModified" datetime="2024-06-02T18:25:09+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:18:06" itemprop="dateModified" datetime="2024-06-02T18:18:06+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,7 +317,7 @@ N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
+          <a href="/categories/CS61B-DataStructure/11-Balanced-Trees/" itemprop="url" rel="index"><span itemprop="name">11.Balanced Trees</span></a>
         </span>
     </span>
 
@@ -339,35 +331,24 @@ N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="123hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(2)</span></h1>
-<h3><span id="1&#x51B2;&#x7A81;&#x5904;&#x7406;">1.&#x51B2;&#x7A81;&#x5904;&#x7406;</span></h3>
-<p>&#x2003;&#x2003;&#x5047;&#x5982;&#x6211;&#x4EEC;&#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;<span class="math inline">\(hashCode\)</span>&#x4E3A;<span class="math inline">\(h\)</span>&#xFF1A;</p>
+          <h1><span id="114&#x6811;&#x7684;&#x65CB;&#x8F6C;"><span class="math inline">\(11.4\)</span>&#x6811;&#x7684;&#x65CB;&#x8F6C;</span></h1>
+<p>&#x2003;&#x2003;The formal definition of rotation is:</p>
 <ul>
-<li>&#x5F53;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x4E0D;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5BF9;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;<code>LinkedList</code>&#xFF0C;&#x5E76;&#x628A;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x63D2;&#x5165;&#x94FE;&#x8868;&#x4E2D;&#x3002;</li>
-<li>&#x5F53;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5C06;&#x5BF9;&#x8C61;&#x63D2;&#x5165;&#x5DF2;&#x6709;&#x7684;&#x94FE;&#x8868;&#x4E2D;&#x3002;</li>
+<li><p><code>rotateLeft(G): Let x be the right child of G. Make G the new left child of x.</code></p></li>
+<li><p><code>rotateRight(G): Let x be the left child of G. Make G the new right child of x.</code></p></li>
 </ul>
-<blockquote>
-<p>&#x2003;&#x2003;<span class="math inline">\(p.s.\)</span>&#x6211;&#x4EEC;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x662F;&#x4E0D;&#x5141;&#x8BB8;&#x91CD;&#x590D;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x5728;&#x63D2;&#x5165;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5FC5;&#x987B;&#x5C06;&#x5F85;&#x63D2;&#x5165;&#x5BF9;&#x8C61;&#x4E0E;&#x94FE;&#x8868;&#x4E2D;&#x6240;&#x6709;&#x5DF2;&#x63D2;&#x5165;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x3002;&#x5F53;&#x8BE5;&#x5BF9;&#x8C61;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x5C31;&#x76F4;&#x63A5;&#x8DF3;&#x8FC7;&#x3002;&#x8FD9;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x4F1A;&#x9700;&#x8981;&#x904D;&#x5386;&#x6574;&#x4E2A;&#x94FE;&#x8868;&#x3002;</p>
-</blockquote>
-<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x5F97;&#x5230;<span class="math inline">\(Hashing\)</span>&#x7684;&#x5177;&#x4F53;&#x6D41;&#x7A0B;&#x4E86;&#xFF1A;</p>
+<p>&#x2003;&#x2003;As in the picture, it means:</p>
 <ul>
-<li><p><code>add</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index has no item, create new List, and place item there.</li>
-<li>If index has a List already, check the List to see if item is
-already in there. If not, add item to List.</li>
-</ul></li>
-<li><p><code>contains</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index is empty, return <code>false</code>.</li>
-<li>Otherwise, check all items in the List at that index, and if the
-item exists, return true.</li>
-</ul></li>
+<li><span class="math inline">\(RotateLeft(G)\)</span>: G moves left,
+promote its right child in the only natural way.(Promoting P means P is
+the new parent of G.)</li>
+<li><span class="math inline">\(RotateRight(P)\)</span>: P moves right,
+promote its left child in the only natural way.</li>
 </ul>
-<h3><span id="2&#x5185;&#x5B58;&#x7684;&#x5904;&#x7406;">2.&#x5185;&#x5B58;&#x7684;&#x5904;&#x7406;</span></h3>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x8FC7;&#x5927;&#x7684;&#x6570;&#x7EC4;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x56FA;&#x5B9A;&#x6570;&#x7EC4;&#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x7136;&#x540E;&#x91C7;&#x7528;&#x53D6;&#x6A21;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x8BA9;&#x6240;&#x6709;&#x7684;<span class="math inline">\(hashCode\)</span>&#x90FD;&#x843D;&#x5165;&#x8BE5;&#x6570;&#x7EC4;&#x7684;&#x7D22;&#x5F15;&#x8303;&#x56F4;&#x5185;(&#x7C7B;&#x4F3C;&#x6211;&#x4EEC;&#x5728;<span class="math inline">\(ArrayList\)</span>&#x4E2D;&#x4F7F;&#x7528;&#x7684;&#x65B9;&#x6CD5;)&#x3002;&#x5C31;&#x7B97;&#x6B64;&#x65F6;&#x53D1;&#x751F;&#x4E86;&#x54C8;&#x5E0C;&#x51B2;&#x7A81;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x4E0A;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x5904;&#x7406;&#x5B83;&#x3002;</p>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-5.png"></p>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
+<p>&#x2003;&#x2003;We can implement these operations by following codes:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -497,6 +478,223 @@ item exists, return true.</li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.1.The%20introduction%20of%20Hashing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/12.1.The%20introduction%20of%20Hashing/" class="post-title-link" itemprop="url">12.1.Hashing&#x7684;&#x5F15;&#x5165;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:40" itemprop="dateModified" datetime="2024-06-02T18:25:40+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="121hashing&#x7684;&#x5F15;&#x5165;"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5F15;&#x5165;</span></h1>
+<h3><span id="1hasing&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(Hasing\)</span>&#x7684;&#x5F15;&#x5165;</span></h3>
+<p>&#x2003;&#x2003;&#x5728;&#x5148;&#x524D;&#x7684;&#x6811;&#x7ED3;&#x6784;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x5BF9;&#x6570;&#x636E;&#x7684;&#x9AD8;&#x6548;&#x67E5;&#x627E;&#x3002;&#x4F46;&#x6811;&#x7684;&#x4F7F;&#x7528;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x9650;&#x5236;&#xFF1A;</p>
+<ol type="1">
+<li>&#x6811;&#x9700;&#x8981;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x53EF;&#x6BD4;&#x8F83;&#x6027;(<span class="math inline">\(comparable\)</span>)&#x3002;&#x5BF9;&#x4E8E;&#x67D0;&#x4E9B;&#x5143;&#x7D20;(&#x6BD4;&#x5982;&#x5B57;&#x7B26;&#x4E32;)&#xFF0C;&#x5B83;&#x4EEC;&#x4E0D;&#x80FD;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x65E0;&#x6CD5;&#x63D2;&#x5165;<span class="math inline">\(BST\)</span>&#x4E2D;&#x4E86;&#x3002;</li>
+<li><span class="math inline">\(BST\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x4E3A;<span class="math inline">\(\Theta(\log
+N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F18;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x5B9E;&#x73B0;&#x5BF9;&#x6574;&#x6570;&#x7684;&#x67E5;&#x627E;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x68C0;&#x6D4B;&#x6570;&#x7EC4;&#x7B2C;<span class="math inline">\(i\)</span>&#x4F4D;&#x662F;&#x5426;&#x4E3A;<span class="math inline">\(1\)</span>&#xFF0C;&#x4ECE;&#x800C;&#x5F97;&#x5230;&#x8BE5;&#x6574;&#x6570;&#x662F;&#x5426;&#x5B58;&#x5728;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5982;&#x4E0B;&#x5B9E;&#x73B0;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> {</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    }</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x67E5;&#x627E;&#x4E0E;&#x63D2;&#x5165;&#x90FD;&#x53EA;&#x9700;&#x8981;<span class="math inline">\(\Theta(1)\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x5B83;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
+<ol type="1">
+<li>&#x7A7A;&#x95F4;&#x6D6A;&#x8D39;&#x8F83;&#x5927;&#x3002;</li>
+<li>&#x4E0D;&#x5177;&#x6709;&#x666E;&#x9002;&#x6027;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x53EA;&#x9002;&#x7528;&#x4E8E;&#x6574;&#x6570;&#x3002;</li>
+</ol>
+<h3><span id="2&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;">2.&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;</span></h3>
+<p>&#x2003;&#x2003;&#x4EE5;&#x5B57;&#x7B26;&#x4E32;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;&#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x6309;&#x5982;&#x4E0B;&#x7684;&#x65B9;&#x5F0F;&#x8F6C;&#x6362;&#x6210;&#x4E00;&#x4E2A;&#x6574;&#x6570;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &apos;a&apos; -&gt; 1, &apos;b&apos; -&gt; 2, &apos;z&apos; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&apos;a&apos;</span>) || (ithChar &gt; <span class="string">&apos;z&apos;</span>)) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&apos;a&apos;</span> + <span class="number">1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) {</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5B9E;&#x73B0;&#x4E86;&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x8FD9;&#x5E76;&#x672A;&#x89E3;&#x51B3;&#x6211;&#x4EEC;&#x63D0;&#x51FA;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.5.Red-Black%20Trees/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/11.5.Red-Black%20Trees/" class="post-title-link" itemprop="url">11.5.&#x7EA2;&#x9ED1;&#x6811;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:15:04" itemprop="dateModified" datetime="2024-06-02T18:15:04+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/11-Balanced-Trees/" itemprop="url" rel="index"><span itemprop="name">11.Balanced Trees</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="115&#x7EA2;&#x9ED1;&#x6811;&#x672A;&#x5B8C;&#x7ED3;"><span class="math inline">\(11.5\)</span>&#x7EA2;&#x9ED1;&#x6811;(&#x672A;&#x5B8C;&#x7ED3;)</span></h1>
+<h3><span id="1&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;">1.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;</span></h3>
+<p>&#x2003;&#x2003;&#x524D;&#x9762;&#x4ECB;&#x7ECD;&#x7684;<span class="math inline">\(B\)</span>-&#x6811;&#x5F88;&#x7B26;&#x5408;&#x6211;&#x4EEC;&#x5BF9;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x7684;&#x9700;&#x8981;&#xFF0C;&#x4F46;&#x662F;&#x5B83;&#x5F88;&#x96BE;&#x7528;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x8BBE;&#x60F3;&#x521B;&#x9020;&#x4E00;&#x79CD;&#x6811;&#xFF0C;&#x5B83;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x5B9E;&#x73B0;&#xFF0C;&#x4F46;&#x7ED3;&#x6784;&#x4E0A;&#x4E0E;<span class="math inline">\(B\)</span>-&#x6811;&#x7B49;&#x4EF7;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(2-3\)</span>&#x6811;&#x4E2D;&#xFF0C;&#x53F6;&#x5B50;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#x548C;<span class="math inline">\(BST\)</span>&#x662F;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x7684;&#x3002;&#x800C;&#x5BF9;&#x4E8E;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x5C06;&#x94FE;&#x63A5;&#x5206;&#x6210;&#x4E24;&#x79CD;&#x7C7B;&#x578B;&#xFF1A;&#x7EA2;&#x8272;(<span class="math inline">\(red\)</span>)&#x7684;&#x548C;&#x9ED1;&#x8272;(<span class="math inline">\(black\)</span>)&#x7684;&#x3002;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x5982;&#x4E0B;&#x7684;&#x5F62;&#x5F0F;&#x8868;&#x793A;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4E48;&#x5904;&#x7406;&#x7684;&#x597D;&#x5904;&#x662F;&#xFF1A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E0D;&#x4FEE;&#x6539;&#x539F;&#x6709;&#x7684;<span class="math inline">\(BST\)</span>&#x6765;&#x5B9E;&#x73B0;<span class="math inline">\(2-3\)</span>&#x6811;&#x3002;&#x7ED9;&#x5B9A;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x53EF;&#x4EE5;&#x7ACB;&#x5373;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x7684;<span class="math inline">\(2-3\)</span>&#x6811;&#x5230;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x8F6C;&#x6362;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
+<h3><span id="2&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;">2.&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;</span></h3>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x6A21;&#x62DF;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x7EA2;&#x9ED1;&#x6811;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
+<ol type="1">
+<li>&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x5DE6;&#x659C;&#x3002;</li>
+<li>&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E0E;&#x4E24;&#x4E2A;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x76F8;&#x8FDE;&#x3002;</li>
+<li>&#x7EA2;&#x9ED1;&#x6811;&#x5177;&#x6709;&#x5B8C;&#x7F8E;&#x7684;&#x201C;&#x9ED1;&#x8272;&#x5E73;&#x8861;&#x201D;&#xFF1A;&#x4ECE;&#x6839;&#x8282;&#x70B9;&#x5230;&#x7A7A;&#x8282;&#x70B9;&#x95F4;&#x7684;&#x6BCF;&#x4E2A;&#x8DEF;&#x5F84;&#x90FD;&#x5177;&#x6709;&#x76F8;&#x540C;&#x6570;&#x91CF;&#x7684;&#x8910;&#x8272;&#x94FE;&#x63A5;&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5C06;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x753B;&#x6210;&#x6C34;&#x5E73;&#x7684;&#xFF0C;&#x90A3;&#x4E48;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x4E0B;&#x9762;&#x7684;&#x56FE;&#x793A;&#xFF0C;&#x8FD9;&#x548C;<span class="math inline">\(2-3\)</span>&#x6811;&#x51E0;&#x4E4E;&#x4E00;&#x81F4;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
+<h3><span id="2&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;">2.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;</span></h3>
+<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5DE6;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
+<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x53F3;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.4.Final%20Data%20Structure/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -595,6 +793,123 @@ due to overflow).</li>
 <li>Why a small prime? Because it&apos;s easier to compute.</li>
 </ul></li>
 </ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/" class="post-title-link" itemprop="url">12.3.Hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(2)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:09" itemprop="dateModified" datetime="2024-06-02T18:25:09+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="123hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(2)</span></h1>
+<h3><span id="1&#x51B2;&#x7A81;&#x5904;&#x7406;">1.&#x51B2;&#x7A81;&#x5904;&#x7406;</span></h3>
+<p>&#x2003;&#x2003;&#x5047;&#x5982;&#x6211;&#x4EEC;&#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;<span class="math inline">\(hashCode\)</span>&#x4E3A;<span class="math inline">\(h\)</span>&#xFF1A;</p>
+<ul>
+<li>&#x5F53;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x4E0D;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5BF9;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;<code>LinkedList</code>&#xFF0C;&#x5E76;&#x628A;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x63D2;&#x5165;&#x94FE;&#x8868;&#x4E2D;&#x3002;</li>
+<li>&#x5F53;<span class="math inline">\(h\)</span>&#x7D22;&#x5F15;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5C06;&#x5BF9;&#x8C61;&#x63D2;&#x5165;&#x5DF2;&#x6709;&#x7684;&#x94FE;&#x8868;&#x4E2D;&#x3002;</li>
+</ul>
+<blockquote>
+<p>&#x2003;&#x2003;<span class="math inline">\(p.s.\)</span>&#x6211;&#x4EEC;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x662F;&#x4E0D;&#x5141;&#x8BB8;&#x91CD;&#x590D;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x5728;&#x63D2;&#x5165;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5FC5;&#x987B;&#x5C06;&#x5F85;&#x63D2;&#x5165;&#x5BF9;&#x8C61;&#x4E0E;&#x94FE;&#x8868;&#x4E2D;&#x6240;&#x6709;&#x5DF2;&#x63D2;&#x5165;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x3002;&#x5F53;&#x8BE5;&#x5BF9;&#x8C61;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x65F6;&#xFF0C;&#x5C31;&#x76F4;&#x63A5;&#x8DF3;&#x8FC7;&#x3002;&#x8FD9;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x4F1A;&#x9700;&#x8981;&#x904D;&#x5386;&#x6574;&#x4E2A;&#x94FE;&#x8868;&#x3002;</p>
+</blockquote>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x5F97;&#x5230;<span class="math inline">\(Hashing\)</span>&#x7684;&#x5177;&#x4F53;&#x6D41;&#x7A0B;&#x4E86;&#xFF1A;</p>
+<ul>
+<li><p><code>add</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index has no item, create new List, and place item there.</li>
+<li>If index has a List already, check the List to see if item is
+already in there. If not, add item to List.</li>
+</ul></li>
+<li><p><code>contains</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index is empty, return <code>false</code>.</li>
+<li>Otherwise, check all items in the List at that index, and if the
+item exists, return true.</li>
+</ul></li>
+</ul>
+<h3><span id="2&#x5185;&#x5B58;&#x7684;&#x5904;&#x7406;">2.&#x5185;&#x5B58;&#x7684;&#x5904;&#x7406;</span></h3>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x8FC7;&#x5927;&#x7684;&#x6570;&#x7EC4;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x56FA;&#x5B9A;&#x6570;&#x7EC4;&#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x7136;&#x540E;&#x91C7;&#x7528;&#x53D6;&#x6A21;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x8BA9;&#x6240;&#x6709;&#x7684;<span class="math inline">\(hashCode\)</span>&#x90FD;&#x843D;&#x5165;&#x8BE5;&#x6570;&#x7EC4;&#x7684;&#x7D22;&#x5F15;&#x8303;&#x56F4;&#x5185;(&#x7C7B;&#x4F3C;&#x6211;&#x4EEC;&#x5728;<span class="math inline">\(ArrayList\)</span>&#x4E2D;&#x4F7F;&#x7528;&#x7684;&#x65B9;&#x6CD5;)&#x3002;&#x5C31;&#x7B97;&#x6B64;&#x65F6;&#x53D1;&#x751F;&#x4E86;&#x54C8;&#x5E0C;&#x51B2;&#x7A81;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x4E0A;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x5904;&#x7406;&#x5B83;&#x3002;</p>
 
       
     </div>
@@ -969,352 +1284,6 @@ rightchild=2i+1
 <p>&#x2003;&#x2003;<code>sink</code>&#x65B9;&#x6CD5;&#x7528;&#x4E8E;&#x5C06;&#x5806;&#x9876;&#x90E8;&#x7684;&#x5143;&#x7D20;&#x4E0B;&#x6C89;&#xFF0C;&#x4EE5;&#x7EF4;&#x62A4;&#x5806;&#x7684;&#x6027;&#x8D28;&#xFF1A;
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= N) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;</span><br><span class="line">        <span class="comment">//assure that the parent is the biggest of its children</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; N &amp;&amp; less(j, j + <span class="number">1</span>)) {</span><br><span class="line">            swap (j, j + <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (!less(k, j)) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        swap (k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 <p><img src="/2024/05/31/13.3.The%20Implementation/image-6.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/15.2.Implementation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/15.2.Implementation/" class="post-title-link" itemprop="url">15.2.Trie&#x7684;&#x5B9E;&#x73B0;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:17:56" itemprop="dateModified" datetime="2024-06-02T21:17:56+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/15-Tries/" itemprop="url" rel="index"><span itemprop="name">15.Tries</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="152trie&#x7684;&#x5B9E;&#x73B0;"><span class="math inline">\(15.2\)</span><span class="math inline">\(Trie\)</span>&#x7684;&#x5B9E;&#x73B0;</span></h1>
-<h3><span id="1trie&#x7684;&#x4ECB;&#x7ECD;">1.<span class="math inline">\(Trie\)</span>&#x7684;&#x4ECB;&#x7ECD;</span></h3>
-<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(Trie\)</span>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x7684;&#x8BA1;&#x7B56;&#x6765;&#x5B58;&#x50A8;&#x4E00;&#x7CFB;&#x5217;&#x5355;&#x8BCD;(&#x5B57;&#x7B26;&#x4E32;)&#xFF1A;</p>
-<ol type="1">
-<li>&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x53EA;&#x5B58;&#x50A8;&#x4E00;&#x4E2A;&#x5B57;&#x6BCD;&#x3002;</li>
-<li>&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x53EF;&#x4EE5;&#x88AB;&#x591A;&#x4E2A;&#x952E;&#x5171;&#x7528;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x4E0B;&#x9762;&#x7684;&#x6811;&#x7ED3;&#x6784;&#x5373;&#x662F;&#x4E00;&#x7EC4;&#x5355;&#x8BCD;&#x7684;<span class="math inline">\(Trie\)</span>&#xFF0C;&#x84DD;&#x8272;&#x610F;&#x5473;&#x7740;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x5355;&#x8BCD;&#x7684;&#x7ED3;&#x5C3E;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.2.Implementation/image.png"></p>
-<p>&#x2003;&#x2003;&#x540C;&#x6837;&#x5730;&#xFF0C;<span class="math inline">\(Trie\)</span>&#x4EA6;&#x53EF;&#x7528;&#x4F5C;<span class="math inline">\(map\)</span>&#xFF1A;</p>
-<p><img src="/2024/05/31/15.2.Implementation/image-1.png"></p>
-<p>&#x2003;&#x2003;&#x9700;&#x8981;&#x6CE8;&#x610F;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5904;&#x7406;&#x67D0;&#x4E2A;&#x7279;&#x5B9A;(<span class="math inline">\(specificity\)</span>)&#x7684;&#x95EE;&#x9898;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6539;&#x8FDB;&#x6211;&#x4EEC;&#x539F;&#x6709;&#x7684;&#x3001;&#x901A;&#x7528;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;(&#x901A;&#x5E38;&#x662F;&#x5BF9;&#x5176;&#x52A0;&#x4EE5;&#x9650;&#x5236;(<span class="math inline">\(constraint\)</span>))&#xFF0C;&#x6765;&#x66F4;&#x597D;&#x5730;&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x7684;&#x529F;&#x80FD;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x7528;<span class="math inline">\(HashMap\)</span>&#x6765;&#x5B9E;&#x73B0;&#x5BF9;&#x5355;&#x8BCD;&#x7684;&#x5B58;&#x653E;&#xFF0C;&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x7684;&#x67E5;&#x627E;&#x5C31;&#x9700;&#x8981;&#x904D;&#x5386;&#x6240;&#x6709;&#x5DF2;&#x6709;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x8FD9;&#x6837;&#x7684;&#x6548;&#x7387;&#x663E;&#x7136;&#x5F88;&#x4F4E;&#x3002;</p>
-<ul>
-<li><p><span class="math inline">\(ADT\)</span>&#x4E0E;&#x7279;&#x6B8A;&#x5B9E;&#x73B0;(<span class="math inline">\(specific\;implementations\)</span>)&#x662F;&#x6709;&#x533A;&#x522B;&#x7684;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5E76;&#x67E5;&#x96C6;&#x662F;&#x4E00;&#x79CD;<span class="math inline">\(ADT\)</span>&#xFF0C;&#x5B83;&#x5177;&#x6709;<code>connect(x, y)</code>&#x4E0E;<code>isConnected(x, y)</code>&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;&#x800C;&#x8FD9;&#x6765;&#x4E2A;&#x65B9;&#x6CD5;&#x6709;&#x56DB;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#xFF1A;<span class="math inline">\(Quick\;find\)</span>&#x3001;<span class="math inline">\(Quick\;union\)</span>&#x3001;<span class="math inline">\(Weight\;QU\)</span>&#x3001;<span class="math inline">\(WQUPC\)</span>&#x3002;</p></li>
-<li><p>&#x5728;&#x8FD9;&#x91CC;&#xFF0C;<span class="math inline">\(Trie\)</span>&#x5C31;&#x662F;&#x5F53;<span class="math inline">\(Set\)</span>&#x6216;<span class="math inline">\(Map\)</span>&#x5B58;&#x50A8;&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#x65F6;&#x7684;&#x7279;&#x6B8A;&#x5B9E;&#x73B0;&#xFF1A;</p>
-<ul>
-<li>We give each node a single character and each node can be a part of
-several keys inside of the trie.</li>
-<li>Searching will only fail if we hit an unmarked node or we fall off
-the tree</li>
-<li>Short for Retrieval tree, almost everyone pronounces it as &quot;try&quot; but
-Edward Fredkin suggested it be pronounced as &quot;tree&quot;</li>
-</ul></li>
-</ul>
-<h3><span id="2trie&#x7684;&#x6784;&#x5EFA;">2.<span class="math inline">\(Trie\)</span>&#x7684;&#x6784;&#x5EFA;</span></h3>
-<p>&#x2003;&#x2003;&#x5229;&#x7528;&#x5148;&#x524D;&#x7684;&#x7B56;&#x7565;&#xFF0C;&#x6211;&#x4EEC;&#x8BA9;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x5B58;&#x50A8;&#x5B57;&#x6BCD;&#x3001;&#x5B69;&#x5B50;&#x548C;&#x989C;&#x8272;&#x3002;&#x7531;&#x4E8E;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x662F;&#x4E00;&#x4E2A;&#x5B57;&#x6BCD;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<code>DataIndexedCharMap</code>&#x6765;&#x5B58;&#x50A8;&#x8282;&#x70B9;&#x7684;&#x6240;&#x6709;&#x5B69;&#x5B50;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedCharMap</span>&lt;V&gt; {</span><br><span class="line">    <span class="keyword">private</span> V[] items;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedCharMap</span><span class="params">(<span class="type">int</span> R)</span> {</span><br><span class="line">        items = (V[]) <span class="keyword">new</span> <span class="title class_">Object</span>[R];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(<span class="type">char</span> c, V val)</span> {</span><br><span class="line">        items[c] = val;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(<span class="type">char</span> c)</span> {</span><br><span class="line">        <span class="keyword">return</span> items[c];</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> <span class="number">128</span>; <span class="comment">// ASCII</span></span><br><span class="line">   <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">      <span class="keyword">private</span> <span class="type">char</span> ch;  </span><br><span class="line">      <span class="keyword">private</span> <span class="type">boolean</span> isKey;   </span><br><span class="line">      <span class="keyword">private</span> DataIndexedCharMap next;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">char</span> c, <span class="type">boolean</span> blue, <span class="type">int</span> R)</span> {</span><br><span class="line">         ch = c; </span><br><span class="line">         isKey = blue;</span><br><span class="line">         next = <span class="keyword">new</span> <span class="title class_">DataIndexedCharMap</span>&lt;Node&gt;(R);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/15.2.Implementation/image-2.png"></p>
-<p>&#x2003;&#x2003;&#x7136;&#x800C;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x7684;&#x8282;&#x70B9;&#x53EA;&#x6709;&#x5F88;&#x5C11;&#x7684;&#x5B69;&#x5B50;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x521B;&#x5EFA;&#x4E86;<span class="math inline">\(128\)</span>&#x4E2A;&#x7A7A;&#x95F4;&#xFF0C;&#x53EA;&#x6709;&#x5F88;&#x5C11;&#x7684;&#x7A7A;&#x95F4;&#x662F;&#x771F;&#x6B63;&#x88AB;&#x4F7F;&#x7528;&#x7684;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6CE8;&#x610F;&#x5230;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x95F4;&#x5B58;&#x5728;&#x94FE;&#x63A5;&#x5F53;&#x4E14;&#x4EC5;&#x5F53;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x5B58;&#x50A8;&#x4E86;&#x5B57;&#x7B26;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5220;&#x6389;<span class="math inline">\(Node\)</span>&#x7684;<span class="math inline">\(ch\)</span>&#x53D8;&#x91CF;&#xFF0C;&#x800C;&#x7528;&#x8BE5;&#x8282;&#x70B9;&#x5728;&#x7236;&#x8282;&#x70B9;&#x7684;<span class="math inline">\(next\)</span>&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#x6765;&#x8868;&#x5F81;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> <span class="number">128</span>; <span class="comment">// ASCII</span></span><br><span class="line">   <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">      <span class="keyword">private</span> <span class="type">boolean</span> isKey;   </span><br><span class="line">      <span class="keyword">private</span> DataIndexedCharMap next;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">boolean</span> blue, <span class="type">int</span> R)</span> {</span><br><span class="line">         isKey = blue;</span><br><span class="line">         next = <span class="keyword">new</span> <span class="title class_">DataIndexedCharMap</span>&lt;Node&gt;(R);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/15.2.Implementation/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x540C;&#x65F6;&#xFF0C;&#x4E3A;&#x4E86;&#x51CF;&#x5C11;&#x7A7A;&#x95F4;&#x6D6A;&#x8D39;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<span class="math inline">\(HashMap\)</span>&#x4EE3;&#x66FF;<span class="math inline">\(DataIndexedCharMap\)</span>&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">    <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">        <span class="keyword">private</span> <span class="type">boolean</span> isKey;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Character, Node&gt; next;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">boolean</span> isKey)</span> {</span><br><span class="line">            <span class="built_in">this</span>.isKey = isKey;</span><br><span class="line">            <span class="built_in">this</span>.next = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3trie&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;">3.<span class="math inline">\(Trie\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;</span></h3>
-<p>&#x2003;&#x2003;&#x7ED9;&#x5B9A;&#x5B57;&#x7B26;&#x4E32;&#x7684;<span class="math inline">\(Trie\)</span>&#xFF0C;&#x5176;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(Map\)</span>&#x3001;<span class="math inline">\(Set\)</span>&#x64CD;&#x4F5C;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<ul>
-<li><code>add</code>&#xFF1A;<span class="math inline">\(\Theta(1)\)</span></li>
-<li><code>contains</code>&#xFF1A;<span class="math inline">\(\Theta(1)\)</span></li>
-</ul>
-<p>&#x2003;&#x2003;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;<span class="math inline">\(Trie\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x53EA;&#x53D6;&#x51B3;&#x4E8E;&#x5355;&#x8BCD;&#x7684;&#x957F;&#x5EA6;&#xFF0C;&#x800C;&#x4E0E;<span class="math inline">\(Trie\)</span>&#x4E2D;&#x952E;&#x7684;&#x591A;&#x5C11;&#x65E0;&#x5173;&#x3002;&#x6211;&#x4EEC;&#x5728;&#x67E5;&#x8BE2;&#x65F6;&#x53EA;&#x4F1A;&#x904D;&#x5386;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x5355;&#x8BCD;&#x3002;</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/16.1.QuadTrees/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/16.1.QuadTrees/" class="post-title-link" itemprop="url">16.1.&#x56DB;&#x53C9;&#x6811;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:25:26" itemprop="dateModified" datetime="2024-06-02T21:25:26+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/16-QuadTrees/" itemprop="url" rel="index"><span itemprop="name">16.QuadTrees</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="161&#x56DB;&#x53C9;&#x6811;"><span class="math inline">\(16.1\)</span>&#x56DB;&#x53C9;&#x6811;</span></h1>
-<h3><span id="1&#x95EE;&#x9898;&#x7684;&#x5F15;&#x5165;">1.&#x95EE;&#x9898;&#x7684;&#x5F15;&#x5165;</span></h3>
-<p>&#x2003;&#x2003;&#x8003;&#x8651;&#x8FD9;&#x6837;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x7ED9;&#x5B9A;&#x4E0B;&#x9762;&#x4E00;&#x7CFB;&#x5217;&#x70B9;&#xFF0C;&#x6C42;&#x843D;&#x5165;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x7684;&#x70B9;&#x7684;&#x6570;&#x91CF;&#x3002;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image.png"></p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x4E0D;&#x7528;&#x904D;&#x5386;&#x6240;&#x6709;&#x7684;&#x70B9;&#xFF0C;&#x4E00;&#x4E2A;&#x81EA;&#x7136;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x7684;&#x6027;&#x8D28;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#x3002;&#x5728;&#x5BF9;&#x4E00;&#x7CFB;&#x5217;&#x7684;&#x70B9;&#x5750;&#x6807;<span class="math inline">\((x,y)\)</span>&#x6784;&#x5EFA;<span class="math inline">\(BST\)</span>&#x65F6;&#x3002;&#x5BF9;&#x4E8E;&#x5355;&#x4E2A;&#x7684;<span class="math inline">\(x\)</span>&#x5750;&#x6807;&#x6216;<span class="math inline">\(y\)</span>&#x5750;&#x6807;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5F88;&#x5BB9;&#x6613;&#x5730;&#x6784;&#x5EFA;&#x51FA;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F46;&#x5BF9;&#x4E8E;&#x4E8C;&#x7EF4;&#x7684;&#x5750;&#x6807;&#xFF0C;&#x5F53;&#x4E00;&#x4E2A;&#x70B9;&#x7684;<span class="math inline">\(x\)</span>&#x5750;&#x6807;&#x5927;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x70B9;&#x3001;&#x800C;<span class="math inline">\(y\)</span>&#x5750;&#x6807;&#x5C0F;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x70B9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x8BE5;&#x600E;&#x4E48;&#x6392;&#x5E8F;&#x5462;&#xFF1F;</p>
-<h3><span id="2&#x56DB;&#x53C9;&#x6811;">2.&#x56DB;&#x53C9;&#x6811;</span></h3>
-<p>&#x2003;&#x2003;&#x8BE5;&#x95EE;&#x9898;&#x7684;&#x89E3;&#x51B3;&#x529E;&#x6CD5;&#x4E3A;&#xFF1A;&#x8BA9;&#x6211;&#x4EEC;&#x7684;&#x6811;&#x4ECE;&#x56DB;&#x4E2A;&#x65B9;&#x5411;&#x540C;&#x65F6;(<span class="math inline">\(simultaneously\)</span>)&#x5206;&#x5272;&#x7A7A;&#x95F4;&#xFF0C;&#x5B9E;&#x73B0;&#x8FD9;&#x4E00;&#x64CD;&#x4F5C;&#x7684;&#x7ED3;&#x6784;&#x79F0;&#x4F5C;&#x56DB;&#x53C9;&#x6811;&#x3002;</p>
-<h4><span id="a&#x56DB;&#x53C9;&#x6811;&#x7684;&#x6784;&#x5EFA;">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&#x56DB;&#x53C9;&#x6811;&#x7684;&#x6784;&#x5EFA;</span></h4>
-<p>&#x2003;&#x2003;&#x56DB;&#x53C9;&#x6811;&#x5177;&#x6709;&#x56DB;&#x4E2A;&#x6307;&#x9488;&#xFF0C;&#x6BCF;&#x4E2A;&#x6307;&#x9488;&#x5206;&#x522B;&#x6307;&#x5411;&#x4E1C;&#x5357;&#x3001;&#x4E1C;&#x5317;&#x3001;&#x897F;&#x5357;&#x3001;&#x897F;&#x5317;&#x533A;&#x57DF;&#x3002;&#x5047;&#x5982;&#x6211;&#x4EEC;&#x4EE5;<span class="math inline">\(A\)</span>&#x4E3A;&#x6839;&#x8282;&#x70B9;&#xFF0C;&#x5219;&#x521D;&#x59CB;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-1.png"></p>
-<p>&#x2003;&#x2003;&#x5BF9;&#x5E94;&#x7684;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-2.png"></p>
-<p>&#x2003;&#x2003;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x6211;&#x4EEC;&#x63D2;&#x5165;<span class="math inline">\(B(2,2)\)</span>&#x8FD9;&#x4E2A;&#x8282;&#x70B9;&#x3002;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>&#x5728;<span class="math inline">\(A\)</span>&#x7684;&#x4E1C;&#x5317;&#x65B9;&#x5411;&#xFF0C;<span class="math inline">\(A\)</span>&#x7684;<span class="math inline">\(NE\)</span>&#x6307;&#x9488;&#x6307;&#x5411;<span class="math inline">\(B\)</span>&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x6B64;&#x65F6;&#x5BF9;&#x5E94;&#x7684;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-4.png"></p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x4EE5;&#x540C;&#x6837;&#x5730;&#x65B9;&#x5F0F;&#x63D2;&#x5165;<span class="math inline">\(C\)</span>&#x3001;<span class="math inline">\(D\)</span>&#x3001;<span class="math inline">\(E\)</span>&#xFF0C;&#x53EF;&#x5F97;&#x5230;&#x4EE5;&#x4E0B;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x548C;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-5.png"></p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-6.png"></p>
-<h4><span id="b&#x56DB;&#x53C9;&#x6811;&#x7684;&#x641C;&#x7D22;">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>&#x56DB;&#x53C9;&#x6811;&#x7684;&#x641C;&#x7D22;</span></h4>
-<p>&#x2003;&#x2003;&#x56DE;&#x5230;&#x5F00;&#x7BC7;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x6211;&#x4EEC;&#x7528;&#x6211;&#x4EEC;&#x6784;&#x5EFA;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x6765;&#x641C;&#x7D22;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x8282;&#x70B9;&#x3002;</p>
-<ol type="1">
-<li>&#x4ECE;&#x6839;&#x8282;&#x70B9;<span class="math inline">\(A\)</span>&#x5F00;&#x59CB;&#x641C;&#x7D22;&#x3002;<span class="math inline">\(A\)</span>&#x4E0D;&#x5C5E;&#x4E8E;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#xFF0C;&#x6545;&#x8FD4;&#x56DE;<span class="math inline">\(null\)</span>&#x3002;</li>
-<li>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#xFF1A;<span class="math inline">\(A\)</span>&#x7684;&#x54EA;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;(<span class="math inline">\(subspace\)</span>)&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x70B9;&#xFF1F;&#x7531;&#x4E8E;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x5728;<span class="math inline">\(A\)</span>&#x7684;&#x4E1C;&#x5317;&#x65B9;&#x5411;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x641C;&#x7D22;<span class="math inline">\(A\)</span>&#x7684;<span class="math inline">\(NE\)</span>&#x5B50;&#x6811;&#xFF1A;</li>
-</ol>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-7.png"></p>
-<ol start="3" type="1">
-<li>&#x63A5;&#x7740;&#x6211;&#x4EEC;&#x641C;&#x7D22;<span class="math inline">\(B\)</span>&#x8282;&#x70B9;&#xFF0C;<span class="math inline">\(B\)</span>&#x5728;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x5185;&#xFF0C;&#x6240;&#x4EE5;&#x8FD4;&#x56DE;&#x5B83;&#x7684;&#x5750;&#x6807;&#x3002;</li>
-<li>&#x63A5;&#x7740;&#x6211;&#x4EEC;&#x8003;&#x8651;&#xFF1A;<span class="math inline">\(B\)</span>&#x7684;&#x54EA;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x70B9;&#xFF1F;&#x53EF;&#x4EE5;&#x770B;&#x5230;<span class="math inline">\(B\)</span>&#x7684;&#x56DB;&#x4E2A;&#x65B9;&#x5411;&#x90FD;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x3002;</li>
-<li>......</li>
-</ol>
-<p>&#x2003;&#x2003;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x56DB;&#x53C9;&#x6811;&#x5177;&#x6709;&#x826F;&#x597D;&#x7684;&#x526A;&#x679D;(<span class="math inline">\(pruning\)</span>)&#x6548;&#x679C;&#xFF0C;&#x8FD9;&#x63D0;&#x9AD8;&#x4E86;&#x6211;&#x4EEC;&#x7684;&#x641C;&#x7D22;&#x6548;&#x7387;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x9012;&#x5F52;&#x8FDB;&#x884C;&#x6211;&#x4EEC;&#x7684;&#x641C;&#x7D22;&#x6D41;&#x7A0B;&#x3002;</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/15.3.Trie%20String%20Operations/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/15.3.Trie%20String%20Operations/" class="post-title-link" itemprop="url">15.3.&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:17:56" itemprop="dateModified" datetime="2024-06-02T21:17:56+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/15-Tries/" itemprop="url" rel="index"><span itemprop="name">15.Tries</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="153&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;"><span class="math inline">\(15.3\)</span>&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;</span></h1>
-<h3><span id="1&#x952E;&#x7684;&#x6536;&#x96C6;&#x4E0E;&#x524D;&#x7F00;&#x5339;&#x914D;">1.&#x952E;&#x7684;&#x6536;&#x96C6;&#x4E0E;&#x524D;&#x7F00;&#x5339;&#x914D;</span></h3>
-<p>&#x2003;&#x2003;&#x7531;&#x4E8E;&#x5728;<span class="math inline">\(trie\)</span>&#x4E2D;&#xFF0C;&#x5B57;&#x7B26;&#x548C;&#x952E;(<span class="math inline">\(key\)</span>)&#x90FD;&#x662F;&#x88AB;&#x9690;&#x6027;&#x8868;&#x793A;&#x7684;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x60F3;&#x8BA9;&#x6211;&#x4EEC;&#x7684;&#x952E;&#x53D8;&#x5F97;&#x53EF;&#x8FED;&#x4EE3;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x53EA;&#x5728;<span class="math inline">\(trie\)</span>&#x4E2D;&#x76F4;&#x63A5;&#x5BFB;&#x627E;&#x5B83;&#x4EEC;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x4E00;&#x4E2A;&#x53EF;&#x8FED;&#x4EE3;&#x7684;<code>collect</code>&#x65B9;&#x6CD5;&#xFF0C;&#x8BE5;&#x65B9;&#x6CD5;&#x4F1A;&#x7EF4;&#x62A4;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5B83;&#x7528;&#x4E8E;&#x50A8;&#x5B58;&#x8DEF;&#x5F84;&#x4E0A;&#x7684;&#x5B57;&#x7B26;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> {</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> { </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> {</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> {</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) {</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x6574;&#x4E2A;&#x641C;&#x7D22;&#x952E;&#x7684;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
-<p>&#x2003;&#x2003;<code>keysWithPrefix</code>&#x65B9;&#x6CD5;&#x7684;&#x6267;&#x884C;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
-<h3><span id="2&#x901A;&#x914D;&#x7B26;&#x5339;&#x914D;">2.&#x901A;&#x914D;&#x7B26;&#x5339;&#x914D;</span></h3>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x5B9E;&#x73B0;<code>keysThatMatch()</code>&#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x7C7B;&#x4F3C;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x4F46;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x53C2;&#x6570;<span class="math inline">\(pat\)</span>&#x6765;&#x8868;&#x793A;&#x6211;&#x4EEC;&#x9700;&#x8981;<span class="math inline">\(collect()\)</span>&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x3002;&#x5F53;&#x6A21;&#x5F0F;&#x5B57;&#x7B26;&#x662F;&#x901A;&#x914D;&#x7B26;(<span class="math inline">\(wildcard\)</span>)&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x6240;&#x6709;&#x94FE;&#x63A5;&#xFF1B;&#x5426;&#x5219;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x8C03;&#x7528;&#x548C;&#x901A;&#x914D;&#x7B26;&#x76F8;&#x5173;&#x7684;&#x94FE;&#x63A5;&#x3002;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> {</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&apos;.&apos;</span> || next == c) {</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
