@@ -170,101 +170,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/17.1.The%20construction%20of%20Graphs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/17.1.The%20construction%20of%20Graphs/" class="post-title-link" itemprop="url">17.1.&#x56FE;&#x7684;&#x6784;&#x5EFA;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:32:25" itemprop="dateModified" datetime="2024-06-02T21:32:25+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/17-Graphs/" itemprop="url" rel="index"><span itemprop="name">17.Graphs</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="171&#x56FE;&#x7684;&#x6784;&#x5EFA;"><span class="math inline">\(17.1\)</span>&#x56FE;&#x7684;&#x6784;&#x5EFA;</span></h1>
-<h3><span id="1&#x56FE;&#x7684;api">1.&#x56FE;&#x7684;<span class="math inline">\(API\)</span></span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> {</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) {</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> {</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) { <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> {</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> {</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> {</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> {</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) {</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> {</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="3&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;">3.&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;</span></h3>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/16.2.K-D%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -318,6 +223,21 @@
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>415</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -398,7 +318,7 @@ closest to the query point.</p></li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/17.1.The%20construction%20of%20Graphs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -416,7 +336,7 @@ closest to the query point.</p></li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.1.Selection%20Sort/" class="post-title-link" itemprop="url">18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/17.1.The%20construction%20of%20Graphs/" class="post-title-link" itemprop="url">17.1.&#x56FE;&#x7684;&#x6784;&#x5EFA;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -434,7 +354,7 @@ closest to the query point.</p></li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:38:27" itemprop="dateModified" datetime="2024-06-02T21:38:27+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:32:25" itemprop="dateModified" datetime="2024-06-02T21:32:25+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -446,11 +366,26 @@ closest to the query point.</p></li>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
+          <a href="/categories/CS61B-DataStructure/17-Graphs/" itemprop="url" rel="index"><span itemprop="name">17.Graphs</span></a>
         </span>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>205</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -460,131 +395,13 @@ closest to the query point.</p></li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</span></h1>
-<h3><span id="1the-step-of-selection-sort">1.The step of Selection sort</span></h3>
-<p>&#x2003;&#x2003;In selection sort, we basically do these three things:</p>
-<ol type="1">
-<li>Find the smallest item.</li>
-<li>Move it to the front.</li>
-<li>Selection sort the rest(using recursion).</li>
-</ol>
-<p>&#x2003;&#x2003;For each step, we can design an individual method to implement
-it.</p>
-<h3><span id="2step-implementation">2.Step implementation</span></h3>
-<p>&#x2003;&#x2003;As the moving step requires the index of the to-moving element, the
-value we return should be index of elements, too.</p>
-<h4><span id="afind">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>Find</code></span></h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Given that we may need to <code>Find</code> the minimun in asked
-range, we may improve our method by passing an extra parameter which
-point to the start index(We&apos;ll use it in the following procedure)&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> {</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h4><span id="bswap">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swap</code></span></h4>
-<p>&#x2003;&#x2003;We are going to implement the method by manipulating the index of
-the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h4><span id="cmainmethod">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Main
-method</span></h4>
-<p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
-a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.3.Merge%20Sort/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.3.Merge%20Sort/" class="post-title-link" itemprop="url">18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:01:43" itemprop="dateModified" datetime="2024-06-02T22:01:43+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
-Sort</span></h1>
-<h3><span id="1the-step-of-merge-sort">1.The step of Merge Sort</span></h3>
-<ul>
-<li>Split items into 2 roughly even pieces.</li>
-<li>Mergesort each half (steps not shown, this is a recursive
-algorithm!)</li>
-<li>Merge the two sorted halves to form the final result.</li>
-</ul>
-<h3><span id="2step-implementation">2.Step implementation</span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> {</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) {</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+          <h1><span id="171&#x56FE;&#x7684;&#x6784;&#x5EFA;"><span class="math inline">\(17.1\)</span>&#x56FE;&#x7684;&#x6784;&#x5EFA;</span></h1>
+<h3><span id="1&#x56FE;&#x7684;api">1.&#x56FE;&#x7684;<span class="math inline">\(API\)</span></span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> {</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) {</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> {</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) { <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> {</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> {</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> {</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> {</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) {</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> {</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3><span id="3&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;">3.&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;</span></h3>
 
       
     </div>
@@ -664,6 +481,21 @@ algorithm!)</li>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>276</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -696,6 +528,135 @@ back of the array.</li>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/18.1.Selection%20Sort/" class="post-title-link" itemprop="url">18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:38:27" itemprop="dateModified" datetime="2024-06-02T21:38:27+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>302</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</span></h1>
+<h3><span id="1the-step-of-selection-sort">1.The step of Selection sort</span></h3>
+<p>&#x2003;&#x2003;In selection sort, we basically do these three things:</p>
+<ol type="1">
+<li>Find the smallest item.</li>
+<li>Move it to the front.</li>
+<li>Selection sort the rest(using recursion).</li>
+</ol>
+<p>&#x2003;&#x2003;For each step, we can design an individual method to implement
+it.</p>
+<h3><span id="2step-implementation">2.Step implementation</span></h3>
+<p>&#x2003;&#x2003;As the moving step requires the index of the to-moving element, the
+value we return should be index of elements, too.</p>
+<h4><span id="afind">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>Find</code></span></h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Given that we may need to <code>Find</code> the minimun in asked
+range, we may improve our method by passing an extra parameter which
+point to the start index(We&apos;ll use it in the following procedure)&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> {</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4><span id="bswap">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swap</code></span></h4>
+<p>&#x2003;&#x2003;We are going to implement the method by manipulating the index of
+the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4><span id="cmainmethod">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Main
+method</span></h4>
+<p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
+a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -775,6 +736,21 @@ back of the array.</li>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>323</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -824,6 +800,120 @@ insertion sort is excellent on these arrays.</p>
 fast.</p>
 <h3><span id="4sorting-summary">4.Sorting Summary</span></h3>
 <p><img src="/2024/05/31/18.4.Insertion%20Sort/image-8.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.3.Merge%20Sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/18.3.Merge%20Sort/" class="post-title-link" itemprop="url">18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:01:43" itemprop="dateModified" datetime="2024-06-02T22:01:43+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>155</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
+Sort</span></h1>
+<h3><span id="1the-step-of-merge-sort">1.The step of Merge Sort</span></h3>
+<ul>
+<li>Split items into 2 roughly even pieces.</li>
+<li>Mergesort each half (steps not shown, this is a recursive
+algorithm!)</li>
+<li>Merge the two sorted halves to form the final result.</li>
+</ul>
+<h3><span id="2step-implementation">2.Step implementation</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> {</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) {</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -903,6 +993,21 @@ fast.</p>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>342</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -955,165 +1060,6 @@ items with same left digit as a group, and compare the next left
 character within groups:</p>
 <p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png"></p>
 <p>&#x2003;&#x2003;The runtime of MSD radix sort is the same as LSD radix sort.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/2.2.SLLists/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/2.2.SLLists/" class="post-title-link" itemprop="url">2.2.&#x5355;&#x94FE;&#x8868;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 16:39:07" itemprop="dateModified" datetime="2024-06-02T16:39:07+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/2-List/" itemprop="url" rel="index"><span itemprop="name">2.List</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="22&#x5355;&#x94FE;&#x8868;"><span class="math inline">\(2.2\)</span>&#x5355;&#x94FE;&#x8868;</span></h1>
-<p>&#x2003;&#x2003;&#x5728;&#x524D;&#x4E00;&#x7AE0;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x642D;&#x5EFA;&#x4E86;&#x6574;&#x578B;&#x94FE;&#x8868;<span class="math inline">\(IntList\)</span>&#xFF0C;&#x4F46;&#x5728;&#x5B9E;&#x9645;&#x5E94;&#x7528;&#x4E2D;&#xFF0C;<span class="math inline">\(IntList\)</span>&#x8F83;&#x96BE;&#x4F7F;&#x7528;&#xFF0C;&#x5E76;&#x4E14;&#x4F1A;&#x5BFC;&#x81F4;&#x4EE3;&#x7801;&#x96BE;&#x4EE5;&#x7406;&#x89E3;&#x4E0E;&#x7EF4;&#x62A4;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x4E9B;&#x95EE;&#x9898;&#x7684;&#x6765;&#x6E90;&#x662F;&#xFF1A;<span class="math inline">\(IntList\)</span>&#x662F;&#x4E00;&#x4E2A;&#x88F8;&#x88F8;&#x9012;&#x5F52;&#x7ED3;&#x6784;&#xFF1A;<span class="math inline">\(IntList\)</span>&#x5728;&#x51FD;&#x6570;&#x5185;&#x90E8;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x81EA;&#x8EAB;&#x7684;&#x9012;&#x5F52;&#xFF0C;&#x800C;&#x6CA1;&#x6709;&#x5176;&#x4ED6;&#x8F85;&#x52A9;&#x64CD;&#x4F5C;&#x6216;&#x6761;&#x4EF6;&#x68C0;&#x67E5;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x5BF9;<span class="math inline">\(IntList\)</span>&#x8FDB;&#x884C;&#x4E00;&#x7CFB;&#x5217;&#x4F18;&#x5316;&#xFF0C;&#x6765;&#x642D;&#x5EFA;&#x65B0;&#x7684;&#x7C7B;<span class="math inline">\(SLList\)</span>&#x3002;</p>
-<h3><span id="1&#x91CD;&#x6784;">1.&#x91CD;&#x6784;</span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">        item = i;</span><br><span class="line">        next = n;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x907F;&#x514D;<span class="math inline">\(IntList\)</span>&#x7684;&#x590D;&#x6742;&#x4F7F;&#x7528;&#xFF0C;&#x6211;&#x4EEC;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5355;&#x72EC;&#x7684;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x7ED9;&#x7528;&#x6237;&#x4F7F;&#x7528;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    <span class="keyword">public</span> IntNode first;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(SLList\)</span>&#x7684;&#x5B9E;&#x73B0;&#x9690;&#x85CF;&#x4E86;<span class="math inline">\(IntList\)</span>&#x7684;&#x4E00;&#x4E9B;&#x7EC6;&#x8282;&#xFF0C;&#x4F7F;&#x5F97;&#x5B9A;&#x4E49;&#x94FE;&#x8868;&#x53D8;&#x5F97;&#x66F4;&#x7B80;&#x6D01;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">IntList</span> <span class="variable">L1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, <span class="literal">null</span>);</span><br><span class="line"><span class="type">SLList</span> <span class="variable">L2</span>  <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure></p>
-<h3><span id="2addfirstgetfirst">2.<code>addFirst</code>&#xFF0C;<code>getFirst</code></span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, first);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getFirst</span><span class="params">()</span> {</span><br><span class="line">    <span class="keyword">return</span> first.item;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#x4F18;&#x5316;&#x540E;&#x7684;&#x94FE;&#x8868;&#x5F88;&#x65B9;&#x4FBF;&#x4F7F;&#x7528;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SLList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">15</span>);</span><br><span class="line">L.addFirst(<span class="number">10</span>);</span><br><span class="line">L.addFirst(<span class="number">5</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> L.getFirst();</span><br><span class="line"></span><br><span class="line"><span class="comment">//compared with IntList//</span></span><br><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, L);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, L);</span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> L.first;</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x626E;&#x6F14;&#x4E86;&#x94FE;&#x8868;&#x4F7F;&#x7528;&#x8005;&#x548C;&#x88F8;&#x9012;&#x5F52;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x95F4;&#x4E2D;&#x4ECB;&#x4EBA;&#x7684;&#x89D2;&#x8272;&#x3002;</p>
-<h3><span id="3public&#x548C;private">3.<code>public</code>&#x548C;<code>private</code></span></h3>
-<p>&#x2003;&#x2003;&#x5148;&#x524D;&#x5B9A;&#x4E49;&#x7684;<span class="math inline">\(SLList\)</span>&#x6709;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x7528;&#x6237;&#x7684;&#x4E00;&#x4E9B;&#x64CD;&#x4F5C;&#x4F1A;&#x5BFC;&#x81F4;&#x94FE;&#x8868;&#x7684;&#x5F02;&#x5E38;&#x3002;&#x4F8B;&#x5982;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SLList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">15</span>);</span><br><span class="line">L.addFirst(<span class="number">10</span>);</span><br><span class="line">L.first.next.next = L.first.next;</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x4F1A;&#x5BFC;&#x81F4;&#x94FE;&#x8868;&#x7684;&#x65E0;&#x9650;&#x5EF6;&#x957F;&#xFF0C;&#x800C;&#x8FD9;&#x662F;&#x6211;&#x4EEC;&#x4E0D;&#x5E0C;&#x671B;&#x770B;&#x5230;&#x7684;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x91C7;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x6765;&#x675C;&#x7EDD;&#x8FD9;&#x4EF6;&#x4E8B;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    <span class="keyword">private</span> IntNode first;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;<code>private</code>&#x53D8;&#x91CF;&#x548C;&#x65B9;&#x6CD5;&#x53EA;&#x80FD;&#x88AB;&#x540C;&#x4E00;&#x4E2A;<code>.java</code>&#x6587;&#x4EF6;&#x5185;&#x7684;&#x4EE3;&#x7801;&#x8BBF;&#x95EE;&#xFF0C;&#x5176;&#x4ED6;&#x6587;&#x4EF6;&#x8BBF;&#x95EE;&#x5B83;&#x65F6;&#xFF0C;&#x4F1A;&#x8FD4;&#x56DE;<code>first has private access in SLList</code>&#x7684;&#x9519;&#x8BEF;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5728;&#x8F6F;&#x4EF6;&#x5DE5;&#x7A0B;&#x4E2D;&#xFF0C;<code>private</code>&#x5173;&#x952E;&#x5B57;&#x8868;&#x660E;&#x4E00;&#x6BB5;&#x4EE3;&#x7801;&#x5E94;&#x8BE5;&#x88AB;&#x7528;&#x6237;&#x5FFD;&#x7565;&#x3001;&#x4E5F;&#x4E0D;&#x9700;&#x8981;&#x88AB;&#x7528;&#x6237;&#x7406;&#x89E3;&#x3002;<code>public</code>&#x5173;&#x952E;&#x5B57;&#x5219;&#x58F0;&#x660E;&#x4E86;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x662F;&#x53EF;&#x7528;&#x7684;&#x3001;&#x5E76;&#x4E14;&#x6C38;&#x8FDC;&#x4E0D;&#x4F1A;&#x51FA;&#x9519;(&#x4E0D;&#x7BA1;&#x7528;&#x6237;&#x505A;&#x51FA;&#x4EC0;&#x4E48;&#x66F4;&#x6539;)&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x8981;&#x8C28;&#x614E;&#x4F7F;&#x7528;<code>public</code>&#x5173;&#x952E;&#x5B57;&#x3002;</p>
-<blockquote>
-<p>&#x2003;&#x2003;As an analogy, a car has certain public features, e.g. the
-accelerator and brake pedals. Under the hood, there are private details
-about how these operate. In a gas powered car, the accelerator pedal
-might control some sort of fuel injection system, and in a battery
-powered car, it may adjust the amount of battery power being delivered
-to the motor. While the private details may vary from car to car, we
-expect the same behavior from all accelerator pedals. Changing these
-would cause great consternation from users, and quite possibly terrible
-accidents.</p>
-</blockquote>
-<h3><span id="4&#x5D4C;&#x5957;&#x7C7B;">4.&#x5D4C;&#x5957;&#x7C7B;</span></h3>
-<p>&#x2003;&#x2003;&#x76EE;&#x524D;&#x4E3A;&#x6B62;&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x7C7B;&#xFF1A;<span class="math inline">\(IntNode\)</span>&#x548C;<span class="math inline">\(SLList\)</span>&#xFF0C;&#x4F46;&#x662F;<span class="math inline">\(IntNode\)</span>&#x5B9E;&#x9645;&#x4E0A;&#x53EA;&#x662F;&#x8F85;&#x52A9;<span class="math inline">\(SLList\)</span>&#x7684;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5BF9;&#x6B64;&#xFF0C;<span class="math inline">\(Java\)</span>&#x5141;&#x8BB8;&#x6211;&#x4EEC;&#x5728;&#x4E00;&#x4E2A;&#x7C7B;&#x91CC;&#x9762;&#x5B9A;&#x4E49;&#x5176;&#x4ED6;&#x7C7B;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">       <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">            <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">            <span class="keyword">public</span> IntNode next;</span><br><span class="line">            <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">                item = i;</span><br><span class="line">                next = n;</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">private</span> IntNode first; </span><br><span class="line"></span><br><span class="line">       <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">           first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">       } </span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5D4C;&#x5957;&#x7C7B;&#x4E0E;&#x5206;&#x5F00;&#x5B9A;&#x4E49;&#x4E24;&#x4E2A;&#x7C7B;&#x7684;&#x6548;&#x679C;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x524D;&#x8005;&#x80FD;&#x8BA9;&#x4EE3;&#x7801;&#x770B;&#x8D77;&#x6765;&#x66F4;&#x4E3A;&#x6574;&#x9F50;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5D4C;&#x5957;&#x7C7B;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;<span class="math inline">\(SLList\)</span>&#x4E2D;&#x7684;&#x4EFB;&#x4F55;&#x5B9E;&#x4F8B;&#x65B9;&#x6CD5;&#x6216;&#x8005;&#x53D8;&#x91CF;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<code>static</code>&#x6765;&#x58F0;&#x660E;&#x5B83;&#x3002;<code>static</code>&#x5173;&#x952E;&#x5B57;&#x8BF4;&#x660E;&#x9759;&#x6001;&#x7C7B;(<span class="math inline">\(static\;class\)</span>)&#x4E2D;&#x7684;&#x65B9;&#x6CD5;&#x4E0D;&#x80FD;&#x8BBF;&#x95EE;&#x4EFB;&#x4F55;&#x5728;&#x5C01;&#x95ED;&#x7C7B;&#x4E2D;&#x7684;&#x6210;&#x5458;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x8FD9;&#x610F;&#x5473;&#x7740;<span class="math inline">\(IntNode\)</span>&#x4E0D;&#x80FD;&#x591F;&#x8BBF;&#x95EE;<code>first</code>&#xFF0C;<code>addFirst</code>&#x6216;&#x8005;<code>getFirst</code>&#x3002;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">       <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">            <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">            <span class="keyword">public</span> IntNode next;</span><br><span class="line">            <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">                item = i;</span><br><span class="line">                next = n;</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">private</span> IntNode first;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#x7684;&#x505A;&#x6CD5;&#x53EF;&#x4EE5;&#x8282;&#x7EA6;&#x4E00;&#x4E9B;&#x5185;&#x5B58;&#xFF0C;&#x56E0;&#x4E3A;&#x4E4B;&#x540E;<span class="math inline">\(IntNode\)</span>&#x5C31;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x8FFD;&#x8E2A;&#x5B83;&#x600E;&#x4E48;&#x8BBF;&#x95EE;&#x5B83;&#x6240;&#x5904;&#x7684;<span class="math inline">\(SLList\)</span>&#x4E86;&#xFF0C;&#x4ECE;&#x800C;<span class="math inline">\(IntNode\)</span>&#x4E0D;&#x4F1A;&#x8C03;&#x7528;<span class="math inline">\(SLList\)</span>&#x3002;</p>
-<blockquote>
-<p>&#x2003;&#x2003;if you don&apos;t use any instance members of the outer class, make the
-nested class static.</p>
-</blockquote>
-<h3><span id="5addlast-size">5.<code>addLast</code>&#x3001;<code>size</code></span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Adds an item to the end of the list. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> first;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Advance p to the end of the list. */</span></span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Returns the size of the list starting at IntNode p. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">(IntNode p)</span> {</span><br><span class="line">    <span class="keyword">if</span> (p.next == <span class="literal">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + size(p.next);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;&#x8FD9;&#x4E2A;<span class="math inline">\(size\)</span>&#x51FD;&#x6570;&#x4E5F;&#x662F;<span class="math inline">\(O(n)\)</span>&#x590D;&#x6742;&#x5EA6;&#x7684;&#x3002;&#x4E3A;&#x4E86;&#x51CF;&#x5C11;&#x65F6;&#x95F4;&#x6D88;&#x8017;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x50CF;&#x521B;&#x5EFA;<span class="math inline">\(SLList\)</span>&#x4E00;&#x6837;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x201C;&#x4E2D;&#x4ECB;&#x4EBA;&#x201D;&#xFF0C;&#x6765;&#x5B9E;&#x73B0;&#x7528;&#x6237;&#x5BF9;<span class="math inline">\(Size\)</span>&#x7684;&#x8BBF;&#x95EE;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Returns the size of the list starting at IntNode p. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">(IntNode p)</span> {</span><br><span class="line">    <span class="keyword">if</span> (p.next == <span class="literal">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + size(p.next);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> {</span><br><span class="line">    <span class="keyword">return</span> size(first);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x91CC;&#x51FA;&#x73B0;&#x4E86;&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x540D;&#x79F0;&#x90FD;&#x53EB;<span class="math inline">\(size\)</span>&#x3002;&#x8FD9;&#x662F;&#x5141;&#x8BB8;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x4EEC;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x53C2;&#x6570;&#x3002;&#x6211;&#x4EEC;&#x628A;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x540D;&#x5B57;&#x76F8;&#x540C;&#x3001;&#x53C2;&#x6570;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x6CD5;&#x79F0;&#x4F5C;&#x91CD;&#x8F7D;(<span class="math inline">\(overloaded\)</span>)&#x3002;</p>
-<h3><span id="6&#x7F13;&#x5B58;cashing">6.&#x7F13;&#x5B58;<span class="math inline">\(cashing\)</span></span></h3>
-<p>&#x2003;&#x2003;&#x9664;&#x4E86;&#x7528;&#x4E0A;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x8BA1;&#x7B97;<span class="math inline">\(size\)</span>&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x5728;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;<span class="math inline">\(size\)</span>&#x53D8;&#x91CF;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    ... <span class="comment">/* IntNode declaration omitted. */</span></span><br><span class="line">    <span class="keyword">private</span> IntNode first;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, first);</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x79CD;&#x901A;&#x8FC7;&#x4FDD;&#x5B58;&#x5173;&#x952E;&#x4FE1;&#x606F;&#x6765;&#x52A0;&#x901F;&#x68C0;&#x7D22;&#x7684;&#x65B9;&#x6CD5;&#x88AB;&#x79F0;&#x4E3A;&#x7F13;&#x5B58;(<span class="math inline">\(cashing\)</span>)&#x3002;</p>
-<h3><span id="7&#x7A7A;&#x94FE;&#x8868;">7.&#x7A7A;&#x94FE;&#x8868;</span></h3>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;<span class="math inline">\(SLList\)</span>&#x7684;&#x6846;&#x67B6;&#x53EF;&#x4EE5;&#x8F7B;&#x677E;&#x5730;&#x521D;&#x59CB;&#x5316;&#x94FE;&#x8868;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">()</span> {</span><br><span class="line">    first = <span class="literal">null</span>;</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h3><span id="8&#x54E8;&#x5175;&#x8282;&#x70B9;sentinel">8.&#x54E8;&#x5175;&#x8282;&#x70B9;(<span class="math inline">\(sentinel\)</span>)</span></h3>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x4E0A;&#x4E00;&#x7AE0;&#x7684;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0;<code>addLast</code>&#x65B9;&#x6CD5;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> first;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x4F46;&#x662F;&#xFF0C;&#x5F53;&#x4F20;&#x5165;&#x7684;&#x94FE;&#x8868;&#x662F;&#x7A7A;&#x94FE;&#x8868;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;<code>first == null</code>&#xFF0C;<code>while(p.next != null),p.next</code>&#x8FD9;&#x4E9B;&#x65B9;&#x6CD5;&#x90FD;&#x4F1A;&#x5BFC;&#x81F4;<code>null pointer exceptation</code>&#x7684;&#x9519;&#x8BEF;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5355;&#x72EC;&#x8BA8;&#x8BBA;<code>first == null</code>&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x4F46;&#x8FD9;&#x6837;&#x4F1A;&#x8BA9;&#x7A0B;&#x5E8F;&#x53D8;&#x5F97;&#x590D;&#x6742;&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x8BBE;&#x6CD5;&#x5C06;&#x6240;&#x6709;&#x7684;&#x94FE;&#x8868;&#x90FD;&#x7EDF;&#x4E00;&#x6210;&#x4E00;&#x79CD;&#x60C5;&#x51B5;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x94FE;&#x8868;&#x7684;&#x5F00;&#x5934;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x53EB;&#x4F5C;&#x54E8;&#x5175;&#x8282;&#x70B9;(<span class="math inline">\(sentinel\;node\)</span>)&#xFF0C;&#x4E0D;&#x7BA1;&#x94FE;&#x8868;&#x662F;&#x5426;&#x4E3A;&#x7A7A;&#xFF0C;&#x8FD9;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x5B58;&#x5728;&#x3002;</p>
-<p><img src="/2024/05/31/2.2.SLLists/image-9.png"></p>
-<p><img src="/2024/05/31/2.2.SLLists/image-10.png"></p>
-<p>&#x2003;&#x2003;&#x5728;&#x5C06;&#x6240;&#x6709;&#x60C5;&#x51B5;&#x7EDF;&#x4E00;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x66F4;&#x597D;&#x5730;&#x5B9E;&#x73B0;<code>addLast</code>&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span>(p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h3><span id="9&#x4E0D;&#x53D8;&#x91CF;invarient">9.&#x4E0D;&#x53D8;&#x91CF;<span class="math inline">\(invarient\)</span></span></h3>
-<p>&#x2003;&#x2003;&#x4E0D;&#x53D8;&#x91CF;&#xFF0C;&#x5C31;&#x662F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E2D;&#x5FC5;&#x987B;&#x8981;&#x9075;&#x5B88;&#x7684;&#x4E8B;&#x5B9E;(<span class="math inline">\(fact\;that\;is\;guaranteed\;to\;be\;true\)</span>)&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4E00;&#x4E2A;<span class="math inline">\(SLList\)</span>&#x81F3;&#x5C11;&#x8981;&#x9075;&#x5FAA;&#x4EE5;&#x4E0B;&#x4E0D;&#x53D8;&#x91CF;&#xFF1A;</p>
-<ul>
-<li><code>sentinel</code>&#x603B;&#x662F;&#x6307;&#x5411;&#x54E8;&#x5175;&#x8282;&#x70B9;&#x3002;</li>
-<li>&#x94FE;&#x8868;&#x6700;&#x524D;&#x9762;&#x7684;&#x5143;&#x7D20;(&#x5982;&#x679C;&#x5B58;&#x5728;&#x7684;&#x8BDD;)&#x6C38;&#x8FDC;&#x662F;<code>sentinel.next.item</code>&#x3002;</li>
-<li><code>size</code>&#x53D8;&#x91CF;&#x6C38;&#x8FDC;&#x4EE3;&#x6307;&#x88AB;&#x52A0;&#x5165;&#x94FE;&#x8868;&#x7684;&#x5143;&#x7D20;&#x7684;&#x6570;&#x91CF;&#x3002;</li>
-</ul>
 
       
     </div>
@@ -1193,6 +1139,21 @@ nested class static.</p>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>7 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -1311,6 +1272,180 @@ am&quot; or &quot;my name is&quot;. You can&apos;t change who you are.</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/2.2.SLLists/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/2.2.SLLists/" class="post-title-link" itemprop="url">2.2.&#x5355;&#x94FE;&#x8868;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 16:39:07" itemprop="dateModified" datetime="2024-06-02T16:39:07+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/2-List/" itemprop="url" rel="index"><span itemprop="name">2.List</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>6 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="22&#x5355;&#x94FE;&#x8868;"><span class="math inline">\(2.2\)</span>&#x5355;&#x94FE;&#x8868;</span></h1>
+<p>&#x2003;&#x2003;&#x5728;&#x524D;&#x4E00;&#x7AE0;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x642D;&#x5EFA;&#x4E86;&#x6574;&#x578B;&#x94FE;&#x8868;<span class="math inline">\(IntList\)</span>&#xFF0C;&#x4F46;&#x5728;&#x5B9E;&#x9645;&#x5E94;&#x7528;&#x4E2D;&#xFF0C;<span class="math inline">\(IntList\)</span>&#x8F83;&#x96BE;&#x4F7F;&#x7528;&#xFF0C;&#x5E76;&#x4E14;&#x4F1A;&#x5BFC;&#x81F4;&#x4EE3;&#x7801;&#x96BE;&#x4EE5;&#x7406;&#x89E3;&#x4E0E;&#x7EF4;&#x62A4;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4E9B;&#x95EE;&#x9898;&#x7684;&#x6765;&#x6E90;&#x662F;&#xFF1A;<span class="math inline">\(IntList\)</span>&#x662F;&#x4E00;&#x4E2A;&#x88F8;&#x88F8;&#x9012;&#x5F52;&#x7ED3;&#x6784;&#xFF1A;<span class="math inline">\(IntList\)</span>&#x5728;&#x51FD;&#x6570;&#x5185;&#x90E8;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x81EA;&#x8EAB;&#x7684;&#x9012;&#x5F52;&#xFF0C;&#x800C;&#x6CA1;&#x6709;&#x5176;&#x4ED6;&#x8F85;&#x52A9;&#x64CD;&#x4F5C;&#x6216;&#x6761;&#x4EF6;&#x68C0;&#x67E5;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x5BF9;<span class="math inline">\(IntList\)</span>&#x8FDB;&#x884C;&#x4E00;&#x7CFB;&#x5217;&#x4F18;&#x5316;&#xFF0C;&#x6765;&#x642D;&#x5EFA;&#x65B0;&#x7684;&#x7C7B;<span class="math inline">\(SLList\)</span>&#x3002;</p>
+<h3><span id="1&#x91CD;&#x6784;">1.&#x91CD;&#x6784;</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">        item = i;</span><br><span class="line">        next = n;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x907F;&#x514D;<span class="math inline">\(IntList\)</span>&#x7684;&#x590D;&#x6742;&#x4F7F;&#x7528;&#xFF0C;&#x6211;&#x4EEC;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5355;&#x72EC;&#x7684;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x7ED9;&#x7528;&#x6237;&#x4F7F;&#x7528;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    <span class="keyword">public</span> IntNode first;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(SLList\)</span>&#x7684;&#x5B9E;&#x73B0;&#x9690;&#x85CF;&#x4E86;<span class="math inline">\(IntList\)</span>&#x7684;&#x4E00;&#x4E9B;&#x7EC6;&#x8282;&#xFF0C;&#x4F7F;&#x5F97;&#x5B9A;&#x4E49;&#x94FE;&#x8868;&#x53D8;&#x5F97;&#x66F4;&#x7B80;&#x6D01;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">IntList</span> <span class="variable">L1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, <span class="literal">null</span>);</span><br><span class="line"><span class="type">SLList</span> <span class="variable">L2</span>  <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2addfirstgetfirst">2.<code>addFirst</code>&#xFF0C;<code>getFirst</code></span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, first);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getFirst</span><span class="params">()</span> {</span><br><span class="line">    <span class="keyword">return</span> first.item;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#x4F18;&#x5316;&#x540E;&#x7684;&#x94FE;&#x8868;&#x5F88;&#x65B9;&#x4FBF;&#x4F7F;&#x7528;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SLList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">15</span>);</span><br><span class="line">L.addFirst(<span class="number">10</span>);</span><br><span class="line">L.addFirst(<span class="number">5</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> L.getFirst();</span><br><span class="line"></span><br><span class="line"><span class="comment">//compared with IntList//</span></span><br><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, L);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, L);</span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> L.first;</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x626E;&#x6F14;&#x4E86;&#x94FE;&#x8868;&#x4F7F;&#x7528;&#x8005;&#x548C;&#x88F8;&#x9012;&#x5F52;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x95F4;&#x4E2D;&#x4ECB;&#x4EBA;&#x7684;&#x89D2;&#x8272;&#x3002;</p>
+<h3><span id="3public&#x548C;private">3.<code>public</code>&#x548C;<code>private</code></span></h3>
+<p>&#x2003;&#x2003;&#x5148;&#x524D;&#x5B9A;&#x4E49;&#x7684;<span class="math inline">\(SLList\)</span>&#x6709;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x7528;&#x6237;&#x7684;&#x4E00;&#x4E9B;&#x64CD;&#x4F5C;&#x4F1A;&#x5BFC;&#x81F4;&#x94FE;&#x8868;&#x7684;&#x5F02;&#x5E38;&#x3002;&#x4F8B;&#x5982;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SLList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SLList</span>(<span class="number">15</span>);</span><br><span class="line">L.addFirst(<span class="number">10</span>);</span><br><span class="line">L.first.next.next = L.first.next;</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4F1A;&#x5BFC;&#x81F4;&#x94FE;&#x8868;&#x7684;&#x65E0;&#x9650;&#x5EF6;&#x957F;&#xFF0C;&#x800C;&#x8FD9;&#x662F;&#x6211;&#x4EEC;&#x4E0D;&#x5E0C;&#x671B;&#x770B;&#x5230;&#x7684;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x91C7;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x6765;&#x675C;&#x7EDD;&#x8FD9;&#x4EF6;&#x4E8B;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    <span class="keyword">private</span> IntNode first;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;<code>private</code>&#x53D8;&#x91CF;&#x548C;&#x65B9;&#x6CD5;&#x53EA;&#x80FD;&#x88AB;&#x540C;&#x4E00;&#x4E2A;<code>.java</code>&#x6587;&#x4EF6;&#x5185;&#x7684;&#x4EE3;&#x7801;&#x8BBF;&#x95EE;&#xFF0C;&#x5176;&#x4ED6;&#x6587;&#x4EF6;&#x8BBF;&#x95EE;&#x5B83;&#x65F6;&#xFF0C;&#x4F1A;&#x8FD4;&#x56DE;<code>first has private access in SLList</code>&#x7684;&#x9519;&#x8BEF;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5728;&#x8F6F;&#x4EF6;&#x5DE5;&#x7A0B;&#x4E2D;&#xFF0C;<code>private</code>&#x5173;&#x952E;&#x5B57;&#x8868;&#x660E;&#x4E00;&#x6BB5;&#x4EE3;&#x7801;&#x5E94;&#x8BE5;&#x88AB;&#x7528;&#x6237;&#x5FFD;&#x7565;&#x3001;&#x4E5F;&#x4E0D;&#x9700;&#x8981;&#x88AB;&#x7528;&#x6237;&#x7406;&#x89E3;&#x3002;<code>public</code>&#x5173;&#x952E;&#x5B57;&#x5219;&#x58F0;&#x660E;&#x4E86;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x662F;&#x53EF;&#x7528;&#x7684;&#x3001;&#x5E76;&#x4E14;&#x6C38;&#x8FDC;&#x4E0D;&#x4F1A;&#x51FA;&#x9519;(&#x4E0D;&#x7BA1;&#x7528;&#x6237;&#x505A;&#x51FA;&#x4EC0;&#x4E48;&#x66F4;&#x6539;)&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x8981;&#x8C28;&#x614E;&#x4F7F;&#x7528;<code>public</code>&#x5173;&#x952E;&#x5B57;&#x3002;</p>
+<blockquote>
+<p>&#x2003;&#x2003;As an analogy, a car has certain public features, e.g. the
+accelerator and brake pedals. Under the hood, there are private details
+about how these operate. In a gas powered car, the accelerator pedal
+might control some sort of fuel injection system, and in a battery
+powered car, it may adjust the amount of battery power being delivered
+to the motor. While the private details may vary from car to car, we
+expect the same behavior from all accelerator pedals. Changing these
+would cause great consternation from users, and quite possibly terrible
+accidents.</p>
+</blockquote>
+<h3><span id="4&#x5D4C;&#x5957;&#x7C7B;">4.&#x5D4C;&#x5957;&#x7C7B;</span></h3>
+<p>&#x2003;&#x2003;&#x76EE;&#x524D;&#x4E3A;&#x6B62;&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x7C7B;&#xFF1A;<span class="math inline">\(IntNode\)</span>&#x548C;<span class="math inline">\(SLList\)</span>&#xFF0C;&#x4F46;&#x662F;<span class="math inline">\(IntNode\)</span>&#x5B9E;&#x9645;&#x4E0A;&#x53EA;&#x662F;&#x8F85;&#x52A9;<span class="math inline">\(SLList\)</span>&#x7684;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5BF9;&#x6B64;&#xFF0C;<span class="math inline">\(Java\)</span>&#x5141;&#x8BB8;&#x6211;&#x4EEC;&#x5728;&#x4E00;&#x4E2A;&#x7C7B;&#x91CC;&#x9762;&#x5B9A;&#x4E49;&#x5176;&#x4ED6;&#x7C7B;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">       <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">            <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">            <span class="keyword">public</span> IntNode next;</span><br><span class="line">            <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">                item = i;</span><br><span class="line">                next = n;</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">private</span> IntNode first; </span><br><span class="line"></span><br><span class="line">       <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">           first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">       } </span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5D4C;&#x5957;&#x7C7B;&#x4E0E;&#x5206;&#x5F00;&#x5B9A;&#x4E49;&#x4E24;&#x4E2A;&#x7C7B;&#x7684;&#x6548;&#x679C;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x524D;&#x8005;&#x80FD;&#x8BA9;&#x4EE3;&#x7801;&#x770B;&#x8D77;&#x6765;&#x66F4;&#x4E3A;&#x6574;&#x9F50;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5D4C;&#x5957;&#x7C7B;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;<span class="math inline">\(SLList\)</span>&#x4E2D;&#x7684;&#x4EFB;&#x4F55;&#x5B9E;&#x4F8B;&#x65B9;&#x6CD5;&#x6216;&#x8005;&#x53D8;&#x91CF;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<code>static</code>&#x6765;&#x58F0;&#x660E;&#x5B83;&#x3002;<code>static</code>&#x5173;&#x952E;&#x5B57;&#x8BF4;&#x660E;&#x9759;&#x6001;&#x7C7B;(<span class="math inline">\(static\;class\)</span>)&#x4E2D;&#x7684;&#x65B9;&#x6CD5;&#x4E0D;&#x80FD;&#x8BBF;&#x95EE;&#x4EFB;&#x4F55;&#x5728;&#x5C01;&#x95ED;&#x7C7B;&#x4E2D;&#x7684;&#x6210;&#x5458;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x8FD9;&#x610F;&#x5473;&#x7740;<span class="math inline">\(IntNode\)</span>&#x4E0D;&#x80FD;&#x591F;&#x8BBF;&#x95EE;<code>first</code>&#xFF0C;<code>addFirst</code>&#x6216;&#x8005;<code>getFirst</code>&#x3002;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">       <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">            <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">            <span class="keyword">public</span> IntNode next;</span><br><span class="line">            <span class="keyword">public</span> <span class="title function_">IntNode</span><span class="params">(<span class="type">int</span> i, IntNode n)</span> {</span><br><span class="line">                item = i;</span><br><span class="line">                next = n;</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">private</span> IntNode first;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#x7684;&#x505A;&#x6CD5;&#x53EF;&#x4EE5;&#x8282;&#x7EA6;&#x4E00;&#x4E9B;&#x5185;&#x5B58;&#xFF0C;&#x56E0;&#x4E3A;&#x4E4B;&#x540E;<span class="math inline">\(IntNode\)</span>&#x5C31;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x8FFD;&#x8E2A;&#x5B83;&#x600E;&#x4E48;&#x8BBF;&#x95EE;&#x5B83;&#x6240;&#x5904;&#x7684;<span class="math inline">\(SLList\)</span>&#x4E86;&#xFF0C;&#x4ECE;&#x800C;<span class="math inline">\(IntNode\)</span>&#x4E0D;&#x4F1A;&#x8C03;&#x7528;<span class="math inline">\(SLList\)</span>&#x3002;</p>
+<blockquote>
+<p>&#x2003;&#x2003;if you don&apos;t use any instance members of the outer class, make the
+nested class static.</p>
+</blockquote>
+<h3><span id="5addlast-size">5.<code>addLast</code>&#x3001;<code>size</code></span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Adds an item to the end of the list. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> first;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Advance p to the end of the list. */</span></span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Returns the size of the list starting at IntNode p. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">(IntNode p)</span> {</span><br><span class="line">    <span class="keyword">if</span> (p.next == <span class="literal">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + size(p.next);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4E2A;<span class="math inline">\(size\)</span>&#x51FD;&#x6570;&#x4E5F;&#x662F;<span class="math inline">\(O(n)\)</span>&#x590D;&#x6742;&#x5EA6;&#x7684;&#x3002;&#x4E3A;&#x4E86;&#x51CF;&#x5C11;&#x65F6;&#x95F4;&#x6D88;&#x8017;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x50CF;&#x521B;&#x5EFA;<span class="math inline">\(SLList\)</span>&#x4E00;&#x6837;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x201C;&#x4E2D;&#x4ECB;&#x4EBA;&#x201D;&#xFF0C;&#x6765;&#x5B9E;&#x73B0;&#x7528;&#x6237;&#x5BF9;<span class="math inline">\(Size\)</span>&#x7684;&#x8BBF;&#x95EE;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Returns the size of the list starting at IntNode p. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">(IntNode p)</span> {</span><br><span class="line">    <span class="keyword">if</span> (p.next == <span class="literal">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + size(p.next);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> {</span><br><span class="line">    <span class="keyword">return</span> size(first);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x91CC;&#x51FA;&#x73B0;&#x4E86;&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x540D;&#x79F0;&#x90FD;&#x53EB;<span class="math inline">\(size\)</span>&#x3002;&#x8FD9;&#x662F;&#x5141;&#x8BB8;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x4EEC;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x53C2;&#x6570;&#x3002;&#x6211;&#x4EEC;&#x628A;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x540D;&#x5B57;&#x76F8;&#x540C;&#x3001;&#x53C2;&#x6570;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x6CD5;&#x79F0;&#x4F5C;&#x91CD;&#x8F7D;(<span class="math inline">\(overloaded\)</span>)&#x3002;</p>
+<h3><span id="6&#x7F13;&#x5B58;cashing">6.&#x7F13;&#x5B58;<span class="math inline">\(cashing\)</span></span></h3>
+<p>&#x2003;&#x2003;&#x9664;&#x4E86;&#x7528;&#x4E0A;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#x8BA1;&#x7B97;<span class="math inline">\(size\)</span>&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x53EF;&#x4EE5;&#x5728;<span class="math inline">\(SLList\)</span>&#x7C7B;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;<span class="math inline">\(size\)</span>&#x53D8;&#x91CF;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> {</span><br><span class="line">    ... <span class="comment">/* IntNode declaration omitted. */</span></span><br><span class="line">    <span class="keyword">private</span> IntNode first;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        first = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, first);</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    }</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x79CD;&#x901A;&#x8FC7;&#x4FDD;&#x5B58;&#x5173;&#x952E;&#x4FE1;&#x606F;&#x6765;&#x52A0;&#x901F;&#x68C0;&#x7D22;&#x7684;&#x65B9;&#x6CD5;&#x88AB;&#x79F0;&#x4E3A;&#x7F13;&#x5B58;(<span class="math inline">\(cashing\)</span>)&#x3002;</p>
+<h3><span id="7&#x7A7A;&#x94FE;&#x8868;">7.&#x7A7A;&#x94FE;&#x8868;</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;<span class="math inline">\(SLList\)</span>&#x7684;&#x6846;&#x67B6;&#x53EF;&#x4EE5;&#x8F7B;&#x677E;&#x5730;&#x521D;&#x59CB;&#x5316;&#x94FE;&#x8868;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">SLList</span><span class="params">()</span> {</span><br><span class="line">    first = <span class="literal">null</span>;</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h3><span id="8&#x54E8;&#x5175;&#x8282;&#x70B9;sentinel">8.&#x54E8;&#x5175;&#x8282;&#x70B9;(<span class="math inline">\(sentinel\)</span>)</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x4E0A;&#x4E00;&#x7AE0;&#x7684;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0;<code>addLast</code>&#x65B9;&#x6CD5;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> first;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x4F46;&#x662F;&#xFF0C;&#x5F53;&#x4F20;&#x5165;&#x7684;&#x94FE;&#x8868;&#x662F;&#x7A7A;&#x94FE;&#x8868;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;<code>first == null</code>&#xFF0C;<code>while(p.next != null),p.next</code>&#x8FD9;&#x4E9B;&#x65B9;&#x6CD5;&#x90FD;&#x4F1A;&#x5BFC;&#x81F4;<code>null pointer exceptation</code>&#x7684;&#x9519;&#x8BEF;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5355;&#x72EC;&#x8BA8;&#x8BBA;<code>first == null</code>&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x4F46;&#x8FD9;&#x6837;&#x4F1A;&#x8BA9;&#x7A0B;&#x5E8F;&#x53D8;&#x5F97;&#x590D;&#x6742;&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x8BBE;&#x6CD5;&#x5C06;&#x6240;&#x6709;&#x7684;&#x94FE;&#x8868;&#x90FD;&#x7EDF;&#x4E00;&#x6210;&#x4E00;&#x79CD;&#x60C5;&#x51B5;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x94FE;&#x8868;&#x7684;&#x5F00;&#x5934;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x53EB;&#x4F5C;&#x54E8;&#x5175;&#x8282;&#x70B9;(<span class="math inline">\(sentinel\;node\)</span>)&#xFF0C;&#x4E0D;&#x7BA1;&#x94FE;&#x8868;&#x662F;&#x5426;&#x4E3A;&#x7A7A;&#xFF0C;&#x8FD9;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x5B58;&#x5728;&#x3002;</p>
+<p><img src="/2024/05/31/2.2.SLLists/image-9.png"></p>
+<p><img src="/2024/05/31/2.2.SLLists/image-10.png"></p>
+<p>&#x2003;&#x2003;&#x5728;&#x5C06;&#x6240;&#x6709;&#x60C5;&#x51B5;&#x7EDF;&#x4E00;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x66F4;&#x597D;&#x5730;&#x5B9E;&#x73B0;<code>addLast</code>&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span>(p.next != <span class="literal">null</span>) {</span><br><span class="line">        p = p.next;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h3><span id="9&#x4E0D;&#x53D8;&#x91CF;invarient">9.&#x4E0D;&#x53D8;&#x91CF;<span class="math inline">\(invarient\)</span></span></h3>
+<p>&#x2003;&#x2003;&#x4E0D;&#x53D8;&#x91CF;&#xFF0C;&#x5C31;&#x662F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E2D;&#x5FC5;&#x987B;&#x8981;&#x9075;&#x5B88;&#x7684;&#x4E8B;&#x5B9E;(<span class="math inline">\(fact\;that\;is\;guaranteed\;to\;be\;true\)</span>)&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E00;&#x4E2A;<span class="math inline">\(SLList\)</span>&#x81F3;&#x5C11;&#x8981;&#x9075;&#x5FAA;&#x4EE5;&#x4E0B;&#x4E0D;&#x53D8;&#x91CF;&#xFF1A;</p>
+<ul>
+<li><code>sentinel</code>&#x603B;&#x662F;&#x6307;&#x5411;&#x54E8;&#x5175;&#x8282;&#x70B9;&#x3002;</li>
+<li>&#x94FE;&#x8868;&#x6700;&#x524D;&#x9762;&#x7684;&#x5143;&#x7D20;(&#x5982;&#x679C;&#x5B58;&#x5728;&#x7684;&#x8BDD;)&#x6C38;&#x8FDC;&#x662F;<code>sentinel.next.item</code>&#x3002;</li>
+<li><code>size</code>&#x53D8;&#x91CF;&#x6C38;&#x8FDC;&#x4EE3;&#x6307;&#x88AB;&#x52A0;&#x5165;&#x94FE;&#x8868;&#x7684;&#x5143;&#x7D20;&#x7684;&#x6570;&#x91CF;&#x3002;</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/2.2.%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1364,6 +1499,21 @@ am&quot; or &quot;my name is&quot;. You can&apos;t change who you are.</p>
     </span>
 
   
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>5 &#x5206;&#x949F;</span>
+    </span>
 </div>
 
         </div>
@@ -1445,6 +1595,22 @@ d\)</span>&#x8868;&#x793A;&#x7684;&#x6709;&#x7406;&#x6570;</li>
     </span>
     <span class="author" itemprop="copyrightHolder">fyerfyer</span>
   </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">84k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:07</span>
+  </span>
+</div>
 <div class="busuanzi-count">
     <span class="post-meta-item" id="busuanzi_container_site_uv">
       <span class="post-meta-item-icon">
