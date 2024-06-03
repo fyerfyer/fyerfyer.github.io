@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -186,6 +186,162 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>250</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</span></h1>
+<h3><span id="1-the-stack-machine">1. The stack machine</span></h3>
+<ul>
+<li>The stack machine is an <em>abstraction</em> that consists of
+<strong>an architecture, a stack and a set of operation which we can
+apply to the architecture</strong>.</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
+<ul>
+<li>It can be considered an <em>array</em> which offers direct access to
+every element in the memory, as oppose to the traditional stack which
+only offers a stack pointer.</li>
+<li>When we do <code>push x</code>, <strong>the address of
+<code>x</code></strong> will be push into the stack:</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
+<ul>
+<li><p>When we do <code>pop y</code>:</p>
+<ul>
+<li>the <strong>current top value in the stack</strong> will be
+removed,</li>
+<li>the <strong>popped value</strong> will override <code>y</code> (in
+this example, when 7 is popped, 3 becomes the new top value).</li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
+<h3><span id="2stack-arithmetic">2.Stack arithmetic</span></h3>
+<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
+three different things:</p>
+<ol type="1">
+<li>Pop as many required operands in the stack as possible.</li>
+<li>Apply the function to these operands in a separate process and get
+the result.</li>
+<li>Push the result back into the stack.</li>
+</ol>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
+<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
+have to do it to call <code>add</code> or <code>neg</code>, and these
+things will take place.</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
+<h3><span id="3vm-commands">3.VM commands</span></h3>
+<ul>
+<li>Arithmetic commands:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
+<ul>
+<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
+<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
+high-level language:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1964,129 +2120,6 @@ want to carry out the jump.</p></li>
 </ul></li>
 </ul></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">4.8.&#x6307;&#x9488;&#xFF0C;&#x8F93;&#x5165;&#x4E0E;&#x8F93;&#x51FA;&#x63A7;&#x5236;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 20:23:44" itemprop="dateCreated datePublished" datetime="2024-04-05T20:23:44+08:00">2024-04-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 16:16:48" itemprop="dateModified" datetime="2024-06-03T16:16:48+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-4-Machine-Language/" itemprop="url" rel="index"><span itemprop="name">Module 4.Machine Language</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>268</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="48pointer-and-input-outputcontrol"><span class="math inline">\(4.8.\)</span>Pointer and Input, Output
-Control</span></h1>
-<h3><span id="1pointer">1.Pointer</span></h3>
-<p>&#x2003;&#x2003;We use <strong>A-instruction</strong> to point to a certain
-address. For example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">//   for(i = 0; i &lt; n; i ++) {</span><br><span class="line">//      arr[i] = -1</span><br><span class="line">//   }</span><br><span class="line"></span><br><span class="line">//   suppose arr = 100 and n = 10</span><br><span class="line"></span><br><span class="line">//initialize</span><br><span class="line">	@100</span><br><span class="line">	D = A</span><br><span class="line">	@arr</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@10</span><br><span class="line">	D = A</span><br><span class="line">	@n</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = 0</span><br><span class="line"></span><br><span class="line">//iteration</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n </span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D;JEQ</span><br><span class="line"></span><br><span class="line">	//RAM[arr + i] = -1</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@arr</span><br><span class="line">	A = D + M</span><br><span class="line">	M = -1</span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	</span><br><span class="line">	@LOOP</span><br><span class="line">	0;JMP</span><br><span class="line"></span><br><span class="line">	(END)</span><br><span class="line">	@END</span><br><span class="line">	0;JMP</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;The key step in the program is <code>A = D + M, M = -1</code>:</p>
-<ul>
-<li><p>The <code>A = D + M</code> point the address of <code>arr</code>
-to the <strong>base address</strong> of <code>arr</code>(the initial
-address, 100) plus i, which match the expression
-<code>arr + i</code>.</p></li>
-<li><p>By the time we say M equals -1, the register that will be
-affected is the register in A address.</p></li>
-<li><p>Variables that store memory addresses like <code>arr + i</code>
-are called <em>pointers</em>.</p></li>
-<li><p>Typical pointer semantics:&quot;set the address register to the
-contents of some <strong>memory register</strong>&quot;</p></li>
-</ul>
-<h3><span id="2screen-input">2.Screen input</span></h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">//for (i = 0; i &lt; n; i ++)</span><br><span class="line">//    draw 16 black pixels at the </span><br><span class="line">//    beginning of row i</span><br><span class="line"></span><br><span class="line">//    addr = SCREEN</span><br><span class="line">//    n = RAM[0]</span><br><span class="line">//    i = 0</span><br><span class="line">//    LOOP:</span><br><span class="line">//    if i &gt; n goto END</span><br><span class="line">//    RAM[addr] = -1 1111111111111111</span><br><span class="line">//    addr = addr + 32</span><br><span class="line">//    i = i + 1</span><br><span class="line">//    goto LOOP</span><br><span class="line"></span><br><span class="line">@SCREEN</span><br><span class="line">D = A</span><br><span class="line">@addr</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@R0</span><br><span class="line">D = M</span><br><span class="line">@n</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@i</span><br><span class="line">M = 0</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n</span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D; JGT</span><br><span class="line"></span><br><span class="line">	@addr</span><br><span class="line">	A = M</span><br><span class="line">	M = -1</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	@32</span><br><span class="line">	D = A</span><br><span class="line">	@addr</span><br><span class="line">	M = M + D</span><br><span class="line">	(LOOP)</span><br><span class="line">	0; JMP</span><br><span class="line">	</span><br><span class="line">(END)</span><br><span class="line">	@END</span><br><span class="line">	0; JMP</span><br></pre></td></tr></table></figure>
 
       
     </div>
