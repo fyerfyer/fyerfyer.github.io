@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>3.1.Compiler, Assembler, Linker, Loader</title>
-    <url>/2024/05/18/1-2-Number-Representation/</url>
-    <content><![CDATA[
-]]></content>
-      <categories>
-        <category>CS61C Great Ideas in Computer Architecture</category>
-        <category>Module 1.Intro</category>
-      </categories>
-  </entry>
-  <entry>
     <title>1.2.布尔函数合成</title>
     <url>/2024/04/03/1-2-%E5%B8%83%E5%B0%94%E5%87%BD%E6%95%B0%E5%90%88%E6%88%90/</url>
     <content><![CDATA[<h1><span id="12boolean-function-construction"><span class="math inline">\(1.2.\)</span>Boolean function construction</span></h1>
@@ -854,6 +844,29 @@ various components of the rule.</p>
       </categories>
   </entry>
   <entry>
+    <title>10.4.对控制流的处理</title>
+    <url>/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1><span id="114handling-flow-of-control"><span class="math inline">\(11.4.\)</span>Handling Flow of Control</span></h1>
+<p><img src="/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<ul>
+<li>The <code>not</code> operation will <strong>turn the expression into
+a boolean value</strong>, thus make out code simpler and tighter.</li>
+<li>The compiler generates these labels automatically.</li>
+</ul>
+<p><img src="/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p>  In a program, we may have multiple <code>if</code> and
+<code>while</code>statements, to deal we this, we only have to assure
+that <strong>the compiler generates unique labels</strong>.</p>
+<p>  Also the <code>if</code> and <code>while</code> statements may be
+nested. That is , <strong>the compiler employs a highly recursive
+compilation</strong>.</p>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 10.Code Generator</category>
+      </categories>
+  </entry>
+  <entry>
     <title>9.4.解析树</title>
     <url>/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/</url>
     <content><![CDATA[<h1><span id="94parsetree"><span class="math inline">\(9.4.\)</span>Parse
@@ -965,29 +978,6 @@ currently located in <code>RAM 8000</code> onto the stack</strong>.</li>
 <li><code>pop this 0</code> will <strong>take something off the stack
 and put it into <code>RAM 8000</code></strong>.</li>
 </ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 10.Code Generator</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>10.4.对控制流的处理</title>
-    <url>/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1><span id="114handling-flow-of-control"><span class="math inline">\(11.4.\)</span>Handling Flow of Control</span></h1>
-<p><img src="/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
-<ul>
-<li>The <code>not</code> operation will <strong>turn the expression into
-a boolean value</strong>, thus make out code simpler and tighter.</li>
-<li>The compiler generates these labels automatically.</li>
-</ul>
-<p><img src="/2024/04/20/10-4-%E5%AF%B9%E6%8E%A7%E5%88%B6%E6%B5%81%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
-<p>  In a program, we may have multiple <code>if</code> and
-<code>while</code>statements, to deal we this, we only have to assure
-that <strong>the compiler generates unique labels</strong>.</p>
-<p>  Also the <code>if</code> and <code>while</code> statements may be
-nested. That is , <strong>the compiler employs a highly recursive
-compilation</strong>.</p>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
@@ -1501,58 +1491,6 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
-    <title>12.2.Hashing的实现方法(1)</title>
-    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
-    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
-<h3><span id="1整数溢出">1.整数溢出</span></h3>
-<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
-<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
-<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
-<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
-<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
-<ol type="1">
-<li>它是一个整数</li>
-<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
-<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
-<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.1.Hashing的引入</title>
-    <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
-    <content><![CDATA[<h1><span id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</span></h1>
-<h3><span id="1hasing的引入">1.<span class="math inline">\(Hasing\)</span>的引入</span></h3>
-<p>  在先前的树结构中，我们实现了对数据的高效查找。但树的使用有以下的限制：</p>
-<ol type="1">
-<li>树需要对象具有可比较性(<span class="math inline">\(comparable\)</span>)。对于某些元素(比如字符串)，它们不能进行比较，因此就无法插入<span class="math inline">\(BST\)</span>中了。</li>
-<li><span class="math inline">\(BST\)</span>的运行时间为<span class="math inline">\(\Theta(\log
-N)\)</span>，但我们希望有更优的运行时间。</li>
-</ol>
-<p>  假设我们想要实现对整数的查找，我们可以通过检测数组第<span class="math inline">\(i\)</span>位是否为<span class="math inline">\(1\)</span>，从而得到该整数是否存在。该数据结构如下实现：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> &#123;</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>  该数据结构的查找与插入都只需要<span class="math inline">\(\Theta(1)\)</span>的运行时间。然而，它有以下的问题：</p>
-<ol type="1">
-<li>空间浪费较大。</li>
-<li>不具有普适性。该数据结构只适用于整数。</li>
-</ol>
-<h3><span id="2字符串到整数的转换">2.字符串到整数的转换</span></h3>
-<p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>12.3.Hashing的实现方法(2)</title>
     <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
     <content><![CDATA[<h1><span id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</span></h1>
@@ -1584,6 +1522,30 @@ item exists, return true.</li>
 </ul>
 <h3><span id="2内存的处理">2.内存的处理</span></h3>
 <p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.2.Hashing的实现方法(1)</title>
+    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
+    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
+<h3><span id="1整数溢出">1.整数溢出</span></h3>
+<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
+<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
+<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
+<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
+<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
+<ol type="1">
+<li>它是一个整数</li>
+<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
+<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
+<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -1629,6 +1591,34 @@ due to overflow).</li>
 <li>Why a small prime? Because it's easier to compute.</li>
 </ul></li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.1.Hashing的引入</title>
+    <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
+    <content><![CDATA[<h1><span id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</span></h1>
+<h3><span id="1hasing的引入">1.<span class="math inline">\(Hasing\)</span>的引入</span></h3>
+<p>  在先前的树结构中，我们实现了对数据的高效查找。但树的使用有以下的限制：</p>
+<ol type="1">
+<li>树需要对象具有可比较性(<span class="math inline">\(comparable\)</span>)。对于某些元素(比如字符串)，它们不能进行比较，因此就无法插入<span class="math inline">\(BST\)</span>中了。</li>
+<li><span class="math inline">\(BST\)</span>的运行时间为<span class="math inline">\(\Theta(\log
+N)\)</span>，但我们希望有更优的运行时间。</li>
+</ol>
+<p>  假设我们想要实现对整数的查找，我们可以通过检测数组第<span class="math inline">\(i\)</span>位是否为<span class="math inline">\(1\)</span>，从而得到该整数是否存在。该数据结构如下实现：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> &#123;</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>  该数据结构的查找与插入都只需要<span class="math inline">\(\Theta(1)\)</span>的运行时间。然而，它有以下的问题：</p>
+<ol type="1">
+<li>空间浪费较大。</li>
+<li>不具有普适性。该数据结构只适用于整数。</li>
+</ol>
+<h3><span id="2字符串到整数的转换">2.字符串到整数的转换</span></h3>
+<p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -3133,89 +3123,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
-    <title>3.1.Compiler, Assembler, Linker, Loader</title>
-    <url>/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/</url>
-    <content><![CDATA[<h1><span id="31compiler-assembler-linkerloader"><span class="math inline">\(3.1.\)</span>Compiler, Assembler, Linker,
-Loader</span></h1>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image.png"></p>
-<h3><span id="1an-example">1.An example</span></h3>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-1.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-2.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-3.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-4.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-5.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-6.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-7.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-8.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-9.png"></p>
-<h3><span id="2interpretation">2.Interpretation</span></h3>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-10.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-11.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-12.png"></p>
-<h3><span id="3calling-chain">3.Calling chain</span></h3>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-13.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-18.png"></p>
-<h3><span id="4compilation">4.Compilation</span></h3>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-14.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-15.png"></p>
-<hr>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-16.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-17.png"></p>
-<hr>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-32.png"></p>
-<h3><span id="5generating-machine-code">5.Generating machine code</span></h3>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-19.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-20.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-21.png"></p>
-<blockquote>
-<p>The <code>auipc</code> instruction <strong>adds an immediate number
-to the current PC value</strong>. This means that the generated address
-<strong>is relative to the current instruction</strong>. It add an
-offset to the PC (upper 20 bits to the left of the instant number by 12
-bits), and use <code>addi</code> to load the lower 12 bits.</p>
-<p><code>lui</code> instructions are used to generate absolute
-addresses, which are fixed addresses of data in memory. This approach
-works for memory addresses that do not move. It loads an instant number
-to the upper 20 bits of the register.</p>
-</blockquote>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-24.png"></p>
-<h4><span id="asymboltable">  <span class="math inline">\(a.\)</span>Symbol
-table</span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-22.png"></p>
-<h4><span id="brelocation-table">  <span class="math inline">\(b.\)</span>Relocation table</span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-23.png"></p>
-<h4><span id="clinker">  <span class="math inline">\(c.\)</span>Linker</span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-25.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-26.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-27.png"></p>
-<hr>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-28.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-29.png"></p>
-<h4><span id="dreference">  <span class="math inline">\(d.Reference\)</span></span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-30.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-31.png"></p>
-<h4><span id="eloader">  <span class="math inline">\(e.\)</span>Loader</span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-33.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-34.png"></p>
-<h4><span id="fanexample">  <span class="math inline">\(f.\)</span>An
-example</span></h4>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-35.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-36.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-37.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-38.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-39.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-40.png"></p>
-<hr>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-41.png"></p>
-<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-42.png"></p>
-<hr>
-]]></content>
-      <categories>
-        <category>CS61C Great Ideas in Computer Architecture</category>
-        <category>Module 3.Translating and Starting a Program</category>
-      </categories>
-  </entry>
-  <entry>
     <title>3.1.时序逻辑</title>
     <url>/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/</url>
     <content><![CDATA[<h1><span id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</span></h1>
@@ -4127,6 +4034,35 @@ the following pseudo code: <figure class="highlight plaintext"><table><tr><td cl
       </categories>
   </entry>
   <entry>
+    <title>4.8.指针，输入与输出控制</title>
+    <url>/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/</url>
+    <content><![CDATA[<h1><span id="48pointer-and-input-outputcontrol"><span class="math inline">\(4.8.\)</span>Pointer and Input, Output
+Control</span></h1>
+<h3><span id="1pointer">1.Pointer</span></h3>
+<p>  We use <strong>A-instruction</strong> to point to a certain
+address. For example: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//   for(i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">//      arr[i] = -1</span><br><span class="line">//   &#125;</span><br><span class="line"></span><br><span class="line">//   suppose arr = 100 and n = 10</span><br><span class="line"></span><br><span class="line">//initialize</span><br><span class="line">	@100</span><br><span class="line">	D = A</span><br><span class="line">	@arr</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@10</span><br><span class="line">	D = A</span><br><span class="line">	@n</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = 0</span><br><span class="line"></span><br><span class="line">//iteration</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n </span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D;JEQ</span><br><span class="line"></span><br><span class="line">	//RAM[arr + i] = -1</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@arr</span><br><span class="line">	A = D + M</span><br><span class="line">	M = -1</span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	</span><br><span class="line">	@LOOP</span><br><span class="line">	0;JMP</span><br><span class="line"></span><br><span class="line">	(END)</span><br><span class="line">	@END</span><br><span class="line">	0;JMP</span><br></pre></td></tr></table></figure></p>
+<p>  The key step in the program is <code>A = D + M, M = -1</code>:</p>
+<ul>
+<li><p>The <code>A = D + M</code> point the address of <code>arr</code>
+to the <strong>base address</strong> of <code>arr</code>(the initial
+address, 100) plus i, which match the expression
+<code>arr + i</code>.</p></li>
+<li><p>By the time we say M equals -1, the register that will be
+affected is the register in A address.</p></li>
+<li><p>Variables that store memory addresses like <code>arr + i</code>
+are called <em>pointers</em>.</p></li>
+<li><p>Typical pointer semantics:"set the address register to the
+contents of some <strong>memory register</strong>"</p></li>
+</ul>
+<h3><span id="2screen-input">2.Screen input</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//for (i = 0; i &lt; n; i ++)</span><br><span class="line">//    draw 16 black pixels at the </span><br><span class="line">//    beginning of row i</span><br><span class="line"></span><br><span class="line">//    addr = SCREEN</span><br><span class="line">//    n = RAM[0]</span><br><span class="line">//    i = 0</span><br><span class="line">//    LOOP:</span><br><span class="line">//    if i &gt; n goto END</span><br><span class="line">//    RAM[addr] = -1 1111111111111111</span><br><span class="line">//    addr = addr + 32</span><br><span class="line">//    i = i + 1</span><br><span class="line">//    goto LOOP</span><br><span class="line"></span><br><span class="line">@SCREEN</span><br><span class="line">D = A</span><br><span class="line">@addr</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@R0</span><br><span class="line">D = M</span><br><span class="line">@n</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@i</span><br><span class="line">M = 0</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n</span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D; JGT</span><br><span class="line"></span><br><span class="line">	@addr</span><br><span class="line">	A = M</span><br><span class="line">	M = -1</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	@32</span><br><span class="line">	D = A</span><br><span class="line">	@addr</span><br><span class="line">	M = M + D</span><br><span class="line">	(LOOP)</span><br><span class="line">	0; JMP</span><br><span class="line">	</span><br><span class="line">(END)</span><br><span class="line">	@END</span><br><span class="line">	0; JMP</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 4.Machine Language</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.1.接口</title>
     <url>/2024/05/31/4.1.interface/</url>
     <content><![CDATA[<h1><span id="41接口"><span class="math inline">\(4.1\)</span>接口</span></h1>
@@ -4185,35 +4121,6 @@ it’s currently referring to.</p>
       <categories>
         <category>CS61B DataStructure</category>
         <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.8.指针，输入与输出控制</title>
-    <url>/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/</url>
-    <content><![CDATA[<h1><span id="48pointer-and-input-outputcontrol"><span class="math inline">\(4.8.\)</span>Pointer and Input, Output
-Control</span></h1>
-<h3><span id="1pointer">1.Pointer</span></h3>
-<p>  We use <strong>A-instruction</strong> to point to a certain
-address. For example: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//   for(i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">//      arr[i] = -1</span><br><span class="line">//   &#125;</span><br><span class="line"></span><br><span class="line">//   suppose arr = 100 and n = 10</span><br><span class="line"></span><br><span class="line">//initialize</span><br><span class="line">	@100</span><br><span class="line">	D = A</span><br><span class="line">	@arr</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@10</span><br><span class="line">	D = A</span><br><span class="line">	@n</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = 0</span><br><span class="line"></span><br><span class="line">//iteration</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n </span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D;JEQ</span><br><span class="line"></span><br><span class="line">	//RAM[arr + i] = -1</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@arr</span><br><span class="line">	A = D + M</span><br><span class="line">	M = -1</span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	</span><br><span class="line">	@LOOP</span><br><span class="line">	0;JMP</span><br><span class="line"></span><br><span class="line">	(END)</span><br><span class="line">	@END</span><br><span class="line">	0;JMP</span><br></pre></td></tr></table></figure></p>
-<p>  The key step in the program is <code>A = D + M, M = -1</code>:</p>
-<ul>
-<li><p>The <code>A = D + M</code> point the address of <code>arr</code>
-to the <strong>base address</strong> of <code>arr</code>(the initial
-address, 100) plus i, which match the expression
-<code>arr + i</code>.</p></li>
-<li><p>By the time we say M equals -1, the register that will be
-affected is the register in A address.</p></li>
-<li><p>Variables that store memory addresses like <code>arr + i</code>
-are called <em>pointers</em>.</p></li>
-<li><p>Typical pointer semantics:"set the address register to the
-contents of some <strong>memory register</strong>"</p></li>
-</ul>
-<h3><span id="2screen-input">2.Screen input</span></h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//for (i = 0; i &lt; n; i ++)</span><br><span class="line">//    draw 16 black pixels at the </span><br><span class="line">//    beginning of row i</span><br><span class="line"></span><br><span class="line">//    addr = SCREEN</span><br><span class="line">//    n = RAM[0]</span><br><span class="line">//    i = 0</span><br><span class="line">//    LOOP:</span><br><span class="line">//    if i &gt; n goto END</span><br><span class="line">//    RAM[addr] = -1 1111111111111111</span><br><span class="line">//    addr = addr + 32</span><br><span class="line">//    i = i + 1</span><br><span class="line">//    goto LOOP</span><br><span class="line"></span><br><span class="line">@SCREEN</span><br><span class="line">D = A</span><br><span class="line">@addr</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@R0</span><br><span class="line">D = M</span><br><span class="line">@n</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@i</span><br><span class="line">M = 0</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n</span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D; JGT</span><br><span class="line"></span><br><span class="line">	@addr</span><br><span class="line">	A = M</span><br><span class="line">	M = -1</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	@32</span><br><span class="line">	D = A</span><br><span class="line">	@addr</span><br><span class="line">	M = M + D</span><br><span class="line">	(LOOP)</span><br><span class="line">	0; JMP</span><br><span class="line">	</span><br><span class="line">(END)</span><br><span class="line">	@END</span><br><span class="line">	0; JMP</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 4.Machine Language</category>
       </categories>
   </entry>
   <entry>
@@ -4388,151 +4295,6 @@ invoked is based on the dynamic type of the invoking expression</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.3.子类多态性</title>
-    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
-    <content><![CDATA[<h1><span id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</span></h1>
-<h3><span id="1多态性的概念">1.多态性的概念</span></h3>
-<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
-<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
-<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
-<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
-<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
-<h3><span id="2子类多态性的应用">2.子类多态性的应用</span></h3>
-<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
-<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
-<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
-<h3><span id="3comparable接口">3.<code>comparable</code>接口</span></h3>
-<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
-<h3><span id="4comparator接口">4.<code>comparator</code>接口</span></h3>
-<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
-<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
-<h3><span id="5接口的功能">5.接口的功能</span></h3>
-<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
-<blockquote>
-<p>  A Comparable says, "I want to compare myself to another object". It
-is imbedded within the object itself, and it defines the natural
-ordering of a type. A Comparator, on the other hand, is more like a
-third party machine that compares two objects to each other. Since
-there's only room for one compareTo method, if we want multiple ways to
-compare, we must turn to Comparator.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.3.声明式编程</title>
-    <url>/2024/05/31/4.3.%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<h1><span id="43声明式编程declarativeprogramming"><span class="math inline">\(4.3\)</span>声明式编程(<span class="math inline">\(declarative\;programming\)</span>)</span></h1>
-<h2><span id="一-概述">一、概述</span></h2>
-<p>  除了流(<span class="math inline">\(streams\)</span>)，数据的值也经常存储在一个叫作数据库(<span class="math inline">\(database\)</span>)的仓库里。</p>
-<p>  数据库由存入其中的数据和检索、转换这些数据的接口组成。每个存储在数据库中的值称作记录(<span class="math inline">\(record\)</span>)，有着相似结构的记录被归类为表格(<span class="math inline">\(tables\)</span>)。可以通过询问语言中的询问语句(<span class="math inline">\(queries\)</span>)来检索、转换记录。目前最普遍的询问语言被称作<span class="math inline">\(Structure\;Query\;Language(SQL)\)</span>。</p>
-<p>  <span class="math inline">\(SQL\)</span>是声明式编程语言的一种。在这种语言中，声明并不直接描述计算，而是描述计算想要得到的结果。而设计和运行一个计算过程来得到这个结果是询问解释器(<span class="math inline">\(query\;interpreter\)</span>)的工作。这种语言经常将过程性的细节(<span class="math inline">\(procedural\;details\)</span>)抽象，而专注于结果的形式(<span class="math inline">\(form\)</span>)。</p>
-<h2><span id="二-sql">二、<span class="math inline">\(SQL\)</span></span></h2>
-<h3><span id="1表格">1.表格</span></h3>
-<p>  表格(<span class="math inline">\(table\)</span>)具有固定数量的命名列(<span class="math inline">\(named\;column\)</span>)和类型列(<span class="math inline">\(typed\;column\)</span>)。表的每一行表示一个数据记录，行中的每一列表示一个值。例如下面这个关于城市的表格：</p>
-<p><img src="/2024/05/31/4.3.%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/image.png"></p>
-<p>  一个只有一行的表格可以通过<span class="math inline">\(select\)</span>语句创建。该行的每个值间用逗号隔开，列名称跟在关键词<span class="math inline">\(as\)</span>后面。所有的<span class="math inline">\(SQL\)</span>语句都以分号结尾： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name;</span><br><span class="line">38|122|Berkeley</span><br></pre></td></tr></table></figure></p>
-<p>  多行的表格可以通过<span class="math inline">\(union\)</span>语句创建： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name union</span><br><span class="line">   ...&gt; select 42,             71,               &quot;Cambridge&quot;        union</span><br><span class="line">   ...&gt; select 45,             93,               &quot;Minneapolis&quot;;</span><br><span class="line">38|122|Berkeley</span><br><span class="line">42|71|Cambridge</span><br><span class="line">45|93|Minneapolis</span><br></pre></td></tr></table></figure></p>
-<p>  可以通过<span class="math inline">\(create\;table\)</span>语句来给表格命名：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table cities as</span><br><span class="line">   ...&gt;    select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name union</span><br><span class="line">   ...&gt;    select 42,             71,               &quot;Cambridge&quot;        union</span><br><span class="line">   ...&gt;    select 45,             93,               &quot;Minneapolis&quot;;</span><br></pre></td></tr></table></figure></p>
-<p>  当一个表格被命名后，可以通过<span class="math inline">\(from\)</span>语句调用这个名字。表格中的所有列可以通过<code>select *</code>形式访问：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select * from cities;</span><br><span class="line">38|122|Berkeley</span><br><span class="line">42|71|Cambridge</span><br><span class="line">45|93|Minneapolis</span><br></pre></td></tr></table></figure></p>
-<h3><span id="2select语句">2.<span class="math inline">\(select\)</span>语句</span></h3>
-<p>  <span class="math inline">\(select\)</span>语句通过列举(<span class="math inline">\(listing\)</span>)某一行的值，或者(更普遍地)从一个已存在的表格中，利用<span class="math inline">\(from\)</span>句式投射(<span class="math inline">\(project\)</span>)来定义一个表格。该语句的一般格式如下：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select [column description] from [existing table name]</span><br></pre></td></tr></table></figure>   这里的<span class="math inline">\(column\;expression\)</span>表示对原来表格的列的操作，如加减乘除等。</p>
-<p>  例如，我们可以用如下方法来创造一个两列的表格，这个表格描述了每个城市到<span class="math inline">\(Berkeley\)</span>的距离： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, 60*abs(latitude-38) from cities;</span><br><span class="line">Berkeley|0</span><br><span class="line">Cambridge|240</span><br><span class="line">Minneapolis|420</span><br></pre></td></tr></table></figure></p>
-<p>  为了方便后续被其它<span class="math inline">\(select\)</span>语句所引用，在定义表格时给每一个列一个名字往往是必须的：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table distances as</span><br><span class="line">   ...&gt;   select name, 60*abs(latitude-38) as distance from cities;</span><br><span class="line">sqlite&gt; select distance/5, name from distances;</span><br><span class="line">0|Berkeley</span><br><span class="line">48|Cambridge</span><br><span class="line">84|Minneapolis</span><br></pre></td></tr></table></figure></p>
-<h4><span id="awhere语句">  <span class="math inline">\(a.\)</span><span class="math inline">\(Where\)</span>语句</span></h4>
-<p>  <span class="math inline">\(select\)</span>语句也可以穿插一个表示过滤元素(<span class="math inline">\(filering\)</span>)的<span class="math inline">\(where\)</span>语句。这个表达式将不符合<span class="math inline">\(where\)</span>语句的行给筛序掉。只有符合筛选条件的行才会被用于构成一个新的表格：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table cold as</span><br><span class="line">   ...&gt;   select name from cities where latitude &gt; 43;</span><br><span class="line">sqlite&gt; select name, &quot;is cold!&quot; from cold;</span><br><span class="line">Minneapolis|is cold!</span><br></pre></td></tr></table></figure></p>
-<h4><span id="b顺序语句">  <span class="math inline">\(b.\)</span>顺序语句</span></h4>
-<p>  顺序语句(<span class="math inline">\(order\;clause\)</span>)包括一个排序表达式，所有未被过滤的行都会按照这个语句进行排序：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select distance, name from distances order by -distance;</span><br><span class="line">84|Minneapolis</span><br><span class="line">48|Cambridge</span><br><span class="line">0|Berkeley</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(select\)</span>的这些特性功能使得<span class="math inline">\(select\)</span>能够表示很多种类的行输入表格到输出表格的映射。</p>
-<h3><span id="3合并">3.合并</span></h3>
-<h4><span id="a合并的基本操作">  <span class="math inline">\(a.\)</span>合并的基本操作</span></h4>
-<p>  众多数据可以通过合并(<span class="math inline">\(joining\)</span>)表格变成一个，这是数据库系统中一个基础的操作。</p>
-<p>  当表格被合并后，对于输入表格的每一个行，合并后的表格都会包括一个新的行。如果有两个表格进行合并操作，它们分别有<span class="math inline">\(m\)</span>行与<span class="math inline">\(n\)</span>行，那么合并后的表格就会有<span class="math inline">\(m\times n\)</span>行。在<span class="math inline">\(SQL\)</span>语言中，合并两个表格是通过<span class="math inline">\(from\)</span>语句加上逗号隔开的表格名称实现的：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table temps as</span><br><span class="line">   ...&gt;   select &quot;Berkeley&quot; as city, 68 as temp union</span><br><span class="line">   ...&gt;   select &quot;Chicago&quot;         , 59         union</span><br><span class="line">   ...&gt;   select &quot;Minneapolis&quot;     , 55;</span><br><span class="line"></span><br><span class="line">sqlite&gt; select * from cities, temps;</span><br><span class="line">38|122|Berkeley|Berkeley|68</span><br><span class="line">38|122|Berkeley|Chicago|59</span><br><span class="line">38|122|Berkeley|Minneapolis|55</span><br><span class="line">42|71|Cambridge|Berkeley|68</span><br><span class="line">42|71|Cambridge|Chicago|59</span><br><span class="line">42|71|Cambridge|Minneapolis|55</span><br><span class="line">45|93|Minneapolis|Berkeley|68</span><br><span class="line">45|93|Minneapolis|Chicago|59</span><br><span class="line">45|93|Minneapolis|Minneapolis|55</span><br></pre></td></tr></table></figure></p>
-<h4><span id="b不同表格的关系">  <span class="math inline">\(b.\)</span>不同表格的关系</span></h4>
-<p>  同样地，合并也可以通过<span class="math inline">\(where\)</span>语句，表示两个表格间的关系。例如，我们希望将数据收集到一个表中，以获得每个城市自己的<span class="math inline">\(temp\)</span>和<span class="math inline">\(lati\)</span>。可以通过以下语句实现这个想法：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, latitude, temp from cities, temps where name = city;</span><br><span class="line">Berkeley|38|68</span><br><span class="line">Minneapolis|45|55</span><br></pre></td></tr></table></figure></p>
-<h4><span id="c消除歧义">  <span class="math inline">\(c.\)</span>消除歧义</span></h4>
-<p>  为了消除名称相同的表格间的歧义，<span class="math inline">\(SQL\)</span>允许我们使用关键字<span class="math inline">\(as\)</span>为<span class="math inline">\(form\)</span>语句提供别名，并利用点表达式来引用特定的表中的列。在下面计算不同城市温差的例子中，<span class="math inline">\(where\)</span>语句的字母顺序约束确保了每个对在结果中只出现一次：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select a.city, b.city, a.temp - b.temp</span><br><span class="line">   ...&gt;        from temps as a, temps as b where a.city &lt; b.city;</span><br><span class="line">Berkeley|Chicago|10</span><br><span class="line">Berkeley|Minneapolis|15</span><br><span class="line">Chicago|Minneapolis|5</span><br></pre></td></tr></table></figure></p>
-<h2><span id="三-sql解释器">三、<span class="math inline">\(SQL\)</span>解释器</span></h2>
-<h3><span id="1概括">1.概括</span></h3>
-<p>  为了创建一个<span class="math inline">\(SQL\)</span>解释器，我们需要创造一个对表格的表示、对<span class="math inline">\(SQL\)</span>语句的分析器，和对分析后语句的计算器。</p>
-<p>  在这个实现中，每个表格有自己的一个类，并且表格中的每行都由该类的一个实例来代表。一行的每一列都有一个属性，并且表格是列的序列。</p>
-<h3><span id="2table的创建">2.<span class="math inline">\(table\)</span>的创建</span></h3>
-<p>  在<span class="math inline">\(python\)</span>中，可以用<span class="math inline">\(namedtuple\)</span>函数实现表格的类，它会返回一个新的<span class="math inline">\(tuple\)</span>子类，这个子类会为元组中的每个元素给予名称。例如，先前的<span class="math inline">\(cities\)</span>表格可以用如下<span class="math inline">\(python\)</span>语句实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line">CitiesRow = namedtuple(<span class="string">&quot;Row&quot;</span>, [<span class="string">&quot;latitude&quot;</span>, <span class="string">&quot;longitude&quot;</span>, <span class="string">&quot;name&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cities = [CitiesRow(<span class="number">38</span>, <span class="number">122</span>, <span class="string">&quot;Berkeley&quot;</span>),</span><br><span class="line">              CitiesRow(<span class="number">42</span>,  <span class="number">71</span>, <span class="string">&quot;Cambridge&quot;</span>),</span><br><span class="line">              CitiesRow(<span class="number">43</span>,  <span class="number">93</span>, <span class="string">&quot;Minneapolis&quot;</span>)]</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3select的实现">3.<span class="math inline">\(select\)</span>的实现</span></h3>
-<p>  可以通过序列操作来实现<span class="math inline">\(select\)</span>语句，例如先前生成的<span class="math inline">\(cities\)</span>的<span class="math inline">\(distances\)</span>的表格： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table distances as</span><br><span class="line">   ...&gt;   select name, 60*abs(latitude-38) as distance from cities;</span><br><span class="line">sqlite&gt; select distance/5, name from distances;</span><br><span class="line">0|Berkeley</span><br><span class="line">48|Cambridge</span><br><span class="line">84|Minneapolis</span><br></pre></td></tr></table></figure></p>
-<p>  这个表格是由<span class="math inline">\(cities\)</span>的<span class="math inline">\(name\)</span>列和<span class="math inline">\(latitude\)</span>列生成的。该过程可以通过对输入表格的行用一个函数映射(<span class="math inline">\(mapping\;a\;function\)</span>)、然后返回一个新的行来实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>DistancesRow = namedtuple(<span class="string">&quot;Row&quot;</span>, [<span class="string">&quot;name&quot;</span>, <span class="string">&quot;distance&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">select</span>(<span class="params">cities_row</span>):</span><br><span class="line">        latitude, longitude, name = cities_row</span><br><span class="line">        <span class="keyword">return</span> DistancesRow(name, <span class="number">60</span>*<span class="built_in">abs</span>(latitude-<span class="number">38</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>distances = <span class="built_in">list</span>(<span class="built_in">map</span>(select, cities))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> distances:</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Berkeley&#x27;</span>, distance=<span class="number">0</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>)</span><br></pre></td></tr></table></figure></p>
-<h3><span id="4解释器的整体实现">4.解释器的整体实现</span></h3>
-<p>  <span class="math inline">\(SQL\)</span>解释器的设计将上述方法普遍化了：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Select</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;select [columns] from [tables] where [condition] order by [order].&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, columns, tables, condition, order</span>):</span><br><span class="line">            self.columns = columns</span><br><span class="line">            self.tables = tables</span><br><span class="line">            self.condition = condition</span><br><span class="line">            self.order = order</span><br><span class="line">            self.make_row = create_make_row(self.columns)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, env</span>):</span><br><span class="line">            <span class="string">&quot;&quot;&quot;Join, filter, sort, and map rows from tables to columns.&quot;&quot;&quot;</span></span><br><span class="line">            from_rows = join(self.tables, env)</span><br><span class="line">            filtered_rows = <span class="built_in">filter</span>(self.<span class="built_in">filter</span>, from_rows)</span><br><span class="line">            ordered_rows = self.sort(filtered_rows)</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">map</span>(self.make_row, ordered_rows)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">filter</span>(<span class="params">self, row</span>):</span><br><span class="line">            <span class="keyword">if</span> self.condition:</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">eval</span>(self.condition, row)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">sort</span>(<span class="params">self, rows</span>):</span><br><span class="line">            <span class="keyword">if</span> self.order:</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">sorted</span>(rows, key=<span class="keyword">lambda</span> r: <span class="built_in">eval</span>(self.order, r))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> rows</span><br></pre></td></tr></table></figure></p>
-<p>  <code>execute</code>方法将输入的表格进行合并、过滤和排序。最后输出行调用的函数<code>make_row</code>是一个高阶函数，它为生成的表格创建了一个新的类，并且定义了如何从一个输入行(<span class="math inline">\(input\;row\)</span>)到一个输出行(<span class="math inline">\(output\;row\)</span>)： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_make_row</span>(<span class="params">description</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a function from an input environment (dict) to an output row.</span></span><br><span class="line"><span class="string">        description -- a comma-separated list of [expression] as [column name]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#seperate the string by commas and space</span></span><br><span class="line">        columns = description.split(<span class="string">&quot;, &quot;</span>)</span><br><span class="line">        expressions, names = [], []</span><br><span class="line">        <span class="keyword">for</span> column <span class="keyword">in</span> columns:</span><br><span class="line">        <span class="comment">#if an &#x27;as&#x27; is contained in the coloum,then divide it into expression and column name</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot; as &quot;</span> <span class="keyword">in</span> column:</span><br><span class="line">                expression, name = column.split(<span class="string">&quot; as &quot;</span>)</span><br><span class="line">         <span class="comment">#else,view expression and name as the same</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                expression, name = column, column</span><br><span class="line">            expressions.append(expression)</span><br><span class="line">            names.append(name)</span><br><span class="line">        row = namedtuple(<span class="string">&quot;Row&quot;</span>, names)</span><br><span class="line">        <span class="comment">#the lambda function output a named tuple,its value is received by calculating the expression in the current environment</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">lambda</span> env: row(*[<span class="built_in">eval</span>(e, env) <span class="keyword">for</span> e <span class="keyword">in</span> expressions])</span><br></pre></td></tr></table></figure></p>
-<p>  最后，我们需要定义<span class="math inline">\(join\)</span>函数。在提供<code>env</code>，包括由名字键(<span class="math inline">\(keyed\;by\;name\)</span>)控制的现有表格(以行列表的形式存在)，的情况下，<span class="math inline">\(join\)</span>函数通过<span class="math inline">\(python\)</span>的<span class="math inline">\(product\)</span>函数，将这些行列表进行合并。对被合并的输出行，它用<code>make_env</code>函数映射，来得出对应字段的计算值：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">join</span>(<span class="params">tables, env</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return an iterator over dictionaries from names to values in a row.</span></span><br><span class="line"><span class="string">        tables -- a comma-separate sequences of table names</span></span><br><span class="line"><span class="string">        env    -- a dictionary from global names to tables</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        names = tables.split(<span class="string">&quot;, &quot;</span>)</span><br><span class="line">        joined_rows = product(*[env[name] <span class="keyword">for</span> name <span class="keyword">in</span> names])</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">map</span>(<span class="keyword">lambda</span> rows: make_env(rows, names), joined_rows)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">make_env</span>(<span class="params">rows, names</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Create an environment of names bound to values.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#transform a tuple into a dictionary</span></span><br><span class="line">        env = <span class="built_in">dict</span>(<span class="built_in">zip</span>(names, rows))</span><br><span class="line">        <span class="comment"># add the name and its value into the dictionary</span></span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">            <span class="keyword">for</span> name <span class="keyword">in</span> row._fields:</span><br><span class="line">                env[name] = <span class="built_in">getattr</span>(row, name)</span><br><span class="line">        <span class="keyword">return</span> env</span><br></pre></td></tr></table></figure></p>
-<p>  上述的<span class="math inline">\(SQL\)</span>解释器能够实现大部分<span class="math inline">\(SQL\)</span>语句： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, 60*abs(latitude-38) as distance</span><br><span class="line">   ...&gt;        from cities where name != &quot;Berkeley&quot; order by -longitude;</span><br><span class="line">Minneapolis|420</span><br><span class="line">Cambridge|240</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>env = &#123;<span class="string">&quot;cities&quot;</span>: cities&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>select = Select(<span class="string">&quot;name, 60*abs(latitude-38) as distance&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;cities&quot;</span>, <span class="string">&quot;name != &#x27;Berkeley&#x27;&quot;</span>, <span class="string">&quot;-longitude&quot;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> select.execute(env):</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select cities.name as name, distance, longitude</span><br><span class="line">   ...&gt;        from cities, distances where cities.name = distances.name;</span><br><span class="line">Cambridge|240|71</span><br><span class="line">Minneapolis|420|93</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>env[<span class="string">&quot;distances&quot;</span>] = <span class="built_in">list</span>(select.execute(env))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>joined = Select(<span class="string">&quot;cities.name as name, distance, longitude&quot;</span>, <span class="string">&quot;cities, distances&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;cities.name == distances.name&quot;</span>, <span class="literal">None</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> joined.execute(env):</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>, longitude=<span class="number">71</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>, longitude=<span class="number">93</span>)</span><br></pre></td></tr></table></figure></p>
-<h2><span id="四-递归select语句">四、递归<span class="math inline">\(select\)</span>语句</span></h2>
-<h3><span id="1with语句">1.<span class="math inline">\(with\)</span>语句</span></h3>
-<p>  <span class="math inline">\(with\)</span>语句的格式如下：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with [tables] select [columns] from [names] where [condition] order by [order]</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(tables\)</span>部分是一个用逗号分隔开的列表，列表内是对表格的描述：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[table name]([column names]) as ([select statement])</span><br></pre></td></tr></table></figure></p>
-<p>  任何<span class="math inline">\(select\)</span>语句都可以用于描述表格。</p>
-<p>  下面的例子展示了<span class="math inline">\(with\)</span>语句的使用： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   states(city, state) as (</span><br><span class="line">   ...&gt;     select &quot;Berkeley&quot;,  &quot;California&quot;    union</span><br><span class="line">   ...&gt;     select &quot;Boston&quot;,    &quot;Massachusetts&quot; union</span><br><span class="line">   ...&gt;     select &quot;Cambridge&quot;, &quot;Massachusetts&quot; union</span><br><span class="line">   ...&gt;     select &quot;Chicago&quot;,   &quot;Illinois&quot;      union</span><br><span class="line">   ...&gt;     select &quot;Pasadena&quot;,  &quot;California&quot;</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select a.city, b.city, a.state from states as a, states as b</span><br><span class="line">   ...&gt;        where a.state = b.state and a.city &lt; b.city;</span><br><span class="line">Berkeley|Pasadena|California</span><br><span class="line">Boston|Cambridge|Massachusetts</span><br></pre></td></tr></table></figure></p>
-<p>  在<span class="math inline">\(with\)</span>语句中定义的表格可以包含一个简单的递归结构，通过其他的输出行来得出当前输出行。例如下面定义一个<span class="math inline">\(5\)</span>到<span class="math inline">\(15\)</span>间整数的表格： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   ints(n) as (</span><br><span class="line">   ...&gt;     select 5 union</span><br><span class="line">   ...&gt;     select n+1 from ints where n &lt; 15</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select n, n*n from ints where n % 2 = 1;</span><br><span class="line">5|25</span><br><span class="line">7|49</span><br><span class="line">9|81</span><br><span class="line">11|121</span><br><span class="line">13|169</span><br><span class="line">15|225</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(with\)</span>语句还可以定义多重表格，表格间用逗号隔开。例如下面求解勾股数的表格：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   ints(n) as (</span><br><span class="line">   ...&gt;     select 1 union </span><br><span class="line">            select n+1 from ints where n &lt; 20</span><br><span class="line">   ...&gt;   ),</span><br><span class="line">   ...&gt;   squares(x, xx) as (</span><br><span class="line">   ...&gt;     select n, n*n from ints</span><br><span class="line">   ...&gt;   ),</span><br><span class="line">   ...&gt;   sum_of_squares(a, b, sum) as (</span><br><span class="line">   ...&gt;     select a.x, b.x, a.xx + b.xx</span><br><span class="line">   ...&gt;            from squares as a, squares as b where a.x &lt; b.x</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select a, b, x from squares, sum_of_squares where sum = xx;</span><br><span class="line">3|4|5</span><br><span class="line">6|8|10</span><br><span class="line">5|12|13</span><br><span class="line">9|12|15</span><br><span class="line">8|15|17</span><br><span class="line">12|16|20</span><br></pre></td></tr></table></figure></p>
-<p>  设计递归询问需要确保每个输入行都有足够的信息来计算结果行。例如下面求解斐波那契数的表格：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   fib(previous, current) as (</span><br><span class="line">   ...&gt;     select 0, 1 union</span><br><span class="line">   ...&gt;     select current, previous+current from fib</span><br><span class="line">   ...&gt;     where current &lt;= 100</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select previous from fib;</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">8</span><br><span class="line">13</span><br><span class="line">21</span><br><span class="line">34</span><br><span class="line">55</span><br><span class="line">89</span><br></pre></td></tr></table></figure></p>
-<h3><span id="2搭建字符串">2.搭建字符串</span></h3>
-<p>  两个字符串可以通过<code>||</code>操作符合并成一个更长的字符串：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with wall(n) as (</span><br><span class="line">  ....&gt;   select 99 union select 98 union select 97</span><br><span class="line">  ....&gt; )</span><br><span class="line">  ....&gt; select n || &quot; bottles&quot; from wall;</span><br><span class="line">99 bottles</span><br><span class="line">98 bottles</span><br><span class="line">97 bottles</span><br></pre></td></tr></table></figure></p>
-<p>  这个操作可以用来通过短语来构建句子。例如，构建英语句子的一个方式是用主语、动词和宾语进行组合：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table nouns as</span><br><span class="line">  ....&gt;   select &quot;the dog&quot; as phrase union</span><br><span class="line">  ....&gt;   select &quot;the cat&quot;           union</span><br><span class="line">  ....&gt;   select &quot;the bird&quot;;</span><br><span class="line">sqlite&gt; select subject.phrase || &quot; chased &quot; || object.phrase</span><br><span class="line">  ....&gt;        from nouns as subject, nouns as object</span><br><span class="line">  ....&gt;        where subject.phrase != object.phrase;</span><br><span class="line">the bird chased the cat</span><br><span class="line">the bird chased the dog</span><br><span class="line">the cat chased the bird</span><br><span class="line">the cat chased the dog</span><br><span class="line">the dog chased the bird</span><br><span class="line">the dog chased the cat</span><br></pre></td></tr></table></figure></p>
-<h2><span id="五-归并与分组">五、归并与分组</span></h2>
-<h3><span id="1归并操作">1.归并操作</span></h3>
-<p>  <span class="math inline">\(select\)</span>语句可以实现如<span class="math inline">\(max\)</span>、<span class="math inline">\(min\)</span>、<span class="math inline">\(count\)</span>、<span class="math inline">\(sum\)</span>等归并操作，它们分别返回行的最大最小值、行的数量和行内值的和：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table animals as</span><br><span class="line">  ....&gt;   select &quot;dog&quot; as name, 4 as legs, 20 as weight union</span><br><span class="line">  ....&gt;   select &quot;cat&quot;        , 4        , 10           union</span><br><span class="line">  ....&gt;   select &quot;ferret&quot;     , 4        , 10           union</span><br><span class="line">  ....&gt;   select &quot;t-rex&quot;      , 2        , 12000        union</span><br><span class="line">  ....&gt;   select &quot;penguin&quot;    , 2        , 10           union</span><br><span class="line">  ....&gt;   select &quot;bird&quot;       , 2        , 6;</span><br><span class="line">sqlite&gt; select max(legs) from animals;</span><br><span class="line">4</span><br><span class="line">sqlite&gt; select sum(weight) from animals;</span><br><span class="line">12056</span><br><span class="line">sqlite&gt; select min(legs), max(weight) from animals where name &lt;&gt; &quot;t-rex&quot;;</span><br><span class="line">2|20</span><br></pre></td></tr></table></figure></p>
-<p>  <code>count(*)</code>语句用于计算对应量的行的数量：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select count(legs) from animals;</span><br><span class="line">6</span><br><span class="line">sqlite&gt; select count(*) from animals;</span><br><span class="line">6</span><br><span class="line">sqlite&gt; select count(distinct legs) from animals;</span><br><span class="line">2</span><br></pre></td></tr></table></figure></p>
-<h3><span id="2groupby和having语句">2.<span class="math inline">\(group\;by\)</span>和<span class="math inline">\(having\)</span>语句</span></h3>
-<p>  <span class="math inline">\(group\;by\)</span>和<span class="math inline">\(having\)</span>语句用于将表格的行分割为组的一个子集(<span class="math inline">\(subset\;of\;groups\)</span>)并只从这些子集中挑选一个。任何在<span class="math inline">\(having\)</span>语句中的归并语句都会应用到表格的每一行，而不是一次性用于表格的所有行。例如下面的例子：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select legs, max(weight) from animals group by legs;</span><br><span class="line">2|12000</span><br><span class="line">4|20</span><br><span class="line">sqlite&gt; select weight from animals group by weight having count(*)&gt;1;</span><br><span class="line">10</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(group\;by\)</span>语句可以接受多个列，并将原来的表格按照这些列分组：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select max(name) from animals group by legs, weight order by name;</span><br><span class="line">bird</span><br><span class="line">dog</span><br><span class="line">ferret</span><br><span class="line">penguin</span><br><span class="line">t-rex</span><br><span class="line">sqlite&gt; select max(name), legs, weight from animals group by legs, weight</span><br><span class="line">  ....&gt;   having max(weight) &lt; 100;</span><br><span class="line">bird|2|6</span><br><span class="line">penguin|2|10</span><br><span class="line">ferret|4|10</span><br><span class="line">dog|4|20</span><br><span class="line">sqlite&gt; select count(*), weight/legs from animals group by weight/legs;</span><br><span class="line">2|2</span><br><span class="line">1|3</span><br><span class="line">2|5</span><br><span class="line">1|6000</span><br><span class="line"></span><br><span class="line">sqlite&gt; select name, legs, max(weight) from animals group by legs;</span><br><span class="line">t-rex|2|12000</span><br><span class="line">dog|4|20</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(having\)</span>语句可以和<span class="math inline">\(where\)</span>语句一样过滤表格元素，还可以包含对归并元素的引用。可以按照如下原则选择两种语句：当过滤条件是对单一的行执行时使用<span class="math inline">\(where\)</span>语句；当过滤条件设计归并操作时使用<span class="math inline">\(having\)</span>语句。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 4.Data Processing</category>
       </categories>
   </entry>
   <entry>
@@ -5101,6 +4863,55 @@ button.</li>
       </categories>
   </entry>
   <entry>
+    <title>4.3.子类多态性</title>
+    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
+    <content><![CDATA[<h1><span id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</span></h1>
+<h3><span id="1多态性的概念">1.多态性的概念</span></h3>
+<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
+<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
+<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
+<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
+<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
+<h3><span id="2子类多态性的应用">2.子类多态性的应用</span></h3>
+<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
+<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
+<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
+<h3><span id="3comparable接口">3.<code>comparable</code>接口</span></h3>
+<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
+<h3><span id="4comparator接口">4.<code>comparator</code>接口</span></h3>
+<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
+<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
+<h3><span id="5接口的功能">5.接口的功能</span></h3>
+<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
+<blockquote>
+<p>  A Comparable says, "I want to compare myself to another object". It
+is imbedded within the object itself, and it defines the natural
+ordering of a type. A Comparator, on the other hand, is more like a
+third party machine that compares two objects to each other. Since
+there's only room for one compareTo method, if we want multiple ways to
+compare, we must turn to Comparator.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
     <title>5.5.Hack计算机实现</title>
     <url>/2024/04/07/5-5-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1><span id="55hack计算机实现笔记"><span class="math inline">\(5.5.\)</span>Hack计算机实现笔记</span></h1>
@@ -5192,31 +5003,6 @@ button.</li>
       </categories>
   </entry>
   <entry>
-    <title>5.1.自动装箱</title>
-    <url>/2024/05/31/5.1.Autoboxing/</url>
-    <content><![CDATA[<h1><span id="51自动装箱"><span class="math inline">\(5.1\)</span>自动装箱</span></h1>
-<h3><span id="1自动装箱与解包">1.自动装箱与解包</span></h3>
-<p>  当我们实例化一个泛型对象时，我们需要指定其具体的类型，例如<code>LinkedListDeque&lt;Integer&gt;</code>。对于<span class="math inline">\(Java\)</span>的<span class="math inline">\(8\)</span>种基本类型，我们使用相应的引用类型，这些引用类型被称为包装类(<span class="math inline">\(wrapper\;classes\)</span>)：</p>
-<p><img src="/2024/05/31/5.1.Autoboxing/image.png"></p>
-<p>  由引用类型转换到基本类型，我们不需要执行额外的操作。例如，我们可以直接写如下程序：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="number">5</span>);</span><br><span class="line">      L.add(<span class="number">6</span>);</span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  而不必写成如下繁琐的形式： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">5</span>));</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">6</span>));</span><br><span class="line"></span><br><span class="line">      <span class="comment">/* Use the Integer.valueOf method to convert to int */</span></span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>).valueOf();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这是因为<span class="math inline">\(Java\)</span>会自动“装箱”(<span class="math inline">\(autobox\)</span>)与“解包”(<span class="math inline">\(unbox\)</span>)基本类型与引用类型。因此，下面的程序都是正确的：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blah</span><span class="params">(Integer x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blah(x);</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahPrimitive</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">20</span>);</span><br><span class="line">blahPrimitive(x);</span><br></pre></td></tr></table></figure></p>
-<p>  不过需要注意，数组不能自动装箱或解包。</p>
-<h3><span id="2类型扩展">2.类型扩展</span></h3>
-<p>  当需要的时候，<span class="math inline">\(Java\)</span>会自动扩展一个初始类型的范围，例如：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahDouble</span><span class="params">(<span class="type">double</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">double</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahDouble(x);</span><br></pre></td></tr></table></figure></p>
-<p>  是正确的，但： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahInt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">int</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt(x);</span><br></pre></td></tr></table></figure></p>
-<p>  是错误的，因为<span class="math inline">\(int\)</span>的范围小于<span class="math inline">\(double\)</span>，不能扩展到比自己更大的集合中。此时必须使用类型铸造：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt((<span class="type">int</span>) x);</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>5.Generics and Autoboxing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>5.3.泛类的创建</title>
     <url>/2024/05/31/5.3.Creating%20Another%20Generic%20Class/</url>
     <content><![CDATA[<h1><span id="53泛类的创建"><span class="math inline">\(5.3\)</span>泛类的创建</span></h1>
@@ -5229,6 +5015,102 @@ button.</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>5.Generics and Autoboxing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.3.声明式编程</title>
+    <url>/2024/05/31/4.3.%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<h1><span id="43声明式编程declarativeprogramming"><span class="math inline">\(4.3\)</span>声明式编程(<span class="math inline">\(declarative\;programming\)</span>)</span></h1>
+<h2><span id="一-概述">一、概述</span></h2>
+<p>  除了流(<span class="math inline">\(streams\)</span>)，数据的值也经常存储在一个叫作数据库(<span class="math inline">\(database\)</span>)的仓库里。</p>
+<p>  数据库由存入其中的数据和检索、转换这些数据的接口组成。每个存储在数据库中的值称作记录(<span class="math inline">\(record\)</span>)，有着相似结构的记录被归类为表格(<span class="math inline">\(tables\)</span>)。可以通过询问语言中的询问语句(<span class="math inline">\(queries\)</span>)来检索、转换记录。目前最普遍的询问语言被称作<span class="math inline">\(Structure\;Query\;Language(SQL)\)</span>。</p>
+<p>  <span class="math inline">\(SQL\)</span>是声明式编程语言的一种。在这种语言中，声明并不直接描述计算，而是描述计算想要得到的结果。而设计和运行一个计算过程来得到这个结果是询问解释器(<span class="math inline">\(query\;interpreter\)</span>)的工作。这种语言经常将过程性的细节(<span class="math inline">\(procedural\;details\)</span>)抽象，而专注于结果的形式(<span class="math inline">\(form\)</span>)。</p>
+<h2><span id="二-sql">二、<span class="math inline">\(SQL\)</span></span></h2>
+<h3><span id="1表格">1.表格</span></h3>
+<p>  表格(<span class="math inline">\(table\)</span>)具有固定数量的命名列(<span class="math inline">\(named\;column\)</span>)和类型列(<span class="math inline">\(typed\;column\)</span>)。表的每一行表示一个数据记录，行中的每一列表示一个值。例如下面这个关于城市的表格：</p>
+<p><img src="/2024/05/31/4.3.%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/image.png"></p>
+<p>  一个只有一行的表格可以通过<span class="math inline">\(select\)</span>语句创建。该行的每个值间用逗号隔开，列名称跟在关键词<span class="math inline">\(as\)</span>后面。所有的<span class="math inline">\(SQL\)</span>语句都以分号结尾： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name;</span><br><span class="line">38|122|Berkeley</span><br></pre></td></tr></table></figure></p>
+<p>  多行的表格可以通过<span class="math inline">\(union\)</span>语句创建： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name union</span><br><span class="line">   ...&gt; select 42,             71,               &quot;Cambridge&quot;        union</span><br><span class="line">   ...&gt; select 45,             93,               &quot;Minneapolis&quot;;</span><br><span class="line">38|122|Berkeley</span><br><span class="line">42|71|Cambridge</span><br><span class="line">45|93|Minneapolis</span><br></pre></td></tr></table></figure></p>
+<p>  可以通过<span class="math inline">\(create\;table\)</span>语句来给表格命名：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table cities as</span><br><span class="line">   ...&gt;    select 38 as latitude, 122 as longitude, &quot;Berkeley&quot; as name union</span><br><span class="line">   ...&gt;    select 42,             71,               &quot;Cambridge&quot;        union</span><br><span class="line">   ...&gt;    select 45,             93,               &quot;Minneapolis&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>  当一个表格被命名后，可以通过<span class="math inline">\(from\)</span>语句调用这个名字。表格中的所有列可以通过<code>select *</code>形式访问：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select * from cities;</span><br><span class="line">38|122|Berkeley</span><br><span class="line">42|71|Cambridge</span><br><span class="line">45|93|Minneapolis</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2select语句">2.<span class="math inline">\(select\)</span>语句</span></h3>
+<p>  <span class="math inline">\(select\)</span>语句通过列举(<span class="math inline">\(listing\)</span>)某一行的值，或者(更普遍地)从一个已存在的表格中，利用<span class="math inline">\(from\)</span>句式投射(<span class="math inline">\(project\)</span>)来定义一个表格。该语句的一般格式如下：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select [column description] from [existing table name]</span><br></pre></td></tr></table></figure>   这里的<span class="math inline">\(column\;expression\)</span>表示对原来表格的列的操作，如加减乘除等。</p>
+<p>  例如，我们可以用如下方法来创造一个两列的表格，这个表格描述了每个城市到<span class="math inline">\(Berkeley\)</span>的距离： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, 60*abs(latitude-38) from cities;</span><br><span class="line">Berkeley|0</span><br><span class="line">Cambridge|240</span><br><span class="line">Minneapolis|420</span><br></pre></td></tr></table></figure></p>
+<p>  为了方便后续被其它<span class="math inline">\(select\)</span>语句所引用，在定义表格时给每一个列一个名字往往是必须的：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table distances as</span><br><span class="line">   ...&gt;   select name, 60*abs(latitude-38) as distance from cities;</span><br><span class="line">sqlite&gt; select distance/5, name from distances;</span><br><span class="line">0|Berkeley</span><br><span class="line">48|Cambridge</span><br><span class="line">84|Minneapolis</span><br></pre></td></tr></table></figure></p>
+<h4><span id="awhere语句">  <span class="math inline">\(a.\)</span><span class="math inline">\(Where\)</span>语句</span></h4>
+<p>  <span class="math inline">\(select\)</span>语句也可以穿插一个表示过滤元素(<span class="math inline">\(filering\)</span>)的<span class="math inline">\(where\)</span>语句。这个表达式将不符合<span class="math inline">\(where\)</span>语句的行给筛序掉。只有符合筛选条件的行才会被用于构成一个新的表格：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table cold as</span><br><span class="line">   ...&gt;   select name from cities where latitude &gt; 43;</span><br><span class="line">sqlite&gt; select name, &quot;is cold!&quot; from cold;</span><br><span class="line">Minneapolis|is cold!</span><br></pre></td></tr></table></figure></p>
+<h4><span id="b顺序语句">  <span class="math inline">\(b.\)</span>顺序语句</span></h4>
+<p>  顺序语句(<span class="math inline">\(order\;clause\)</span>)包括一个排序表达式，所有未被过滤的行都会按照这个语句进行排序：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select distance, name from distances order by -distance;</span><br><span class="line">84|Minneapolis</span><br><span class="line">48|Cambridge</span><br><span class="line">0|Berkeley</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(select\)</span>的这些特性功能使得<span class="math inline">\(select\)</span>能够表示很多种类的行输入表格到输出表格的映射。</p>
+<h3><span id="3合并">3.合并</span></h3>
+<h4><span id="a合并的基本操作">  <span class="math inline">\(a.\)</span>合并的基本操作</span></h4>
+<p>  众多数据可以通过合并(<span class="math inline">\(joining\)</span>)表格变成一个，这是数据库系统中一个基础的操作。</p>
+<p>  当表格被合并后，对于输入表格的每一个行，合并后的表格都会包括一个新的行。如果有两个表格进行合并操作，它们分别有<span class="math inline">\(m\)</span>行与<span class="math inline">\(n\)</span>行，那么合并后的表格就会有<span class="math inline">\(m\times n\)</span>行。在<span class="math inline">\(SQL\)</span>语言中，合并两个表格是通过<span class="math inline">\(from\)</span>语句加上逗号隔开的表格名称实现的：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table temps as</span><br><span class="line">   ...&gt;   select &quot;Berkeley&quot; as city, 68 as temp union</span><br><span class="line">   ...&gt;   select &quot;Chicago&quot;         , 59         union</span><br><span class="line">   ...&gt;   select &quot;Minneapolis&quot;     , 55;</span><br><span class="line"></span><br><span class="line">sqlite&gt; select * from cities, temps;</span><br><span class="line">38|122|Berkeley|Berkeley|68</span><br><span class="line">38|122|Berkeley|Chicago|59</span><br><span class="line">38|122|Berkeley|Minneapolis|55</span><br><span class="line">42|71|Cambridge|Berkeley|68</span><br><span class="line">42|71|Cambridge|Chicago|59</span><br><span class="line">42|71|Cambridge|Minneapolis|55</span><br><span class="line">45|93|Minneapolis|Berkeley|68</span><br><span class="line">45|93|Minneapolis|Chicago|59</span><br><span class="line">45|93|Minneapolis|Minneapolis|55</span><br></pre></td></tr></table></figure></p>
+<h4><span id="b不同表格的关系">  <span class="math inline">\(b.\)</span>不同表格的关系</span></h4>
+<p>  同样地，合并也可以通过<span class="math inline">\(where\)</span>语句，表示两个表格间的关系。例如，我们希望将数据收集到一个表中，以获得每个城市自己的<span class="math inline">\(temp\)</span>和<span class="math inline">\(lati\)</span>。可以通过以下语句实现这个想法：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, latitude, temp from cities, temps where name = city;</span><br><span class="line">Berkeley|38|68</span><br><span class="line">Minneapolis|45|55</span><br></pre></td></tr></table></figure></p>
+<h4><span id="c消除歧义">  <span class="math inline">\(c.\)</span>消除歧义</span></h4>
+<p>  为了消除名称相同的表格间的歧义，<span class="math inline">\(SQL\)</span>允许我们使用关键字<span class="math inline">\(as\)</span>为<span class="math inline">\(form\)</span>语句提供别名，并利用点表达式来引用特定的表中的列。在下面计算不同城市温差的例子中，<span class="math inline">\(where\)</span>语句的字母顺序约束确保了每个对在结果中只出现一次：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select a.city, b.city, a.temp - b.temp</span><br><span class="line">   ...&gt;        from temps as a, temps as b where a.city &lt; b.city;</span><br><span class="line">Berkeley|Chicago|10</span><br><span class="line">Berkeley|Minneapolis|15</span><br><span class="line">Chicago|Minneapolis|5</span><br></pre></td></tr></table></figure></p>
+<h2><span id="三-sql解释器">三、<span class="math inline">\(SQL\)</span>解释器</span></h2>
+<h3><span id="1概括">1.概括</span></h3>
+<p>  为了创建一个<span class="math inline">\(SQL\)</span>解释器，我们需要创造一个对表格的表示、对<span class="math inline">\(SQL\)</span>语句的分析器，和对分析后语句的计算器。</p>
+<p>  在这个实现中，每个表格有自己的一个类，并且表格中的每行都由该类的一个实例来代表。一行的每一列都有一个属性，并且表格是列的序列。</p>
+<h3><span id="2table的创建">2.<span class="math inline">\(table\)</span>的创建</span></h3>
+<p>  在<span class="math inline">\(python\)</span>中，可以用<span class="math inline">\(namedtuple\)</span>函数实现表格的类，它会返回一个新的<span class="math inline">\(tuple\)</span>子类，这个子类会为元组中的每个元素给予名称。例如，先前的<span class="math inline">\(cities\)</span>表格可以用如下<span class="math inline">\(python\)</span>语句实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line">CitiesRow = namedtuple(<span class="string">&quot;Row&quot;</span>, [<span class="string">&quot;latitude&quot;</span>, <span class="string">&quot;longitude&quot;</span>, <span class="string">&quot;name&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cities = [CitiesRow(<span class="number">38</span>, <span class="number">122</span>, <span class="string">&quot;Berkeley&quot;</span>),</span><br><span class="line">              CitiesRow(<span class="number">42</span>,  <span class="number">71</span>, <span class="string">&quot;Cambridge&quot;</span>),</span><br><span class="line">              CitiesRow(<span class="number">43</span>,  <span class="number">93</span>, <span class="string">&quot;Minneapolis&quot;</span>)]</span><br></pre></td></tr></table></figure></p>
+<h3><span id="3select的实现">3.<span class="math inline">\(select\)</span>的实现</span></h3>
+<p>  可以通过序列操作来实现<span class="math inline">\(select\)</span>语句，例如先前生成的<span class="math inline">\(cities\)</span>的<span class="math inline">\(distances\)</span>的表格： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table distances as</span><br><span class="line">   ...&gt;   select name, 60*abs(latitude-38) as distance from cities;</span><br><span class="line">sqlite&gt; select distance/5, name from distances;</span><br><span class="line">0|Berkeley</span><br><span class="line">48|Cambridge</span><br><span class="line">84|Minneapolis</span><br></pre></td></tr></table></figure></p>
+<p>  这个表格是由<span class="math inline">\(cities\)</span>的<span class="math inline">\(name\)</span>列和<span class="math inline">\(latitude\)</span>列生成的。该过程可以通过对输入表格的行用一个函数映射(<span class="math inline">\(mapping\;a\;function\)</span>)、然后返回一个新的行来实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>DistancesRow = namedtuple(<span class="string">&quot;Row&quot;</span>, [<span class="string">&quot;name&quot;</span>, <span class="string">&quot;distance&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">select</span>(<span class="params">cities_row</span>):</span><br><span class="line">        latitude, longitude, name = cities_row</span><br><span class="line">        <span class="keyword">return</span> DistancesRow(name, <span class="number">60</span>*<span class="built_in">abs</span>(latitude-<span class="number">38</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>distances = <span class="built_in">list</span>(<span class="built_in">map</span>(select, cities))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> distances:</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Berkeley&#x27;</span>, distance=<span class="number">0</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>)</span><br></pre></td></tr></table></figure></p>
+<h3><span id="4解释器的整体实现">4.解释器的整体实现</span></h3>
+<p>  <span class="math inline">\(SQL\)</span>解释器的设计将上述方法普遍化了：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Select</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;select [columns] from [tables] where [condition] order by [order].&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, columns, tables, condition, order</span>):</span><br><span class="line">            self.columns = columns</span><br><span class="line">            self.tables = tables</span><br><span class="line">            self.condition = condition</span><br><span class="line">            self.order = order</span><br><span class="line">            self.make_row = create_make_row(self.columns)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, env</span>):</span><br><span class="line">            <span class="string">&quot;&quot;&quot;Join, filter, sort, and map rows from tables to columns.&quot;&quot;&quot;</span></span><br><span class="line">            from_rows = join(self.tables, env)</span><br><span class="line">            filtered_rows = <span class="built_in">filter</span>(self.<span class="built_in">filter</span>, from_rows)</span><br><span class="line">            ordered_rows = self.sort(filtered_rows)</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">map</span>(self.make_row, ordered_rows)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">filter</span>(<span class="params">self, row</span>):</span><br><span class="line">            <span class="keyword">if</span> self.condition:</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">eval</span>(self.condition, row)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">sort</span>(<span class="params">self, rows</span>):</span><br><span class="line">            <span class="keyword">if</span> self.order:</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">sorted</span>(rows, key=<span class="keyword">lambda</span> r: <span class="built_in">eval</span>(self.order, r))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> rows</span><br></pre></td></tr></table></figure></p>
+<p>  <code>execute</code>方法将输入的表格进行合并、过滤和排序。最后输出行调用的函数<code>make_row</code>是一个高阶函数，它为生成的表格创建了一个新的类，并且定义了如何从一个输入行(<span class="math inline">\(input\;row\)</span>)到一个输出行(<span class="math inline">\(output\;row\)</span>)： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_make_row</span>(<span class="params">description</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a function from an input environment (dict) to an output row.</span></span><br><span class="line"><span class="string">        description -- a comma-separated list of [expression] as [column name]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#seperate the string by commas and space</span></span><br><span class="line">        columns = description.split(<span class="string">&quot;, &quot;</span>)</span><br><span class="line">        expressions, names = [], []</span><br><span class="line">        <span class="keyword">for</span> column <span class="keyword">in</span> columns:</span><br><span class="line">        <span class="comment">#if an &#x27;as&#x27; is contained in the coloum,then divide it into expression and column name</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot; as &quot;</span> <span class="keyword">in</span> column:</span><br><span class="line">                expression, name = column.split(<span class="string">&quot; as &quot;</span>)</span><br><span class="line">         <span class="comment">#else,view expression and name as the same</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                expression, name = column, column</span><br><span class="line">            expressions.append(expression)</span><br><span class="line">            names.append(name)</span><br><span class="line">        row = namedtuple(<span class="string">&quot;Row&quot;</span>, names)</span><br><span class="line">        <span class="comment">#the lambda function output a named tuple,its value is received by calculating the expression in the current environment</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">lambda</span> env: row(*[<span class="built_in">eval</span>(e, env) <span class="keyword">for</span> e <span class="keyword">in</span> expressions])</span><br></pre></td></tr></table></figure></p>
+<p>  最后，我们需要定义<span class="math inline">\(join\)</span>函数。在提供<code>env</code>，包括由名字键(<span class="math inline">\(keyed\;by\;name\)</span>)控制的现有表格(以行列表的形式存在)，的情况下，<span class="math inline">\(join\)</span>函数通过<span class="math inline">\(python\)</span>的<span class="math inline">\(product\)</span>函数，将这些行列表进行合并。对被合并的输出行，它用<code>make_env</code>函数映射，来得出对应字段的计算值：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">join</span>(<span class="params">tables, env</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return an iterator over dictionaries from names to values in a row.</span></span><br><span class="line"><span class="string">        tables -- a comma-separate sequences of table names</span></span><br><span class="line"><span class="string">        env    -- a dictionary from global names to tables</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        names = tables.split(<span class="string">&quot;, &quot;</span>)</span><br><span class="line">        joined_rows = product(*[env[name] <span class="keyword">for</span> name <span class="keyword">in</span> names])</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">map</span>(<span class="keyword">lambda</span> rows: make_env(rows, names), joined_rows)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">make_env</span>(<span class="params">rows, names</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Create an environment of names bound to values.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment">#transform a tuple into a dictionary</span></span><br><span class="line">        env = <span class="built_in">dict</span>(<span class="built_in">zip</span>(names, rows))</span><br><span class="line">        <span class="comment"># add the name and its value into the dictionary</span></span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">            <span class="keyword">for</span> name <span class="keyword">in</span> row._fields:</span><br><span class="line">                env[name] = <span class="built_in">getattr</span>(row, name)</span><br><span class="line">        <span class="keyword">return</span> env</span><br></pre></td></tr></table></figure></p>
+<p>  上述的<span class="math inline">\(SQL\)</span>解释器能够实现大部分<span class="math inline">\(SQL\)</span>语句： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select name, 60*abs(latitude-38) as distance</span><br><span class="line">   ...&gt;        from cities where name != &quot;Berkeley&quot; order by -longitude;</span><br><span class="line">Minneapolis|420</span><br><span class="line">Cambridge|240</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>env = &#123;<span class="string">&quot;cities&quot;</span>: cities&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>select = Select(<span class="string">&quot;name, 60*abs(latitude-38) as distance&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;cities&quot;</span>, <span class="string">&quot;name != &#x27;Berkeley&#x27;&quot;</span>, <span class="string">&quot;-longitude&quot;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> select.execute(env):</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select cities.name as name, distance, longitude</span><br><span class="line">   ...&gt;        from cities, distances where cities.name = distances.name;</span><br><span class="line">Cambridge|240|71</span><br><span class="line">Minneapolis|420|93</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>env[<span class="string">&quot;distances&quot;</span>] = <span class="built_in">list</span>(select.execute(env))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>joined = Select(<span class="string">&quot;cities.name as name, distance, longitude&quot;</span>, <span class="string">&quot;cities, distances&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;cities.name == distances.name&quot;</span>, <span class="literal">None</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> row <span class="keyword">in</span> joined.execute(env):</span><br><span class="line">        <span class="built_in">print</span>(row)</span><br><span class="line">Row(name=<span class="string">&#x27;Cambridge&#x27;</span>, distance=<span class="number">240</span>, longitude=<span class="number">71</span>)</span><br><span class="line">Row(name=<span class="string">&#x27;Minneapolis&#x27;</span>, distance=<span class="number">300</span>, longitude=<span class="number">93</span>)</span><br></pre></td></tr></table></figure></p>
+<h2><span id="四-递归select语句">四、递归<span class="math inline">\(select\)</span>语句</span></h2>
+<h3><span id="1with语句">1.<span class="math inline">\(with\)</span>语句</span></h3>
+<p>  <span class="math inline">\(with\)</span>语句的格式如下：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with [tables] select [columns] from [names] where [condition] order by [order]</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(tables\)</span>部分是一个用逗号分隔开的列表，列表内是对表格的描述：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[table name]([column names]) as ([select statement])</span><br></pre></td></tr></table></figure></p>
+<p>  任何<span class="math inline">\(select\)</span>语句都可以用于描述表格。</p>
+<p>  下面的例子展示了<span class="math inline">\(with\)</span>语句的使用： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   states(city, state) as (</span><br><span class="line">   ...&gt;     select &quot;Berkeley&quot;,  &quot;California&quot;    union</span><br><span class="line">   ...&gt;     select &quot;Boston&quot;,    &quot;Massachusetts&quot; union</span><br><span class="line">   ...&gt;     select &quot;Cambridge&quot;, &quot;Massachusetts&quot; union</span><br><span class="line">   ...&gt;     select &quot;Chicago&quot;,   &quot;Illinois&quot;      union</span><br><span class="line">   ...&gt;     select &quot;Pasadena&quot;,  &quot;California&quot;</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select a.city, b.city, a.state from states as a, states as b</span><br><span class="line">   ...&gt;        where a.state = b.state and a.city &lt; b.city;</span><br><span class="line">Berkeley|Pasadena|California</span><br><span class="line">Boston|Cambridge|Massachusetts</span><br></pre></td></tr></table></figure></p>
+<p>  在<span class="math inline">\(with\)</span>语句中定义的表格可以包含一个简单的递归结构，通过其他的输出行来得出当前输出行。例如下面定义一个<span class="math inline">\(5\)</span>到<span class="math inline">\(15\)</span>间整数的表格： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   ints(n) as (</span><br><span class="line">   ...&gt;     select 5 union</span><br><span class="line">   ...&gt;     select n+1 from ints where n &lt; 15</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select n, n*n from ints where n % 2 = 1;</span><br><span class="line">5|25</span><br><span class="line">7|49</span><br><span class="line">9|81</span><br><span class="line">11|121</span><br><span class="line">13|169</span><br><span class="line">15|225</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(with\)</span>语句还可以定义多重表格，表格间用逗号隔开。例如下面求解勾股数的表格：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   ints(n) as (</span><br><span class="line">   ...&gt;     select 1 union </span><br><span class="line">            select n+1 from ints where n &lt; 20</span><br><span class="line">   ...&gt;   ),</span><br><span class="line">   ...&gt;   squares(x, xx) as (</span><br><span class="line">   ...&gt;     select n, n*n from ints</span><br><span class="line">   ...&gt;   ),</span><br><span class="line">   ...&gt;   sum_of_squares(a, b, sum) as (</span><br><span class="line">   ...&gt;     select a.x, b.x, a.xx + b.xx</span><br><span class="line">   ...&gt;            from squares as a, squares as b where a.x &lt; b.x</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select a, b, x from squares, sum_of_squares where sum = xx;</span><br><span class="line">3|4|5</span><br><span class="line">6|8|10</span><br><span class="line">5|12|13</span><br><span class="line">9|12|15</span><br><span class="line">8|15|17</span><br><span class="line">12|16|20</span><br></pre></td></tr></table></figure></p>
+<p>  设计递归询问需要确保每个输入行都有足够的信息来计算结果行。例如下面求解斐波那契数的表格：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with</span><br><span class="line">   ...&gt;   fib(previous, current) as (</span><br><span class="line">   ...&gt;     select 0, 1 union</span><br><span class="line">   ...&gt;     select current, previous+current from fib</span><br><span class="line">   ...&gt;     where current &lt;= 100</span><br><span class="line">   ...&gt;   )</span><br><span class="line">   ...&gt; select previous from fib;</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">8</span><br><span class="line">13</span><br><span class="line">21</span><br><span class="line">34</span><br><span class="line">55</span><br><span class="line">89</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2搭建字符串">2.搭建字符串</span></h3>
+<p>  两个字符串可以通过<code>||</code>操作符合并成一个更长的字符串：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; with wall(n) as (</span><br><span class="line">  ....&gt;   select 99 union select 98 union select 97</span><br><span class="line">  ....&gt; )</span><br><span class="line">  ....&gt; select n || &quot; bottles&quot; from wall;</span><br><span class="line">99 bottles</span><br><span class="line">98 bottles</span><br><span class="line">97 bottles</span><br></pre></td></tr></table></figure></p>
+<p>  这个操作可以用来通过短语来构建句子。例如，构建英语句子的一个方式是用主语、动词和宾语进行组合：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table nouns as</span><br><span class="line">  ....&gt;   select &quot;the dog&quot; as phrase union</span><br><span class="line">  ....&gt;   select &quot;the cat&quot;           union</span><br><span class="line">  ....&gt;   select &quot;the bird&quot;;</span><br><span class="line">sqlite&gt; select subject.phrase || &quot; chased &quot; || object.phrase</span><br><span class="line">  ....&gt;        from nouns as subject, nouns as object</span><br><span class="line">  ....&gt;        where subject.phrase != object.phrase;</span><br><span class="line">the bird chased the cat</span><br><span class="line">the bird chased the dog</span><br><span class="line">the cat chased the bird</span><br><span class="line">the cat chased the dog</span><br><span class="line">the dog chased the bird</span><br><span class="line">the dog chased the cat</span><br></pre></td></tr></table></figure></p>
+<h2><span id="五-归并与分组">五、归并与分组</span></h2>
+<h3><span id="1归并操作">1.归并操作</span></h3>
+<p>  <span class="math inline">\(select\)</span>语句可以实现如<span class="math inline">\(max\)</span>、<span class="math inline">\(min\)</span>、<span class="math inline">\(count\)</span>、<span class="math inline">\(sum\)</span>等归并操作，它们分别返回行的最大最小值、行的数量和行内值的和：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; create table animals as</span><br><span class="line">  ....&gt;   select &quot;dog&quot; as name, 4 as legs, 20 as weight union</span><br><span class="line">  ....&gt;   select &quot;cat&quot;        , 4        , 10           union</span><br><span class="line">  ....&gt;   select &quot;ferret&quot;     , 4        , 10           union</span><br><span class="line">  ....&gt;   select &quot;t-rex&quot;      , 2        , 12000        union</span><br><span class="line">  ....&gt;   select &quot;penguin&quot;    , 2        , 10           union</span><br><span class="line">  ....&gt;   select &quot;bird&quot;       , 2        , 6;</span><br><span class="line">sqlite&gt; select max(legs) from animals;</span><br><span class="line">4</span><br><span class="line">sqlite&gt; select sum(weight) from animals;</span><br><span class="line">12056</span><br><span class="line">sqlite&gt; select min(legs), max(weight) from animals where name &lt;&gt; &quot;t-rex&quot;;</span><br><span class="line">2|20</span><br></pre></td></tr></table></figure></p>
+<p>  <code>count(*)</code>语句用于计算对应量的行的数量：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select count(legs) from animals;</span><br><span class="line">6</span><br><span class="line">sqlite&gt; select count(*) from animals;</span><br><span class="line">6</span><br><span class="line">sqlite&gt; select count(distinct legs) from animals;</span><br><span class="line">2</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2groupby和having语句">2.<span class="math inline">\(group\;by\)</span>和<span class="math inline">\(having\)</span>语句</span></h3>
+<p>  <span class="math inline">\(group\;by\)</span>和<span class="math inline">\(having\)</span>语句用于将表格的行分割为组的一个子集(<span class="math inline">\(subset\;of\;groups\)</span>)并只从这些子集中挑选一个。任何在<span class="math inline">\(having\)</span>语句中的归并语句都会应用到表格的每一行，而不是一次性用于表格的所有行。例如下面的例子：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select legs, max(weight) from animals group by legs;</span><br><span class="line">2|12000</span><br><span class="line">4|20</span><br><span class="line">sqlite&gt; select weight from animals group by weight having count(*)&gt;1;</span><br><span class="line">10</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(group\;by\)</span>语句可以接受多个列，并将原来的表格按照这些列分组：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlite&gt; select max(name) from animals group by legs, weight order by name;</span><br><span class="line">bird</span><br><span class="line">dog</span><br><span class="line">ferret</span><br><span class="line">penguin</span><br><span class="line">t-rex</span><br><span class="line">sqlite&gt; select max(name), legs, weight from animals group by legs, weight</span><br><span class="line">  ....&gt;   having max(weight) &lt; 100;</span><br><span class="line">bird|2|6</span><br><span class="line">penguin|2|10</span><br><span class="line">ferret|4|10</span><br><span class="line">dog|4|20</span><br><span class="line">sqlite&gt; select count(*), weight/legs from animals group by weight/legs;</span><br><span class="line">2|2</span><br><span class="line">1|3</span><br><span class="line">2|5</span><br><span class="line">1|6000</span><br><span class="line"></span><br><span class="line">sqlite&gt; select name, legs, max(weight) from animals group by legs;</span><br><span class="line">t-rex|2|12000</span><br><span class="line">dog|4|20</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(having\)</span>语句可以和<span class="math inline">\(where\)</span>语句一样过滤表格元素，还可以包含对归并元素的引用。可以按照如下原则选择两种语句：当过滤条件是对单一的行执行时使用<span class="math inline">\(where\)</span>语句；当过滤条件设计归并操作时使用<span class="math inline">\(having\)</span>语句。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 4.Data Processing</category>
       </categories>
   </entry>
   <entry>
@@ -5431,6 +5313,31 @@ translation.</p></li>
       </categories>
   </entry>
   <entry>
+    <title>5.1.自动装箱</title>
+    <url>/2024/05/31/5.1.Autoboxing/</url>
+    <content><![CDATA[<h1><span id="51自动装箱"><span class="math inline">\(5.1\)</span>自动装箱</span></h1>
+<h3><span id="1自动装箱与解包">1.自动装箱与解包</span></h3>
+<p>  当我们实例化一个泛型对象时，我们需要指定其具体的类型，例如<code>LinkedListDeque&lt;Integer&gt;</code>。对于<span class="math inline">\(Java\)</span>的<span class="math inline">\(8\)</span>种基本类型，我们使用相应的引用类型，这些引用类型被称为包装类(<span class="math inline">\(wrapper\;classes\)</span>)：</p>
+<p><img src="/2024/05/31/5.1.Autoboxing/image.png"></p>
+<p>  由引用类型转换到基本类型，我们不需要执行额外的操作。例如，我们可以直接写如下程序：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="number">5</span>);</span><br><span class="line">      L.add(<span class="number">6</span>);</span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  而不必写成如下繁琐的形式： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">5</span>));</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">6</span>));</span><br><span class="line"></span><br><span class="line">      <span class="comment">/* Use the Integer.valueOf method to convert to int */</span></span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>).valueOf();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这是因为<span class="math inline">\(Java\)</span>会自动“装箱”(<span class="math inline">\(autobox\)</span>)与“解包”(<span class="math inline">\(unbox\)</span>)基本类型与引用类型。因此，下面的程序都是正确的：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blah</span><span class="params">(Integer x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blah(x);</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahPrimitive</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">20</span>);</span><br><span class="line">blahPrimitive(x);</span><br></pre></td></tr></table></figure></p>
+<p>  不过需要注意，数组不能自动装箱或解包。</p>
+<h3><span id="2类型扩展">2.类型扩展</span></h3>
+<p>  当需要的时候，<span class="math inline">\(Java\)</span>会自动扩展一个初始类型的范围，例如：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahDouble</span><span class="params">(<span class="type">double</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">double</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahDouble(x);</span><br></pre></td></tr></table></figure></p>
+<p>  是正确的，但： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahInt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">int</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt(x);</span><br></pre></td></tr></table></figure></p>
+<p>  是错误的，因为<span class="math inline">\(int\)</span>的范围小于<span class="math inline">\(double\)</span>，不能扩展到比自己更大的集合中。此时必须使用类型铸造：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt((<span class="type">int</span>) x);</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>5.Generics and Autoboxing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.5.Hack汇编器开发</title>
     <url>/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/</url>
     <content><![CDATA[<h1><span id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</span></h1>
@@ -5521,64 +5428,6 @@ allocation</p></li>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 6.Assembler</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>6.3.迭代</title>
-    <url>/2024/05/31/6.3.Iteration/</url>
-    <content><![CDATA[<h1><span id="63迭代"><span class="math inline">\(6.3\)</span>迭代</span></h1>
-<h3><span id="1增强型for循环">1.增强型<span class="math inline">\(for\)</span>循环</span></h3>
-<p>  我们知道，可以用以下<span class="math inline">\(for\)</span>语句实现对数组元素的遍历：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Set&lt;String&gt; s = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span> (String city : s) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这与下面的程序等价： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Set&lt;String&gt; s = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line">Iterator&lt;String&gt; seer = s.iterator();</span><br><span class="line"><span class="keyword">while</span> (seer.hasNext()) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">city</span> <span class="operator">=</span> seer.next();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这个程序的关键在于被称作迭代器(<span class="math inline">\(iterator\)</span>)的对象。我们可以使用如下方法返回一个迭代器对象：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;E&gt; <span class="title function_">iterator</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></p>
-<p>  例如，我们可以通过如下语句实现对<span class="math inline">\(List\)</span>的迭代遍历： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; friends = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">...</span><br><span class="line">Iterator&lt;Integer&gt; seer = friends.iterator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (seer.hasNext()) &#123;</span><br><span class="line">System.out.println(seer.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这个迭代器有三个关键方法：</p>
-<ol type="1">
-<li>获得迭代器对象：<code>Iterator&lt;Integer&gt; seer = friends.iterator();</code>。</li>
-<li>检测是否有对象剩余：<code>seer.hasNext()</code>。</li>
-<li>返回当前对象、并使迭代器前进一个对象：<code>seer.next()</code>。</li>
-</ol>
-<h3><span id="2迭代器的实现">2.迭代器的实现</span></h3>
-<h4><span id="a迭代器要素">  <span class="math inline">\(a.\)</span>迭代器要素</span></h4>
-<p>  首先，我们考虑编译器需要知道哪些可迭代对象的信息。首先，<code>iterator()</code>被调用了，于是我们需要知道：</p>
-<ul>
-<li>该接口具有<code>iterator()</code>方法。</li>
-</ul>
-<p>  其次，<span class="math inline">\(seer\)</span>的<code>.next()</code>与<code>.hasNext()</code>方法被调用了，于是：
-*
-迭代器接口是否有<code>.next()</code>与<code>.hasNext()</code>方法。</p>
-<h4><span id="b迭代器的实现">  <span class="math inline">\(b.\)</span>迭代器的实现</span></h4>
-<ol type="1">
-<li><p>我们的<span class="math inline">\(List\)</span>接口需要扩展迭代器接口，继承迭代器的抽象方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
-<li><p>编译器检查迭代器接口是否具有<code>.next()</code>与<code>.hasNext()</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span>;</span><br><span class="line">    T <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
-</ol>
-<p>  特定的类需要实现自己的迭代器方法与行为。例如，我们想给<span class="math inline">\(ArrarMap\)</span>添加一个迭代器。可以先如下实现迭代器接口所需方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ArraySetIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> wizPos;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ArraySetIterator</span><span class="params">()</span> &#123;</span><br><span class="line">        wizPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> wizPos &lt; size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">next</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">returnItem</span> <span class="operator">=</span> items[wizPos];</span><br><span class="line">        wizPos += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> returnItem;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们就可以利用<span class="math inline">\(ArraySetIterator\)</span>来实现对<span class="math inline">\(ArrayMap\)</span>的迭代： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">aset.add(<span class="number">5</span>);</span><br><span class="line">aset.add(<span class="number">23</span>);</span><br><span class="line">aset.add(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; iter = aset.iterator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(iter.hasNext()) &#123;</span><br><span class="line">    System.out.println(iter.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4><span id="c增强型for循环的实现">  <span class="math inline">\(c.\)</span>增强型<span class="math inline">\(for\)</span>循环的实现</span></h4>
-<p>  为了实现增强型<span class="math inline">\(for\)</span>循环，我们需要让<span class="math inline">\(ArrayMap\)</span>类实现可迭代接口。可迭代接口的关键方法是<code>iterator</code>，我们只需要如下实现：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArraySetIterator</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样以后，我们就可以使用增强型<span class="math inline">\(for\)</span>循环了： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i : aset) &#123;</span><br><span class="line">    System.out.println(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4><span id="d关键概念辨析">  <span class="math inline">\(d.\)</span>关键概念辨析</span></h4>
-<ul>
-<li><p>可迭代对象(<span class="math inline">\(iterable\)</span>)：使得一个类可以被迭代的接口，需要方法<code>iterator()</code>。</p></li>
-<li><p>迭代器(<span class="math inline">\(iterator\)</span>)：定义某些方法的接口，这些方法用于实现真正的迭代。</p></li>
-</ul>
-<blockquote>
-<p>   You can think of an Iterator as a machine that you put onto an
-iterable that facilitates the iteration. Any iterable is the object on
-which the iterator is performing.</p>
-</blockquote>
-<h3><span id="3可迭代arrayset的完整实现">3.可迭代<span class="math inline">\(ArraySet\)</span>的完整实现</span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArraySet</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size; <span class="comment">// the next item to be added will be at position size</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ArraySet</span><span class="params">()</span> &#123;</span><br><span class="line">        items = (T[]) <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns true if this map contains a mapping for the specified key.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (items[i].equals(x)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Associates the specified value with the specified key in this map.</span></span><br><span class="line"><span class="comment">       Throws an IllegalArgumentException if the key is null. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;can&#x27;t add null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (contains(x)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns the number of key-value mappings in this map. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** returns an iterator (a.k.a. seer) into ME */</span></span><br><span class="line">    <span class="keyword">public</span> Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArraySetIterator</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ArraySetIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> wizPos;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">ArraySetIterator</span><span class="params">()</span> &#123;</span><br><span class="line">            wizPos = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> wizPos &lt; size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> T <span class="title function_">next</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="type">T</span> <span class="variable">returnItem</span> <span class="operator">=</span> items[wizPos];</span><br><span class="line">            wizPos += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> returnItem;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">        aset.add(<span class="number">5</span>);</span><br><span class="line">        aset.add(<span class="number">23</span>);</span><br><span class="line">        aset.add(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//iteration</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i : aset) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
       </categories>
   </entry>
   <entry>
@@ -5741,6 +5590,64 @@ and <em>VM implementation</em>.</p>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 7.VM Machine</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>6.3.迭代</title>
+    <url>/2024/05/31/6.3.Iteration/</url>
+    <content><![CDATA[<h1><span id="63迭代"><span class="math inline">\(6.3\)</span>迭代</span></h1>
+<h3><span id="1增强型for循环">1.增强型<span class="math inline">\(for\)</span>循环</span></h3>
+<p>  我们知道，可以用以下<span class="math inline">\(for\)</span>语句实现对数组元素的遍历：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Set&lt;String&gt; s = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span> (String city : s) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这与下面的程序等价： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Set&lt;String&gt; s = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line">Iterator&lt;String&gt; seer = s.iterator();</span><br><span class="line"><span class="keyword">while</span> (seer.hasNext()) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">city</span> <span class="operator">=</span> seer.next();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这个程序的关键在于被称作迭代器(<span class="math inline">\(iterator\)</span>)的对象。我们可以使用如下方法返回一个迭代器对象：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;E&gt; <span class="title function_">iterator</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></p>
+<p>  例如，我们可以通过如下语句实现对<span class="math inline">\(List\)</span>的迭代遍历： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; friends = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">...</span><br><span class="line">Iterator&lt;Integer&gt; seer = friends.iterator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (seer.hasNext()) &#123;</span><br><span class="line">System.out.println(seer.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这个迭代器有三个关键方法：</p>
+<ol type="1">
+<li>获得迭代器对象：<code>Iterator&lt;Integer&gt; seer = friends.iterator();</code>。</li>
+<li>检测是否有对象剩余：<code>seer.hasNext()</code>。</li>
+<li>返回当前对象、并使迭代器前进一个对象：<code>seer.next()</code>。</li>
+</ol>
+<h3><span id="2迭代器的实现">2.迭代器的实现</span></h3>
+<h4><span id="a迭代器要素">  <span class="math inline">\(a.\)</span>迭代器要素</span></h4>
+<p>  首先，我们考虑编译器需要知道哪些可迭代对象的信息。首先，<code>iterator()</code>被调用了，于是我们需要知道：</p>
+<ul>
+<li>该接口具有<code>iterator()</code>方法。</li>
+</ul>
+<p>  其次，<span class="math inline">\(seer\)</span>的<code>.next()</code>与<code>.hasNext()</code>方法被调用了，于是：
+*
+迭代器接口是否有<code>.next()</code>与<code>.hasNext()</code>方法。</p>
+<h4><span id="b迭代器的实现">  <span class="math inline">\(b.\)</span>迭代器的实现</span></h4>
+<ol type="1">
+<li><p>我们的<span class="math inline">\(List\)</span>接口需要扩展迭代器接口，继承迭代器的抽象方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>编译器检查迭代器接口是否具有<code>.next()</code>与<code>.hasNext()</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span>;</span><br><span class="line">    T <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p>  特定的类需要实现自己的迭代器方法与行为。例如，我们想给<span class="math inline">\(ArrarMap\)</span>添加一个迭代器。可以先如下实现迭代器接口所需方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ArraySetIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> wizPos;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ArraySetIterator</span><span class="params">()</span> &#123;</span><br><span class="line">        wizPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> wizPos &lt; size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">next</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">returnItem</span> <span class="operator">=</span> items[wizPos];</span><br><span class="line">        wizPos += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> returnItem;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们就可以利用<span class="math inline">\(ArraySetIterator\)</span>来实现对<span class="math inline">\(ArrayMap\)</span>的迭代： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">aset.add(<span class="number">5</span>);</span><br><span class="line">aset.add(<span class="number">23</span>);</span><br><span class="line">aset.add(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; iter = aset.iterator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(iter.hasNext()) &#123;</span><br><span class="line">    System.out.println(iter.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4><span id="c增强型for循环的实现">  <span class="math inline">\(c.\)</span>增强型<span class="math inline">\(for\)</span>循环的实现</span></h4>
+<p>  为了实现增强型<span class="math inline">\(for\)</span>循环，我们需要让<span class="math inline">\(ArrayMap\)</span>类实现可迭代接口。可迭代接口的关键方法是<code>iterator</code>，我们只需要如下实现：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArraySetIterator</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样以后，我们就可以使用增强型<span class="math inline">\(for\)</span>循环了： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i : aset) &#123;</span><br><span class="line">    System.out.println(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4><span id="d关键概念辨析">  <span class="math inline">\(d.\)</span>关键概念辨析</span></h4>
+<ul>
+<li><p>可迭代对象(<span class="math inline">\(iterable\)</span>)：使得一个类可以被迭代的接口，需要方法<code>iterator()</code>。</p></li>
+<li><p>迭代器(<span class="math inline">\(iterator\)</span>)：定义某些方法的接口，这些方法用于实现真正的迭代。</p></li>
+</ul>
+<blockquote>
+<p>   You can think of an Iterator as a machine that you put onto an
+iterable that facilitates the iteration. Any iterable is the object on
+which the iterator is performing.</p>
+</blockquote>
+<h3><span id="3可迭代arrayset的完整实现">3.可迭代<span class="math inline">\(ArraySet\)</span>的完整实现</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArraySet</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size; <span class="comment">// the next item to be added will be at position size</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ArraySet</span><span class="params">()</span> &#123;</span><br><span class="line">        items = (T[]) <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns true if this map contains a mapping for the specified key.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (items[i].equals(x)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Associates the specified value with the specified key in this map.</span></span><br><span class="line"><span class="comment">       Throws an IllegalArgumentException if the key is null. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;can&#x27;t add null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (contains(x)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns the number of key-value mappings in this map. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** returns an iterator (a.k.a. seer) into ME */</span></span><br><span class="line">    <span class="keyword">public</span> Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArraySetIterator</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ArraySetIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> wizPos;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">ArraySetIterator</span><span class="params">()</span> &#123;</span><br><span class="line">            wizPos = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> wizPos &lt; size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> T <span class="title function_">next</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="type">T</span> <span class="variable">returnItem</span> <span class="operator">=</span> items[wizPos];</span><br><span class="line">            wizPos += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> returnItem;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">        aset.add(<span class="number">5</span>);</span><br><span class="line">        aset.add(<span class="number">23</span>);</span><br><span class="line">        aset.add(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//iteration</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i : aset) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
       </categories>
   </entry>
   <entry>
@@ -6791,31 +6698,6 @@ it to the object that was just constructed</strong>.</li>
       </categories>
   </entry>
   <entry>
-    <title>8.2.渐进分析介绍</title>
-    <url>/2024/05/31/8.2.Asymptotics%20I/</url>
-    <content><![CDATA[<h1><span id="82渐进分析介绍"><span class="math inline">\(8.2\)</span>
-渐进分析介绍</span></h1>
-<h3><span id="1简化的分析流程">1.简化的分析流程</span></h3>
-<blockquote>
-<p>We can do the following steps to simplify our analysis: * Only
-consider the worst case. * Pick a representative operation (aka: cost
-model) * Ignore lower order terms * Ignore multiplicative constants.</p>
-</blockquote>
-<h3><span id="2big-theta">2.<span class="math inline">\(Big-Theta\)</span></span></h3>
-<p>  当对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>、<span class="math inline">\(k_2\)</span>使得<span class="math inline">\(k_1·f(N)\leq R(N)\leq
-k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
-\Theta(f(N))\)</span>。</p>
-<p>  我们可以用<span class="math inline">\(\Theta\)</span>来衡量程序的增长阶数，通过确定增长函数的上界和下界，我们相当于“确定”了增长函数。</p>
-<h3><span id="3big-o">3.<span class="math inline">\(Big-O\)</span></span></h3>
-<p>  <span class="math inline">\(O\)</span>可以看作是增长函数的“不等关系”，即“大于等于”。例如，我们可以说<span class="math inline">\(R(N)\in O(f(n^2))\)</span>。</p>
-<p>  一般地，如果对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>使得<span class="math inline">\(R(N)\leq k_1·f(N)\)</span>，有：<span class="math inline">\(R(n)\in O(f(n))\)</span>。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>8.Effecient Programming</category>
-      </categories>
-  </entry>
-  <entry>
     <title>8.3.列表处理</title>
     <url>/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h1><span id="83listprocessing"><span class="math inline">\(8.3.\)</span>List
@@ -6933,86 +6815,28 @@ space for the new object</strong>.</li>
       </categories>
   </entry>
   <entry>
-    <title>9.2.词法分析</title>
-    <url>/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h1><span id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</span></h1>
-<h3><span id="1-tokenizing">1. Tokenizing</span></h3>
-<p>  In the previous unit, we observed that the syntax analyzer consist
-of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
-<p>  And the tokenizer is an application of a more general area of
-theory known as <em>lexical analysis</em>. Here's an example of
-tokenizing in action:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
-<ul>
-<li><p>As far as <em>lexical analysis</em> is concerned, the input is
-nothing more than <strong>a stream of characters</strong>.</p></li>
-<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
-stream of characters into a stream of meaningful tokens</strong>. It
-provides a very simple yet important preliminary processing of the
-file.</p></li>
-<li><p>A <em>token</em> is <strong>a string of characters that has a
-meaning</strong>.</p>
-<ul>
-<li>Different programming languages have different definitions of token.
-For example, <code>x++</code> in C makes a lot of sense, but not in
-Jack, for it doesn't have an <code>++</code> operation.</li>
-</ul></li>
-</ul>
-<p>  Once we come up with these stream of tokens, we can <strong>hand it
-over to the compiler and completely forget the original input
-file</strong>.</p>
-<h3><span id="2jack-tokenizer">2.Jack tokenizer</span></h3>
-<p>  In Jack, we have 5 kinds of tokens:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
-<p>  And our tokenizer will provide these useful service:</p>
-<ol type="1">
-<li><p>Handle the compiler's input: It allow us to view the input as a
-stream of tokens.</p></li>
-<li><p>Allow advancing the input: It allow us to know:</p>
-<ul>
-<li><strong>If there are more tokens to process</strong>.</li>
-<li><strong>What the next token is</strong>.</li>
-<li><strong>The value, type of this token</strong>.</li>
-</ul></li>
-<li><p>Supply the value, type of the current token.</p></li>
-</ol>
-<p>  Here's an example of a program that use these services:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
-<p>  The <code>TokenizerTest</code> is a program that construct the
-tokenizer object. Here's what it does:</p>
-<ul>
-<li>It goes through the input, and for every token, it <strong>lists the
-token to be out of file</strong>.</li>
-<li>In the first line, <code>if</code> is surrounded by two
-<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
-</ul>
-<p>  And to conduct these functionalities, we can write this pseudo
-code: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() &#123;</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<ol type="1">
-<li><p>We get the first token, and it becomes the current
-token.</p></li>
-<li><p>We enter a loop as long as we have more tokens to
-process.</p></li>
-<li><p>In each line of the program, we have to <strong>output the
-classification of the token</strong>, and we have to <strong>do it
-twice</strong>.</p></li>
-<li><p>We:</p>
-<ol type="1">
-<li>Print the <strong>opening tag</strong>, then</li>
-<li>Print the <strong>value of of the current token</strong>,</li>
-<li>Print the <strong>token itself</strong>,</li>
-<li>At last print <strong>end tag with token
-classification</strong>.</li>
-</ol></li>
-<li><p>We print a newline, and <code>advance()</code> to get the next
-token from the tokenizer, until we consume all the tokens from the input
-file.</p></li>
-</ol>
+    <title>8.2.渐进分析介绍</title>
+    <url>/2024/05/31/8.2.Asymptotics%20I/</url>
+    <content><![CDATA[<h1><span id="82渐进分析介绍"><span class="math inline">\(8.2\)</span>
+渐进分析介绍</span></h1>
+<h3><span id="1简化的分析流程">1.简化的分析流程</span></h3>
+<blockquote>
+<p>We can do the following steps to simplify our analysis: * Only
+consider the worst case. * Pick a representative operation (aka: cost
+model) * Ignore lower order terms * Ignore multiplicative constants.</p>
+</blockquote>
+<h3><span id="2big-theta">2.<span class="math inline">\(Big-Theta\)</span></span></h3>
+<p>  当对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>、<span class="math inline">\(k_2\)</span>使得<span class="math inline">\(k_1·f(N)\leq R(N)\leq
+k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
+\Theta(f(N))\)</span>。</p>
+<p>  我们可以用<span class="math inline">\(\Theta\)</span>来衡量程序的增长阶数，通过确定增长函数的上界和下界，我们相当于“确定”了增长函数。</p>
+<h3><span id="3big-o">3.<span class="math inline">\(Big-O\)</span></span></h3>
+<p>  <span class="math inline">\(O\)</span>可以看作是增长函数的“不等关系”，即“大于等于”。例如，我们可以说<span class="math inline">\(R(N)\in O(f(n^2))\)</span>。</p>
+<p>  一般地，如果对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>使得<span class="math inline">\(R(N)\leq k_1·f(N)\)</span>，有：<span class="math inline">\(R(n)\in O(f(n))\)</span>。</p>
 ]]></content>
       <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 9.Syntax Analyze</category>
+        <category>CS61B DataStructure</category>
+        <category>8.Effecient Programming</category>
       </categories>
   </entry>
   <entry>
@@ -7172,6 +6996,89 @@ downstream to know which rule to use. In this process, we may need to
 backtrack and reconsider some of the rules we have to use...</li>
 </ul></li>
 </ul>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 9.Syntax Analyze</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>9.2.词法分析</title>
+    <url>/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1><span id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</span></h1>
+<h3><span id="1-tokenizing">1. Tokenizing</span></h3>
+<p>  In the previous unit, we observed that the syntax analyzer consist
+of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
+<p>  And the tokenizer is an application of a more general area of
+theory known as <em>lexical analysis</em>. Here's an example of
+tokenizing in action:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+<ul>
+<li><p>As far as <em>lexical analysis</em> is concerned, the input is
+nothing more than <strong>a stream of characters</strong>.</p></li>
+<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
+stream of characters into a stream of meaningful tokens</strong>. It
+provides a very simple yet important preliminary processing of the
+file.</p></li>
+<li><p>A <em>token</em> is <strong>a string of characters that has a
+meaning</strong>.</p>
+<ul>
+<li>Different programming languages have different definitions of token.
+For example, <code>x++</code> in C makes a lot of sense, but not in
+Jack, for it doesn't have an <code>++</code> operation.</li>
+</ul></li>
+</ul>
+<p>  Once we come up with these stream of tokens, we can <strong>hand it
+over to the compiler and completely forget the original input
+file</strong>.</p>
+<h3><span id="2jack-tokenizer">2.Jack tokenizer</span></h3>
+<p>  In Jack, we have 5 kinds of tokens:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
+<p>  And our tokenizer will provide these useful service:</p>
+<ol type="1">
+<li><p>Handle the compiler's input: It allow us to view the input as a
+stream of tokens.</p></li>
+<li><p>Allow advancing the input: It allow us to know:</p>
+<ul>
+<li><strong>If there are more tokens to process</strong>.</li>
+<li><strong>What the next token is</strong>.</li>
+<li><strong>The value, type of this token</strong>.</li>
+</ul></li>
+<li><p>Supply the value, type of the current token.</p></li>
+</ol>
+<p>  Here's an example of a program that use these services:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
+<p>  The <code>TokenizerTest</code> is a program that construct the
+tokenizer object. Here's what it does:</p>
+<ul>
+<li>It goes through the input, and for every token, it <strong>lists the
+token to be out of file</strong>.</li>
+<li>In the first line, <code>if</code> is surrounded by two
+<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
+</ul>
+<p>  And to conduct these functionalities, we can write this pseudo
+code: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() &#123;</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<ol type="1">
+<li><p>We get the first token, and it becomes the current
+token.</p></li>
+<li><p>We enter a loop as long as we have more tokens to
+process.</p></li>
+<li><p>In each line of the program, we have to <strong>output the
+classification of the token</strong>, and we have to <strong>do it
+twice</strong>.</p></li>
+<li><p>We:</p>
+<ol type="1">
+<li>Print the <strong>opening tag</strong>, then</li>
+<li>Print the <strong>value of of the current token</strong>,</li>
+<li>Print the <strong>token itself</strong>,</li>
+<li>At last print <strong>end tag with token
+classification</strong>.</li>
+</ol></li>
+<li><p>We print a newline, and <code>advance()</code> to get the next
+token from the tokenizer, until we consume all the tokens from the input
+file.</p></li>
+</ol>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
