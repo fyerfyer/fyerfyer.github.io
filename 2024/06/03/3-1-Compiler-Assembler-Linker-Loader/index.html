@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="1.An example          2.Interpretation    3.Calling chain   4.Compilation        5.Generating machine code     The auipc instruction adds an immediate number to the cu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3.1.Compiler, Assembler, Linker, Loader">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="1.An example          2.Interpretation    3.Calling chain   4.Compilation        5.Generating machine code     The auipc instruction adds an immediate number to the cu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-3.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-4.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-5.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-6.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-7.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-8.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-9.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-10.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-11.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-12.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-13.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-18.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-14.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-15.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-16.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-17.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-32.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-19.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-20.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-21.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-24.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-22.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-23.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-25.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-26.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-27.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-28.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-29.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-30.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-31.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-33.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-34.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-35.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-36.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-37.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-38.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-39.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-40.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-41.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-42.png">
+<meta property="article:published_time" content="2024-06-03T00:42:12.000Z">
+<meta property="article:modified_time" content="2024-06-03T05:33:11.456Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/","path":"2024/06/03/3-1-Compiler-Assembler-Linker-Loader/","title":"3.1.Compiler, Assembler, Linker, Loader"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3.1.Compiler, Assembler, Linker, Loader | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.An example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Interpretation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Calling chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Compilation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Generating machine code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)Symbol
+table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)Relocation table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(c.\)Linker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(d.Reference\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(e.\)Loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(f.\)An
+example</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3.1.Compiler, Assembler, Linker, Loader | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3.1.Compiler, Assembler, Linker, Loader
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:42:12 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;13:33:11" itemprop="dateCreated datePublished" datetime="2024-06-03T08:42:12+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Translating-and-Starting-a-Program/" itemprop="url" rel="index"><span itemprop="name">Module 3.Translating and Starting a Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image.png"></p>
+<h3><span id="1an-example">1.An example</span></h3>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-1.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-2.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-3.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-4.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-5.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-6.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-7.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-8.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-9.png"></p>
+<h3><span id="2interpretation">2.Interpretation</span></h3>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-10.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-11.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-12.png"></p>
+<h3><span id="3calling-chain">3.Calling chain</span></h3>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-13.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-18.png"></p>
+<h3><span id="4compilation">4.Compilation</span></h3>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-14.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-15.png"></p>
+<hr>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-16.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-17.png"></p>
+<hr>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-32.png"></p>
+<h3><span id="5generating-machine-code">5.Generating machine code</span></h3>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-19.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-20.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-21.png"></p>
+<blockquote>
+<p>The <code>auipc</code> instruction <strong>adds an immediate number
+to the current PC value</strong>. This means that the generated address
+<strong>is relative to the current instruction</strong>. It add an
+offset to the PC (upper 20 bits to the left of the instant number by 12
+bits), and use <code>addi</code> to load the lower 12 bits.</p>
+<p><code>lui</code> instructions are used to generate absolute
+addresses, which are fixed addresses of data in memory. This approach
+works for memory addresses that do not move. It loads an instant number
+to the upper 20 bits of the register.</p>
+</blockquote>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-24.png"></p>
+<h4><span id="asymboltable">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Symbol
+table</span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-22.png"></p>
+<h4><span id="brelocation-table">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Relocation table</span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-23.png"></p>
+<h4><span id="clinker">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Linker</span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-25.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-26.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-27.png"></p>
+<hr>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-28.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-29.png"></p>
+<h4><span id="dreference">&#x2003;&#x2003;<span class="math inline">\(d.Reference\)</span></span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-30.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-31.png"></p>
+<h4><span id="eloader">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Loader</span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-33.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-34.png"></p>
+<h4><span id="fanexample">&#x2003;&#x2003;<span class="math inline">\(f.\)</span>An
+example</span></h4>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-35.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-36.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-37.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-38.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-39.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-40.png"></p>
+<hr>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-41.png"></p>
+<p><img src="/2024/06/03/3-1-Compiler-Assembler-Linker-Loader/image-42.png"></p>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/31/1.1-1.5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%A6%82%E5%BF%B5/" rel="prev" title="1.1~1.5&#x7684;&#x4E00;&#x4E9B;&#x6982;&#x5FF5;">
+                  <i class="fa fa-angle-left"></i> 1.1~1.5&#x7684;&#x4E00;&#x4E9B;&#x6982;&#x5FF5;
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
