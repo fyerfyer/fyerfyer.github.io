@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(9.2.\)Object-based Programming 1.Object-oriented programming &#x2003;&#x2003;When designing an abstraction, we  Consider what kind of data do we want to store about and the objects that this class is suppose">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8.2.&#x57FA;&#x4E8E;&#x5BF9;&#x8C61;&#x7684;&#x7F16;&#x7A0B;">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(9.2.\)Object-based Programming 1.Object-oriented programming &#x2003;&#x2003;When designing an abstraction, we  Consider what kind of data do we want to store about and the objects that this class is suppose">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png">
+<meta property="article:published_time" content="2024-04-13T08:15:43.000Z">
+<meta property="article:modified_time" content="2024-06-03T06:59:20.440Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/","path":"2024/04/13/8-2-基于对象的编程/","title":"8.2.基于对象的编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>8.2.&#x57FA;&#x4E8E;&#x5BF9;&#x8C61;&#x7684;&#x7F16;&#x7A0B; | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(9.2.\)Object-based Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Object-oriented programming</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Object representation</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="8.2.&#x57FA;&#x4E8E;&#x5BF9;&#x8C61;&#x7684;&#x7F16;&#x7A0B; | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          8.2.&#x57FA;&#x4E8E;&#x5BF9;&#x8C61;&#x7684;&#x7F16;&#x7A0B;
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-13 16:15:43" itemprop="dateCreated datePublished" datetime="2024-04-13T16:15:43+08:00">2024-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:59:20" itemprop="dateModified" datetime="2024-06-03T14:59:20+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-8-High-Level-Language/" itemprop="url" rel="index"><span itemprop="name">Module 8.High Level Language</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1><span id="92object-based-programming"><span class="math inline">\(9.2.\)</span>Object-based Programming</span></h1>
+<h3><span id="1object-oriented-programming">1.Object-oriented programming</span></h3>
+<p>&#x2003;&#x2003;When designing an abstraction, we</p>
+<ol type="1">
+<li><p>Consider <strong>what kind of data do we want to store
+about</strong> and <strong>the objects that this class is supposed to
+represent</strong>.</p>
+<ul>
+<li>In our case, we need to store numerator and denominator.</li>
+</ul></li>
+<li><p>We store these values into integer type of
+<code>field</code>.</p></li>
+<li><p><strong>The only way to access field values from outside the
+class is through <em>accessor</em> methods</strong>, so we create
+accessors to facilitate access.</p></li>
+</ol>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png"></p>
+<ol start="4" type="1">
+<li><p>Then we write a <em>constructor</em> to create new objects. We
+create the object and <strong>return it to the base
+address</strong>.</p>
+<ul>
+<li><p><code>this</code> is a standard reference to the current object.
+It is actually <strong>the base address of the current object in the
+host RAM</strong>.</p></li>
+<li><p>One of the rules of the game is that a Jack constructor must</p>
+<ul>
+<li>return the <em>base address</em>.</li>
+<li>return <em>an object of the type of the surrounding class</em> or
+<em>the class to which this constructor belongs</em>.</li>
+<li>In Jack, every subroutine must <strong>always terminate with
+<code>return</code> command</strong>.</li>
+</ul></li>
+</ul></li>
+<li><p>We create several methods as we wish, this is quite simple so we
+skip this part.</p></li>
+<li><p>We create <code>dispose</code> method:</p>
+<ul>
+<li>The method is implemented using a call to the host operation system.
+We call the OS routine <code>deAlloc</code>, which takes an address in
+memory and disposes the memory block that begins in this address.</li>
+<li>This is important to Jack, because Jack has no garbage collection
+services, so it&apos;s up to the programmer to do this.</li>
+</ul></li>
+</ol>
+<h3><span id="2object-representation">2.Object representation</span></h3>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png"></p>
+<p>&#x2003;&#x2003;In client&apos;s view:</p>
+<ul>
+<li>Each fraction is represented by a block that includes all the field
+values of the current object.</li>
+<li>We have a reference to each of these blocks, which is <strong>the
+name of the variable</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;In the host RAM:</p>
+<ul>
+<li>Some area of it <strong>is designated to represent the the stack of
+the currently running application</strong>.</li>
+<li>The <code>stack</code> is used to <strong>store
+variables</strong>.</li>
+<li>We have the <code>heap</code> where we <strong>represent objects and
+arrays</strong>.</li>
+</ul>
+<p>&#x2003;We see that we have a variable <code>a</code> which contains the
+number 15087. If we <strong>treat this variable as a pointer and look up
+this address in the RAM</strong>, we see that the number after the 2 is
+3. This two numbers comprise the memory block that represents our first
+object.</p>
+<p>&#x2003;&#x2003;How does this representation is established? The secret is that:
+when the compiler is going to compile your constructor, it would</p>
+<ol type="1">
+<li><strong>Inject some calls to the operating system</strong>.</li>
+<li><strong>These calls are going to find available memory and allocate
+it to the object that was just constructed</strong>.</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/13/7-12-%E7%BF%BB%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/" rel="prev" title="7.12.&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;">
+                  <i class="fa fa-angle-left"></i> 7.12.&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/" rel="next" title="8.3.&#x5217;&#x8868;&#x5904;&#x7406;">
+                  8.3.&#x5217;&#x8868;&#x5904;&#x7406; <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
