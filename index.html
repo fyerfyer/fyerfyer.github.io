@@ -157,7 +157,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/03/1-4-Floating-Point/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/03/3-1-Translating-Starting-a-Program/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/03/1-4-Floating-Point/" class="post-title-link" itemprop="url">&#x672A;&#x547D;&#x540D;</a>
+          <a href="/2024/06/03/3-1-Translating-Starting-a-Program/" class="post-title-link" itemprop="url">3.1.Translating &amp; Starting a Program</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,27 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 21:03:09" itemprop="dateCreated datePublished" datetime="2024-06-03T21:03:09+08:00">2024-06-03</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 22:15:12" itemprop="dateCreated datePublished" datetime="2024-06-03T22:15:12+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 08:11:26" itemprop="dateModified" datetime="2024-06-04T08:11:26+08:00">2024-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+        </span>
     </span>
 
   
@@ -234,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>0</span>
+      <span>1k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>4 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -252,7 +272,185 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h1><span id="31translating-amp-starting-aprogram"><span class="math inline">\(3.1.\)</span>Translating &amp; Starting a
+Program</span></h1>
+<h3><span id="1a-complex-example">1.A complex example</span></h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image.png"></p>
+<p>&#x2003;&#x2003;When we are going to translate the program, we should follow the
+following process:</p>
+<ol type="1">
+<li><p>Need to decide on what variables go in what registers</p></li>
+<li><p>Need to determine which registers we need to save on function
+entry (the function preamble/prolog)</p>
+<ol type="1">
+<li>Decrement the stack</li>
+<li>Save all the callee saved registers we will use</li>
+<li>Save ra or any other caller saved registers we need to live across
+calls to other functions</li>
+</ol></li>
+<li><p>Translate the code itself</p></li>
+<li><p>Restore all the registers necessary (the function
+postamble/epilog)</p>
+<ol type="1">
+<li>Restore the callee saved registers we used</li>
+<li>Restore <code>ra</code></li>
+<li>Increment the stack</li>
+</ol></li>
+<li><p>Return using `jr``</p></li>
+</ol>
+<p>&#x2003;&#x2003;There are some points in the process:</p>
+<ul>
+<li>Return <code>null</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">li a0 0</span><br><span class="line">j postamble</span><br></pre></td></tr></table></figure>
+<ul>
+<li>When calling function, we can <strong>use the <code>call</code>
+pseudo-instruction for <code>jal ra (location)</code></strong>. For
+example, <code>call malloc</code>.</li>
+</ul>
+<h3><span id="2interpretation">2.Interpretation</span></h3>
+<ul>
+<li><p>Interpreter <strong>directly executes a program in the source
+language</strong>.</p></li>
+<li><p>Since interpreter <strong>is closer to high-level</strong>, it
+can give better error messages during interpreting.</p></li>
+<li><p>Because the interpreter executes intermediate representations
+rather than direct machine code, <strong>the same source code can be run
+from one machine to another without modification of the source
+code</strong>.</p></li>
+</ul>
+<h3><span id="3calling-chain">3.Calling chain</span></h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-1.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-2.png"></p>
+<h3><span id="4compilation">4.Compilation</span></h3>
+<h4><span id="aconcepts">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts</span></h4>
+<p>&#x2003;&#x2003;The compiler transforms the C program into <strong>an assembly
+language program</strong>, a symbolic form of what the machine
+understands. High-level language programs take many fewer lines of code
+than assembly language, so programmer productivity is much higher.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-3.png"></p>
+<h4><span id="bassembler">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Assembler</span></h4>
+<ul>
+<li><p>The assembler <strong>converts the assembly language instruction
+into machine language</strong>. It turns the assembly language program
+into an <strong>object file, which is a combination of machine language
+instructions, data, and information needed to place instructions
+properly in memory.</strong></p></li>
+<li><p>Assembler will also <strong>accept numbers in a variety of
+bases</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;To produce the binary version of each instruction in the assembly
+language program, the assembler must determine the address corresponding
+to all labels. This is done by a <strong>symbol table</strong>.</p>
+<ul>
+<li><p>The object file for UNIX mainly consists of:</p>
+<ul>
+<li><p>The object file header describes <strong>the size and position of
+the other pieces of the object file</strong>.</p></li>
+<li><p>The text segment contains <strong>the machine language
+code</strong>.</p></li>
+<li><p>The static data segment contains <strong>data allocated for the
+life of the program</strong>.</p></li>
+<li><p>The relocation information identifies instructions and data words
+that <strong>depend on absolute addresses when the program is loaded
+into memory</strong>.</p></li>
+<li><p>The symbol table contains <strong>the remaining labels that are
+not defined</strong>, such as external references.</p>
+<ul>
+<li>Use <strong>dummy &quot;placeholders&quot;</strong> for unresolved absolute
+and external references.</li>
+</ul></li>
+<li><p>The debugging information contains <strong>a concise description
+of how the modules were compiled</strong>.</p></li>
+</ul></li>
+</ul>
+<hr>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-4.png"></p>
+<blockquote>
+<p><span class="math inline">\(p.s.\)</span> The <code>auipc</code>
+instruction <strong>adds an immediate number to the current PC
+value</strong>. This means that the generated address <strong>is
+relative to the current instruction</strong>. It add an offset to the PC
+(upper 20 bits to the left of the instant number by 12 bits), and use
+<code>addi</code> to load the lower 12 bits.</p>
+<p><code>lui</code> instructions are used to generate absolute
+addresses, which are fixed addresses of data in memory. This approach
+works for memory addresses that do not move. It loads an instant number
+to the upper 20 bits of the register.</p>
+</blockquote>
+<h4><span id="clinker">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Linker</span></h4>
+<p>&#x2003;&#x2003;Linker is used for <strong>compiling and assembling each procedure
+independently</strong>, so that a change to one line would require
+resolving only one procedure. It&apos;s a system that <strong>combines
+independently assembled machine language programs</strong> and
+<strong>resolves all undefined labels into an executable
+file</strong>.</p>
+<p>&#x2003;&#x2003;There are three steps for the linker:</p>
+<ol type="1">
+<li>Place code and data modules symbolically in memory.</li>
+<li>Determine the addresses of data and instruction labels.</li>
+<li>Patch both the internal and external references.</li>
+</ol>
+<p>&#x2003;&#x2003;The linker uses the relocation information and symbol table in each
+object module to <strong>resolve all undefined labels</strong>.</p>
+<ul>
+<li>For each entry in the relocation table, it replaces it with
+<strong>the actual address for the symbol table of the item</strong> we
+are linking to.</li>
+</ul>
+<p>&#x2003;&#x2003;If all external references are resolved, the linker next
+<strong>determines the memory locations each module will
+occupy</strong>. Since the files were assembled in isolation,
+<strong>the assembler couldn&apos;t know where a module&apos;s instructions and
+data would be placed relative to other modules</strong>. So when the
+linker places a module in memory, all <strong>absolute references, that
+is, memory addresses that are not relative to a register</strong>, must
+<strong>be relocated to reflect its true location</strong>.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-7.png"></p>
+<h4><span id="dtype-of-addressing">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Type of addressing</span></h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-5.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-6.png"></p>
+<h4><span id="eloader">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Loader</span></h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-8.png"></p>
+<h3><span id="5dynamically-linkedlibraries">5.Dynamically linked
+libraries</span></h3>
+<p>&#x2003;&#x2003;In tradition, before the program is run, the library has been
+linked. Although this static approach is the fastest way to call library
+routines,it has a few disadvantages:</p>
+<ol type="1">
+<li><p>The library routines become <strong>part of the executable
+code</strong>. If a new version of the library is released, <strong>the
+statically linked program keeps using the old version</strong>.</p></li>
+<li><p>It loads <strong>all routines in the library that are called
+anywhere in the executable</strong>, even if those calls are not
+executed.</p></li>
+</ol>
+<p>&#x2003;&#x2003;A replacement of it is called <em>dynamically linked
+libraries</em>, where the library routines are not linked and loaded
+<strong>until the program is run</strong>.</p>
+<ol type="1">
+<li><p>The first time the library routine is called, the program
+<strong>calls the dummy entry and follows the indirect branch</strong>,
+which points to a piece of code.</p></li>
+<li><p>The code <strong>puts a number in a register</strong> to
+<strong>identify the desired library routine</strong>.</p></li>
+<li><p>Then it branches to the dynamic linker/loader.</p></li>
+<li><p>The linker/loader finds the wanted routine, <strong>remaps it
+into the memory</strong>, and <strong>changes the address in the
+indirect branch location to point to that routine</strong>. Then it
+branches to it.</p></li>
+</ol>
+<blockquote>
+<p>The dynamic linker loads the library function into memory on the
+first call and updates the indirect branch address. In this way, if the
+following call to the library function, the program can directly jump to
+the correct memory address, avoid repeated symbol parsing and address
+calculation, which improves the efficiency of the program.</p>
+</blockquote>
+<ol start="5" type="1">
+<li>When the routine completes, it <strong>returns to the original
+calling site</strong>.</li>
+</ol>
 
       
     </div>
@@ -1570,14 +1768,14 @@ promote its left child in the only natural way.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">85k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">86k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:09</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:12</span>
   </span>
 </div>
 <div class="busuanzi-count">

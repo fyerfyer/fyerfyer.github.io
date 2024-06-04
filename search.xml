@@ -327,12 +327,6 @@ making <code>b</code>'s address a multiple of 4.</p>
       </categories>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/06/03/1-4-Floating-Point/</url>
-    <content><![CDATA[
-]]></content>
-  </entry>
-  <entry>
     <title>1.4.硬件描述语言</title>
     <url>/2024/04/03/1-4-%E7%A1%AC%E4%BB%B6%E6%8F%8F%E8%BF%B0%E8%AF%AD%E8%A8%80/</url>
     <content><![CDATA[<h1><span id="14hardware-description-language"><span class="math inline">\(1.4.\)</span>Hardware description language</span></h1>
@@ -1847,6 +1841,51 @@ item exists, return true.</li>
       </categories>
   </entry>
   <entry>
+    <title>12.4.数据结构的最终实现</title>
+    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
+    <content><![CDATA[<h1><span id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</span></h1>
+<h3><span id="1运行时间的优化">1.运行时间的优化</span></h3>
+<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
+<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
+<ol type="1">
+<li>动态地扩大我们的哈希表。</li>
+<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<h4><span id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</span></h4>
+<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
+<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
+<ul>
+<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
+<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
+<ul>
+<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
+</ul></li>
+</ul>
+<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
+M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
+M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
+<h4><span id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></span></h4>
+<ul>
+<li><p>Use a 'base' strategy similar to the one we developed
+earlier.</p></li>
+<li><p>Use a 'base' that's a small prime.</p>
+<ul>
+<li>Base 126 isn't actually very good, because using base 126 means that
+any string that ends in the same last 32 characters has the same
+hashcode.</li>
+<li>This happens because of overflow.</li>
+<li>Using prime numbers helps avoid overflow issues (i.e., collisions
+due to overflow).</li>
+<li>Why a small prime? Because it's easier to compute.</li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>13.1.优先队列接口</title>
     <url>/2024/05/31/13.1.PQ%20Interface/</url>
     <content><![CDATA[<h1><span id="131优先队列接口"><span class="math inline">\(13.1\)</span>优先队列接口</span></h1>
@@ -1894,51 +1933,6 @@ N)\)</span></li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>13.Heap &amp; Priority Queue</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.4.数据结构的最终实现</title>
-    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
-    <content><![CDATA[<h1><span id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</span></h1>
-<h3><span id="1运行时间的优化">1.运行时间的优化</span></h3>
-<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
-<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
-<ol type="1">
-<li>动态地扩大我们的哈希表。</li>
-<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<h4><span id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</span></h4>
-<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
-<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
-<ul>
-<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
-<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
-<ul>
-<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
-</ul></li>
-</ul>
-<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
-M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
-M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
-<h4><span id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></span></h4>
-<ul>
-<li><p>Use a 'base' strategy similar to the one we developed
-earlier.</p></li>
-<li><p>Use a 'base' that's a small prime.</p>
-<ul>
-<li>Base 126 isn't actually very good, because using base 126 means that
-any string that ends in the same last 32 characters has the same
-hashcode.</li>
-<li>This happens because of overflow.</li>
-<li>Using prime numbers helps avoid overflow issues (i.e., collisions
-due to overflow).</li>
-<li>Why a small prime? Because it's easier to compute.</li>
-</ul></li>
-</ul>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
       </categories>
   </entry>
   <entry>
@@ -3389,6 +3383,194 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
+    <title>3.1.Translating &amp; Starting a Program</title>
+    <url>/2024/06/03/3-1-Translating-Starting-a-Program/</url>
+    <content><![CDATA[<h1><span id="31translating-amp-starting-aprogram"><span class="math inline">\(3.1.\)</span>Translating &amp; Starting a
+Program</span></h1>
+<h3><span id="1a-complex-example">1.A complex example</span></h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image.png"></p>
+<p>  When we are going to translate the program, we should follow the
+following process:</p>
+<ol type="1">
+<li><p>Need to decide on what variables go in what registers</p></li>
+<li><p>Need to determine which registers we need to save on function
+entry (the function preamble/prolog)</p>
+<ol type="1">
+<li>Decrement the stack</li>
+<li>Save all the callee saved registers we will use</li>
+<li>Save ra or any other caller saved registers we need to live across
+calls to other functions</li>
+</ol></li>
+<li><p>Translate the code itself</p></li>
+<li><p>Restore all the registers necessary (the function
+postamble/epilog)</p>
+<ol type="1">
+<li>Restore the callee saved registers we used</li>
+<li>Restore <code>ra</code></li>
+<li>Increment the stack</li>
+</ol></li>
+<li><p>Return using `jr``</p></li>
+</ol>
+<p>  There are some points in the process:</p>
+<ul>
+<li>Return <code>null</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">li a0 0</span><br><span class="line">j postamble</span><br></pre></td></tr></table></figure>
+<ul>
+<li>When calling function, we can <strong>use the <code>call</code>
+pseudo-instruction for <code>jal ra (location)</code></strong>. For
+example, <code>call malloc</code>.</li>
+</ul>
+<h3><span id="2interpretation">2.Interpretation</span></h3>
+<ul>
+<li><p>Interpreter <strong>directly executes a program in the source
+language</strong>.</p></li>
+<li><p>Since interpreter <strong>is closer to high-level</strong>, it
+can give better error messages during interpreting.</p></li>
+<li><p>Because the interpreter executes intermediate representations
+rather than direct machine code, <strong>the same source code can be run
+from one machine to another without modification of the source
+code</strong>.</p></li>
+</ul>
+<h3><span id="3calling-chain">3.Calling chain</span></h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-1.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-2.png"></p>
+<h3><span id="4compilation">4.Compilation</span></h3>
+<h4><span id="aconcepts">  <span class="math inline">\(a.\)</span>Concepts</span></h4>
+<p>  The compiler transforms the C program into <strong>an assembly
+language program</strong>, a symbolic form of what the machine
+understands. High-level language programs take many fewer lines of code
+than assembly language, so programmer productivity is much higher.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-3.png"></p>
+<h4><span id="bassembler">  <span class="math inline">\(b.\)</span>Assembler</span></h4>
+<ul>
+<li><p>The assembler <strong>converts the assembly language instruction
+into machine language</strong>. It turns the assembly language program
+into an <strong>object file, which is a combination of machine language
+instructions, data, and information needed to place instructions
+properly in memory.</strong></p></li>
+<li><p>Assembler will also <strong>accept numbers in a variety of
+bases</strong>.</p></li>
+</ul>
+<p>  To produce the binary version of each instruction in the assembly
+language program, the assembler must determine the address corresponding
+to all labels. This is done by a <strong>symbol table</strong>.</p>
+<ul>
+<li><p>The object file for UNIX mainly consists of:</p>
+<ul>
+<li><p>The object file header describes <strong>the size and position of
+the other pieces of the object file</strong>.</p></li>
+<li><p>The text segment contains <strong>the machine language
+code</strong>.</p></li>
+<li><p>The static data segment contains <strong>data allocated for the
+life of the program</strong>.</p></li>
+<li><p>The relocation information identifies instructions and data words
+that <strong>depend on absolute addresses when the program is loaded
+into memory</strong>.</p></li>
+<li><p>The symbol table contains <strong>the remaining labels that are
+not defined</strong>, such as external references.</p>
+<ul>
+<li>Use <strong>dummy "placeholders"</strong> for unresolved absolute
+and external references.</li>
+</ul></li>
+<li><p>The debugging information contains <strong>a concise description
+of how the modules were compiled</strong>.</p></li>
+</ul></li>
+</ul>
+<hr>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-4.png"></p>
+<blockquote>
+<p><span class="math inline">\(p.s.\)</span> The <code>auipc</code>
+instruction <strong>adds an immediate number to the current PC
+value</strong>. This means that the generated address <strong>is
+relative to the current instruction</strong>. It add an offset to the PC
+(upper 20 bits to the left of the instant number by 12 bits), and use
+<code>addi</code> to load the lower 12 bits.</p>
+<p><code>lui</code> instructions are used to generate absolute
+addresses, which are fixed addresses of data in memory. This approach
+works for memory addresses that do not move. It loads an instant number
+to the upper 20 bits of the register.</p>
+</blockquote>
+<h4><span id="clinker">  <span class="math inline">\(c.\)</span>Linker</span></h4>
+<p>  Linker is used for <strong>compiling and assembling each procedure
+independently</strong>, so that a change to one line would require
+resolving only one procedure. It's a system that <strong>combines
+independently assembled machine language programs</strong> and
+<strong>resolves all undefined labels into an executable
+file</strong>.</p>
+<p>  There are three steps for the linker:</p>
+<ol type="1">
+<li>Place code and data modules symbolically in memory.</li>
+<li>Determine the addresses of data and instruction labels.</li>
+<li>Patch both the internal and external references.</li>
+</ol>
+<p>  The linker uses the relocation information and symbol table in each
+object module to <strong>resolve all undefined labels</strong>.</p>
+<ul>
+<li>For each entry in the relocation table, it replaces it with
+<strong>the actual address for the symbol table of the item</strong> we
+are linking to.</li>
+</ul>
+<p>  If all external references are resolved, the linker next
+<strong>determines the memory locations each module will
+occupy</strong>. Since the files were assembled in isolation,
+<strong>the assembler couldn't know where a module's instructions and
+data would be placed relative to other modules</strong>. So when the
+linker places a module in memory, all <strong>absolute references, that
+is, memory addresses that are not relative to a register</strong>, must
+<strong>be relocated to reflect its true location</strong>.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-7.png"></p>
+<h4><span id="dtype-of-addressing">  <span class="math inline">\(d.\)</span>Type of addressing</span></h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-5.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-6.png"></p>
+<h4><span id="eloader">  <span class="math inline">\(e.\)</span>Loader</span></h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-8.png"></p>
+<h3><span id="5dynamically-linkedlibraries">5.Dynamically linked
+libraries</span></h3>
+<p>  In tradition, before the program is run, the library has been
+linked. Although this static approach is the fastest way to call library
+routines,it has a few disadvantages:</p>
+<ol type="1">
+<li><p>The library routines become <strong>part of the executable
+code</strong>. If a new version of the library is released, <strong>the
+statically linked program keeps using the old version</strong>.</p></li>
+<li><p>It loads <strong>all routines in the library that are called
+anywhere in the executable</strong>, even if those calls are not
+executed.</p></li>
+</ol>
+<p>  A replacement of it is called <em>dynamically linked
+libraries</em>, where the library routines are not linked and loaded
+<strong>until the program is run</strong>.</p>
+<ol type="1">
+<li><p>The first time the library routine is called, the program
+<strong>calls the dummy entry and follows the indirect branch</strong>,
+which points to a piece of code.</p></li>
+<li><p>The code <strong>puts a number in a register</strong> to
+<strong>identify the desired library routine</strong>.</p></li>
+<li><p>Then it branches to the dynamic linker/loader.</p></li>
+<li><p>The linker/loader finds the wanted routine, <strong>remaps it
+into the memory</strong>, and <strong>changes the address in the
+indirect branch location to point to that routine</strong>. Then it
+branches to it.</p></li>
+</ol>
+<blockquote>
+<p>The dynamic linker loads the library function into memory on the
+first call and updates the indirect branch address. In this way, if the
+following call to the library function, the program can directly jump to
+the correct memory address, avoid repeated symbol parsing and address
+calculation, which improves the efficiency of the program.</p>
+</blockquote>
+<ol start="5" type="1">
+<li>When the routine completes, it <strong>returns to the original
+calling site</strong>.</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.1.时序逻辑</title>
     <url>/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/</url>
     <content><![CDATA[<h1><span id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</span></h1>
@@ -4613,106 +4795,6 @@ compare, we must turn to Comparator.</p>
       </categories>
   </entry>
   <entry>
-    <title>5.2.获取-执行循环</title>
-    <url>/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/</url>
-    <content><![CDATA[<h1><span id="52the-fetch-execute-cycle"><span class="math inline">\(5.2.\)</span>The Fetch-Execute Cycle</span></h1>
-<ul>
-<li><em>Fetch an instruction from the program memory</em></li>
-<li><em>Execute</em> it</li>
-</ul>
-<h3><span id="1fetching">1.Fetching</span></h3>
-<ul>
-<li><p>The next instruction is located at the <em>program memory</em>,
-the program memory is in the <em>memory</em>, and its address is
-specified by the <em>program counter</em>.</p></li>
-<li><p>We need to basically <strong>put the location of the next
-instruction into the "address" of the program memory</strong>. Then we
-need to read the contents at that location and then will get the basic
-instructions we need to execute.</p></li>
-<li><p>We usually put the address of the next instruction into the
-address input of the program memory by <em>program
-counter</em>.</p></li>
-</ul>
-<p>  The hardware cycle of executing the fetch operation is as
-below:</p>
-<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png"></p>
-<ul>
-<li>When we need to jump into a new location, we <strong>manipulate the
-program counter</strong> so that it will have the address of the next
-instruction.</li>
-<li>The output of the program counter feeds into the address
-specification of program memory.</li>
-<li>The program memory output comes the actual instruction code that we
-need to execute.</li>
-</ul>
-<h3><span id="2execute">2.Execute</span></h3>
-<ul>
-<li><p>The instruction code specifies "what to do"</p>
-<ul>
-<li>Which arithmetie or logical instruction.</li>
-<li>What memory to access (read/write).</li>
-<li>If/where to jump.</li>
-</ul></li>
-<li><p><em>Bit aspect</em>: Execute current instruction means
-<strong>taking the bits from the instruction code that specifies what to
-do</strong>, and do what needs to be done.</p>
-<ul>
-<li>Often, different subsets of the bits control different aspects of
-the operation</li>
-</ul></li>
-<li><p><em>Hardware aspect</em>:</p></li>
-</ul>
-<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-1.png"></p>
-<ul>
-<li><p><em>control bus</em>:</p>
-<ul>
-<li><p>tells the ALU what instruction to compute,</p></li>
-<li><p>tells where do the data pieces come from,</p></li>
-</ul></li>
-</ul>
-<h3><span id="2the-clash">2.The clash</span></h3>
-<p>  There's a clash in the cycle above:</p>
-<ul>
-<li>For <em>fetch</em>, we need to put into the address of the memory
-<strong>the address of the next instruction</strong> to get the
-instruction output.</li>
-<li>For <em>execute</em>, we need to put into the address of the memory
-<strong>the address of the data pieces</strong> that we want to operate
-on to access data.</li>
-<li>But we only have a single memory, so <strong>should we put into the
-memory the address of data or instructions</strong>?</li>
-</ul>
-<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-2.png"></p>
-<p>  To solve this problem, we will do <strong>one after
-another</strong>. We will achieve this through a
-<em>Multiplexer</em>:</p>
-<ul>
-<li>In the first part, the <em>fetch cycle</em>, the multiplexer set the
-memory to point into <strong>the program counter that is the location of
-the next instruction</strong>.</li>
-<li>While in the <em>execute cycle</em>, the multiplexer will set the
-memory to point into <strong>the data address that we need to
-access</strong>.</li>
-</ul>
-<p>  So how do we do this together?</p>
-<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-3.png"></p>
-<ul>
-<li>When we are in a <em>fetch cycle</em>, we get the next instruction,
-and then we need to <strong>remember it inside an instruction
-register</strong>.</li>
-<li><strong>That instruction register is exactly what is remains holding
-the value of the instruction that we are now executing in the execute
-cycle.</strong> Then in the <em>execute cycle</em> we have the
-instruction already stored in this register, so we can work with all the
-information we need for the cycle.</li>
-</ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 5.Computer Architecture</category>
-      </categories>
-  </entry>
-  <entry>
     <title>4.3.声明式编程</title>
     <url>/2024/05/31/4.3.%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h1><span id="43声明式编程declarativeprogramming"><span class="math inline">\(4.3\)</span>声明式编程(<span class="math inline">\(declarative\;programming\)</span>)</span></h1>
@@ -4917,6 +4999,106 @@ from the data output of the program memory and <strong>feed it into the
 control bus</strong>.</li>
 </ul></li>
 </ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 5.Computer Architecture</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>5.2.获取-执行循环</title>
+    <url>/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/</url>
+    <content><![CDATA[<h1><span id="52the-fetch-execute-cycle"><span class="math inline">\(5.2.\)</span>The Fetch-Execute Cycle</span></h1>
+<ul>
+<li><em>Fetch an instruction from the program memory</em></li>
+<li><em>Execute</em> it</li>
+</ul>
+<h3><span id="1fetching">1.Fetching</span></h3>
+<ul>
+<li><p>The next instruction is located at the <em>program memory</em>,
+the program memory is in the <em>memory</em>, and its address is
+specified by the <em>program counter</em>.</p></li>
+<li><p>We need to basically <strong>put the location of the next
+instruction into the "address" of the program memory</strong>. Then we
+need to read the contents at that location and then will get the basic
+instructions we need to execute.</p></li>
+<li><p>We usually put the address of the next instruction into the
+address input of the program memory by <em>program
+counter</em>.</p></li>
+</ul>
+<p>  The hardware cycle of executing the fetch operation is as
+below:</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png"></p>
+<ul>
+<li>When we need to jump into a new location, we <strong>manipulate the
+program counter</strong> so that it will have the address of the next
+instruction.</li>
+<li>The output of the program counter feeds into the address
+specification of program memory.</li>
+<li>The program memory output comes the actual instruction code that we
+need to execute.</li>
+</ul>
+<h3><span id="2execute">2.Execute</span></h3>
+<ul>
+<li><p>The instruction code specifies "what to do"</p>
+<ul>
+<li>Which arithmetie or logical instruction.</li>
+<li>What memory to access (read/write).</li>
+<li>If/where to jump.</li>
+</ul></li>
+<li><p><em>Bit aspect</em>: Execute current instruction means
+<strong>taking the bits from the instruction code that specifies what to
+do</strong>, and do what needs to be done.</p>
+<ul>
+<li>Often, different subsets of the bits control different aspects of
+the operation</li>
+</ul></li>
+<li><p><em>Hardware aspect</em>:</p></li>
+</ul>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-1.png"></p>
+<ul>
+<li><p><em>control bus</em>:</p>
+<ul>
+<li><p>tells the ALU what instruction to compute,</p></li>
+<li><p>tells where do the data pieces come from,</p></li>
+</ul></li>
+</ul>
+<h3><span id="2the-clash">2.The clash</span></h3>
+<p>  There's a clash in the cycle above:</p>
+<ul>
+<li>For <em>fetch</em>, we need to put into the address of the memory
+<strong>the address of the next instruction</strong> to get the
+instruction output.</li>
+<li>For <em>execute</em>, we need to put into the address of the memory
+<strong>the address of the data pieces</strong> that we want to operate
+on to access data.</li>
+<li>But we only have a single memory, so <strong>should we put into the
+memory the address of data or instructions</strong>?</li>
+</ul>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-2.png"></p>
+<p>  To solve this problem, we will do <strong>one after
+another</strong>. We will achieve this through a
+<em>Multiplexer</em>:</p>
+<ul>
+<li>In the first part, the <em>fetch cycle</em>, the multiplexer set the
+memory to point into <strong>the program counter that is the location of
+the next instruction</strong>.</li>
+<li>While in the <em>execute cycle</em>, the multiplexer will set the
+memory to point into <strong>the data address that we need to
+access</strong>.</li>
+</ul>
+<p>  So how do we do this together?</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-3.png"></p>
+<ul>
+<li>When we are in a <em>fetch cycle</em>, we get the next instruction,
+and then we need to <strong>remember it inside an instruction
+register</strong>.</li>
+<li><strong>That instruction register is exactly what is remains holding
+the value of the instruction that we are now executing in the execute
+cycle.</strong> Then in the <em>execute cycle</em> we have the
+instruction already stored in this register, so we can work with all the
+information we need for the cycle.</li>
 </ul>
 ]]></content>
       <categories>
