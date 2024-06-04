@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(11.2\)Handling Variables 1.Program compilation &#x2003;&#x2003;Remember that the VM language doesn&apos;t have symbolic variables, it only has local, this and so on. In order to resolve this pseudocode into final">
+    <meta name="description" content="11.211.211.2Handling Variables  1.Program compilation &#x2003;&#x2003;Remember that the VM language doesn&#x2019;t have symbolic variables, it only has local, this and so on. In order to resolve this pseudocode into fina">
 <meta property="og:type" content="article">
 <meta property="og:title" content="10.2.&#x5BF9;&#x53D8;&#x91CF;&#x7684;&#x5904;&#x7406;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(11.2\)Handling Variables 1.Program compilation &#x2003;&#x2003;Remember that the VM language doesn&apos;t have symbolic variables, it only has local, this and so on. In order to resolve this pseudocode into final">
+<meta property="og:description" content="11.211.211.2Handling Variables  1.Program compilation &#x2003;&#x2003;Remember that the VM language doesn&#x2019;t have symbolic variables, it only has local, this and so on. In order to resolve this pseudocode into fina">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png">
@@ -146,8 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(11.2\)Handling Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Program compilation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Symbol table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Handling variables in
-general</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 11.211.211.2Handling Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1.Program compilation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.Symbol table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 3.Handling variables in general</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -289,133 +288,90 @@ general</span></a></li></ol></li></ol></div>
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</span></h1>
-<h3><span id="1program-compilation">1.Program compilation</span></h3>
-<p>&#x2003;&#x2003;Remember that the VM language doesn&apos;t have symbolic variables, it
-only has <code>local</code>, <code>this</code> and so on. In order to
-resolve this pseudocode into final executable VM code, we have to
-<strong>map these symbolic variables on what is called <em>virtual
-memory segments</em></strong>. And to do this, we:</p>
+    <div class="post-body" itemprop="articleBody"><h1><span id="112112112handling-variables"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11.2</mn></mrow><annotation encoding="application/x-tex">11.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mord">.</span><span class="mord">2</span></span></span></span>Handling Variables</span></h1>
+<h3><span id="1program-compilation"> 1.Program compilation</span></h3>
+<p>&#x2003;&#x2003;Remember that the VM language doesn&#x2019;t have symbolic variables, it only has <code>local</code>, <code>this</code> and so on. In order to resolve this pseudocode into final executable VM code, we have to <strong>map these symbolic variables on what is called <em>virtual memory segments</em></strong>. And to do this, we:</p>
 <ul>
 <li>need the <strong>variable properties</strong>.</li>
-<li>also have to know <strong>the index of the variable of its
-kind</strong>(first, second, etc.).</li>
+<li>also have to know <strong>the index of the variable of its kind</strong>(first, second, etc.).</li>
 </ul>
 <p>&#x2003;&#x2003;And the properties of variables include:</p>
 <ul>
-<li><p><em>name</em>: It&apos;s an identifier.</p></li>
-<li><p><em>type</em>: <code>int</code>, <code>char</code>,
-<code>boolean</code> and <strong>all class name</strong>.</p></li>
-<li><p><em>kind</em>: There are two kinds of variables, and we view them
-separately:</p>
+<li>
+<p><em>name</em>: It&#x2019;s an identifier.</p>
+</li>
+<li>
+<p><em>type</em>: <code>int</code>, <code>char</code>, <code>boolean</code> and <strong>all class name</strong>.</p>
+</li>
+<li>
+<p><em>kind</em>: There are two kinds of variables, and we view them separately:</p>
 <ul>
-<li><em>class level</em>: <code>field</code>, <code>static</code>
-variables.</li>
-<li><em>subroutine level</em>: <code>argument</code> and
-<code>local</code> variables.</li>
-</ul></li>
-<li><p><em>scope</em>, which is the region of the code in which it is
-recognized.</p></li>
+<li><em>class level</em>: <code>field</code>, <code>static</code> variables.</li>
+<li><em>subroutine level</em>: <code>argument</code> and <code>local</code> variables.</li>
 </ul>
-<h3><span id="2symbol-table">2.Symbol table</span></h3>
-<p>&#x2003;&#x2003;We handle the property of variables using a <em>symbol
-table</em>:</p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+</li>
+<li>
+<p><em>scope</em>, which is the region of the code in which it is recognized.</p>
+</li>
+</ul>
+<h3><span id="2symbol-table"> 2.Symbol table</span></h3>
+<p>&#x2003;&#x2003;We handle the property of variables using a <em>symbol table</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png" alt></p>
 <ul>
-<li>A method is always designed to operate on the current object which
-is called <code>this</code>. Therefore, the symbol table of method
-<strong>always begins with <code>this</code> entry</strong>, which
-represents the properties of current object.</li>
+<li>A method is always designed to operate on the current object which is called <code>this</code>. Therefore, the symbol table of method <strong>always begins with <code>this</code> entry</strong>, which represents the properties of current object.</li>
 <li><code>this</code> is always treated as <code>argument 0</code></li>
-<li>The type of current object is <strong>the name of the class to which
-this subroutine belongs</strong>.</li>
+<li>The type of current object is <strong>the name of the class to which this subroutine belongs</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The class level symbol table can be reset each time we begin to
-compile a new class, for <strong>classes are standalone compilation
-unity</strong>. Something similar happens when we compile
-subroutines.</p>
-<p>&#x2003;&#x2003;The code writer is going to encounter all sorts of variable
-declaration commands, of which in Jack we have three:
-<code>local</code>, <code>field</code> and <code>static</code>.</p>
-<p>&#x2003;&#x2003;Then it&apos;s going to elucidate all important properties of the
-declared variables, and <strong>add the information to the respective
-symbol table</strong>. It generates no code whatsoever beyond updating
-the symbol tables.</p>
+<p>&#x2003;&#x2003;The class level symbol table can be reset each time we begin to compile a new class, for <strong>classes are standalone compilation unity</strong>. Something similar happens when we compile subroutines.</p>
+<p>&#x2003;&#x2003;The code writer is going to encounter all sorts of variable declaration commands, of which in Jack we have three: <code>local</code>, <code>field</code> and <code>static</code>.</p>
+<p>&#x2003;&#x2003;Then it&#x2019;s going to elucidate all important properties of the declared variables, and <strong>add the information to the respective symbol table</strong>. It generates no code whatsoever beyond updating the symbol tables.</p>
 <ul>
-<li>If we are defining a <code>field</code> or a <code>static</code>
-variable, the code writer will add a new row to the end of the class
-level symbol table.</li>
-<li>If we are defining <code>local</code> or <code>argument</code>, the
-code writer will update the symbol table of the subroutine which is
-currently being compiled.</li>
-<li>Arguments are being defined as <strong>part of the parameter list of
-the method&apos;s signature</strong>. When the code writer goes through the
-parameter list, it adds the respective lines to the subroutine&apos;s symbol
-table.</li>
+<li>If we are defining a <code>field</code> or a <code>static</code> variable, the code writer will add a new row to the end of the class level symbol table.</li>
+<li>If we are defining <code>local</code> or <code>argument</code>, the code writer will update the symbol table of the subroutine which is currently being compiled.</li>
+<li>Arguments are being defined as <strong>part of the parameter list of the method&#x2019;s signature</strong>. When the code writer goes through the parameter list, it adds the respective lines to the subroutine&#x2019;s symbol table.</li>
 </ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
-<p>&#x2003;&#x2003;What about using variables within the context of expressions or
-statements. Take <code>let dx = x - other.getX();</code> as an
-example:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png" alt></p>
+<p>&#x2003;&#x2003;What about using variables within the context of expressions or statements. Take <code>let dx = x - other.getX();</code> as an example:</p>
 <ul>
-<li><p>For each variable in the code, we <strong>look up this variable
-in the subroutine level symbol table</strong>.</p>
+<li>
+<p>For each variable in the code, we <strong>look up this variable in the subroutine level symbol table</strong>.</p>
 <ul>
 <li>If we find it there, we know which property we have to use.</li>
-<li>If don&apos;t, we revert to <strong>looking it up in the class level
-symbol table</strong>.</li>
-<li>If don&apos;t either, we can conclude that the variable is undefined and
-throw an error message.</li>
-</ul></li>
+<li>If don&#x2019;t, we revert to <strong>looking it up in the class level symbol table</strong>.</li>
+<li>If don&#x2019;t either, we can conclude that the variable is undefined and throw an error message.</li>
 </ul>
-<p>&#x2003;&#x2003;How can the statements be translated into VM code? Take
-<code>let y = y +dy</code> for example:</p>
-<ol type="1">
-<li>In the process of generating code, the code generator will look up
-the respective table.</li>
-<li>It finds out that <strong><code>y</code> stands for the second
-<code>field</code> of the current object</strong>, so it will be
-translated into <code>this 1</code></li>
-<li><code>dy</code> stands for the second <code>local</code> variable,
-so it will be translated into <code>local 1</code></li>
+</li>
+</ul>
+<p>&#x2003;&#x2003;How can the statements be translated into VM code? Take <code>let y = y +dy</code> for example:</p>
+<ol>
+<li>In the process of generating code, the code generator will look up the respective table.</li>
+<li>It finds out that <strong><code>y</code> stands for the second <code>field</code> of the current object</strong>, so it will be translated into <code>this 1</code></li>
+<li><code>dy</code> stands for the second <code>local</code> variable, so it will be translated into <code>local 1</code></li>
 </ol>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
-<h3><span id="3handling-variables-ingeneral">3.Handling variables in
-general</span></h3>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png" alt></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png" alt></p>
+<h3><span id="3handling-variables-in-general"> 3.Handling variables in general</span></h3>
 <p>&#x2003;&#x2003;High level of programming languages vary in terms of:</p>
 <ul>
 <li>variable types</li>
 <li>variable kinds</li>
 <li>nested scoping rules</li>
 </ul>
-<p>&#x2003;&#x2003;And the symbol table generation and usage we discussed right now
-can be easily entended to handle any number of possible variables types
-and kinds.</p>
-<p>&#x2003;&#x2003;Some languages, like Java, feature <em>unlimited scoping</em>. this
-means that whenever you define a block of code with a pair of curly
-brackets, you can define variables within this code which are recognized
-only within that block. <code>x</code> in this scope doesn&apos;t mean the
-same as <code>x</code> in that block.</p>
-<p>&#x2003;&#x2003;To represent the information in our symbol table mechanism, we use
-<strong>a linked list of symbol tables</strong>:</p>
+<p>&#x2003;&#x2003;And the symbol table generation and usage we discussed right now can be easily entended to handle any number of possible variables types and kinds.</p>
+<p>&#x2003;&#x2003;Some languages, like Java, feature <em>unlimited scoping</em>. this means that whenever you define a block of code with a pair of curly brackets, you can define variables within this code which are recognized only within that block. <code>x</code> in this scope doesn&#x2019;t mean the same as <code>x</code> in that block.</p>
+<p>&#x2003;&#x2003;To represent the information in our symbol table mechanism, we use <strong>a linked list of symbol tables</strong>:</p>
 <ul>
 <li>When start compiling the class, we first create an linked list.</li>
-<li>The first symbol table we add to the list is the class level symbol
-table.</li>
-<li>When we start compiling a method, we create the method symbol table
-like before.</li>
-<li>Whenever we have another scoping region, we <strong>add another
-symbol table to the linked list</strong>.</li>
+<li>The first symbol table we add to the list is the class level symbol table.</li>
+<li>When we start compiling a method, we create the method symbol table like before.</li>
+<li>Whenever we have another scoping region, we <strong>add another symbol table to the linked list</strong>.</li>
 </ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png" alt></p>
 <p>&#x2003;&#x2003;When you encounter some variable <code>x</code> in the code we:</p>
-<ol type="1">
-<li>Look up <code>x</code> in the current scope, which is also the first
-table.</li>
+<ol>
+<li>Look up <code>x</code> in the current scope, which is also the first table.</li>
 <li>If fail, we move to the next symbol table.</li>
-<li>We simply go on downstream until we get to the class level symbol
-table.</li>
+<li>We simply go on downstream until we get to the class level symbol table.</li>
 </ol>
 
     </div>
