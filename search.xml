@@ -459,41 +459,6 @@ the missing functionality.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>1.1~1.5的一些概念</title>
-    <url>/2024/05/31/1.1-1.5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<h1><span id="someconceptsinfrom11to15"><span class="math inline">\(some\;concepts\;in\;from\;1.1\;to\;1.5\)</span></span></h1>
-<h3><span id="1environment">1.<span class="math inline">\(Environment\)</span></span></h3>
-<blockquote>
-<p>  An environment in which an expression is evaluated consists of a
-sequence of frames, depicted as boxes. Each frame contains bindings,
-each of which associates a name with its corresponding value. Assignment
-and import statements add entries to the first frame of the current
-environment.</p>
-</blockquote>
-<h3><span id="2function-as-abstractions">2.<span class="math inline">\(Function\)</span> <span class="math inline">\(as\)</span> <span class="math inline">\(abstractions\)</span></span></h3>
-<p>  我们以下面这个简单的程序为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add, mul</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">square</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> mul(x, x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sum_squares</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> add(square(x), square(y))</span><br></pre></td></tr></table></figure></p>
-<p>  我们可以<strong>写出求和平方，而不必考虑如何求一个数的平方</strong>。如何计算平方的细节可以去掉，以后再考虑。事实上，就<span class="math inline">\(sum\_square\)</span>而言，<span class="math inline">\(square\)</span>不是一个特定的函数体，而是<strong>一个函数的抽象，即函数抽象</strong>。我们可以将<span class="math inline">\(square\)</span>看作一个“黑匣子”，我们放入一个值，然后函数输出一个值，而<strong>中间的实现细节我们并不关心</strong>。</p>
-<p>  为了掌握函数抽象的使用，考虑它的三个核心属性通常是有用的：</p>
-<ul>
-<li><strong>函数的域(domain)</strong> 是它可以接受的一组参数。</li>
-<li><strong>函数的范围(range)</strong> 是它可以返回的值的集合。</li>
-<li><strong>函数的目的(intent)</strong>
-是它计算输入和输出之间的关系(以及它可能产生的任何副作用)，可以看作是输入到输出的抽象映射。</li>
-</ul>
-<p>  例如对于<span class="math inline">\(sum\_square\)</span>，其：</p>
-<ul>
-<li><span class="math inline">\(domain\)</span>：两个数。</li>
-<li><span class="math inline">\(range\)</span>：非负实数。</li>
-<li><span class="math inline">\(intent\)</span>：返回两个数的平方和。</li>
-</ul>
-<p>  这些属性没有指定如何执行意图；<strong>这些细节被抽象掉了</strong>。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 1.Building Abstractions with Functions</category>
-      </categories>
-  </entry>
-  <entry>
     <title>1.6.高阶函数</title>
     <url>/2024/05/31/1.6.%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1><span id="16高阶函数"><span class="math inline">\(1.6\)</span>高阶函数</span></h1>
@@ -606,6 +571,41 @@ environment.</p>
 <strong><span class="math inline">\(lambda\)</span>函数</strong> 。<span class="math inline">\(lambda\)</span>函数没有内置名称，但可以和普通的函数一样调用：
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="keyword">lambda</span> x: x * x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0xf3f490</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s(<span class="number">12</span>)</span><br><span class="line"><span class="number">144</span></span><br></pre></td></tr></table></figure></p>
 <p>  对于较简单的函数，利用<span class="math inline">\(lambda\)</span>表达式可以简化代码；但如果函数较为复杂，<span class="math inline">\(lambda\)</span>就很可能给人带来理解上的困难。因此在代码较复杂、层层嵌套时，还是用传统的<code>def</code>为佳。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 1.Building Abstractions with Functions</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>1.1~1.5的一些概念</title>
+    <url>/2024/05/31/1.1-1.5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<h1><span id="someconceptsinfrom11to15"><span class="math inline">\(some\;concepts\;in\;from\;1.1\;to\;1.5\)</span></span></h1>
+<h3><span id="1environment">1.<span class="math inline">\(Environment\)</span></span></h3>
+<blockquote>
+<p>  An environment in which an expression is evaluated consists of a
+sequence of frames, depicted as boxes. Each frame contains bindings,
+each of which associates a name with its corresponding value. Assignment
+and import statements add entries to the first frame of the current
+environment.</p>
+</blockquote>
+<h3><span id="2function-as-abstractions">2.<span class="math inline">\(Function\)</span> <span class="math inline">\(as\)</span> <span class="math inline">\(abstractions\)</span></span></h3>
+<p>  我们以下面这个简单的程序为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add, mul</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">square</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> mul(x, x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sum_squares</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> add(square(x), square(y))</span><br></pre></td></tr></table></figure></p>
+<p>  我们可以<strong>写出求和平方，而不必考虑如何求一个数的平方</strong>。如何计算平方的细节可以去掉，以后再考虑。事实上，就<span class="math inline">\(sum\_square\)</span>而言，<span class="math inline">\(square\)</span>不是一个特定的函数体，而是<strong>一个函数的抽象，即函数抽象</strong>。我们可以将<span class="math inline">\(square\)</span>看作一个“黑匣子”，我们放入一个值，然后函数输出一个值，而<strong>中间的实现细节我们并不关心</strong>。</p>
+<p>  为了掌握函数抽象的使用，考虑它的三个核心属性通常是有用的：</p>
+<ul>
+<li><strong>函数的域(domain)</strong> 是它可以接受的一组参数。</li>
+<li><strong>函数的范围(range)</strong> 是它可以返回的值的集合。</li>
+<li><strong>函数的目的(intent)</strong>
+是它计算输入和输出之间的关系(以及它可能产生的任何副作用)，可以看作是输入到输出的抽象映射。</li>
+</ul>
+<p>  例如对于<span class="math inline">\(sum\_square\)</span>，其：</p>
+<ul>
+<li><span class="math inline">\(domain\)</span>：两个数。</li>
+<li><span class="math inline">\(range\)</span>：非负实数。</li>
+<li><span class="math inline">\(intent\)</span>：返回两个数的平方和。</li>
+</ul>
+<p>  这些属性没有指定如何执行意图；<strong>这些细节被抽象掉了</strong>。</p>
 ]]></content>
       <categories>
         <category>SICP in python</category>
@@ -1556,6 +1556,26 @@ below:</p>
       </categories>
   </entry>
   <entry>
+    <title>11.1.一些概念</title>
+    <url>/2024/05/31/11.1%20Some%20concepts/</url>
+    <content><![CDATA[<h1><span id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</span></h1>
+<h3><span id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</span></h3>
+<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
+<h3><span id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</span></h3>
+<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
+<ul>
+<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
+<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
+<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
+</ul>
+<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>10.1.二叉搜索树</title>
     <url>/2024/05/31/10.1.Binary%20Search%20Trees/</url>
     <content><![CDATA[<h1><span id="101二叉搜索树"><span class="math inline">\(10.1\)</span>二叉搜索树</span></h1>
@@ -1612,26 +1632,6 @@ ordering restriction to support efficient search</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>10.Trees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.1.一些概念</title>
-    <url>/2024/05/31/11.1%20Some%20concepts/</url>
-    <content><![CDATA[<h1><span id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</span></h1>
-<h3><span id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</span></h3>
-<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
-<h3><span id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</span></h3>
-<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
-<ul>
-<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
-<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
-<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
-</ul>
-<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
       </categories>
   </entry>
   <entry>
@@ -1720,34 +1720,27 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
-    <title>11.5.红黑树</title>
-    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
-    <content><![CDATA[<h1><span id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</span></h1>
-<h3><span id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</span></h3>
-<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
-<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
-<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
-<h3><span id="2左斜红黑树的性质">2.左斜红黑树的性质</span></h3>
-<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
+    <title>12.2.Hashing的实现方法(1)</title>
+    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
+    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
+<h3><span id="1整数溢出">1.整数溢出</span></h3>
+<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
+<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
+<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
+<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
+<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
 <ol type="1">
-<li>红色链接左斜。</li>
-<li>没有一个节点与两个红色链接相连。</li>
-<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
+<li>它是一个整数</li>
+<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
+<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
 </ol>
-<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
-<h3><span id="2红黑树的旋转操作">2.红黑树的旋转操作</span></h3>
-<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
-<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
+<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
+        <category>12.Hashing</category>
       </categories>
   </entry>
   <entry>
@@ -1779,65 +1772,34 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
-    <title>12.2.Hashing的实现方法(1)</title>
-    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
-    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
-<h3><span id="1整数溢出">1.整数溢出</span></h3>
-<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
-<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
-<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
-<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
-<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
+    <title>11.5.红黑树</title>
+    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
+    <content><![CDATA[<h1><span id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</span></h1>
+<h3><span id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</span></h3>
+<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
+<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
+<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
+<h3><span id="2左斜红黑树的性质">2.左斜红黑树的性质</span></h3>
+<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
 <ol type="1">
-<li>它是一个整数</li>
-<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
-<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
+<li>红色链接左斜。</li>
+<li>没有一个节点与两个红色链接相连。</li>
+<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
 </ol>
-<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
-<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
+<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
+<h3><span id="2红黑树的旋转操作">2.红黑树的旋转操作</span></h3>
+<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
+<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.3.Hashing的实现方法(2)</title>
-    <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
-    <content><![CDATA[<h1><span id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</span></h1>
-<h3><span id="1冲突处理">1.冲突处理</span></h3>
-<p>  假如我们得到一个对象的<span class="math inline">\(hashCode\)</span>为<span class="math inline">\(h\)</span>：</p>
-<ul>
-<li>当<span class="math inline">\(h\)</span>索引不存在时，我们就对<span class="math inline">\(h\)</span>索引创建一个新的<code>LinkedList</code>，并把这个对象插入链表中。</li>
-<li>当<span class="math inline">\(h\)</span>索引存在时，我们就将对象插入已有的链表中。</li>
-</ul>
-<blockquote>
-<p>  <span class="math inline">\(p.s.\)</span>我们的数据结构是不允许重复的，因此在插入时，我们必须将待插入对象与链表中所有已插入对象进行比较。当该对象已经存在时，就直接跳过。这说明我们会需要遍历整个链表。</p>
-</blockquote>
-<p>  这样，我们就可以得到<span class="math inline">\(Hashing\)</span>的具体流程了：</p>
-<ul>
-<li><p><code>add</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index has no item, create new List, and place item there.</li>
-<li>If index has a List already, check the List to see if item is
-already in there. If not, add item to List.</li>
-</ul></li>
-<li><p><code>contains</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index is empty, return <code>false</code>.</li>
-<li>Otherwise, check all items in the List at that index, and if the
-item exists, return true.</li>
-</ul></li>
-</ul>
-<h3><span id="2内存的处理">2.内存的处理</span></h3>
-<p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
+        <category>11.Balanced Trees</category>
       </categories>
   </entry>
   <entry>
@@ -1879,6 +1841,44 @@ due to overflow).</li>
 <li>Why a small prime? Because it's easier to compute.</li>
 </ul></li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.3.Hashing的实现方法(2)</title>
+    <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
+    <content><![CDATA[<h1><span id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</span></h1>
+<h3><span id="1冲突处理">1.冲突处理</span></h3>
+<p>  假如我们得到一个对象的<span class="math inline">\(hashCode\)</span>为<span class="math inline">\(h\)</span>：</p>
+<ul>
+<li>当<span class="math inline">\(h\)</span>索引不存在时，我们就对<span class="math inline">\(h\)</span>索引创建一个新的<code>LinkedList</code>，并把这个对象插入链表中。</li>
+<li>当<span class="math inline">\(h\)</span>索引存在时，我们就将对象插入已有的链表中。</li>
+</ul>
+<blockquote>
+<p>  <span class="math inline">\(p.s.\)</span>我们的数据结构是不允许重复的，因此在插入时，我们必须将待插入对象与链表中所有已插入对象进行比较。当该对象已经存在时，就直接跳过。这说明我们会需要遍历整个链表。</p>
+</blockquote>
+<p>  这样，我们就可以得到<span class="math inline">\(Hashing\)</span>的具体流程了：</p>
+<ul>
+<li><p><code>add</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index has no item, create new List, and place item there.</li>
+<li>If index has a List already, check the List to see if item is
+already in there. If not, add item to List.</li>
+</ul></li>
+<li><p><code>contains</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index is empty, return <code>false</code>.</li>
+<li>Otherwise, check all items in the List at that index, and if the
+item exists, return true.</li>
+</ul></li>
+</ul>
+<h3><span id="2内存的处理">2.内存的处理</span></h3>
+<p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -2885,6 +2885,46 @@ nodes themselves are not reversed; only the labels are.
       </categories>
   </entry>
   <entry>
+    <title>2.5.数组型链表</title>
+    <url>/2024/05/31/2.5.ALists/</url>
+    <content><![CDATA[<h1><span id="25数组型链表"><span class="math inline">\(2.5\)</span>数组型链表</span></h1>
+<h3><span id="1数组型链表的引入与搭建">1.数组型链表的引入与搭建</span></h3>
+<p>  在<span class="math inline">\(SLList\)</span>与<span class="math inline">\(DLList\)</span>中，我们可以轻易地实现<code>getFirst</code>和<code>getLast</code>，但只能用线性的时间复杂度实现<code>get(int index)</code>。而数组可以实现常数时间复杂度的访问(参考<span class="math inline">\(cs61a\)</span>的懒惰计算)。</p>
+<p>  可以初步搭建出以下的<span class="math inline">\(AList\)</span>框架： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AList &#123;</span><br><span class="line">        items = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> items[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这一实现遵循了以下不变量：</p>
+<ul>
+<li>下一个插入元素的插入位置一直是<span class="math inline">\(size\)</span>。</li>
+<li><span class="math inline">\(AList\)</span>中的元素数量永远是<span class="math inline">\(size\)</span>。</li>
+<li>最后一个元素的位置永远是<span class="math inline">\(size-1\)</span>。</li>
+</ul>
+<h3><span id="2对链表的思考">2.对链表的思考</span></h3>
+<p>  在实现<code>removeLast</code>操作时，我们先明确一个重要的发现：在我们实现某个方法时，对链表的任何改变都应该导致一个或多个内存盒子(<span class="math inline">\(memory\;box\)</span>)的改变。</p>
+<p>  链表是一个抽象的概念用户使用我们提供的抽象(<code>addLast</code>，<code>removeLast</code>)来对列表进行的任何更改，而我们必须将这些更改以符合用户期望的方式反映在这些内存盒子中。中间的过程并不重要，我们只需要让数组型链表的行为与用户所设想的相一致就好了。</p>
+<p>  而<span class="math inline">\(size\)</span>，<span class="math inline">\(items\)</span>，<span class="math inline">\(items[i]\)</span>的内存盒子(<span class="math inline">\(memory\;boxes\)</span>)是这个概念的具体表示，是我们已经设计好的事实。我们的目标就是通过操作这些具体的表示形式，来实现用户想要的模型。</p>
+<h3><span id="3removelast的实现">3.<code>removeLast</code>的实现</span></h3>
+<p>  通过上面对链表的思考，我们可以只通过改变<span class="math inline">\(size\)</span>来实现<code>removeLast</code>：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> getLast();</span><br><span class="line">        size = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这种<code>removeLast</code>的实现是基于<span class="math inline">\(AList\)</span>的不变量的。只要我们改变<span class="math inline">\(Size\)</span>，那么下一个元素插入的位置就一定是<span class="math inline">\(size\)</span>，不管<span class="math inline">\(size\)</span>这个位置有没有元素，而最后一个元素的位置是<span class="math inline">\(size-1\)</span>，用户并不能去访问<span class="math inline">\(size\)</span>这个位置。因此可以通过这个手段实现元素的删除。至于<span class="math inline">\(size\)</span>位置的元素，我们想把它改为几都可以。</p>
+<p>  不过，与<span class="math inline">\(int\)</span>型的链表不同，当我们链表的存储类型为<span class="math inline">\(generic\)</span>时，我们会将<span class="math inline">\(size\)</span>位置的元素置为<code>null</code>，因为如果对<span class="math inline">\(size\)</span>位置的元素置之不理的话，这个元素就会一直占用内存，导致内存的浪费。而设为<code>null</code>后，由于对它的引用丢失了，<span class="math inline">\(Java\)</span>会在内存中删掉它。</p>
+<h3><span id="4数组大小的调整">4.数组大小的调整</span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，数组必须有固定的大小，因此在数组容量不够时，我们需要调整数组的大小(<span class="math inline">\(resize\)</span>)。</p>
+<p>  实现调整数组的办法很简单：创建一个具有所需大小的数组，然后把原数组的元素复制过来，最后返回这个新数组即可：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[size + <span class="number">1</span>];</span><br><span class="line">System.arraycopy(items, <span class="number">0</span>, a, <span class="number">0</span>, size);</span><br><span class="line">a[size] = <span class="number">11</span>;</span><br><span class="line">items = a;</span><br><span class="line">size = size + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>  但是，这种在需要扩容时增加一部分的做法过于缓慢。例如我们每次扩容<span class="math inline">\(1\)</span>，则当数组扩容到<span class="math inline">\(n\)</span>时，由于每次扩容都要先创建一个新的数组，一共创建了<span class="math inline">\(\sum_{i=1}^n i ={ {n(n+1)}\over
+2}\)</span>个单位大小的数组，时间复杂度为<span class="math inline">\(O(n^2)\)</span>，这样的效率十分低。</p>
+<p>  因此，我们一般不采用上面的扩容方式，而是在需要扩容的时候适当地多扩大一些，以减少创建数组的次数。一般的做法如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertBack</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (size == items.length) &#123;</span><br><span class="line">           resize(size * RFACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">    items[size] = x;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="5内存使用率">5.内存使用率</span></h3>
+<p>  数组中的实际元素个数与数组大小之比的数值是内存利用率。下面的数组的内存使用率为<span class="math inline">\(0.04\)</span>：</p>
+<p><img src="/2024/05/31/2.5.ALists/image-14.png"></p>
+<p>  当数组的内存使用率较低的时候，我们可以考虑<code>resize(size \ 2)</code>，缩小数组空间来节约内存。这种做法被称为以空间换时间。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>2.List</category>
+      </categories>
+  </entry>
+  <entry>
     <title>2.4.可变数据</title>
     <url>/2024/05/31/2.4.%E5%8F%AF%E5%8F%98%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1><span id="24可变数据"><span class="math inline">\(2.4\)</span>可变数据</span></h1>
@@ -3070,46 +3110,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 2.Building Abstraction with Data</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>2.5.数组型链表</title>
-    <url>/2024/05/31/2.5.ALists/</url>
-    <content><![CDATA[<h1><span id="25数组型链表"><span class="math inline">\(2.5\)</span>数组型链表</span></h1>
-<h3><span id="1数组型链表的引入与搭建">1.数组型链表的引入与搭建</span></h3>
-<p>  在<span class="math inline">\(SLList\)</span>与<span class="math inline">\(DLList\)</span>中，我们可以轻易地实现<code>getFirst</code>和<code>getLast</code>，但只能用线性的时间复杂度实现<code>get(int index)</code>。而数组可以实现常数时间复杂度的访问(参考<span class="math inline">\(cs61a\)</span>的懒惰计算)。</p>
-<p>  可以初步搭建出以下的<span class="math inline">\(AList\)</span>框架： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AList &#123;</span><br><span class="line">        items = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> items[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这一实现遵循了以下不变量：</p>
-<ul>
-<li>下一个插入元素的插入位置一直是<span class="math inline">\(size\)</span>。</li>
-<li><span class="math inline">\(AList\)</span>中的元素数量永远是<span class="math inline">\(size\)</span>。</li>
-<li>最后一个元素的位置永远是<span class="math inline">\(size-1\)</span>。</li>
-</ul>
-<h3><span id="2对链表的思考">2.对链表的思考</span></h3>
-<p>  在实现<code>removeLast</code>操作时，我们先明确一个重要的发现：在我们实现某个方法时，对链表的任何改变都应该导致一个或多个内存盒子(<span class="math inline">\(memory\;box\)</span>)的改变。</p>
-<p>  链表是一个抽象的概念用户使用我们提供的抽象(<code>addLast</code>，<code>removeLast</code>)来对列表进行的任何更改，而我们必须将这些更改以符合用户期望的方式反映在这些内存盒子中。中间的过程并不重要，我们只需要让数组型链表的行为与用户所设想的相一致就好了。</p>
-<p>  而<span class="math inline">\(size\)</span>，<span class="math inline">\(items\)</span>，<span class="math inline">\(items[i]\)</span>的内存盒子(<span class="math inline">\(memory\;boxes\)</span>)是这个概念的具体表示，是我们已经设计好的事实。我们的目标就是通过操作这些具体的表示形式，来实现用户想要的模型。</p>
-<h3><span id="3removelast的实现">3.<code>removeLast</code>的实现</span></h3>
-<p>  通过上面对链表的思考，我们可以只通过改变<span class="math inline">\(size\)</span>来实现<code>removeLast</code>：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> getLast();</span><br><span class="line">        size = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这种<code>removeLast</code>的实现是基于<span class="math inline">\(AList\)</span>的不变量的。只要我们改变<span class="math inline">\(Size\)</span>，那么下一个元素插入的位置就一定是<span class="math inline">\(size\)</span>，不管<span class="math inline">\(size\)</span>这个位置有没有元素，而最后一个元素的位置是<span class="math inline">\(size-1\)</span>，用户并不能去访问<span class="math inline">\(size\)</span>这个位置。因此可以通过这个手段实现元素的删除。至于<span class="math inline">\(size\)</span>位置的元素，我们想把它改为几都可以。</p>
-<p>  不过，与<span class="math inline">\(int\)</span>型的链表不同，当我们链表的存储类型为<span class="math inline">\(generic\)</span>时，我们会将<span class="math inline">\(size\)</span>位置的元素置为<code>null</code>，因为如果对<span class="math inline">\(size\)</span>位置的元素置之不理的话，这个元素就会一直占用内存，导致内存的浪费。而设为<code>null</code>后，由于对它的引用丢失了，<span class="math inline">\(Java\)</span>会在内存中删掉它。</p>
-<h3><span id="4数组大小的调整">4.数组大小的调整</span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，数组必须有固定的大小，因此在数组容量不够时，我们需要调整数组的大小(<span class="math inline">\(resize\)</span>)。</p>
-<p>  实现调整数组的办法很简单：创建一个具有所需大小的数组，然后把原数组的元素复制过来，最后返回这个新数组即可：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[size + <span class="number">1</span>];</span><br><span class="line">System.arraycopy(items, <span class="number">0</span>, a, <span class="number">0</span>, size);</span><br><span class="line">a[size] = <span class="number">11</span>;</span><br><span class="line">items = a;</span><br><span class="line">size = size + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-<p>  但是，这种在需要扩容时增加一部分的做法过于缓慢。例如我们每次扩容<span class="math inline">\(1\)</span>，则当数组扩容到<span class="math inline">\(n\)</span>时，由于每次扩容都要先创建一个新的数组，一共创建了<span class="math inline">\(\sum_{i=1}^n i ={ {n(n+1)}\over
-2}\)</span>个单位大小的数组，时间复杂度为<span class="math inline">\(O(n^2)\)</span>，这样的效率十分低。</p>
-<p>  因此，我们一般不采用上面的扩容方式，而是在需要扩容的时候适当地多扩大一些，以减少创建数组的次数。一般的做法如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertBack</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (size == items.length) &#123;</span><br><span class="line">           resize(size * RFACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">    items[size] = x;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3><span id="5内存使用率">5.内存使用率</span></h3>
-<p>  数组中的实际元素个数与数组大小之比的数值是内存利用率。下面的数组的内存使用率为<span class="math inline">\(0.04\)</span>：</p>
-<p><img src="/2024/05/31/2.5.ALists/image-14.png"></p>
-<p>  当数组的内存使用率较低的时候，我们可以考虑<code>resize(size \ 2)</code>，缩小数组空间来节约内存。这种做法被称为以空间换时间。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>2.List</category>
       </categories>
   </entry>
   <entry>
@@ -3808,8 +3808,116 @@ status</strong>, and then outputs the selected value.</li>
 <h3><span id="1clock-concepts">1.Clock concepts</span></h3>
 <p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
 <h3><span id="2d-flip-flops">2.D Flip-flops</span></h3>
-<h4><span id="a">  <span class="math inline">\(a.\)</span></span></h4>
+<h4><span id="a-dffconcept">  <span class="math inline">\(a.\)</span> DFF
+concept</span></h4>
 <p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
+<blockquote>
+<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
+<span class="math inline">\(D\)</span> is the data input.</p>
+</blockquote>
+<blockquote>
+<p>DFF only responds to the input signal on the rising edge of the clock
+signal, it captures and latches the value of data input. <strong>It will
+hold the value until the next rising edge of the clock
+signal</strong>.</p>
+</blockquote>
+<ul>
+<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
+take for the input to propagate to the output after the clock
+trigger</strong>.</p></li>
+<li><p><em>Setup time</em> is the amount of time that the input needs to
+be stable BEFORE the clock trigger</p></li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
+<ul>
+<li><em>Hold time</em> is the amount of time that the input needs to be
+stable AFTER the clock trigger</li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
+<h3><span id="3register">3.Register</span></h3>
+<h4><span id="asomeconcept">  <span class="math inline">\(a.\)</span>Some
+concept</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
+<blockquote>
+<p>Why this? Because the max hold time is to <strong>ensure that data
+input D remains stable for a period of time after the rising edge of the
+clock arrives</strong>. And the period of time equals to the delay of
+<span class="math inline">\(A\)</span> plus the combinational delay.</p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
+<blockquote>
+<p>Why this? Because the min clock cycle is to <strong>ensure that the
+signal is properly transmitted during the clock cycle and captured by
+the next register</strong>. So we must take the longest time into
+consideration.</p>
+</blockquote>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
+<h3><span id="4transitor">4.Transitor</span></h3>
+<h4><span id="ametal-oxide-semiconductor-field-effecttransistormosfet">  <span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
+Transistor(MOSFET)</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
+<p>  To know how the result comes from, we can <strong>view the value of
+<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
+an example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
+<ul>
+<li><p>First we need to know <strong>whether the switch is
+closed</strong>. <strong>If the switch is closed, then the state of
+<span class="math inline">\(D\)</span> is decided by the outside
+circuits</strong>.</p></li>
+<li><p>When the switch is on, we then judge <strong>if the voltage of
+<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it's true, then the FET is
+conducting, and vice versa.</p></li>
+</ul>
+<p>  In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can't get the electronic, thus it's
+0.</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
+<h4><span id="bvddand-ground">  <span class="math inline">\(b.\)</span>Vdd
+and Ground</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
+<h4><span id="cbuilding-an-inverter">  <span class="math inline">\(c.\)</span>Building an Inverter</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
+<h4><span id="dbuilding-other-gates">  <span class="math inline">\(d.\)</span>Building other gates</span></h4>
+<p>  To build a CMOS, we:</p>
+<ol type="1">
+<li><p>Implement the pull-up network and pull-down network separately to
+fit the truth table.</p>
+<ul>
+<li>It's OK to get the opposite of truth table. <strong>We can simply
+convert it through an invertor</strong>.</li>
+</ul></li>
+<li><p>Connect the pull-up with Vdd, and the pull-down with
+Ground.</p></li>
+</ol>
+<p>  We take the <code>NAND</code> gate for example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
+<h4><span id="ethe-use-of-demorgans-law">  <span class="math inline">\(e.\)</span>The use of DeMorgan's Law</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
 ]]></content>
       <categories>
         <category>CS61C Great Ideas in Computer Architecture</category>
@@ -3881,6 +3989,17 @@ want to change</strong>.</p>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 3.Memory</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>3.4.Building a Datapath</title>
+    <url>/2024/06/05/3-4-Building-a-Datapath/</url>
+    <content><![CDATA[<h1><span id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</span></h1>
+<h3><span id="1">1.</span></h3>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
       </categories>
   </entry>
   <entry>
