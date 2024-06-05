@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="18.6.18.6.18.6.Radix Sort  1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of &#x398;(nlog&#x2061;n)\Theta(n\log n)&#x398;(nlogn).However, what if we">
+    <meta name="description" content="\(18.6.\)Radix Sort 1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of \(\Theta(n\log n)\).However, what if we don&apos;t compare at">
 <meta property="og:type" content="article">
 <meta property="og:title" content="18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="18.6.18.6.18.6.Radix Sort  1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of &#x398;(nlog&#x2061;n)\Theta(n\log n)&#x398;(nlogn).However, what if we">
+<meta property="og:description" content="\(18.6.\)Radix Sort 1.Counting Sort &#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of \(\Theta(n\log n)\).However, what if we don&apos;t compare at">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-9.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/image-10.png">
@@ -146,7 +146,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 18.6.18.6.18.6.Radix Sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1.Counting Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.LSD Radix Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 3.MSD Radix Sort</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(18.6.\)Radix
+Sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Counting Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.LSD Radix Sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.MSD Radix Sort</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +161,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -288,30 +289,48 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="186186186radix-sort"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>18.6.</mn></mrow><annotation encoding="application/x-tex">18.6.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">8</span><span class="mord">.</span><span class="mord">6</span><span class="mord">.</span></span></span></span>Radix Sort</span></h1>
-<h3><span id="1counting-sort"> 1.Counting Sort</span></h3>
-<p>&#x2003;&#x2003; In the previous text, we have proved that sorting using comparison has a worst case running time of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">&#x398;</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>&#x2061;</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">&#x398;</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>.However, what if we don&#x2019;t compare at all?</p>
-<p>&#x2003;&#x2003;Suppose we have a couple of characters, saying <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>c</mi><mi>d</mi><mi>s</mi><mi>j</mi><mi>l</mi><mi>f</mi><mi>k</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">acdsjlfkm</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">d</span><span class="mord mathnormal">s</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal">m</span></span></span></span>, we can sort them in alphabet order through the following steps:</p>
-<ol>
-<li>Creat an array with the same size of an alphabet(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>26</mn></mrow><annotation encoding="application/x-tex">26</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">6</span></span></span></span>).</li>
-<li>For each character, put it in the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>h</mi><msup><mo>&#x2212;</mo><mo mathvariant="normal" lspace="0em" rspace="0em">&#x2032;</mo></msup><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">&#x2032;</mo></msup></mrow><annotation encoding="application/x-tex">ch-&apos;a&apos;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.835222em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin"><span class="mbin">&#x2212;</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">&#x2032;</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.751892em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">&#x2032;</span></span></span></span></span></span></span></span></span></span></span></span> index.</li>
-<li>Scan the whole array, and the former character are always less than the latter. Insert the character into a new array in order, then we get a sorted array.</li>
+    <div class="post-body" itemprop="articleBody"><h1><span id="186radixsort"><span class="math inline">\(18.6.\)</span>Radix
+Sort</span></h1>
+<h3><span id="1counting-sort">1.Counting Sort</span></h3>
+<p>&#x2003;&#x2003; In the previous text, we have proved that sorting using comparison
+has a worst case running time of <span class="math inline">\(\Theta(n\log n)\)</span>.However, what if we don&apos;t
+compare at all?</p>
+<p>&#x2003;&#x2003;Suppose we have a couple of characters, saying <span class="math inline">\(acdsjlfkm\)</span>, we can sort them in alphabet
+order through the following steps:</p>
+<ol type="1">
+<li>Creat an array with the same size of an alphabet(<span class="math inline">\(26\)</span>).</li>
+<li>For each character, put it in the <span class="math inline">\(ch-&apos;a&apos;\)</span> index.</li>
+<li>Scan the whole array, and the former character are always less than
+the latter. Insert the character into a new array in order, then we get
+a sorted array.</li>
 </ol>
-<p>&#x2003;&#x2003;This kind of sorting method is called counting sort. If the length of data is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>, and the size of alphabet is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span>, then the runtime of counting sort is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">&#x398;</mi><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(N+R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">&#x398;</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span>. It&#x2019;s liner runtime!</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-9.png" alt></p>
-<p>&#x2003;&#x2003;However, the algorithm falls to sort hard-to-count items like String, so we need improvement.</p>
-<h3><span id="2lsd-radix-sort"> 2.LSD Radix Sort</span></h3>
-<p>&#x2003;&#x2003;The LSD(Least Significant Digit) radix sort sort each digit of the item independently form rightmost digit towards left, take the below table as example:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-10.png" alt></p>
-<p>&#x2003;&#x2003;The runtime of LSD radix sort is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">&#x398;</mi><mo stretchy="false">(</mo><mi>W</mi><mi>N</mi><mo>+</mo><mi>W</mi><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(WN+WR)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">&#x398;</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span>,where N is Number of items, R is size of alphabet, and W is the maximun length of these items.</p>
-<p>&#x2003;&#x2003;What if the length of each item isn&#x2019;t same? We can treat empty spaces as less than all other characters:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-11.png" alt></p>
-<h3><span id="3msd-radix-sort"> 3.MSD Radix Sort</span></h3>
-<p>&#x2003;&#x2003;The MSD(Most Significant Digit) radix sort is similiar to LSD radix sort. However, it sorts from the left digit to the right.</p>
+<p>&#x2003;&#x2003;This kind of sorting method is called counting sort. If the length
+of data is <span class="math inline">\(N\)</span>, and the size of
+alphabet is <span class="math inline">\(R\)</span>, then the runtime of
+counting sort is <span class="math inline">\(\Theta(N+R)\)</span>. It&apos;s
+liner runtime!</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-9.png"></p>
+<p>&#x2003;&#x2003;However, the algorithm falls to sort hard-to-count items like
+String, so we need improvement.</p>
+<h3><span id="2lsd-radix-sort">2.LSD Radix Sort</span></h3>
+<p>&#x2003;&#x2003;The LSD(Least Significant Digit) radix sort sort each digit of the
+item independently form rightmost digit towards left, take the below
+table as example:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-10.png"></p>
+<p>&#x2003;&#x2003;The runtime of LSD radix sort is <span class="math inline">\(\Theta(WN+WR)\)</span>,where N is Number of items,
+R is size of alphabet, and W is the maximun length of these items.</p>
+<p>&#x2003;&#x2003;What if the length of each item isn&apos;t same? We can treat empty
+spaces as less than all other characters:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-11.png"></p>
+<h3><span id="3msd-radix-sort">3.MSD Radix Sort</span></h3>
+<p>&#x2003;&#x2003;The MSD(Most Significant Digit) radix sort is similiar to LSD radix
+sort. However, it sorts from the left digit to the right.</p>
 <p>&#x2003;&#x2003;After first sorting process, we may get items as below:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-12.png" alt></p>
-<p>&#x2003;&#x2003;The items are not in correct order yet! To solve this, we can treat items with same left digit as a group, and compare the next left character within groups:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png" alt></p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-12.png"></p>
+<p>&#x2003;&#x2003;The items are not in correct order yet! To solve this, we can treat
+items with same left digit as a group, and compare the next left
+character within groups:</p>
+<p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png"></p>
 <p>&#x2003;&#x2003;The runtime of MSD radix sort is the same as LSD radix sort.</p>
 
     </div>
@@ -345,7 +364,6 @@
 
 
 
-    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81OTg4OC8zNjM1MA=="></div>
 </div>
   </main>
 
@@ -440,7 +458,6 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script src="/js/third-party/comments/livere.js"></script>
 
 </body>
 </html>

@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="7.4.7.4.7.4.Implementation of Stack  1.Pointer manipulation &#x2003;&#x2003;We first introduce pointer notation: *p represents the value stores in the address that p points to.  &#x2003;&#x2003;In Hack, the pointer statement: 1">
+    <meta name="description" content="\(7.4.\)Implementation of Stack 1.Pointer manipulation &#x2003;&#x2003;We first introduce pointer notation: *p represents the value stores in the address that p points to.  &#x2003;&#x2003;In Hack, the pointer statement:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="7.4.7.4.7.4.Implementation of Stack  1.Pointer manipulation &#x2003;&#x2003;We first introduce pointer notation: *p represents the value stores in the address that p points to.  &#x2003;&#x2003;In Hack, the pointer statement: 1">
+<meta property="og:description" content="\(7.4.\)Implementation of Stack 1.Pointer manipulation &#x2003;&#x2003;We first introduce pointer notation: *p represents the value stores in the address that p points to.  &#x2003;&#x2003;In Hack, the pointer statement:">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png">
@@ -146,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 7.4.7.4.7.4.Implementation of Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1.Pointer manipulation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.Stack machine operation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 3.VM translator perspective</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(7.4.\)Implementation of Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Pointer manipulation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Stack machine operation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.VM translator perspective</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -288,55 +288,58 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="747474implementation-of-stack"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.4.</mn></mrow><annotation encoding="application/x-tex">7.4.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">4</span><span class="mord">.</span></span></span></span>Implementation of Stack</span></h1>
-<h3><span id="1pointer-manipulation"> 1.Pointer manipulation</span></h3>
-<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code> represents <strong>the value stores in the address that <code>p</code> points to</strong>.</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png" alt></p>
+    <div class="post-body" itemprop="articleBody"><h1><span id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</span></h1>
+<h3><span id="1pointer-manipulation">1.Pointer manipulation</span></h3>
+<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
+represents <strong>the value stores in the address that <code>p</code>
+points to</strong>.</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
 <p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;can be translated into:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
 <ul>
-<li><code>A = M</code> points the pointer to the address of  register M.</li>
+<li><code>A = M</code> points the pointer to the address of register
+M.</li>
 <li><code>D = M</code> gets the value of the RAM.</li>
 </ul>
 <p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to <code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it will get the value stored in <code>RAM[256]</code>, namely 19.</p>
-<p>&#x2003;&#x2003;When we assign a number to pointer, such as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores value 5. After the assignment, <code>RAM[1024]</code>stores 9 instead.</p>
-<h3><span id="2stack-machine-operation"> 2.Stack machine operation</span></h3>
+<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
+<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
+will get the value stored in <code>RAM[256]</code>, namely 19.</p>
+<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
+value 5. After the assignment, <code>RAM[1024]</code>stores 9
+instead.</p>
+<h3><span id="2stack-machine-operation">2.Stack machine operation</span></h3>
 <p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
-<ol>
+<ol type="1">
 <li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
 <li>Stack base address will be <code>addr = 256</code>.</li>
 </ol>
-<p>&#x2003;&#x2003;Let&#x2019;s <code>push</code> two value first:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png" alt></p>
-<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258, and our RAM looks like this:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png" alt></p>
-<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in the previous available space, and stack pointer moves forward:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png" alt></p>
-<p>&#x2003;&#x2003;So we can write the VM code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This can be translated into this Hack assembly:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
+<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
+and our RAM looks like this:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
+<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
+the previous available space, and stack pointer moves forward:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>&#x2003;&#x2003;In this program, the A register plays two roles:<br>
-&#x2003;&#x2003;<em>Data register</em> which stores x<br>
-&#x2003;&#x2003;<em>Address register</em> as usual</p>
+<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
+register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
 </blockquote>
-<h3><span id="3vm-translator-perspective"> 3.VM translator perspective</span></h3>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png" alt></p>
+<h3><span id="3vm-translator-perspective">3.VM translator perspective</span></h3>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
 <ul>
-<li>
-<p>VM translator is:</p>
+<li><p>VM translator is:</p>
 <ul>
 <li>A program that translates VM code into machine language.</li>
 <li>Each VM command generates several assembly commands.</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 
     </div>
@@ -370,7 +373,6 @@
 
 
 
-    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81OTg4OC8zNjM1MA=="></div>
 </div>
   </main>
 
@@ -465,7 +467,6 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script src="/js/third-party/comments/livere.js"></script>
 
 </body>
 </html>

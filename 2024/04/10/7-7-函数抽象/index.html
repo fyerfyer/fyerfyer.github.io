@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="7.7.7.7.7.7.Function: Abstraction  1.Function in VM language   The VM language features:  primitive operation(fixed): add, sub abstract operation(extensible): mutiple    &#x2003;&#x2003;When we want to call a func">
+    <meta name="description" content="\(7.7.\)Function: Abstraction 1.Function in VM language  The VM language features:  primitive operation(fixed): add, sub abstract operation(extensible): mutiple   &#x2003;&#x2003;When we want to call a fu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="7.7.&#x51FD;&#x6570;&#x62BD;&#x8C61;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="7.7.7.7.7.7.Function: Abstraction  1.Function in VM language   The VM language features:  primitive operation(fixed): add, sub abstract operation(extensible): mutiple    &#x2003;&#x2003;When we want to call a func">
+<meta property="og:description" content="\(7.7.\)Function: Abstraction 1.Function in VM language  The VM language features:  primitive operation(fixed): add, sub abstract operation(extensible): mutiple   &#x2003;&#x2003;When we want to call a fu">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png">
@@ -144,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 7.7.7.7.7.7.Function: Abstraction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1.Function in VM language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.Function definition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 3.Function execution</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(7.7.\)Function: Abstraction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Function in VM language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Function definition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Function execution</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,7 +158,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -286,102 +286,93 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="777777function-abstraction"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.7.</mn></mrow><annotation encoding="application/x-tex">7.7.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">7</span><span class="mord">.</span></span></span></span>Function: Abstraction</span></h1>
-<h3><span id="1function-in-vm-language"> 1.Function in VM language</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1><span id="77function-abstraction"><span class="math inline">\(7.7.\)</span>Function: Abstraction</span></h1>
+<h3><span id="1function-in-vm-language">1.Function in VM language</span></h3>
 <ul>
-<li>
-<p>The VM language features:</p>
+<li><p>The VM language features:</p>
 <ul>
-<li><em>primitive operation</em>(fixed): <code>add</code>, <code>sub</code></li>
+<li><em>primitive operation</em>(fixed): <code>add</code>,
+<code>sub</code></li>
 <li><em>abstract operation</em>(extensible): <code>mutiple</code></li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <p>&#x2003;&#x2003;When we want to call a function, we:</p>
 <ul>
 <li>push the required argument onto the stack.</li>
-<li>call the function. Then <strong>the result of function will replace the argument you push earlier</strong>.</li>
+<li>call the function. Then <strong>the result of function will replace
+the argument you push earlier</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;Take this simple funtion call <code>sqrt(x-17+x*5)</code> as example, it can be translated into:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">push x</span><br><span class="line">push 17</span><br><span class="line">sub</span><br><span class="line">push x </span><br><span class="line">push 5</span><br><span class="line">call Math.multiply</span><br><span class="line">add </span><br><span class="line">call Math.sqrt</span><br></pre></td></tr></table></figure>
-<h3><span id="2function-definition"> 2.Function definition</span></h3>
-<p>&#x2003;&#x2003;Take the previous function as example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// returns x&quot;y</span><br><span class="line">int mult(int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		x ++;</span><br><span class="line">	}</span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;As is discussed before, it&#x2019;s pseudo VM code is as below:</p>
+<p>&#x2003;&#x2003;Take this simple funtion call <code>sqrt(x-17+x*5)</code> as
+example, it can be translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">push x</span><br><span class="line">push 17</span><br><span class="line">sub</span><br><span class="line">push x </span><br><span class="line">push 5</span><br><span class="line">call Math.multiply</span><br><span class="line">add </span><br><span class="line">call Math.sqrt</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2function-definition">2.Function definition</span></h3>
+<p>&#x2003;&#x2003;Take the previous function as example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// returns x&quot;y</span><br><span class="line">int mult(int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		x ++;</span><br><span class="line">	}</span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;As is discussed before, it&apos;s pseudo VM code is as below:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;In fact, it can be translated into this VM code:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult 2</span><br><span class="line">	push constant 0 //sum = 0</span><br><span class="line">	pop local 0</span><br><span class="line">	push constant 1 //n = 1</span><br><span class="line">	pop local 1</span><br><span class="line">label LOOP</span><br><span class="line">	push local 1 //if clause</span><br><span class="line">	push argument 1</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push local 0 // sum += x</span><br><span class="line">	push argument 0</span><br><span class="line">	add</span><br><span class="line">	pop local 0</span><br><span class="line">	pop local 1 // n ++</span><br><span class="line">	push constant 1</span><br><span class="line">	add</span><br><span class="line">	pop local 1</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push local 0 // return sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Let&#x2019;s discuss the implementation in detail:</p>
-<ol>
-<li>
-<p><em>Function declaration</em>:</p>
+<p>&#x2003;&#x2003;Let&apos;s discuss the implementation in detail:</p>
+<ol type="1">
+<li><p><em>Function declaration</em>:</p>
 <ul>
 <li><code>Function</code>: function declaration.</li>
 <li><code>mult</code>: the name of the function.</li>
 <li><code>2</code>: use 2 <em>local variables</em> in the function.</li>
-</ul>
-</li>
-<li>
-<p><em>Function body</em>:</p>
+</ul></li>
+<li><p><em>Function body</em>:</p>
 <ul>
 <li>branching.</li>
-<li>the variable declared within the body should be stored in <code>local</code>.</li>
-<li>the assignment of variables can be done through <code>push constant</code> and <code>pop local</code>.</li>
-</ul>
-</li>
-<li>
-<p><em>Return value</em></p>
+<li>the variable declared within the body should be stored in
+<code>local</code>.</li>
+<li>the assignment of variables can be done through
+<code>push constant</code> and <code>pop local</code>.</li>
+</ul></li>
+<li><p><em>Return value</em></p>
 <ul>
 <li><code>push</code> the to-return value in the stack.</li>
 <li><code>return</code> statement at the end of program.</li>
-</ul>
-</li>
+</ul></li>
 </ol>
-<h3><span id="3function-execution"> 3.Function execution</span></h3>
-<p>&#x2003;&#x2003;We can execute a function in a <code>Main</code> function:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	push constant 5</span><br><span class="line">	push constant 8</span><br><span class="line">	call mult 2</span><br><span class="line">	add </span><br><span class="line">	return </span><br></pre></td></tr></table></figure>
+<h3><span id="3function-execution">3.Function execution</span></h3>
+<p>&#x2003;&#x2003;We can execute a function in a <code>Main</code> function:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	push constant 5</span><br><span class="line">	push constant 8</span><br><span class="line">	call mult 2</span><br><span class="line">	add </span><br><span class="line">	return </span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>the <code>2</code> next to <code>mult</code> indicates that <strong>the funtion takes in 2 arguments</strong>.</li>
+<li>the <code>2</code> next to <code>mult</code> indicates that
+<strong>the funtion takes in 2 arguments</strong>.</li>
 <li>the whole process can be described through these diagrams:</li>
 </ul>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png" alt></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png" alt></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-2.png" alt></p>
-<p>&#x2003;&#x2003;for each function <code>call</code> during run-time, the implementation of the <code>call</code> command should :</p>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png"></p>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png"></p>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-2.png"></p>
+<p>&#x2003;&#x2003;for each function <code>call</code> during run-time, the
+implementation of the <code>call</code> command should :</p>
 <ul>
-<li>
-<p><strong>Pass parameters</strong> from the calling function to the called function;</p>
-</li>
-<li>
-<p><strong>Determine the return address</strong> within the caller&#x2019;s code;</p>
-</li>
-<li>
-<p><strong>Save the caller&#x2019;s return address, stack and memory segments</strong>;</p>
+<li><p><strong>Pass parameters</strong> from the calling function to the
+called function;</p></li>
+<li><p><strong>Determine the return address</strong> within the caller&apos;s
+code;</p></li>
+<li><p><strong>Save the caller&apos;s return address, stack and memory
+segments</strong>;</p>
 <ul>
-<li>so that when we return to the <code>main</code>, we will be able to <strong>recreate the private world of <code>main</code></strong>.</li>
+<li>so that when we return to the <code>main</code>, we will be able to
+<strong>recreate the private world of <code>main</code></strong>.</li>
+</ul></li>
+<li><p>Jump to <strong>execute the called fiunction</strong>:</p></li>
 </ul>
-</li>
-<li>
-<p>Jump to <strong>execute the called fiunction</strong>:</p>
-</li>
-</ul>
-<p>&#x2003;&#x2003;And for each function <code>return</code> during run-time, the impletation has to:</p>
+<p>&#x2003;&#x2003;And for each function <code>return</code> during run-time, the
+impletation has to:</p>
 <ul>
-<li>
-<p>Return to the caller <em>the value computed by the called function</em>;</p>
+<li><p>Return to the caller <em>the value computed by the called
+function</em>;</p>
 <ul>
-<li>The implementation knows that the topmost value on the stack must be the return value, so it returns the value.</li>
-</ul>
-</li>
-<li>
-<p><strong>Recycle the memory resources</strong> used by the called funetion;</p>
-</li>
-<li>
-<p><strong>Reinstate the caller&#x2019;s stack and memory segments</strong>;</p>
-</li>
-<li>
-<p>Jump to the <strong>return address in the caller&#x2019;s code</strong>.</p>
-</li>
+<li>The implementation knows that the topmost value on the stack must be
+the return value, so it returns the value.</li>
+</ul></li>
+<li><p><strong>Recycle the memory resources</strong> used by the called
+funetion;</p></li>
+<li><p><strong>Reinstate the caller&apos;s stack and memory
+segments</strong>;</p></li>
+<li><p>Jump to the <strong>return address in the caller&apos;s
+code</strong>.</p></li>
 </ul>
 
     </div>
@@ -415,7 +406,6 @@
 
 
 
-    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81OTg4OC8zNjM1MA=="></div>
 </div>
   </main>
 
@@ -510,7 +500,6 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script src="/js/third-party/comments/livere.js"></script>
 
 </body>
 </html>
