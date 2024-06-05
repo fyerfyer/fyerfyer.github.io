@@ -1803,56 +1803,6 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
-    <title>13.1.优先队列接口</title>
-    <url>/2024/05/31/13.1.PQ%20Interface/</url>
-    <content><![CDATA[<h1><span id="131优先队列接口"><span class="math inline">\(13.1\)</span>优先队列接口</span></h1>
-<h3><span id="1优先队列的引入">1.优先队列的引入</span></h3>
-<p>  我们知道<span class="math inline">\(BST\)</span>可以实现数据的快速搜索，那么如果我们只关心对最大(最小)元素的查找呢？</p>
-<p>  这时，我们就可以引入优先队列(<span class="math inline">\(Priority\;Queue\)</span>)的<span class="math inline">\(ADT\)</span>。在优先队列中，我们只能对一组数据中的最小元素进行操作：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** (Min) Priority Queue: Allowing tracking and removal of </span></span><br><span class="line"><span class="comment">  * the smallest item in a priority queue. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MinPQ</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="comment">/** Adds the item to the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="comment">/** Returns the smallest item in the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getSmallest</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/** Removes the smallest item from the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeSmallest</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/** Returns the size of the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="2优先队列的实现">2.优先队列的实现</span></h3>
-<p>  假如我们用链表实现以下的问题：</p>
-<p>  <span class="math inline">\(question:\)</span></p>
-<ul>
-<li>Consider the scenario where we are monitoring text messages between
-citizens and want to keep track of unharmonious conversations.</li>
-<li>Each day, you prepare a report of <span class="math inline">\(M\)</span> messages that are the most unharmonious
-using a HarmoniousnessComparator.</li>
-</ul>
-<p>  用链表将得到如下实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;String&gt; <span class="title function_">unharmoniousTexts</span><span class="params">(Sniffer sniffer, <span class="type">int</span> M)</span> &#123;</span><br><span class="line">    ArrayList&lt;String&gt;allMessages = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Timer</span> <span class="variable">timer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Timer</span>(); timer.hours() &lt; <span class="number">24</span>; ) &#123;</span><br><span class="line">        allMessages.add(sniffer.getNextMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Comparator&lt;String&gt; cmptr = <span class="keyword">new</span> <span class="title class_">HarmoniousnessComparator</span>();</span><br><span class="line">    Collections.sort(allMessages, cmptr, Collections.reverseOrder());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> allMessages.sublist(<span class="number">0</span>, M);</span><br></pre></td></tr></table></figure></p>
-<p>  然而，这种方式的弊端为：我们只需要<span class="math inline">\(\Theta(M)\)</span>空间内的变量，但该方法使用了<span class="math inline">\(\Theta(N)\)</span>的空间。</p>
-<p>  为了优化内存的占用，我们可以尝试用下面的数据结构实现优先队列：</p>
-<ul>
-<li>Ordered Array
-<ul>
-<li><code>add</code>:<span class="math inline">\(\Theta(N)\)</span></li>
-<li><code>getSmallest</code>:<span class="math inline">\(\Theta(1)\)</span></li>
-<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
-</ul></li>
-<li>Bushy BST
-<ul>
-<li><code>add</code>:<span class="math inline">\(\Theta(\log
-N)\)</span></li>
-<li><code>getSmallest</code>:<span class="math inline">\(\Theta(\log
-N)\)</span></li>
-<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(\log
-N)\)</span></li>
-</ul></li>
-<li>HashTable
-<ul>
-<li><code>add</code>:<span class="math inline">\(\Theta(1)\)</span></li>
-<li><code>getSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
-<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
-</ul></li>
-</ul>
-<p>  那么，我们有更优秀的实现方法吗？</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>13.Heap &amp; Priority Queue</category>
-      </categories>
-  </entry>
-  <entry>
     <title>12.3.Hashing的实现方法(2)</title>
     <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
     <content><![CDATA[<h1><span id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</span></h1>
@@ -1933,6 +1883,56 @@ due to overflow).</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>13.1.优先队列接口</title>
+    <url>/2024/05/31/13.1.PQ%20Interface/</url>
+    <content><![CDATA[<h1><span id="131优先队列接口"><span class="math inline">\(13.1\)</span>优先队列接口</span></h1>
+<h3><span id="1优先队列的引入">1.优先队列的引入</span></h3>
+<p>  我们知道<span class="math inline">\(BST\)</span>可以实现数据的快速搜索，那么如果我们只关心对最大(最小)元素的查找呢？</p>
+<p>  这时，我们就可以引入优先队列(<span class="math inline">\(Priority\;Queue\)</span>)的<span class="math inline">\(ADT\)</span>。在优先队列中，我们只能对一组数据中的最小元素进行操作：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** (Min) Priority Queue: Allowing tracking and removal of </span></span><br><span class="line"><span class="comment">  * the smallest item in a priority queue. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MinPQ</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="comment">/** Adds the item to the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="comment">/** Returns the smallest item in the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getSmallest</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/** Removes the smallest item from the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeSmallest</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/** Returns the size of the priority queue. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="2优先队列的实现">2.优先队列的实现</span></h3>
+<p>  假如我们用链表实现以下的问题：</p>
+<p>  <span class="math inline">\(question:\)</span></p>
+<ul>
+<li>Consider the scenario where we are monitoring text messages between
+citizens and want to keep track of unharmonious conversations.</li>
+<li>Each day, you prepare a report of <span class="math inline">\(M\)</span> messages that are the most unharmonious
+using a HarmoniousnessComparator.</li>
+</ul>
+<p>  用链表将得到如下实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;String&gt; <span class="title function_">unharmoniousTexts</span><span class="params">(Sniffer sniffer, <span class="type">int</span> M)</span> &#123;</span><br><span class="line">    ArrayList&lt;String&gt;allMessages = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Timer</span> <span class="variable">timer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Timer</span>(); timer.hours() &lt; <span class="number">24</span>; ) &#123;</span><br><span class="line">        allMessages.add(sniffer.getNextMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Comparator&lt;String&gt; cmptr = <span class="keyword">new</span> <span class="title class_">HarmoniousnessComparator</span>();</span><br><span class="line">    Collections.sort(allMessages, cmptr, Collections.reverseOrder());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> allMessages.sublist(<span class="number">0</span>, M);</span><br></pre></td></tr></table></figure></p>
+<p>  然而，这种方式的弊端为：我们只需要<span class="math inline">\(\Theta(M)\)</span>空间内的变量，但该方法使用了<span class="math inline">\(\Theta(N)\)</span>的空间。</p>
+<p>  为了优化内存的占用，我们可以尝试用下面的数据结构实现优先队列：</p>
+<ul>
+<li>Ordered Array
+<ul>
+<li><code>add</code>:<span class="math inline">\(\Theta(N)\)</span></li>
+<li><code>getSmallest</code>:<span class="math inline">\(\Theta(1)\)</span></li>
+<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
+</ul></li>
+<li>Bushy BST
+<ul>
+<li><code>add</code>:<span class="math inline">\(\Theta(\log
+N)\)</span></li>
+<li><code>getSmallest</code>:<span class="math inline">\(\Theta(\log
+N)\)</span></li>
+<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(\log
+N)\)</span></li>
+</ul></li>
+<li>HashTable
+<ul>
+<li><code>add</code>:<span class="math inline">\(\Theta(1)\)</span></li>
+<li><code>getSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
+<li><code>removeSmallest</code>:<span class="math inline">\(\Theta(N)\)</span></li>
+</ul></li>
+</ul>
+<p>  那么，我们有更优秀的实现方法吗？</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>13.Heap &amp; Priority Queue</category>
       </categories>
   </entry>
   <entry>
@@ -3680,7 +3680,48 @@ algebra to simplify circuits</span></h3>
 <p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
 <p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
 <h3><span id="3build-an-adder">3.Build an Adder</span></h3>
-<h4><span id>  </span></h4>
+<h4><span id="ahalfadder">  <span class="math inline">\(a.\)</span>Half
+adder</span></h4>
+<p>  A half adder's output consists of:</p>
+<ul>
+<li>The <em>sum</em>. It can be computed by <code>xor</code>
+method.</li>
+<li>The <em>carry</em>. It can be computed by <code>and</code>
+method.</li>
+</ul>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
+<h4><span id="bfulladder">  <span class="math inline">\(b.\)</span>Full
+adder</span></h4>
+<p>  To implement full adder, we just need to add <code>A</code>,
+<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
+<p>  The output of a full adder is the same as the half adder. Then how
+can we calculate each of them?</p>
+<ul>
+<li><p>For <span class="math inline">\(C_0\)</span>, it's decided by the
+sum of <code>A</code> and <code>B</code> &amp; the current carry in the
+position. There are two cases that make the carry 1:</p>
+<ol type="1">
+<li><code>A + B</code> is 1, and current carry is 1.</li>
+<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
+</ol></li>
+</ul>
+<p>  So we can compute <span class="math inline">\(C_0\)</span> by this
+expression:</p>
+<p><span class="math display">\[
+C_0 = C_i(A+B) + AB
+\]</span></p>
+<ul>
+<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
+<code>B</code> and current carry is 1:</li>
+</ul>
+<p><span class="math display">\[
+S = A \; xor B \; xor C_i
+\]</span></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
+<h4><span id="c4-bit-adder">  $c.$4-bit Adder</span></h4>
+<p>  To make a multi-bit Adder, we simply <strong>connect full adder
+together</strong>:</p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
 ]]></content>
       <categories>
         <category>CS61C Great Ideas in Computer Architecture</category>
@@ -3758,6 +3799,21 @@ status</strong>, and then outputs the selected value.</li>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 3.Memory</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>3.3.Synchronous Digital Systems</title>
+    <url>/2024/06/05/3-3-Synchronous-Digital-Systems/</url>
+    <content><![CDATA[<h1><span id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</span></h1>
+<h3><span id="1clock-concepts">1.Clock concepts</span></h3>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
+<h3><span id="2d-flip-flops">2.D Flip-flops</span></h3>
+<h4><span id="a">  <span class="math inline">\(a.\)</span></span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
       </categories>
   </entry>
   <entry>
@@ -4597,92 +4653,6 @@ it’s currently referring to.</p>
       </categories>
   </entry>
   <entry>
-    <title>4.2.隐性序列</title>
-    <url>/2024/05/31/4.2.%E9%9A%90%E6%80%A7%E5%BA%8F%E5%88%97/</url>
-    <content><![CDATA[<h1><span id="42隐性序列implicitsequences"><span class="math inline">\(4.2\)</span>隐性序列<span class="math inline">\(Implicit\;Sequences\)</span></span></h1>
-<h2><span id="一-概述">一、概述</span></h2>
-<h3><span id="1懒惰计算">1.懒惰计算</span></h3>
-<p>  一个序列可以在不直接存储在电脑内存的情况下被代表(<span class="math inline">\(represent\)</span>)。这就是说，我们可以创建一个对象，它<strong>能够访问序列型数据集(<span class="math inline">\(sequential\;dataset\)</span>)的所有元素，并且不用预先计算存储所有的元素</strong>。作为替代，我们<strong>只在需要访问某元素的时候进行计算</strong>。</p>
-<p>  一个简单的例子是序列类型<span class="math inline">\(range\)</span>。在<span class="math inline">\(range\)</span>中，当一个元素被要求计算出来时，<span class="math inline">\(range\)</span>才会着手计算它。因此，我们可以在不消耗大量内存的情况下表示很大区间范围的整数。只有<span class="math inline">\(range\)</span>的结尾作为<span class="math inline">\(range\)</span>对象的一部分被存储了：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = <span class="built_in">range</span>(<span class="number">10000</span>, <span class="number">1000000000</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r[<span class="number">45006230</span>]</span><br><span class="line"><span class="number">45016230</span></span><br></pre></td></tr></table></figure></p>
-<p>  在这个例子中，<code>r[45006230]</code>是通过第一个元素<span class="math inline">\(10000\)</span>加上索引(<span class="math inline">\(index\)</span>)<span class="math inline">\(45006230\)</span>计算出来的。这种<strong>在需要某个值的时候才计算它的行为</strong>被称作懒惰计算(<span class="math inline">\(lazy\;computation\)</span>)。</p>
-<h3><span id="2迭代器">2.迭代器</span></h3>
-<p>  迭代器(iterator)是一个对象，它为底层的序列型数据集提供循序存取。迭代器抽象有两个组成部分：</p>
-<ul>
-<li><strong>在序列元素中检索下一个元素<span class="math inline">\(next\)</span></strong> 的机制。</li>
-<li><strong>发出结束信号</strong>：已经到达序列结束处、没有其他元素存在的信号的机制。</li>
-</ul>
-<p>  迭代器的有用之处基于底层的一系列信息(<span class="math inline">\(series\;of\;data\)</span>)可能不会在内存中直接被表示。而迭代器提供了一个<strong>依次考虑一系列值的机制</strong>，而<strong>其他未被考虑的值不需要同时存储在内存中，而是在迭代器访问到它的时候才被计算</strong>。</p>
-<p>  <span class="math inline">\(range\)</span>之所以可以对元素进行懒惰计算，是因为<strong>序列内部的元素形式是统一的，并且任意一个值都可以容易地通过头元素与尾元素计算出来</strong>。而迭代器将懒惰计算的适用类型扩大了，因为这些序列类型不需要自己提供一种计算任意值的方法。相反，它们<strong>只需要能依次计算出下一个元素<span class="math inline">\(next\)</span>即可</strong>。</p>
-<h2><span id="二-python的迭代器">二、<span class="math inline">\(python\)</span>的迭代器</span></h2>
-<h3><span id="1迭代器的功能与性质">1.迭代器的功能与性质</span></h3>
-<p>  <span class="math inline">\(python\)</span>迭代器包含<code>__next__</code>信息：询问迭代器序列的下一个元素是什么。对<code>__next__</code>的调用<strong>会导致迭代器的改变</strong>：它<strong>更新当前迭代器的位置</strong>。<span class="math inline">\(python\)</span>在迭代器到达序列末端时会产生<code>StopIteration</code>的异常(<span class="math inline">\(exception\)</span>)。</p>
-<p>  下面的$ LetterIter$迭代了一系列字母： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LetterIter</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;An iterator over letters of the alphabet in ASCII order.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.next_letter = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">if</span> self.next_letter == self.end:</span><br><span class="line">                <span class="keyword">raise</span> StopIteration</span><br><span class="line">            letter = self.next_letter</span><br><span class="line">            self.next_letter = <span class="built_in">chr</span>(<span class="built_in">ord</span>(letter)+<span class="number">1</span>)<span class="comment">#iterate to the next number</span></span><br><span class="line">            <span class="keyword">return</span> letter</span><br></pre></td></tr></table></figure>
-  通过这个类，我们可以用<code>__next__</code>方法或<code>next</code>函数来访问字母：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter = LetterIter()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(letter_iter)</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">12</span>, <span class="keyword">in</span> <span class="built_in">next</span></span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure></p>
-<p>  迭代器是<strong>可改变的(<span class="math inline">\(mutable\)</span>)</strong>。当迭代器到达序列的末尾时，它就被耗尽了。<span class="math inline">\(LetterIter\)</span><strong>只能被迭代一次，当它的<code>__next__</code>方法产生<code>StopIteration</code>的异常后，从这以后的所有迭代都会产生这个异常</strong>。一般地，<strong>迭代器不会重置</strong>。<strong>当一个新的实例被创建时，一个新的迭代器也被创建了</strong>。</p>
-<p>  迭代器也可以通过实现<strong>一个不产生异常的<code>__next__</code>方法</strong>来表示无限序列，例如下面表示正整数序列的迭代器：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Positives</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">            self.next_positive = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">            result = self.next_positive</span><br><span class="line">            self.next_positive += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p = Positives()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<h3><span id="2可迭代性">2.可迭代性</span></h3>
-<p>  一个对象<strong>是可迭代的(<span class="math inline">\(iterable\)</span>)，当它的<code>iter</code>方法被调用</strong>。可迭代值代表数据集合，并且它们提供了产生一个或多个迭代器的固定表达。</p>
-<p>  以下面这个代表一系列有序字母序列的类为例。每次当其<code>__iter__</code>方法被调用，<strong>一个新的<span class="math inline">\(LetterIter\)</span>实例就被创建，这允许了对序列内容的有序访问</strong>：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Letters</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.start = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> LetterIter(self.start, self.end)</span><br></pre></td></tr></table></figure></p>
-<p>  在下面的表达式中，两个源自同一个可迭代序列的迭代器<strong>独立地</strong>产生各自的单词序列：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b_to_k = Letters(<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;k&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator = b_to_k.__iter__()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(first_iterator)</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(first_iterator)</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator = <span class="built_in">iter</span>(b_to_k)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br></pre></td></tr></table></figure></p>
-<h3><span id="3for语句">3.<span class="math inline">\(for\)</span>语句</span></h3>
-<p>  <span class="math inline">\(for\)</span>语句对迭代器进行操作。可迭代对象可以作为<span class="math inline">\(for\)</span>语句<code>&lt;expression&gt;</code>结构的值：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> &lt;name&gt; <span class="keyword">in</span> &lt;expression&gt;:</span><br><span class="line">    &lt;suite&gt;</span><br></pre></td></tr></table></figure></p>
-<p>  为了执行<span class="math inline">\(for\)</span>语句，<span class="math inline">\(python\)</span>会<strong>计算<code>&lt;expression&gt;</code>，它提供一个可迭代的值</strong>。然后，<strong><code>__iter__</code>方法在该值上调用</strong>，直到异常被提出。这个过程中，<span class="math inline">\(python\)</span><strong>将迭代器产生的结果与<code>&lt;name&gt;</code>绑定，然后执行<code>&lt;suite&gt;</code></strong>：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>counts = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> item <span class="keyword">in</span> counts:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<p>  通过先前对迭代器的讲解，我们可以用<span class="math inline">\(while\)</span>语句实现该<span class="math inline">\(for\)</span>语句： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">items = counts.__iter__()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        item = items.__next__()</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"><span class="keyword">except</span> StopIteration:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<h2><span id="三-生成器与yield语句">三、生成器与<code>yield</code>语句</span></h2>
-<h3><span id="1引入">1.引入</span></h3>
-<p>  当我们在处理复杂序列、并且需要在计算过程中保存<code>__next__</code>的位置时，单独依靠迭代器显得难以为继。生成器(<span class="math inline">\(genarator\)</span>)允许我们利用<span class="math inline">\(python\)</span>的特性定义更为复杂的迭代器。</p>
-<h3><span id="2生成器与yield语句的声明与执行">2.生成器与<code>yield</code>语句的声明与执行</span></h3>
-<p>  生成器是由被称为生成器函数(<span class="math inline">\(genarator\;function\)</span>)的特殊类函数(<span class="math inline">\(class\;of\;function\)</span>)返回的迭代器。生成器函数与一般函数的区别在于：生成器函数<strong>通过<code>yield</code>语句返回元素而不是<code>return</code>语句</strong>。</p>
-<p>  生成器并不用对象的属性来跟踪序列的过程。相反，他<strong>控制生成器函数的执行过程</strong>，这个函数会<strong>在生成器调用<code>__next__</code>方法后一直运行直到下个<code>yield</code>被执行</strong>。<span class="math inline">\(Letter\)</span>迭代器可以利用生成器更加紧凑地实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">letters_generator</span>():</span><br><span class="line">        current = <span class="string">&#x27;a&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> current &lt;= <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            <span class="keyword">yield</span> current</span><br><span class="line">            current = <span class="built_in">chr</span>(<span class="built_in">ord</span>(current)+<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> letter <span class="keyword">in</span> letters_generator():</span><br><span class="line">        <span class="built_in">print</span>(letter)</span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">d</span><br></pre></td></tr></table></figure></p>
-<p>  尽管我们没有直接地定义<code>__iter__</code>与<code>__next__</code>方法，程序中的<code>yield</code>语句表明我们在定义一个生成器函数。<strong>当被调用，生成器函数不会返回一个特定的生成值(<span class="math inline">\(yielded\;value\)</span>)，而是一个生成器(迭代器的一种)，生成器自己会返回生成值</strong>。生成器对象有<code>__iter__</code>和<code>__next__</code>方法。</p>
-<p>  第一次<code>__next__</code>被调用时，程序执行<code>&lt;body&gt;</code>内语句，即<code>letters_generator</code>，直到<strong>遇到<code>yield</code>语句。然后，它暂停执行并返回<span class="math inline">\(current\)</span>的值</strong>。<code>yield</code>语句并不会破坏新创建的环境，<strong>它会保存这个环境留着之后计算使用</strong>。<strong>当<code>__next__</code>被再次调用时，程序从之前停下来的地方开始执行</strong>。在对<code>__next__</code>的后续调用中，<code>letters_generator</code>作用域中的<span class="math inline">\(current\)</span>值和其他绑定名称被保存下来：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters = letters_generator()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(letters)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;generator&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3利用yield语句创建可迭代对象">3.利用<code>yield</code>语句创建可迭代对象</span></h3>
-<p>  在<span class="math inline">\(python\)</span>中，迭代器只会对底层序列的元素进行一次传递，<strong>当这次传递结束后，再次调用<code>__next__</code>方法，迭代器将一直产生<code>StopIteration</code>异常</strong>。而许多程序需要<strong>多次迭代</strong>元素，例如我们想要枚举一个列表的所有<span class="math inline">\(pair\)</span>： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">all_pairs</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="keyword">for</span> item1 <span class="keyword">in</span> s:</span><br><span class="line">            <span class="keyword">for</span> item2 <span class="keyword">in</span> s:</span><br><span class="line">                <span class="keyword">yield</span> (item1, item2)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(all_pairs([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[(<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">3</span>)]</span><br></pre></td></tr></table></figure></p>
-<p>  序列本身<strong>不是迭代器，而是可迭代对象</strong>。当<strong>序列的<code>__iter__</code>方法被调用后，序列会返回一个新的迭代器实例</strong>。如果一个可迭代对象<strong>在每次调用<code>__iter__</code>后都会返回一个新的新的迭代器实例，它就可以被多次迭代</strong>。</p>
-<p>  可以通过实现一个可迭代接口来定义新的可迭代类，例如下面<span class="math inline">\(LettersWithYield\)</span>类就在每次调用<code>__iter__</code>后返回一个新的迭代器：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#create an iterable object</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LettersWithYield</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.start = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">            next_letter = self.start</span><br><span class="line">            <span class="keyword">while</span> next_letter &lt; self.end:</span><br><span class="line">                <span class="keyword">yield</span> next_letter</span><br><span class="line">                next_letter = <span class="built_in">chr</span>(<span class="built_in">ord</span>(next_letter)+<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  该类的<code>__iter__</code>方法是一个生成器函数，它<strong>返回一个生成器对象，这个生成器对象生成从<code>a</code>到<code>d</code>的序列后停下</strong>。每次我们调用这个方法，一个新的生成器会开始对序列型数据的新的传递：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters = LettersWithYield()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(all_pairs(letters))[:<span class="number">5</span>]</span><br><span class="line">[(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;d&#x27;</span>), (<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;a&#x27;</span>)]</span><br></pre></td></tr></table></figure></p>
-<h2><span id="四-流">四、流</span></h2>
-<h3><span id="1流的概念">1.流的概念</span></h3>
-<p>  流(<span class="math inline">\(stream\)</span>)提供了隐性表示序列型数据的另一种方法。流是<strong>懒惰计算的递归列表(<span class="math inline">\(recusive\;list\)</span>)</strong>，与链表结构类似。但与链表不同，<strong>流的<span class="math inline">\(rest\)</span>部分只有在被调用的时候才会被计算</strong>。</p>
-<h3><span id="2流的实现与调用">2.流的实现与调用</span></h3>
-<p>  为了实现懒惰计算的操作，流会<strong>存储一个计算<span class="math inline">\(rest\)</span>部分的函数</strong>。当这个函数被调用时，<strong>它的返回值作为流的属性<code>_rest</code>存储在流的一部分</strong>，名称前面的下划线说明<strong>它不应该被直接访问</strong>。而<strong>可访问的<code>rest</code>属性是一个返回流的<span class="math inline">\(rest\)</span>部分的属性方法</strong>。流的基本设计如下：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Stream</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;A lazily computed recursive list.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">class</span> <span class="title class_">empty</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">            <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Stream.empty&#x27;</span></span><br><span class="line">        empty = empty()</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, first, compute_rest=<span class="keyword">lambda</span>: empty</span>):</span><br><span class="line">            <span class="keyword">assert</span> <span class="built_in">callable</span>(compute_rest), <span class="string">&#x27;compute_rest must be callable.&#x27;</span></span><br><span class="line">            self.first = first</span><br><span class="line">            self._compute_rest = compute_rest</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">rest</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="string">&quot;&quot;&quot;Return the rest of the stream, computing it if necessary.&quot;&quot;&quot;</span></span><br><span class="line">            <span class="keyword">if</span> self._compute_rest <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                self._rest = self._compute_rest()</span><br><span class="line">                self._compute_rest = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">return</span> self._rest</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;Stream(&#123;0&#125;, &lt;...&gt;)&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">repr</span>(self.first))</span><br></pre></td></tr></table></figure></p>
-<p>  流可以像链表一样利用嵌套表达式创建。为了实现懒惰计算，我们采用匿名函数的方法：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = Stream(<span class="number">1</span>, <span class="keyword">lambda</span>: Stream(<span class="number">2</span>+<span class="number">3</span>, <span class="keyword">lambda</span>: Stream(<span class="number">9</span>)))</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(lambda\)</span>表达式返回<strong>计算流剩余部分的方法</strong>。可以通过下面的操作访问流中的元素：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.first</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.first</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.rest.first</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.rest.first</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.rest</span><br><span class="line">Rlist(<span class="number">5</span>, Rlist(<span class="number">9</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.rest</span><br><span class="line">Stream(<span class="number">5</span>, &lt;...&gt;)</span><br><span class="line"><span class="comment">#the fact that it will return the empty stream are undiscovered</span></span><br></pre></td></tr></table></figure></p>
-<p>  当一个<span class="math inline">\(stream\)</span>实例被创建时，<code>self._rest</code>是<span class="math inline">\(None\)</span>，这表明实例的<span class="math inline">\(rest\)</span>部分尚未被计算；<strong>当<code>rest</code>属性通过点表达式被访问后，<code>rest</code>的属性方法被调用，触发了<code>self._rest = self._compute_rest()</code>的计算</strong>。</p>
-<p>  <code>compute_rest</code>函数的关键属性是：它<strong>不接受参数，并且返回<span class="math inline">\(stream\)</span>或<span class="math inline">\(stream.empty\)</span></strong>。</p>
-<p>  懒惰计算允许我们用流表示无限的序列型数据集。例如，可以用以下语句表示正整数集：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">integer_stream</span>(<span class="params">first</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">        <span class="keyword">return</span> integer_stream(first+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> Stream(first, compute_rest)</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives = integer_stream(<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives</span><br><span class="line">Stream(<span class="number">1</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives.first</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<h3><span id="3利用流实现序列基本操作">3.利用流实现序列基本操作</span></h3>
-<p>  上述<strong>利用高阶函数改变<span class="math inline">\(compute_rest\)</span>函数</strong>的方法可以用于其他序列操作：</p>
-<h4><span id="amap映射">  <span class="math inline">\(a.\)</span><span class="math inline">\(map\)</span>映射</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">map_stream</span>(<span class="params">fn, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Stream.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">            <span class="keyword">return</span> map_stream(fn, s.rest)</span><br><span class="line">        <span class="keyword">return</span> Stream(fn(s.first), compute_rest)</span><br></pre></td></tr></table></figure>
-<h4><span id="b筛选指定元素">  <span class="math inline">\(b.\)</span>筛选指定元素</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">filter_stream</span>(<span class="params">fn, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Stream.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">            <span class="keyword">return</span> filter_stream(fn, s.rest)</span><br><span class="line">        <span class="keyword">if</span> fn(s.first):</span><br><span class="line">            <span class="keyword">return</span> Stream(s.first, compute_rest)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> compute_rest()</span><br></pre></td></tr></table></figure>
-<h4><span id="c筛选前k个元素">  <span class="math inline">\(c.\)</span>筛选前<span class="math inline">\(k\)</span>个元素</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">first_k_as_list</span>(<span class="params">s, k</span>):</span><br><span class="line">        first_k = []</span><br><span class="line">        <span class="keyword">while</span> s <span class="keyword">is</span> <span class="keyword">not</span> Stream.empty <span class="keyword">and</span> k &gt; <span class="number">0</span>:</span><br><span class="line">            first_k.append(s.first)</span><br><span class="line">            s, k = s.rest, k-<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> first_k</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = integer_stream(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">Stream(<span class="number">3</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m = map_stream(<span class="keyword">lambda</span> x: x*x, s)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m</span><br><span class="line">Stream(<span class="number">9</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_k_as_list(m, <span class="number">5</span>)</span><br><span class="line">[<span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>]</span><br></pre></td></tr></table></figure>
-<p>  正如链表提供的简单的数据抽象的实现，流也提供了一个简单的函数化递归数据结构，通过高阶函数实现懒惰计算。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 4.Data Processing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>4.2.扩展</title>
     <url>/2024/05/31/4.2.extends/</url>
     <content><![CDATA[<h1><span id="42扩展"><span class="math inline">\(4.2\)</span>扩展</span></h1>
@@ -4768,6 +4738,92 @@ invoked is based on the dynamic type of the invoking expression</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.2.隐性序列</title>
+    <url>/2024/05/31/4.2.%E9%9A%90%E6%80%A7%E5%BA%8F%E5%88%97/</url>
+    <content><![CDATA[<h1><span id="42隐性序列implicitsequences"><span class="math inline">\(4.2\)</span>隐性序列<span class="math inline">\(Implicit\;Sequences\)</span></span></h1>
+<h2><span id="一-概述">一、概述</span></h2>
+<h3><span id="1懒惰计算">1.懒惰计算</span></h3>
+<p>  一个序列可以在不直接存储在电脑内存的情况下被代表(<span class="math inline">\(represent\)</span>)。这就是说，我们可以创建一个对象，它<strong>能够访问序列型数据集(<span class="math inline">\(sequential\;dataset\)</span>)的所有元素，并且不用预先计算存储所有的元素</strong>。作为替代，我们<strong>只在需要访问某元素的时候进行计算</strong>。</p>
+<p>  一个简单的例子是序列类型<span class="math inline">\(range\)</span>。在<span class="math inline">\(range\)</span>中，当一个元素被要求计算出来时，<span class="math inline">\(range\)</span>才会着手计算它。因此，我们可以在不消耗大量内存的情况下表示很大区间范围的整数。只有<span class="math inline">\(range\)</span>的结尾作为<span class="math inline">\(range\)</span>对象的一部分被存储了：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = <span class="built_in">range</span>(<span class="number">10000</span>, <span class="number">1000000000</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r[<span class="number">45006230</span>]</span><br><span class="line"><span class="number">45016230</span></span><br></pre></td></tr></table></figure></p>
+<p>  在这个例子中，<code>r[45006230]</code>是通过第一个元素<span class="math inline">\(10000\)</span>加上索引(<span class="math inline">\(index\)</span>)<span class="math inline">\(45006230\)</span>计算出来的。这种<strong>在需要某个值的时候才计算它的行为</strong>被称作懒惰计算(<span class="math inline">\(lazy\;computation\)</span>)。</p>
+<h3><span id="2迭代器">2.迭代器</span></h3>
+<p>  迭代器(iterator)是一个对象，它为底层的序列型数据集提供循序存取。迭代器抽象有两个组成部分：</p>
+<ul>
+<li><strong>在序列元素中检索下一个元素<span class="math inline">\(next\)</span></strong> 的机制。</li>
+<li><strong>发出结束信号</strong>：已经到达序列结束处、没有其他元素存在的信号的机制。</li>
+</ul>
+<p>  迭代器的有用之处基于底层的一系列信息(<span class="math inline">\(series\;of\;data\)</span>)可能不会在内存中直接被表示。而迭代器提供了一个<strong>依次考虑一系列值的机制</strong>，而<strong>其他未被考虑的值不需要同时存储在内存中，而是在迭代器访问到它的时候才被计算</strong>。</p>
+<p>  <span class="math inline">\(range\)</span>之所以可以对元素进行懒惰计算，是因为<strong>序列内部的元素形式是统一的，并且任意一个值都可以容易地通过头元素与尾元素计算出来</strong>。而迭代器将懒惰计算的适用类型扩大了，因为这些序列类型不需要自己提供一种计算任意值的方法。相反，它们<strong>只需要能依次计算出下一个元素<span class="math inline">\(next\)</span>即可</strong>。</p>
+<h2><span id="二-python的迭代器">二、<span class="math inline">\(python\)</span>的迭代器</span></h2>
+<h3><span id="1迭代器的功能与性质">1.迭代器的功能与性质</span></h3>
+<p>  <span class="math inline">\(python\)</span>迭代器包含<code>__next__</code>信息：询问迭代器序列的下一个元素是什么。对<code>__next__</code>的调用<strong>会导致迭代器的改变</strong>：它<strong>更新当前迭代器的位置</strong>。<span class="math inline">\(python\)</span>在迭代器到达序列末端时会产生<code>StopIteration</code>的异常(<span class="math inline">\(exception\)</span>)。</p>
+<p>  下面的$ LetterIter$迭代了一系列字母： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LetterIter</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;An iterator over letters of the alphabet in ASCII order.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.next_letter = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">if</span> self.next_letter == self.end:</span><br><span class="line">                <span class="keyword">raise</span> StopIteration</span><br><span class="line">            letter = self.next_letter</span><br><span class="line">            self.next_letter = <span class="built_in">chr</span>(<span class="built_in">ord</span>(letter)+<span class="number">1</span>)<span class="comment">#iterate to the next number</span></span><br><span class="line">            <span class="keyword">return</span> letter</span><br></pre></td></tr></table></figure>
+  通过这个类，我们可以用<code>__next__</code>方法或<code>next</code>函数来访问字母：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter = LetterIter()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(letter_iter)</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letter_iter.__next__()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">12</span>, <span class="keyword">in</span> <span class="built_in">next</span></span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure></p>
+<p>  迭代器是<strong>可改变的(<span class="math inline">\(mutable\)</span>)</strong>。当迭代器到达序列的末尾时，它就被耗尽了。<span class="math inline">\(LetterIter\)</span><strong>只能被迭代一次，当它的<code>__next__</code>方法产生<code>StopIteration</code>的异常后，从这以后的所有迭代都会产生这个异常</strong>。一般地，<strong>迭代器不会重置</strong>。<strong>当一个新的实例被创建时，一个新的迭代器也被创建了</strong>。</p>
+<p>  迭代器也可以通过实现<strong>一个不产生异常的<code>__next__</code>方法</strong>来表示无限序列，例如下面表示正整数序列的迭代器：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Positives</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">            self.next_positive = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">            result = self.next_positive</span><br><span class="line">            self.next_positive += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p = Positives()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(p)</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<h3><span id="2可迭代性">2.可迭代性</span></h3>
+<p>  一个对象<strong>是可迭代的(<span class="math inline">\(iterable\)</span>)，当它的<code>iter</code>方法被调用</strong>。可迭代值代表数据集合，并且它们提供了产生一个或多个迭代器的固定表达。</p>
+<p>  以下面这个代表一系列有序字母序列的类为例。每次当其<code>__iter__</code>方法被调用，<strong>一个新的<span class="math inline">\(LetterIter\)</span>实例就被创建，这允许了对序列内容的有序访问</strong>：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Letters</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.start = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> LetterIter(self.start, self.end)</span><br></pre></td></tr></table></figure></p>
+<p>  在下面的表达式中，两个源自同一个可迭代序列的迭代器<strong>独立地</strong>产生各自的单词序列：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b_to_k = Letters(<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;k&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator = b_to_k.__iter__()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(first_iterator)</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(first_iterator)</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator = <span class="built_in">iter</span>(b_to_k)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>second_iterator.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<h3><span id="3for语句">3.<span class="math inline">\(for\)</span>语句</span></h3>
+<p>  <span class="math inline">\(for\)</span>语句对迭代器进行操作。可迭代对象可以作为<span class="math inline">\(for\)</span>语句<code>&lt;expression&gt;</code>结构的值：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> &lt;name&gt; <span class="keyword">in</span> &lt;expression&gt;:</span><br><span class="line">    &lt;suite&gt;</span><br></pre></td></tr></table></figure></p>
+<p>  为了执行<span class="math inline">\(for\)</span>语句，<span class="math inline">\(python\)</span>会<strong>计算<code>&lt;expression&gt;</code>，它提供一个可迭代的值</strong>。然后，<strong><code>__iter__</code>方法在该值上调用</strong>，直到异常被提出。这个过程中，<span class="math inline">\(python\)</span><strong>将迭代器产生的结果与<code>&lt;name&gt;</code>绑定，然后执行<code>&lt;suite&gt;</code></strong>：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>counts = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> item <span class="keyword">in</span> counts:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>  通过先前对迭代器的讲解，我们可以用<span class="math inline">\(while\)</span>语句实现该<span class="math inline">\(for\)</span>语句： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">items = counts.__iter__()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        item = items.__next__()</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"><span class="keyword">except</span> StopIteration:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<h2><span id="三-生成器与yield语句">三、生成器与<code>yield</code>语句</span></h2>
+<h3><span id="1引入">1.引入</span></h3>
+<p>  当我们在处理复杂序列、并且需要在计算过程中保存<code>__next__</code>的位置时，单独依靠迭代器显得难以为继。生成器(<span class="math inline">\(genarator\)</span>)允许我们利用<span class="math inline">\(python\)</span>的特性定义更为复杂的迭代器。</p>
+<h3><span id="2生成器与yield语句的声明与执行">2.生成器与<code>yield</code>语句的声明与执行</span></h3>
+<p>  生成器是由被称为生成器函数(<span class="math inline">\(genarator\;function\)</span>)的特殊类函数(<span class="math inline">\(class\;of\;function\)</span>)返回的迭代器。生成器函数与一般函数的区别在于：生成器函数<strong>通过<code>yield</code>语句返回元素而不是<code>return</code>语句</strong>。</p>
+<p>  生成器并不用对象的属性来跟踪序列的过程。相反，他<strong>控制生成器函数的执行过程</strong>，这个函数会<strong>在生成器调用<code>__next__</code>方法后一直运行直到下个<code>yield</code>被执行</strong>。<span class="math inline">\(Letter\)</span>迭代器可以利用生成器更加紧凑地实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">letters_generator</span>():</span><br><span class="line">        current = <span class="string">&#x27;a&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> current &lt;= <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            <span class="keyword">yield</span> current</span><br><span class="line">            current = <span class="built_in">chr</span>(<span class="built_in">ord</span>(current)+<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> letter <span class="keyword">in</span> letters_generator():</span><br><span class="line">        <span class="built_in">print</span>(letter)</span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">d</span><br></pre></td></tr></table></figure></p>
+<p>  尽管我们没有直接地定义<code>__iter__</code>与<code>__next__</code>方法，程序中的<code>yield</code>语句表明我们在定义一个生成器函数。<strong>当被调用，生成器函数不会返回一个特定的生成值(<span class="math inline">\(yielded\;value\)</span>)，而是一个生成器(迭代器的一种)，生成器自己会返回生成值</strong>。生成器对象有<code>__iter__</code>和<code>__next__</code>方法。</p>
+<p>  第一次<code>__next__</code>被调用时，程序执行<code>&lt;body&gt;</code>内语句，即<code>letters_generator</code>，直到<strong>遇到<code>yield</code>语句。然后，它暂停执行并返回<span class="math inline">\(current\)</span>的值</strong>。<code>yield</code>语句并不会破坏新创建的环境，<strong>它会保存这个环境留着之后计算使用</strong>。<strong>当<code>__next__</code>被再次调用时，程序从之前停下来的地方开始执行</strong>。在对<code>__next__</code>的后续调用中，<code>letters_generator</code>作用域中的<span class="math inline">\(current\)</span>值和其他绑定名称被保存下来：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters = letters_generator()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(letters)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;generator&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line"><span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters.__next__()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure></p>
+<h3><span id="3利用yield语句创建可迭代对象">3.利用<code>yield</code>语句创建可迭代对象</span></h3>
+<p>  在<span class="math inline">\(python\)</span>中，迭代器只会对底层序列的元素进行一次传递，<strong>当这次传递结束后，再次调用<code>__next__</code>方法，迭代器将一直产生<code>StopIteration</code>异常</strong>。而许多程序需要<strong>多次迭代</strong>元素，例如我们想要枚举一个列表的所有<span class="math inline">\(pair\)</span>： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">all_pairs</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="keyword">for</span> item1 <span class="keyword">in</span> s:</span><br><span class="line">            <span class="keyword">for</span> item2 <span class="keyword">in</span> s:</span><br><span class="line">                <span class="keyword">yield</span> (item1, item2)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(all_pairs([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[(<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">3</span>)]</span><br></pre></td></tr></table></figure></p>
+<p>  序列本身<strong>不是迭代器，而是可迭代对象</strong>。当<strong>序列的<code>__iter__</code>方法被调用后，序列会返回一个新的迭代器实例</strong>。如果一个可迭代对象<strong>在每次调用<code>__iter__</code>后都会返回一个新的新的迭代器实例，它就可以被多次迭代</strong>。</p>
+<p>  可以通过实现一个可迭代接口来定义新的可迭代类，例如下面<span class="math inline">\(LettersWithYield\)</span>类就在每次调用<code>__iter__</code>后返回一个新的迭代器：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#create an iterable object</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LettersWithYield</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, start=<span class="string">&#x27;a&#x27;</span>, end=<span class="string">&#x27;e&#x27;</span></span>):</span><br><span class="line">            self.start = start</span><br><span class="line">            self.end = end</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">            next_letter = self.start</span><br><span class="line">            <span class="keyword">while</span> next_letter &lt; self.end:</span><br><span class="line">                <span class="keyword">yield</span> next_letter</span><br><span class="line">                next_letter = <span class="built_in">chr</span>(<span class="built_in">ord</span>(next_letter)+<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  该类的<code>__iter__</code>方法是一个生成器函数，它<strong>返回一个生成器对象，这个生成器对象生成从<code>a</code>到<code>d</code>的序列后停下</strong>。每次我们调用这个方法，一个新的生成器会开始对序列型数据的新的传递：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>letters = LettersWithYield()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(all_pairs(letters))[:<span class="number">5</span>]</span><br><span class="line">[(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;a&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>), (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;d&#x27;</span>), (<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;a&#x27;</span>)]</span><br></pre></td></tr></table></figure></p>
+<h2><span id="四-流">四、流</span></h2>
+<h3><span id="1流的概念">1.流的概念</span></h3>
+<p>  流(<span class="math inline">\(stream\)</span>)提供了隐性表示序列型数据的另一种方法。流是<strong>懒惰计算的递归列表(<span class="math inline">\(recusive\;list\)</span>)</strong>，与链表结构类似。但与链表不同，<strong>流的<span class="math inline">\(rest\)</span>部分只有在被调用的时候才会被计算</strong>。</p>
+<h3><span id="2流的实现与调用">2.流的实现与调用</span></h3>
+<p>  为了实现懒惰计算的操作，流会<strong>存储一个计算<span class="math inline">\(rest\)</span>部分的函数</strong>。当这个函数被调用时，<strong>它的返回值作为流的属性<code>_rest</code>存储在流的一部分</strong>，名称前面的下划线说明<strong>它不应该被直接访问</strong>。而<strong>可访问的<code>rest</code>属性是一个返回流的<span class="math inline">\(rest\)</span>部分的属性方法</strong>。流的基本设计如下：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Stream</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;A lazily computed recursive list.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">class</span> <span class="title class_">empty</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">            <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Stream.empty&#x27;</span></span><br><span class="line">        empty = empty()</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, first, compute_rest=<span class="keyword">lambda</span>: empty</span>):</span><br><span class="line">            <span class="keyword">assert</span> <span class="built_in">callable</span>(compute_rest), <span class="string">&#x27;compute_rest must be callable.&#x27;</span></span><br><span class="line">            self.first = first</span><br><span class="line">            self._compute_rest = compute_rest</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">rest</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="string">&quot;&quot;&quot;Return the rest of the stream, computing it if necessary.&quot;&quot;&quot;</span></span><br><span class="line">            <span class="keyword">if</span> self._compute_rest <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                self._rest = self._compute_rest()</span><br><span class="line">                self._compute_rest = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">return</span> self._rest</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;Stream(&#123;0&#125;, &lt;...&gt;)&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">repr</span>(self.first))</span><br></pre></td></tr></table></figure></p>
+<p>  流可以像链表一样利用嵌套表达式创建。为了实现懒惰计算，我们采用匿名函数的方法：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = Stream(<span class="number">1</span>, <span class="keyword">lambda</span>: Stream(<span class="number">2</span>+<span class="number">3</span>, <span class="keyword">lambda</span>: Stream(<span class="number">9</span>)))</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(lambda\)</span>表达式返回<strong>计算流剩余部分的方法</strong>。可以通过下面的操作访问流中的元素：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.first</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.first</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.rest.first</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.rest.first</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.rest</span><br><span class="line">Rlist(<span class="number">5</span>, Rlist(<span class="number">9</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.rest</span><br><span class="line">Stream(<span class="number">5</span>, &lt;...&gt;)</span><br><span class="line"><span class="comment">#the fact that it will return the empty stream are undiscovered</span></span><br></pre></td></tr></table></figure></p>
+<p>  当一个<span class="math inline">\(stream\)</span>实例被创建时，<code>self._rest</code>是<span class="math inline">\(None\)</span>，这表明实例的<span class="math inline">\(rest\)</span>部分尚未被计算；<strong>当<code>rest</code>属性通过点表达式被访问后，<code>rest</code>的属性方法被调用，触发了<code>self._rest = self._compute_rest()</code>的计算</strong>。</p>
+<p>  <code>compute_rest</code>函数的关键属性是：它<strong>不接受参数，并且返回<span class="math inline">\(stream\)</span>或<span class="math inline">\(stream.empty\)</span></strong>。</p>
+<p>  懒惰计算允许我们用流表示无限的序列型数据集。例如，可以用以下语句表示正整数集：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">integer_stream</span>(<span class="params">first</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">        <span class="keyword">return</span> integer_stream(first+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> Stream(first, compute_rest)</span><br></pre></td></tr></table></figure> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives = integer_stream(<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives</span><br><span class="line">Stream(<span class="number">1</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>positives.first</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h3><span id="3利用流实现序列基本操作">3.利用流实现序列基本操作</span></h3>
+<p>  上述<strong>利用高阶函数改变<span class="math inline">\(compute_rest\)</span>函数</strong>的方法可以用于其他序列操作：</p>
+<h4><span id="amap映射">  <span class="math inline">\(a.\)</span><span class="math inline">\(map\)</span>映射</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">map_stream</span>(<span class="params">fn, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Stream.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">            <span class="keyword">return</span> map_stream(fn, s.rest)</span><br><span class="line">        <span class="keyword">return</span> Stream(fn(s.first), compute_rest)</span><br></pre></td></tr></table></figure>
+<h4><span id="b筛选指定元素">  <span class="math inline">\(b.\)</span>筛选指定元素</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">filter_stream</span>(<span class="params">fn, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Stream.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">compute_rest</span>():</span><br><span class="line">            <span class="keyword">return</span> filter_stream(fn, s.rest)</span><br><span class="line">        <span class="keyword">if</span> fn(s.first):</span><br><span class="line">            <span class="keyword">return</span> Stream(s.first, compute_rest)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> compute_rest()</span><br></pre></td></tr></table></figure>
+<h4><span id="c筛选前k个元素">  <span class="math inline">\(c.\)</span>筛选前<span class="math inline">\(k\)</span>个元素</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">first_k_as_list</span>(<span class="params">s, k</span>):</span><br><span class="line">        first_k = []</span><br><span class="line">        <span class="keyword">while</span> s <span class="keyword">is</span> <span class="keyword">not</span> Stream.empty <span class="keyword">and</span> k &gt; <span class="number">0</span>:</span><br><span class="line">            first_k.append(s.first)</span><br><span class="line">            s, k = s.rest, k-<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> first_k</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = integer_stream(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">Stream(<span class="number">3</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m = map_stream(<span class="keyword">lambda</span> x: x*x, s)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m</span><br><span class="line">Stream(<span class="number">9</span>, &lt;...&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>first_k_as_list(m, <span class="number">5</span>)</span><br><span class="line">[<span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>]</span><br></pre></td></tr></table></figure>
+<p>  正如链表提供的简单的数据抽象的实现，流也提供了一个简单的函数化递归数据结构，通过高阶函数实现懒惰计算。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 4.Data Processing</category>
       </categories>
   </entry>
   <entry>
@@ -6818,6 +6874,32 @@ code</strong>.</p></li>
       </categories>
   </entry>
   <entry>
+    <title>7.6.分支</title>
+    <url>/2024/04/10/7-7-%E5%88%86%E6%94%AF/</url>
+    <content><![CDATA[<h1><span id="76branching"><span class="math inline">\(7.6.\)</span>Branching</span></h1>
+<h3><span id="1branching-implementation">1.Branching implementation</span></h3>
+<p>  Take the following program as example:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//return x * y</span><br><span class="line">int mult (int x, int y) &#123;</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line"></span><br><span class="line">	while !(n&gt;y) &#123;</span><br><span class="line">		sum += x;</span><br><span class="line">		n++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  This program can be translated into pseudo VM code as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
+<p>  Notice that we have three new symbols: <code>label</code>,
+<code>if-goto</code>, <code>goto</code>:</p>
+<ul>
+<li><code>label LABEL</code> declare the label.</li>
+<li><code>if-goto LABEL</code>: if the statement is true, then jump to
+<code>LABEL</code>.</li>
+<li><code>goto LABEL</code>: jump to <code>LABEL</code> with no
+condition.</li>
+</ul>
+<p>  With these three statement, we can translate the branching
+expression into VM code.</p>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 7.VM Machine</category>
+      </categories>
+  </entry>
+  <entry>
     <title>7.8.函数实现前瞻</title>
     <url>/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/</url>
     <content><![CDATA[<h1><span id="78function-impletation-preview"><span class="math inline">\(7.8.\)</span>Function Impletation Preview</span></h1>
@@ -6954,32 +7036,6 @@ parts don't belong to the world of the function.</li>
 executing all the behind-scene apparatus that is required to service the
 program. Everything is saved on the same stack.</li>
 </ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 7.VM Machine</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>7.6.分支</title>
-    <url>/2024/04/10/7-7-%E5%88%86%E6%94%AF/</url>
-    <content><![CDATA[<h1><span id="76branching"><span class="math inline">\(7.6.\)</span>Branching</span></h1>
-<h3><span id="1branching-implementation">1.Branching implementation</span></h3>
-<p>  Take the following program as example:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//return x * y</span><br><span class="line">int mult (int x, int y) &#123;</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line"></span><br><span class="line">	while !(n&gt;y) &#123;</span><br><span class="line">		sum += x;</span><br><span class="line">		n++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  This program can be translated into pseudo VM code as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>  Notice that we have three new symbols: <code>label</code>,
-<code>if-goto</code>, <code>goto</code>:</p>
-<ul>
-<li><code>label LABEL</code> declare the label.</li>
-<li><code>if-goto LABEL</code>: if the statement is true, then jump to
-<code>LABEL</code>.</li>
-<li><code>goto LABEL</code>: jump to <code>LABEL</code> with no
-condition.</li>
-</ul>
-<p>  With these three statement, we can translate the branching
-expression into VM code.</p>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
