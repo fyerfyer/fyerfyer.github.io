@@ -1556,6 +1556,44 @@ below:</p>
       </categories>
   </entry>
   <entry>
+    <title>11.2.B树</title>
+    <url>/2024/05/31/11.2%20B-Trees/</url>
+    <content><![CDATA[<h1><span id="112b树"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>树</span></h1>
+<h3><span id="1b树的引入">1.<span class="math inline">\(B\)</span>树的引入</span></h3>
+<p>  导致<span class="math inline">\(BST\)</span>最坏运行时间的原因是：每次<code>insert</code>操作，我们都选择在叶子上进行，这导致了树的高度的增加。因此，一个自然的想法是：能否在不增加树的高度的前提下插入节点。</p>
+<p>  为了达到这个目的，我们可以在一个叶子中插入多个节点，这样就不会导致叶子高度的增加了。</p>
+<p>  但如果无限制地在一个叶子中插入，那么这个叶子就会退化成一个链表了。因此，我们可以对单个叶子能够装入节点的数量设置限度(<span class="math inline">\(limit\)</span>)，例如<span class="math inline">\(4\)</span>。当叶子中节点个数超过<span class="math inline">\(4\)</span>个时，就通过弹出中间的节点，把这个叶子分开(<span class="math inline">\(split\)</span>)。</p>
+<h3><span id="22-3搜索树">2.<span class="math inline">\(2-3\)</span>搜索树</span></h3>
+<p>  一棵<span class="math inline">\(2-3\)</span>搜索树是满足如下条件的树：</p>
+<ul>
+<li>空的(<span class="math inline">\(empty\)</span>)。</li>
+<li>一个叶子存储一个节点，同时有两个链接(<span class="math inline">\(link\)</span>)，和<span class="math inline">\(BST\)</span>类似。</li>
+<li>一个叶子存储二个节点，同时有三个链接。设二个节点分别为<span class="math inline">\(x,y\)</span>，则三个链接所指向的其它叶子分别满足<span class="math inline">\(a_i\leq x,x\leq a_i\leq y,a_i\leq
+y\)</span>。</li>
+</ul>
+<p><img src="/2024/05/31/11.2%20B-Trees/image.png"></p>
+<h3><span id="3查找流程">3.查找流程</span></h3>
+<p>  <span class="math inline">\(2-3\)</span>搜索树查找节点的流程如下：</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-1.png"></p>
+<h3><span id="4插入流程">4.插入流程</span></h3>
+<p>  <span class="math inline">\(2-3\)</span>搜索树插入节点的流程如下：</p>
+<ol type="1">
+<li>我们仍然一直在左叶子进行插入操作。</li>
+<li>将节点插入对应的叶子时，如果该叶子的节点个数大于<span class="math inline">\(3\)</span>，则弹出中间靠左的节点(如果是奇数个节点就直接弹出中间的)，然后相应地重新排列子树。</li>
+<li>重复上述步骤，直到找到一个有空位的父节点或者遍历到根节点。</li>
+</ol>
+<p>  一些插入情况对应的图示如下：</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-2.png"></p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
+<p>  分开叶子的图示如下：</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>10.1.二叉搜索树</title>
     <url>/2024/05/31/10.1.Binary%20Search%20Trees/</url>
     <content><![CDATA[<h1><span id="101二叉搜索树"><span class="math inline">\(10.1\)</span>二叉搜索树</span></h1>
@@ -1635,64 +1673,6 @@ ordering restriction to support efficient search</li>
       </categories>
   </entry>
   <entry>
-    <title>11.2.B树</title>
-    <url>/2024/05/31/11.2%20B-Trees/</url>
-    <content><![CDATA[<h1><span id="112b树"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>树</span></h1>
-<h3><span id="1b树的引入">1.<span class="math inline">\(B\)</span>树的引入</span></h3>
-<p>  导致<span class="math inline">\(BST\)</span>最坏运行时间的原因是：每次<code>insert</code>操作，我们都选择在叶子上进行，这导致了树的高度的增加。因此，一个自然的想法是：能否在不增加树的高度的前提下插入节点。</p>
-<p>  为了达到这个目的，我们可以在一个叶子中插入多个节点，这样就不会导致叶子高度的增加了。</p>
-<p>  但如果无限制地在一个叶子中插入，那么这个叶子就会退化成一个链表了。因此，我们可以对单个叶子能够装入节点的数量设置限度(<span class="math inline">\(limit\)</span>)，例如<span class="math inline">\(4\)</span>。当叶子中节点个数超过<span class="math inline">\(4\)</span>个时，就通过弹出中间的节点，把这个叶子分开(<span class="math inline">\(split\)</span>)。</p>
-<h3><span id="22-3搜索树">2.<span class="math inline">\(2-3\)</span>搜索树</span></h3>
-<p>  一棵<span class="math inline">\(2-3\)</span>搜索树是满足如下条件的树：</p>
-<ul>
-<li>空的(<span class="math inline">\(empty\)</span>)。</li>
-<li>一个叶子存储一个节点，同时有两个链接(<span class="math inline">\(link\)</span>)，和<span class="math inline">\(BST\)</span>类似。</li>
-<li>一个叶子存储二个节点，同时有三个链接。设二个节点分别为<span class="math inline">\(x,y\)</span>，则三个链接所指向的其它叶子分别满足<span class="math inline">\(a_i\leq x,x\leq a_i\leq y,a_i\leq
-y\)</span>。</li>
-</ul>
-<p><img src="/2024/05/31/11.2%20B-Trees/image.png"></p>
-<h3><span id="3查找流程">3.查找流程</span></h3>
-<p>  <span class="math inline">\(2-3\)</span>搜索树查找节点的流程如下：</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-1.png"></p>
-<h3><span id="4插入流程">4.插入流程</span></h3>
-<p>  <span class="math inline">\(2-3\)</span>搜索树插入节点的流程如下：</p>
-<ol type="1">
-<li>我们仍然一直在左叶子进行插入操作。</li>
-<li>将节点插入对应的叶子时，如果该叶子的节点个数大于<span class="math inline">\(3\)</span>，则弹出中间靠左的节点(如果是奇数个节点就直接弹出中间的)，然后相应地重新排列子树。</li>
-<li>重复上述步骤，直到找到一个有空位的父节点或者遍历到根节点。</li>
-</ol>
-<p>  一些插入情况对应的图示如下：</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-2.png"></p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
-<p>  分开叶子的图示如下：</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.3.B-树的不变量</title>
-    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
-    <content><![CDATA[<h1><span id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</span></h1>
-<h3><span id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</span></h3>
-<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
-<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
-<ul>
-<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
-<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
-</ul>
-<h3><span id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</span></h3>
-<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
-n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
     <title>11.4.树的旋转</title>
     <url>/2024/05/31/11.4.Rotating%20Trees/</url>
     <content><![CDATA[<h1><span id="114树的旋转"><span class="math inline">\(11.4\)</span>树的旋转</span></h1>
@@ -1713,6 +1693,26 @@ promote its left child in the only natural way.</li>
 <p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
 <p>  We can implement these operations by following codes:
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>11.3.B-树的不变量</title>
+    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
+    <content><![CDATA[<h1><span id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</span></h1>
+<h3><span id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</span></h3>
+<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
+<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
+<ul>
+<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
+<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
+</ul>
+<h3><span id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</span></h3>
+<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
+n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -1751,6 +1751,30 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
+    <title>12.2.Hashing的实现方法(1)</title>
+    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
+    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
+<h3><span id="1整数溢出">1.整数溢出</span></h3>
+<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
+<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
+<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
+<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
+<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
+<ol type="1">
+<li>它是一个整数</li>
+<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
+<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
+<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>12.1.Hashing的引入</title>
     <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
     <content><![CDATA[<h1><span id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</span></h1>
@@ -1772,30 +1796,6 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
 <p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.2.Hashing的实现方法(1)</title>
-    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
-    <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
-<h3><span id="1整数溢出">1.整数溢出</span></h3>
-<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
-<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
-<h3><span id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
-<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
-<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
-<ol type="1">
-<li>它是一个整数</li>
-<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
-<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
-<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -1834,51 +1834,6 @@ item exists, return true.</li>
 </ul>
 <h3><span id="2内存的处理">2.内存的处理</span></h3>
 <p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.4.数据结构的最终实现</title>
-    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
-    <content><![CDATA[<h1><span id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</span></h1>
-<h3><span id="1运行时间的优化">1.运行时间的优化</span></h3>
-<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
-<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
-<ol type="1">
-<li>动态地扩大我们的哈希表。</li>
-<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<h4><span id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</span></h4>
-<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
-<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
-<ul>
-<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
-<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
-<ul>
-<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
-</ul></li>
-</ul>
-<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
-M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
-M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
-<h4><span id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></span></h4>
-<ul>
-<li><p>Use a 'base' strategy similar to the one we developed
-earlier.</p></li>
-<li><p>Use a 'base' that's a small prime.</p>
-<ul>
-<li>Base 126 isn't actually very good, because using base 126 means that
-any string that ends in the same last 32 characters has the same
-hashcode.</li>
-<li>This happens because of overflow.</li>
-<li>Using prime numbers helps avoid overflow issues (i.e., collisions
-due to overflow).</li>
-<li>Why a small prime? Because it's easier to compute.</li>
-</ul></li>
-</ul>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -1933,6 +1888,51 @@ N)\)</span></li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>13.Heap &amp; Priority Queue</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.4.数据结构的最终实现</title>
+    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
+    <content><![CDATA[<h1><span id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</span></h1>
+<h3><span id="1运行时间的优化">1.运行时间的优化</span></h3>
+<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
+<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
+<ol type="1">
+<li>动态地扩大我们的哈希表。</li>
+<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<h4><span id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</span></h4>
+<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
+<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
+<ul>
+<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
+<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
+<ul>
+<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
+</ul></li>
+</ul>
+<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
+M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
+M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
+<h4><span id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></span></h4>
+<ul>
+<li><p>Use a 'base' strategy similar to the one we developed
+earlier.</p></li>
+<li><p>Use a 'base' that's a small prime.</p>
+<ul>
+<li>Base 126 isn't actually very good, because using base 126 means that
+any string that ends in the same last 32 characters has the same
+hashcode.</li>
+<li>This happens because of overflow.</li>
+<li>Using prime numbers helps avoid overflow issues (i.e., collisions
+due to overflow).</li>
+<li>Why a small prime? Because it's easier to compute.</li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
       </categories>
   </entry>
   <entry>
@@ -2186,22 +2186,6 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>17.1.图的构建</title>
-    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
-    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
-<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>17.Graphs</category>
-      </categories>
-  </entry>
-  <entry>
     <title>18.1.选择排序</title>
     <url>/2024/05/31/18.1.Selection%20Sort/</url>
     <content><![CDATA[<h1><span id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</span></h1>
@@ -2269,26 +2253,6 @@ back of the array.</li>
       </categories>
   </entry>
   <entry>
-    <title>18.3.归并排序</title>
-    <url>/2024/05/31/18.3.Merge%20Sort/</url>
-    <content><![CDATA[<h1><span id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
-Sort</span></h1>
-<h3><span id="1the-step-of-merge-sort">1.The step of Merge Sort</span></h3>
-<ul>
-<li>Split items into 2 roughly even pieces.</li>
-<li>Mergesort each half (steps not shown, this is a recursive
-algorithm!)</li>
-<li>Merge the two sorted halves to form the final result.</li>
-</ul>
-<h3><span id="2step-implementation">2.Step implementation</span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> &#123;</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
     <title>18.4.插入排序</title>
     <url>/2024/05/31/18.4.Insertion%20Sort/</url>
     <content><![CDATA[<h1><span id="184insertion-sort"><span class="math inline">\(18.4.\)</span>Insertion Sort</span></h1>
@@ -2331,6 +2295,26 @@ insertion sort is excellent on these arrays.</p>
 fast.</p>
 <h3><span id="4sorting-summary">4.Sorting Summary</span></h3>
 <p><img src="/2024/05/31/18.4.Insertion%20Sort/image-8.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>18.3.归并排序</title>
+    <url>/2024/05/31/18.3.Merge%20Sort/</url>
+    <content><![CDATA[<h1><span id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
+Sort</span></h1>
+<h3><span id="1the-step-of-merge-sort">1.The step of Merge Sort</span></h3>
+<ul>
+<li>Split items into 2 roughly even pieces.</li>
+<li>Mergesort each half (steps not shown, this is a recursive
+algorithm!)</li>
+<li>Merge the two sorted halves to form the final result.</li>
+</ul>
+<h3><span id="2step-implementation">2.Step implementation</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> &#123;</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -2443,6 +2427,22 @@ it's also easy.</p>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 2.Boolean Calculation &amp; ALU</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>17.1.图的构建</title>
+    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
+    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
+<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>17.Graphs</category>
       </categories>
   </entry>
   <entry>
@@ -2657,6 +2657,39 @@ nested class static.</p>
       </categories>
   </entry>
   <entry>
+    <title>2.3.双链表</title>
+    <url>/2024/05/31/2.3.DLLists/</url>
+    <content><![CDATA[<h1><span id="23双链表"><span class="math inline">\(2.3\)</span>双链表</span></h1>
+<h3><span id="1对addlast的优化">1.对<code>addLast</code>的优化</span></h3>
+<p>  让我们回顾一下<span class="math inline">\(SLList\)</span>的<code>addList</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) &#123;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这个方法的问题在于速度太慢。对此，我们可以像处理<span class="math inline">\(size\)</span>一样，在链表中多存储一个关键信息<span class="math inline">\(last\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> IntNode sentinel;</span><br><span class="line">    <span class="keyword">private</span> IntNode last;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        last.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        last = last.next;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  但这样会让<code>deleteLast</code>的操作变得困难，因为要删除<span class="math inline">\(last\)</span>，必须知道<span class="math inline">\(last\)</span>前面的元素。如果我们再缓存<span class="math inline">\(secondlast\)</span>，就相应地需要缓存<span class="math inline">\(thirdlast\)</span>...这说明缓存并不能解决问题，这引出了我们下面的解决方案：</p>
+<h3><span id="2指向前面元素的指针">2.指向前面元素的指针</span></h3>
+<p>  上面问题的解决方案就是给<span class="math inline">\(IntNode\)</span>添加一个指向前面元素的指针：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> IntNode prev;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过这种操作，我们的链表就与前后两个节点都产生了链接。这种链表被称为双链表(<span class="math inline">\(double\;linked\;list\)</span>)。下面的图示显示了双链表的具体构建：</p>
+<p><img src="/2024/05/31/2.3.DLLists/image-11.png"></p>
+<h3><span id="3哨兵节点的改进">3.哨兵节点的改进</span></h3>
+<p>  向后的指针有时会指向哨兵节点，有时会指向真实节点，在特殊情况下，这会导致原先代码的错误。对此，我们有两种解决办法：</p>
+<ol type="1">
+<li>在前后各设置一个哨兵节点：</li>
+</ol>
+<p><img src="/2024/05/31/2.3.DLLists/image-12.png"></p>
+<ol start="2" type="1">
+<li>将链表变为循环链表：</li>
+</ol>
+<p><img src="/2024/05/31/2.3.DLLists/image-13.png"></p>
+<h3><span id="4通用型链表">4.通用型链表</span></h3>
+<p>  有时，链表中的元素不止是<span class="math inline">\(int\)</span>型，还可能是其他类型。我们可以用以下语句声明能表示任何引用类型的数据结构：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*create a class able to contain any type*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DLList</span>&lt;T&gt; () &#123;</span><br><span class="line">    <span class="comment">//create an item able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T item;</span><br><span class="line">    <span class="comment">//create an array able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T[] arr = (T[])<span class="keyword">new</span> <span class="title class_">Object</span>[capacity]; </span><br><span class="line">    <span class="comment">//print this type of item</span></span><br><span class="line">    System.out.println(item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>2.List</category>
+      </categories>
+  </entry>
+  <entry>
     <title>2.2.数据抽象</title>
     <url>/2024/05/31/2.2.%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1/</url>
     <content><![CDATA[<h1><span id="22数据抽象"><span class="math inline">\(2.2\)</span>数据抽象</span></h1>
@@ -2697,39 +2730,6 @@ d\)</span>表示的有理数</li>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 2.Building Abstraction with Data</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>2.3.双链表</title>
-    <url>/2024/05/31/2.3.DLLists/</url>
-    <content><![CDATA[<h1><span id="23双链表"><span class="math inline">\(2.3\)</span>双链表</span></h1>
-<h3><span id="1对addlast的优化">1.对<code>addLast</code>的优化</span></h3>
-<p>  让我们回顾一下<span class="math inline">\(SLList\)</span>的<code>addList</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) &#123;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这个方法的问题在于速度太慢。对此，我们可以像处理<span class="math inline">\(size\)</span>一样，在链表中多存储一个关键信息<span class="math inline">\(last\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> IntNode sentinel;</span><br><span class="line">    <span class="keyword">private</span> IntNode last;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        last.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        last = last.next;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  但这样会让<code>deleteLast</code>的操作变得困难，因为要删除<span class="math inline">\(last\)</span>，必须知道<span class="math inline">\(last\)</span>前面的元素。如果我们再缓存<span class="math inline">\(secondlast\)</span>，就相应地需要缓存<span class="math inline">\(thirdlast\)</span>...这说明缓存并不能解决问题，这引出了我们下面的解决方案：</p>
-<h3><span id="2指向前面元素的指针">2.指向前面元素的指针</span></h3>
-<p>  上面问题的解决方案就是给<span class="math inline">\(IntNode\)</span>添加一个指向前面元素的指针：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> IntNode prev;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过这种操作，我们的链表就与前后两个节点都产生了链接。这种链表被称为双链表(<span class="math inline">\(double\;linked\;list\)</span>)。下面的图示显示了双链表的具体构建：</p>
-<p><img src="/2024/05/31/2.3.DLLists/image-11.png"></p>
-<h3><span id="3哨兵节点的改进">3.哨兵节点的改进</span></h3>
-<p>  向后的指针有时会指向哨兵节点，有时会指向真实节点，在特殊情况下，这会导致原先代码的错误。对此，我们有两种解决办法：</p>
-<ol type="1">
-<li>在前后各设置一个哨兵节点：</li>
-</ol>
-<p><img src="/2024/05/31/2.3.DLLists/image-12.png"></p>
-<ol start="2" type="1">
-<li>将链表变为循环链表：</li>
-</ol>
-<p><img src="/2024/05/31/2.3.DLLists/image-13.png"></p>
-<h3><span id="4通用型链表">4.通用型链表</span></h3>
-<p>  有时，链表中的元素不止是<span class="math inline">\(int\)</span>型，还可能是其他类型。我们可以用以下语句声明能表示任何引用类型的数据结构：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*create a class able to contain any type*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DLList</span>&lt;T&gt; () &#123;</span><br><span class="line">    <span class="comment">//create an item able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T item;</span><br><span class="line">    <span class="comment">//create an array able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T[] arr = (T[])<span class="keyword">new</span> <span class="title class_">Object</span>[capacity]; </span><br><span class="line">    <span class="comment">//print this type of item</span></span><br><span class="line">    System.out.println(item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>2.List</category>
       </categories>
   </entry>
   <entry>
@@ -3571,6 +3571,72 @@ calling site</strong>.</li>
       </categories>
   </entry>
   <entry>
+    <title>3.2.Introduction to Digital System</title>
+    <url>/2024/06/04/3-2-Introduction-to-Digital-System/</url>
+    <content><![CDATA[<h1><span id="32introduction-to-digital-system"><span class="math inline">\(3.2.\)</span>Introduction to Digital System</span></h1>
+<h3><span id="1logic-gate-representation">1.Logic gate representation</span></h3>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-1.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-2.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-3.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-4.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-5.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-6.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-7.png"></p>
+<h3><span id="2using-booleanalgebra-to-simplify-circuits">2.Using boolean
+algebra to simplify circuits</span></h3>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
+<h3><span id="3build-an-adder">3.Build an Adder</span></h3>
+<h4><span id="ahalfadder">  <span class="math inline">\(a.\)</span>Half
+adder</span></h4>
+<p>  A half adder's output consists of:</p>
+<ul>
+<li>The <em>sum</em>. It can be computed by <code>xor</code>
+method.</li>
+<li>The <em>carry</em>. It can be computed by <code>and</code>
+method.</li>
+</ul>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
+<h4><span id="bfulladder">  <span class="math inline">\(b.\)</span>Full
+adder</span></h4>
+<p>  To implement full adder, we just need to add <code>A</code>,
+<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
+<p>  The output of a full adder is the same as the half adder. Then how
+can we calculate each of them?</p>
+<ul>
+<li><p>For <span class="math inline">\(C_0\)</span>, it's decided by the
+sum of <code>A</code> and <code>B</code> &amp; the current carry in the
+position. There are two cases that make the carry 1:</p>
+<ol type="1">
+<li><code>A + B</code> is 1, and current carry is 1.</li>
+<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
+</ol></li>
+</ul>
+<p>  So we can compute <span class="math inline">\(C_0\)</span> by this
+expression:</p>
+<p><span class="math display">\[
+C_0 = C_i(A+B) + AB
+\]</span></p>
+<ul>
+<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
+<code>B</code> and current carry is 1:</li>
+</ul>
+<p><span class="math display">\[
+S = A \; xor B \; xor C_i
+\]</span></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
+<h4><span id="c4-bit-adder">  $c.$4-bit Adder</span></h4>
+<p>  To make a multi-bit Adder, we simply <strong>connect full adder
+together</strong>:</p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.1.时序逻辑</title>
     <url>/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/</url>
     <content><![CDATA[<h1><span id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</span></h1>
@@ -3663,72 +3729,6 @@ step at each subsequent step and building upon it.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>3.2.Introduction to Digital System</title>
-    <url>/2024/06/04/3-2-Introduction-to-Digital-System/</url>
-    <content><![CDATA[<h1><span id="32introduction-to-digital-system"><span class="math inline">\(3.2.\)</span>Introduction to Digital System</span></h1>
-<h3><span id="1logic-gate-representation">1.Logic gate representation</span></h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-1.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-2.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-3.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-4.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-5.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-6.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-7.png"></p>
-<h3><span id="2using-booleanalgebra-to-simplify-circuits">2.Using boolean
-algebra to simplify circuits</span></h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
-<h3><span id="3build-an-adder">3.Build an Adder</span></h3>
-<h4><span id="ahalfadder">  <span class="math inline">\(a.\)</span>Half
-adder</span></h4>
-<p>  A half adder's output consists of:</p>
-<ul>
-<li>The <em>sum</em>. It can be computed by <code>xor</code>
-method.</li>
-<li>The <em>carry</em>. It can be computed by <code>and</code>
-method.</li>
-</ul>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
-<h4><span id="bfulladder">  <span class="math inline">\(b.\)</span>Full
-adder</span></h4>
-<p>  To implement full adder, we just need to add <code>A</code>,
-<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
-<p>  The output of a full adder is the same as the half adder. Then how
-can we calculate each of them?</p>
-<ul>
-<li><p>For <span class="math inline">\(C_0\)</span>, it's decided by the
-sum of <code>A</code> and <code>B</code> &amp; the current carry in the
-position. There are two cases that make the carry 1:</p>
-<ol type="1">
-<li><code>A + B</code> is 1, and current carry is 1.</li>
-<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
-</ol></li>
-</ul>
-<p>  So we can compute <span class="math inline">\(C_0\)</span> by this
-expression:</p>
-<p><span class="math display">\[
-C_0 = C_i(A+B) + AB
-\]</span></p>
-<ul>
-<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
-<code>B</code> and current carry is 1:</li>
-</ul>
-<p><span class="math display">\[
-S = A \; xor B \; xor C_i
-\]</span></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
-<h4><span id="c4-bit-adder">  $c.$4-bit Adder</span></h4>
-<p>  To make a multi-bit Adder, we simply <strong>connect full adder
-together</strong>:</p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
-]]></content>
-      <categories>
-        <category>CS61C Great Ideas in Computer Architecture</category>
-        <category>Module 3.Program Process</category>
-      </categories>
-  </entry>
-  <entry>
     <title>3.2.触发器</title>
     <url>/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/</url>
     <content><![CDATA[<h1><span id="32flipflops"><span class="math inline">\(3.2.\)</span>Flip
@@ -3799,129 +3799,6 @@ status</strong>, and then outputs the selected value.</li>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 3.Memory</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>3.3.Synchronous Digital Systems</title>
-    <url>/2024/06/05/3-3-Synchronous-Digital-Systems/</url>
-    <content><![CDATA[<h1><span id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</span></h1>
-<h3><span id="1clock-concepts">1.Clock concepts</span></h3>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
-<h3><span id="2d-flip-flops">2.D Flip-flops</span></h3>
-<h4><span id="a-dffconcept">  <span class="math inline">\(a.\)</span> DFF
-concept</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
-<blockquote>
-<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
-<span class="math inline">\(D\)</span> is the data input.</p>
-</blockquote>
-<blockquote>
-<p>DFF only responds to the input signal on the rising edge of the clock
-signal, it captures and latches the value of data input. <strong>It will
-hold the value until the next rising edge of the clock
-signal</strong>.</p>
-</blockquote>
-<ul>
-<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
-take for the input to propagate to the output after the clock
-trigger</strong>.</p></li>
-<li><p><em>Setup time</em> is the amount of time that the input needs to
-be stable BEFORE the clock trigger</p></li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
-<ul>
-<li><em>Hold time</em> is the amount of time that the input needs to be
-stable AFTER the clock trigger</li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
-<h3><span id="3register">3.Register</span></h3>
-<h4><span id="asomeconcept">  <span class="math inline">\(a.\)</span>Some
-concept</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
-<blockquote>
-<p>Why this? Because the max hold time is to <strong>ensure that data
-input D remains stable for a period of time after the rising edge of the
-clock arrives</strong>. And the period of time equals to the delay of
-<span class="math inline">\(A\)</span> plus the combinational delay.</p>
-</blockquote>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
-<blockquote>
-<p>Why this? Because the min clock cycle is to <strong>ensure that the
-signal is properly transmitted during the clock cycle and captured by
-the next register</strong>. So we must take the longest time into
-consideration.</p>
-</blockquote>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
-<h3><span id="4transitor">4.Transitor</span></h3>
-<h4><span id="ametal-oxide-semiconductor-field-effecttransistormosfet">  <span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
-Transistor(MOSFET)</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
-<p>  To know how the result comes from, we can <strong>view the value of
-<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
-an example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
-<ul>
-<li><p>First we need to know <strong>whether the switch is
-closed</strong>. <strong>If the switch is closed, then the state of
-<span class="math inline">\(D\)</span> is decided by the outside
-circuits</strong>.</p></li>
-<li><p>When the switch is on, we then judge <strong>if the voltage of
-<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it's true, then the FET is
-conducting, and vice versa.</p></li>
-</ul>
-<p>  In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can't get the electronic, thus it's
-0.</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
-<h4><span id="bvddand-ground">  <span class="math inline">\(b.\)</span>Vdd
-and Ground</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
-<h4><span id="cbuilding-an-inverter">  <span class="math inline">\(c.\)</span>Building an Inverter</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
-<h4><span id="dbuilding-other-gates">  <span class="math inline">\(d.\)</span>Building other gates</span></h4>
-<p>  To build a CMOS, we:</p>
-<ol type="1">
-<li><p>Implement the pull-up network and pull-down network separately to
-fit the truth table.</p>
-<ul>
-<li>It's OK to get the opposite of truth table. <strong>We can simply
-convert it through an invertor</strong>.</li>
-</ul></li>
-<li><p>Connect the pull-up with Vdd, and the pull-down with
-Ground.</p></li>
-</ol>
-<p>  We take the <code>NAND</code> gate for example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
-<h4><span id="ethe-use-of-demorgans-law">  <span class="math inline">\(e.\)</span>The use of DeMorgan's Law</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
-]]></content>
-      <categories>
-        <category>CS61C Great Ideas in Computer Architecture</category>
-        <category>Module 3.Program Process</category>
       </categories>
   </entry>
   <entry>
@@ -4115,6 +3992,129 @@ of ALU with input of PC</strong>.</li>
       </categories>
   </entry>
   <entry>
+    <title>3.3.Synchronous Digital Systems</title>
+    <url>/2024/06/05/3-3-Synchronous-Digital-Systems/</url>
+    <content><![CDATA[<h1><span id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</span></h1>
+<h3><span id="1clock-concepts">1.Clock concepts</span></h3>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
+<h3><span id="2d-flip-flops">2.D Flip-flops</span></h3>
+<h4><span id="a-dffconcept">  <span class="math inline">\(a.\)</span> DFF
+concept</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
+<blockquote>
+<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
+<span class="math inline">\(D\)</span> is the data input.</p>
+</blockquote>
+<blockquote>
+<p>DFF only responds to the input signal on the rising edge of the clock
+signal, it captures and latches the value of data input. <strong>It will
+hold the value until the next rising edge of the clock
+signal</strong>.</p>
+</blockquote>
+<ul>
+<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
+take for the input to propagate to the output after the clock
+trigger</strong>.</p></li>
+<li><p><em>Setup time</em> is the amount of time that the input needs to
+be stable BEFORE the clock trigger</p></li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
+<ul>
+<li><em>Hold time</em> is the amount of time that the input needs to be
+stable AFTER the clock trigger</li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
+<h3><span id="3register">3.Register</span></h3>
+<h4><span id="asomeconcept">  <span class="math inline">\(a.\)</span>Some
+concept</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
+<blockquote>
+<p>Why this? Because the max hold time is to <strong>ensure that data
+input D remains stable for a period of time after the rising edge of the
+clock arrives</strong>. And the period of time equals to the delay of
+<span class="math inline">\(A\)</span> plus the combinational delay.</p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
+<blockquote>
+<p>Why this? Because the min clock cycle is to <strong>ensure that the
+signal is properly transmitted during the clock cycle and captured by
+the next register</strong>. So we must take the longest time into
+consideration.</p>
+</blockquote>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
+<h3><span id="4transitor">4.Transitor</span></h3>
+<h4><span id="ametal-oxide-semiconductor-field-effecttransistormosfet">  <span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
+Transistor(MOSFET)</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
+<p>  To know how the result comes from, we can <strong>view the value of
+<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
+an example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
+<ul>
+<li><p>First we need to know <strong>whether the switch is
+closed</strong>. <strong>If the switch is closed, then the state of
+<span class="math inline">\(D\)</span> is decided by the outside
+circuits</strong>.</p></li>
+<li><p>When the switch is on, we then judge <strong>if the voltage of
+<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it's true, then the FET is
+conducting, and vice versa.</p></li>
+</ul>
+<p>  In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can't get the electronic, thus it's
+0.</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
+<h4><span id="bvddand-ground">  <span class="math inline">\(b.\)</span>Vdd
+and Ground</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
+<h4><span id="cbuilding-an-inverter">  <span class="math inline">\(c.\)</span>Building an Inverter</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
+<h4><span id="dbuilding-other-gates">  <span class="math inline">\(d.\)</span>Building other gates</span></h4>
+<p>  To build a CMOS, we:</p>
+<ol type="1">
+<li><p>Implement the pull-up network and pull-down network separately to
+fit the truth table.</p>
+<ul>
+<li>It's OK to get the opposite of truth table. <strong>We can simply
+convert it through an invertor</strong>.</li>
+</ul></li>
+<li><p>Connect the pull-up with Vdd, and the pull-down with
+Ground.</p></li>
+</ol>
+<p>  We take the <code>NAND</code> gate for example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
+<h4><span id="ethe-use-of-demorgans-law">  <span class="math inline">\(e.\)</span>The use of DeMorgan's Law</span></h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.4.计数器</title>
     <url>/2024/04/05/3-4-%E8%AE%A1%E6%95%B0%E5%99%A8/</url>
     <content><![CDATA[<h1><span id="34counter"><span class="math inline">\(3.4.\)</span>Counter</span></h1>
@@ -4132,6 +4132,457 @@ It contains these features:</p>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 3.Memory</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>3.5.Pipelined Datapath and Control</title>
+    <url>/2024/06/07/3-5-Pipelined-Datapath-and-Control/</url>
+    <content><![CDATA[<h1><span id="35pipelined-datapath-and-control"><span class="math inline">\(3.5.\)</span>Pipelined Datapath and Control</span></h1>
+<h3><span id="1some-point">1.Some point</span></h3>
+<ul>
+<li><p>All the instructions go from left to right through the datapath
+except the write-back stage and the selection of the next value of PC,
+and they never move backward.</p>
+<ul>
+<li>So the first right-to-left flow of data can lead to data hazards
+while the second leads to control hazards.</li>
+</ul></li>
+<li><p>One way to show what happens in pipelined execution is to pretend
+that each instruction has its own datapath, and then to place these
+datapaths on a timeline to show their relationship:</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image.png"></p>
+<p>  All instructions advance during each clock cycle from one pipeline
+register to the next.</p>
+<h3><span id="2pipeline-registers">2.Pipeline registers</span></h3>
+<ul>
+<li><p>A separate pipeline register is redundant to the state that is
+updated. For example, a load instruction will place its result in one of
+the 32 registers, and any later instruction that needs that data will
+<strong>simply read the appropriate register</strong>.</p>
+<ul>
+<li>Every instruction updates PC, and the PC can be thought of as a
+pipeline register: one <strong>that feeds the IF stage of the
+pipeline</strong>.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-1.png"></p>
+<p>  We use the command <code>ld</code> to illustrate the pipe stage
+that is active in each stage:</p>
+<ol type="1">
+<li><em>Instruction fetch</em>: The PC is saved in the IF/ID pipeline
+register in case it's needed later for an instruction. This stage occurs
+<strong>before the instruction is identified</strong>.</li>
+</ol>
+<blockquote>
+<p>The computer cannot know which type of instruction is being fetched,
+so it must <strong>prepare for any instruction, passing potentially
+needed information down the pipeline</strong>.</p>
+</blockquote>
+<ol start="2" type="1">
+<li><em>Instruction decode and register file read</em>: Both the two
+read value and sign-extended immediate are stored in the ID/EX pipeline
+register, along with PC address.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-2.png"></p>
+<ol start="3" type="1">
+<li><em>Execute/address calculation</em>: It reads the information from
+the ID/EX pipeline register and add then using ALU. The result is placed
+in EX/MEM pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-3.png"></p>
+<ol start="4" type="1">
+<li><em>Memory access</em>: It uses the data from EX/MEM register and
+loads the data into MEM/WB pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-4.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-5.png"></p>
+<ol start="5" type="1">
+<li><em>Write back</em>: There's nothing to do in this stage.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-6.png"></p>
+<p>  From the analysis above, we can get some key point:</p>
+<ul>
+<li><p>The information must be placed in a pipeline register, otherwise,
+<strong>the information is lost when the next instruction enters that
+pipeline stage</strong>.</p></li>
+<li><p>Each logical component of the datapath(ALU, data memory, etc),
+can be used <strong>only within a single pipeline stage</strong>. That
+is, <strong>each pipeline register can only be used by one phase in one
+clock cycle</strong>, which ensures that <strong>no more than one
+instruction can access the same hardware resources simultaneously in one
+clock cycle</strong>, thus avoiding structural dangers.</p></li>
+</ul>
+<p>  We know that the instruction in IF/ID pipeline register supplies
+the writer register number, but the instruction fetch procedure occurs
+after the <code>ld</code> instruction(because it is conducted before an
+instruction is identified, so only when we complete the <code>ld</code>
+instruction will this step be done)! Hence, we need to <strong>preserve
+the distination register number in the <code>ld</code>
+instruction</strong>. The <code>ld</code> must pass the register number
+from ID/EX through EX/MEM to the MEM/WB pipeline register for use in the
+WB stage.</p>
+<h3><span id="3data-hazards-amp-forwarding">3.Data hazards &amp; forwarding</span></h3>
+<h4><span id="adatahazards">  <span class="math inline">\(a.\)</span>Data
+hazards</span></h4>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-7.png"></p>
+<h4><span id="bdetact-hazards">  <span class="math inline">\(b.\)</span>Detact hazards</span></h4>
+<p>  We first introduce a notation: we use "ID/EX.RegisterRs1" to refer
+to the number of 1 register whose value is found in the pipeline
+register ID/EX.</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-8.png"></p>
+<p>  Using this notation, the two pairs of hazard conditions are:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-9.png"></p>
+<ul>
+<li>The <code>sub-and</code> is a type 1a hazard:</li>
+</ul>
+<p><span class="math display">\[
+MEM/WB.RegisterRd=ID/EX.RegisterRs2=x2
+\]</span></p>
+<ul>
+<li><p>The <code>sub-or</code> is a type 2a hazard.</p></li>
+<li><p>There's no data hazard between <code>sub</code> and
+<code>sd</code> because <strong><code>sd</code> reads <code>x2</code>
+the clock cycle after <code>sub</code> writes
+<code>x2</code></strong>.</p></li>
+</ul>
+<blockquote>
+<p>Pay attention to the clock cycle, not the name!!!</p>
+</blockquote>
+<p>  One way to detact the hazards is simple <strong>check if the
+<code>RegWrite</code> signal is active</strong>. This can be done by
+<strong>examing the <code>WB</code> control field of the pipeline
+register during the <code>EX</code> and <code>MEM</code>
+stages</strong>.</p>
+<blockquote>
+<p>Recall that RISC-V requires that <code>x0</code> is taken as an
+oprand value of 0, if an instruction in the pipeline has <code>x0</code>
+as its destination, we want to <strong>avoid forwarding its possibly
+nonzero value</strong>.</p>
+</blockquote>
+<h4><span id="csolution">  <span class="math inline">\(c.\)</span>Solution</span></h4>
+<p>  If we can take the inputs to the ALU <strong>from any pipeline
+register rather than just ID/EX</strong>, then we can forward the
+correct data.</p>
+<p>  By <strong>adding multiplexors to the input of the ALU, and with
+the proper controls</strong>, we can run the pipeline at full speed in
+the presence of these data hazards:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-10.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-11.png"></p>
+<blockquote>
+<p>Before forwarding, the ID/EX register has no need to include space to
+hold the rs1 and rs2 fields, so they are added to ID/EX.</p>
+</blockquote>
+<h4><span id="ddetailed-detection-ampresolution">  <span class="math inline">\(d.\)</span>Detailed detection &amp;
+resolution</span></h4>
+<ul>
+<li><p>EX hazard:</p>
+<ul>
+<li>If there's a write operation and a load operation at the same time,
+and the loaded object is under writting, then there's an EX hazard:</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-12.png"></p>
+<p>  This case forwards the result from the previous instruction to
+either input of the ALU instead of the pipeline register EX/MEM</p>
+<ul>
+<li><p>MEM hazard</p>
+<ul>
+<li>If the writting part is just loaded.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-13.png"> <img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-14.png"></p>
+<blockquote>
+<p>What happens when a register is read and written in the same clock
+cycle? We assume that <strong>the write is in the first half of the
+clock cycle and the read is in the second half</strong>, so the read
+delivers what is written. As is the case for many implementations of
+register files, we have no data hazard in this case.</p>
+<p>As mentioned above, there is no hazard in the WB stage, because
+<strong>we assume that the register file supplies the correct
+result</strong> if the instruction in the ID stage reads the same
+register written by the instruction in the WB stage.</p>
+</blockquote>
+<p>  One complication occurs when we all read and write to a same
+register:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">add x1 x1 x2</span><br><span class="line">add x1 x1 x3</span><br><span class="line">add x1 x1 x4</span><br></pre></td></tr></table></figure>
+<p>  In this case, <strong>the result should be forwarded from the MEM
+stage, because the MEM stage is the more recent result</strong>. Thus,
+the control for the MEM should be:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-15.png"></p>
+<blockquote>
+<p>Why <code>not EX/MEM.RegisterRd = ID/EX.RegisterRs1</code>? Because
+if this is true, then <strong>the instruction of EX/MEM should be
+written back into the register</strong>(because it's the most current),
+and it will cover the result of MEM/WB. So we take EX/MEM first.</p>
+</blockquote>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-16.png"></p>
+<h4><span id="estalls">  <span class="math inline">\(e.\)</span>Stalls</span></h4>
+<p>  One case where forwarding cannot help is when <strong>an
+instruction tries to read a register following a load instruction that
+writes the same register</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
+<p>  Hence, we also need a <em>hazard detection unit</em>. It operates
+during the ID stage so that it can insert the stall between the load and
+the instruction depentent on it:</p>
+<ul>
+<li>If it's in a load process, and the being-loaded object involves in
+other process.</li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-18.png"></p>
+<p>  If the instruction in the ID stage is stalled, then the instruction
+in the IF stage must also be stalled, or we will lose the fetch of
+instruction. Therefore, <strong>the instruction in the IF stage will
+continue to be read using the same PC</strong>. The EX stage must also
+be doing something, so we let it <strong>execute instructions that have
+no effect: nops</strong>.</p>
+<p>  <strong>Deasserting all seven control signals(setting them to 0) in
+the EX, MEM, WB stages</strong> will create a nop instruction:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-19.png"></p>
+<ul>
+<li><p>The forwarding unit controls the ALU multiplexor s to replace the
+value from a general-purpose register with that in the pipeline
+register.</p></li>
+<li><p>The hazard detection unit controls the writing of the PC and
+IF/ID registers plus the multiplexor that choose between the real
+control values and all 0s.</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-20.png"></p>
+<h3><span id="4control-hazards">4.Control hazards</span></h3>
+<h4><span id="aassume-branch-not-taken">  <span class="math inline">\(a.\)</span>Assume branch not taken</span></h4>
+<p>  We can assume the branch is not taken. If the condition branch is
+taken instead, <strong>the instructions that are being fetched and
+decoded must be discarded</strong>.</p>
+<p>  To discard instructions, we merely change the original control
+values to 0s. Notice that we must also change the three instructions in
+the IF, ID and EX stages when the branch reaches the MEM stage, which is
+called <em>flush</em>.</p>
+<p>  To flush instructions in the IF, we <strong>add a control line
+called IF.Flush</strong>, it zeros the instruction field of the IF/ID
+pipeline register.</p>
+<h4><span id="breducing-the-delay-of-branches">  <span class="math inline">\(b.\)</span>Reducing the delay of branches</span></h4>
+<p>  One way to improve conditional branch performance is to reduce the
+cost of taken branch. We have assumed that the next PC for a branch is
+selected in the MEM stage, but <strong>if we move the conditional branch
+execution earlier in the pipeline, then fewer instructions need be
+flushed</strong>.</p>
+<p>  Moving the branch decision up requires two actions to occur
+earlier: computing the branch target address and evaluating the branch
+decision.</p>
+<p>  Moving up the address calculation is easy, we can <strong>move the
+branch adder from EX stage to ID stage</strong>.</p>
+<p>  The harder part is branch decision itself. We must deal with two
+complicate factors:</p>
+<ol type="1">
+<li><p>The introduction of equlity test unit.</p></li>
+<li><p>Because <strong>the value in a branch comparison is needed during
+ID but may be produced later in time</strong>, it is possible that a
+data hazard can occur and a stall will be needed.</p></li>
+</ol>
+<h3><span id="5dynamic-branch-prediction">5.Dynamic branch prediction</span></h3>
+<ul>
+<li>This method looks up the address of the instruction to see
+<strong>if the conditional branch was taken the last time this
+instruction was executed</strong>, and, if so, to <strong>begin fetching
+new instructions from the same place as the last time</strong>.</li>
+</ul>
+<p>  One implementation of this approach is a <em>branch prediction
+buffer</em> or <em>branch history table</em>. A branch prediction buffer
+is a small memory indexed by the lower portion of the address of the
+branch instruction. The memory contains <strong>a bit that says whether
+the branch was recently taken or not</strong>.</p>
+<ul>
+<li>Fetching begins in the predicted direction. If the predition turns
+out to be wrong, the incorrectly predicted instructions are deleted, the
+predition bit is inverted and stored back, and the proper sequence is
+fetched and executed.</li>
+</ul>
+<blockquote>
+<p>  To improve the accuracy, the <em>2-bit prediction schemes</em> are
+often used. In a 2-bit scheme, <strong>a prediction must be wrong twive
+before it is changed</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-21.png"></p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-22.png"></p>
+<h3><span id="5parallelism-via-instruction">5.Parallelism via instruction</span></h3>
+<h4><span id="apipelining">  <span class="math inline">\(a.\)</span>Pipelining</span></h4>
+<p>  Exploiting the potential parallelism among instructions is called
+<em>instruction-level parallelism</em>.</p>
+<ul>
+<li><p>The first is <strong>increasing the depth of the pipeline to
+overlap more instructions</strong>.</p></li>
+<li><p>We also need to <strong>reblance the remaining steps so they are
+the same length</strong>.</p></li>
+<li><p>Another approach is to <strong>replicate the internal components
+so that it can launch multiple instruction in every pipeline
+stage</strong>. The general name of this approach is <em>multiple
+issue</em>.</p></li>
+</ul>
+<h4><span id="bmultiple-issue-processor">  <span class="math inline">\(b.\)</span>Multiple issue processor</span></h4>
+<p>  There are two main ways to implement a multiple-issue processor,
+with the major difference being <strong>the division of work between the
+compiler and the hardware</strong>. One is called <em>static multiple
+issue</em> and the other <em>dynamic multiple issue</em>.</p>
+<p>  There are two primary distinct responsibilities within a
+multiple-issue pipeline:</p>
+<ol type="1">
+<li><p>Packaging instructions into <em>issue slots</em>. It refers to
+<strong>the position from which instructions could issue in a given
+clock cycle</strong>. In dynamic multiple issue, it is normally dealt
+with <strong>at runtime by processor</strong>.</p></li>
+<li><p>Dealing with data and control hazards. The compiler handles it
+statically. In contrast, most dynamic issue processors attempt to
+alleviate them <strong>using hardware techniques operation at execution
+time</strong>.</p></li>
+</ol>
+<h4><span id="cspeculation-conceptsextracted-fromtextbook">  <span class="math inline">\(c.\)</span>Speculation concepts(extracted from
+textbook)</span></h4>
+<p>  Speculation is an approach that <strong>allows the
+compilator/processor to "guess" about the properties of an
+instruction</strong>. Any speculation mechanism must include both a
+method to <strong>check if the guess was right</strong> and a method to
+<strong>unroll or back out the effects of the instructions that were
+executed speculatively</strong>.</p>
+<p>  Speculation may be done in the compiler or by the hardware. For
+example,the compiler can use speculation to <strong>reorder
+instructions, moving an instruction across a branch or a load across a
+store</strong>. The processor hardware can perform the same
+transformation at runtime using techniques we discuss later in this
+section.</p>
+<p>  The recovery mechanisms used for incorrect speculation are rather
+different. In the case of speculation in software, the compiler usually
+<strong>inserts additional instructions that check the accuracy of the
+speculation and provide a fix-up routine to use when the speculation is
+wrong</strong>. In hardware speculation, the processor usually
+<strong>buffers the speculative results until it knows they are no
+longer speculative</strong>. If the speculation is correct, the
+instructions are completed by <strong>allowing the contents of the
+buffers to be written to the registers or memory</strong>. If the
+speculation is incorrect, the hardware flushes the buffers and
+re-executes the correct instruction sequence. Misspeculation typically
+requires the pipeline to be flushed, or at least stalled, and thus
+further reduces performance.</p>
+<p>  Speculation introduces one other possible problem: speculating on
+certain instructions may <strong>introduce exceptions that were formerly
+not present</strong>. For example, suppose a load instruction is moved
+in a speculative manner, but the address it uses is not within bounds
+when the speculation is incorrect. The result would be that an exception
+that should not have occurred would occur. The problem is complicated by
+the fact that if the load instruction were not speculative, then the
+exception must occur! In compiler-based speculation, such problems are
+avoided by <strong>adding special speculation support that allows such
+exceptions to be ignored until it is clear that they really should
+occur</strong>. In hardware-based speculation, <strong>exceptions are
+simply buffered until it is clear that the instruction causing them is
+no longer speculative and is ready to complete;</strong> at that point,
+the exception is raised,and normal exception handling proceeds.</p>
+<h4><span id="dstatic-multiple-issue">  <span class="math inline">\(d.\)</span>Static multiple issue</span></h4>
+<p>  Static multiple-issue processors all use the compiler to assist
+with packaging instructions and handling hazards. In a static issue
+processor, we can think of the set of instructions issued in a given
+clock cycle called <em>issue packet</em>. And it's useful to think of
+the issue packet as a single instuction allowing weveral operations in
+certain predefined fields.</p>
+<p>  When it comes to the certain instructions:</p>
+<ul>
+<li><p>We require that the instructions <strong>be paired and aligned on
+a 64-bit boundary</strong>.</p></li>
+<li><p>If on instruction of the pair cannot be used, we require that
+<strong>it be replaced with nop</strong>.</p></li>
+</ul>
+<p>  However, the overlapping of instructions <strong>increase the
+relative performance loss from data and control hazards</strong>.</p>
+<blockquote>
+<p>For example, in our simple five-stage pipeline, loads have a use
+latency of one clock cycle, which <strong>prevents one instruction from
+using the result without stalling</strong>. In the two-issue, five-stage
+pipeline the result of a load instruction <strong>cannot be used on the
+next clock cycle</strong>. This means that the next two instructions
+cannot use the load result without stalling.</p>
+</blockquote>
+<p>  An important compiler technique to get more performance from loops
+is <em>loop unrolling</em>:</p>
+<ul>
+<li>Say we are going to deal with this program:</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">    A[i] = B[i] + C[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line">    addi xA, xA, 8      ; Increment A pointer</span><br><span class="line">    addi xB, xB, 8      ; Increment B pointer</span><br><span class="line">    addi xC, xC, 8      ; Increment C pointer</span><br><span class="line">    addi xI, xI, 1      ; Increment loop counter</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  We can do this iteration part for more times:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i += <span class="number">4</span>) &#123;</span><br><span class="line">    A[i]   = B[i]   + C[i];</span><br><span class="line">    A[i+<span class="number">1</span>] = B[i+<span class="number">1</span>] + C[i+<span class="number">1</span>];</span><br><span class="line">    A[i+<span class="number">2</span>] = B[i+<span class="number">2</span>] + C[i+<span class="number">2</span>];</span><br><span class="line">    A[i+<span class="number">3</span>] = B[i+<span class="number">3</span>] + C[i+<span class="number">3</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line"></span><br><span class="line">    ld  x5, 8(xA)       ; Load A[i+1]</span><br><span class="line">    ld  x6, 8(xB)       ; Load B[i+1]</span><br><span class="line">    ld  x7, 8(xC)       ; Load C[i+1]</span><br><span class="line">    add x8, x6, x7      ; A[i+1] = B[i+1] + C[i+1]</span><br><span class="line">    sd  8(xA), x8       ; Store A[i+1]</span><br><span class="line"></span><br><span class="line">    ld  x9, 16(xA)      ; Load A[i+2]</span><br><span class="line">    ld  x10, 16(xB)     ; Load B[i+2]</span><br><span class="line">    ld  x11, 16(xC)     ; Load C[i+2]</span><br><span class="line">    add x12, x10, x11   ; A[i+2] = B[i+2] + C[i+2]</span><br><span class="line">    sd  16(xA), x12     ; Store A[i+2]</span><br><span class="line"></span><br><span class="line">    ld  x13, 24(xA)     ; Load A[i+3]</span><br><span class="line">    ld  x14, 24(xB)     ; Load B[i+3]</span><br><span class="line">    ld  x15, 24(xC)     ; Load C[i+3]</span><br><span class="line">    add x16, x14, x15   ; A[i+3] = B[i+3] + C[i+3]</span><br><span class="line">    sd  24(xA), x16     ; Store A[i+3]</span><br><span class="line"></span><br><span class="line">    addi xA, xA, 32     ; Increment A pointer by 4</span><br><span class="line">    addi xB, xB, 32     ; Increment B pointer by 4</span><br><span class="line">    addi xC, xC, 32     ; Increment C pointer by 4</span><br><span class="line">    addi xI, xI, 4      ; Increment loop counter by 4</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br></pre></td></tr></table></figure>
+<p>  This operation has the following advantages:</p>
+<ol type="1">
+<li><p><strong>Reduce cycle control overhead</strong>: cycle control
+operations are less frequent when the cycle is expanded. In the above
+example, the loop control operation is reduced from one generation per
+generation to one generation per four.</p></li>
+<li><p><strong>Increase instruction level parallelism</strong>: the more
+instructions expanded, the compiler can better schedule these
+instructions, improve parallelism.</p></li>
+<li><p><strong>Reduced branch prediction failure</strong>: the
+probability of branch prediction failure is reduced due to the reduction
+in the number of branch instructions and the frequency of loop control
+operations.</p></li>
+</ol>
+<p>  During the unrolling process, the compiler introduce additional
+registers. The goal of the process, called <em>register renaming</em>,
+it to <strong>eliminate dependences that are not true data
+dependences</strong>, but could either lead to potential hazards or
+prevent the compiler from flexibly scheduling the code.</p>
+<h4><span id="edynamic-multiple-issue-processor">  <span class="math inline">\(e.\)</span>Dynamic multiple-issue processor</span></h4>
+<p>  Dynamic multiple-issue processors are also known as <em>superscalar
+processors</em>.</p>
+<p>  Many superscalars extend the basic framework of dynamic issue
+decisions to include <em>dynamic pipeline scheduling</em>. Dynamic
+pipeline scheduling <strong>chooses which instructions to execute in a
+given clock cycle while trying to avoid hazards and stalls</strong>.</p>
+<ul>
+<li><p><em>Dynamic pipeline scheduling</em> <strong>chooses which
+instructions to execute next, possibly reordering them to avoid
+stalls</strong>. The pipeline is divided into three major units: an
+instruction fetch and issue unit, multiple functional units, and a
+commit unit.</p>
+<ul>
+<li><p>The first unit fetch instructions, decodes them and sends them to
+corresponding function unit for execution.</p></li>
+<li><p>Each function unit has <em>buffers</em> called <em>reservation
+stations</em>, which <strong>hold the operands and the
+operation</strong>. As soon as the buffer contains all its operands and
+the functional unit is ready to execute, the result calculated. The
+result is sent to <strong>any reservation stations waiting for this
+particular result</strong> and <strong>the commit
+unit</strong>.</p></li>
+<li><p>The commit unit <strong>buffers the result until it's safe to put
+the result into the register file/memory</strong>. The buffer in the
+commit unit, often called the <em>reorder buffer</em>, is also used to
+supply operands.</p></li>
+<li><p>Once a result is committed to the register file, it can be
+fetched directly from there like in a normal pipeline.</p></li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-23.png"></p>
+<blockquote>
+<p>If an operand is not in the register file or reorder buffer, it must
+<strong>be waiting to be produced by a functional unit</strong>.
+<strong>The name of the functional unit that will produce the result is
+tracked</strong>. When that unit eventually produces the result,
+<strong>it is copied directly into the waiting reservation
+statio</strong>n from the functional unit bypassing the registers.</p>
+</blockquote>
+<p>  We may think of a dynamically scheduled pipeline as an
+<em>out-of-order execution</em>. To make programs behave as if they were
+running on a simple in-order pipeline, the instruction fetch and decode
+unit is required to <strong>issue instructions in order</strong>, which
+allows dependences to be tracked, and the commit unit is required to
+<strong>write results to registers and memory in program fetch
+order</strong>. This conservative mode is called <em>in-order
+commit</em>. Hence, if an exception occurs, the computer can point to
+the last instruction executed.</p>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 3.Program Process</category>
       </categories>
   </entry>
   <entry>
@@ -7274,90 +7725,6 @@ program. Everything is saved on the same stack.</li>
       </categories>
   </entry>
   <entry>
-    <title>8.2.基于对象的编程</title>
-    <url>/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<h1><span id="92object-based-programming"><span class="math inline">\(9.2.\)</span>Object-based Programming</span></h1>
-<h3><span id="1object-oriented-programming">1.Object-oriented programming</span></h3>
-<p>  When designing an abstraction, we</p>
-<ol type="1">
-<li><p>Consider <strong>what kind of data do we want to store
-about</strong> and <strong>the objects that this class is supposed to
-represent</strong>.</p>
-<ul>
-<li>In our case, we need to store numerator and denominator.</li>
-</ul></li>
-<li><p>We store these values into integer type of
-<code>field</code>.</p></li>
-<li><p><strong>The only way to access field values from outside the
-class is through <em>accessor</em> methods</strong>, so we create
-accessors to facilitate access.</p></li>
-</ol>
-<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png"></p>
-<ol start="4" type="1">
-<li><p>Then we write a <em>constructor</em> to create new objects. We
-create the object and <strong>return it to the base
-address</strong>.</p>
-<ul>
-<li><p><code>this</code> is a standard reference to the current object.
-It is actually <strong>the base address of the current object in the
-host RAM</strong>.</p></li>
-<li><p>One of the rules of the game is that a Jack constructor must</p>
-<ul>
-<li>return the <em>base address</em>.</li>
-<li>return <em>an object of the type of the surrounding class</em> or
-<em>the class to which this constructor belongs</em>.</li>
-<li>In Jack, every subroutine must <strong>always terminate with
-<code>return</code> command</strong>.</li>
-</ul></li>
-</ul></li>
-<li><p>We create several methods as we wish, this is quite simple so we
-skip this part.</p></li>
-<li><p>We create <code>dispose</code> method:</p>
-<ul>
-<li>The method is implemented using a call to the host operation system.
-We call the OS routine <code>deAlloc</code>, which takes an address in
-memory and disposes the memory block that begins in this address.</li>
-<li>This is important to Jack, because Jack has no garbage collection
-services, so it's up to the programmer to do this.</li>
-</ul></li>
-</ol>
-<h3><span id="2object-representation">2.Object representation</span></h3>
-<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png"></p>
-<p>  In client's view:</p>
-<ul>
-<li>Each fraction is represented by a block that includes all the field
-values of the current object.</li>
-<li>We have a reference to each of these blocks, which is <strong>the
-name of the variable</strong>.</li>
-</ul>
-<p>  In the host RAM:</p>
-<ul>
-<li>Some area of it <strong>is designated to represent the the stack of
-the currently running application</strong>.</li>
-<li>The <code>stack</code> is used to <strong>store
-variables</strong>.</li>
-<li>We have the <code>heap</code> where we <strong>represent objects and
-arrays</strong>.</li>
-</ul>
-<p> We see that we have a variable <code>a</code> which contains the
-number 15087. If we <strong>treat this variable as a pointer and look up
-this address in the RAM</strong>, we see that the number after the 2 is
-3. This two numbers comprise the memory block that represents our first
-object.</p>
-<p>  How does this representation is established? The secret is that:
-when the compiler is going to compile your constructor, it would</p>
-<ol type="1">
-<li><strong>Inject some calls to the operating system</strong>.</li>
-<li><strong>These calls are going to find available memory and allocate
-it to the object that was just constructed</strong>.</li>
-</ol>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 8.High Level Language</category>
-      </categories>
-  </entry>
-  <entry>
     <title>7.9.函数运行模拟</title>
     <url>/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/</url>
     <content><![CDATA[<h1><span id="79run-time-simulation"><span class="math inline">\(7.9.\)</span>Run-time Simulation</span></h1>
@@ -7455,6 +7822,90 @@ drama, it takes part behind the scene.</p>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 7.VM Machine</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>8.2.基于对象的编程</title>
+    <url>/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<h1><span id="92object-based-programming"><span class="math inline">\(9.2.\)</span>Object-based Programming</span></h1>
+<h3><span id="1object-oriented-programming">1.Object-oriented programming</span></h3>
+<p>  When designing an abstraction, we</p>
+<ol type="1">
+<li><p>Consider <strong>what kind of data do we want to store
+about</strong> and <strong>the objects that this class is supposed to
+represent</strong>.</p>
+<ul>
+<li>In our case, we need to store numerator and denominator.</li>
+</ul></li>
+<li><p>We store these values into integer type of
+<code>field</code>.</p></li>
+<li><p><strong>The only way to access field values from outside the
+class is through <em>accessor</em> methods</strong>, so we create
+accessors to facilitate access.</p></li>
+</ol>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png"></p>
+<ol start="4" type="1">
+<li><p>Then we write a <em>constructor</em> to create new objects. We
+create the object and <strong>return it to the base
+address</strong>.</p>
+<ul>
+<li><p><code>this</code> is a standard reference to the current object.
+It is actually <strong>the base address of the current object in the
+host RAM</strong>.</p></li>
+<li><p>One of the rules of the game is that a Jack constructor must</p>
+<ul>
+<li>return the <em>base address</em>.</li>
+<li>return <em>an object of the type of the surrounding class</em> or
+<em>the class to which this constructor belongs</em>.</li>
+<li>In Jack, every subroutine must <strong>always terminate with
+<code>return</code> command</strong>.</li>
+</ul></li>
+</ul></li>
+<li><p>We create several methods as we wish, this is quite simple so we
+skip this part.</p></li>
+<li><p>We create <code>dispose</code> method:</p>
+<ul>
+<li>The method is implemented using a call to the host operation system.
+We call the OS routine <code>deAlloc</code>, which takes an address in
+memory and disposes the memory block that begins in this address.</li>
+<li>This is important to Jack, because Jack has no garbage collection
+services, so it's up to the programmer to do this.</li>
+</ul></li>
+</ol>
+<h3><span id="2object-representation">2.Object representation</span></h3>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png"></p>
+<p>  In client's view:</p>
+<ul>
+<li>Each fraction is represented by a block that includes all the field
+values of the current object.</li>
+<li>We have a reference to each of these blocks, which is <strong>the
+name of the variable</strong>.</li>
+</ul>
+<p>  In the host RAM:</p>
+<ul>
+<li>Some area of it <strong>is designated to represent the the stack of
+the currently running application</strong>.</li>
+<li>The <code>stack</code> is used to <strong>store
+variables</strong>.</li>
+<li>We have the <code>heap</code> where we <strong>represent objects and
+arrays</strong>.</li>
+</ul>
+<p> We see that we have a variable <code>a</code> which contains the
+number 15087. If we <strong>treat this variable as a pointer and look up
+this address in the RAM</strong>, we see that the number after the 2 is
+3. This two numbers comprise the memory block that represents our first
+object.</p>
+<p>  How does this representation is established? The secret is that:
+when the compiler is going to compile your constructor, it would</p>
+<ol type="1">
+<li><strong>Inject some calls to the operating system</strong>.</li>
+<li><strong>These calls are going to find available memory and allocate
+it to the object that was just constructed</strong>.</li>
+</ol>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 8.High Level Language</category>
       </categories>
   </entry>
   <entry>
