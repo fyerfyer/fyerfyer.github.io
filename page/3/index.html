@@ -1009,116 +1009,6 @@ closest to the query point.</p></li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/17.1.The%20construction%20of%20Graphs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/17.1.The%20construction%20of%20Graphs/" class="post-title-link" itemprop="url">17.1.&#x56FE;&#x7684;&#x6784;&#x5EFA;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:32:25" itemprop="dateModified" datetime="2024-06-02T21:32:25+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/17-Graphs/" itemprop="url" rel="index"><span itemprop="name">17.Graphs</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>205</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="171&#x56FE;&#x7684;&#x6784;&#x5EFA;"><span class="math inline">\(17.1\)</span>&#x56FE;&#x7684;&#x6784;&#x5EFA;</span></h1>
-<h3><span id="1&#x56FE;&#x7684;api">1.&#x56FE;&#x7684;<span class="math inline">\(API\)</span></span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> {</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) {</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> {</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) { <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> {</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> {</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> {</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> {</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) {</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> {</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="3&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;">3.&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;</span></h3>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1222,6 +1112,116 @@ the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre>
 method</span></h4>
 <p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
 a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/17.1.The%20construction%20of%20Graphs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/17.1.The%20construction%20of%20Graphs/" class="post-title-link" itemprop="url">17.1.&#x56FE;&#x7684;&#x6784;&#x5EFA;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:32:25" itemprop="dateModified" datetime="2024-06-02T21:32:25+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61B-DataStructure/17-Graphs/" itemprop="url" rel="index"><span itemprop="name">17.Graphs</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>205</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="171&#x56FE;&#x7684;&#x6784;&#x5EFA;"><span class="math inline">\(17.1\)</span>&#x56FE;&#x7684;&#x6784;&#x5EFA;</span></h1>
+<h3><span id="1&#x56FE;&#x7684;api">1.&#x56FE;&#x7684;<span class="math inline">\(API\)</span></span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> {</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) {</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> {</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) { <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> {</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> {</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> {</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> {</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) {</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> {</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3><span id="3&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;">3.&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;</span></h3>
 
       
     </div>

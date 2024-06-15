@@ -691,6 +691,143 @@ environment.</p>
       </categories>
   </entry>
   <entry>
+    <title>10.2.对变量的处理</title>
+    <url>/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1><span id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</span></h1>
+<h3><span id="1program-compilation">1.Program compilation</span></h3>
+<p>  Remember that the VM language doesn't have symbolic variables, it
+only has <code>local</code>, <code>this</code> and so on. In order to
+resolve this pseudocode into final executable VM code, we have to
+<strong>map these symbolic variables on what is called <em>virtual
+memory segments</em></strong>. And to do this, we:</p>
+<ul>
+<li>need the <strong>variable properties</strong>.</li>
+<li>also have to know <strong>the index of the variable of its
+kind</strong>(first, second, etc.).</li>
+</ul>
+<p>  And the properties of variables include:</p>
+<ul>
+<li><p><em>name</em>: It's an identifier.</p></li>
+<li><p><em>type</em>: <code>int</code>, <code>char</code>,
+<code>boolean</code> and <strong>all class name</strong>.</p></li>
+<li><p><em>kind</em>: There are two kinds of variables, and we view them
+separately:</p>
+<ul>
+<li><em>class level</em>: <code>field</code>, <code>static</code>
+variables.</li>
+<li><em>subroutine level</em>: <code>argument</code> and
+<code>local</code> variables.</li>
+</ul></li>
+<li><p><em>scope</em>, which is the region of the code in which it is
+recognized.</p></li>
+</ul>
+<h3><span id="2symbol-table">2.Symbol table</span></h3>
+<p>  We handle the property of variables using a <em>symbol
+table</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<ul>
+<li>A method is always designed to operate on the current object which
+is called <code>this</code>. Therefore, the symbol table of method
+<strong>always begins with <code>this</code> entry</strong>, which
+represents the properties of current object.</li>
+<li><code>this</code> is always treated as <code>argument 0</code></li>
+<li>The type of current object is <strong>the name of the class to which
+this subroutine belongs</strong>.</li>
+</ul>
+<p>  The class level symbol table can be reset each time we begin to
+compile a new class, for <strong>classes are standalone compilation
+unity</strong>. Something similar happens when we compile
+subroutines.</p>
+<p>  The code writer is going to encounter all sorts of variable
+declaration commands, of which in Jack we have three:
+<code>local</code>, <code>field</code> and <code>static</code>.</p>
+<p>  Then it's going to elucidate all important properties of the
+declared variables, and <strong>add the information to the respective
+symbol table</strong>. It generates no code whatsoever beyond updating
+the symbol tables.</p>
+<ul>
+<li>If we are defining a <code>field</code> or a <code>static</code>
+variable, the code writer will add a new row to the end of the class
+level symbol table.</li>
+<li>If we are defining <code>local</code> or <code>argument</code>, the
+code writer will update the symbol table of the subroutine which is
+currently being compiled.</li>
+<li>Arguments are being defined as <strong>part of the parameter list of
+the method's signature</strong>. When the code writer goes through the
+parameter list, it adds the respective lines to the subroutine's symbol
+table.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p>  What about using variables within the context of expressions or
+statements. Take <code>let dx = x - other.getX();</code> as an
+example:</p>
+<ul>
+<li><p>For each variable in the code, we <strong>look up this variable
+in the subroutine level symbol table</strong>.</p>
+<ul>
+<li>If we find it there, we know which property we have to use.</li>
+<li>If don't, we revert to <strong>looking it up in the class level
+symbol table</strong>.</li>
+<li>If don't either, we can conclude that the variable is undefined and
+throw an error message.</li>
+</ul></li>
+</ul>
+<p>  How can the statements be translated into VM code? Take
+<code>let y = y +dy</code> for example:</p>
+<ol type="1">
+<li>In the process of generating code, the code generator will look up
+the respective table.</li>
+<li>It finds out that <strong><code>y</code> stands for the second
+<code>field</code> of the current object</strong>, so it will be
+translated into <code>this 1</code></li>
+<li><code>dy</code> stands for the second <code>local</code> variable,
+so it will be translated into <code>local 1</code></li>
+</ol>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
+<h3><span id="3handling-variables-ingeneral">3.Handling variables in
+general</span></h3>
+<p>  High level of programming languages vary in terms of:</p>
+<ul>
+<li>variable types</li>
+<li>variable kinds</li>
+<li>nested scoping rules</li>
+</ul>
+<p>  And the symbol table generation and usage we discussed right now
+can be easily entended to handle any number of possible variables types
+and kinds.</p>
+<p>  Some languages, like Java, feature <em>unlimited scoping</em>. this
+means that whenever you define a block of code with a pair of curly
+brackets, you can define variables within this code which are recognized
+only within that block. <code>x</code> in this scope doesn't mean the
+same as <code>x</code> in that block.</p>
+<p>  To represent the information in our symbol table mechanism, we use
+<strong>a linked list of symbol tables</strong>:</p>
+<ul>
+<li>When start compiling the class, we first create an linked list.</li>
+<li>The first symbol table we add to the list is the class level symbol
+table.</li>
+<li>When we start compiling a method, we create the method symbol table
+like before.</li>
+<li>Whenever we have another scoping region, we <strong>add another
+symbol table to the linked list</strong>.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p>  When you encounter some variable <code>x</code> in the code we:</p>
+<ol type="1">
+<li>Look up <code>x</code> in the current scope, which is also the first
+table.</li>
+<li>If fail, we move to the next symbol table.</li>
+<li>We simply go on downstream until we get to the class level symbol
+table.</li>
+</ol>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 10.Code Generator</category>
+      </categories>
+  </entry>
+  <entry>
     <title>10.11.编译器实现笔记</title>
     <url>/2024/05/04/10-11-%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1><span id="1011编译器实现笔记"><span class="math inline">\(10.11.\)</span>编译器实现笔记</span></h1>
@@ -829,143 +966,6 @@ environment.</p>
 </ol>
 <p>  对每一类，分别编译即可。需要注意，处理函数体时，我们需要读入整个子程序，将其放入<code>ArrayList&lt;String&gt;</code>中作为<code>compileSubroutineBody</code>的参数：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">constructor</span><span class="params">(String[] files)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (String filename : files) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> filename.substring(<span class="number">0</span>, filename.length() - <span class="number">5</span>);</span><br><span class="line">        Operation.addToArray(Tokenizer.className, name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    initType();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (String filename : files) &#123;</span><br><span class="line">        SymbolTable.constructor(filename);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">vmFile</span> <span class="operator">=</span> filename.substring(<span class="number">0</span>, filename.length() - <span class="number">5</span>) + <span class="string">&quot;.vm&quot;</span>;</span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">FileReader</span>(filename));</span><br><span class="line">            <span class="type">BufferedWriter</span> <span class="variable">writer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(vmFile));</span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> Operation.modify(reader.readLine());</span><br><span class="line">            <span class="keyword">while</span> (line != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!line.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (line.indexOf(<span class="string">&quot;class&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">                        className.setLength(<span class="number">0</span>);</span><br><span class="line">                        className.append(line.substring(<span class="number">5</span>, line.length() - <span class="number">1</span>));</span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (isSubroutineDec(line)) &#123;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutineKind</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutineType</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">                        <span class="type">int</span> <span class="variable">subroutineLength</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">                        <span class="type">int</span> <span class="variable">typeLength</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; subroutineDec.length; i++) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (line.indexOf(subroutineDec[i]) == <span class="number">0</span>) &#123;</span><br><span class="line">                                subroutineKind = subroutineDec[i];</span><br><span class="line">                                subroutineLength = subroutineDec[i].length();</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = line.substring(subroutineLength);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// then comes the type</span></span><br><span class="line">                        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; type.length; i++) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (line.indexOf(type[i]) == <span class="number">0</span>) &#123;</span><br><span class="line">                                subroutineType = type[i];</span><br><span class="line">                                typeLength = type[i].length();</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = line.substring(typeLength);</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutine</span> <span class="operator">=</span> className + <span class="string">&quot;.&quot;</span> + line.substring(<span class="number">0</span>, line.indexOf(<span class="string">&quot;(&quot;</span>));</span><br><span class="line">                        curSubroutine.setLength(<span class="number">0</span>);</span><br><span class="line">                        curSubroutine.append(subroutine);</span><br><span class="line">                        funcType.put(curSubroutine.toString(), subroutineType);</span><br><span class="line">                        writer.write(VMWriter.writeFunctionDec(curSubroutine.toString(), SymbolTable.kindCount(<span class="string">&quot;local&quot;</span>, curSubroutine.toString())));</span><br><span class="line">                        writer.newLine();</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (subroutineKind.equals(<span class="string">&quot;constructor&quot;</span>)) &#123;</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line1</span> <span class="operator">=</span> VMWriter.writePush(<span class="string">&quot;constant&quot;</span>, SymbolTable.kindCount(<span class="string">&quot;field&quot;</span>, <span class="literal">null</span>));</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line2</span> <span class="operator">=</span> VMWriter.writeCall(<span class="string">&quot;Memory.alloc&quot;</span>, <span class="number">1</span>);</span><br><span class="line">                            writer.write(line1);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                            writer.write(line2);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (subroutineKind.equals(<span class="string">&quot;method&quot;</span>)) &#123;</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line1</span> <span class="operator">=</span> VMWriter.writePush(<span class="string">&quot;argument&quot;</span>, <span class="number">0</span>);</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line2</span> <span class="operator">=</span> VMWriter.writePop(<span class="string">&quot;pointer&quot;</span>, <span class="number">0</span>);</span><br><span class="line">                            writer.write(line1);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                            writer.write(line2);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// case 2: varDec, we just ignore it</span></span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (isVarDec(line)) &#123;</span><br><span class="line">                        <span class="keyword">while</span> (isVarDec(line)) &#123;</span><br><span class="line">                            line = Operation.modify(reader.readLine());</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// case 3: subroutineBody</span></span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                        ArrayList&lt;String&gt; subroutineCode = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">                        <span class="keyword">while</span> (line != <span class="literal">null</span> &amp;&amp; !isSubroutineDec(line)) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (!line.isEmpty()) &#123;</span><br><span class="line">                                System.out.println(line);</span><br><span class="line">                                subroutineCode.add(line);</span><br><span class="line">                            &#125;</span><br><span class="line">                            line = Operation.modify(reader.readLine());</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        ArrayList&lt;String&gt; subroutineBody = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(compileSubroutineBody(subroutineCode));</span><br><span class="line">                        <span class="keyword">for</span> (String s : subroutineBody) &#123;</span><br><span class="line">                            writer.write(s);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                line = Operation.modify(reader.readLine());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            reader.close();</span><br><span class="line">            writer.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 10.Code Generator</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>10.2.对变量的处理</title>
-    <url>/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1><span id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</span></h1>
-<h3><span id="1program-compilation">1.Program compilation</span></h3>
-<p>  Remember that the VM language doesn't have symbolic variables, it
-only has <code>local</code>, <code>this</code> and so on. In order to
-resolve this pseudocode into final executable VM code, we have to
-<strong>map these symbolic variables on what is called <em>virtual
-memory segments</em></strong>. And to do this, we:</p>
-<ul>
-<li>need the <strong>variable properties</strong>.</li>
-<li>also have to know <strong>the index of the variable of its
-kind</strong>(first, second, etc.).</li>
-</ul>
-<p>  And the properties of variables include:</p>
-<ul>
-<li><p><em>name</em>: It's an identifier.</p></li>
-<li><p><em>type</em>: <code>int</code>, <code>char</code>,
-<code>boolean</code> and <strong>all class name</strong>.</p></li>
-<li><p><em>kind</em>: There are two kinds of variables, and we view them
-separately:</p>
-<ul>
-<li><em>class level</em>: <code>field</code>, <code>static</code>
-variables.</li>
-<li><em>subroutine level</em>: <code>argument</code> and
-<code>local</code> variables.</li>
-</ul></li>
-<li><p><em>scope</em>, which is the region of the code in which it is
-recognized.</p></li>
-</ul>
-<h3><span id="2symbol-table">2.Symbol table</span></h3>
-<p>  We handle the property of variables using a <em>symbol
-table</em>:</p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
-<ul>
-<li>A method is always designed to operate on the current object which
-is called <code>this</code>. Therefore, the symbol table of method
-<strong>always begins with <code>this</code> entry</strong>, which
-represents the properties of current object.</li>
-<li><code>this</code> is always treated as <code>argument 0</code></li>
-<li>The type of current object is <strong>the name of the class to which
-this subroutine belongs</strong>.</li>
-</ul>
-<p>  The class level symbol table can be reset each time we begin to
-compile a new class, for <strong>classes are standalone compilation
-unity</strong>. Something similar happens when we compile
-subroutines.</p>
-<p>  The code writer is going to encounter all sorts of variable
-declaration commands, of which in Jack we have three:
-<code>local</code>, <code>field</code> and <code>static</code>.</p>
-<p>  Then it's going to elucidate all important properties of the
-declared variables, and <strong>add the information to the respective
-symbol table</strong>. It generates no code whatsoever beyond updating
-the symbol tables.</p>
-<ul>
-<li>If we are defining a <code>field</code> or a <code>static</code>
-variable, the code writer will add a new row to the end of the class
-level symbol table.</li>
-<li>If we are defining <code>local</code> or <code>argument</code>, the
-code writer will update the symbol table of the subroutine which is
-currently being compiled.</li>
-<li>Arguments are being defined as <strong>part of the parameter list of
-the method's signature</strong>. When the code writer goes through the
-parameter list, it adds the respective lines to the subroutine's symbol
-table.</li>
-</ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
-<p>  What about using variables within the context of expressions or
-statements. Take <code>let dx = x - other.getX();</code> as an
-example:</p>
-<ul>
-<li><p>For each variable in the code, we <strong>look up this variable
-in the subroutine level symbol table</strong>.</p>
-<ul>
-<li>If we find it there, we know which property we have to use.</li>
-<li>If don't, we revert to <strong>looking it up in the class level
-symbol table</strong>.</li>
-<li>If don't either, we can conclude that the variable is undefined and
-throw an error message.</li>
-</ul></li>
-</ul>
-<p>  How can the statements be translated into VM code? Take
-<code>let y = y +dy</code> for example:</p>
-<ol type="1">
-<li>In the process of generating code, the code generator will look up
-the respective table.</li>
-<li>It finds out that <strong><code>y</code> stands for the second
-<code>field</code> of the current object</strong>, so it will be
-translated into <code>this 1</code></li>
-<li><code>dy</code> stands for the second <code>local</code> variable,
-so it will be translated into <code>local 1</code></li>
-</ol>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
-<h3><span id="3handling-variables-ingeneral">3.Handling variables in
-general</span></h3>
-<p>  High level of programming languages vary in terms of:</p>
-<ul>
-<li>variable types</li>
-<li>variable kinds</li>
-<li>nested scoping rules</li>
-</ul>
-<p>  And the symbol table generation and usage we discussed right now
-can be easily entended to handle any number of possible variables types
-and kinds.</p>
-<p>  Some languages, like Java, feature <em>unlimited scoping</em>. this
-means that whenever you define a block of code with a pair of curly
-brackets, you can define variables within this code which are recognized
-only within that block. <code>x</code> in this scope doesn't mean the
-same as <code>x</code> in that block.</p>
-<p>  To represent the information in our symbol table mechanism, we use
-<strong>a linked list of symbol tables</strong>:</p>
-<ul>
-<li>When start compiling the class, we first create an linked list.</li>
-<li>The first symbol table we add to the list is the class level symbol
-table.</li>
-<li>When we start compiling a method, we create the method symbol table
-like before.</li>
-<li>Whenever we have another scoping region, we <strong>add another
-symbol table to the linked list</strong>.</li>
-</ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
-<p>  When you encounter some variable <code>x</code> in the code we:</p>
-<ol type="1">
-<li>Look up <code>x</code> in the current scope, which is also the first
-table.</li>
-<li>If fail, we move to the next symbol table.</li>
-<li>We simply go on downstream until we get to the class level symbol
-table.</li>
-</ol>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
@@ -2186,22 +2186,6 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>17.1.图的构建</title>
-    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
-    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
-<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>17.Graphs</category>
-      </categories>
-  </entry>
-  <entry>
     <title>18.1.选择排序</title>
     <url>/2024/05/31/18.1.Selection%20Sort/</url>
     <content><![CDATA[<h1><span id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</span></h1>
@@ -2234,6 +2218,22 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
       <categories>
         <category>CS61B DataStructure</category>
         <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>17.1.图的构建</title>
+    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
+    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
+<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>17.Graphs</category>
       </categories>
   </entry>
   <entry>
@@ -2657,39 +2657,6 @@ nested class static.</p>
       </categories>
   </entry>
   <entry>
-    <title>2.3.双链表</title>
-    <url>/2024/05/31/2.3.DLLists/</url>
-    <content><![CDATA[<h1><span id="23双链表"><span class="math inline">\(2.3\)</span>双链表</span></h1>
-<h3><span id="1对addlast的优化">1.对<code>addLast</code>的优化</span></h3>
-<p>  让我们回顾一下<span class="math inline">\(SLList\)</span>的<code>addList</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) &#123;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这个方法的问题在于速度太慢。对此，我们可以像处理<span class="math inline">\(size\)</span>一样，在链表中多存储一个关键信息<span class="math inline">\(last\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> IntNode sentinel;</span><br><span class="line">    <span class="keyword">private</span> IntNode last;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        last.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        last = last.next;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  但这样会让<code>deleteLast</code>的操作变得困难，因为要删除<span class="math inline">\(last\)</span>，必须知道<span class="math inline">\(last\)</span>前面的元素。如果我们再缓存<span class="math inline">\(secondlast\)</span>，就相应地需要缓存<span class="math inline">\(thirdlast\)</span>...这说明缓存并不能解决问题，这引出了我们下面的解决方案：</p>
-<h3><span id="2指向前面元素的指针">2.指向前面元素的指针</span></h3>
-<p>  上面问题的解决方案就是给<span class="math inline">\(IntNode\)</span>添加一个指向前面元素的指针：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> IntNode prev;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过这种操作，我们的链表就与前后两个节点都产生了链接。这种链表被称为双链表(<span class="math inline">\(double\;linked\;list\)</span>)。下面的图示显示了双链表的具体构建：</p>
-<p><img src="/2024/05/31/2.3.DLLists/image-11.png"></p>
-<h3><span id="3哨兵节点的改进">3.哨兵节点的改进</span></h3>
-<p>  向后的指针有时会指向哨兵节点，有时会指向真实节点，在特殊情况下，这会导致原先代码的错误。对此，我们有两种解决办法：</p>
-<ol type="1">
-<li>在前后各设置一个哨兵节点：</li>
-</ol>
-<p><img src="/2024/05/31/2.3.DLLists/image-12.png"></p>
-<ol start="2" type="1">
-<li>将链表变为循环链表：</li>
-</ol>
-<p><img src="/2024/05/31/2.3.DLLists/image-13.png"></p>
-<h3><span id="4通用型链表">4.通用型链表</span></h3>
-<p>  有时，链表中的元素不止是<span class="math inline">\(int\)</span>型，还可能是其他类型。我们可以用以下语句声明能表示任何引用类型的数据结构：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*create a class able to contain any type*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DLList</span>&lt;T&gt; () &#123;</span><br><span class="line">    <span class="comment">//create an item able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T item;</span><br><span class="line">    <span class="comment">//create an array able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T[] arr = (T[])<span class="keyword">new</span> <span class="title class_">Object</span>[capacity]; </span><br><span class="line">    <span class="comment">//print this type of item</span></span><br><span class="line">    System.out.println(item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>2.List</category>
-      </categories>
-  </entry>
-  <entry>
     <title>2.2.数据抽象</title>
     <url>/2024/05/31/2.2.%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1/</url>
     <content><![CDATA[<h1><span id="22数据抽象"><span class="math inline">\(2.2\)</span>数据抽象</span></h1>
@@ -2730,6 +2697,39 @@ d\)</span>表示的有理数</li>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 2.Building Abstraction with Data</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>2.3.双链表</title>
+    <url>/2024/05/31/2.3.DLLists/</url>
+    <content><![CDATA[<h1><span id="23双链表"><span class="math inline">\(2.3\)</span>双链表</span></h1>
+<h3><span id="1对addlast的优化">1.对<code>addLast</code>的优化</span></h3>
+<p>  让我们回顾一下<span class="math inline">\(SLList\)</span>的<code>addList</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">    <span class="type">IntNode</span> <span class="variable">p</span> <span class="operator">=</span> sentinel;</span><br><span class="line">    <span class="keyword">while</span> (p.next != <span class="literal">null</span>) &#123;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这个方法的问题在于速度太慢。对此，我们可以像处理<span class="math inline">\(size\)</span>一样，在链表中多存储一个关键信息<span class="math inline">\(last\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SLList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> IntNode sentinel;</span><br><span class="line">    <span class="keyword">private</span> IntNode last;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        last.next = <span class="keyword">new</span> <span class="title class_">IntNode</span>(x, <span class="literal">null</span>);</span><br><span class="line">        last = last.next;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  但这样会让<code>deleteLast</code>的操作变得困难，因为要删除<span class="math inline">\(last\)</span>，必须知道<span class="math inline">\(last\)</span>前面的元素。如果我们再缓存<span class="math inline">\(secondlast\)</span>，就相应地需要缓存<span class="math inline">\(thirdlast\)</span>...这说明缓存并不能解决问题，这引出了我们下面的解决方案：</p>
+<h3><span id="2指向前面元素的指针">2.指向前面元素的指针</span></h3>
+<p>  上面问题的解决方案就是给<span class="math inline">\(IntNode\)</span>添加一个指向前面元素的指针：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> IntNode prev;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> item;</span><br><span class="line">    <span class="keyword">public</span> IntNode next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过这种操作，我们的链表就与前后两个节点都产生了链接。这种链表被称为双链表(<span class="math inline">\(double\;linked\;list\)</span>)。下面的图示显示了双链表的具体构建：</p>
+<p><img src="/2024/05/31/2.3.DLLists/image-11.png"></p>
+<h3><span id="3哨兵节点的改进">3.哨兵节点的改进</span></h3>
+<p>  向后的指针有时会指向哨兵节点，有时会指向真实节点，在特殊情况下，这会导致原先代码的错误。对此，我们有两种解决办法：</p>
+<ol type="1">
+<li>在前后各设置一个哨兵节点：</li>
+</ol>
+<p><img src="/2024/05/31/2.3.DLLists/image-12.png"></p>
+<ol start="2" type="1">
+<li>将链表变为循环链表：</li>
+</ol>
+<p><img src="/2024/05/31/2.3.DLLists/image-13.png"></p>
+<h3><span id="4通用型链表">4.通用型链表</span></h3>
+<p>  有时，链表中的元素不止是<span class="math inline">\(int\)</span>型，还可能是其他类型。我们可以用以下语句声明能表示任何引用类型的数据结构：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*create a class able to contain any type*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DLList</span>&lt;T&gt; () &#123;</span><br><span class="line">    <span class="comment">//create an item able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T item;</span><br><span class="line">    <span class="comment">//create an array able to carry any type</span></span><br><span class="line">    <span class="keyword">public</span> T[] arr = (T[])<span class="keyword">new</span> <span class="title class_">Object</span>[capacity]; </span><br><span class="line">    <span class="comment">//print this type of item</span></span><br><span class="line">    System.out.println(item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>2.List</category>
       </categories>
   </entry>
   <entry>
@@ -4322,6 +4322,10 @@ and it will cover the result of MEM/WB. So we take EX/MEM first.</p>
 instruction tries to read a register following a load instruction that
 writes the same register</strong>:</p>
 <p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
+<blockquote>
+<p>The RAM is used by <code>add</code> before it's updated. And since it
+must be used in the first step, forwarding cannot help.</p>
+</blockquote>
 <p>  Hence, we also need a <em>hazard detection unit</em>. It operates
 during the ID stage so that it can insert the stall between the load and
 the instruction depentent on it:</p>
@@ -7142,58 +7146,6 @@ over time.</p>
       </categories>
   </entry>
   <entry>
-    <title>6.4.对象方法</title>
-    <url>/2024/05/31/6.4.Object%20Methods/</url>
-    <content><![CDATA[<h1><span id="64对象方法"><span class="math inline">\(6.4\)</span>对象方法</span></h1>
-<h3><span id="1对象方法概述">1.对象方法概述</span></h3>
-<p>  所有的类都继承了<span class="math inline">\(Object\)</span>类。它们继承的方法如下：</p>
-<ul>
-<li>String toString()</li>
-<li>boolean equals(Object obj)</li>
-<li>Class &lt;?&gt; getClass()</li>
-<li>int hashCode()</li>
-<li>protected Objectclone()</li>
-<li>protected void finalize()</li>
-<li>void notify()</li>
-<li>void notifyAll()</li>
-<li>void wait()</li>
-<li>void wait(long timeout)</li>
-<li>void wait(long timeout, int nanos)</li>
-</ul>
-<p>  下面我们重点讨论前两个。</p>
-<h3><span id="2tostring">2.<code>toString()</code></span></h3>
-<p>  <code>toString</code>方法返回一个对象的字符串表示。对于特定的类，我们可以覆盖对象原有的方法。考虑下面的问题：</p>
-<p>  Exercise 6.4.1: Write the toString() method so that when we print
-an ArraySet, it prints the elements separated by commas inside of curly
-braces. i.e {1, 2, 3, 4}. Remember, the toString() method should return
-a string: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">/* hmmm */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(solution\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">returnString</span> <span class="operator">=</span> <span class="string">&quot;&#123;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">        returnString += keys[i];</span><br><span class="line">        returnString += <span class="string">&quot;, &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    returnString += <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> returnString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这种写法看似简洁优雅，但每次使用<code>+=</code>运算符后，都需要创建一个新的字符串，这样的时间复杂度为<span class="math inline">\(O(n^2)\)</span>。为了优化该方法，<span class="math inline">\(Java\)</span>内置了<code>StringBuilder</code>方法。这个方法创造一个<span class="math inline">\(String\)</span>的可变对象，我们可以向对象内添加其它<span class="math inline">\(String\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">returnSB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&#123;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size - <span class="number">1</span>; i += <span class="number">1</span>) &#123;</span><br><span class="line">            returnSB.append(items[i].toString());</span><br><span class="line">            returnSB.append(<span class="string">&quot;, &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        returnSB.append(items[size - <span class="number">1</span>]);</span><br><span class="line">        returnSB.append(<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> returnSB.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3equals">3.<code>equals()</code></span></h3>
-<h4><span id="aequals的实现">  <span class="math inline">\(a.\)</span><code>equals()</code>的实现</span></h4>
-<p>  在<span class="math inline">\(Java\)</span>中，<code>==</code>检查两个对象在内存中的是否为同一个对象。由之前<span class="math inline">\(pass-by-value\)</span>原则，<code>==</code>会检查两个盒子放的是不是同一个东西：</p>
-<ul>
-<li>对于基本类型的变量，这表示比较它们的值是否相等。</li>
-<li>对于对象(<span class="math inline">\(objects\)</span>)，这表示比较两个对象的地址或指针是否相等。</li>
-</ul>
-<p>  而<code>equals()</code>方法在比较对象时，只会比较两者的值是否相等，这便是我们实现它的目的。我们可以如下实现<span class="math inline">\(ArraySet\)</span>的<code>equals()</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object other)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span> == other) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other.getClass() != <span class="built_in">this</span>.getClass()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ArraySet&lt;T&gt; o = (ArraySet&lt;T&gt;) other;</span><br><span class="line">        <span class="keyword">if</span> (o.size() != <span class="built_in">this</span>.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (T item : <span class="built_in">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!o.contains(item)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>   在上面的<code>equals()</code>方法中，我们加入了对<span class="math inline">\(null\)</span>与跨类对象的比较的判断。我们也通过预先判断<code>==</code>的情况优化了方法。</p>
-<h4><span id="bequals方法的规则">  <span class="math inline">\(b.\)</span><code>equals()</code>方法的规则</span></h4>
-<p>  <code>equals()</code>方法要符合以下规则：</p>
-<ol type="1">
-<li>反身性(<span class="math inline">\(reflexive\)</span>)：<code>x.equals(x) == true</code>。</li>
-<li>对称性(<span class="math inline">\(symmetric\)</span>)：<code>x.equals(y) == true</code>当且仅当<code>y.equals(x) == true</code>。</li>
-<li>传递性(<span class="math inline">\(transitive\)</span>)：<code>x.equals(y), y.equals(z) == true</code>，则<code>x.equals(z) == true</code>。</li>
-<li><code>x.equals(null) == false</code>，不论<span class="math inline">\(x\)</span>是什么。</li>
-<li><code>equals()</code>方法的参数必须是<span class="math inline">\(object\)</span>型的，这样才能覆盖原有的<code>.equals()</code>方法。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
-      </categories>
-  </entry>
-  <entry>
     <title>6.3.迭代</title>
     <url>/2024/05/31/6.3.Iteration/</url>
     <content><![CDATA[<h1><span id="63迭代"><span class="math inline">\(6.3\)</span>迭代</span></h1>
@@ -7249,6 +7201,115 @@ which the iterator is performing.</p>
       <categories>
         <category>CS61B DataStructure</category>
         <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>6.4.对象方法</title>
+    <url>/2024/05/31/6.4.Object%20Methods/</url>
+    <content><![CDATA[<h1><span id="64对象方法"><span class="math inline">\(6.4\)</span>对象方法</span></h1>
+<h3><span id="1对象方法概述">1.对象方法概述</span></h3>
+<p>  所有的类都继承了<span class="math inline">\(Object\)</span>类。它们继承的方法如下：</p>
+<ul>
+<li>String toString()</li>
+<li>boolean equals(Object obj)</li>
+<li>Class &lt;?&gt; getClass()</li>
+<li>int hashCode()</li>
+<li>protected Objectclone()</li>
+<li>protected void finalize()</li>
+<li>void notify()</li>
+<li>void notifyAll()</li>
+<li>void wait()</li>
+<li>void wait(long timeout)</li>
+<li>void wait(long timeout, int nanos)</li>
+</ul>
+<p>  下面我们重点讨论前两个。</p>
+<h3><span id="2tostring">2.<code>toString()</code></span></h3>
+<p>  <code>toString</code>方法返回一个对象的字符串表示。对于特定的类，我们可以覆盖对象原有的方法。考虑下面的问题：</p>
+<p>  Exercise 6.4.1: Write the toString() method so that when we print
+an ArraySet, it prints the elements separated by commas inside of curly
+braces. i.e {1, 2, 3, 4}. Remember, the toString() method should return
+a string: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">/* hmmm */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(solution\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">returnString</span> <span class="operator">=</span> <span class="string">&quot;&#123;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">        returnString += keys[i];</span><br><span class="line">        returnString += <span class="string">&quot;, &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    returnString += <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> returnString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这种写法看似简洁优雅，但每次使用<code>+=</code>运算符后，都需要创建一个新的字符串，这样的时间复杂度为<span class="math inline">\(O(n^2)\)</span>。为了优化该方法，<span class="math inline">\(Java\)</span>内置了<code>StringBuilder</code>方法。这个方法创造一个<span class="math inline">\(String\)</span>的可变对象，我们可以向对象内添加其它<span class="math inline">\(String\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">returnSB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&#123;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size - <span class="number">1</span>; i += <span class="number">1</span>) &#123;</span><br><span class="line">            returnSB.append(items[i].toString());</span><br><span class="line">            returnSB.append(<span class="string">&quot;, &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        returnSB.append(items[size - <span class="number">1</span>]);</span><br><span class="line">        returnSB.append(<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> returnSB.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="3equals">3.<code>equals()</code></span></h3>
+<h4><span id="aequals的实现">  <span class="math inline">\(a.\)</span><code>equals()</code>的实现</span></h4>
+<p>  在<span class="math inline">\(Java\)</span>中，<code>==</code>检查两个对象在内存中的是否为同一个对象。由之前<span class="math inline">\(pass-by-value\)</span>原则，<code>==</code>会检查两个盒子放的是不是同一个东西：</p>
+<ul>
+<li>对于基本类型的变量，这表示比较它们的值是否相等。</li>
+<li>对于对象(<span class="math inline">\(objects\)</span>)，这表示比较两个对象的地址或指针是否相等。</li>
+</ul>
+<p>  而<code>equals()</code>方法在比较对象时，只会比较两者的值是否相等，这便是我们实现它的目的。我们可以如下实现<span class="math inline">\(ArraySet\)</span>的<code>equals()</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object other)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span> == other) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other.getClass() != <span class="built_in">this</span>.getClass()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ArraySet&lt;T&gt; o = (ArraySet&lt;T&gt;) other;</span><br><span class="line">        <span class="keyword">if</span> (o.size() != <span class="built_in">this</span>.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (T item : <span class="built_in">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!o.contains(item)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>   在上面的<code>equals()</code>方法中，我们加入了对<span class="math inline">\(null\)</span>与跨类对象的比较的判断。我们也通过预先判断<code>==</code>的情况优化了方法。</p>
+<h4><span id="bequals方法的规则">  <span class="math inline">\(b.\)</span><code>equals()</code>方法的规则</span></h4>
+<p>  <code>equals()</code>方法要符合以下规则：</p>
+<ol type="1">
+<li>反身性(<span class="math inline">\(reflexive\)</span>)：<code>x.equals(x) == true</code>。</li>
+<li>对称性(<span class="math inline">\(symmetric\)</span>)：<code>x.equals(y) == true</code>当且仅当<code>y.equals(x) == true</code>。</li>
+<li>传递性(<span class="math inline">\(transitive\)</span>)：<code>x.equals(y), y.equals(z) == true</code>，则<code>x.equals(z) == true</code>。</li>
+<li><code>x.equals(null) == false</code>，不论<span class="math inline">\(x\)</span>是什么。</li>
+<li><code>equals()</code>方法的参数必须是<span class="math inline">\(object\)</span>型的，这样才能覆盖原有的<code>.equals()</code>方法。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>7.1.程序编译前瞻</title>
+    <url>/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/</url>
+    <content><![CDATA[<h1><span id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</span></h1>
+<h3><span id="1problem-in-compilation">1.Problem in compilation</span></h3>
+<p>  To start with an abstract program and end with something actually
+runs on the computer, we need</p>
+<ul>
+<li>A computer that can run machine language code.</li>
+<li>Translating the high level language into machine language.</li>
+</ul>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
+<p>  However, there are so many kinds of computers in the world, and
+many of them <strong>use different processes, which take different
+machine languages</strong>. It seems that we have to develop many
+compilers, one for each processor. This is very annoying.</p>
+<p>  Luckily, this "write once fix everywhere" can be replaced by a
+"write once run everywhere" process.</p>
+<h3><span id="2-2-tier-compilation">2. 2-Tier compilation</span></h3>
+<p>  Let's take Java as example:</p>
+<ul>
+<li><p>The first tier: also called <em>the top tier</em></p>
+<ul>
+<li><p>Java compiler translates the Java program into VM code.</p>
+<ul>
+<li>The VM code is designed to run on an abstract artifact called
+<em>virtual machine</em>.</li>
+<li>It's not a real computer, so if we want to execute the code, we have
+to translate it further into machine language and realize it on real
+hardware (computer, for example).</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
+<ul>
+<li><p>The second tier:</p>
+<ul>
+<li>We equip the target device with <em>JVM</em>, the Java machine
+implementation.</li>
+<li>The JVM is a program that takes VM code and translates it into the
+target code of the target platform.</li>
+<li>We need such translator <strong>for every platform on which we want
+to execute VM program</strong>.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
+<p>  The gap between high-level language (Java, for example) and
+low-level language is huge. But by <strong>introducing an intermediate
+level</strong>, we <strong>decouple this process into two separate
+standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
+and <em>VM implementation</em>.</p>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 7.VM Machine</category>
       </categories>
   </entry>
   <entry>
@@ -7377,63 +7438,6 @@ shows</strong>.</li>
 stack.</li>
 <li>The stack pointer will point at the next world in the memory.</li>
 </ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 7.VM Machine</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>7.1.程序编译前瞻</title>
-    <url>/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/</url>
-    <content><![CDATA[<h1><span id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</span></h1>
-<h3><span id="1problem-in-compilation">1.Problem in compilation</span></h3>
-<p>  To start with an abstract program and end with something actually
-runs on the computer, we need</p>
-<ul>
-<li>A computer that can run machine language code.</li>
-<li>Translating the high level language into machine language.</li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
-<p>  However, there are so many kinds of computers in the world, and
-many of them <strong>use different processes, which take different
-machine languages</strong>. It seems that we have to develop many
-compilers, one for each processor. This is very annoying.</p>
-<p>  Luckily, this "write once fix everywhere" can be replaced by a
-"write once run everywhere" process.</p>
-<h3><span id="2-2-tier-compilation">2. 2-Tier compilation</span></h3>
-<p>  Let's take Java as example:</p>
-<ul>
-<li><p>The first tier: also called <em>the top tier</em></p>
-<ul>
-<li><p>Java compiler translates the Java program into VM code.</p>
-<ul>
-<li>The VM code is designed to run on an abstract artifact called
-<em>virtual machine</em>.</li>
-<li>It's not a real computer, so if we want to execute the code, we have
-to translate it further into machine language and realize it on real
-hardware (computer, for example).</li>
-</ul></li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
-<ul>
-<li><p>The second tier:</p>
-<ul>
-<li>We equip the target device with <em>JVM</em>, the Java machine
-implementation.</li>
-<li>The JVM is a program that takes VM code and translates it into the
-target code of the target platform.</li>
-<li>We need such translator <strong>for every platform on which we want
-to execute VM program</strong>.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
-<p>  The gap between high-level language (Java, for example) and
-low-level language is huge. But by <strong>introducing an intermediate
-level</strong>, we <strong>decouple this process into two separate
-standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
-and <em>VM implementation</em>.</p>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
@@ -7575,6 +7579,68 @@ stream.</li>
       </categories>
   </entry>
   <entry>
+    <title>7.2.VM结构</title>
+    <url>/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/</url>
+    <content><![CDATA[<h1><span id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction——the Stack</span></h1>
+<h3><span id="1-the-stack-machine">1. The stack machine</span></h3>
+<ul>
+<li>The stack machine is an <em>abstraction</em> that consists of
+<strong>an architecture, a stack and a set of operation which we can
+apply to the architecture</strong>.</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
+<ul>
+<li>It can be considered an <em>array</em> which offers direct access to
+every element in the memory, as oppose to the traditional stack which
+only offers a stack pointer.</li>
+<li>When we do <code>push x</code>, <strong>the address of
+<code>x</code></strong> will be push into the stack:</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
+<ul>
+<li><p>When we do <code>pop y</code>:</p>
+<ul>
+<li>the <strong>current top value in the stack</strong> will be
+removed,</li>
+<li>the <strong>popped value</strong> will override <code>y</code> (in
+this example, when 7 is popped, 3 becomes the new top value).</li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
+<h3><span id="2stack-arithmetic">2.Stack arithmetic</span></h3>
+<p>  If we want to apply a certain function on the stack, we have to do
+three different things:</p>
+<ol type="1">
+<li>Pop as many required operands in the stack as possible.</li>
+<li>Apply the function to these operands in a separate process and get
+the result.</li>
+<li>Push the result back into the stack.</li>
+</ol>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
+<p>  The obstruction supports all these operations inherently, all we
+have to do it to call <code>add</code> or <code>neg</code>, and these
+things will take place.</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
+<h3><span id="3vm-commands">3.VM commands</span></h3>
+<ul>
+<li>Arithmetic commands:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
+<ul>
+<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
+<p>  Where do these commands come from? It's compiled from the
+high-level language:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 7.VM Machine</category>
+      </categories>
+  </entry>
+  <entry>
     <title>7.3.内存段</title>
     <url>/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/</url>
     <content><![CDATA[<h1><span id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
@@ -7690,68 +7756,6 @@ register</em> which stores x   <em>Address register</em> as usual</p>
 <li>Each VM command generates several assembly commands.</li>
 </ul></li>
 </ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 7.VM Machine</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>7.2.VM结构</title>
-    <url>/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[<h1><span id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction——the Stack</span></h1>
-<h3><span id="1-the-stack-machine">1. The stack machine</span></h3>
-<ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
-<ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
-<ul>
-<li><p>When we do <code>pop y</code>:</p>
-<ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3><span id="2stack-arithmetic">2.Stack arithmetic</span></h3>
-<p>  If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
-<li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
-<li>Push the result back into the stack.</li>
-</ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>  The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3><span id="3vm-commands">3.VM commands</span></h3>
-<ul>
-<li>Arithmetic commands:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
-<ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>  Where do these commands come from? It's compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
@@ -8744,34 +8748,6 @@ backtrack and reconsider some of the rules we have to use...</li>
       </categories>
   </entry>
   <entry>
-    <title>9.2.快速查找</title>
-    <url>/2024/05/31/9.2.Quick%20Find/</url>
-    <content><![CDATA[<h1><span id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</span></h1>
-<h3><span id="1并查集的构造">1.并查集的构造</span></h3>
-<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
-<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
-<ul>
-<li>数组的下标值代表元素本身。</li>
-<li>数组下标对应的值代表元素所属集合的序号。</li>
-</ul>
-<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
-<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
-<h3><span id="2connect操作">2.<code>connect</code>操作</span></h3>
-<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
-<h3><span id="3isconnected操作">3.<code>isConnected</code>操作</span></h3>
-<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
-<h3><span id="4总结与代码实现">4.总结与代码实现</span></h3>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>9.Disjoint sets</category>
-      </categories>
-  </entry>
-  <entry>
     <title>9.9.分析器实现笔记</title>
     <url>/2024/04/19/9-9-%E5%88%86%E6%9E%90%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1><span id="99分析器实现笔记"><span class="math inline">\(9.9.\)</span>分析器实现笔记</span></h1>
@@ -8802,6 +8778,46 @@ backtrack and reconsider some of the rules we have to use...</li>
       </categories>
   </entry>
   <entry>
+    <title>9.1.并查集介绍</title>
+    <url>/2024/05/31/9.1.Introduction%20to%20Disjoint%20Sets/</url>
+    <content><![CDATA[<h1><span id="91并查集介绍"><span class="math inline">\(9.1\)</span>并查集介绍</span></h1>
+<h3><span id="1并查集的接口">1.并查集的接口</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="comment">/** connects two items P and Q */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** checks to see if two items are connected */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>9.Disjoint sets</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>9.2.快速查找</title>
+    <url>/2024/05/31/9.2.Quick%20Find/</url>
+    <content><![CDATA[<h1><span id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</span></h1>
+<h3><span id="1并查集的构造">1.并查集的构造</span></h3>
+<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
+<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
+<ul>
+<li>数组的下标值代表元素本身。</li>
+<li>数组下标对应的值代表元素所属集合的序号。</li>
+</ul>
+<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
+<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
+<h3><span id="2connect操作">2.<code>connect</code>操作</span></h3>
+<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
+<h3><span id="3isconnected操作">3.<code>isConnected</code>操作</span></h3>
+<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
+<h3><span id="4总结与代码实现">4.总结与代码实现</span></h3>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>9.Disjoint sets</category>
+      </categories>
+  </entry>
+  <entry>
     <title>9.3.快速合并</title>
     <url>/2024/05/31/9.3.Quick%20Union/</url>
     <content><![CDATA[<h1><span id="93快速合并"><span class="math inline">\(9.3\)</span>快速合并</span></h1>
@@ -8826,18 +8842,6 @@ backtrack and reconsider some of the rules we have to use...</li>
 <p><img src="/2024/05/31/9.3.Quick%20Union/image-6.png"></p>
 <p>  看起来快速合并的运行时间比快速查询长！但是<span class="math inline">\(O(n)\)</span>代表的是快速合并的上界。当我们的树比较平衡时，快速查询的时间复杂度会非常优秀。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickUnionDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickUnionDS</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[num];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; num; i += <span class="number">1</span>) &#123;</span><br><span class="line">            parent[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(parent[p] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            p = parent[p];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> find(q);</span><br><span class="line">        parent[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>9.Disjoint sets</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>9.1.并查集介绍</title>
-    <url>/2024/05/31/9.1.Introduction%20to%20Disjoint%20Sets/</url>
-    <content><![CDATA[<h1><span id="91并查集介绍"><span class="math inline">\(9.1\)</span>并查集介绍</span></h1>
-<h3><span id="1并查集的接口">1.并查集的接口</span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="comment">/** connects two items P and Q */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** checks to see if two items are connected */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>

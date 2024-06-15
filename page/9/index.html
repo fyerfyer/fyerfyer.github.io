@@ -1560,160 +1560,6 @@ register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual<
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>239</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
-Segments</span></h1>
-<h3><span id="1memory-segments-intro">1.Memory segments intro</span></h3>
-<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
-as:</p>
-<ul>
-<li>Argument variables</li>
-<li>Local variables</li>
-<li>Static variables</li>
-</ul>
-<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
-role</strong>, we need some mechanism to <strong>record the different
-roles of different variables</strong>. We can achieve this by the notion
-of <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
-<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
-<em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
-<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
-<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
-these variables.</p>
-<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
-not a big deal, however, for <strong>the VM obstruction doesn&apos;t
-recognize symbolic variable names</strong>, all the variables are
-replaced by references to memory segments.</p>
-<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
-segments:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
-<p>&#x2003;&#x2003;And the syntax of the command is:
-<code>push / pop segment i</code></p>
-<ul>
-<li><em>segment</em> is the segment you want to operate on.</li>
-<li><em>i</em> is the index of the command in that segment.</li>
-<li><span class="math inline">\(e.g.\)</span>
-:<code>push constant 17</code></li>
-<li><span class="math inline">\(e.g.\)</span> : translation of
-<code>let static 2 = argument 1</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
-<h3><span id="2the-usage-of-segment">2.The usage of segment</span></h3>
-<ul>
-<li><p>There&apos;s a lot of semantics going on in the high-level
-language:</p>
-<ul>
-<li>static variables, local variables, argument variables, ...</li>
-<li>the <em>object</em> consisting a bundle of variables</li>
-</ul></li>
-<li><p>We can handle all the semantics using the eight virtual
-segments.</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
     <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1844,6 +1690,160 @@ things will take place.</p>
 <p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
 high-level language:</p>
 <p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>239</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
+Segments</span></h1>
+<h3><span id="1memory-segments-intro">1.Memory segments intro</span></h3>
+<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
+as:</p>
+<ul>
+<li>Argument variables</li>
+<li>Local variables</li>
+<li>Static variables</li>
+</ul>
+<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
+role</strong>, we need some mechanism to <strong>record the different
+roles of different variables</strong>. We can achieve this by the notion
+of <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
+<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
+<em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
+<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
+<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
+these variables.</p>
+<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
+not a big deal, however, for <strong>the VM obstruction doesn&apos;t
+recognize symbolic variable names</strong>, all the variables are
+replaced by references to memory segments.</p>
+<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
+segments:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
+<p>&#x2003;&#x2003;And the syntax of the command is:
+<code>push / pop segment i</code></p>
+<ul>
+<li><em>segment</em> is the segment you want to operate on.</li>
+<li><em>i</em> is the index of the command in that segment.</li>
+<li><span class="math inline">\(e.g.\)</span>
+:<code>push constant 17</code></li>
+<li><span class="math inline">\(e.g.\)</span> : translation of
+<code>let static 2 = argument 1</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
+<h3><span id="2the-usage-of-segment">2.The usage of segment</span></h3>
+<ul>
+<li><p>There&apos;s a lot of semantics going on in the high-level
+language:</p>
+<ul>
+<li>static variables, local variables, argument variables, ...</li>
+<li>the <em>object</em> consisting a bundle of variables</li>
+</ul></li>
+<li><p>We can handle all the semantics using the eight virtual
+segments.</p></li>
+</ul>
 
       
     </div>
