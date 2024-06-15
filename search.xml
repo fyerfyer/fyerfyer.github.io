@@ -691,143 +691,6 @@ environment.</p>
       </categories>
   </entry>
   <entry>
-    <title>10.2.对变量的处理</title>
-    <url>/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1><span id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</span></h1>
-<h3><span id="1program-compilation">1.Program compilation</span></h3>
-<p>  Remember that the VM language doesn't have symbolic variables, it
-only has <code>local</code>, <code>this</code> and so on. In order to
-resolve this pseudocode into final executable VM code, we have to
-<strong>map these symbolic variables on what is called <em>virtual
-memory segments</em></strong>. And to do this, we:</p>
-<ul>
-<li>need the <strong>variable properties</strong>.</li>
-<li>also have to know <strong>the index of the variable of its
-kind</strong>(first, second, etc.).</li>
-</ul>
-<p>  And the properties of variables include:</p>
-<ul>
-<li><p><em>name</em>: It's an identifier.</p></li>
-<li><p><em>type</em>: <code>int</code>, <code>char</code>,
-<code>boolean</code> and <strong>all class name</strong>.</p></li>
-<li><p><em>kind</em>: There are two kinds of variables, and we view them
-separately:</p>
-<ul>
-<li><em>class level</em>: <code>field</code>, <code>static</code>
-variables.</li>
-<li><em>subroutine level</em>: <code>argument</code> and
-<code>local</code> variables.</li>
-</ul></li>
-<li><p><em>scope</em>, which is the region of the code in which it is
-recognized.</p></li>
-</ul>
-<h3><span id="2symbol-table">2.Symbol table</span></h3>
-<p>  We handle the property of variables using a <em>symbol
-table</em>:</p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
-<ul>
-<li>A method is always designed to operate on the current object which
-is called <code>this</code>. Therefore, the symbol table of method
-<strong>always begins with <code>this</code> entry</strong>, which
-represents the properties of current object.</li>
-<li><code>this</code> is always treated as <code>argument 0</code></li>
-<li>The type of current object is <strong>the name of the class to which
-this subroutine belongs</strong>.</li>
-</ul>
-<p>  The class level symbol table can be reset each time we begin to
-compile a new class, for <strong>classes are standalone compilation
-unity</strong>. Something similar happens when we compile
-subroutines.</p>
-<p>  The code writer is going to encounter all sorts of variable
-declaration commands, of which in Jack we have three:
-<code>local</code>, <code>field</code> and <code>static</code>.</p>
-<p>  Then it's going to elucidate all important properties of the
-declared variables, and <strong>add the information to the respective
-symbol table</strong>. It generates no code whatsoever beyond updating
-the symbol tables.</p>
-<ul>
-<li>If we are defining a <code>field</code> or a <code>static</code>
-variable, the code writer will add a new row to the end of the class
-level symbol table.</li>
-<li>If we are defining <code>local</code> or <code>argument</code>, the
-code writer will update the symbol table of the subroutine which is
-currently being compiled.</li>
-<li>Arguments are being defined as <strong>part of the parameter list of
-the method's signature</strong>. When the code writer goes through the
-parameter list, it adds the respective lines to the subroutine's symbol
-table.</li>
-</ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
-<p>  What about using variables within the context of expressions or
-statements. Take <code>let dx = x - other.getX();</code> as an
-example:</p>
-<ul>
-<li><p>For each variable in the code, we <strong>look up this variable
-in the subroutine level symbol table</strong>.</p>
-<ul>
-<li>If we find it there, we know which property we have to use.</li>
-<li>If don't, we revert to <strong>looking it up in the class level
-symbol table</strong>.</li>
-<li>If don't either, we can conclude that the variable is undefined and
-throw an error message.</li>
-</ul></li>
-</ul>
-<p>  How can the statements be translated into VM code? Take
-<code>let y = y +dy</code> for example:</p>
-<ol type="1">
-<li>In the process of generating code, the code generator will look up
-the respective table.</li>
-<li>It finds out that <strong><code>y</code> stands for the second
-<code>field</code> of the current object</strong>, so it will be
-translated into <code>this 1</code></li>
-<li><code>dy</code> stands for the second <code>local</code> variable,
-so it will be translated into <code>local 1</code></li>
-</ol>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
-<h3><span id="3handling-variables-ingeneral">3.Handling variables in
-general</span></h3>
-<p>  High level of programming languages vary in terms of:</p>
-<ul>
-<li>variable types</li>
-<li>variable kinds</li>
-<li>nested scoping rules</li>
-</ul>
-<p>  And the symbol table generation and usage we discussed right now
-can be easily entended to handle any number of possible variables types
-and kinds.</p>
-<p>  Some languages, like Java, feature <em>unlimited scoping</em>. this
-means that whenever you define a block of code with a pair of curly
-brackets, you can define variables within this code which are recognized
-only within that block. <code>x</code> in this scope doesn't mean the
-same as <code>x</code> in that block.</p>
-<p>  To represent the information in our symbol table mechanism, we use
-<strong>a linked list of symbol tables</strong>:</p>
-<ul>
-<li>When start compiling the class, we first create an linked list.</li>
-<li>The first symbol table we add to the list is the class level symbol
-table.</li>
-<li>When we start compiling a method, we create the method symbol table
-like before.</li>
-<li>Whenever we have another scoping region, we <strong>add another
-symbol table to the linked list</strong>.</li>
-</ul>
-<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
-<p>  When you encounter some variable <code>x</code> in the code we:</p>
-<ol type="1">
-<li>Look up <code>x</code> in the current scope, which is also the first
-table.</li>
-<li>If fail, we move to the next symbol table.</li>
-<li>We simply go on downstream until we get to the class level symbol
-table.</li>
-</ol>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 10.Code Generator</category>
-      </categories>
-  </entry>
-  <entry>
     <title>10.11.编译器实现笔记</title>
     <url>/2024/05/04/10-11-%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1><span id="1011编译器实现笔记"><span class="math inline">\(10.11.\)</span>编译器实现笔记</span></h1>
@@ -966,6 +829,143 @@ table.</li>
 </ol>
 <p>  对每一类，分别编译即可。需要注意，处理函数体时，我们需要读入整个子程序，将其放入<code>ArrayList&lt;String&gt;</code>中作为<code>compileSubroutineBody</code>的参数：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">constructor</span><span class="params">(String[] files)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (String filename : files) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> filename.substring(<span class="number">0</span>, filename.length() - <span class="number">5</span>);</span><br><span class="line">        Operation.addToArray(Tokenizer.className, name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    initType();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (String filename : files) &#123;</span><br><span class="line">        SymbolTable.constructor(filename);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">vmFile</span> <span class="operator">=</span> filename.substring(<span class="number">0</span>, filename.length() - <span class="number">5</span>) + <span class="string">&quot;.vm&quot;</span>;</span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">FileReader</span>(filename));</span><br><span class="line">            <span class="type">BufferedWriter</span> <span class="variable">writer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(vmFile));</span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> Operation.modify(reader.readLine());</span><br><span class="line">            <span class="keyword">while</span> (line != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!line.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (line.indexOf(<span class="string">&quot;class&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">                        className.setLength(<span class="number">0</span>);</span><br><span class="line">                        className.append(line.substring(<span class="number">5</span>, line.length() - <span class="number">1</span>));</span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (isSubroutineDec(line)) &#123;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutineKind</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutineType</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">                        <span class="type">int</span> <span class="variable">subroutineLength</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">                        <span class="type">int</span> <span class="variable">typeLength</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; subroutineDec.length; i++) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (line.indexOf(subroutineDec[i]) == <span class="number">0</span>) &#123;</span><br><span class="line">                                subroutineKind = subroutineDec[i];</span><br><span class="line">                                subroutineLength = subroutineDec[i].length();</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = line.substring(subroutineLength);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// then comes the type</span></span><br><span class="line">                        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; type.length; i++) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (line.indexOf(type[i]) == <span class="number">0</span>) &#123;</span><br><span class="line">                                subroutineType = type[i];</span><br><span class="line">                                typeLength = type[i].length();</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = line.substring(typeLength);</span><br><span class="line">                        <span class="type">String</span> <span class="variable">subroutine</span> <span class="operator">=</span> className + <span class="string">&quot;.&quot;</span> + line.substring(<span class="number">0</span>, line.indexOf(<span class="string">&quot;(&quot;</span>));</span><br><span class="line">                        curSubroutine.setLength(<span class="number">0</span>);</span><br><span class="line">                        curSubroutine.append(subroutine);</span><br><span class="line">                        funcType.put(curSubroutine.toString(), subroutineType);</span><br><span class="line">                        writer.write(VMWriter.writeFunctionDec(curSubroutine.toString(), SymbolTable.kindCount(<span class="string">&quot;local&quot;</span>, curSubroutine.toString())));</span><br><span class="line">                        writer.newLine();</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (subroutineKind.equals(<span class="string">&quot;constructor&quot;</span>)) &#123;</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line1</span> <span class="operator">=</span> VMWriter.writePush(<span class="string">&quot;constant&quot;</span>, SymbolTable.kindCount(<span class="string">&quot;field&quot;</span>, <span class="literal">null</span>));</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line2</span> <span class="operator">=</span> VMWriter.writeCall(<span class="string">&quot;Memory.alloc&quot;</span>, <span class="number">1</span>);</span><br><span class="line">                            writer.write(line1);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                            writer.write(line2);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (subroutineKind.equals(<span class="string">&quot;method&quot;</span>)) &#123;</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line1</span> <span class="operator">=</span> VMWriter.writePush(<span class="string">&quot;argument&quot;</span>, <span class="number">0</span>);</span><br><span class="line">                            <span class="type">String</span> <span class="variable">line2</span> <span class="operator">=</span> VMWriter.writePop(<span class="string">&quot;pointer&quot;</span>, <span class="number">0</span>);</span><br><span class="line">                            writer.write(line1);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                            writer.write(line2);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// case 2: varDec, we just ignore it</span></span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (isVarDec(line)) &#123;</span><br><span class="line">                        <span class="keyword">while</span> (isVarDec(line)) &#123;</span><br><span class="line">                            line = Operation.modify(reader.readLine());</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// case 3: subroutineBody</span></span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                        ArrayList&lt;String&gt; subroutineCode = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">                        <span class="keyword">while</span> (line != <span class="literal">null</span> &amp;&amp; !isSubroutineDec(line)) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (!line.isEmpty()) &#123;</span><br><span class="line">                                System.out.println(line);</span><br><span class="line">                                subroutineCode.add(line);</span><br><span class="line">                            &#125;</span><br><span class="line">                            line = Operation.modify(reader.readLine());</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        ArrayList&lt;String&gt; subroutineBody = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(compileSubroutineBody(subroutineCode));</span><br><span class="line">                        <span class="keyword">for</span> (String s : subroutineBody) &#123;</span><br><span class="line">                            writer.write(s);</span><br><span class="line">                            writer.newLine();</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        line = Operation.modify(reader.readLine());</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                line = Operation.modify(reader.readLine());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            reader.close();</span><br><span class="line">            writer.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 10.Code Generator</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>10.2.对变量的处理</title>
+    <url>/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1><span id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</span></h1>
+<h3><span id="1program-compilation">1.Program compilation</span></h3>
+<p>  Remember that the VM language doesn't have symbolic variables, it
+only has <code>local</code>, <code>this</code> and so on. In order to
+resolve this pseudocode into final executable VM code, we have to
+<strong>map these symbolic variables on what is called <em>virtual
+memory segments</em></strong>. And to do this, we:</p>
+<ul>
+<li>need the <strong>variable properties</strong>.</li>
+<li>also have to know <strong>the index of the variable of its
+kind</strong>(first, second, etc.).</li>
+</ul>
+<p>  And the properties of variables include:</p>
+<ul>
+<li><p><em>name</em>: It's an identifier.</p></li>
+<li><p><em>type</em>: <code>int</code>, <code>char</code>,
+<code>boolean</code> and <strong>all class name</strong>.</p></li>
+<li><p><em>kind</em>: There are two kinds of variables, and we view them
+separately:</p>
+<ul>
+<li><em>class level</em>: <code>field</code>, <code>static</code>
+variables.</li>
+<li><em>subroutine level</em>: <code>argument</code> and
+<code>local</code> variables.</li>
+</ul></li>
+<li><p><em>scope</em>, which is the region of the code in which it is
+recognized.</p></li>
+</ul>
+<h3><span id="2symbol-table">2.Symbol table</span></h3>
+<p>  We handle the property of variables using a <em>symbol
+table</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<ul>
+<li>A method is always designed to operate on the current object which
+is called <code>this</code>. Therefore, the symbol table of method
+<strong>always begins with <code>this</code> entry</strong>, which
+represents the properties of current object.</li>
+<li><code>this</code> is always treated as <code>argument 0</code></li>
+<li>The type of current object is <strong>the name of the class to which
+this subroutine belongs</strong>.</li>
+</ul>
+<p>  The class level symbol table can be reset each time we begin to
+compile a new class, for <strong>classes are standalone compilation
+unity</strong>. Something similar happens when we compile
+subroutines.</p>
+<p>  The code writer is going to encounter all sorts of variable
+declaration commands, of which in Jack we have three:
+<code>local</code>, <code>field</code> and <code>static</code>.</p>
+<p>  Then it's going to elucidate all important properties of the
+declared variables, and <strong>add the information to the respective
+symbol table</strong>. It generates no code whatsoever beyond updating
+the symbol tables.</p>
+<ul>
+<li>If we are defining a <code>field</code> or a <code>static</code>
+variable, the code writer will add a new row to the end of the class
+level symbol table.</li>
+<li>If we are defining <code>local</code> or <code>argument</code>, the
+code writer will update the symbol table of the subroutine which is
+currently being compiled.</li>
+<li>Arguments are being defined as <strong>part of the parameter list of
+the method's signature</strong>. When the code writer goes through the
+parameter list, it adds the respective lines to the subroutine's symbol
+table.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p>  What about using variables within the context of expressions or
+statements. Take <code>let dx = x - other.getX();</code> as an
+example:</p>
+<ul>
+<li><p>For each variable in the code, we <strong>look up this variable
+in the subroutine level symbol table</strong>.</p>
+<ul>
+<li>If we find it there, we know which property we have to use.</li>
+<li>If don't, we revert to <strong>looking it up in the class level
+symbol table</strong>.</li>
+<li>If don't either, we can conclude that the variable is undefined and
+throw an error message.</li>
+</ul></li>
+</ul>
+<p>  How can the statements be translated into VM code? Take
+<code>let y = y +dy</code> for example:</p>
+<ol type="1">
+<li>In the process of generating code, the code generator will look up
+the respective table.</li>
+<li>It finds out that <strong><code>y</code> stands for the second
+<code>field</code> of the current object</strong>, so it will be
+translated into <code>this 1</code></li>
+<li><code>dy</code> stands for the second <code>local</code> variable,
+so it will be translated into <code>local 1</code></li>
+</ol>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
+<h3><span id="3handling-variables-ingeneral">3.Handling variables in
+general</span></h3>
+<p>  High level of programming languages vary in terms of:</p>
+<ul>
+<li>variable types</li>
+<li>variable kinds</li>
+<li>nested scoping rules</li>
+</ul>
+<p>  And the symbol table generation and usage we discussed right now
+can be easily entended to handle any number of possible variables types
+and kinds.</p>
+<p>  Some languages, like Java, feature <em>unlimited scoping</em>. this
+means that whenever you define a block of code with a pair of curly
+brackets, you can define variables within this code which are recognized
+only within that block. <code>x</code> in this scope doesn't mean the
+same as <code>x</code> in that block.</p>
+<p>  To represent the information in our symbol table mechanism, we use
+<strong>a linked list of symbol tables</strong>:</p>
+<ul>
+<li>When start compiling the class, we first create an linked list.</li>
+<li>The first symbol table we add to the list is the class level symbol
+table.</li>
+<li>When we start compiling a method, we create the method symbol table
+like before.</li>
+<li>Whenever we have another scoping region, we <strong>add another
+symbol table to the linked list</strong>.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p>  When you encounter some variable <code>x</code> in the code we:</p>
+<ol type="1">
+<li>Look up <code>x</code> in the current scope, which is also the first
+table.</li>
+<li>If fail, we move to the next symbol table.</li>
+<li>We simply go on downstream until we get to the class level symbol
+table.</li>
+</ol>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
@@ -2023,6 +2023,26 @@ rightchild=2i+1
       </categories>
   </entry>
   <entry>
+    <title>15.3.字符串操作</title>
+    <url>/2024/05/31/15.3.Trie%20String%20Operations/</url>
+    <content><![CDATA[<h1><span id="153字符串操作"><span class="math inline">\(15.3\)</span>字符串操作</span></h1>
+<h3><span id="1键的收集与前缀匹配">1.键的收集与前缀匹配</span></h3>
+<p>  由于在<span class="math inline">\(trie\)</span>中，字符和键(<span class="math inline">\(key\)</span>)都是被隐性表示的，当我们想让我们的键变得可迭代时，我们不能只在<span class="math inline">\(trie\)</span>中直接寻找它们。我们可以用一个可迭代的<code>collect</code>方法，该方法会维护一个字符串，它用于储存路径上的字符：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  整个搜索键的过程如下：</p>
+<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
+<p>  <code>keysWithPrefix</code>方法的执行过程如下：</p>
+<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
+<h3><span id="2通配符匹配">2.通配符匹配</span></h3>
+<p>  为了实现<code>keysThatMatch()</code>方法，我们使用一个类似的程序，但添加一个参数<span class="math inline">\(pat\)</span>来表示我们需要<span class="math inline">\(collect()\)</span>的字符串。当模式字符是通配符(<span class="math inline">\(wildcard\)</span>)时，我们调用它的所有链接；否则，我们只调用和通配符相关的链接。
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&#x27;.&#x27;</span> || next == c) &#123;</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>15.Tries</category>
+      </categories>
+  </entry>
+  <entry>
     <title>15.2.Trie的实现</title>
     <url>/2024/05/31/15.2.Implementation/</url>
     <content><![CDATA[<h1><span id="152trie的实现"><span class="math inline">\(15.2\)</span><span class="math inline">\(Trie\)</span>的实现</span></h1>
@@ -2064,26 +2084,6 @@ Edward Fredkin suggested it be pronounced as "tree"</li>
 <li><code>contains</code>：<span class="math inline">\(\Theta(1)\)</span></li>
 </ul>
 <p>  这是因为<span class="math inline">\(Trie\)</span>的运行时间只取决于单词的长度，而与<span class="math inline">\(Trie\)</span>中键的多少无关。我们在查询时只会遍历我们需要的单词。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>15.Tries</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>15.3.字符串操作</title>
-    <url>/2024/05/31/15.3.Trie%20String%20Operations/</url>
-    <content><![CDATA[<h1><span id="153字符串操作"><span class="math inline">\(15.3\)</span>字符串操作</span></h1>
-<h3><span id="1键的收集与前缀匹配">1.键的收集与前缀匹配</span></h3>
-<p>  由于在<span class="math inline">\(trie\)</span>中，字符和键(<span class="math inline">\(key\)</span>)都是被隐性表示的，当我们想让我们的键变得可迭代时，我们不能只在<span class="math inline">\(trie\)</span>中直接寻找它们。我们可以用一个可迭代的<code>collect</code>方法，该方法会维护一个字符串，它用于储存路径上的字符：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  整个搜索键的过程如下：</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
-<p>  <code>keysWithPrefix</code>方法的执行过程如下：</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
-<h3><span id="2通配符匹配">2.通配符匹配</span></h3>
-<p>  为了实现<code>keysThatMatch()</code>方法，我们使用一个类似的程序，但添加一个参数<span class="math inline">\(pat\)</span>来表示我们需要<span class="math inline">\(collect()\)</span>的字符串。当模式字符是通配符(<span class="math inline">\(wildcard\)</span>)时，我们调用它的所有链接；否则，我们只调用和通配符相关的链接。
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&#x27;.&#x27;</span> || next == c) &#123;</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -2186,6 +2186,22 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
+    <title>17.1.图的构建</title>
+    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
+    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
+<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>17.Graphs</category>
+      </categories>
+  </entry>
+  <entry>
     <title>18.1.选择排序</title>
     <url>/2024/05/31/18.1.Selection%20Sort/</url>
     <content><![CDATA[<h1><span id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</span></h1>
@@ -2218,22 +2234,6 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
       <categories>
         <category>CS61B DataStructure</category>
         <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>17.1.图的构建</title>
-    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
-    <content><![CDATA[<h1><span id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</span></h1>
-<h3><span id="1图的api">1.图的<span class="math inline">\(API\)</span></span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="2dfs">2.<span class="math inline">\(dfs\)</span></span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="3路径的寻找">3.路径的寻找</span></h3>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>17.Graphs</category>
       </categories>
   </entry>
   <entry>
@@ -4323,8 +4323,9 @@ instruction tries to read a register following a load instruction that
 writes the same register</strong>:</p>
 <p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
 <blockquote>
-<p>The RAM is used by <code>add</code> before it's updated. And since it
-must be used in the first step, forwarding cannot help.</p>
+<p>The RAM is used by <code>add</code> before it's updated, and it won't
+be updated until the <code>lw</code> ends. Since it must be used in the
+first step, forwarding cannot help.</p>
 </blockquote>
 <p>  Hence, we also need a <em>hazard detection unit</em>. It operates
 during the ID stage so that it can insert the stall between the load and
@@ -5874,6 +5875,55 @@ invoked is based on the dynamic type of the invoking expression</li>
       </categories>
   </entry>
   <entry>
+    <title>4.3.子类多态性</title>
+    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
+    <content><![CDATA[<h1><span id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</span></h1>
+<h3><span id="1多态性的概念">1.多态性的概念</span></h3>
+<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
+<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
+<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
+<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
+<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
+<h3><span id="2子类多态性的应用">2.子类多态性的应用</span></h3>
+<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
+<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
+<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
+<h3><span id="3comparable接口">3.<code>comparable</code>接口</span></h3>
+<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
+<h3><span id="4comparator接口">4.<code>comparator</code>接口</span></h3>
+<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
+<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
+<h3><span id="5接口的功能">5.接口的功能</span></h3>
+<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
+<blockquote>
+<p>  A Comparable says, "I want to compare myself to another object". It
+is imbedded within the object itself, and it defines the natural
+ordering of a type. A Comparator, on the other hand, is more like a
+third party machine that compares two objects to each other. Since
+there's only room for one compareTo method, if we want multiple ways to
+compare, we must turn to Comparator.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.2.隐性序列</title>
     <url>/2024/05/31/4.2.%E9%9A%90%E6%80%A7%E5%BA%8F%E5%88%97/</url>
     <content><![CDATA[<h1><span id="42隐性序列implicitsequences"><span class="math inline">\(4.2\)</span>隐性序列<span class="math inline">\(Implicit\;Sequences\)</span></span></h1>
@@ -5957,55 +6007,6 @@ invoked is based on the dynamic type of the invoking expression</li>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 4.Data Processing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.3.子类多态性</title>
-    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
-    <content><![CDATA[<h1><span id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</span></h1>
-<h3><span id="1多态性的概念">1.多态性的概念</span></h3>
-<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
-<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
-<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
-<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
-<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
-<h3><span id="2子类多态性的应用">2.子类多态性的应用</span></h3>
-<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
-<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
-<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
-<h3><span id="3comparable接口">3.<code>comparable</code>接口</span></h3>
-<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
-<h3><span id="4comparator接口">4.<code>comparator</code>接口</span></h3>
-<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
-<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
-<h3><span id="5接口的功能">5.接口的功能</span></h3>
-<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
-<blockquote>
-<p>  A Comparable says, "I want to compare myself to another object". It
-is imbedded within the object itself, and it defines the natural
-ordering of a type. A Comparator, on the other hand, is more like a
-third party machine that compares two objects to each other. Since
-there's only room for one compareTo method, if we want multiple ways to
-compare, we must turn to Comparator.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
       </categories>
   </entry>
   <entry>
