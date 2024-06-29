@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -186,6 +186,755 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">9.2.&#x8BCD;&#x6CD5;&#x5206;&#x6790;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-15 20:17:43" itemprop="dateCreated datePublished" datetime="2024-04-15T20:17:43+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:16:17" itemprop="dateModified" datetime="2024-06-03T15:16:17+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>442</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</span></h1>
+<h3><span id="1-tokenizing">1. Tokenizing</span></h3>
+<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist
+of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
+<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of
+theory known as <em>lexical analysis</em>. Here&apos;s an example of
+tokenizing in action:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+<ul>
+<li><p>As far as <em>lexical analysis</em> is concerned, the input is
+nothing more than <strong>a stream of characters</strong>.</p></li>
+<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
+stream of characters into a stream of meaningful tokens</strong>. It
+provides a very simple yet important preliminary processing of the
+file.</p></li>
+<li><p>A <em>token</em> is <strong>a string of characters that has a
+meaning</strong>.</p>
+<ul>
+<li>Different programming languages have different definitions of token.
+For example, <code>x++</code> in C makes a lot of sense, but not in
+Jack, for it doesn&apos;t have an <code>++</code> operation.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it
+over to the compiler and completely forget the original input
+file</strong>.</p>
+<h3><span id="2jack-tokenizer">2.Jack tokenizer</span></h3>
+<p>&#x2003;&#x2003;In Jack, we have 5 kinds of tokens:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
+<p>&#x2003;&#x2003;And our tokenizer will provide these useful service:</p>
+<ol type="1">
+<li><p>Handle the compiler&apos;s input: It allow us to view the input as a
+stream of tokens.</p></li>
+<li><p>Allow advancing the input: It allow us to know:</p>
+<ul>
+<li><strong>If there are more tokens to process</strong>.</li>
+<li><strong>What the next token is</strong>.</li>
+<li><strong>The value, type of this token</strong>.</li>
+</ul></li>
+<li><p>Supply the value, type of the current token.</p></li>
+</ol>
+<p>&#x2003;&#x2003;Here&apos;s an example of a program that use these services:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the
+tokenizer object. Here&apos;s what it does:</p>
+<ul>
+<li>It goes through the input, and for every token, it <strong>lists the
+token to be out of file</strong>.</li>
+<li>In the first line, <code>if</code> is surrounded by two
+<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo
+code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<ol type="1">
+<li><p>We get the first token, and it becomes the current
+token.</p></li>
+<li><p>We enter a loop as long as we have more tokens to
+process.</p></li>
+<li><p>In each line of the program, we have to <strong>output the
+classification of the token</strong>, and we have to <strong>do it
+twice</strong>.</p></li>
+<li><p>We:</p>
+<ol type="1">
+<li>Print the <strong>opening tag</strong>, then</li>
+<li>Print the <strong>value of of the current token</strong>,</li>
+<li>Print the <strong>token itself</strong>,</li>
+<li>At last print <strong>end tag with token
+classification</strong>.</li>
+</ol></li>
+<li><p>We print a newline, and <code>advance()</code> to get the next
+token from the tokenizer, until we consume all the tokens from the input
+file.</p></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">8.3.&#x5217;&#x8868;&#x5904;&#x7406;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-13 19:17:43" itemprop="dateCreated datePublished" datetime="2024-04-13T19:17:43+08:00">2024-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:08:02" itemprop="dateModified" datetime="2024-06-03T15:08:02+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-8-High-Level-Language/" itemprop="url" rel="index"><span itemprop="name">Module 8.High Level Language</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>532</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="83listprocessing"><span class="math inline">\(8.3.\)</span>List
+Processing</span></h1>
+<h3><span id="1list-processing">1.List processing</span></h3>
+<h4><span id="acreation">&#x2003;&#x2003;$a.Creation</span></h4>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image.png"></p>
+<p>&#x2003;&#x2003;The client process is described as below:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-1.png"></p>
+<ol type="1">
+<li>We create a V pointer. We will get the variable containing 0,
+because all local variables are initialized to 0.</li>
+<li>We invoke the list constructor, and the list constructor is going to
+<strong>come back with a block of memory that represents the number 5
+and null</strong>.</li>
+<li>V is going to <strong>point to the base address</strong> of the
+object that was returned by the constructor.</li>
+<li>The previous version of V is no longer relevant, and the next
+command will do exactly the same.</li>
+</ol>
+<h4><span id="bsequential-access">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Sequential access</span></h4>
+<p>&#x2003;&#x2003;We will use the <code>print</code> method to illustrate the
+sequential process:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-2.png"></p>
+<blockquote>
+<p>In Object-based Programming, when we call a method on an object, we
+are implicitily <strong>passing the object as a parameter to this
+method</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;In the constructor, we do these things:</p>
+<ol type="1">
+<li><p>We create <code>current</code>, it&apos;s an identifier that exist
+outside the world of list. We use a special variable called
+<code>this</code> which stands for the current object.</p>
+<ul>
+<li><code>this</code> is the point from which we are going to
+<strong>refer to the object that was passed with</strong>.</li>
+</ul></li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-3.png"></p>
+<ol start="2" type="1">
+<li>The entry point of the list is <code>this</code>, and we set
+<code>current</code> to <code>this</code>, then we get two pointers
+referring to the head of the list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-4.png"></p>
+<ol start="3" type="1">
+<li>Now we enter the loop, we print the <code>data</code> and move
+<code>current</code> to <code>next</code>.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-5.png"></p>
+<ol start="4" type="1">
+<li>At last we <code>return</code>, <code>current</code> no longer
+exists and <code>this</code> is reinstated and points to the list as
+before.</li>
+</ol>
+<p>&#x2003;&#x2003;When the client want to create a list:</p>
+<ol type="1">
+<li>It all starts by creating a <code>V</code> pointer. We <strong>get
+the variable containing value 0</strong> because all local variables are
+initialized to 0.</li>
+</ol>
+<p>&#x2003;&#x2003;Then we call the constructor, and the list constructor is going to
+come back with a block of memory that represents the
+<code>(5, null)</code>.</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-6.png"></p>
+<ol start="2" type="1">
+<li>Once the <code>List.new</code> is called, the previous vesion of
+<code>V</code> is no longer relevant. The rest steps are trival.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-7.png"></p>
+<h4><span id="crecursive-access">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Recursive access</span></h4>
+<p>&#x2003;&#x2003;Let&apos;s take the <code>dispose</code> method as an example:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-8.png"></p>
+<ol type="1">
+<li>As usual, we first call a variable <code>V</code>. The
+<code>dispose</code> method doesn&apos;t know what <code>V</code> is, so the
+variable <code>this</code> was passed to <code>dispose</code>.</li>
+<li>The <code>next</code> isn&apos;t null, so we go to the recursive call.
+The <code>this</code> now points at the tail of the list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-9.png"></p>
+<ol start="3" type="1">
+<li>We finally meet 5, do the <code>deAlloc</code> and
+<code>return</code>. Once we do the <code>return</code>, we get
+completely out of the recursive method, and <strong>what used to be
+called <code>this</code> goes back to be named
+<code>V</code></strong>.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-10.png"></p>
+<ol start="4" type="1">
+<li>Now the <code>V</code> points to nothing, for we basically disposed
+everything in this list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-11.png"></p>
+<p>&#x2003;&#x2003;However, recursion is very inefficient operation and if you do this
+with a big list, you will probably get a <code>StackOverflow</code>
+error.</p>
+<h3><span id="4list-representation">4.List representation</span></h3>
+<p>&#x2003;&#x2003;The following list:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-12.png"></p>
+<p>&#x2003;&#x2003;is represented in the host RAM like this:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-13.png"></p>
+<p>&#x2003;&#x2003;Then who makes these work?</p>
+<ul>
+<li>High-level: the constructor</li>
+<li>Low-level: when compiling the constructor, <strong>the compiler
+plants calls to OS routines that find, and allocate, available memory
+space for the new object</strong>.</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">8.2.&#x57FA;&#x4E8E;&#x5BF9;&#x8C61;&#x7684;&#x7F16;&#x7A0B;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-13 16:15:43" itemprop="dateCreated datePublished" datetime="2024-04-13T16:15:43+08:00">2024-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:59:20" itemprop="dateModified" datetime="2024-06-03T14:59:20+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-8-High-Level-Language/" itemprop="url" rel="index"><span itemprop="name">Module 8.High Level Language</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>428</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="92object-based-programming"><span class="math inline">\(9.2.\)</span>Object-based Programming</span></h1>
+<h3><span id="1object-oriented-programming">1.Object-oriented programming</span></h3>
+<p>&#x2003;&#x2003;When designing an abstraction, we</p>
+<ol type="1">
+<li><p>Consider <strong>what kind of data do we want to store
+about</strong> and <strong>the objects that this class is supposed to
+represent</strong>.</p>
+<ul>
+<li>In our case, we need to store numerator and denominator.</li>
+</ul></li>
+<li><p>We store these values into integer type of
+<code>field</code>.</p></li>
+<li><p><strong>The only way to access field values from outside the
+class is through <em>accessor</em> methods</strong>, so we create
+accessors to facilitate access.</p></li>
+</ol>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png"></p>
+<ol start="4" type="1">
+<li><p>Then we write a <em>constructor</em> to create new objects. We
+create the object and <strong>return it to the base
+address</strong>.</p>
+<ul>
+<li><p><code>this</code> is a standard reference to the current object.
+It is actually <strong>the base address of the current object in the
+host RAM</strong>.</p></li>
+<li><p>One of the rules of the game is that a Jack constructor must</p>
+<ul>
+<li>return the <em>base address</em>.</li>
+<li>return <em>an object of the type of the surrounding class</em> or
+<em>the class to which this constructor belongs</em>.</li>
+<li>In Jack, every subroutine must <strong>always terminate with
+<code>return</code> command</strong>.</li>
+</ul></li>
+</ul></li>
+<li><p>We create several methods as we wish, this is quite simple so we
+skip this part.</p></li>
+<li><p>We create <code>dispose</code> method:</p>
+<ul>
+<li>The method is implemented using a call to the host operation system.
+We call the OS routine <code>deAlloc</code>, which takes an address in
+memory and disposes the memory block that begins in this address.</li>
+<li>This is important to Jack, because Jack has no garbage collection
+services, so it&apos;s up to the programmer to do this.</li>
+</ul></li>
+</ol>
+<h3><span id="2object-representation">2.Object representation</span></h3>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png"></p>
+<p>&#x2003;&#x2003;In client&apos;s view:</p>
+<ul>
+<li>Each fraction is represented by a block that includes all the field
+values of the current object.</li>
+<li>We have a reference to each of these blocks, which is <strong>the
+name of the variable</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;In the host RAM:</p>
+<ul>
+<li>Some area of it <strong>is designated to represent the the stack of
+the currently running application</strong>.</li>
+<li>The <code>stack</code> is used to <strong>store
+variables</strong>.</li>
+<li>We have the <code>heap</code> where we <strong>represent objects and
+arrays</strong>.</li>
+</ul>
+<p>&#x2003;We see that we have a variable <code>a</code> which contains the
+number 15087. If we <strong>treat this variable as a pointer and look up
+this address in the RAM</strong>, we see that the number after the 2 is
+3. This two numbers comprise the memory block that represents our first
+object.</p>
+<p>&#x2003;&#x2003;How does this representation is established? The secret is that:
+when the compiler is going to compile your constructor, it would</p>
+<ol type="1">
+<li><strong>Inject some calls to the operating system</strong>.</li>
+<li><strong>These calls are going to find available memory and allocate
+it to the object that was just constructed</strong>.</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/13/7-12-%E7%BF%BB%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/13/7-12-%E7%BF%BB%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">7.12.&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-13 09:25:43" itemprop="dateCreated datePublished" datetime="2024-04-13T09:25:43+08:00">2024-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:54:01" itemprop="dateModified" datetime="2024-06-03T14:54:01+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>5 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="712&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;"><span class="math inline">\(7.12.\)</span>&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;</span></h1>
+<h3><span id="1localargumentthisthattemp&#x7684;&#x5B9E;&#x73B0;">1.
+<code>local,argument,this,that,temp</code>&#x7684;&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x8FD9;&#x51E0;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#x7684;<code>push</code>&#x5B9E;&#x73B0;&#x90FD;&#x9075;&#x5FAA;<code>*sp=*addr</code>&#x7684;&#x8FC7;&#x7A0B;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x8BE5;&#x8FC7;&#x7A0B;&#x62C6;&#x5206;&#x4E3A;&#x4E0B;&#x9762;&#x7684;&#x5B50;&#x8FC7;&#x7A0B;&#xFF1A;</p>
+<ul>
+<li><code>D=*addr</code>.</li>
+<li><code>*sp=D</code>.</li>
+<li><code>sp++</code></li>
+</ul>
+<p>&#x2003;&#x2003;&#x540C;&#x65F6;&#xFF0C;&#x6839;&#x636E;&#x5148;&#x524D;&#x7684;&#x8BA8;&#x8BBA;&#xFF0C;<code>push</code>&#x64CD;&#x4F5C;&#x4E2D;&#x7684;<code>addr</code>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<code>baseAddr+index</code>&#x6765;&#x8BA1;&#x7B97;&#x3002;<code>index</code>&#x7684;&#x503C;&#x5F88;&#x5BB9;&#x6613;&#x83B7;&#x53D6;&#xFF0C;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x7684;&#x64CD;&#x4F5C;&#x4E3A;<code>push local x</code>,
+&#x5219;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//get index</span><br><span class="line">@x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x4F46;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x83B7;&#x53D6;<code>baseAddr</code>&#xFF0C;&#x56E0;&#x4E3A;&#x6B64;&#x65F6;&#x7684;D&#x5BC4;&#x5B58;&#x5668;&#x5DF2;&#x7ECF;&#x5B58;&#x50A8;&#x4E86;<code>x</code>&#x7684;&#x5E8F;&#x53F7;&#xFF0C;
+&#x6211;&#x4EEC;&#x4F1A;&#x60F3;&#x901A;&#x8FC7;A&#x5BC4;&#x5B58;&#x5668;&#x83B7;&#x5F97;<code>baseAddr</code>,
+&#x7136;&#x540E;&#x5C06;<code>baseAddr+index</code>&#x7684;&#x5730;&#x5740;&#x5B58;&#x5165;A&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//get base addr</span><br><span class="line">@LCL</span><br><span class="line">A=M</span><br><span class="line">A=A+D</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x987A;&#x5229;&#x5B8C;&#x6210;<code>LCL</code>&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5730;&#x5740;&#x8BFB;&#x5165;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x63A5;&#x7740;&#x7528;D&#x5BC4;&#x5B58;&#x5668;&#x8BFB;&#x5165;<code>baseAddr+index</code>&#x5BF9;&#x5E94;&#x7684;&#x6570;&#x636E;&#x3002;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D=A+D</span><br></pre></td></tr></table></figure>
+&#x2003;&#x2003;&#x4F46;&#x662F;&#xFF0C;&#x6B64;&#x65F6;&#x7684;<code>A</code>&#x50A8;&#x5B58;&#x7684;&#x5DF2;&#x4E0D;&#x662F;&#x539F;&#x5148;&#x7684;<code>baseAddr</code>&#x4E86;&#xFF0C;&#x901A;&#x8FC7;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x66F4;&#x65B0;<code>D</code>&#x7684;&#x503C;&#x662F;&#x4E0D;&#x884C;&#x7684;&#x3002;&#x8FD9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;<strong>&#x540C;&#x65F6;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>&#x7684;&#x503C;</strong>&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x672A;&#x6539;&#x53D8;&#x7684;<code>A</code>&#x6210;&#x529F;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@x</span><br><span class="line">D=A</span><br><span class="line">@LCL</span><br><span class="line">A=M //pointer</span><br><span class="line">AD=A+D</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;<code>D=*addr</code>&#xFF0C;&#x7531;&#x524D;&#x9762;&#x8BB2;&#x89E3;&#x7684;&#x6307;&#x9488;&#x7684;&#x8868;&#x793A;&#xFF0C;&#x53EA;&#x9700;&#x8865;&#x4E0A;<code>D=M</code>&#x8BED;&#x53E5;&#x5373;&#x53EF;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x662F;&#x8F83;&#x4E3A;&#x7B80;&#x5355;&#x7684;<code>*sp=D</code>&#x64CD;&#x4F5C;&#x4E86;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br></pre></td></tr></table></figure></p>
+<h3><span id="2loop&#x5B9E;&#x73B0;">2.<code>Loop</code>&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;<code>if-goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x6839;&#x636E;&#x6808;&#x9876;&#x5143;&#x7D20;&#x662F;&#x5426;&#x4E3A;<code>0</code>&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x6240;&#x9700;&#x5206;&#x652F;&#x3002;&#x56E0;&#x4E3A;&#x5728;&#x6808;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7528;<code>0</code>&#x8868;&#x793A;<code>false</code>&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LABEL</span><br><span class="line">D;JNE</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x800C;&#x5BF9;&#x4E8E;&#x65E0;&#x6761;&#x4EF6;&#x7684;<code>goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x5229;&#x7528;<code>0,JMP</code>&#x5373;&#x53EF;&#x5B9E;&#x73B0;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@LABEL</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p>
+<h3><span id="3function&#x5B9E;&#x73B0;">3.<code>function</code>&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x5728;<code>Hack</code>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x4E3A;<code>function</code>&#x521B;&#x5EFA;&#x5BF9;&#x5E94;&#x6807;&#x7B7E;&#x5373;&#x53EF;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(LABEL)</span><br></pre></td></tr></table></figure></p>
+<h3><span id="4call&#x5B9E;&#x73B0;">4.<code>Call</code>&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="math inline">\(8.6.\)</span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
+<ol type="1">
+<li><p>&#x5728;&#x6808;&#x4E2D;&#x653E;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6807;&#x5FD7;&#x7740;&#x6211;&#x4EEC;&#x5728;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x540E;&#x5C06;&#x8FD4;&#x56DE;&#x7684;&#x5730;&#x5740;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@return_address1</span><br></pre></td></tr></table></figure> &#x2003;&#x2003;&#x8BE5;&#x5730;&#x5740;&#x4EA6;&#x662F;&#x6808;&#x6307;&#x9488;&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x6240;&#x5728;&#x4E4B;&#x5904;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x4F9D;&#x6B21;&#x653E;&#x5165;<code>LCL</code>, <code>ARG</code>,
+<code>THIS</code>,
+<code>THAT</code>&#xFF0C;&#x4EE5;&#x4FDD;&#x5B58;&#x8C03;&#x7528;&#x8005;(caller)&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x3002;</p></li>
+</ol>
+<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;&#x6BCF;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x6211;&#x4EEC;&#x50CF;&#x666E;&#x901A;&#x7684;<code>push</code>&#x64CD;&#x4F5C;&#x4E00;&#x6837;&#xFF0C;&#x5C06;&#x5176;&#x653E;&#x5165;&#x6808;&#x6307;&#x9488;&#x6240;&#x6307;&#x4F4D;&#x7F6E;&#xFF0C;&#x7136;&#x540E;&#x79FB;&#x52A8;&#x6808;&#x6307;&#x9488;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SP = memorySegment</span><br><span class="line">SP = SP + 1</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">@LCL</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@SRG</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@THIS</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@THAT</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x8981;&#x91CD;&#x5B9A;&#x5411;<code>ARG</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x628A;&#x5B83;&#x5B9A;&#x5411;&#x81F3;<code>ARG[0]</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x800C;&#x8BE5;&#x4F4D;&#x7F6E;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#xFF1A;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x7684;&#x51FD;&#x6570;&#x4E3A;<code>call func x</code>&#xFF0C;&#x5219;&#x5728;<code>ARG</code>&#x5185;&#x5B58;&#x6BB5;&#x524D;&#x6709;4(&#x524D;&#x56DB;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;)+x(<code>LCL</code>&#x9700;&#x8981;&#x7684;&#x4F4D;&#x7F6E;&#x4E2A;&#x6570;)&#xFF0C;&#x5BF9;&#x5E94;&#x4EE3;&#x7801;&#x4E3A;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@5+x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x6808;&#x6307;&#x9488;&#x79FB;&#x5230;&#x5BF9;&#x5E94;&#x4F4D;&#x7F6E;&#xFF0C;&#x5E76;&#x5C06;<code>ARG</code>&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x8BBE;&#x7F6E;&#x5728;&#x8FD9;&#x91CC;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">AD=A-D</span><br><span class="line">@ARG</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p>
+<ol start="4" type="1">
+<li><p>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x6B63;&#x786E;&#x8BBF;&#x95EE;<code>LCL</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;<code>LCL</code>
+<code>push</code>&#x5230;&#x6808;&#x6307;&#x9488;&#x6240;&#x5728;&#x4F4D;&#x7F6E;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">D=M</span><br><span class="line">@LCL</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;<code>goto</code>&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x51FD;&#x6570;&#x4EE5;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@func</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x6700;&#x540E;&#x6211;&#x4EEC;&#x63D2;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6837;&#x5F53;&#x51FD;&#x6570;&#x88AB;&#x6267;&#x884C;&#x5B8C;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x5730;&#x65B9;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(return_address1)</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h3><span id="5return&#x5B9E;&#x73B0;">5.<code>return</code>&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="math inline">\(8.6.\)</span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
+<ol type="1">
+<li><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E34;&#x65F6;&#x53D8;&#x91CF;<code>frame</code>&#xFF0C;&#x5E76;&#x628A;<code>LCL</code>&#x7684;&#x503C;&#x8D4B;&#x7ED9;&#x5B83;&#x3002;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@LCL</span><br><span class="line">D=M</span><br><span class="line">@frame</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x6211;&#x4EEC;&#x5C06;<code>return</code>&#x7684;&#x503C;&#x653E;&#x5728;&#x6808;&#x9876;&#x3002;&#x7531;&#x4E8E;&#x6709;&#x56DB;&#x4E2A;&#x5360;&#x636E;&#x4E3B;&#x5185;&#x5B58;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E0A;&#x79FB;4+1=5&#x4E2A;&#xFF0C;<code>frame-5</code>&#x5373;&#x4E3A;<code>return</code>&#x7684;&#x5730;&#x5740;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@5</span><br><span class="line">A=D-A</span><br><span class="line">D=M</span><br><span class="line">@ret</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<blockquote>
+<p>&#x4E3A;&#x4EC0;&#x4E48;&#x6B64;&#x65F6;&#x4E0D;&#x8003;&#x8651;&#x6BCF;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#x4E2D;&#x7684;&#x539F;&#x6709;&#x5143;&#x7D20;&#x4E86;&#x5462;&#xFF1F;&#x56E0;&#x4E3A;<strong>&#x5728;<code>return</code>&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8986;&#x76D6;&#x6240;&#x6709;&#x7684;&#x5DF2;&#x6709;&#x5143;&#x7D20;&#xFF0C;&#x8FD9;&#x8981;&#x6C42;&#x6211;&#x4EEC;&#x5C06;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5F53;&#x4F5C;&#x4E0D;&#x5B58;&#x5728;</strong>&#x3002;&#x800C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5E76;&#x5C06;<code>ret</code>&#x4E0A;&#x79FB;&#xFF0C;<strong>&#x5728;&#x4E4B;&#x540E;&#x7684;&#x6B65;&#x9AA4;&#x4E2D;&#x5C31;&#x65E0;&#x6CD5;&#x8986;&#x76D6;&#x4E00;&#x4E9B;&#x539F;&#x6709;&#x7684;&#x65E7;&#x6570;&#x636E;&#x548C;&#x6E05;&#x7A7A;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x7684;&#x6808;&#x4E86;</strong>&#x3002;</p>
+</blockquote>
+<ol start="3" type="1">
+<li><p>&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x5F85;<code>return</code>&#x7684;&#x503C;&#x590D;&#x5236;&#x5230;<code>ARG[0]</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x800C;&#x8BE5;&#x503C;&#x5C31;&#x5728;&#x6808;&#x9876;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x5730;&#x901A;&#x8FC7;&#x64CD;&#x7EB5;&#x6808;&#x6307;&#x9488;&#x8BFB;&#x53D6;&#x8BE5;&#x503C;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x8C03;&#x7528;&#x8005;&#x9700;&#x8981;&#x80FD;&#x591F;&#x83B7;&#x53D6;&#x8BE5;&#x503C;&#xFF0C;&#x56E0;&#x6B64;&#x6808;&#x6307;&#x9488;&#x5E94;&#x4E0E;<code>ARG</code>&#x76F8;&#x90BB;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@ARG</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">M=D+1</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x7740;&#x624B;&#x8986;&#x76D6;&#x539F;&#x6709;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x4ECE;&#x5148;&#x524D;&#x8BBE;&#x7F6E;&#x7684;<code>frame</code>&#x5730;&#x5740;&#x5F80;&#x4E0B;&#xFF0C;&#x4F9D;&#x6B21;&#x8BBE;&#x7F6E;&#x65B0;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x5730;&#x5740;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THAT </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THIS </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LCL </span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<li><p>&#x6700;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8BBE;&#x7F6E;&#x7684;<code>ret</code>&#x4F4D;&#x7F6E;&#x3002;&#x7531;&#x4E8E;<code>ret</code>&#x5E76;&#x975E;&#x6807;&#x7B7E;&#xFF0C;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x5176;&#x5730;&#x5740;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x6307;&#x9488;&#x64CD;&#x4F5C;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@ret</span><br><span class="line">A=M</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h3><span id="6initial&#x5B9E;&#x73B0;">6.<code>Initial</code>&#x5B9E;&#x73B0;</span></h3>
+<p>&#x2003;&#x2003;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7FFB;&#x8BD1;&#x7684;VM&#x4EE3;&#x7801;&#x662F;&#x6709;&#x6548;&#x7684;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981;&#x5BF9;&#x6211;&#x4EEC;&#x7684;&#x786C;&#x4EF6;&#x7CFB;&#x7EDF;&#x8FDB;&#x884C;&#x521D;&#x59CB;&#x5316;&#xFF1A;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@256</span><br><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">call Sys.init// same as other call statements before.</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1294,713 +2043,6 @@ expression into VM code.</p>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.5.&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5B9E;&#x73B0;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-09 10:32:16" itemprop="dateCreated datePublished" datetime="2024-04-09T10:32:16+08:00">2024-04-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:15:56" itemprop="dateModified" datetime="2024-06-03T08:15:56+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>751</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="75memory-segment-implementation"><span class="math inline">\(7.5.\)</span>Memory Segment implementation</span></h1>
-<h3><span id="1local-implementation">1.<code>local</code> implementation</span></h3>
-<p>&#x2003;&#x2003;The <code>local</code> segment can be placed <strong>anywhere we
-want in the host RAM</strong>, for we just need to <strong>remember the
-base address of the block</strong>.</p>
-<ul>
-<li>We place the <strong>base address of the <code>local</code>
-segment</strong> in a pointer called <em>LCL</em>.</li>
-<li><em>LCL</em> will refer to <code>RAM 1</code>.</li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<p>&#x2003;&#x2003;Then we can <code>push</code> or <code>pop</code> a value easily.
-Say we want to accomplish <code>pop local 2</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<p>&#x2003;&#x2003;We can do this by putting the stack-top value into
-<code>RAM[1015]</code>.</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
-<ul>
-<li>How do we know which <code>RAM</code> to add to? We get it by
-<code>base addr + index</code></li>
-</ul>
-<p>&#x2003;&#x2003;This process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//get the place to be added</span><br><span class="line">addr = addr + index</span><br><span class="line">//get the value, and put it into correct place</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br><span class="line">// D = *sp, *addr = D</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;Notice that 5 is still in <code>RAM[257]</code>, it hasn&apos;t been
-removed. It&apos;s common to have these wasted data in the stack, and it&apos;s
-not big deal, for <strong>the pointer indicates exactly which part of
-the stack are in play, not the data</strong>.</p>
-<h3><span id="2argumentthisthatimplementation">2.<code>argument,this,that</code>
-implementation</span></h3>
-<ul>
-<li><p>When translating the high-level code of some method into VM
-code:</p>
-<ul>
-<li>Maps the method&apos;s local and argument variables onto the
-<code>local</code> and <code>argument</code> segments</li>
-<li>Maps the object fields and the array entries that the method is
-currently processing onto the <code>this</code> and <code>that</code>
-segments</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The process of <code>argument</code>, <code>this</code> and
-<code>that</code> is nearly the same as <code>local</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
-<p>&#x2003;&#x2003;The process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//push</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">*sp = *addr</span><br><span class="line">sp++</span><br><span class="line"></span><br><span class="line">//pop</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3constant">3.<code>Constant</code></span></h3>
-<ul>
-<li><p>When the compiler translates the high-level code of some method
-into VM,</p>
-<ul>
-<li>it translates high-level operations involving constant into VM
-operations involving the constant segment.</li>
-</ul></li>
-<li><p>When we implement <code>constant</code>, we simply <strong>supply
-the specified constant</strong>.</p></li>
-<li><p>Since we won&apos;t store things where a <code>constant</code>
-resides, there&apos;s no <code>pop</code> in <code>constant</code>.</p></li>
-<li><p>The <code>constant</code> segment is a <strong>truly virtual
-segment</strong>. So whenever we see a <code>push constant i</code>
-command, we simply supply the specified constant
-<code>i</code>.</p></li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-5.png"></p>
-<h3><span id="4static">4.<code>Static</code></span></h3>
-<ul>
-<li><p>When translating the high-level code of some method into VM code,
-the compiler:</p>
-<ul>
-<li>Maps the static variables that the method sees onto the
-<code>static</code> segment.</li>
-</ul></li>
-<li><p>The <code>static</code> variables should <strong>be seen by all
-the methods in a program</strong>. &#x2003;&#x2003;To complement this, we store the
-variables in a <em>&quot;global space&quot;</em>:</p></li>
-<li><p>Have the VM translator translate each VM reference
-<code>static i</code>(in file <code>Foo.vm</code>)into an <em>assembly
-reference</em> <code>Foo.i</code>.</p>
-<ul>
-<li><code>Foo</code> is the name of the file, and <code>i</code> is the
-index of VM command.</li>
-</ul></li>
-<li><p>Following assembly, the Hack assembler will map these references
-onto <code>RAM[16]</code>,<code>RAM[17]</code>,<code>RAM[18]</code>,
-...</p></li>
-</ul>
-<p>&#x2003;&#x2003;For example, the statement <code>pop static 5</code> can be
-translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Foo.5</span><br><span class="line">M = D</span><br><span class="line">//the register stores this data</span><br><span class="line"></span><br><span class="line">@Foo.2</span><br><span class="line">M = D</span><br></pre></td></tr></table></figure> * The entries of <code>static</code>
-segment will end up being mapped onto <code>RAM[16]</code>,
-<code>RAM[17]</code>, ... , in the order <strong>in which they appear in
-the program</strong> (not their names!!!).</p>
-<figure>
-<img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-6.png" alt="Alt text">
-<figcaption aria-hidden="true">Alt text</figcaption>
-</figure>
-<blockquote>
-<p>Static variables are stored <strong>in a section of memory called the
-static data segment</strong>, which is allocated when the program is
-loaded and has fixed memory addresses. When we want to retrieve the
-value of a static variable, we need to read the value stored <strong>at
-the memory location</strong> where the static variable is stored, rather
-than directly accessing the value of the static variable itself. This is
-why we need to use <code>D=M</code> instead of <code>D=A</code> to get a
-<code>static</code> value.</p>
-</blockquote>
-<h3><span id="5temp">5.<code>Temp</code></span></h3>
-<p>&#x2003;&#x2003;When the compiler translates the Jack program into VM code, it
-sometimes has to use temporary variables.</p>
-<ul>
-<li>We let the 8 place segment called <code>temp</code> to contain and
-serve these variables when needed.</li>
-<li><code>temp</code> is going to be a <strong>fixed 8-place memory
-segment</strong>.</li>
-<li>The variables will be mapped on <code>RAM</code> locations 5 to
-12.</li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-7.png"></p>
-<h3><span id="6pointer">6.Pointer</span></h3>
-<ul>
-<li><p>When translating a high-level method code into VM code,the
-compiler:</p>
-<ul>
-<li>Has to remember the base addresses of <code>this</code>, which
-represents <em>the current object</em>, and <code>that</code>, which
-represents <em>the current array of method be processing</em>.</li>
-<li>Generates code that <strong>keeps track of the base addresses of the
-this and that segments</strong> using the pointer segment.</li>
-</ul></li>
-<li><p><code>pointer</code> is a fixed memory segment. It has only two
-entries, <code>0</code> and <code>1</code>.</p>
-<ul>
-<li>So we can only <code>push</code> and <code>pop</code> <code>0</code>
-and <code>1</code></li>
-</ul></li>
-<li><p>Accessing <code>pointer 0</code> should result in
-<strong>accessing <code>THIS</code></strong>.</p></li>
-<li><p>Accessing <code>pointer 1</code> should result in
-<strong>accessing <code>THAT</code></strong>.</p></li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-8.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 18:24:16" itemprop="dateCreated datePublished" datetime="2024-04-08T18:24:16+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:06:14" itemprop="dateModified" datetime="2024-06-03T08:06:14+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>311</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</span></h1>
-<h3><span id="1pointer-manipulation">1.Pointer manipulation</span></h3>
-<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
-represents <strong>the value stores in the address that <code>p</code>
-points to</strong>.</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;can be translated into:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>A = M</code> points the pointer to the address of register
-M.</li>
-<li><code>D = M</code> gets the value of the RAM.</li>
-</ul>
-<p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
-<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
-will get the value stored in <code>RAM[256]</code>, namely 19.</p>
-<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
-value 5. After the assignment, <code>RAM[1024]</code>stores 9
-instead.</p>
-<h3><span id="2stack-machine-operation">2.Stack machine operation</span></h3>
-<p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
-<ol type="1">
-<li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
-<li>Stack base address will be <code>addr = 256</code>.</li>
-</ol>
-<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
-and our RAM looks like this:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
-the previous available space, and stack pointer moves forward:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
-<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
-register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
-</blockquote>
-<h3><span id="3vm-translator-perspective">3.VM translator perspective</span></h3>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
-<ul>
-<li><p>VM translator is:</p>
-<ul>
-<li>A program that translates VM code into machine language.</li>
-<li>Each VM command generates several assembly commands.</li>
-</ul></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>250</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</span></h1>
-<h3><span id="1-the-stack-machine">1. The stack machine</span></h3>
-<ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
-<ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
-<ul>
-<li><p>When we do <code>pop y</code>:</p>
-<ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3><span id="2stack-arithmetic">2.Stack arithmetic</span></h3>
-<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
-<li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
-<li>Push the result back into the stack.</li>
-</ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3><span id="3vm-commands">3.VM commands</span></h3>
-<ul>
-<li>Arithmetic commands:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
-<ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>239</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
-Segments</span></h1>
-<h3><span id="1memory-segments-intro">1.Memory segments intro</span></h3>
-<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
-as:</p>
-<ul>
-<li>Argument variables</li>
-<li>Local variables</li>
-<li>Static variables</li>
-</ul>
-<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
-role</strong>, we need some mechanism to <strong>record the different
-roles of different variables</strong>. We can achieve this by the notion
-of <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
-<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
-<em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
-<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
-<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
-these variables.</p>
-<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
-not a big deal, however, for <strong>the VM obstruction doesn&apos;t
-recognize symbolic variable names</strong>, all the variables are
-replaced by references to memory segments.</p>
-<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
-segments:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
-<p>&#x2003;&#x2003;And the syntax of the command is:
-<code>push / pop segment i</code></p>
-<ul>
-<li><em>segment</em> is the segment you want to operate on.</li>
-<li><em>i</em> is the index of the command in that segment.</li>
-<li><span class="math inline">\(e.g.\)</span>
-:<code>push constant 17</code></li>
-<li><span class="math inline">\(e.g.\)</span> : translation of
-<code>let static 2 = argument 1</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
-<h3><span id="2the-usage-of-segment">2.The usage of segment</span></h3>
-<ul>
-<li><p>There&apos;s a lot of semantics going on in the high-level
-language:</p>
-<ul>
-<li>static variables, local variables, argument variables, ...</li>
-<li>the <em>object</em> consisting a bundle of variables</li>
-</ul></li>
-<li><p>We can handle all the semantics using the eight virtual
-segments.</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -2027,14 +2069,14 @@ segments.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">93k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">95k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:39</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:44</span>
   </span>
 </div>
 <div class="busuanzi-count">
