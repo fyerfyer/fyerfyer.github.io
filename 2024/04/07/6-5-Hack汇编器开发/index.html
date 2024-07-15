@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(6.5.\)Developing a Hack Assembler 1.Start reding a file &#x2003;&#x2003;In general, this part:  Need to be able to read the input and break it into parts. Doesn&apos;t need to understand what the command means or">
+    <meta name="description" content="6.5.6.5.6.5.Developing a Hack Assembler  1.Start reding a file &#x2003;&#x2003;In general, this part:  Need to be able to read the input and break it into parts. Doesn&#x2019;t need to understand what the command means o">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(6.5.\)Developing a Hack Assembler 1.Start reding a file &#x2003;&#x2003;In general, this part:  Need to be able to read the input and break it into parts. Doesn&apos;t need to understand what the command means or">
+<meta property="og:description" content="6.5.6.5.6.5.Developing a Hack Assembler  1.Start reding a file &#x2003;&#x2003;In general, this part:  Need to be able to read the input and break it into parts. Doesn&#x2019;t need to understand what the command means o">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png">
@@ -143,8 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(6.5.\)Developing a Hack Assembler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Start reding a file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Translating mnemonic to
-code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.The symbol table</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 6.5.6.5.6.5.Developing a Hack Assembler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1.Start reding a file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.Translating mnemonic to code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 3.The symbol table</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,13 +157,13 @@ code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span c
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">123</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -286,89 +285,92 @@ code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span c
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</span></h1>
-<h3><span id="1start-reding-a-file">1.Start reding a file</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1><span id="656565developing-a-hack-assembler"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.5.</mn></mrow><annotation encoding="application/x-tex">6.5.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">.</span><span class="mord">5</span><span class="mord">.</span></span></span></span>Developing a Hack Assembler</span></h1>
+<h3><span id="1start-reding-a-file"> 1.Start reding a file</span></h3>
 <p>&#x2003;&#x2003;In general, this part:</p>
 <ul>
 <li>Need to be able to read the input and break it into parts.</li>
-<li>Doesn&apos;t need to understand what the command means or how it will be
-translated into machine language.</li>
-<li>Need to understand the format of the input language and how it
-breaks into different components.</li>
+<li>Doesn&#x2019;t need to understand what the command means or how it will be translated into machine language.</li>
+<li>Need to understand the format of the input language and how it breaks into different components.</li>
 </ul>
 <p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
-<ol type="1">
-<li><p>Read a file with a given name.</p>
+<ol>
+<li>
+<p>Read a file with a given name.</p>
 <ul>
-<li>You may want a constructor to be able to accept the file name and
-then open the file for reading.</li>
-</ul></li>
-<li><p>Move to next command in the file:</p>
-<ol type="1">
+<li>You may want a constructor to be able to accept the file name and then open the file for reading.</li>
+</ul>
+</li>
+<li>
+<p>Move to next command in the file:</p>
+<ol>
 <li>Are we finished? <code>boolean hasMoreCommands()</code></li>
 <li>Get the next command: <code>void advance()</code></li>
 <li>Read into one line into some kind of string.</li>
 <li>Skip white space including comments.</li>
-</ol></li>
-<li><p>Get the fields of the current command</p>
+</ol>
+</li>
+<li>
+<p>Get the fields of the current command</p>
 <ul>
 <li>Type of command (A, C, or label)</li>
-</ul></li>
+</ul>
+</li>
 </ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
-<h3><span id="2translating-mnemonic-tocode">2.Translating mnemonic to
-code</span></h3>
+<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png" alt></p>
+<h3><span id="2translating-mnemonic-to-code"> 2.Translating mnemonic to code</span></h3>
 <p>&#x2003;&#x2003;In general, this part:</p>
 <ul>
-<li><p>Don&apos;t need to worry about how the mnemonic fields were
-obtained.</p>
+<li>
+<p>Don&#x2019;t need to worry about how the mnemonic fields were obtained.</p>
 <ul>
 <li>No need to know what part of input line it is, etc.</li>
-</ul></li>
+</ul>
+</li>
 </ul>
 <p>&#x2003;&#x2003;In detail, we:</p>
-<ol type="1">
-<li>Ask the parser to give us the string that corresponds to each part
-of the field.</li>
-<li>Once we get the three string, we go to the code object to translate
-each one of them separately according to the known table.</li>
+<ol>
+<li>Ask the parser to give us the string that corresponds to each part of the field.</li>
+<li>Once we get the three string, we go to the code object to translate each one of them separately according to the known table.</li>
 <li>Concatenate the output together.</li>
 </ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
-<h3><span id="3the-symbol-table">3.The symbol table</span></h3>
+<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png" alt></p>
+<h3><span id="3the-symbol-table"> 3.The symbol table</span></h3>
 <p>&#x2003;&#x2003;In general, this part:</p>
 <ul>
-<li>Don&apos;t need to know what the symbols mean.</li>
-<li>Need to maintain the association between a symbol and a memory
-address.</li>
+<li>Don&#x2019;t need to know what the symbols mean.</li>
+<li>Need to maintain the association between a symbol and a memory address.</li>
 </ul>
 <p>&#x2003;&#x2003;In detail, we need to be able to:</p>
-<ol type="1">
+<ol>
 <li>Create an new empty table</li>
 <li>Add a (symbol, address) pair to the table</li>
 <li>Does the table contain a given symbol?</li>
 <li>What is the address associated with a given symbol?</li>
 </ol>
 <p>&#x2003;&#x2003;And do the following things:</p>
-<ol type="1">
-<li><p>Create a new empty table</p></li>
-<li><p>Add all the pre-defined symbols to the table</p></li>
-<li><p>While reading the input, add labels and new variables to the
-table</p>
+<ol>
+<li>
+<p>Create a new empty table</p>
+</li>
+<li>
+<p>Add all the pre-defined symbols to the table</p>
+</li>
+<li>
+<p>While reading the input, add labels and new variables to the table</p>
 <ul>
-<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
-<code>&quot;xxx&quot;</code> and the address of the next machine language
-command</p>
+<li>
+<p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add <code>&quot;xxx&quot;</code> and the address of the next machine language command</p>
 <ul>
-<li>Comment 1: this requires maintaining this running address (line
-number).</li>
+<li>Comment 1: this requires maintaining this running address (line number).</li>
 <li>Comment 2: this may need to be done in a first pass</li>
-</ul></li>
-<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
-<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
-<code>&quot;xxx&quot;</code> and the next free address for variable
-allocation</p></li>
-</ul></li>
+</ul>
+</li>
+<li>
+<p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where <code>&quot;xxx&quot;</code> is not a number and not already in the table, add <code>&quot;xxx&quot;</code> and the next free address for variable allocation</p>
+</li>
+</ul>
+</li>
 </ol>
 
     </div>
@@ -424,14 +426,14 @@ allocation</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">95k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">96k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:46</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:49</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(9.2.\)Lexical Analysis 1. Tokenizing &#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a tokenizer and a parser:  &#x2003;&#x2003;And the tokenizer is an application of a m">
+    <meta name="description" content="9.2.9.2.9.2.Lexical Analysis  1. Tokenizing &#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a tokenizer and a parser:  &#x2003;&#x2003;And the tokenizer is an application of a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="9.2.&#x8BCD;&#x6CD5;&#x5206;&#x6790;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(9.2.\)Lexical Analysis 1. Tokenizing &#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a tokenizer and a parser:  &#x2003;&#x2003;And the tokenizer is an application of a m">
+<meta property="og:description" content="9.2.9.2.9.2.Lexical Analysis  1. Tokenizing &#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a tokenizer and a parser:  &#x2003;&#x2003;And the tokenizer is an application of a">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png">
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(9.2.\)Lexical Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1. Tokenizing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Jack tokenizer</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> 9.2.9.2.9.2.Lexical Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 1. Tokenizing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> 2.Jack tokenizer</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -159,13 +159,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">123</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -287,79 +287,78 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</span></h1>
-<h3><span id="1-tokenizing">1. Tokenizing</span></h3>
-<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist
-of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
-<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of
-theory known as <em>lexical analysis</em>. Here&apos;s an example of
-tokenizing in action:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+    <div class="post-body" itemprop="articleBody"><h1><span id="929292lexical-analysis"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.2.</mn></mrow><annotation encoding="application/x-tex">9.2.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span></span></span></span>Lexical Analysis</span></h1>
+<h3><span id="1-tokenizing"> 1. Tokenizing</span></h3>
+<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png" alt></p>
+<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of theory known as <em>lexical analysis</em>. Here&#x2019;s an example of tokenizing in action:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png" alt></p>
 <ul>
-<li><p>As far as <em>lexical analysis</em> is concerned, the input is
-nothing more than <strong>a stream of characters</strong>.</p></li>
-<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
-stream of characters into a stream of meaningful tokens</strong>. It
-provides a very simple yet important preliminary processing of the
-file.</p></li>
-<li><p>A <em>token</em> is <strong>a string of characters that has a
-meaning</strong>.</p>
+<li>
+<p>As far as <em>lexical analysis</em> is concerned, the input is nothing more than <strong>a stream of characters</strong>.</p>
+</li>
+<li>
+<p><em>Tokenizing</em> refers to <strong>grouping the primitive stream of characters into a stream of meaningful tokens</strong>. It provides a very simple yet important preliminary processing of the file.</p>
+</li>
+<li>
+<p>A <em>token</em> is <strong>a string of characters that has a meaning</strong>.</p>
 <ul>
-<li>Different programming languages have different definitions of token.
-For example, <code>x++</code> in C makes a lot of sense, but not in
-Jack, for it doesn&apos;t have an <code>++</code> operation.</li>
-</ul></li>
+<li>Different programming languages have different definitions of token. For example, <code>x++</code> in C makes a lot of sense, but not in Jack, for it doesn&#x2019;t have an <code>++</code> operation.</li>
 </ul>
-<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it
-over to the compiler and completely forget the original input
-file</strong>.</p>
-<h3><span id="2jack-tokenizer">2.Jack tokenizer</span></h3>
+</li>
+</ul>
+<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it over to the compiler and completely forget the original input file</strong>.</p>
+<h3><span id="2jack-tokenizer"> 2.Jack tokenizer</span></h3>
 <p>&#x2003;&#x2003;In Jack, we have 5 kinds of tokens:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png" alt></p>
 <p>&#x2003;&#x2003;And our tokenizer will provide these useful service:</p>
-<ol type="1">
-<li><p>Handle the compiler&apos;s input: It allow us to view the input as a
-stream of tokens.</p></li>
-<li><p>Allow advancing the input: It allow us to know:</p>
+<ol>
+<li>
+<p>Handle the compiler&#x2019;s input: It allow us to view the input as a stream of tokens.</p>
+</li>
+<li>
+<p>Allow advancing the input: It allow us to know:</p>
 <ul>
 <li><strong>If there are more tokens to process</strong>.</li>
 <li><strong>What the next token is</strong>.</li>
 <li><strong>The value, type of this token</strong>.</li>
-</ul></li>
-<li><p>Supply the value, type of the current token.</p></li>
-</ol>
-<p>&#x2003;&#x2003;Here&apos;s an example of a program that use these services:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the
-tokenizer object. Here&apos;s what it does:</p>
-<ul>
-<li>It goes through the input, and for every token, it <strong>lists the
-token to be out of file</strong>.</li>
-<li>In the first line, <code>if</code> is surrounded by two
-<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo
-code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<ol type="1">
-<li><p>We get the first token, and it becomes the current
-token.</p></li>
-<li><p>We enter a loop as long as we have more tokens to
-process.</p></li>
-<li><p>In each line of the program, we have to <strong>output the
-classification of the token</strong>, and we have to <strong>do it
-twice</strong>.</p></li>
-<li><p>We:</p>
-<ol type="1">
+</li>
+<li>
+<p>Supply the value, type of the current token.</p>
+</li>
+</ol>
+<p>&#x2003;&#x2003;Here&#x2019;s an example of a program that use these services:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png" alt></p>
+<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the tokenizer object. Here&#x2019;s what it does:</p>
+<ul>
+<li>It goes through the input, and for every token, it <strong>lists the token to be out of file</strong>.</li>
+<li>In the first line, <code>if</code> is surrounded by two <em>tags</em>, it <strong>describe the type of the token</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>
+<p>We get the first token, and it becomes the current token.</p>
+</li>
+<li>
+<p>We enter a loop as long as we have more tokens to process.</p>
+</li>
+<li>
+<p>In each line of the program, we have to <strong>output the classification of the token</strong>, and we have to <strong>do it twice</strong>.</p>
+</li>
+<li>
+<p>We:</p>
+<ol>
 <li>Print the <strong>opening tag</strong>, then</li>
 <li>Print the <strong>value of of the current token</strong>,</li>
 <li>Print the <strong>token itself</strong>,</li>
-<li>At last print <strong>end tag with token
-classification</strong>.</li>
-</ol></li>
-<li><p>We print a newline, and <code>advance()</code> to get the next
-token from the tokenizer, until we consume all the tokens from the input
-file.</p></li>
+<li>At last print <strong>end tag with token classification</strong>.</li>
+</ol>
+</li>
+<li>
+<p>We print a newline, and <code>advance()</code> to get the next token from the tokenizer, until we consume all the tokens from the input file.</p>
+</li>
 </ol>
 
     </div>
@@ -415,14 +414,14 @@ file.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">95k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">96k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:46</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">5:49</span>
   </span>
 </div>
 <div class="busuanzi-count">
