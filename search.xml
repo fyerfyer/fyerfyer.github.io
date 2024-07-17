@@ -1635,26 +1635,6 @@ ordering restriction to support efficient search</li>
       </categories>
   </entry>
   <entry>
-    <title>11.3.B-树的不变量</title>
-    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
-    <content><![CDATA[<h1><span id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</span></h1>
-<h3><span id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</span></h3>
-<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
-<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
-<ul>
-<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
-<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
-</ul>
-<h3><span id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</span></h3>
-<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
-n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
     <title>11.2.B树</title>
     <url>/2024/05/31/11.2%20B-Trees/</url>
     <content><![CDATA[<h1><span id="112b树"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>树</span></h1>
@@ -1686,6 +1666,26 @@ y\)</span>。</li>
 <p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
 <p>  分开叶子的图示如下：</p>
 <p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>11.3.B-树的不变量</title>
+    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
+    <content><![CDATA[<h1><span id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</span></h1>
+<h3><span id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</span></h3>
+<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
+<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
+<ul>
+<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
+<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
+</ul>
+<h3><span id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</span></h3>
+<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
+n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -1751,6 +1751,34 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
+    <title>12.1.Hashing的引入</title>
+    <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
+    <content><![CDATA[<h1><span id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</span></h1>
+<h3><span id="1hasing的引入">1.<span class="math inline">\(Hasing\)</span>的引入</span></h3>
+<p>  在先前的树结构中，我们实现了对数据的高效查找。但树的使用有以下的限制：</p>
+<ol type="1">
+<li>树需要对象具有可比较性(<span class="math inline">\(comparable\)</span>)。对于某些元素(比如字符串)，它们不能进行比较，因此就无法插入<span class="math inline">\(BST\)</span>中了。</li>
+<li><span class="math inline">\(BST\)</span>的运行时间为<span class="math inline">\(\Theta(\log
+N)\)</span>，但我们希望有更优的运行时间。</li>
+</ol>
+<p>  假设我们想要实现对整数的查找，我们可以通过检测数组第<span class="math inline">\(i\)</span>位是否为<span class="math inline">\(1\)</span>，从而得到该整数是否存在。该数据结构如下实现：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> &#123;</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>  该数据结构的查找与插入都只需要<span class="math inline">\(\Theta(1)\)</span>的运行时间。然而，它有以下的问题：</p>
+<ol type="1">
+<li>空间浪费较大。</li>
+<li>不具有普适性。该数据结构只适用于整数。</li>
+</ol>
+<h3><span id="2字符串到整数的转换">2.字符串到整数的转换</span></h3>
+<p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>12.2.Hashing的实现方法(1)</title>
     <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
     <content><![CDATA[<h1><span id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</span></h1>
@@ -1806,34 +1834,6 @@ item exists, return true.</li>
 </ul>
 <h3><span id="2内存的处理">2.内存的处理</span></h3>
 <p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.1.Hashing的引入</title>
-    <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
-    <content><![CDATA[<h1><span id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</span></h1>
-<h3><span id="1hasing的引入">1.<span class="math inline">\(Hasing\)</span>的引入</span></h3>
-<p>  在先前的树结构中，我们实现了对数据的高效查找。但树的使用有以下的限制：</p>
-<ol type="1">
-<li>树需要对象具有可比较性(<span class="math inline">\(comparable\)</span>)。对于某些元素(比如字符串)，它们不能进行比较，因此就无法插入<span class="math inline">\(BST\)</span>中了。</li>
-<li><span class="math inline">\(BST\)</span>的运行时间为<span class="math inline">\(\Theta(\log
-N)\)</span>，但我们希望有更优的运行时间。</li>
-</ol>
-<p>  假设我们想要实现对整数的查找，我们可以通过检测数组第<span class="math inline">\(i\)</span>位是否为<span class="math inline">\(1\)</span>，从而得到该整数是否存在。该数据结构如下实现：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> &#123;</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>  该数据结构的查找与插入都只需要<span class="math inline">\(\Theta(1)\)</span>的运行时间。然而，它有以下的问题：</p>
-<ol type="1">
-<li>空间浪费较大。</li>
-<li>不具有普适性。该数据结构只适用于整数。</li>
-</ol>
-<h3><span id="2字符串到整数的转换">2.字符串到整数的转换</span></h3>
-<p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -3113,107 +3113,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
-    <title>2.7.对象抽象</title>
-    <url>/2024/05/31/2.7.%E5%AF%B9%E8%B1%A1%E6%8A%BD%E8%B1%A1/</url>
-    <content><![CDATA[<h1><span id="27对象抽象"><span class="math inline">\(2.7\)</span>对象抽象</span></h1>
-<h2><span id="一-思想概述">一、思想概述</span></h2>
-<p>  对象系统(<span class="math inline">\(object\;system\)</span>)可以实现对抽象数据的不同表达的共存。</p>
-<p>  为实现这样的对象系统，我们需要<strong>找到一个普遍函数(<span class="math inline">\(generic\;function\)</span>)，这个函数可以接受某个值的各种表达</strong>，下面将介绍实现这一操作的方法。</p>
-<h2><span id="二-前置知识">二、前置知识</span></h2>
-<h3><span id="1字符串转换">1.字符串转换</span></h3>
-<p>  为更高效地表达数据，我们希望在<span class="math inline">\(python\)</span>的交互式对话中自动显示表达式的字符串表示。</p>
-<p>  <span class="math inline">\(python\)</span>规定，每个对象都会产生两种不同的字符串表示：<strong>一种是人类可以阅读(<span class="math inline">\(human-interpretable\)</span>)的文本，一种是<span class="math inline">\(python\)</span>可理解(<span class="math inline">\(python-interpretable\)</span>)的表达式</strong>。字符串的构造函数<code>str</code>返回一个人类可读的字符串。(在可能的情况下)而<code>repr</code>函数返回结果等价的<code>python</code>表达式：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">12e12</span></span><br><span class="line"><span class="number">12000000000000.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="built_in">repr</span>(<span class="number">12e12</span>))</span><br><span class="line"><span class="number">12000000000000.0</span></span><br></pre></td></tr></table></figure></p>
-<p>  当传入的表达式没有初始值时，<code>repr</code>会返回如下语句：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">repr</span>(<span class="built_in">min</span>)</span><br><span class="line"><span class="string">&#x27;&lt;built-in function min&gt;&#x27;</span></span><br></pre></td></tr></table></figure></p>
-<p>  <code>str</code>的<span class="math inline">\(constructor\)</span>与<code>repr</code>语句经常重合，但前者返回一个人类更易读的文本：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues = date(<span class="number">2011</span>, <span class="number">9</span>, <span class="number">12</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">repr</span>(tues)</span><br><span class="line"><span class="string">&#x27;datetime.date(2011, 9, 12)&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">str</span>(tues)</span><br><span class="line"><span class="string">&#x27;2011-09-12&#x27;</span></span><br></pre></td></tr></table></figure></p>
-<p>  对象系统为我们提供了能用于所有数据类型的方法：<code>__repr__</code>与<code>__str__</code>，这让我们可以以点表达式编写程序：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues.__repr__()</span><br><span class="line"><span class="string">&#x27;datetime.date(2011, 9, 12)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues.__str__()</span><br><span class="line"><span class="string">&#x27;2011-09-12&#x27;</span></span><br></pre></td></tr></table></figure></p>
-<h3><span id="2特殊方法">2.特殊方法</span></h3>
-<p>  在<span class="math inline">\(python\)</span>中，特殊方法(<span class="math inline">\(special\;method\)</span>)在特定情况被<span class="math inline">\(python\)</span>编译器调用，例如：</p>
-<ul>
-<li><code>__init__</code>方法会在某个对象被创建后自动调用。</li>
-<li><code>__str__</code>方法在打印结果时自动调用。</li>
-<li><code>__repr</code>方法在交互式程序展示值(<code>value</code>)时自动调用。</li>
-</ul>
-<p>  <span class="math inline">\(python\)</span>中还有一些类似的特殊方法。</p>
-<h4><span id="a__bool__方法">  <span class="math inline">\(a.\)</span><code>__bool__</code>方法</span></h4>
-<p>  一般的<code>bool</code>会默认<span class="math inline">\(0\)</span>为<code>false</code>，其他值为<code>true</code>。对于对象而言，<span class="math inline">\(python\)</span>中默认所有对象都有<code>true</code>值。但<strong>我们可以利用<code>__bool__</code>方法来覆盖这一默认值</strong>。例如我们将值为<span class="math inline">\(0\)</span>的<span class="math inline">\(Account\)</span>为<code>false</code>：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt;Account.__bool__=<span class="keyword">lambda</span> self:self.balance!= <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<p>  则对于下面的对象，它会输出<code>false</code>： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">bool</span>(Account(<span class="string">&#x27;Jack&#x27;</span>))</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">if</span> <span class="keyword">not</span> Account(<span class="string">&#x27;Jack&#x27;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Jack has nothing&#x27;</span>)</span><br><span class="line">Jack has nothing</span><br></pre></td></tr></table></figure></p>
-<h4><span id="b序列操作">  <span class="math inline">\(b.\)</span>序列操作</span></h4>
-<p>  序列中的方法主要如下：</p>
-<ul>
-<li><p><code>__len__</code> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>.__len__()</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure></p></li>
-<li><p><code>__getitem__</code> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>[<span class="number">3</span>]</span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>.__getitem__(<span class="number">3</span>)</span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
-</ul>
-<h3><span id="3可调用的对象">3.可调用的对象</span></h3>
-<p>  <strong>通过<code>__call__</code>方法，我们可以让定义的对象像函数一样被调用</strong>，进而实现类似高阶函数的功能。</p>
-<p>  考虑下面的高阶函数： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">make_adder</span>(<span class="params">n</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">adder</span>(<span class="params">k</span>):</span><br><span class="line">            <span class="keyword">return</span> n + k</span><br><span class="line">        <span class="keyword">return</span> adder</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three = make_adder(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three(<span class="number">4</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure></p>
-<p>  我们可以定义一个<code>Adder</code>类实现类似操作：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Adder</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>):</span><br><span class="line">            self.n = n</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, k</span>):</span><br><span class="line">            <span class="keyword">return</span> self.n + k</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three_obj = Adder(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three_obj(<span class="number">4</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们就让类和对象表现得像函数一样，这进一步模糊了函数与数据的界限。</p>
-<h2><span id="三-多重表示multiplerepresentations">三、多重表示<span class="math inline">\(multiple\;representations\)</span></span></h2>
-<p>  在编程中，对于程序中的某个数据对象，可能存在多种表达方式。例如复数(<span class="math inline">\(complex\;number\)</span>)，既可以用“实部+虚部”来表示，又可以用“模长+辐角主值”来表示。这使我们希望设计出<strong>能处理多重表示(<span class="math inline">\(multiple\;representations\)</span>)的系统</strong>。</p>
-<p>  下面即以复数系统说明这一功能的实现。</p>
-<h3><span id="1对两种表示的初始化">1.对两种表示的初始化</span></h3>
-<p>  我们<strong>从最高层次的抽象着手搭建系统，然后慢慢将其中的功能具体化</strong>。所有的复数都属于<span class="math inline">\(Number\)</span>，而数字可以相加与相乘，于是我们可以定义一个基准类<code>Number</code>与方法<code>__add__</code>、<code>__mul__</code>，这里的<code>__add__</code>、<code>__mul__</code>是通过<code>add</code>、<code>mul</code>等更具体的方法实现的：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> self.add(other)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> self.mul(other)</span><br></pre></td></tr></table></figure></p>
-<p>  然后考虑在复数中实现<code>add</code>与<code>mul</code>方法，对<code>add</code>我们用复数的标准形式来计算；对于<code>mul</code>我们用复数的辐角形式来计算：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Complex</span>(<span class="title class_ inherited__">Number</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> ComplexRI(self.real+other.real,self.imag+other.imag)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">self,other</span>):</span><br><span class="line">            magnitude=self.magnitude*other.magnitude</span><br><span class="line">            <span class="keyword">return</span> ComplexMA(magnitude,self.angle+other.angle)</span><br></pre></td></tr></table></figure></p>
-<p>  这种实现方式假设了复数的两种类表示。</p>
-<h3><span id="2接口">2.接口</span></h3>
-<p>  <strong>对象的属性作为信息传递(<span class="math inline">\(message\;passing\)</span>)的一种，允许不同的数据类型对相同信息做出不同反应</strong>。这种<strong>在不同的类中引发相似操作的共享信息组(<span class="math inline">\(shared\;set\;of\;messages\)</span>)</strong>
-是有力的抽象方式。而<strong>接口(<span class="math inline">\(interface\)</span>)是一系列共享的属性名称与各自行为的详细说明</strong>。对于复数系统，接口需要实现四个属性：<code>real</code>，<code>imag</code>，<code>magnitude</code>，<code>angle</code>。</p>
-<p>  为了保证复数算法(<span class="math inline">\(arithmic\)</span>)的正确性，这些属性必须具有一致性。这就是说，<code>(magnitude,angle)</code>表示的复数与<code>(real,imag)</code>表示的复数必须是同一个复数。</p>
-<h3><span id="3properties">3.<span class="math inline">\(properties\)</span></span></h3>
-<p>  让多个属性维系一个固定的关系是一个新的问题，我们可以通过<strong>只存储某种属性、在需要其他属性时单独计算</strong>的方式解决这个问题。</p>
-<p>  <span class="math inline">\(python\)</span>中的<code>@property</code>装饰符允许我们在不调用表达式语法的情况下调用函数，通过零参数的方法计算属性。以复数系统为例，我们存储复数的标准形式：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> math <span class="keyword">import</span> atan2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">ComplexRI</span>(<span class="title class_ inherited__">Complex</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, real, imag</span>):</span><br><span class="line">            self.real = real</span><br><span class="line">            self.imag = imag</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">magnitude</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> (self.real**<span class="number">2</span>+self.imag**<span class="number">2</span>)**<span class="number">0.5</span></span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">angle</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> atan2(self.imag, self.real)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ComplexRI(&#123;0:g&#125;, &#123;1:g&#125;)&#x27;</span>.<span class="built_in">format</span>(self.real, self.imag)</span><br></pre></td></tr></table></figure></p>
-<p>  这样我们就可以通过点表达式直接访问除标准形式外的属性了：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri = ComplexRI(<span class="number">5</span>, <span class="number">12</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.magnitude</span><br><span class="line"><span class="number">13.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real = <span class="number">9</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real</span><br><span class="line"><span class="number">9</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.magnitude</span><br><span class="line"><span class="number">15.0</span></span><br></pre></td></tr></table></figure></p>
-<p>  同样地，我们也可以存储辐角形式： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> math <span class="keyword">import</span> sin, cos, pi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">ComplexMA</span>(<span class="title class_ inherited__">Complex</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, magnitude, angle</span>):</span><br><span class="line">            self.magnitude = magnitude</span><br><span class="line">            self.angle = angle</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">real</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> self.magnitude * cos(self.angle)</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">imag</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> self.magnitude * sin(self.angle)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ComplexMA(&#123;0:g&#125;, &#123;1:g&#125; * pi)&#x27;</span>.<span class="built_in">format</span>(self.magnitude, self.angle/pi)</span><br></pre></td></tr></table></figure></p>
-<p>  并得到以下的输出结果： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma = ComplexMA(<span class="number">2</span>, pi/<span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.imag</span><br><span class="line"><span class="number">2.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.angle = pi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.real</span><br><span class="line">-<span class="number">2.0</span></span><br></pre></td></tr></table></figure></p>
-<p>  通过接口方式对多重表示进行编码有优良的性质：<strong>每种表达的类都可以独自定义，它们只需要在共享的属性名称、这些属性的行为条件(<span class="math inline">\(behaviour\;condition\)</span>)上达成一致即可</strong>。当另一个编程者想再加入一个表达时，他只需要再创建一个具有相同属性的类即可。</p>
-<h2><span id="四-通用函数">四、通用函数</span></h2>
-<h3><span id="1概念amp引入">1.概念&amp;引入</span></h3>
-<p>  <strong>通用函数(<span class="math inline">\(generic\;function\)</span>)是一种函数方法，它可以被用于不同类型的变量。</strong>
-先前的<code>Complex.add</code>是通用函数，因为它的<code>other</code>变量既可以接受<code>ComplexRI</code>型，也可以接受<code>ComplexMA</code>型。</p>
-<p>  这种灵活性的实现是基于
-<strong><code>ComeplexRI</code>与<code>ComplexMA</code>共享一个接口</strong>的事实。除了利用接口和信息传递来实现通用函数，还有两种不同方法：类型分派与类型强制。</p>
-<p>  现在，我们想将原来的复数系统拓展到实数域，在先前章节中我们已经实现了实数类：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> fractions <span class="keyword">import</span> gcd</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Rational</span>(<span class="title class_ inherited__">Number</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,numer,denom</span>):</span><br><span class="line">            g = gcd(numer,denom)</span><br><span class="line">            self.numer=numer // g</span><br><span class="line">            self.denom=denom // g</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;Rational(&#123;0&#125;, &#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(self.numer, self.denom)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,other</span>):</span><br><span class="line">            nx,dx=self.numer, self.denom</span><br><span class="line">            ny,dy=other.numer, other.denom</span><br><span class="line">            <span class="keyword">return</span> Rational(nx*dy+ny*dx,dx*dy)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">self,other</span>):</span><br><span class="line">            numer=self.numer*other.numer</span><br><span class="line">            denom=self.denom*other.denom</span><br><span class="line">            <span class="keyword">return</span> Rational(numer,denom)</span><br></pre></td></tr></table></figure></p>
-<p>  我们希望实现一个通用函数<code>__add__</code>实现所有数的加法，同时将实数与复数的概念分离。</p>
-<h3><span id="2类型分派">2.类型分派</span></h3>
-<p>  一个实现跨类(<span class="math inline">\(cross-type\)</span>)操作的方法是基于参数的数据类型选择适当的行为。而<strong>类型分派(<span class="math inline">\(type\;dispatch\)</span>)正是为了实现一个检查参数数据类型的函数</strong>。</p>
-<p>  <span class="math inline">\(python\)</span>内置的<code>isinstance</code>函数可以实现这一功能。它<strong>接收一个对象和一个类，返回这个对象属于该类或属于该类的继承类的真假</strong>：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = ComplexRI(<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, ComplexRI)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, Complex)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, ComplexMA)</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
-<p>  可以利用<code>isinstance</code>函数实现对某个数是不是实数的判断：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">is_real</span>(<span class="params">c</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return whether c is a real number with no imaginary part.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(c, ComplexRI):</span><br><span class="line">            <span class="keyword">return</span> c.imag == <span class="number">0</span></span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">isinstance</span>(c, ComplexMA):</span><br><span class="line">            <span class="keyword">return</span> c.angle % pi == <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>is_real(ComplexRI(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>is_real(ComplexMA(<span class="number">2</span>, pi))</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
-<p>  当然，我们也可以通过别的方式实现类型分派。我们可以<strong>给每一种数据类型添加一个属性<code>.type_tag</code></strong>，调用该属性会<strong>返回该数据类型的字符串表示</strong>。这样，我们就可以直接比较两个参数的<code>type_tag</code>了：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational.type_tag = <span class="string">&#x27;rat&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Complex.type_tag = <span class="string">&#x27;com&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational(<span class="number">2</span>, <span class="number">5</span>).type_tag == Rational(<span class="number">1</span>, <span class="number">2</span>).type_tag</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ComplexRI(<span class="number">1</span>, <span class="number">1</span>).type_tag == ComplexMA(<span class="number">2</span>, pi/<span class="number">2</span>).type_tag</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational(<span class="number">2</span>, <span class="number">5</span>).type_tag == ComplexRI(<span class="number">1</span>, <span class="number">1</span>).type_tag</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
-<p>  处理完类型分派问题，我们编写接受实数与复数进行计算的函数操作：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">add_complex_and_rational</span>(<span class="params">c, r</span>):</span><br><span class="line">        <span class="keyword">return</span> ComplexRI(c.real + r.numer/r.denom, c.imag)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">mul_complex_and_rational</span>(<span class="params">c, r</span>):</span><br><span class="line">        r_magnitude, r_angle = r.numer/r.denom, <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> r_magnitude &lt; <span class="number">0</span>:</span><br><span class="line">            r_magnitude, r_angle = -r_magnitude, pi</span><br><span class="line">        <span class="keyword">return</span> ComplexMA(c.magnitude * r_magnitude, c.angle + r_angle)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">add_rational_and_complex</span>(<span class="params">r, c</span>):</span><br><span class="line">        <span class="keyword">return</span> add_complex_and_rational(c, r)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">mul_rational_and_complex</span>(<span class="params">r, c</span>):</span><br><span class="line">        <span class="keyword">return</span> mul_complex_and_rational(c, r)</span><br></pre></td></tr></table></figure></p>
-<p>  利用类型分派，我们可以根据传入参数的类型选择适当的函数操作：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag == other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self.add(other)</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.adders:</span><br><span class="line">                <span class="keyword">return</span> self.cross_apply(other, self.adders)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag == other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self.mul(other)</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.multipliers:</span><br><span class="line">                <span class="keyword">return</span> self.cross_apply(other, self.multipliers)</span><br><span class="line">        <span class="comment"># to tackle cross-type requirement</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">cross_apply</span>(<span class="params">self, other, cross_fns</span>):</span><br><span class="line">            cross_fn = cross_fns[(self.type_tag, other.type_tag)]</span><br><span class="line">            <span class="keyword">return</span> cross_fn(self, other)</span><br><span class="line">        <span class="comment"># dispatch dictionary</span></span><br><span class="line">        adders = &#123;(<span class="string">&quot;com&quot;</span>, <span class="string">&quot;rat&quot;</span>): add_complex_and_rational,</span><br><span class="line">                  (<span class="string">&quot;rat&quot;</span>, <span class="string">&quot;com&quot;</span>): add_rational_and_complex&#125;</span><br><span class="line">        multipliers = &#123;(<span class="string">&quot;com&quot;</span>, <span class="string">&quot;rat&quot;</span>): mul_complex_and_rational,</span><br><span class="line">                       (<span class="string">&quot;rat&quot;</span>, <span class="string">&quot;com&quot;</span>): mul_rational_and_complex&#125;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;ComplexRI(<span class="number">1.5</span>,<span class="number">0</span>)+Rational(<span class="number">3</span>,<span class="number">2</span>)</span><br><span class="line">ComplexRI(<span class="number">3</span>,<span class="number">0</span>)</span><br><span class="line">&gt;&gt;&gt;Rational(-<span class="number">1</span>,<span class="number">2</span>)*ComplexMA(<span class="number">4</span>,pi/<span class="number">2</span>)</span><br><span class="line">ComplexMA(<span class="number">2</span>,<span class="number">1.5</span>*pi)</span><br></pre></td></tr></table></figure></p>
-<p>  在新定义的<code>Number</code>类中，所有跨类型函数都作为<code>adders</code>与<code>multipliers</code>的索引。</p>
-<p>  在这种基于字典的实现方式是可拓展的，当我们要定义一个<code>Number</code>的新子类时，只需<strong>给它定义一个<code>type_tag</code>，然后把对应的跨类型操作加进<code>Number.adders</code>和<code>Number.multiplier</code>中，同时也可以在子类中定义自己的<code>adders</code>和<code>multipliers</code></strong>
-。</p>
-<h3><span id="3类型强制">3.类型强制</span></h3>
-<p>  在对两种完全不相同的数据类型进行操作时，直接实现跨类型函数是最佳选择。但有时，我们可以利用<strong>类型系统中隐性的附加结构</strong>得到更优解法。</p>
-<p>  通常，<strong>不同的数据类型并不是完全独立的，一种数据类型可能是另一种数据类型的子类型</strong>，例如实数就可以被看作虚部为<span class="math inline">\(0\)</span>的复数。这样，我们就可以只用<code>Complex.add</code>与<code>Complex.mul</code>来实现实数虚数的运算了。像这样转换类型的做法被称作<strong>类型强制(<span class="math inline">\(type\;coercion\)</span>)</strong>。</p>
-<p>  可以通过以下函数实现类型强制： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">rational_to_complex</span>(<span class="params">r</span>):</span><br><span class="line">        <span class="keyword">return</span> ComplexRI(r.numer/r.denom,<span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  包含类型强制的<code>Number</code>类实现如下： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.add(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.mul(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag==other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self,other</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self.coerce_to(other.type_tag), other)</span><br><span class="line">            <span class="keyword">elif</span> (other.type_tag, self.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self, other.coerce_to(self.type_tag))</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce_to</span>(<span class="params">self, other_tag</span>):</span><br><span class="line">            coercion_fn=self.coercions[(self.type_tag, other_tag)]</span><br><span class="line">            <span class="keyword">return</span> coercion_fn(self)</span><br><span class="line">        coercions=&#123;(<span class="string">&#x27;rat&#x27;</span>, <span class="string">&#x27;com&#x27;</span>): rational_to_complex&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  类型强制的方法相对于类型分派有新的优势：虽然需要一个<code>coerce_to</code>函数实现类型转换，但<strong>我们只需要写这一个函数，就可以将其他所有的函数归进一个统一的范式中</strong>。这是基于以下思想：类型间的转换<strong>只与类型本身有关、与类型的具体操作无关</strong>。</p>
-<p>  类型强制给我们带来了启发：对于两种数据类型，我们可以<strong>设法找到一种中间类型(即前文说的“隐性的附加结构”)，将两种数据类型转换成这个类型</strong>。例如我们可以将矩形和菱形都转化为平行四边形。类似的，不同的中间类型可以转换为新的中间类型<span class="math inline">\(\cdots\)</span>通过这样的链式强制(<span class="math inline">\(chaining\;coercion\)</span>)，我们可以减少程序中需要的<code>coerce</code>函数数量。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 2.Building Abstraction with Data</category>
-      </categories>
-  </entry>
-  <entry>
     <title>2.5.面向对象编程</title>
     <url>/2024/05/31/2.5.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h1><span id="25面向对象编程"><span class="math inline">\(2.5\)</span>面向对象编程</span></h1>
@@ -3343,6 +3242,107 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
+    <title>2.7.对象抽象</title>
+    <url>/2024/05/31/2.7.%E5%AF%B9%E8%B1%A1%E6%8A%BD%E8%B1%A1/</url>
+    <content><![CDATA[<h1><span id="27对象抽象"><span class="math inline">\(2.7\)</span>对象抽象</span></h1>
+<h2><span id="一-思想概述">一、思想概述</span></h2>
+<p>  对象系统(<span class="math inline">\(object\;system\)</span>)可以实现对抽象数据的不同表达的共存。</p>
+<p>  为实现这样的对象系统，我们需要<strong>找到一个普遍函数(<span class="math inline">\(generic\;function\)</span>)，这个函数可以接受某个值的各种表达</strong>，下面将介绍实现这一操作的方法。</p>
+<h2><span id="二-前置知识">二、前置知识</span></h2>
+<h3><span id="1字符串转换">1.字符串转换</span></h3>
+<p>  为更高效地表达数据，我们希望在<span class="math inline">\(python\)</span>的交互式对话中自动显示表达式的字符串表示。</p>
+<p>  <span class="math inline">\(python\)</span>规定，每个对象都会产生两种不同的字符串表示：<strong>一种是人类可以阅读(<span class="math inline">\(human-interpretable\)</span>)的文本，一种是<span class="math inline">\(python\)</span>可理解(<span class="math inline">\(python-interpretable\)</span>)的表达式</strong>。字符串的构造函数<code>str</code>返回一个人类可读的字符串。(在可能的情况下)而<code>repr</code>函数返回结果等价的<code>python</code>表达式：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">12e12</span></span><br><span class="line"><span class="number">12000000000000.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="built_in">repr</span>(<span class="number">12e12</span>))</span><br><span class="line"><span class="number">12000000000000.0</span></span><br></pre></td></tr></table></figure></p>
+<p>  当传入的表达式没有初始值时，<code>repr</code>会返回如下语句：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">repr</span>(<span class="built_in">min</span>)</span><br><span class="line"><span class="string">&#x27;&lt;built-in function min&gt;&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<p>  <code>str</code>的<span class="math inline">\(constructor\)</span>与<code>repr</code>语句经常重合，但前者返回一个人类更易读的文本：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues = date(<span class="number">2011</span>, <span class="number">9</span>, <span class="number">12</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">repr</span>(tues)</span><br><span class="line"><span class="string">&#x27;datetime.date(2011, 9, 12)&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">str</span>(tues)</span><br><span class="line"><span class="string">&#x27;2011-09-12&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<p>  对象系统为我们提供了能用于所有数据类型的方法：<code>__repr__</code>与<code>__str__</code>，这让我们可以以点表达式编写程序：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues.__repr__()</span><br><span class="line"><span class="string">&#x27;datetime.date(2011, 9, 12)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tues.__str__()</span><br><span class="line"><span class="string">&#x27;2011-09-12&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<h3><span id="2特殊方法">2.特殊方法</span></h3>
+<p>  在<span class="math inline">\(python\)</span>中，特殊方法(<span class="math inline">\(special\;method\)</span>)在特定情况被<span class="math inline">\(python\)</span>编译器调用，例如：</p>
+<ul>
+<li><code>__init__</code>方法会在某个对象被创建后自动调用。</li>
+<li><code>__str__</code>方法在打印结果时自动调用。</li>
+<li><code>__repr</code>方法在交互式程序展示值(<code>value</code>)时自动调用。</li>
+</ul>
+<p>  <span class="math inline">\(python\)</span>中还有一些类似的特殊方法。</p>
+<h4><span id="a__bool__方法">  <span class="math inline">\(a.\)</span><code>__bool__</code>方法</span></h4>
+<p>  一般的<code>bool</code>会默认<span class="math inline">\(0\)</span>为<code>false</code>，其他值为<code>true</code>。对于对象而言，<span class="math inline">\(python\)</span>中默认所有对象都有<code>true</code>值。但<strong>我们可以利用<code>__bool__</code>方法来覆盖这一默认值</strong>。例如我们将值为<span class="math inline">\(0\)</span>的<span class="math inline">\(Account\)</span>为<code>false</code>：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt;Account.__bool__=<span class="keyword">lambda</span> self:self.balance!= <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>  则对于下面的对象，它会输出<code>false</code>： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">bool</span>(Account(<span class="string">&#x27;Jack&#x27;</span>))</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">if</span> <span class="keyword">not</span> Account(<span class="string">&#x27;Jack&#x27;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Jack has nothing&#x27;</span>)</span><br><span class="line">Jack has nothing</span><br></pre></td></tr></table></figure></p>
+<h4><span id="b序列操作">  <span class="math inline">\(b.\)</span>序列操作</span></h4>
+<p>  序列中的方法主要如下：</p>
+<ul>
+<li><p><code>__len__</code> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>.__len__()</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p><code>__getitem__</code> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>[<span class="number">3</span>]</span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;Go Bears!&#x27;</span>.__getitem__(<span class="number">3</span>)</span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+</ul>
+<h3><span id="3可调用的对象">3.可调用的对象</span></h3>
+<p>  <strong>通过<code>__call__</code>方法，我们可以让定义的对象像函数一样被调用</strong>，进而实现类似高阶函数的功能。</p>
+<p>  考虑下面的高阶函数： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">make_adder</span>(<span class="params">n</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">adder</span>(<span class="params">k</span>):</span><br><span class="line">            <span class="keyword">return</span> n + k</span><br><span class="line">        <span class="keyword">return</span> adder</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three = make_adder(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three(<span class="number">4</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure></p>
+<p>  我们可以定义一个<code>Adder</code>类实现类似操作：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Adder</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>):</span><br><span class="line">            self.n = n</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, k</span>):</span><br><span class="line">            <span class="keyword">return</span> self.n + k</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three_obj = Adder(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_three_obj(<span class="number">4</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们就让类和对象表现得像函数一样，这进一步模糊了函数与数据的界限。</p>
+<h2><span id="三-多重表示multiplerepresentations">三、多重表示<span class="math inline">\(multiple\;representations\)</span></span></h2>
+<p>  在编程中，对于程序中的某个数据对象，可能存在多种表达方式。例如复数(<span class="math inline">\(complex\;number\)</span>)，既可以用“实部+虚部”来表示，又可以用“模长+辐角主值”来表示。这使我们希望设计出<strong>能处理多重表示(<span class="math inline">\(multiple\;representations\)</span>)的系统</strong>。</p>
+<p>  下面即以复数系统说明这一功能的实现。</p>
+<h3><span id="1对两种表示的初始化">1.对两种表示的初始化</span></h3>
+<p>  我们<strong>从最高层次的抽象着手搭建系统，然后慢慢将其中的功能具体化</strong>。所有的复数都属于<span class="math inline">\(Number\)</span>，而数字可以相加与相乘，于是我们可以定义一个基准类<code>Number</code>与方法<code>__add__</code>、<code>__mul__</code>，这里的<code>__add__</code>、<code>__mul__</code>是通过<code>add</code>、<code>mul</code>等更具体的方法实现的：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> self.add(other)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> self.mul(other)</span><br></pre></td></tr></table></figure></p>
+<p>  然后考虑在复数中实现<code>add</code>与<code>mul</code>方法，对<code>add</code>我们用复数的标准形式来计算；对于<code>mul</code>我们用复数的辐角形式来计算：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Complex</span>(<span class="title class_ inherited__">Number</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,other</span>):</span><br><span class="line">            <span class="keyword">return</span> ComplexRI(self.real+other.real,self.imag+other.imag)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">self,other</span>):</span><br><span class="line">            magnitude=self.magnitude*other.magnitude</span><br><span class="line">            <span class="keyword">return</span> ComplexMA(magnitude,self.angle+other.angle)</span><br></pre></td></tr></table></figure></p>
+<p>  这种实现方式假设了复数的两种类表示。</p>
+<h3><span id="2接口">2.接口</span></h3>
+<p>  <strong>对象的属性作为信息传递(<span class="math inline">\(message\;passing\)</span>)的一种，允许不同的数据类型对相同信息做出不同反应</strong>。这种<strong>在不同的类中引发相似操作的共享信息组(<span class="math inline">\(shared\;set\;of\;messages\)</span>)</strong>
+是有力的抽象方式。而<strong>接口(<span class="math inline">\(interface\)</span>)是一系列共享的属性名称与各自行为的详细说明</strong>。对于复数系统，接口需要实现四个属性：<code>real</code>，<code>imag</code>，<code>magnitude</code>，<code>angle</code>。</p>
+<p>  为了保证复数算法(<span class="math inline">\(arithmic\)</span>)的正确性，这些属性必须具有一致性。这就是说，<code>(magnitude,angle)</code>表示的复数与<code>(real,imag)</code>表示的复数必须是同一个复数。</p>
+<h3><span id="3properties">3.<span class="math inline">\(properties\)</span></span></h3>
+<p>  让多个属性维系一个固定的关系是一个新的问题，我们可以通过<strong>只存储某种属性、在需要其他属性时单独计算</strong>的方式解决这个问题。</p>
+<p>  <span class="math inline">\(python\)</span>中的<code>@property</code>装饰符允许我们在不调用表达式语法的情况下调用函数，通过零参数的方法计算属性。以复数系统为例，我们存储复数的标准形式：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> math <span class="keyword">import</span> atan2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">ComplexRI</span>(<span class="title class_ inherited__">Complex</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, real, imag</span>):</span><br><span class="line">            self.real = real</span><br><span class="line">            self.imag = imag</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">magnitude</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> (self.real**<span class="number">2</span>+self.imag**<span class="number">2</span>)**<span class="number">0.5</span></span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">angle</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> atan2(self.imag, self.real)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ComplexRI(&#123;0:g&#125;, &#123;1:g&#125;)&#x27;</span>.<span class="built_in">format</span>(self.real, self.imag)</span><br></pre></td></tr></table></figure></p>
+<p>  这样我们就可以通过点表达式直接访问除标准形式外的属性了：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri = ComplexRI(<span class="number">5</span>, <span class="number">12</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.magnitude</span><br><span class="line"><span class="number">13.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real = <span class="number">9</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.real</span><br><span class="line"><span class="number">9</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ri.magnitude</span><br><span class="line"><span class="number">15.0</span></span><br></pre></td></tr></table></figure></p>
+<p>  同样地，我们也可以存储辐角形式： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> math <span class="keyword">import</span> sin, cos, pi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">ComplexMA</span>(<span class="title class_ inherited__">Complex</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, magnitude, angle</span>):</span><br><span class="line">            self.magnitude = magnitude</span><br><span class="line">            self.angle = angle</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">real</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> self.magnitude * cos(self.angle)</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">imag</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> self.magnitude * sin(self.angle)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ComplexMA(&#123;0:g&#125;, &#123;1:g&#125; * pi)&#x27;</span>.<span class="built_in">format</span>(self.magnitude, self.angle/pi)</span><br></pre></td></tr></table></figure></p>
+<p>  并得到以下的输出结果： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma = ComplexMA(<span class="number">2</span>, pi/<span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.imag</span><br><span class="line"><span class="number">2.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.angle = pi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ma.real</span><br><span class="line">-<span class="number">2.0</span></span><br></pre></td></tr></table></figure></p>
+<p>  通过接口方式对多重表示进行编码有优良的性质：<strong>每种表达的类都可以独自定义，它们只需要在共享的属性名称、这些属性的行为条件(<span class="math inline">\(behaviour\;condition\)</span>)上达成一致即可</strong>。当另一个编程者想再加入一个表达时，他只需要再创建一个具有相同属性的类即可。</p>
+<h2><span id="四-通用函数">四、通用函数</span></h2>
+<h3><span id="1概念amp引入">1.概念&amp;引入</span></h3>
+<p>  <strong>通用函数(<span class="math inline">\(generic\;function\)</span>)是一种函数方法，它可以被用于不同类型的变量。</strong>
+先前的<code>Complex.add</code>是通用函数，因为它的<code>other</code>变量既可以接受<code>ComplexRI</code>型，也可以接受<code>ComplexMA</code>型。</p>
+<p>  这种灵活性的实现是基于
+<strong><code>ComeplexRI</code>与<code>ComplexMA</code>共享一个接口</strong>的事实。除了利用接口和信息传递来实现通用函数，还有两种不同方法：类型分派与类型强制。</p>
+<p>  现在，我们想将原来的复数系统拓展到实数域，在先前章节中我们已经实现了实数类：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> fractions <span class="keyword">import</span> gcd</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Rational</span>(<span class="title class_ inherited__">Number</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,numer,denom</span>):</span><br><span class="line">            g = gcd(numer,denom)</span><br><span class="line">            self.numer=numer // g</span><br><span class="line">            self.denom=denom // g</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;Rational(&#123;0&#125;, &#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(self.numer, self.denom)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">self,other</span>):</span><br><span class="line">            nx,dx=self.numer, self.denom</span><br><span class="line">            ny,dy=other.numer, other.denom</span><br><span class="line">            <span class="keyword">return</span> Rational(nx*dy+ny*dx,dx*dy)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">self,other</span>):</span><br><span class="line">            numer=self.numer*other.numer</span><br><span class="line">            denom=self.denom*other.denom</span><br><span class="line">            <span class="keyword">return</span> Rational(numer,denom)</span><br></pre></td></tr></table></figure></p>
+<p>  我们希望实现一个通用函数<code>__add__</code>实现所有数的加法，同时将实数与复数的概念分离。</p>
+<h3><span id="2类型分派">2.类型分派</span></h3>
+<p>  一个实现跨类(<span class="math inline">\(cross-type\)</span>)操作的方法是基于参数的数据类型选择适当的行为。而<strong>类型分派(<span class="math inline">\(type\;dispatch\)</span>)正是为了实现一个检查参数数据类型的函数</strong>。</p>
+<p>  <span class="math inline">\(python\)</span>内置的<code>isinstance</code>函数可以实现这一功能。它<strong>接收一个对象和一个类，返回这个对象属于该类或属于该类的继承类的真假</strong>：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = ComplexRI(<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, ComplexRI)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, Complex)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(c, ComplexMA)</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
+<p>  可以利用<code>isinstance</code>函数实现对某个数是不是实数的判断：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">is_real</span>(<span class="params">c</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return whether c is a real number with no imaginary part.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(c, ComplexRI):</span><br><span class="line">            <span class="keyword">return</span> c.imag == <span class="number">0</span></span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">isinstance</span>(c, ComplexMA):</span><br><span class="line">            <span class="keyword">return</span> c.angle % pi == <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>is_real(ComplexRI(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>is_real(ComplexMA(<span class="number">2</span>, pi))</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
+<p>  当然，我们也可以通过别的方式实现类型分派。我们可以<strong>给每一种数据类型添加一个属性<code>.type_tag</code></strong>，调用该属性会<strong>返回该数据类型的字符串表示</strong>。这样，我们就可以直接比较两个参数的<code>type_tag</code>了：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational.type_tag = <span class="string">&#x27;rat&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Complex.type_tag = <span class="string">&#x27;com&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational(<span class="number">2</span>, <span class="number">5</span>).type_tag == Rational(<span class="number">1</span>, <span class="number">2</span>).type_tag</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ComplexRI(<span class="number">1</span>, <span class="number">1</span>).type_tag == ComplexMA(<span class="number">2</span>, pi/<span class="number">2</span>).type_tag</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rational(<span class="number">2</span>, <span class="number">5</span>).type_tag == ComplexRI(<span class="number">1</span>, <span class="number">1</span>).type_tag</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure></p>
+<p>  处理完类型分派问题，我们编写接受实数与复数进行计算的函数操作：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">add_complex_and_rational</span>(<span class="params">c, r</span>):</span><br><span class="line">        <span class="keyword">return</span> ComplexRI(c.real + r.numer/r.denom, c.imag)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">mul_complex_and_rational</span>(<span class="params">c, r</span>):</span><br><span class="line">        r_magnitude, r_angle = r.numer/r.denom, <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> r_magnitude &lt; <span class="number">0</span>:</span><br><span class="line">            r_magnitude, r_angle = -r_magnitude, pi</span><br><span class="line">        <span class="keyword">return</span> ComplexMA(c.magnitude * r_magnitude, c.angle + r_angle)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">add_rational_and_complex</span>(<span class="params">r, c</span>):</span><br><span class="line">        <span class="keyword">return</span> add_complex_and_rational(c, r)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">mul_rational_and_complex</span>(<span class="params">r, c</span>):</span><br><span class="line">        <span class="keyword">return</span> mul_complex_and_rational(c, r)</span><br></pre></td></tr></table></figure></p>
+<p>  利用类型分派，我们可以根据传入参数的类型选择适当的函数操作：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag == other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self.add(other)</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.adders:</span><br><span class="line">                <span class="keyword">return</span> self.cross_apply(other, self.adders)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag == other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self.mul(other)</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.multipliers:</span><br><span class="line">                <span class="keyword">return</span> self.cross_apply(other, self.multipliers)</span><br><span class="line">        <span class="comment"># to tackle cross-type requirement</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">cross_apply</span>(<span class="params">self, other, cross_fns</span>):</span><br><span class="line">            cross_fn = cross_fns[(self.type_tag, other.type_tag)]</span><br><span class="line">            <span class="keyword">return</span> cross_fn(self, other)</span><br><span class="line">        <span class="comment"># dispatch dictionary</span></span><br><span class="line">        adders = &#123;(<span class="string">&quot;com&quot;</span>, <span class="string">&quot;rat&quot;</span>): add_complex_and_rational,</span><br><span class="line">                  (<span class="string">&quot;rat&quot;</span>, <span class="string">&quot;com&quot;</span>): add_rational_and_complex&#125;</span><br><span class="line">        multipliers = &#123;(<span class="string">&quot;com&quot;</span>, <span class="string">&quot;rat&quot;</span>): mul_complex_and_rational,</span><br><span class="line">                       (<span class="string">&quot;rat&quot;</span>, <span class="string">&quot;com&quot;</span>): mul_rational_and_complex&#125;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;ComplexRI(<span class="number">1.5</span>,<span class="number">0</span>)+Rational(<span class="number">3</span>,<span class="number">2</span>)</span><br><span class="line">ComplexRI(<span class="number">3</span>,<span class="number">0</span>)</span><br><span class="line">&gt;&gt;&gt;Rational(-<span class="number">1</span>,<span class="number">2</span>)*ComplexMA(<span class="number">4</span>,pi/<span class="number">2</span>)</span><br><span class="line">ComplexMA(<span class="number">2</span>,<span class="number">1.5</span>*pi)</span><br></pre></td></tr></table></figure></p>
+<p>  在新定义的<code>Number</code>类中，所有跨类型函数都作为<code>adders</code>与<code>multipliers</code>的索引。</p>
+<p>  在这种基于字典的实现方式是可拓展的，当我们要定义一个<code>Number</code>的新子类时，只需<strong>给它定义一个<code>type_tag</code>，然后把对应的跨类型操作加进<code>Number.adders</code>和<code>Number.multiplier</code>中，同时也可以在子类中定义自己的<code>adders</code>和<code>multipliers</code></strong>
+。</p>
+<h3><span id="3类型强制">3.类型强制</span></h3>
+<p>  在对两种完全不相同的数据类型进行操作时，直接实现跨类型函数是最佳选择。但有时，我们可以利用<strong>类型系统中隐性的附加结构</strong>得到更优解法。</p>
+<p>  通常，<strong>不同的数据类型并不是完全独立的，一种数据类型可能是另一种数据类型的子类型</strong>，例如实数就可以被看作虚部为<span class="math inline">\(0\)</span>的复数。这样，我们就可以只用<code>Complex.add</code>与<code>Complex.mul</code>来实现实数虚数的运算了。像这样转换类型的做法被称作<strong>类型强制(<span class="math inline">\(type\;coercion\)</span>)</strong>。</p>
+<p>  可以通过以下函数实现类型强制： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">rational_to_complex</span>(<span class="params">r</span>):</span><br><span class="line">        <span class="keyword">return</span> ComplexRI(r.numer/r.denom,<span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  包含类型强制的<code>Number</code>类实现如下： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.add(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.mul(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag==other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self,other</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self.coerce_to(other.type_tag), other)</span><br><span class="line">            <span class="keyword">elif</span> (other.type_tag, self.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self, other.coerce_to(self.type_tag))</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce_to</span>(<span class="params">self, other_tag</span>):</span><br><span class="line">            coercion_fn=self.coercions[(self.type_tag, other_tag)]</span><br><span class="line">            <span class="keyword">return</span> coercion_fn(self)</span><br><span class="line">        coercions=&#123;(<span class="string">&#x27;rat&#x27;</span>, <span class="string">&#x27;com&#x27;</span>): rational_to_complex&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  类型强制的方法相对于类型分派有新的优势：虽然需要一个<code>coerce_to</code>函数实现类型转换，但<strong>我们只需要写这一个函数，就可以将其他所有的函数归进一个统一的范式中</strong>。这是基于以下思想：类型间的转换<strong>只与类型本身有关、与类型的具体操作无关</strong>。</p>
+<p>  类型强制给我们带来了启发：对于两种数据类型，我们可以<strong>设法找到一种中间类型(即前文说的“隐性的附加结构”)，将两种数据类型转换成这个类型</strong>。例如我们可以将矩形和菱形都转化为平行四边形。类似的，不同的中间类型可以转换为新的中间类型<span class="math inline">\(\cdots\)</span>通过这样的链式强制(<span class="math inline">\(chaining\;coercion\)</span>)，我们可以减少程序中需要的<code>coerce</code>函数数量。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 2.Building Abstraction with Data</category>
+      </categories>
+  </entry>
+  <entry>
     <title>2.9.迭代对象</title>
     <url>/2024/05/31/2.9.%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1/</url>
     <content><![CDATA[<h1><span id="29迭代对象"><span class="math inline">\(2.9\)</span>迭代对象</span></h1>
@@ -3380,98 +3380,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 2.Building Abstraction with Data</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>3.1.时序逻辑</title>
-    <url>/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/</url>
-    <content><![CDATA[<h1><span id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</span></h1>
-<h3><span id="1background">1.Background</span></h3>
-<p>  In the previous chapter, we've completely ignored the issue of
-time:</p>
-<ul>
-<li><p><strong>Everything happened immediately</strong>, there were
-inputs and immediately the outputs were some function of them.</p></li>
-<li><p><strong>The inputs never change</strong>, we didn't have any
-notion of change.</p></li>
-<li><p>We didn't have any notion of things <strong>happening one thing
-after another</strong>. Just was some kind of logical mapping from
-inputs to outputs.</p></li>
-</ul>
-<p>  So, there are two things that we want to complement:</p>
-<ol type="1">
-<li><p>Be able to use the same hardware to <strong>compute many things
-one time after another</strong>. We need to be able to reuse our
-hardware.</p>
-<ul>
-<li>For example, if we take some kind of loop in a hard, in a, in some
-kind of software program, that the loop calls for doing the same thing
-many times, we want to be able to use a same hardware to do that.</li>
-</ul></li>
-<li><p><strong>Remember things from the past</strong>.When we need to
-remember intermediate results,we need to remember where we are in a
-computation.</p></li>
-</ol>
-<h3><span id="2the-clock">2.The clock</span></h3>
-<p>  What we're going to do is to <strong>convert the continuous
-physical time into discrete time</strong>.</p>
-<p>  To do this, we're going to have a <em>clock</em>:</p>
-<ul>
-<li>It is some kind of <em>oscillator going up and down at a certain
-fixed rate</em>.</li>
-<li>Each cycle of the clock is treated as one <em>digital integer time
-unit</em>.</li>
-</ul>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image.png"></p>
-<ul>
-<li><p>With each time unit, we are going to deal it as a indivisible
-thing. <em>Nothing changes in a time unit</em>.</p></li>
-<li><p>In a time unit, it will compute the output from the input <em>in
-an instantaneous manner</em>.</p></li>
-</ul>
-<h3><span id="3delay">3.Delay</span></h3>
-<p>  However, for a physical signal, it doesn't change instantaneously
-in a number time between time as we suppose. In reality, the little
-course current builds slowly, and the voltage may change slowly. That is
-to say, the actual analog signal takes time to reach its final stage,
-both input and output.</p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-1.png"></p>
-<p>  Therefore, we will give ourselves enough time between consecutive
-time units. For example, we will give the logical operations <em>at the
-end of the grey area</em> to make sure that <em>all the hardware there
-really stabilizes:</em></p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-2.png"></p>
-<p>  And then,we can simply ignore these inconsistencies because
-now,whatever happened before the gray area,we don't need to worry about
-it because we know it's gone by the end of the clock cycle.</p>
-<h3><span id="4combinatorial-logic">4.Combinatorial logic</span></h3>
-<ul>
-<li>Combinatorial logic: It's a stateless logic, where <em>the output
-depends solely on the current input state:</em><span class="math inline">\(out(t)=f(in(t))\)</span>. Our ALU and bool chips
-take this logic.</li>
-<li>Sequential logic: <span class="math inline">\(out(t)=f(in(t-1))\)</span>.</li>
-</ul>
-<h3><span id="5state-feedback">5.State feedback</span></h3>
-<ul>
-<li><p>The sequential logic points out a new way of thinking, which is
-to <strong>consider inputs and outputs as the same bits, capable of
-being transmitted on the same bus and occupying the same hardware
-location</strong>. This design allows us to <strong>feed output values
-back to the input</strong>, creating a <strong>state</strong> rather
-than simply passing data. Thus, we can use a particular bit in the
-circuit to store state information rather than solely transmitting
-data.</p></li>
-<li><p>This new way of thinking alters our understanding of time.
-Instead of viewing time as continuous, we now divide it into discrete
-integer time steps and observe the events happening sequentially at each
-time step. This approach enables us to <strong>change the state
-incrementally</strong>, remembering the result from the previous time
-step at each subsequent step and building upon it.</p></li>
-</ul>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 3.Memory</category>
       </categories>
   </entry>
   <entry>
@@ -3660,6 +3568,98 @@ calling site</strong>.</li>
       <categories>
         <category>CS61C Great Ideas in Computer Architecture</category>
         <category>Module 3.Program Process</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>3.1.时序逻辑</title>
+    <url>/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/</url>
+    <content><![CDATA[<h1><span id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</span></h1>
+<h3><span id="1background">1.Background</span></h3>
+<p>  In the previous chapter, we've completely ignored the issue of
+time:</p>
+<ul>
+<li><p><strong>Everything happened immediately</strong>, there were
+inputs and immediately the outputs were some function of them.</p></li>
+<li><p><strong>The inputs never change</strong>, we didn't have any
+notion of change.</p></li>
+<li><p>We didn't have any notion of things <strong>happening one thing
+after another</strong>. Just was some kind of logical mapping from
+inputs to outputs.</p></li>
+</ul>
+<p>  So, there are two things that we want to complement:</p>
+<ol type="1">
+<li><p>Be able to use the same hardware to <strong>compute many things
+one time after another</strong>. We need to be able to reuse our
+hardware.</p>
+<ul>
+<li>For example, if we take some kind of loop in a hard, in a, in some
+kind of software program, that the loop calls for doing the same thing
+many times, we want to be able to use a same hardware to do that.</li>
+</ul></li>
+<li><p><strong>Remember things from the past</strong>.When we need to
+remember intermediate results,we need to remember where we are in a
+computation.</p></li>
+</ol>
+<h3><span id="2the-clock">2.The clock</span></h3>
+<p>  What we're going to do is to <strong>convert the continuous
+physical time into discrete time</strong>.</p>
+<p>  To do this, we're going to have a <em>clock</em>:</p>
+<ul>
+<li>It is some kind of <em>oscillator going up and down at a certain
+fixed rate</em>.</li>
+<li>Each cycle of the clock is treated as one <em>digital integer time
+unit</em>.</li>
+</ul>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image.png"></p>
+<ul>
+<li><p>With each time unit, we are going to deal it as a indivisible
+thing. <em>Nothing changes in a time unit</em>.</p></li>
+<li><p>In a time unit, it will compute the output from the input <em>in
+an instantaneous manner</em>.</p></li>
+</ul>
+<h3><span id="3delay">3.Delay</span></h3>
+<p>  However, for a physical signal, it doesn't change instantaneously
+in a number time between time as we suppose. In reality, the little
+course current builds slowly, and the voltage may change slowly. That is
+to say, the actual analog signal takes time to reach its final stage,
+both input and output.</p>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-1.png"></p>
+<p>  Therefore, we will give ourselves enough time between consecutive
+time units. For example, we will give the logical operations <em>at the
+end of the grey area</em> to make sure that <em>all the hardware there
+really stabilizes:</em></p>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-2.png"></p>
+<p>  And then,we can simply ignore these inconsistencies because
+now,whatever happened before the gray area,we don't need to worry about
+it because we know it's gone by the end of the clock cycle.</p>
+<h3><span id="4combinatorial-logic">4.Combinatorial logic</span></h3>
+<ul>
+<li>Combinatorial logic: It's a stateless logic, where <em>the output
+depends solely on the current input state:</em><span class="math inline">\(out(t)=f(in(t))\)</span>. Our ALU and bool chips
+take this logic.</li>
+<li>Sequential logic: <span class="math inline">\(out(t)=f(in(t-1))\)</span>.</li>
+</ul>
+<h3><span id="5state-feedback">5.State feedback</span></h3>
+<ul>
+<li><p>The sequential logic points out a new way of thinking, which is
+to <strong>consider inputs and outputs as the same bits, capable of
+being transmitted on the same bus and occupying the same hardware
+location</strong>. This design allows us to <strong>feed output values
+back to the input</strong>, creating a <strong>state</strong> rather
+than simply passing data. Thus, we can use a particular bit in the
+circuit to store state information rather than solely transmitting
+data.</p></li>
+<li><p>This new way of thinking alters our understanding of time.
+Instead of viewing time as continuous, we now divide it into discrete
+integer time steps and observe the events happening sequentially at each
+time step. This approach enables us to <strong>change the state
+incrementally</strong>, remembering the result from the previous time
+step at each subsequent step and building upon it.</p></li>
+</ul>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 3.Memory</category>
       </categories>
   </entry>
   <entry>
@@ -4326,6 +4326,118 @@ It contains these features:</p>
       </categories>
   </entry>
   <entry>
+    <title>3.5.Arithmetic and Logical Operations</title>
+    <url>/2024/07/15/3-5-Arithmetic-and-Logical-Operations/</url>
+    <content><![CDATA[<h1><span id="35arithmetic-and-logicaloperations"><span class="math inline">\(3.5.\)</span>Arithmetic and Logical
+Operations</span></h1>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image.png"></p>
+<h3><span id="1load-effective-address">1.Load Effective Address</span></h3>
+<ul>
+<li>The <code>leaq</code> instruction <strong>doesn't reference memory
+at all</strong>. Instead of reading from the designated location, it
+<strong>copies the effective address to the destination</strong>.</li>
+</ul>
+<p>  The instruction can be used to <strong>generate pointers for later
+memory reference</strong>. For example, if register <code>%rdx</code>
+represents <span class="math inline">\(x\)</span>, then
+<code>leaq 7(%rdx, %rdx, 4), %rdx</code> will set <code>%rdx</code> to
+<span class="math inline">\(5x+7\)</span>.</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-1.png"></p>
+<h3><span id="2unary-amp-binary-operations">2.Unary &amp; Binary Operations</span></h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-2.png"></p>
+<p>  Operations in the first group are unary operations:</p>
+<ul>
+<li><p>The single operand serves as both source and
+destination.</p></li>
+<li><p>This operand can be either a register or a memory
+location.</p></li>
+</ul>
+<p>  The second group consists of binary operations.</p>
+<ul>
+<li>The second operand is used as both a source and a destination, the
+first operand is another operand.</li>
+</ul>
+<blockquote>
+<p>This syntax is reminiscent of the C assignment operators, such as
+<code>x -= y</code>.</p>
+</blockquote>
+<ul>
+<li>The first operand can be either an immediate value, a register, or a
+memory location. The second can be either a register or a memory
+location.</li>
+</ul>
+<blockquote>
+<p>The operation: <code>xor %rcx %rcx</code> is simply to set</p>
+</blockquote>
+<h3><span id="3shift-operations">3.Shift operations</span></h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-3.png"></p>
+<ul>
+<li><p>The shift amount is either <strong>an immediate value</strong> or
+<strong>a single-byte register <code>%cl</code></strong>.</p></li>
+<li><p>In x86-64, if the data values are <span class="math inline">\(w\)</span> bits, then its shift amount will be
+<strong>the low-order <span class="math inline">\(m\)</span> bits of
+<code>%cl</code>, where <span class="math inline">\(2^m=w\)</span></strong>. For example, when
+<code>%cl</code> has value 0xFF, then <code>salb</code> would shift by
+7, while <code>salw</code> would shift by 15.</p></li>
+</ul>
+<p>  <span class="math inline">\(e.g.\)</span>(Convert 64-bits into
+32-bits)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-4.png"></p>
+<p>  <span class="math inline">\(solution:\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-5.png"></p>
+<ul>
+<li>The <code>movl %esi %ecx</code> is worth noting. Because we only
+need 4 bytes of data, we can use <code>movl</code> operation to set the
+low-order 32 bits of <code>rcx</code> to <code>%esi</code> while
+high-order 32 bits to 0. Since we only need the low-order 4 bytes, doing
+this implies that the high-order 4 bytes is meaningless, which makes
+code safer, more accurate and more readable.</li>
+</ul>
+<h3><span id="4special-arithmeticoperations">4.Special Arithmetic
+Operations</span></h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-6.png"></p>
+<h4><span id="aone-operand-multiply">  <span class="math inline">\(a.\)</span>"One-operand" multiply</span></h4>
+<p>  The <code>mulq</code>(unsigned) and <code>imulq</code>(signed) can
+also act as "one-operand" instructions to <strong>compute the full
+128-bits product of 2 64-bits values</strong>.</p>
+<ul>
+<li><p><strong>One of the multiplicand is value in
+<code>%rax</code></strong>, another is the operand.</p></li>
+<li><p>The product is stored in <code>%rdx</code> (high-order 64 bits)
+and <code>%rax</code> (low-order 64 bits).</p></li>
+</ul>
+<p>  We will need to take two steps to store an oct word:</p>
+<p>  <span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-7.png"></p>
+<h4><span id="bdivision">  <span class="math inline">\(b.\)</span>Division</span></h4>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-8.png"></p>
+<ul>
+<li><p>For a division, <code>%rdx</code> stores the remainder and
+<code>%rax</code> stores the quotient.</p></li>
+<li><p>For most applications of 64-bit addition, the dividend is given
+as a 64-bit value. The bits of <code>%rdx</code> should then be set to
+either <strong>all zeros (unsigned arithmetic) or the sign bit of %rax
+(signed arithmetic)</strong>.</p>
+<ul>
+<li><p>The former can be implemented by <code>movl $0 %reg</code>, this
+can set upper 8 bytes of diviend to 0.</p></li>
+<li><p>The latter can be implemented by <code>cqto</code>. It takes no
+operands, implicitly reads the sign bit from %rax and copies it across
+all of %rdx.</p></li>
+</ul></li>
+</ul>
+<p>  <span class="math inline">\(e.g.\)</span>(Signed and Unsigned)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-9.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-10.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-11.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-12.png"></p>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 3.Machine-level Representation of Program</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.5.Pipelined Datapath and Control</title>
     <url>/2024/06/07/3-5-Pipelined-Datapath-and-Control/</url>
     <content><![CDATA[<h1><span id="35pipelined-datapath-and-control"><span class="math inline">\(3.5.\)</span>Pipelined Datapath and Control</span></h1>
@@ -4605,118 +4717,6 @@ before it is changed</strong>:</p>
       <categories>
         <category>CS61C Great Ideas in Computer Architecture</category>
         <category>Module 3.Program Process</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>3.5.Arithmetic and Logical Operations</title>
-    <url>/2024/07/15/3-5-Arithmetic-and-Logical-Operations/</url>
-    <content><![CDATA[<h1><span id="35arithmetic-and-logicaloperations"><span class="math inline">\(3.5.\)</span>Arithmetic and Logical
-Operations</span></h1>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image.png"></p>
-<h3><span id="1load-effective-address">1.Load Effective Address</span></h3>
-<ul>
-<li>The <code>leaq</code> instruction <strong>doesn't reference memory
-at all</strong>. Instead of reading from the designated location, it
-<strong>copies the effective address to the destination</strong>.</li>
-</ul>
-<p>  The instruction can be used to <strong>generate pointers for later
-memory reference</strong>. For example, if register <code>%rdx</code>
-represents <span class="math inline">\(x\)</span>, then
-<code>leaq 7(%rdx, %rdx, 4), %rdx</code> will set <code>%rdx</code> to
-<span class="math inline">\(5x+7\)</span>.</p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-1.png"></p>
-<h3><span id="2unary-amp-binary-operations">2.Unary &amp; Binary Operations</span></h3>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-2.png"></p>
-<p>  Operations in the first group are unary operations:</p>
-<ul>
-<li><p>The single operand serves as both source and
-destination.</p></li>
-<li><p>This operand can be either a register or a memory
-location.</p></li>
-</ul>
-<p>  The second group consists of binary operations.</p>
-<ul>
-<li>The second operand is used as both a source and a destination, the
-first operand is another operand.</li>
-</ul>
-<blockquote>
-<p>This syntax is reminiscent of the C assignment operators, such as
-<code>x -= y</code>.</p>
-</blockquote>
-<ul>
-<li>The first operand can be either an immediate value, a register, or a
-memory location. The second can be either a register or a memory
-location.</li>
-</ul>
-<blockquote>
-<p>The operation: <code>xor %rcx %rcx</code> is simply to set</p>
-</blockquote>
-<h3><span id="3shift-operations">3.Shift operations</span></h3>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-3.png"></p>
-<ul>
-<li><p>The shift amount is either <strong>an immediate value</strong> or
-<strong>a single-byte register <code>%cl</code></strong>.</p></li>
-<li><p>In x86-64, if the data values are <span class="math inline">\(w\)</span> bits, then its shift amount will be
-<strong>the low-order <span class="math inline">\(m\)</span> bits of
-<code>%cl</code>, where <span class="math inline">\(2^m=w\)</span></strong>. For example, when
-<code>%cl</code> has value 0xFF, then <code>salb</code> would shift by
-7, while <code>salw</code> would shift by 15.</p></li>
-</ul>
-<p>  <span class="math inline">\(e.g.\)</span>(Convert 64-bits into
-32-bits)</p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-4.png"></p>
-<p>  <span class="math inline">\(solution:\)</span></p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-5.png"></p>
-<ul>
-<li>The <code>movl %esi %ecx</code> is worth noting. Because we only
-need 4 bytes of data, we can use <code>movl</code> operation to set the
-low-order 32 bits of <code>rcx</code> to <code>%esi</code> while
-high-order 32 bits to 0. Since we only need the low-order 4 bytes, doing
-this implies that the high-order 4 bytes is meaningless, which makes
-code safer, more accurate and more readable.</li>
-</ul>
-<h3><span id="4special-arithmeticoperations">4.Special Arithmetic
-Operations</span></h3>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-6.png"></p>
-<h4><span id="aone-operand-multiply">  <span class="math inline">\(a.\)</span>"One-operand" multiply</span></h4>
-<p>  The <code>mulq</code>(unsigned) and <code>imulq</code>(signed) can
-also act as "one-operand" instructions to <strong>compute the full
-128-bits product of 2 64-bits values</strong>.</p>
-<ul>
-<li><p><strong>One of the multiplicand is value in
-<code>%rax</code></strong>, another is the operand.</p></li>
-<li><p>The product is stored in <code>%rdx</code> (high-order 64 bits)
-and <code>%rax</code> (low-order 64 bits).</p></li>
-</ul>
-<p>  We will need to take two steps to store an oct word:</p>
-<p>  <span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-7.png"></p>
-<h4><span id="bdivision">  <span class="math inline">\(b.\)</span>Division</span></h4>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-8.png"></p>
-<ul>
-<li><p>For a division, <code>%rdx</code> stores the remainder and
-<code>%rax</code> stores the quotient.</p></li>
-<li><p>For most applications of 64-bit addition, the dividend is given
-as a 64-bit value. The bits of <code>%rdx</code> should then be set to
-either <strong>all zeros (unsigned arithmetic) or the sign bit of %rax
-(signed arithmetic)</strong>.</p>
-<ul>
-<li><p>The former can be implemented by <code>movl $0 %reg</code>, this
-can set upper 8 bytes of diviend to 0.</p></li>
-<li><p>The latter can be implemented by <code>cqto</code>. It takes no
-operands, implicitly reads the sign bit from %rax and copies it across
-all of %rdx.</p></li>
-</ul></li>
-</ul>
-<p>  <span class="math inline">\(e.g.\)</span>(Signed and Unsigned)</p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-9.png"></p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-10.png"></p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-11.png"></p>
-<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-12.png"></p>
-]]></content>
-      <categories>
-        <category>CSAPP</category>
-        <category>Chapter 3.Machine-level Representation of Program</category>
       </categories>
   </entry>
   <entry>
@@ -5064,9 +5064,108 @@ procedures is the same as other procedures:</p>
   <entry>
     <title>3.8.Array Allocation and Access</title>
     <url>/2024/07/17/3-8-Array-Allocation-and-Access/</url>
-    <content><![CDATA[<h1><span id="37array-allocation-and-access"><span class="math inline">\(3.7.\)</span>Array Allocation and Access</span></h1>
-<h3><span id="1basic-principle">1.Basic Principle</span></h3>
-<p>  Considering a declaration of the form <code>T A[N]</code>:</p>
+    <content><![CDATA[<h1><span id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</span></h1>
+<h3><span id="1pointer-arithmetic">1.Pointer Arithmetic</span></h3>
+<p>  Suppose the starting address of integer array <code>E</code> and
+integer index <code>i</code> are stored in registers <code>%rdx</code>
+and <code>%rcx</code>. Below are some assembly-code implementation of
+array expressions, with the result being stored in either
+<code>%eax</code>(for data) or register <code>%rax</code>(for
+pointers):</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image.png"></p>
+<blockquote>
+<p>The dereference of a pointer is through
+<code>(register_name)</code>.</p>
+</blockquote>
+<blockquote>
+<p>The final example shows that one can compute the difference of two
+pointers within the same data structure, with the result being data
+having type long and value equal to <strong>the difference of the two
+addresses divided by the size of the data type</strong>.</p>
+</blockquote>
+<h3><span id="2nested-arrays">2.Nested Arrays</span></h3>
+<p>  The array elements are ordered in memory in row-major order:</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image-1.png"></p>
+<p>  Array element <code>M[i][j]</code> can be easily reached through a
+series of arithmetic operations. For example:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># A in %rdi, i in %rsi, and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2), %rax  # Compute 3i</span><br><span class="line">leaq (%rdi,%rax,4), %rax  # Compute xA + 12i</span><br><span class="line">movl (%rax,%rdx,4), %eax  # Read from M[xA + 12i + 4]</span><br></pre></td></tr></table></figure>
+<h3><span id="3fixed-sized-arrays">3.Fixed-sized Arrays</span></h3>
+<p>  The C compiler is able to make many optimizations for code
+operating on multi-dimensional arrays of fixed size. Take the inner
+product calculation program as an example. The original form is as
+below:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  The optimized C code is as below:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele_opt</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span> &#123;</span><br><span class="line">    <span class="type">int</span> *Aptr = &amp;A[i][<span class="number">0</span>]; <span class="comment">/* Points to elements in row i of A */</span></span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k]; <span class="comment">/* Points to elements in column k of B */</span></span><br><span class="line">    <span class="type">int</span> *Bend = &amp;B[N][k]; <span class="comment">/* Marks stopping point for Bptr */</span></span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;                         <span class="comment">/* No need for initial test */</span></span><br><span class="line">        result += *Aptr * *Bptr; <span class="comment">/* Add next product to sum */</span></span><br><span class="line">        Aptr ++;                 <span class="comment">/* Move Aptr to next column */</span></span><br><span class="line">        Bptr += N;               <span class="comment">/* Move Bptr to next row */</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (Bptr != Bend);      <span class="comment">/* Test for stopping point */</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  The optimization follows the following steps:</p>
+<ol type="1">
+<li><p>Generating a pointer, which we have named <code>Aptr</code>, that
+points to successive elements in row <code>i</code> of
+<code>A</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bptr</code>, that
+points to successive elements in column <code>k</code> of
+<code>B</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bend</code>, that
+equals the value <code>Bptr</code> will have <strong>when it is time to
+terminate the loop</strong>.</p></li>
+</ol>
+<p>  The key points of optimization are as below:</p>
+<ol type="1">
+<li><p>Decide the <strong>starting address and end address of the
+array</strong>.</p></li>
+<li><p>Decide <strong>how to move the address forward</strong>.</p></li>
+</ol>
+<p>  <span class="math inline">\(e.g.\)</span>The C program below:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Set all diagonal elements to val */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">        A[i][i] = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  With the properties:</p>
+<ul>
+<li><p>Starting address: <code>&amp;A[0][0]</code>.</p></li>
+<li><p>Ending address: <code>&amp;A[N+1][0]</code>.</p></li>
+<li><p>Moving stride: <code>index += N + 1</code>.</p></li>
+</ul>
+<p>  And the optimized program:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag_opt</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *Abase = &amp;A[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> iend = N * (N + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        Abase[i] = val;</span><br><span class="line">        i += (N + <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">while</span> (i != iend);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="4variable-size-arrays">4.Variable-Size Arrays</span></h3>
+<p>  Programmers requiring variable-size arrays had to allocate storage
+for these arrays using functions such as <code>malloc</code> or
+<code>calloc</code>, and they had to explicitly encode the mapping of
+multidimensional arrays into single-dimension ones via row-major
+indexing.</p>
+<p>  If we declare an array <code>int A[exp1][exp2]</code>, the
+dimensions of the array are determined by evaluating the expressions
+<code>expr1</code> and <code>expr2</code> <strong>at the time the
+declaration is encountered</strong>.</p>
+<p>  For example, the following C program:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">long</span> i, <span class="type">long</span> j)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> A[i][j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  can be translated into the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var_ele:</span><br><span class="line">    imulq %rdx, %rdi          # Compute n * i</span><br><span class="line">    leaq (%rsi,%rdi,4), %rax  # Compute xA + 4(n * i)</span><br><span class="line">    movl (%rax,%rcx,4), %eax  # Read from M[xA + 4(n * i) + 4 * j]</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+<p>  <strong>Instead of using <code>leaq</code>, the dynamic version
+must use <code>imul</code> to scale <code>i</code> by
+<code>n</code></strong>. This is because we don't know the exact size of
+array until encounter the declaration.</p>
+<p>  The optimization of variable-size arrays is similar to that of the
+fixed-size:</p>
+<p>  For example, the C program:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span> &#123;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  can be optimized as:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of variable matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele_opt</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *Arow = A[i];</span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k];</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        result += Arow[j] * *Bptr;</span><br><span class="line">        Bptr += n;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>We can see that <code>GCC</code> is able to recognize patterns that
+arise when a program steps through the elements of a multidimensional
+array, and generate the <strong>pointer-based code</strong> or the
+<strong>array-based code</strong> to <strong>avoid direct multiple
+calculation</strong>.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 3.Machine-level Representation of Program</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>3.9.Heterogeneous Data Structures</title>
+    <url>/2024/07/17/3-9-Heterogeneous-Data-Structures/</url>
+    <content><![CDATA[<h1><span id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</span></h1>
 ]]></content>
       <categories>
         <category>CSAPP</category>
@@ -6889,6 +6988,105 @@ control bus</strong>.</li>
       </categories>
   </entry>
   <entry>
+    <title>5.2.SIMD, MIMD, SIMD, SPMD and Vector</title>
+    <url>/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/</url>
+    <content><![CDATA[<h1><span id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
+Vector</span></h1>
+<h3><span id="1basic-concepts">1.Basic concepts</span></h3>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
+<ul>
+<li><p>In SIMD, all the parallel execution units are
+<strong>synchronized</strong>, and they all respond to a single
+instruction <strong>that emanates from a single program
+counter</strong>.</p></li>
+<li><p>Each execution unit <strong>has its own address register, and so
+have different data address</strong>.</p></li>
+</ul>
+<blockquote>
+<p>The original motivation behind SIMD was to <strong>amortize the cost
+of the control unit over execution units</strong>. The SIMD can also
+save instrustion bandwidth and space: SIMD needs <strong>only one copy
+of the code that is being simultaneously executed</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Since the instruction is single, SIMD works best when dealing with
+<strong>identically structured data</strong>, which is called
+<em>data-level parallelism</em>, e.g., for loop.</p>
+</blockquote>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
+<ul>
+<li><p>SPMD: The programmer write a single program that runs on all
+processors of a <em>MIMD computer</em>, relying on conditional
+statements when different processors should execute distinct section of
+code.</p></li>
+<li><p>The SIMD computers operate on <strong>vectors of
+data</strong>.</p></li>
+</ul>
+<h3><span id="2vector">2.Vector</span></h3>
+<h4><span id="aconcepts-and-characteristics">  <span class="math inline">\(a.\)</span>Concepts and characteristics</span></h4>
+<p>  The basic philosophy of vector architecture is to <strong>collect
+data elements from memory, put them in order into a large set of
+registers</strong>, and operate on them sequentially in registers using
+<em>pipelined execution units</em>.</p>
+<ul>
+<li>A key feature of vector architectures is <strong>a set of vector
+registers</strong>.</li>
+</ul>
+<p>  Take the following expression as an example(it's called DAXPY
+loop):</p>
+<p><span class="math display">\[
+Y = a \times X + Y
+\]</span></p>
+<p>  In conventional RISC-V, it's written as below:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
+<p>  By using vector, we can write it in a more concise way:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
+<p>  No only does the code reduce the dynamic instruction bandwidth, but
+also the pipeline stalls are required only <strong>once per vector
+operation</strong>, rather than once per vector element.</p>
+<p>  Vector also holds the following characteristic:</p>
+<ol type="1">
+<li><p>The compiler indicates that <strong>the computation of each
+result in the vector is independent</strong>. So compiler doesn't have
+to check for data hazards within an instruction.</p></li>
+<li><p>Since the element in a vector is adjacent, <strong>the cost of
+the latency to main memory is seen only once for the entire
+vector</strong>.</p></li>
+<li><p>Because a complete loop is replaced by a vector instruction whose
+<strong>behaviour is predetermined</strong>, control hazards are
+nonexistent.</p></li>
+</ol>
+<h4><span id="brelated-architecture">   <span class="math inline">\(b.\)</span>Related architecture</span></h4>
+<ul>
+<li>Unlike multimedia extensions, the number of elements in a vector
+operation isn't in the opcode but in <strong>a separate
+register</strong>.</li>
+</ul>
+<blockquote>
+<p>This means different versions of the vector architecture can simply
+be implemented by changing the contents of the register, thus retain
+binary compatibility.</p>
+</blockquote>
+<ul>
+<li>The parallel semantics of a vector instruction allows using a
+<em>deeply pipelined functional unit</em> to execute vector
+operations:</li>
+</ul>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
+<p>  Vector arithmetic instructions only allow element N of one vector
+register to take part in operations with element N from other vector
+registers, and the structure is called <em>vector lanes</em>:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
+<p>  As with a traffic highway, we can increase the peak throughput of a
+vector unit by <strong>adding more lanes</strong>.</p>
+]]></content>
+      <categories>
+        <category>CS61C Great Ideas in Computer Architecture</category>
+        <category>Module 5.Parallelism</category>
+      </categories>
+  </entry>
+  <entry>
     <title>5.2.获取-执行循环</title>
     <url>/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/</url>
     <content><![CDATA[<h1><span id="52the-fetch-execute-cycle"><span class="math inline">\(5.2.\)</span>The Fetch-Execute Cycle</span></h1>
@@ -6986,105 +7184,6 @@ information we need for the cycle.</li>
       <categories>
         <category>The Elements of Computer System</category>
         <category>Module 5.Computer Architecture</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>5.2.SIMD, MIMD, SIMD, SPMD and Vector</title>
-    <url>/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/</url>
-    <content><![CDATA[<h1><span id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
-Vector</span></h1>
-<h3><span id="1basic-concepts">1.Basic concepts</span></h3>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
-<ul>
-<li><p>In SIMD, all the parallel execution units are
-<strong>synchronized</strong>, and they all respond to a single
-instruction <strong>that emanates from a single program
-counter</strong>.</p></li>
-<li><p>Each execution unit <strong>has its own address register, and so
-have different data address</strong>.</p></li>
-</ul>
-<blockquote>
-<p>The original motivation behind SIMD was to <strong>amortize the cost
-of the control unit over execution units</strong>. The SIMD can also
-save instrustion bandwidth and space: SIMD needs <strong>only one copy
-of the code that is being simultaneously executed</strong>.</p>
-</blockquote>
-<blockquote>
-<p>Since the instruction is single, SIMD works best when dealing with
-<strong>identically structured data</strong>, which is called
-<em>data-level parallelism</em>, e.g., for loop.</p>
-</blockquote>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
-<ul>
-<li><p>SPMD: The programmer write a single program that runs on all
-processors of a <em>MIMD computer</em>, relying on conditional
-statements when different processors should execute distinct section of
-code.</p></li>
-<li><p>The SIMD computers operate on <strong>vectors of
-data</strong>.</p></li>
-</ul>
-<h3><span id="2vector">2.Vector</span></h3>
-<h4><span id="aconcepts-and-characteristics">  <span class="math inline">\(a.\)</span>Concepts and characteristics</span></h4>
-<p>  The basic philosophy of vector architecture is to <strong>collect
-data elements from memory, put them in order into a large set of
-registers</strong>, and operate on them sequentially in registers using
-<em>pipelined execution units</em>.</p>
-<ul>
-<li>A key feature of vector architectures is <strong>a set of vector
-registers</strong>.</li>
-</ul>
-<p>  Take the following expression as an example(it's called DAXPY
-loop):</p>
-<p><span class="math display">\[
-Y = a \times X + Y
-\]</span></p>
-<p>  In conventional RISC-V, it's written as below:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
-<p>  By using vector, we can write it in a more concise way:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
-<p>  No only does the code reduce the dynamic instruction bandwidth, but
-also the pipeline stalls are required only <strong>once per vector
-operation</strong>, rather than once per vector element.</p>
-<p>  Vector also holds the following characteristic:</p>
-<ol type="1">
-<li><p>The compiler indicates that <strong>the computation of each
-result in the vector is independent</strong>. So compiler doesn't have
-to check for data hazards within an instruction.</p></li>
-<li><p>Since the element in a vector is adjacent, <strong>the cost of
-the latency to main memory is seen only once for the entire
-vector</strong>.</p></li>
-<li><p>Because a complete loop is replaced by a vector instruction whose
-<strong>behaviour is predetermined</strong>, control hazards are
-nonexistent.</p></li>
-</ol>
-<h4><span id="brelated-architecture">   <span class="math inline">\(b.\)</span>Related architecture</span></h4>
-<ul>
-<li>Unlike multimedia extensions, the number of elements in a vector
-operation isn't in the opcode but in <strong>a separate
-register</strong>.</li>
-</ul>
-<blockquote>
-<p>This means different versions of the vector architecture can simply
-be implemented by changing the contents of the register, thus retain
-binary compatibility.</p>
-</blockquote>
-<ul>
-<li>The parallel semantics of a vector instruction allows using a
-<em>deeply pipelined functional unit</em> to execute vector
-operations:</li>
-</ul>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
-<p>  Vector arithmetic instructions only allow element N of one vector
-register to take part in operations with element N from other vector
-registers, and the structure is called <em>vector lanes</em>:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
-<p>  As with a traffic highway, we can increase the peak throughput of a
-vector unit by <strong>adding more lanes</strong>.</p>
-]]></content>
-      <categories>
-        <category>CS61C Great Ideas in Computer Architecture</category>
-        <category>Module 5.Parallelism</category>
       </categories>
   </entry>
   <entry>
@@ -7699,31 +7798,6 @@ processor causes the store-conditional to fail frequently</strong>.</p>
       </categories>
   </entry>
   <entry>
-    <title>5.1.自动装箱</title>
-    <url>/2024/05/31/5.1.Autoboxing/</url>
-    <content><![CDATA[<h1><span id="51自动装箱"><span class="math inline">\(5.1\)</span>自动装箱</span></h1>
-<h3><span id="1自动装箱与解包">1.自动装箱与解包</span></h3>
-<p>  当我们实例化一个泛型对象时，我们需要指定其具体的类型，例如<code>LinkedListDeque&lt;Integer&gt;</code>。对于<span class="math inline">\(Java\)</span>的<span class="math inline">\(8\)</span>种基本类型，我们使用相应的引用类型，这些引用类型被称为包装类(<span class="math inline">\(wrapper\;classes\)</span>)：</p>
-<p><img src="/2024/05/31/5.1.Autoboxing/image.png"></p>
-<p>  由引用类型转换到基本类型，我们不需要执行额外的操作。例如，我们可以直接写如下程序：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="number">5</span>);</span><br><span class="line">      L.add(<span class="number">6</span>);</span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  而不必写成如下繁琐的形式： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">5</span>));</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">6</span>));</span><br><span class="line"></span><br><span class="line">      <span class="comment">/* Use the Integer.valueOf method to convert to int */</span></span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>).valueOf();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这是因为<span class="math inline">\(Java\)</span>会自动“装箱”(<span class="math inline">\(autobox\)</span>)与“解包”(<span class="math inline">\(unbox\)</span>)基本类型与引用类型。因此，下面的程序都是正确的：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blah</span><span class="params">(Integer x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blah(x);</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahPrimitive</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">20</span>);</span><br><span class="line">blahPrimitive(x);</span><br></pre></td></tr></table></figure></p>
-<p>  不过需要注意，数组不能自动装箱或解包。</p>
-<h3><span id="2类型扩展">2.类型扩展</span></h3>
-<p>  当需要的时候，<span class="math inline">\(Java\)</span>会自动扩展一个初始类型的范围，例如：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahDouble</span><span class="params">(<span class="type">double</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">double</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahDouble(x);</span><br></pre></td></tr></table></figure></p>
-<p>  是正确的，但： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahInt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">int</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt(x);</span><br></pre></td></tr></table></figure></p>
-<p>  是错误的，因为<span class="math inline">\(int\)</span>的范围小于<span class="math inline">\(double\)</span>，不能扩展到比自己更大的集合中。此时必须使用类型铸造：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt((<span class="type">int</span>) x);</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>5.Generics and Autoboxing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>5.6.Cache Coherence</title>
     <url>/2024/06/29/5-6-Cache-coherence/</url>
     <content><![CDATA[<h1><span id="56cache-coherence">5.6.Cache Coherence</span></h1>
@@ -7813,6 +7887,31 @@ concepts</span></h4>
       <categories>
         <category>CS61C Great Ideas in Computer Architecture</category>
         <category>Module 5.Parallelism</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>5.1.自动装箱</title>
+    <url>/2024/05/31/5.1.Autoboxing/</url>
+    <content><![CDATA[<h1><span id="51自动装箱"><span class="math inline">\(5.1\)</span>自动装箱</span></h1>
+<h3><span id="1自动装箱与解包">1.自动装箱与解包</span></h3>
+<p>  当我们实例化一个泛型对象时，我们需要指定其具体的类型，例如<code>LinkedListDeque&lt;Integer&gt;</code>。对于<span class="math inline">\(Java\)</span>的<span class="math inline">\(8\)</span>种基本类型，我们使用相应的引用类型，这些引用类型被称为包装类(<span class="math inline">\(wrapper\;classes\)</span>)：</p>
+<p><img src="/2024/05/31/5.1.Autoboxing/image.png"></p>
+<p>  由引用类型转换到基本类型，我们不需要执行额外的操作。例如，我们可以直接写如下程序：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="number">5</span>);</span><br><span class="line">      L.add(<span class="number">6</span>);</span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  而不必写成如下繁琐的形式： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BasicArrayList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">      ArrayList&lt;Integer&gt; L = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">5</span>));</span><br><span class="line">      L.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">6</span>));</span><br><span class="line"></span><br><span class="line">      <span class="comment">/* Use the Integer.valueOf method to convert to int */</span></span><br><span class="line">      <span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> L.get(<span class="number">0</span>).valueOf();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这是因为<span class="math inline">\(Java\)</span>会自动“装箱”(<span class="math inline">\(autobox\)</span>)与“解包”(<span class="math inline">\(unbox\)</span>)基本类型与引用类型。因此，下面的程序都是正确的：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blah</span><span class="params">(Integer x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blah(x);</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahPrimitive</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">20</span>);</span><br><span class="line">blahPrimitive(x);</span><br></pre></td></tr></table></figure></p>
+<p>  不过需要注意，数组不能自动装箱或解包。</p>
+<h3><span id="2类型扩展">2.类型扩展</span></h3>
+<p>  当需要的时候，<span class="math inline">\(Java\)</span>会自动扩展一个初始类型的范围，例如：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahDouble</span><span class="params">(<span class="type">double</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">double</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahDouble(x);</span><br></pre></td></tr></table></figure></p>
+<p>  是正确的，但： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahInt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">int</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt(x);</span><br></pre></td></tr></table></figure></p>
+<p>  是错误的，因为<span class="math inline">\(int\)</span>的范围小于<span class="math inline">\(double\)</span>，不能扩展到比自己更大的集合中。此时必须使用类型铸造：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt((<span class="type">int</span>) x);</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>5.Generics and Autoboxing</category>
       </categories>
   </entry>
   <entry>
@@ -8343,51 +8442,6 @@ and <em>VM implementation</em>.</p>
       </categories>
   </entry>
   <entry>
-    <title>7.11.Hack平台上的VM实现</title>
-    <url>/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/</url>
-    <content><![CDATA[<h1><span id="711vm-implementation-on-the-hackplatform"><span class="math inline">\(7.11.\)</span>VM Implementation on the Hack
-Platform</span></h1>
-<h3><span id="1program-compilation-andtranslation">1.Program compilation and
-translation</span></h3>
-<p><img src="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/image.png"></p>
-<ul>
-<li>When we translate from Jack to VM, we lost <em>the notion of
-constructors, methods</em>, because everything becomes functions.</li>
-<li>When we translate from VM to assembly, we lost <em>the notion of
-functions</em>, because we just have a long stream of assembly
-commands.</li>
-</ul>
-<h3><span id="2vm-convention">2.VM convention</span></h3>
-<p>  In order to tranlate the VM code into assembly code, we need to
-comply to certain conventions:</p>
-<ol type="1">
-<li><p><em>VM programming convention</em>: One file in any VM program is
-expected to be named <code>Main.vm</code>; one VM function in this file
-is expected to be named <code>main</code>.</p></li>
-<li><p><em>VM implementation convention</em>: When the VM implementation
-starts running, or is reset, it starts executing the argument-less OS
-function <code>Sys.init</code>.<code>Sys.init</code> then calls
-<code>Main.main</code>, and enters an infinite loop.</p></li>
-<li><p><em>Hardware platform convention</em>:</p>
-<ul>
-<li>We request that the code you see here <strong>will be stored in the
-target computer's instruction memory beginning in address
-<code>0</code></strong>, for our Hack computer is programmed to start
-executing the program beginning with address <code>0</code>.</li>
-<li>So we first set <code>SP = 256</code>. By doing this, it will
-determined that the stack should begin in this address in the whole
-stream.</li>
-<li>Then we <code>call Sys.init</code>.</li>
-</ul></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SP = 256</span><br><span class="line">Call Sys.init</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>The Elements of Computer System</category>
-        <category>Module 7.VM Machine</category>
-      </categories>
-  </entry>
-  <entry>
     <title>7.10.函数运行实现</title>
     <url>/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1><span id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
@@ -8513,6 +8567,51 @@ shows</strong>.</li>
 stack.</li>
 <li>The stack pointer will point at the next world in the memory.</li>
 </ul>
+]]></content>
+      <categories>
+        <category>The Elements of Computer System</category>
+        <category>Module 7.VM Machine</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>7.11.Hack平台上的VM实现</title>
+    <url>/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1><span id="711vm-implementation-on-the-hackplatform"><span class="math inline">\(7.11.\)</span>VM Implementation on the Hack
+Platform</span></h1>
+<h3><span id="1program-compilation-andtranslation">1.Program compilation and
+translation</span></h3>
+<p><img src="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/image.png"></p>
+<ul>
+<li>When we translate from Jack to VM, we lost <em>the notion of
+constructors, methods</em>, because everything becomes functions.</li>
+<li>When we translate from VM to assembly, we lost <em>the notion of
+functions</em>, because we just have a long stream of assembly
+commands.</li>
+</ul>
+<h3><span id="2vm-convention">2.VM convention</span></h3>
+<p>  In order to tranlate the VM code into assembly code, we need to
+comply to certain conventions:</p>
+<ol type="1">
+<li><p><em>VM programming convention</em>: One file in any VM program is
+expected to be named <code>Main.vm</code>; one VM function in this file
+is expected to be named <code>main</code>.</p></li>
+<li><p><em>VM implementation convention</em>: When the VM implementation
+starts running, or is reset, it starts executing the argument-less OS
+function <code>Sys.init</code>.<code>Sys.init</code> then calls
+<code>Main.main</code>, and enters an infinite loop.</p></li>
+<li><p><em>Hardware platform convention</em>:</p>
+<ul>
+<li>We request that the code you see here <strong>will be stored in the
+target computer's instruction memory beginning in address
+<code>0</code></strong>, for our Hack computer is programmed to start
+executing the program beginning with address <code>0</code>.</li>
+<li>So we first set <code>SP = 256</code>. By doing this, it will
+determined that the stack should begin in this address in the whole
+stream.</li>
+<li>Then we <code>call Sys.init</code>.</li>
+</ul></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SP = 256</span><br><span class="line">Call Sys.init</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>The Elements of Computer System</category>
