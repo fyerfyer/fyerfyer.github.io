@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-20 10:40:39" itemprop="dateModified" datetime="2024-07-20T10:40:39+08:00">2024-07-20</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-20 16:43:34" itemprop="dateModified" datetime="2024-07-20T16:43:34+08:00">2024-07-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>620</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>5 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -370,6 +370,66 @@ or a memory location</strong>.</p></li>
 <li><p>The second source operand and the destination operands
 <strong>must be XMM registers</strong>.</p></li>
 </ul>
+<p>&#x2003;&#x2003;Take the following C program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">funct</span><span class="params">(<span class="type">double</span> a, <span class="type">float</span> x, <span class="type">double</span> b, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="keyword">return</span> a * x - b / i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># double funct(double a, float x, double b, int i)</span><br><span class="line"># a in %xmm0, x in %xmm1, b in %xmm2, i in %edi</span><br><span class="line"></span><br><span class="line">funct:</span><br><span class="line">    vunpcklps %xmm1, %xmm1, %xmm1  # Convert x to double</span><br><span class="line">    vcvtps2pd %xmm1, %xmm1         # Convert x to double</span><br><span class="line">    vmulsd %xmm0, %xmm1, %xmm0     # Multiply a by x</span><br><span class="line">    vcvtsi2sd %edi, %xmm1, %xmm1   # Convert i to double</span><br><span class="line">    vdivsd %xmm1, %xmm2, %xmm2     # Compute b/i</span><br><span class="line">    vsubsd %xmm2, %xmm0, %xmm0     # Subtract from a*x</span><br><span class="line">    ret                            # Return</span><br></pre></td></tr></table></figure>
+<hr>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-5.png"></p>
+<p>&#x2003;&#x2003;Sometimes the bitwise operations are a useful way to manipulate
+floating-point values. The following are some examples:</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Taking absolute value:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC1(%rip), %xmm1</span><br><span class="line">vandpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">    .long 4294967295</span><br><span class="line">    .long 2147483647</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Set value to zero:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vxorpd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Negate</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC2(%rip), %xmm1</span><br><span class="line">vxorpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">    .long 0</span><br><span class="line">    .long -2147483648</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
+<h3><span id="4defining-andusing-floating-point-constants">4.Defining and
+Using Floating-Point Constants</span></h3>
+<p>&#x2003;&#x2003;AVX floating-point operations cannot have immediate values as
+oprands. Instead, the compiler must <strong>allocate and initialize
+storage for any constant values</strong>.</p>
+<p>&#x2003;&#x2003;Take the following C program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">cel2fahr</span><span class="params">(<span class="type">double</span> temp)</span> {</span><br><span class="line"><span class="keyword">return</span> <span class="number">1.8</span> * temp + <span class="number">32.0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cel2fahr:</span><br><span class="line">vmulsd .LC2(%rip), %xmm0, %xmm0  # Multiply by 1.8</span><br><span class="line">vaddsd .LC3(%rip), %xmm0, %xmm0  # Add 32.0</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">.long 3435973837                 # Low-order 4 bytes of 1.8</span><br><span class="line">.long 1073532108                 # High-order 4 bytes of 1.8</span><br><span class="line"></span><br><span class="line">.LC3:</span><br><span class="line">.long 0                          # Low-order 4 bytes of 32.0</span><br><span class="line">.long 1077936128                 # High-order 4 bytes of 32.0</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;the function reads the value 1.8 from the memory location labeled
+<code>.LC2</code> and the value 32.0 from the memory location labeled
+<code>.LC3</code>.</p>
+<h3><span id="5floating-pointcomparison-operations">5.Floating-Point
+Comparison Operations</span></h3>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-6.png"></p>
+<ul>
+<li><p>These instructions are similar to the <code>cmp</code>
+instructions for integer: they <strong>compare operands S1 and S2 and
+set the condition codes to indicate their relative
+values</strong>.</p></li>
+<li><p>As with <code>cmpq</code>, they follow the ATT-format convention
+of <strong>listing the operands in reverse order</strong>.</p></li>
+<li><p>Argument S2 must be in <strong>an XMM register</strong>, while S1
+can be <strong>either in an XMM register or in memory</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The floating-point comparison instructions set three condition
+codes: the zero flag, the carry flag, and the parity flag:</p>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-7.png"></p>
+<ul>
+<li><p>The parity flag is set when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
+<li><p>By convention, <strong>any comparison in C is considered to fail
+when one of the arguments is <span class="math inline">\(NaN\)</span></strong>, and this flag is used to
+detect such a condition. For example, even the comparison
+<code>x == x</code> yields 0 when x is <span class="math inline">\(NaN\)</span>.</p></li>
+<li><p>The unordered case occurs when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;There are also three relative jump statements:</p>
+<ul>
+<li><p><code>jp</code>: It conditionally jump when a floating-point
+comparison <strong>yields an unordered result</strong>.</p></li>
+<li><p><code>ja</code>: It conditionally jump when <code>CF=0</code> and
+<code>ZF=0</code>.</p></li>
+<li><p><code>jb</code>: It conditionally jump when
+<code>CF=1</code></p></li>
+</ul>
+<p>&#x2003;&#x2003;Take the following C program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span>NEG, ZERO, POS, OTHER} <span class="type">range_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">range_t</span> <span class="title function_">find_range</span><span class="params">(<span class="type">float</span> x)</span> {</span><br><span class="line">    <span class="type">int</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; <span class="number">0</span>)</span><br><span class="line">        result = NEG;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x == <span class="number">0</span>)</span><br><span class="line">        result = ZERO;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x &gt; <span class="number">0</span>)</span><br><span class="line">        result = POS;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = OTHER;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">find_range:</span><br><span class="line">    vxorps %xmm1, %xmm1, %xmm1  # Set %xmm1 = 0</span><br><span class="line">    vucomiss %xmm0, %xmm1       # Compare 0:x</span><br><span class="line">    ja .L5                      # If &gt;, goto neg</span><br><span class="line">    vucomiss %xmm1, %xmm0       # Compare x:0</span><br><span class="line">    jp .L8                      # If NaN, goto posornan</span><br><span class="line">    movl $1, %eax               # result = ZERO</span><br><span class="line">    je .L3                      # If =, goto done</span><br><span class="line">.L8: posornan:</span><br><span class="line">    vucomiss .LC0(%rip), %xmm0  # Compare x:0</span><br><span class="line">    setbe %al                   # Set result = NaN?1:0</span><br><span class="line">    movzbl %al, %eax            # Zero-extend</span><br><span class="line">    addl $2, %eax               # result += 2 (POS for &gt; 0, OTHER for NaN)</span><br><span class="line">    ret                         # Return</span><br><span class="line">.L5: neg:</span><br><span class="line">    movl $0, %eax               # result = NEG</span><br><span class="line">.L3: done:</span><br><span class="line">    rep; ret                    # Return</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -2405,14 +2465,14 @@ concepts</span></h4>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">103k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">104k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:16</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:18</span>
   </span>
 </div>
 <div class="busuanzi-count">
