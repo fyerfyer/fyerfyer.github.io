@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/19/3-11-Floating-Point-Code/" class="post-title-link" itemprop="url">&#x672A;&#x547D;&#x540D;</a>
+          <a href="/2024/07/19/3-11-Floating-Point-Code/" class="post-title-link" itemprop="url">3.11.Floating-Point Code</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,27 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-19 21:34:48" itemprop="dateCreated datePublished" datetime="2024-07-19T21:34:48+08:00">2024-07-19</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-19 21:31:22" itemprop="dateCreated datePublished" datetime="2024-07-19T21:31:22+08:00">2024-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-20 10:40:39" itemprop="dateModified" datetime="2024-07-20T10:40:39+08:00">2024-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
     </span>
 
   
@@ -234,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>0</span>
+      <span>620</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -252,7 +272,104 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h1><span id="311floating-point-code"><span class="math inline">\(3.11.\)</span>Floating-Point Code</span></h1>
+<h3><span id="1floating-pointmovement-and-conversion-operations">1.Floating-Point
+Movement and Conversion Operations</span></h3>
+<h4><span id="abasic-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic instructions</span></h4>
+<ul>
+<li><p>For floating-point, the data are held either in memory (indicated
+in the table as <span class="math inline">\(M_{32}\)</span> and <span class="math inline">\(M_{64}\)</span>) or in XMM registers (shown in the
+table as <code>X</code>).</p>
+<ul>
+<li>Each YMM register is 32 bytes long. When operating on scalar data,
+these registers only hold floating-point data, and <strong>only the
+low-order 32 bits (for float) or 64 bits (for double) are
+used</strong>.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
+<hr>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-1.png"></p>
+<ul>
+<li>The &apos;a&apos; stands for &apos;aligned&apos;.</li>
+</ul>
+<hr>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-2.png"></p>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-3.png"></p>
+<ul>
+<li>When converting floating-point values to integers, the two-operand
+floating-point conversion operations <strong>perform truncation,
+rounding values toward zero</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;For three-operand floating-point conversion operations, we can
+<strong>ignore the second operand, since its value only affects the
+upper bytes of the result</strong>. In common use, both the second
+source and the destination oprands are identical:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsi2sdq %rax, %xmm1, %xmm1</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This instruction reads a long integer from register
+<code>%rax</code>, converts it to data type double, and <strong>stores
+the result in the lower bytes of XMM register
+<code>%xmm1</code></strong>.</p>
+<h4><span id="bconversion-between-floating-point">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Conversion between floating-point</span></h4>
+<p>&#x2003;&#x2003;To convert between two different floating-point format, suppose the
+low-order 4 bytes of <code>%xmm0</code> hold a single-precision value;
+then it would seem straightforward to convert this to a double-precision
+value and store the result in the lower 8 bytes of register
+<code>%xmm0</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtss2sd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;However, GCC will generate the following code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from single to double precision</span><br><span class="line">vunpcklps %xmm0, %xmm0, %xmm0   # Replicate first vector element</span><br><span class="line">vcvtps2pd %xmm0, %xmm0          # Convert two vector elements to double</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>vunpcklps</code> instruction <strong>interleaves the
+values in two XMM registers and store them in a third</strong>. That is,
+if one source register contains words <span class="math inline">\([s_3,
+s_2, s_1, s_0]\)</span> and the other contains words <span class="math inline">\([d_3, d_2, d_1, d_0]\)</span>, then the value of
+the destination register will be <span class="math inline">\([s_1, d_1,
+s_0, d_0]\)</span>.</p></li>
+<li><p>The <code>vcvtps2pd</code> instruction <strong>expands the two
+low-order single precision values in the source XMM register to be the
+two double-precision values in the destination XMM register</strong>.
+Applying this to the result of the preceding <code>vunpcklps</code>
+instruction would give values <span class="math inline">\([dx_0,dx_0]\)</span>, where <span class="math inline">\(dx_0\)</span> is the result of converting <span class="math inline">\(x\)</span> to double precision.</p></li>
+</ul>
+<p>&#x2003;&#x2003;GCC generates similar code for converting from double precision to
+single precision:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from double to single precision</span><br><span class="line">vmovddup %xmm0, %xmm0    # Replicate first vector element</span><br><span class="line">vcvtpd2ps %xmm0, %xmm0  # Convert two vector elements to single</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;rather than by using the single instruction:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsd2ss %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
+<h3><span id="2floating-point-code-inprocedure">2.Floating-Point Code in
+Procedure</span></h3>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
+<p>&#x2003;&#x2003;The following conventions are observed:</p>
+<ul>
+<li><p>Up to eight floating-point arguments can be passed in XMM
+registers <code>%xmm0&#xFFFD;C%xmm7</code>. These registers are used in the
+order the arguments are listed. Additional floating-point arguments can
+be passed on the stack.</p></li>
+<li><p>A function that returns a floating-point value does so in
+register <code>%xmm0</code>.</p></li>
+<li><p><strong>All XMM registers are caller saved</strong>. The callee
+may overwrite any of these registers without first saving it.</p></li>
+</ul>
+<p>&#x2003;&#x2003;When a function contains a combination of pointer, integer, and
+floating-point arguments, the pointers and integers are passed in
+general-purpose registers, while the floating-point values are passed in
+XMM registers. This means that <strong>the mapping of arguments to
+registers depends on both their types and their ordering</strong>.</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">g1</span><span class="params">(<span class="type">double</span> a, <span class="type">long</span> b, <span class="type">float</span> c, <span class="type">int</span> d)</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Registers: <code>a</code> in <code>%xmm0</code>, <code>b</code> in
+<code>%rdi</code>, <code>c</code> in<code>%xmm1</code>, <code>d</code>
+in <code>%esi</code>.</p>
+<h3><span id="3floating-pointarithmetic-operations">3.Floating-Point
+Arithmetic Operations</span></h3>
+<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-4.png"></p>
+<ul>
+<li><p>The first source operand S1 can be <strong>either an XMM register
+or a memory location</strong>.</p></li>
+<li><p>The second source operand and the destination operands
+<strong>must be XMM registers</strong>.</p></li>
+</ul>
 
       
     </div>
@@ -2295,7 +2412,7 @@ concepts</span></h4>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:13</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:16</span>
   </span>
 </div>
 <div class="busuanzi-count">

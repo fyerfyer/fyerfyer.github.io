@@ -1258,7 +1258,7 @@ ordering restriction to support efficient search</li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.4.Rotating%20Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.2%20B-Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -1276,7 +1276,7 @@ ordering restriction to support efficient search</li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.4.Rotating%20Trees/" class="post-title-link" itemprop="url">11.4.&#x6811;&#x7684;&#x65CB;&#x8F6C;</a>
+          <a href="/2024/05/31/11.2%20B-Trees/" class="post-title-link" itemprop="url">11.2.B&#x6811;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1294,7 +1294,7 @@ ordering restriction to support efficient search</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:18:06" itemprop="dateModified" datetime="2024-06-02T18:18:06+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:16:52" itemprop="dateModified" datetime="2024-06-02T18:16:52+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1317,14 +1317,14 @@ ordering restriction to support efficient search</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>153</span>
+      <span>491</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -1335,24 +1335,35 @@ ordering restriction to support efficient search</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="114&#x6811;&#x7684;&#x65CB;&#x8F6C;"><span class="math inline">\(11.4\)</span>&#x6811;&#x7684;&#x65CB;&#x8F6C;</span></h1>
-<p>&#x2003;&#x2003;The formal definition of rotation is:</p>
+          <h1><span id="112b&#x6811;"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>&#x6811;</span></h1>
+<h3><span id="1b&#x6811;&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(B\)</span>&#x6811;&#x7684;&#x5F15;&#x5165;</span></h3>
+<p>&#x2003;&#x2003;&#x5BFC;&#x81F4;<span class="math inline">\(BST\)</span>&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF1A;&#x6BCF;&#x6B21;<code>insert</code>&#x64CD;&#x4F5C;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x9009;&#x62E9;&#x5728;&#x53F6;&#x5B50;&#x4E0A;&#x8FDB;&#x884C;&#xFF0C;&#x8FD9;&#x5BFC;&#x81F4;&#x4E86;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x4E00;&#x4E2A;&#x81EA;&#x7136;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#xFF1A;&#x80FD;&#x5426;&#x5728;&#x4E0D;&#x589E;&#x52A0;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x524D;&#x63D0;&#x4E0B;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x8FBE;&#x5230;&#x8FD9;&#x4E2A;&#x76EE;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#x591A;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x4E0D;&#x4F1A;&#x5BFC;&#x81F4;&#x53F6;&#x5B50;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x4E86;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4F46;&#x5982;&#x679C;&#x65E0;&#x9650;&#x5236;&#x5730;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5C31;&#x4F1A;&#x9000;&#x5316;&#x6210;&#x4E00;&#x4E2A;&#x94FE;&#x8868;&#x4E86;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5BF9;&#x5355;&#x4E2A;&#x53F6;&#x5B50;&#x80FD;&#x591F;&#x88C5;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6570;&#x91CF;&#x8BBE;&#x7F6E;&#x9650;&#x5EA6;(<span class="math inline">\(limit\)</span>)&#xFF0C;&#x4F8B;&#x5982;<span class="math inline">\(4\)</span>&#x3002;&#x5F53;&#x53F6;&#x5B50;&#x4E2D;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x8D85;&#x8FC7;<span class="math inline">\(4\)</span>&#x4E2A;&#x65F6;&#xFF0C;&#x5C31;&#x901A;&#x8FC7;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;&#x8282;&#x70B9;&#xFF0C;&#x628A;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5206;&#x5F00;(<span class="math inline">\(split\)</span>)&#x3002;</p>
+<h3><span id="22-3&#x641C;&#x7D22;&#x6811;">2.<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;</span></h3>
+<p>&#x2003;&#x2003;&#x4E00;&#x68F5;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x662F;&#x6EE1;&#x8DB3;&#x5982;&#x4E0B;&#x6761;&#x4EF6;&#x7684;&#x6811;&#xFF1A;</p>
 <ul>
-<li><p><code>rotateLeft(G): Let x be the right child of G. Make G the new left child of x.</code></p></li>
-<li><p><code>rotateRight(G): Let x be the left child of G. Make G the new right child of x.</code></p></li>
+<li>&#x7A7A;&#x7684;(<span class="math inline">\(empty\)</span>)&#x3002;</li>
+<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E24;&#x4E2A;&#x94FE;&#x63A5;(<span class="math inline">\(link\)</span>)&#xFF0C;&#x548C;<span class="math inline">\(BST\)</span>&#x7C7B;&#x4F3C;&#x3002;</li>
+<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x3002;&#x8BBE;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#x5206;&#x522B;&#x4E3A;<span class="math inline">\(x,y\)</span>&#xFF0C;&#x5219;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x6240;&#x6307;&#x5411;&#x7684;&#x5176;&#x5B83;&#x53F6;&#x5B50;&#x5206;&#x522B;&#x6EE1;&#x8DB3;<span class="math inline">\(a_i\leq x,x\leq a_i\leq y,a_i\leq
+y\)</span>&#x3002;</li>
 </ul>
-<p>&#x2003;&#x2003;As in the picture, it means:</p>
-<ul>
-<li><span class="math inline">\(RotateLeft(G)\)</span>: G moves left,
-promote its right child in the only natural way.(Promoting P means P is
-the new parent of G.)</li>
-<li><span class="math inline">\(RotateRight(P)\)</span>: P moves right,
-promote its left child in the only natural way.</li>
-</ul>
-<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-5.png"></p>
-<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
-<p>&#x2003;&#x2003;We can implement these operations by following codes:
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image.png"></p>
+<h3><span id="3&#x67E5;&#x627E;&#x6D41;&#x7A0B;">3.&#x67E5;&#x627E;&#x6D41;&#x7A0B;</span></h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x67E5;&#x627E;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-1.png"></p>
+<h3><span id="4&#x63D2;&#x5165;&#x6D41;&#x7A0B;">4.&#x63D2;&#x5165;&#x6D41;&#x7A0B;</span></h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
+<ol type="1">
+<li>&#x6211;&#x4EEC;&#x4ECD;&#x7136;&#x4E00;&#x76F4;&#x5728;&#x5DE6;&#x53F6;&#x5B50;&#x8FDB;&#x884C;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x3002;</li>
+<li>&#x5C06;&#x8282;&#x70B9;&#x63D2;&#x5165;&#x5BF9;&#x5E94;&#x7684;&#x53F6;&#x5B50;&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x8BE5;&#x53F6;&#x5B50;&#x7684;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x5927;&#x4E8E;<span class="math inline">\(3\)</span>&#xFF0C;&#x5219;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x9760;&#x5DE6;&#x7684;&#x8282;&#x70B9;(&#x5982;&#x679C;&#x662F;&#x5947;&#x6570;&#x4E2A;&#x8282;&#x70B9;&#x5C31;&#x76F4;&#x63A5;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;)&#xFF0C;&#x7136;&#x540E;&#x76F8;&#x5E94;&#x5730;&#x91CD;&#x65B0;&#x6392;&#x5217;&#x5B50;&#x6811;&#x3002;</li>
+<li>&#x91CD;&#x590D;&#x4E0A;&#x8FF0;&#x6B65;&#x9AA4;&#xFF0C;&#x76F4;&#x5230;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x6709;&#x7A7A;&#x4F4D;&#x7684;&#x7236;&#x8282;&#x70B9;&#x6216;&#x8005;&#x904D;&#x5386;&#x5230;&#x6839;&#x8282;&#x70B9;&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x4E00;&#x4E9B;&#x63D2;&#x5165;&#x60C5;&#x51B5;&#x5BF9;&#x5E94;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-2.png"></p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
+<p>&#x2003;&#x2003;&#x5206;&#x5F00;&#x53F6;&#x5B50;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
 
       
     </div>
@@ -1493,7 +1504,7 @@ n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.2%20B-Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.4.Rotating%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -1511,7 +1522,7 @@ n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.2%20B-Trees/" class="post-title-link" itemprop="url">11.2.B&#x6811;</a>
+          <a href="/2024/05/31/11.4.Rotating%20Trees/" class="post-title-link" itemprop="url">11.4.&#x6811;&#x7684;&#x65CB;&#x8F6C;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1529,7 +1540,7 @@ n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:16:52" itemprop="dateModified" datetime="2024-06-02T18:16:52+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:18:06" itemprop="dateModified" datetime="2024-06-02T18:18:06+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1552,14 +1563,14 @@ n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>491</span>
+      <span>153</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -1570,35 +1581,24 @@ n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="112b&#x6811;"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>&#x6811;</span></h1>
-<h3><span id="1b&#x6811;&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(B\)</span>&#x6811;&#x7684;&#x5F15;&#x5165;</span></h3>
-<p>&#x2003;&#x2003;&#x5BFC;&#x81F4;<span class="math inline">\(BST\)</span>&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF1A;&#x6BCF;&#x6B21;<code>insert</code>&#x64CD;&#x4F5C;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x9009;&#x62E9;&#x5728;&#x53F6;&#x5B50;&#x4E0A;&#x8FDB;&#x884C;&#xFF0C;&#x8FD9;&#x5BFC;&#x81F4;&#x4E86;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x4E00;&#x4E2A;&#x81EA;&#x7136;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#xFF1A;&#x80FD;&#x5426;&#x5728;&#x4E0D;&#x589E;&#x52A0;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x524D;&#x63D0;&#x4E0B;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x8FBE;&#x5230;&#x8FD9;&#x4E2A;&#x76EE;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#x591A;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x4E0D;&#x4F1A;&#x5BFC;&#x81F4;&#x53F6;&#x5B50;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x4E86;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4F46;&#x5982;&#x679C;&#x65E0;&#x9650;&#x5236;&#x5730;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5C31;&#x4F1A;&#x9000;&#x5316;&#x6210;&#x4E00;&#x4E2A;&#x94FE;&#x8868;&#x4E86;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5BF9;&#x5355;&#x4E2A;&#x53F6;&#x5B50;&#x80FD;&#x591F;&#x88C5;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6570;&#x91CF;&#x8BBE;&#x7F6E;&#x9650;&#x5EA6;(<span class="math inline">\(limit\)</span>)&#xFF0C;&#x4F8B;&#x5982;<span class="math inline">\(4\)</span>&#x3002;&#x5F53;&#x53F6;&#x5B50;&#x4E2D;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x8D85;&#x8FC7;<span class="math inline">\(4\)</span>&#x4E2A;&#x65F6;&#xFF0C;&#x5C31;&#x901A;&#x8FC7;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;&#x8282;&#x70B9;&#xFF0C;&#x628A;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5206;&#x5F00;(<span class="math inline">\(split\)</span>)&#x3002;</p>
-<h3><span id="22-3&#x641C;&#x7D22;&#x6811;">2.<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;</span></h3>
-<p>&#x2003;&#x2003;&#x4E00;&#x68F5;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x662F;&#x6EE1;&#x8DB3;&#x5982;&#x4E0B;&#x6761;&#x4EF6;&#x7684;&#x6811;&#xFF1A;</p>
+          <h1><span id="114&#x6811;&#x7684;&#x65CB;&#x8F6C;"><span class="math inline">\(11.4\)</span>&#x6811;&#x7684;&#x65CB;&#x8F6C;</span></h1>
+<p>&#x2003;&#x2003;The formal definition of rotation is:</p>
 <ul>
-<li>&#x7A7A;&#x7684;(<span class="math inline">\(empty\)</span>)&#x3002;</li>
-<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E24;&#x4E2A;&#x94FE;&#x63A5;(<span class="math inline">\(link\)</span>)&#xFF0C;&#x548C;<span class="math inline">\(BST\)</span>&#x7C7B;&#x4F3C;&#x3002;</li>
-<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x3002;&#x8BBE;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#x5206;&#x522B;&#x4E3A;<span class="math inline">\(x,y\)</span>&#xFF0C;&#x5219;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x6240;&#x6307;&#x5411;&#x7684;&#x5176;&#x5B83;&#x53F6;&#x5B50;&#x5206;&#x522B;&#x6EE1;&#x8DB3;<span class="math inline">\(a_i\leq x,x\leq a_i\leq y,a_i\leq
-y\)</span>&#x3002;</li>
+<li><p><code>rotateLeft(G): Let x be the right child of G. Make G the new left child of x.</code></p></li>
+<li><p><code>rotateRight(G): Let x be the left child of G. Make G the new right child of x.</code></p></li>
 </ul>
-<p><img src="/2024/05/31/11.2%20B-Trees/image.png"></p>
-<h3><span id="3&#x67E5;&#x627E;&#x6D41;&#x7A0B;">3.&#x67E5;&#x627E;&#x6D41;&#x7A0B;</span></h3>
-<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x67E5;&#x627E;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-1.png"></p>
-<h3><span id="4&#x63D2;&#x5165;&#x6D41;&#x7A0B;">4.&#x63D2;&#x5165;&#x6D41;&#x7A0B;</span></h3>
-<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<ol type="1">
-<li>&#x6211;&#x4EEC;&#x4ECD;&#x7136;&#x4E00;&#x76F4;&#x5728;&#x5DE6;&#x53F6;&#x5B50;&#x8FDB;&#x884C;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x3002;</li>
-<li>&#x5C06;&#x8282;&#x70B9;&#x63D2;&#x5165;&#x5BF9;&#x5E94;&#x7684;&#x53F6;&#x5B50;&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x8BE5;&#x53F6;&#x5B50;&#x7684;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x5927;&#x4E8E;<span class="math inline">\(3\)</span>&#xFF0C;&#x5219;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x9760;&#x5DE6;&#x7684;&#x8282;&#x70B9;(&#x5982;&#x679C;&#x662F;&#x5947;&#x6570;&#x4E2A;&#x8282;&#x70B9;&#x5C31;&#x76F4;&#x63A5;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;)&#xFF0C;&#x7136;&#x540E;&#x76F8;&#x5E94;&#x5730;&#x91CD;&#x65B0;&#x6392;&#x5217;&#x5B50;&#x6811;&#x3002;</li>
-<li>&#x91CD;&#x590D;&#x4E0A;&#x8FF0;&#x6B65;&#x9AA4;&#xFF0C;&#x76F4;&#x5230;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x6709;&#x7A7A;&#x4F4D;&#x7684;&#x7236;&#x8282;&#x70B9;&#x6216;&#x8005;&#x904D;&#x5386;&#x5230;&#x6839;&#x8282;&#x70B9;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x4E00;&#x4E9B;&#x63D2;&#x5165;&#x60C5;&#x51B5;&#x5BF9;&#x5E94;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-2.png"></p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x5206;&#x5F00;&#x53F6;&#x5B50;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
+<p>&#x2003;&#x2003;As in the picture, it means:</p>
+<ul>
+<li><span class="math inline">\(RotateLeft(G)\)</span>: G moves left,
+promote its right child in the only natural way.(Promoting P means P is
+the new parent of G.)</li>
+<li><span class="math inline">\(RotateRight(P)\)</span>: P moves right,
+promote its left child in the only natural way.</li>
+</ul>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-5.png"></p>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
+<p>&#x2003;&#x2003;We can implement these operations by following codes:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -1625,7 +1625,7 @@ y\)</span>&#x3002;</li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.5.Red-Black%20Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.1.The%20introduction%20of%20Hashing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -1643,7 +1643,7 @@ y\)</span>&#x3002;</li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.5.Red-Black%20Trees/" class="post-title-link" itemprop="url">11.5.&#x7EA2;&#x9ED1;&#x6811;</a>
+          <a href="/2024/05/31/12.1.The%20introduction%20of%20Hashing/" class="post-title-link" itemprop="url">12.1.Hashing&#x7684;&#x5F15;&#x5165;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1661,7 +1661,7 @@ y\)</span>&#x3002;</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:15:04" itemprop="dateModified" datetime="2024-06-02T18:15:04+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:40" itemprop="dateModified" datetime="2024-06-02T18:25:40+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1673,7 +1673,7 @@ y\)</span>&#x3002;</li>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/11-Balanced-Trees/" itemprop="url" rel="index"><span itemprop="name">11.Balanced Trees</span></a>
+          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
         </span>
     </span>
 
@@ -1684,14 +1684,14 @@ y\)</span>&#x3002;</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>437</span>
+      <span>391</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -1702,28 +1702,25 @@ y\)</span>&#x3002;</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1><span id="115&#x7EA2;&#x9ED1;&#x6811;&#x672A;&#x5B8C;&#x7ED3;"><span class="math inline">\(11.5\)</span>&#x7EA2;&#x9ED1;&#x6811;(&#x672A;&#x5B8C;&#x7ED3;)</span></h1>
-<h3><span id="1&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;">1.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;</span></h3>
-<p>&#x2003;&#x2003;&#x524D;&#x9762;&#x4ECB;&#x7ECD;&#x7684;<span class="math inline">\(B\)</span>-&#x6811;&#x5F88;&#x7B26;&#x5408;&#x6211;&#x4EEC;&#x5BF9;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x7684;&#x9700;&#x8981;&#xFF0C;&#x4F46;&#x662F;&#x5B83;&#x5F88;&#x96BE;&#x7528;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x8BBE;&#x60F3;&#x521B;&#x9020;&#x4E00;&#x79CD;&#x6811;&#xFF0C;&#x5B83;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x5B9E;&#x73B0;&#xFF0C;&#x4F46;&#x7ED3;&#x6784;&#x4E0A;&#x4E0E;<span class="math inline">\(B\)</span>-&#x6811;&#x7B49;&#x4EF7;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(2-3\)</span>&#x6811;&#x4E2D;&#xFF0C;&#x53F6;&#x5B50;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#x548C;<span class="math inline">\(BST\)</span>&#x662F;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x7684;&#x3002;&#x800C;&#x5BF9;&#x4E8E;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x5C06;&#x94FE;&#x63A5;&#x5206;&#x6210;&#x4E24;&#x79CD;&#x7C7B;&#x578B;&#xFF1A;&#x7EA2;&#x8272;(<span class="math inline">\(red\)</span>)&#x7684;&#x548C;&#x9ED1;&#x8272;(<span class="math inline">\(black\)</span>)&#x7684;&#x3002;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x5982;&#x4E0B;&#x7684;&#x5F62;&#x5F0F;&#x8868;&#x793A;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x4E48;&#x5904;&#x7406;&#x7684;&#x597D;&#x5904;&#x662F;&#xFF1A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E0D;&#x4FEE;&#x6539;&#x539F;&#x6709;&#x7684;<span class="math inline">\(BST\)</span>&#x6765;&#x5B9E;&#x73B0;<span class="math inline">\(2-3\)</span>&#x6811;&#x3002;&#x7ED9;&#x5B9A;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x53EF;&#x4EE5;&#x7ACB;&#x5373;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x7684;<span class="math inline">\(2-3\)</span>&#x6811;&#x5230;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x8F6C;&#x6362;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
-<h3><span id="2&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;">2.&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;</span></h3>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x6A21;&#x62DF;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x7EA2;&#x9ED1;&#x6811;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
+          <h1><span id="121hashing&#x7684;&#x5F15;&#x5165;"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5F15;&#x5165;</span></h1>
+<h3><span id="1hasing&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(Hasing\)</span>&#x7684;&#x5F15;&#x5165;</span></h3>
+<p>&#x2003;&#x2003;&#x5728;&#x5148;&#x524D;&#x7684;&#x6811;&#x7ED3;&#x6784;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x5BF9;&#x6570;&#x636E;&#x7684;&#x9AD8;&#x6548;&#x67E5;&#x627E;&#x3002;&#x4F46;&#x6811;&#x7684;&#x4F7F;&#x7528;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x9650;&#x5236;&#xFF1A;</p>
 <ol type="1">
-<li>&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x5DE6;&#x659C;&#x3002;</li>
-<li>&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E0E;&#x4E24;&#x4E2A;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x76F8;&#x8FDE;&#x3002;</li>
-<li>&#x7EA2;&#x9ED1;&#x6811;&#x5177;&#x6709;&#x5B8C;&#x7F8E;&#x7684;&#x201C;&#x9ED1;&#x8272;&#x5E73;&#x8861;&#x201D;&#xFF1A;&#x4ECE;&#x6839;&#x8282;&#x70B9;&#x5230;&#x7A7A;&#x8282;&#x70B9;&#x95F4;&#x7684;&#x6BCF;&#x4E2A;&#x8DEF;&#x5F84;&#x90FD;&#x5177;&#x6709;&#x76F8;&#x540C;&#x6570;&#x91CF;&#x7684;&#x8910;&#x8272;&#x94FE;&#x63A5;&#x3002;</li>
+<li>&#x6811;&#x9700;&#x8981;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x53EF;&#x6BD4;&#x8F83;&#x6027;(<span class="math inline">\(comparable\)</span>)&#x3002;&#x5BF9;&#x4E8E;&#x67D0;&#x4E9B;&#x5143;&#x7D20;(&#x6BD4;&#x5982;&#x5B57;&#x7B26;&#x4E32;)&#xFF0C;&#x5B83;&#x4EEC;&#x4E0D;&#x80FD;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x65E0;&#x6CD5;&#x63D2;&#x5165;<span class="math inline">\(BST\)</span>&#x4E2D;&#x4E86;&#x3002;</li>
+<li><span class="math inline">\(BST\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x4E3A;<span class="math inline">\(\Theta(\log
+N)\)</span>&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x6709;&#x66F4;&#x4F18;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;</li>
 </ol>
-<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5C06;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x753B;&#x6210;&#x6C34;&#x5E73;&#x7684;&#xFF0C;&#x90A3;&#x4E48;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x4E0B;&#x9762;&#x7684;&#x56FE;&#x793A;&#xFF0C;&#x8FD9;&#x548C;<span class="math inline">\(2-3\)</span>&#x6811;&#x51E0;&#x4E4E;&#x4E00;&#x81F4;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
-<h3><span id="2&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;">2.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;</span></h3>
-<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5DE6;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
-<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x53F3;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x5B9E;&#x73B0;&#x5BF9;&#x6574;&#x6570;&#x7684;&#x67E5;&#x627E;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x68C0;&#x6D4B;&#x6570;&#x7EC4;&#x7B2C;<span class="math inline">\(i\)</span>&#x4F4D;&#x662F;&#x5426;&#x4E3A;<span class="math inline">\(1\)</span>&#xFF0C;&#x4ECE;&#x800C;&#x5F97;&#x5230;&#x8BE5;&#x6574;&#x6570;&#x662F;&#x5426;&#x5B58;&#x5728;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5982;&#x4E0B;&#x5B9E;&#x73B0;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedIntegerSet</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] present;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedIntegerSet</span><span class="params">()</span> {</span><br><span class="line">        present = <span class="keyword">new</span> <span class="title class_">boolean</span>[<span class="number">2000000000</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        present[i] = <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        <span class="keyword">return</span> present[i];</span><br><span class="line">    }</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x67E5;&#x627E;&#x4E0E;&#x63D2;&#x5165;&#x90FD;&#x53EA;&#x9700;&#x8981;<span class="math inline">\(\Theta(1)\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x5B83;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
+<ol type="1">
+<li>&#x7A7A;&#x95F4;&#x6D6A;&#x8D39;&#x8F83;&#x5927;&#x3002;</li>
+<li>&#x4E0D;&#x5177;&#x6709;&#x666E;&#x9002;&#x6027;&#x3002;&#x8BE5;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x53EA;&#x9002;&#x7528;&#x4E8E;&#x6574;&#x6570;&#x3002;</li>
+</ol>
+<h3><span id="2&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;">2.&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;</span></h3>
+<p>&#x2003;&#x2003;&#x4EE5;&#x5B57;&#x7B26;&#x4E32;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;&#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x6309;&#x5982;&#x4E0B;&#x7684;&#x65B9;&#x5F0F;&#x8F6C;&#x6362;&#x6210;&#x4E00;&#x4E2A;&#x6574;&#x6570;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &apos;a&apos; -&gt; 1, &apos;b&apos; -&gt; 2, &apos;z&apos; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&apos;a&apos;</span>) || (ithChar &gt; <span class="string">&apos;z&apos;</span>)) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&apos;a&apos;</span> + <span class="number">1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) {</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5B9E;&#x73B0;&#x4E86;&#x5B57;&#x7B26;&#x4E32;&#x5230;&#x6574;&#x6570;&#x7684;&#x8F6C;&#x6362;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x8FD9;&#x5E76;&#x672A;&#x89E3;&#x51B3;&#x6211;&#x4EEC;&#x63D0;&#x51FA;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
 
       
     </div>
@@ -1775,7 +1772,7 @@ y\)</span>&#x3002;</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:13</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:16</span>
   </span>
 </div>
 <div class="busuanzi-count">
