@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -186,6 +186,565 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>628</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</span></h1>
+<h3><span id="1machine-code-properties">1.Machine code properties</span></h3>
+<ul>
+<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
+isn&apos;t fixed.</p></li>
+<li><p>The instruction format is designed to insure that <strong>there&apos;s
+a unique decoding of the bytes into machine instructions</strong>. For
+example, only <code>pushq %rbx</code> can start with <code>53</code>(can
+be analogied with opcode in RISC-V).</p></li>
+<li><p>The disassembler determines the assembly code based
+<strong>purely on the byte sequences in the machine-code
+file</strong>.</p></li>
+</ul>
+<h3><span id="2registers">2.Registers</span></h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
+<ul>
+<li><p>When we present instructions copying and generating 1-, 2-, 4-,
+8-byte values, we follow the two conventions:</p>
+<ul>
+<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
+remaining bytes unchanged</strong>.</p></li>
+<li><p>Those that generate 4-byte quantities <strong>set the upper 4
+bytes of the register to zero</strong>.</p></li>
+</ul></li>
+<li><p>A function returns a value by <strong>storing it in register
+<code>%rax</code></strong>, or <strong>in one of the low-order portions
+of this register</strong>.</p></li>
+</ul>
+<h3><span id="3operand-specifiers">3.Operand specifiers</span></h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
+<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
+<ul>
+<li><p><em>Immediate</em>: It refers to constant value. In ATT format
+assembly code, it is written with a <code>$</code> along with an
+integer.</p></li>
+<li><p><em>Register</em>: It denotes the content of a register. We use
+the notation <span class="math inline">\(r_a\)</span> to denote a
+register <span class="math inline">\(a\)</span> and indicate its value
+with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
+<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
+<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
+<ul>
+<li><span class="math inline">\(Imm\)</span> is the immediate offset,
+<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
+<h3><span id="4data-movement-instructions">4.Data Movement Instructions</span></h3>
+<h4><span id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</span></h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
+<ul>
+<li><p>The source operand designates a value that is <strong>immediate,
+stored in a register, or stored in memory</strong>.</p></li>
+<li><p>The destination operand designates a location that is
+<strong>either a register or a memory address</strong>.</p></li>
+<li><p>The value is first passed <strong>from source to a register, then
+from the register to the destination</strong>.</p></li>
+</ul>
+<blockquote>
+<p>The regular <code>movq</code> instruction can only have immediate
+source operands that can be represented as 32-bit two&#xFFFD;s-complement
+numbers. This value is then sign extended to produce the 64-bit value
+for the destination. The <code>movabsq</code> instruction can have an
+<strong>arbitrary 64-bit immediate value</strong> as its source operand
+and can only have a register as a destination.</p>
+</blockquote>
+<blockquote>
+<p>In x86-64, any instruction that generates a 32-bit value for a
+register also <strong>sets the high-order portion of the register to
+0</strong>.</p>
+</blockquote>
+<h4><span id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
+instructions</span></h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
+<ul>
+<li><p>Each instruction name has <strong>size designators</strong> as
+its final two characters&#xFFFD;the first specifying the source size, and the
+second specifying the destination size.</p></li>
+<li><p>The source can be either a register or stored in memory.</p></li>
+<li><p>The destination is a register.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
+points to note:</p>
+<ol type="1">
+<li><p>In x86-64, we always <strong>give quad word registers to memory
+reference</strong>, such as <code>%rax</code>.</p></li>
+<li><p>We <strong>first decide which suffix to use by the
+destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
+<li><p>If <strong>the destination is a memory address(such as
+<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
+the source</strong>.</p></li>
+</ol>
+<blockquote>
+<p>Note that if both the source and the destination are from memory,
+<strong>we can use all four suffix</strong>. The x86-64 imposes the
+restriction that <strong>a move instruction cannot have both operands
+refer to memory locations</strong>.</p>
+</blockquote>
+<h4><span id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</span></h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
+<ul>
+<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
+stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
+<li><p>Dereferencing a pointer involves <strong>copying that pointer
+into a register</strong>, and then <strong>using this register in a
+memory reference</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
+fact <strong>the extension of bits</strong>. For example, if we want to
+convert <code>char</code> to <code>int</code>, because <code>char</code>
+takes word bits while <code>int</code> takes 32 bits, we use
+<code>movsbl</code> to implement operations
+like<code>int x = (int) char_element</code>:</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
+<h4><span id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</span></h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>265</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</span></h1>
+<h3><span id="1program-execution-process">1.Program execution process</span></h3>
+<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
+<code>p2.c</code>, we input the command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>The C preprocessor expands the source code to <strong>include any
+files specified with <code>#include</code> commands and with
+<code>#define</code> declarations</strong>.</p></li>
+<li><p>Compiler generates assembly code having name <code>p1.s</code>
+and <code>p2.s</code>.</p></li>
+<li><p>Assembler converts the assembly code into <em>binary
+object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
+</ol>
+<blockquote>
+<p>The object code contains binary representations of all instructions,
+but doesn&apos;t include the address of the global value.</p>
+</blockquote>
+<ol start="4" type="1">
+<li>Linker merges these two object-code files along with <em>code
+implementing library functions</em> (e.g., <code>printf</code>) and
+generates the final executable code file <code>p</code>(specified by
+<code>-o p</code>).</li>
+</ol>
+<h3><span id="2machine-code">2.Machine code</span></h3>
+<h4><span id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</span></h4>
+<p>&#x2003;&#x2003;The program memory contains:</p>
+<ul>
+<li><p>the executable machine code for the program</p></li>
+<li><p>some information required by the operating system</p></li>
+<li><p>a run-time stack for managing procedure calls and
+returns</p></li>
+<li><p>blocks of memory allocated by the user (e.g., by using the
+<code>malloc</code> library function).</p></li>
+</ul>
+<h4><span id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
+command</span></h4>
+<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
+compiler:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
+<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
+<em>disassembler</em>. The program <code>objdump</code> can serve the
+role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result is as below:</p>
+<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>401</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1><span id="56cache-coherence">5.6.Cache Coherence</span></h1>
+<h3><span id="1cache-model">1.Cache model</span></h3>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
+<h3><span id="2coherence-concept">2.Coherence concept</span></h3>
+<h4><span id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</span></h4>
+<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
+example:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
+<p>&#x2003;&#x2003;The two different processors have two different values for the same
+location, this is referred to as <em>cache coherence problem</em>.</p>
+<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
+<strong>any read of a data item returns the most recently written value
+of that data item</strong>. This simple concept contains two different
+aspects of memory system behaviour:</p>
+<ul>
+<li><em>coherence</em>: defines <em>what</em> values can be returned by
+a read.</li>
+<li><em>consistency</em>: determines <em>when</em> a written value will
+be returned by a read.</li>
+</ul>
+<p>&#x2003;&#x2003;A memory system is coherent if:</p>
+<ol type="1">
+<li>A read by a processor P to location X that follows <em>only one
+write</em> by P to X always returns the value written by P.</li>
+</ol>
+<blockquote>
+<p>This preserves program order.</p>
+</blockquote>
+<ol start="2" type="1">
+<li>A read by a processor to location X that follows <em>only one
+write</em> by another processor to X returns the written value if the
+read and write are sufficiently separated in time.</li>
+</ol>
+<blockquote>
+<p>This defines memory coherence.</p>
+</blockquote>
+<ol start="3" type="1">
+<li>Writes to the same location are <strong>serialized</strong>; that
+is, two writes to the same location by any two processors <strong>are
+seen in the same order by all processors</strong>. For example, if CPU B
+stores 2 into memory at address X after time step 3, processors can
+never read the value at location X as 2 and then later read it as
+1.</li>
+</ol>
+<h4><span id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</span></h4>
+<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
+<strong>has exclusive access to a data item</strong> before it writes
+that item. This style of protocol is called a <em>write invalidate
+protocol</em> because it <strong>invalidates copies in other caches on a
+write</strong>.</p>
+<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
+CPU A, the CPU B will get a cache miss, and is forced to fetch a new
+copy of data:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
+<blockquote>
+<p>Block size plays an important role in cache coherency. Large blocks
+can cause what&apos;s called <em>false sharing</em>, when two unrelated
+shared variables are located in the same cache block, the whole block is
+exchanged between processors even though the processors are accessing
+different variables.</p>
+</blockquote>
+<h3><span id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
+protocol:</span></h3>
+<h4><span id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</span></h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
+<h4><span id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
+concepts</span></h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
+<h4><span id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</span></h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1998,602 +2557,8 @@ before it is changed</strong>:</p>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>527</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</span></h1>
-<h3><span id="1basic-devices">1.Basic devices</span></h3>
-<ul>
-<li><p><em>Registers</em>: It contains:</p>
-<ul>
-<li><p>Two data words from the register file, and <strong>write one data
-word into the register file</strong> for each instruction.</p></li>
-<li><p>An input. It <strong>specifies the register number to be
-read</strong>.</p></li>
-<li><p>An output. It <strong>carries the value that has been read from
-the register</strong>.</p></li>
-<li><p>To write a data word, we need two more inputs: one to
-<strong>specify the register number to be written</strong> and one to
-<strong>supply the data to be written into the
-register</strong>.</p></li>
-</ul></li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
-<ul>
-<li><em>ALU</em></li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
-<ul>
-<li><em>Immediate generation unit</em>: In operations like
-<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
-written in 12-bit offset in the instruction. So we need to
-<strong>sign-extend the number to a 64-bit signed value</strong>. The
-Imm-Gen does the job:</li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
-<h3><span id="2basic-phases-ofinstruction-execution">2.Basic phases of
-instruction execution</span></h3>
-<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
-parts:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
-<h3><span id="3implementation-ofdifferent-statement">3.Implementation of
-different statement</span></h3>
-<h4><span id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
-instruction</span></h4>
-<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
-<code>DataA</code> and <code>DataB</code>, and calculate the result by
-ALU.</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
-<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
-rather than <code>DataB</code>. The source of Imm-Gen is from
-<code>IMEM</code>, from which we can get the instruction, and
-<code>inst[31:20]</code> is the immediate we want:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
-<h4><span id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
-<code>save</code> instruction</span></h4>
-<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
-read or write data.</p>
-<ul>
-<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
-<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
-address. Else, it writes the information into the address:</li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
-<h4><span id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</span></h4>
-<p>&#x2003;&#x2003;The basic form of branch instruction is
-<code>beq x1 x2 offset</code>. To implement this instruction, we must
-compute the branch target address by <strong>adding the sign- extended
-offset field of the instruction to the PC</strong>. There are two
-details in the definition of branch instructions to which we must pay
-attention:</p>
-<ul>
-<li><p>The instruction set architecture specifies that <strong>the base
-for the branch address calculation is the address of the branch
-instruction</strong>.</p></li>
-<li><p>The architecture also states that <strong>the offset field is
-shifted left 1 bit so that it is a half word offset</strong>; this shift
-<strong>increases the effective range of the offset field by a factor of
-2</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
-the new PC, and we say the branch is <strong>taken</strong>. Else, we
-say the branch is <strong>not taken</strong>.</p>
-<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
-this struction:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
-<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
-signal</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
-<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
-<h4><span id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
-<code>jalr</code> instructions</span></h4>
-<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
-<ol type="1">
-<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
-<ul>
-<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
-2 bytes!</strong></li>
-</ul></li>
-<li><p>Set <code>PC=PC+offset</code></p>
-<ul>
-<li>Since the offset is calculated by ALU, we <strong>connect the output
-of ALU with input of PC</strong>.</li>
-</ul></li>
-</ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
-<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
-<ol type="1">
-<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
-<code>DataD</code>)</li>
-<li>Set <code>PC=PC+offset</code></li>
-</ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
-<h3><span id="4datapath-control">4.Datapath control</span></h3>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-3-Synchronous-Digital-Systems/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-3-Synchronous-Digital-Systems/" class="post-title-link" itemprop="url">3.3.Synchronous Digital Systems</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:29:11" itemprop="dateCreated datePublished" datetime="2024-06-05T08:29:11+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:48:39" itemprop="dateModified" datetime="2024-06-06T17:48:39+08:00">2024-06-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>419</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</span></h1>
-<h3><span id="1clock-concepts">1.Clock concepts</span></h3>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
-<h3><span id="2d-flip-flops">2.D Flip-flops</span></h3>
-<h4><span id="a-dffconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span> DFF
-concept</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
-<blockquote>
-<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
-<span class="math inline">\(D\)</span> is the data input.</p>
-</blockquote>
-<blockquote>
-<p>DFF only responds to the input signal on the rising edge of the clock
-signal, it captures and latches the value of data input. <strong>It will
-hold the value until the next rising edge of the clock
-signal</strong>.</p>
-</blockquote>
-<ul>
-<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
-take for the input to propagate to the output after the clock
-trigger</strong>.</p></li>
-<li><p><em>Setup time</em> is the amount of time that the input needs to
-be stable BEFORE the clock trigger</p></li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
-<ul>
-<li><em>Hold time</em> is the amount of time that the input needs to be
-stable AFTER the clock trigger</li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
-<h3><span id="3register">3.Register</span></h3>
-<h4><span id="asomeconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-concept</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
-<blockquote>
-<p>Why this? Because the max hold time is to <strong>ensure that data
-input D remains stable for a period of time after the rising edge of the
-clock arrives</strong>. And the period of time equals to the delay of
-<span class="math inline">\(A\)</span> plus the combinational delay.</p>
-</blockquote>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
-<blockquote>
-<p>Why this? Because the min clock cycle is to <strong>ensure that the
-signal is properly transmitted during the clock cycle and captured by
-the next register</strong>. So we must take the longest time into
-consideration.</p>
-</blockquote>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
-<h3><span id="4transitor">4.Transitor</span></h3>
-<h4><span id="ametal-oxide-semiconductor-field-effecttransistormosfet">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
-Transistor(MOSFET)</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
-<p>&#x2003;&#x2003;To know how the result comes from, we can <strong>view the value of
-<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
-an example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
-<ul>
-<li><p>First we need to know <strong>whether the switch is
-closed</strong>. <strong>If the switch is closed, then the state of
-<span class="math inline">\(D\)</span> is decided by the outside
-circuits</strong>.</p></li>
-<li><p>When the switch is on, we then judge <strong>if the voltage of
-<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it&apos;s true, then the FET is
-conducting, and vice versa.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can&apos;t get the electronic, thus it&apos;s
-0.</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
-<h4><span id="bvddand-ground">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Vdd
-and Ground</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
-<h4><span id="cbuilding-an-inverter">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Building an Inverter</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
-<h4><span id="dbuilding-other-gates">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Building other gates</span></h4>
-<p>&#x2003;&#x2003;To build a CMOS, we:</p>
-<ol type="1">
-<li><p>Implement the pull-up network and pull-down network separately to
-fit the truth table.</p>
-<ul>
-<li>It&apos;s OK to get the opposite of truth table. <strong>We can simply
-convert it through an invertor</strong>.</li>
-</ul></li>
-<li><p>Connect the pull-up with Vdd, and the pull-down with
-Ground.</p></li>
-</ol>
-<p>&#x2003;&#x2003;We take the <code>NAND</code> gate for example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
-<h4><span id="ethe-use-of-demorgans-law">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>The use of DeMorgan&apos;s Law</span></h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/04/3-2-Introduction-to-Digital-System/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/04/3-2-Introduction-to-Digital-System/" class="post-title-link" itemprop="url">3.2.Introduction to Digital System</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 23:03:11" itemprop="dateCreated datePublished" datetime="2024-06-04T23:03:11+08:00">2024-06-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:19:08" itemprop="dateModified" datetime="2024-06-05T08:19:08+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>208</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1><span id="32introduction-to-digital-system"><span class="math inline">\(3.2.\)</span>Introduction to Digital System</span></h1>
-<h3><span id="1logic-gate-representation">1.Logic gate representation</span></h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-1.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-2.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-3.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-4.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-5.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-6.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-7.png"></p>
-<h3><span id="2using-booleanalgebra-to-simplify-circuits">2.Using boolean
-algebra to simplify circuits</span></h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
-<h3><span id="3build-an-adder">3.Build an Adder</span></h3>
-<h4><span id="ahalfadder">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Half
-adder</span></h4>
-<p>&#x2003;&#x2003;A half adder&apos;s output consists of:</p>
-<ul>
-<li>The <em>sum</em>. It can be computed by <code>xor</code>
-method.</li>
-<li>The <em>carry</em>. It can be computed by <code>and</code>
-method.</li>
-</ul>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
-<h4><span id="bfulladder">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Full
-adder</span></h4>
-<p>&#x2003;&#x2003;To implement full adder, we just need to add <code>A</code>,
-<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
-<p>&#x2003;&#x2003;The output of a full adder is the same as the half adder. Then how
-can we calculate each of them?</p>
-<ul>
-<li><p>For <span class="math inline">\(C_0\)</span>, it&apos;s decided by the
-sum of <code>A</code> and <code>B</code> &amp; the current carry in the
-position. There are two cases that make the carry 1:</p>
-<ol type="1">
-<li><code>A + B</code> is 1, and current carry is 1.</li>
-<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
-</ol></li>
-</ul>
-<p>&#x2003;&#x2003;So we can compute <span class="math inline">\(C_0\)</span> by this
-expression:</p>
-<p><span class="math display">\[
-C_0 = C_i(A+B) + AB
-\]</span></p>
-<ul>
-<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
-<code>B</code> and current carry is 1:</li>
-</ul>
-<p><span class="math display">\[
-S = A \; xor B \; xor C_i
-\]</span></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
-<h4><span id="c4-bit-adder">&#x2003;&#x2003;{{c.}}4-bit Adder</span></h4>
-<p>&#x2003;&#x2003;To make a multi-bit Adder, we simply <strong>connect full adder
-together</strong>:</p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -2618,14 +2583,14 @@ together</strong>:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">104k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">106k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:18</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:26</span>
   </span>
 </div>
 <div class="busuanzi-count">
