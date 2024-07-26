@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">10.7.&#x5BF9;&#x5BF9;&#x8C61;&#x7684;&#x5904;&#x7406;&#x2014;&#x2014;&#x64CD;&#x7EB5;&#x5BF9;&#x8C61;</a>
+          <a href="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">10.8.&#x5BF9;&#x6570;&#x7EC4;&#x7684;&#x5904;&#x7406;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-26 20:15:43" itemprop="dateCreated datePublished" datetime="2024-04-26T20:15:43+08:00">2024-04-26</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-27 20:15:43" itemprop="dateCreated datePublished" datetime="2024-04-27T20:15:43+08:00">2024-04-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:58:26" itemprop="dateModified" datetime="2024-06-03T15:58:26+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 16:04:46" itemprop="dateModified" datetime="2024-06-03T16:04:46+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>489</span>
+      <span>521</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,81 +272,101 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="107handling-objects-manipulation"><span class="math inline">\(10.7.\)</span>Handling Objects: Manipulation</h1>
-<h3 id="1compiling-method-calls">1.Compiling method calls</h3>
+          <h1 id="108handling-array"><span class="math inline">\(10.8.\)</span>Handling Array</h1>
+<h3 id="1array-construction">1.Array construction</h3>
+<p>&#x2003;&#x2003;Assume that the high-level programmer writes
+<code>var Array arr</code>.</p>
 <ul>
-<li>In compiler, we are going to translate the OO method calls into
-<strong>procedural style language</strong> like VM language or machine
-language, they don&apos;t understand what an object is.</li>
+<li>In response to this, the compiler will only <strong>allocate a
+<code>local</code> variable</strong> to represent the array and
+<strong>initialize this variable to 0</strong>.</li>
+<li>This statement <strong>generates no code</strong>. The compiler will
+<strong>get a variable called <code>loca1 0</code>, its type
+<code>Array</code> and name <code>arr</code></strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;In order to do this:</p>
+<p>&#x2003;&#x2003;When we construct this array by calling the subroutine of the
+<code>Array</code> class: <code>let arr = Array.new(5)</code>.</p>
 <ul>
-<li>We can <strong>treat the object as the first, implicit
-argument</strong>. We push it onto the stack, because we want it to
-<strong>be the first argument on which the method is going to
-operate</strong>.</li>
+<li>The compiler and OS will magically <strong>allocate sufficient space
+in the heap</strong> to represent the array.</li>
+<li>The base address of the new allocated block is going to be stored in
+<code>local 0</code>, regardless of the address may be.</li>
+<li>What we have here is <strong>a standard call to a Jack
+subroutine</strong>, which we already knew how to handle.</li>
 </ul>
-<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-5.png"></p>
-<ol type="1">
-<li>We <code>push</code> the object into the stack.</li>
-<li>We <code>push</code> enough arguments into the stack.</li>
-<li>We <code>call</code> the method.</li>
-</ol>
-<p>&#x2003;&#x2003;When we say &quot;put the object onto the stack&quot;, we don&apos;t care what the
-object is, we are only interested in its <em>base address</em>.</p>
-<h3 id="2compiling-methods">2.Compiling methods</h3>
-<p>&#x2003;&#x2003;Methods are used to operate on the object which refers to as
-<code>THIS</code>. Therefore, each method&apos;s code needs to <strong>access
-to the object&apos;s <code>field</code> variables</strong>.</p>
-<p>&#x2003;&#x2003;In the previous unit, we know that we can access the <span class="math inline">\(ith\)</span> <code>field</code> by
-<code>THIS i</code>. However, before we use <code>THIS</code>, we have
-to anchor it on the proper address on the RAM first, so we also need
-<code>pointer</code>.</p>
-<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-6.png"></p>
-<p>&#x2003;&#x2003;Let&apos;s take the <code>distance</code> method as an example:</p>
-<ol type="1">
-<li>The method is compiled within a class, so we will <strong>compile
-the class variables</strong>, namely <code>x, y, pointCount</code>. This
-will end up generating no code.</li>
-<li>Both the method declaration and variable declaration generate no
-code, either. Instead, the compiler <strong>creates the symbol table of
-the subroutine</strong> and <strong>populates it within the
-<code>this</code> object as well as the explicit variables that is found
-in the parameter list and the variable declaration.</strong></li>
-<li>We can anticipate that the method will want to operate on the
-current object, so we need to generate code that will <strong>anchor
-this on the correct address in memory</strong>. And we know that the
-current object address is <code>argument 0</code>, so we do
-<code>push argument 0</code> and <code>pop pointer 0</code> to let
-<code>THIS</code> pointer to contain the address of the current
-object.</li>
-</ol>
-<p>&#x2003;&#x2003;When the <code>distance</code> method completes execution and
-terminates, control will return to the caller. The compiled code of the
-caller is as below:</p>
-<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-7.png"></p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<h3 id="2array-manipulation">2.Array manipulation</h3>
+<h4 id="athis-and-thatreview">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>THIS</code> and <code>THAT</code>
+review</h4>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<h5 id="bgenerating-code">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Generating code</h5>
+<p>&#x2003;&#x2003;Suppose we want to conduct <code>arr[2] = 17</code>:</p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
 <ul>
-<li>We know that the method returns a value on the top of stack, so we
-remove it and put it into <code>d</code>.</li>
-</ul>
-<h3 id="3void-methodcompilation">3.<code>void</code> method
-compilation</h3>
-<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-8.png"></p>
-<p>&#x2003;&#x2003;The <code>void</code> doesn&apos;t expect to get a return value, while
-according to the rules of the game, we must return a value. As a result,
-we:</p>
+<li><p>Since the base address of <code>arr</code> is stored in
+<code>THAT</code>, we simply <code>push arr</code> then
+<code>push index</code>, and <code>add</code> to get
+<code>arr + 2</code>.</p></li>
+<li><p>Then the <code>THAT</code> pointer will be aligned with the
+address we want to manipulate.</p></li>
+<li><p>Notice that:</p>
 <ol type="1">
-<li>To obey the rule, we <strong>generate code at the end of each method
-that returns a value</strong>.</li>
-<li>Since we have nothing to return, we <code>push constant 0</code>,
-which is a dummy value and then <code>return</code>.</li>
+<li>We use <strong>only <code>THAT 0</code></strong>, we don&apos;t use other
+entries from <code>THAT</code> segment.</li>
+<li>The VM code you have <strong>operates in a completely symbolic
+logical world</strong>. It doesn&apos;t know where the array is located in
+RAM or which address we are manipulating. In this respect, it&apos;s a very
+safe code, for it cannot reach out of the VM world, because all the
+physical considerations are being implemented by the VM translator, and
+VM code itself is completely oblivious of the host platform. This is
+very important because we have numerous different computers, we don&apos;t
+know where this code is going to run, and we <strong>don&apos;t have the
+luxury of making any assumptions about the underlying hardware
+platform</strong>.</li>
+</ol></li>
+</ul>
+<p>&#x2003;&#x2003;What about <code>arr[exp1] = exp2</code>? As above, we may write
+the following code:</p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p>&#x2003;&#x2003;This seems make sense, but when we try to write
+<code>a[i] = b[j]</code>, there comes a crush:</p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-5.png"></p>
+<p>&#x2003;&#x2003;To avoid this, we:</p>
+<ol type="1">
+<li>First deal with the right hand side and left hand side separately.
+Once we complete this, the stack is going to <strong>contain two
+addresses</strong>: the address of <code>a[i]</code> and the address of
+<code>b[j]</code>:</li>
 </ol>
-<p>&#x2003;&#x2003;But now the compiled code faces a slight problem: the stack
-contains uncessary value and we want to get rid of it.</p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-6.png"></p>
+<ol start="2" type="1">
+<li>We <strong><code>pop</code> the topmost value</strong> onto
+<code>pointer 1</code>, which is <code>b[i]</code> in this example. Once
+is done, we are going to get the following state:</li>
+</ol>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-7.png"></p>
 <ol start="3" type="1">
-<li>To do this, we simply <code>pop temp 0</code>.</li>
+<li>Now that <code>That 0</code> is aligned with <code>b[j]</code>, we
+<strong><code>push</code> the value in <code>b[j]</code> and
+<code>pop</code> it into <code>temp 0</code></strong>. This is the
+picture of the VM segments after the process:</li>
 </ol>
-<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-9.png"></p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-8.png"></p>
+<ol start="4" type="1">
+<li>Because we have <strong>safely saved the value of
+<code>b[i]</code></strong>, we can <strong>take the address of
+<code>a[i]</code> and <code>pop</code> it onto
+<code>pointer 1</code></strong></li>
+<li>We finally <strong><code>push temp 0</code> onto the stack</strong>
+and <strong><code>pop</code> it onto <code>that 0</code></strong>, which
+is on the address of <code>a[i]</code>:</li>
+</ol>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-9.png"></p>
+<p>&#x2003;&#x2003;The general solution for generating array access code is as
+below:</p>
+<p>![[Pasted image 20240507234141.png]]</p>
+<p><img src="/2024/04/27/10-8-%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%84%E7%90%86/image-10.png"></p>
 
       
     </div>
@@ -366,7 +386,7 @@ contains uncessary value and we want to get rid of it.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/83/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/83/">83</a><span class="page-number current">84</span><a class="page-number" href="/page/85/">85</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/85/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/83/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/83/">83</a><span class="page-number current">84</span><a class="page-number" href="/page/85/">85</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/85/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

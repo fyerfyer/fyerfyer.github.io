@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/" class="post-title-link" itemprop="url">3.2.&#x89E6;&#x53D1;&#x5668;</a>
+          <a href="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/" class="post-title-link" itemprop="url">3.3.&#x5B58;&#x50A8;&#x5355;&#x5143;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 17:29:11" itemprop="dateCreated datePublished" datetime="2024-04-04T17:29:11+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 20:19:31" itemprop="dateCreated datePublished" datetime="2024-04-04T20:19:31+08:00">2024-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>475</span>
+      <span>364</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,69 +272,63 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="32flipflops"><span class="math inline">\(3.2.\)</span>Flip
-Flops</h1>
-<h3 id="1clocked-data-flip-flops">1.Clocked Data Flip Flops</h3>
-<p>&#x2003;&#x2003;To implement the sequential logic, we need an element that
-<em>remember one bit of information from <span class="math inline">\(t-1\)</span> so that it can be used at time <span class="math inline">\(t\)</span></em>. It remembers by &quot;flipping&quot;
-between the possible states. Such gates that can flip between two states
-are called <em>Flip Flop</em>:</p>
-<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image.png"></p>
-<p>&#x2003;&#x2003;Take the clock below as example:</p>
-<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-1.png"></p>
+          <h1 id="33memoryunits"><span class="math inline">\(3.3.\)</span>Memory
+Units</h1>
+<h3 id="1from-1-bit-to-register">1.From 1-bit to register</h3>
+<p>&#x2003;&#x2003;the previous unit ended up with a description of how&#xA0;a single bit
+register works.&#xA0;And it doesn&apos;t take a big stretch of imagination to
+understand that you&#xA0;can <strong>take several such one bit register and
+put them one next to the other</strong>.&#xA0;And by doing this, you can
+create <em>an abstraction of a 16-bit number</em>.</p>
+<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image.png"></p>
 <ul>
-<li>At time 1, we don&apos;t exactly know what our output will be because we
-haven&apos;t&#xA0;specified what happened in the previous time unit. So we just
-don&apos;t know what the output is.</li>
-<li>At time 2, the output is exactly what the input was in time 1,
-<code>1</code>.</li>
-<li>......</li>
+<li>The <strong>width</strong> of the register, in general, is a
+parameter called <span class="math inline">\(w\)</span>.&#xA0;In some
+computers it&apos;s 16-bit,&#xA0;in other computers it may be 32-bits or
+64-bit.</li>
+<li>The register&apos;s <strong>state</strong> refers to the value which is
+currently stored in the register.</li>
 </ul>
-<h3 id="2sequential-logicimplementation">2.Sequential logic
-implementation</h3>
-<p>&#x2003;&#x2003;Here is a generic paradigm of how we&apos;re going to build&#xA0;all our
-logic in the computer, and it&apos;s going to be a combination
-of&#xA0;<em>remembering information via this basic D flip flops</em> and then
-<em>manipulating them using combinatorial logics</em>:</p>
-<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-2.png"></p>
+<p>&#x2003;&#x2003;let&apos;s take a user&apos;s perspective of this of this device:</p>
 <ul>
-<li>We have an array of D flip flops&#xA0;which basically compromise all of
-our memory in the system.</li>
-<li>Their output is going to be fed into some combinatorial
-logic&#xA0;together with the new input that you get in this time unit.</li>
-<li>All of this is going to change the state that we have in the D flip
-flop for&#xA0;the next time unit.</li>
+<li>How do we <strong>read</strong> the value of this register? We
+simply probe the output. Because at any given point of time, the output
+simply emits the state of the register.</li>
+<li>How do we <strong>write</strong> the value of this register? We set
+<code>in</code> to the new value <span class="math inline">\(v\)</span>,
+and set <code>load</code> to 1, then the register state becomes 1.</li>
+<li>And from the next cycle onward,&#xA0;the output of the register will also
+start emitting this value <span class="math inline">\(v\)</span>.&#xA0;From
+the next cycle onward,&#xA0;the register will effectively store the value
+<span class="math inline">\(v\)</span>. And it will keep on storing this
+value forever until we decide to change&#xA0;this value in the very same
+manner.</li>
 </ul>
-<h3 id="31-bit-register">3.1-bit Register</h3>
-<p>&#x2003;&#x2003;The 1-bit Register has these functionalities:</p>
+<h3 id="2ram">2.RAM</h3>
+<p>&#x2003;&#x2003;A RAM can be abstracted as a sequence of n addressable registers,
+with addresses from 0 to n-1:</p>
+<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image-1.png"></p>
 <ul>
-<li>Once we take the load bit and&#xA0;put the 1 into it, we want it
-<strong>remember the input bit at that time</strong>.</li>
-<li>When the load bit goes down to 0 we want it <strong>keep remembering
-the last input that was loaded into it for&#xA0;infinity, until a new load
-operation is performed</strong>.</li>
+<li>There&apos;s one thing very important to emphasize: at any given point
+of&#xA0;time, <strong>only one register is selected and only one register is
+working</strong>, all the other registers don&apos;t take any part in the
+game.</li>
 </ul>
-<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-3.png"></p>
-<p>&#x2003;&#x2003;Notice that there are two source into the DFF: one is the output
-from the previous stage, the other is the new input. Whether source to
-be chosen is decided by <code>load</code>, so we may use a
-<code>Mux</code> to solve this:</p>
-<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-4.png"></p>
+<p>&#x2003;&#x2003;Given this fact, we have to say <strong>which is the register on
+which we want to operate</strong>, <strong>which is the register that we
+want to read</strong>, or <strong>which is the register whose value we
+want to change</strong>.</p>
 <ul>
-<li>The DFF serves the purpose of storing and maintaining the previous
-input value in this process. When the load bit is set to 1, the DFF
-<strong>stores the input value and holds it unchanged until the next
-load operation</strong>. When the load bit is 0, the DFF
-<strong>maintains the value from the previous load and continues to
-output this value in the next time</strong> unit until a new load
-operation occurs. Therefore, the DFF is essentially used to remember and
-sustain the state of the input value.</li>
-<li><strong>The final output is determined by the multiplexer
-(Mux)</strong>. The DFF is responsible for storing the previously loaded
-value and sending it to the multiplexer based on the state of the load
-bit. The multiplexer <strong>selects whether to accept the new input
-value or the previously loaded value based on the load bit&apos;s
-status</strong>, and then outputs the selected value.</li>
+<li><p>To <strong>read</strong> a particular register, we:</p>
+<ol type="1">
+<li>Sent the address to RAM.</li>
+<li>Probe the output.</li>
+</ol></li>
+<li><p>To <strong>write</strong> a particular register, we:</p>
+<ol type="1">
+<li>Sent the address to RAM.</li>
+<li>Set the value and <code>load</code>.</li>
+</ol></li>
 </ul>
 
       
@@ -355,7 +349,7 @@ status</strong>, and then outputs the selected value.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/123/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/123/">123</a><span class="page-number current">124</span><a class="page-number" href="/page/125/">125</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/125/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/123/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/123/">123</a><span class="page-number current">124</span><a class="page-number" href="/page/125/">125</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/125/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

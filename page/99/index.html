@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.10.&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x5B9E;&#x73B0;</a>
+          <a href="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.11.Hack&#x5E73;&#x53F0;&#x4E0A;&#x7684;VM&#x5B9E;&#x73B0;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-11 14:35:43" itemprop="dateCreated datePublished" datetime="2024-04-11T14:35:43+08:00">2024-04-11</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-11 18:15:43" itemprop="dateCreated datePublished" datetime="2024-04-11T18:15:43+08:00">2024-04-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:49:14" itemprop="dateModified" datetime="2024-06-03T14:49:14+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:51:28" itemprop="dateModified" datetime="2024-06-03T14:51:28+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>758</span>
+      <span>206</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,129 +272,42 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
-Implementation</h1>
-<h3 id="1the-callers-view">1.The caller&apos;s view</h3>
-<p>&#x2003;&#x2003;In the calling function&apos;s view:</p>
+          <h1 id="711vm-implementation-on-the-hackplatform"><span class="math inline">\(7.11.\)</span>VM Implementation on the Hack
+Platform</h1>
+<h3 id="1program-compilation-andtranslation">1.Program compilation and
+translation</h3>
+<p><img src="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/image.png"></p>
 <ul>
-<li>Before calling another function, I must <strong>push as many
-arguments as the function expects to get</strong>;</li>
-<li>Next, I invoke the function using
-<code>call functionName nArgs</code>;</li>
-<li>After the called function returns, the argument values that I pushed
-before the call have disappeared from the stack, and <strong>a return
-value (that always exists) appears at the top of the
-stack</strong>;</li>
-<li>After the called function returns, <strong>all my memory segments
-are exactly the same as they were before the call</strong> (except that
-temp is undefined and some values of my static segment may have
-changed).</li>
+<li>When we translate from Jack to VM, we lost <em>the notion of
+constructors, methods</em>, because everything becomes functions.</li>
+<li>When we translate from VM to assembly, we lost <em>the notion of
+functions</em>, because we just have a long stream of assembly
+commands.</li>
 </ul>
-<h3 id="2the-callees-view">2.The callee&apos;s view</h3>
-<p>&#x2003;&#x2003;In the called function&apos;s view:</p>
-<ul>
-<li>Before I start executing, <strong>my<code>argument</code> segment
-has been initialized with the argument values passed by the
-caller</strong>.</li>
-<li>My <strong><code>local</code> variables segment has been allocated
-and initialized to zeros</strong>.</li>
-<li>My <code>static</code> segment has been set to <strong>the
-<code>static</code> segment of the VM file to which I belong</strong>
-(memory segments <code>this</code>, <code>that</code>,
-<code>pointer</code>, and <code>temp</code> are undefined upon
-entry).</li>
-<li>My working stack is empty.</li>
-<li>Before returning, I must <strong>push a value onto the
-stack</strong>.</li>
-</ul>
-<h3 id="3handling-call">3.Handling <code>call</code></h3>
-<p>&#x2003;&#x2003;We can implement the VM code by these steps:</p>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p>&#x2003;&#x2003;In terms of <code>call</code>, we do these steps:</p>
+<h3 id="2vm-convention">2.VM convention</h3>
+<p>&#x2003;&#x2003;In order to tranlate the VM code into assembly code, we need to
+comply to certain conventions:</p>
 <ol type="1">
-<li><p>Push a label onto the stack, and use the same label when we are
-going to return after the called function terminates.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push returnAddress</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Push some label that we generate to <strong>save the memory
-segment of the caller</strong>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">push LCL</span><br><span class="line">push ARG</span><br><span class="line">push THIS</span><br><span class="line">push THAT</span><br></pre></td></tr></table></figure></p></li>
-<li><p>The <code>argument</code> should <strong>be repositioned for the
-called function</strong>, and we should reposition it at the beginning
-of the <code>ARG</code> segment:</p>
+<li><p><em>VM programming convention</em>: One file in any VM program is
+expected to be named <code>Main.vm</code>; one VM function in this file
+is expected to be named <code>main</code>.</p></li>
+<li><p><em>VM implementation convention</em>: When the VM implementation
+starts running, or is reset, it starts executing the argument-less OS
+function <code>Sys.init</code>.<code>Sys.init</code> then calls
+<code>Main.main</code>, and enters an infinite loop.</p></li>
+<li><p><em>Hardware platform convention</em>:</p>
 <ul>
-<li>We can calculate the address, because we know how many values we
-pushed. Say we push 5 values the we do : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARG = SP - 5</span><br></pre></td></tr></table></figure></li>
+<li>We request that the code you see here <strong>will be stored in the
+target computer&apos;s instruction memory beginning in address
+<code>0</code></strong>, for our Hack computer is programmed to start
+executing the program beginning with address <code>0</code>.</li>
+<li>So we first set <code>SP = 256</code>. By doing this, it will
+determined that the stack should begin in this address in the whole
+stream.</li>
+<li>Then we <code>call Sys.init</code>.</li>
 </ul></li>
-<li><p>Push the <code>local</code> segment to insure that the function
-can visit its local variables correctly : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCL = SP</span><br></pre></td></tr></table></figure></p></li>
-<li><p>We execute the called function by simply writing the command
-<code>goto nameOfFunction</code>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto functionName</span><br></pre></td></tr></table></figure></p></li>
-<li><p>We insert the <code>returnAddress</code> label, so that when the
-function has been executed, we can get back to the place we invoke it :
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(returnAddress) //Declares a label for the return-address</span><br></pre></td></tr></table></figure></p></li>
 </ol>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<h3 id="4handling-function">4.Handling <code>function</code></h3>
-<p>&#x2003;&#x2003;The big picture of handling <code>function</code> is that:</p>
-<ul>
-<li>The first thing translator does is <strong>it takes the function
-name and generates a label</strong>, and the label will serve as
-<strong>the entry point to the translated assembly code of the
-function</strong>.</li>
-<li>We simply write some assembly code that <strong>handles the setting
-up of the function&apos;s execution</strong>.</li>
-</ul>
-<ol type="1">
-<li>We take the function name and generate its label:</li>
-<li>Since we know how many local variables we have to create, we do
-<code>push 0</code> <code>nVars</code> times. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(functionName)</span><br><span class="line">	//repeat nVars times</span><br><span class="line">	push 0</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="4handling-return">4.Handling <code>return</code></h3>
-<p>&#x2003;&#x2003;After setting up, the function can start doing its thing. We need
-to generate assembly code that <strong>moves the return value to the
-caller, reinstates the caller&apos;s state, and finally <code>goto</code> the
-return address</strong>.</p>
-<ol type="1">
-<li>Create some temporary variable (called <code>endFrame</code>) and
-assign the value of <code>LCL</code> to it: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endFrame = LCL</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>&#x2003;&#x2003;If you look at the stack diagram, you will see that
-<code>endFrame</code> indeed <strong>points at the end of the frame in
-the host RAM</strong>.</p>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<ol start="2" type="1">
-<li><p>Since we should put the return value at the top of the stack, say
-we have 5 values, the <code>endFrame - 5</code> will be the exact return
-address.</p>
-<ul>
-<li>We need to use <code>*</code> to look inside and get the address.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retaddr = *(endFrame - 5)</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>Reposition the return value for the caller.</p>
-<ul>
-<li>The value should be copied to <code>argument 0</code>, and we
-already have a pointer <code>ARG</code> located in the position</li>
-<li><code>pop</code> is going to retrieve the return value off the
-stack. We take this value and put it in <code>ARG</code>.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*ARG = pop()</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>The caller expects to see a return value and continue to do its
-work, so the stack pointer should <strong>be just after
-<code>ARG</code></strong>.<br>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SP = ARG + 1</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Then we can begin to recover the various segments that we saved
-on the stack before. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">THAT = *(endFrame - 1)</span><br><span class="line">THIS = *(endFrame - 2)</span><br><span class="line">ARG = *(endFrame - 3)</span><br><span class="line">LCL = *(endFrame - 4)</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Finally we can jump to the return address we copied before:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto retAddr</span><br></pre></td></tr></table></figure></p></li>
-</ol>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-3.png"></p>
-<ul>
-<li>Every thing below <code>SP</code> is recycled. <strong>The next push
-is going to override the memory location where <code>SP</code>
-shows</strong>.</li>
-<li>The caller will see the return value at the top of its working
-stack.</li>
-<li>The stack pointer will point at the next world in the memory.</li>
-</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SP = 256</span><br><span class="line">Call Sys.init</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -414,7 +327,7 @@ stack.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/98/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/98/">98</a><span class="page-number current">99</span><a class="page-number" href="/page/100/">100</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/100/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/98/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/98/">98</a><span class="page-number current">99</span><a class="page-number" href="/page/100/">100</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/100/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

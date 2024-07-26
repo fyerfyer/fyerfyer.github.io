@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-3-Hardware-Multithreading/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-3-Hardware-Multithreading/" class="post-title-link" itemprop="url">5.3.Hardware Multithreading</a>
+          <a href="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/" class="post-title-link" itemprop="url">5.4.Multicore and Other Shared Memory Multiprocessors</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 10:38:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;15:30:21" itemprop="dateCreated datePublished" datetime="2024-06-29T10:38:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:22:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:53:17" itemprop="dateCreated datePublished" datetime="2024-06-29T11:22:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>259</span>
+      <span>155</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,59 +266,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53hardware-multithreading">5.3.Hardware Multithreading</h1>
-<h3 id="1basic-concepts-of-threads">1.Basic concepts of threads</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image.png"></p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-1.png"></p>
-<h3 id="2multithreading-intro">2.Multithreading intro</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-2.png"></p>
-<p>&#x2003;&#x2003;Hardware multithreading allows multiple threads to <strong>share
-the functional units of a single processor in an overlapping
-fashion</strong> to try to utilize the hardware resources
-efficiently.</p>
-<p>&#x2003;&#x2003;To permit this sharing, the processor must <strong>duplicate the
-independent state of each thread</strong>.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-3.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-4.png"></p>
-<h3 id="3types-of-hardwaremultithreading">3.Types of hardware
-multithreading</h3>
-<p>&#x2003;&#x2003;There are 3 types of hardware multithreading approaches:</p>
-<ul>
-<li><p><em>Fine-grained multithreading</em>: It <strong>switches between
-threads on each instruction</strong>, resulting in interleaved execution
-of multiple threads.</p>
-<ul>
-<li><p>It&apos;s advantage is that it can hide the throughput losses that
-arise from both short and long stalls, since instructions from other
-threads can be executed when one thread stalls. Also, since it switches
-threads frequently, it doesn&apos;t need to clear the pipeline
-everytime.</p></li>
-<li><p>However, it slows down the execution of the individual
-threads.</p></li>
-</ul></li>
-<li><p><em>Coarse-grained multithreading</em>: It switch threads
-<strong>only on expensive stalls</strong>, such as last-level cache
-misses.</p>
-<ul>
-<li><p>It&apos;s much less likely to slow down individual execution.</p></li>
-<li><p>However, it is limited from overcoming throughput losses for
-pipeline start-up time.</p></li>
-</ul></li>
-<li><p><em>Simultaneous multithreading</em>: It uses a multiple-issue,
-dynamically scheduled <em>pipelined processor</em> to <strong>exploit
-thread-level parallelism while exploiting ILP</strong>.</p></li>
-</ul>
-<blockquote>
-<p>With register renaming and dynamic scheduling, multiple instructions
-from independent threads can be issued without regard to the dependences
-among them; <strong>the resolution of the dependences can be handled by
-the dynamic scheduling capability</strong>.</p>
-</blockquote>
-<p>&#x2003;&#x2003;SMT is always executing instructions from multiple threads, leaving
-it up to the hardware to associate instruction slots and renamed
-registers with their proper threads.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-5.png"></p>
+          <h1 id="54multicoreand-other-shared-memory-multiprocessors">5.4.Multicore
+and Other Shared Memory Multiprocessors</h1>
+<h3 id="1amdarls-law">1.Amdarl&apos;s Law</h3>
+<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-6.png"></p>
+<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-7.png"></p>
+<h3 id="2multiprocessor-design">2.Multiprocessor design</h3>
+<p>&#x2003;&#x2003;There are two kinds of multiprocessor designs: one is to
+<strong>provide a single physical address space that all processors can
+share</strong>, another is to <strong>have a separate address space per
+processor that requires that sharing must be explicit</strong>.</p>
+<p>&#x2003;&#x2003;A <em>Shared memory multiprocessor(SMP)</em> is one that offers the
+programmer <strong>a single physical address space across all
+processors</strong>:</p>
+<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-8.png"></p>
+<p>&#x2003;&#x2003;In this multiprocessor, Processors communicate through shared
+variables in memory, with all processors capable of accessing any memory
+location via loads and stores.</p>
+<h3 id="3multiprocessor-operations">3.Multiprocessor operations</h3>
+<p>&#x2003;&#x2003;Processors need to coordinate when operating on shared data, which
+is called <em>synchronization</em>. One way is to <strong>use a lock for
+a shared variable</strong>: <strong>Only one processor r at a time can
+acquire the lock, and other processors interested in shared data must
+wait until the original processor unlocks the variable.</strong></p>
 
       
     </div>
@@ -338,7 +308,7 @@ registers with their proper threads.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

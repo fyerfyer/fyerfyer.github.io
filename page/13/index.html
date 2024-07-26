@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
+          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>401</span>
+      <span>265</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,89 +272,55 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="56cache-coherence">5.6.Cache Coherence</h1>
-<h3 id="1cache-model">1.Cache model</h3>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
-<h3 id="2coherence-concept">2.Coherence concept</h3>
-<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
-<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
-example:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
-<p>&#x2003;&#x2003;The two different processors have two different values for the same
-location, this is referred to as <em>cache coherence problem</em>.</p>
-<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
-<strong>any read of a data item returns the most recently written value
-of that data item</strong>. This simple concept contains two different
-aspects of memory system behaviour:</p>
-<ul>
-<li><em>coherence</em>: defines <em>what</em> values can be returned by
-a read.</li>
-<li><em>consistency</em>: determines <em>when</em> a written value will
-be returned by a read.</li>
-</ul>
-<p>&#x2003;&#x2003;A memory system is coherent if:</p>
+          <h1 id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</h1>
+<h3 id="1program-execution-process">1.Program execution process</h3>
+<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
+<code>p2.c</code>, we input the command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
 <ol type="1">
-<li>A read by a processor P to location X that follows <em>only one
-write</em> by P to X always returns the value written by P.</li>
+<li><p>The C preprocessor expands the source code to <strong>include any
+files specified with <code>#include</code> commands and with
+<code>#define</code> declarations</strong>.</p></li>
+<li><p>Compiler generates assembly code having name <code>p1.s</code>
+and <code>p2.s</code>.</p></li>
+<li><p>Assembler converts the assembly code into <em>binary
+object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
 </ol>
 <blockquote>
-<p>This preserves program order.</p>
+<p>The object code contains binary representations of all instructions,
+but doesn&apos;t include the address of the global value.</p>
 </blockquote>
-<ol start="2" type="1">
-<li>A read by a processor to location X that follows <em>only one
-write</em> by another processor to X returns the written value if the
-read and write are sufficiently separated in time.</li>
+<ol start="4" type="1">
+<li>Linker merges these two object-code files along with <em>code
+implementing library functions</em> (e.g., <code>printf</code>) and
+generates the final executable code file <code>p</code>(specified by
+<code>-o p</code>).</li>
 </ol>
-<blockquote>
-<p>This defines memory coherence.</p>
-</blockquote>
-<ol start="3" type="1">
-<li>Writes to the same location are <strong>serialized</strong>; that
-is, two writes to the same location by any two processors <strong>are
-seen in the same order by all processors</strong>. For example, if CPU B
-stores 2 into memory at address X after time step 3, processors can
-never read the value at location X as 2 and then later read it as
-1.</li>
-</ol>
-<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
-<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
-<strong>has exclusive access to a data item</strong> before it writes
-that item. This style of protocol is called a <em>write invalidate
-protocol</em> because it <strong>invalidates copies in other caches on a
-write</strong>.</p>
-<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
-CPU A, the CPU B will get a cache miss, and is forced to fetch a new
-copy of data:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
-<blockquote>
-<p>Block size plays an important role in cache coherency. Large blocks
-can cause what&apos;s called <em>false sharing</em>, when two unrelated
-shared variables are located in the same cache block, the whole block is
-exchanged between processors even though the processors are accessing
-different variables.</p>
-</blockquote>
-<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
-protocol:</h3>
-<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
-<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
-concepts</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
-<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
+<h3 id="2machine-code">2.Machine code</h3>
+<h4 id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</h4>
+<p>&#x2003;&#x2003;The program memory contains:</p>
+<ul>
+<li><p>the executable machine code for the program</p></li>
+<li><p>some information required by the operating system</p></li>
+<li><p>a run-time stack for managing procedure calls and
+returns</p></li>
+<li><p>blocks of memory allocated by the user (e.g., by using the
+<code>malloc</code> library function).</p></li>
+</ul>
+<h4 id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
+command</h4>
+<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
+compiler:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
+<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
+<em>disassembler</em>. The program <code>objdump</code> can serve the
+role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result is as below:</p>
+<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
 
       
     </div>
@@ -368,7 +340,7 @@ concepts</h4>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/" class="post-title-link" itemprop="url">10.6.&#x5BF9;&#x5BF9;&#x8C61;&#x7684;&#x5904;&#x7406;&#x2014;&#x2014;&#x6784;&#x9020;</a>
+          <a href="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">10.7.&#x5BF9;&#x5BF9;&#x8C61;&#x7684;&#x5904;&#x7406;&#x2014;&#x2014;&#x64CD;&#x7EB5;&#x5BF9;&#x8C61;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-25 20:15:43" itemprop="dateCreated datePublished" datetime="2024-04-25T20:15:43+08:00">2024-04-25</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-26 20:15:43" itemprop="dateCreated datePublished" datetime="2024-04-26T20:15:43+08:00">2024-04-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:56:21" itemprop="dateModified" datetime="2024-06-03T15:56:21+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:58:26" itemprop="dateModified" datetime="2024-06-03T15:58:26+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>664</span>
+      <span>489</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,120 +272,81 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="106handling-objects-construction"><span class="math inline">\(10.6.\)</span>Handling Objects: Construction</h1>
-<p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image.png"></p>
+          <h1 id="107handling-objects-manipulation"><span class="math inline">\(10.7.\)</span>Handling Objects: Manipulation</h1>
+<h3 id="1compiling-method-calls">1.Compiling method calls</h3>
 <ul>
-<li>What we have here is two completely separate compilation units. We
-are facing the challenge of compiling the caller class and the callee
-class.</li>
+<li>In compiler, we are going to translate the OO method calls into
+<strong>procedural style language</strong> like VM language or machine
+language, they don&apos;t understand what an object is.</li>
 </ul>
-<h3 id="1high-level-of-objectconstruction">1.High level of object
-construction</h3>
+<p>&#x2003;&#x2003;In order to do this:</p>
 <ul>
-<li>When we do <code>var Point p1</code>, the compiler will end up
-generating code on <strong>some location in the stack which is going to
-be initialized to 0</strong>.</li>
-<li>When we call the constructor, the compiled code will end up
-<strong>creating the object proper on the heap</strong>.</li>
-<li>The two class running together will end up <strong>taking the base
-address of the newly created object</strong> and <strong>storing it in
-what we assign previously the p1 variable</strong>.</li>
+<li>We can <strong>treat the object as the first, implicit
+argument</strong>. We push it onto the stack, because we want it to
+<strong>be the first argument on which the method is going to
+operate</strong>.</li>
 </ul>
-<h3 id="2the-callerss-side">2.The callers&apos;s side</h3>
-<p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-1.png"></p>
-<ul>
-<li><p>Whenever the compiler encounters a variable declaration, it
-<strong>generates no code whatsover</strong>. The only thing the
-compiler does is it <strong>update the relevant symbol table</strong>.
-Because we are now compiling code that resides in a certain subroutine,
-we will end up <strong>updating the symbol table of the
-subroutine</strong>.</p></li>
-<li><p><code>Point.new(2, 3)</code> is a call to some subroutine, so we
-handle it just like other subroutine. We push the two arguments and
-<code>call Point.new</code></p></li>
-<li><p>The calling code assumes that when the constructor will execute,
-it will end up <strong>allocating some space on the RAM</strong> for the
-newly constructed object. It will also take the base address of this
-space on the RAM and <strong>return it to the caller</strong>.</p></li>
-<li><p>So we <strong><code>pop</code> the topmost value of the stack
-into <code>p1</code></strong>, because we want <code>p1</code> to point
-at the base address of this object.</p></li>
-</ul>
-<h3 id="3resulting-impact">3.Resulting impact</h3>
-<p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-2.png"></p>
-<ul>
-<li>Only when we call the constructors will we actually create the
-objects on RAM.</li>
-<li>Object construction is a <strong>two-stage affair that happens both
-during compile time and run time</strong>.</li>
-</ul>
-<h3 id="4the-big-picture-ofconstructors">4.The big picture of
-constructors</h3>
-<p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-3.png"></p>
-<p>&#x2003;&#x2003;A constructor is typically designed to do at least two things:</p>
+<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-5.png"></p>
 <ol type="1">
-<li><strong>Arrange some place</strong> on RAM for the new object.</li>
-<li><strong>Assign certain values</strong> to the fields of the newly
-constructed object.</li>
+<li>We <code>push</code> the object into the stack.</li>
+<li>We <code>push</code> enough arguments into the stack.</li>
+<li>We <code>call</code> the method.</li>
 </ol>
-<p>&#x2003;&#x2003;To do this, the constructor must have access to the object&apos;s
-fields:</p>
-<ul>
-<li>We can <strong>manipulate <code>THIS</code> segment</strong> to
-manipulate the object that the constructor juct created.</li>
-<li>To access <code>THIS</code> segment, we first <strong>anchor it
-properly on the right address in the RAM</strong> using
-<code>pointer</code> segment.</li>
-</ul>
-<h3 id="5compiling-constuctor">5.Compiling constuctor</h3>
+<p>&#x2003;&#x2003;When we say &quot;put the object onto the stack&quot;, we don&apos;t care what the
+object is, we are only interested in its <em>base address</em>.</p>
+<h3 id="2compiling-methods">2.Compiling methods</h3>
+<p>&#x2003;&#x2003;Methods are used to operate on the object which refers to as
+<code>THIS</code>. Therefore, each method&apos;s code needs to <strong>access
+to the object&apos;s <code>field</code> variables</strong>.</p>
+<p>&#x2003;&#x2003;In the previous unit, we know that we can access the <span class="math inline">\(ith\)</span> <code>field</code> by
+<code>THIS i</code>. However, before we use <code>THIS</code>, we have
+to anchor it on the proper address on the RAM first, so we also need
+<code>pointer</code>.</p>
+<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-6.png"></p>
+<p>&#x2003;&#x2003;Let&apos;s take the <code>distance</code> method as an example:</p>
 <ol type="1">
-<li>The first thing we meet is the constructor signature. The compiler
-will generate no code whatsover. The only thing it will do is <strong>it
-will create the subroutine symbol table</strong> and <strong>record in
-it two variables <code>ax</code> and <code>ay</code> which are both
-arguments </strong></li>
+<li>The method is compiled within a class, so we will <strong>compile
+the class variables</strong>, namely <code>x, y, pointCount</code>. This
+will end up generating no code.</li>
+<li>Both the method declaration and variable declaration generate no
+code, either. Instead, the compiler <strong>creates the symbol table of
+the subroutine</strong> and <strong>populates it within the
+<code>this</code> object as well as the explicit variables that is found
+in the parameter list and the variable declaration.</strong></li>
+<li>We can anticipate that the method will want to operate on the
+current object, so we need to generate code that will <strong>anchor
+this on the correct address in memory</strong>. And we know that the
+current object address is <code>argument 0</code>, so we do
+<code>push argument 0</code> and <code>pop pointer 0</code> to let
+<code>THIS</code> pointer to contain the address of the current
+object.</li>
 </ol>
-<p>&#x2003;&#x2003;Then comes the question: how much space is needed?</p>
-<ol start="2" type="1">
-<li>The compiler can <strong>consult the class level symbol
-table</strong> and realize that objects of the point class requires two
-words only, <code>x</code> and <code>y</code>.</li>
+<p>&#x2003;&#x2003;When the <code>distance</code> method completes execution and
+terminates, control will return to the caller. The compiled code of the
+caller is as below:</p>
+<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-7.png"></p>
+<ul>
+<li>We know that the method returns a value on the top of stack, so we
+remove it and put it into <code>d</code>.</li>
+</ul>
+<h3 id="3void-methodcompilation">3.<code>void</code> method
+compilation</h3>
+<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-8.png"></p>
+<p>&#x2003;&#x2003;The <code>void</code> doesn&apos;t expect to get a return value, while
+according to the rules of the game, we must return a value. As a result,
+we:</p>
+<ol type="1">
+<li>To obey the rule, we <strong>generate code at the end of each method
+that returns a value</strong>.</li>
+<li>Since we have nothing to return, we <code>push constant 0</code>,
+which is a dummy value and then <code>return</code>.</li>
 </ol>
-<p>&#x2003;&#x2003;Then how do we find such a free memory block on RAM?</p>
+<p>&#x2003;&#x2003;But now the compiled code faces a slight problem: the stack
+contains uncessary value and we want to get rid of it.</p>
 <ol start="3" type="1">
-<li><p>The <em>operating system</em> supplies a function called
-<code>alloc</code>, if you provide <code>alloc(x)</code> with a certain
-argument, it will <strong>find a memory block on the RAM</strong> and
-<strong>return the base address of it.</strong> The memory block has two
-important properties:</p>
-<ol type="1">
-<li>It&apos;s <code>x</code> words long.</li>
-<li>It&apos;s free, no one needs it now, so the constructor can safely use
-it.</li>
-</ol></li>
+<li>To do this, we simply <code>pop temp 0</code>.</li>
 </ol>
-<p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-4.png"></p>
-<ol type="1">
-<li>We <code>push 2</code>, because we <strong>need 2 words to store the
-arguments</strong>.</li>
-<li>We want to push <code>THIS</code> into the stack, we need 1 word, so
-we <code>call Memory.alloc 1</code>.</li>
-<li>As usual, we anchor <code>THIS</code> at the base address:
-<code>pop pointer 0</code>.</li>
-</ol>
-<blockquote>
-<p>If we do <code>pop pointer 0</code>, we are going to align the
-virtual segment ot the object we currently constructed on the RAM. We do
-this because I know that with very high likelihood the next commands in
-the constructor will want to access the fields of the newly created
-object.</p>
-</blockquote>
-<ol start="4" type="1">
-<li>Since <code>THIS</code> is anchored on the right endness, to
-<code>return</code>, we simply do <code>push pointer 0</code>. And when
-the caller of constructor do <code>pop pointer 0</code>, it can
-successfully get the address of the newly created object.</li>
-</ol>
+<p><img src="/2024/04/26/10-7-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%93%8D%E7%BA%B5%E5%AF%B9%E8%B1%A1/image-9.png"></p>
 
       
     </div>
@@ -405,7 +366,7 @@ successfully get the address of the newly created object.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/84/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/84/">84</a><span class="page-number current">85</span><a class="page-number" href="/page/86/">86</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/86/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/84/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/84/">84</a><span class="page-number current">85</span><a class="page-number" href="/page/86/">86</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/86/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

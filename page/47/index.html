@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.2.Heap%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.2.Heap%20Sort/" class="post-title-link" itemprop="url">18.2.&#x5806;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/18.1.Selection%20Sort/" class="post-title-link" itemprop="url">18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:05:31" itemprop="dateModified" datetime="2024-06-02T22:05:31+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:38:27" itemprop="dateModified" datetime="2024-06-02T21:38:27+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>276</span>
+      <span>302</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,29 +272,32 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
-Sort</h1>
-<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
-<p>&#x2003;&#x2003;The simplest method to implement sorting via heap is to put the
-whole array into a heap, and pick out top of the heap one by one.</p>
-<p>&#x2003;&#x2003;However, this method will lead to unnecessarily memory waste, for
-we can do heap sorting in place without creating a new heap.</p>
-<h3 id="2step-impletation">2.Step impletation</h3>
-<h4 id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
-Sorting</h4>
-<p>&#x2003;&#x2003;The in place heap sorting use the following step: 1. Sink the
-element in the array one by one, so that the array forms a heap.</p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
-<ol start="2" type="1">
-<li>Pop the front element one by one, and move the popped element to the
-back of the array.</li>
+          <h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
+<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
+<p>&#x2003;&#x2003;In selection sort, we basically do these three things:</p>
+<ol type="1">
+<li>Find the smallest item.</li>
+<li>Move it to the front.</li>
+<li>Selection sort the rest(using recursion).</li>
 </ol>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;For each step, we can design an individual method to implement
+it.</p>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<p>&#x2003;&#x2003;As the moving step requires the index of the to-moving element, the
+value we return should be index of elements, too.</p>
+<h4 id="afind">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>Find</code></h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Given that we may need to <code>Find</code> the minimun in asked
+range, we may improve our method by passing an extra parameter which
+point to the start index(We&apos;ll use it in the following procedure)&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> {</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4 id="bswap">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swap</code></h4>
+<p>&#x2003;&#x2003;We are going to implement the method by manipulating the index of
+the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4 id="cmainmethod">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Main
+method</h4>
+<p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
+a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -314,7 +317,7 @@ back of the array.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/46/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/46/">46</a><span class="page-number current">47</span><a class="page-number" href="/page/48/">48</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/48/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/46/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/46/">46</a><span class="page-number current">47</span><a class="page-number" href="/page/48/">48</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/48/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
