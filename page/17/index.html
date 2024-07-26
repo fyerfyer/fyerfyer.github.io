@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-5-Synchronization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/" class="post-title-link" itemprop="url">5.4.Multicore and Other Shared Memory Multiprocessors</a>
+          <a href="/2024/06/29/5-5-Synchronization/" class="post-title-link" itemprop="url">5.5.Synchronization</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:22:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:53:17" itemprop="dateCreated datePublished" datetime="2024-06-29T11:22:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:55:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;14:56:03" itemprop="dateCreated datePublished" datetime="2024-06-29T11:55:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>155</span>
+      <span>450</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,29 +266,74 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="54multicoreand-other-shared-memory-multiprocessors">5.4.Multicore
-and Other Shared Memory Multiprocessors</h1>
-<h3 id="1amdarls-law">1.Amdarl&apos;s Law</h3>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-6.png"></p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-7.png"></p>
-<h3 id="2multiprocessor-design">2.Multiprocessor design</h3>
-<p>&#x2003;&#x2003;There are two kinds of multiprocessor designs: one is to
-<strong>provide a single physical address space that all processors can
-share</strong>, another is to <strong>have a separate address space per
-processor that requires that sharing must be explicit</strong>.</p>
-<p>&#x2003;&#x2003;A <em>Shared memory multiprocessor(SMP)</em> is one that offers the
-programmer <strong>a single physical address space across all
-processors</strong>:</p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-8.png"></p>
-<p>&#x2003;&#x2003;In this multiprocessor, Processors communicate through shared
-variables in memory, with all processors capable of accessing any memory
-location via loads and stores.</p>
-<h3 id="3multiprocessor-operations">3.Multiprocessor operations</h3>
-<p>&#x2003;&#x2003;Processors need to coordinate when operating on shared data, which
-is called <em>synchronization</em>. One way is to <strong>use a lock for
-a shared variable</strong>: <strong>Only one processor r at a time can
-acquire the lock, and other processors interested in shared data must
-wait until the original processor unlocks the variable.</strong></p>
+          <h1 id="55synchronization">5.5.Synchronization</h1>
+<h3 id="1some-concepts">1.Some concepts</h3>
+<p><img src="/2024/06/29/5-5-Synchronization/image.png"></p>
+<h3 id="2lock-synchronization">2.Lock synchronization</h3>
+<p><img src="/2024/06/29/5-5-Synchronization/image-1.png"></p>
+<p><img src="/2024/06/29/5-5-Synchronization/image-2.png"></p>
+<h3 id="3hardware-synchronization">3.Hardware synchronization</h3>
+<h4 id="apossible-lock-problem">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Possible lock problem</h4>
+<p><img src="/2024/06/29/5-5-Synchronization/image-3.png"></p>
+<p>&#x2003;&#x2003;To solve the problem, the multiprocessor must have the ability ot
+<strong>atomically read and modify a memory location</strong>. That is,
+<strong>nothing else can interpose itself between the read and the write
+of the memory location</strong>.</p>
+<blockquote>
+<p>For example, consider two processors that each try to do
+<code>lw</code> operation. This race is prevented, since exactly one of
+the processors will perform <code>lw</code> first, returning 0, and the
+second processor will return 1 when it does this. This is because
+<strong>the operation is atomic: the exchange is indivisible, and two
+simultaneous exchanges will be ordered by the hardware.</strong></p>
+</blockquote>
+<p><img src="/2024/06/29/5-5-Synchronization/image-4.png"></p>
+<h4 id="binstruction-pair">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>instruction pair</h4>
+<p>&#x2003;&#x2003;To implement atomical property, we can <strong>set a pair of
+instructions</strong> in which the second instruction <strong>returns a
+value showing whether the pair of instructions was executed as if the
+pair was atomic</strong>.</p>
+<p>&#x2003;&#x2003;In RISC-V, this pair of instructions includes a
+<code>(lr, d)</code> and a <code>(sc, d)</code>:</p>
+<p><img src="/2024/06/29/5-5-Synchronization/image-5.png"></p>
+<ul>
+<li>Thus, <code>sc.d</code> specifies three registers: one to hold the
+address, one to indicate whether the atomic operation failed or
+succeeded, and one to hold the value to be stored in memory if it
+succeeded.</li>
+</ul>
+<blockquote>
+<p>Notice that <code>(lr, d)</code> operation not only load a word into
+pointed memory, but also <strong>record the memory address
+internally</strong>, namely <em>reservation</em>. That&apos;s why we can use
+<code>(sc, d)</code> to check if the operation is atomical.</p>
+</blockquote>
+<p>&#x2003;&#x2003;We can use this pair to implement atomic swap:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">again: lr.d x10, (x20)</span><br><span class="line">       sc.d x11, x23, (x20)</span><br><span class="line">       bne x11, x0, again   // branch if store fails</span><br><span class="line">       addi x23, x10, 0     // put loaded value in x23</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Any time a processor intervenes and modifies the value in memory
+between the <code>lr.d</code> and <code>sc.d</code> instructions, the
+<code>sc.d</code> writes a nonzero value into <code>x11</code>, causing
+the code sequence to try again.</p>
+<blockquote>
+<p>Since the store-conditional will fail after either another attempted
+store to the load reservation address or any exception, care must be
+taken in choosing which instructions are inserted between the two
+instructions. In particular, only <strong>integer arithmetic, forward
+branches, and backward branches out of the
+load-reserved/store-conditional block</strong> can safely be permitted;
+otherwise, it is possible to create <em>deadlock situations</em> where
+the processor can never complete the sc.d because of repeated page
+faults. In addition, the number of instructions between the
+load-reserved and the store-conditional should be small to minimize the
+probability that <strong>either an unrelated event or a competing
+processor causes the store-conditional to fail frequently</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Other atomic memory operations can be built using
+<code>lr/sc</code> pairs, some are listed below:</p>
+<p><img src="/2024/06/29/5-5-Synchronization/image-6.png"></p>
+<h4 id="ctest-and-set-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Test-and-Set instruction</h4>
+<p><img src="/2024/06/29/5-5-Synchronization/image-7.png"></p>
+<p><img src="/2024/06/29/5-5-Synchronization/image-8.png"></p>
 
       
     </div>
@@ -311,7 +356,7 @@ wait until the original processor unlocks the variable.</strong></p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -343,7 +388,7 @@ wait until the original processor unlocks the variable.</strong></p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:35</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:36</span>
   </span>
 </div>
 <div class="busuanzi-count">

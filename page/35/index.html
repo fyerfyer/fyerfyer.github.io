@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.5.Red-Black%20Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.4.Rotating%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.5.Red-Black%20Trees/" class="post-title-link" itemprop="url">11.5.&#x7EA2;&#x9ED1;&#x6811;</a>
+          <a href="/2024/05/31/11.4.Rotating%20Trees/" class="post-title-link" itemprop="url">11.4.&#x6811;&#x7684;&#x65CB;&#x8F6C;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:15:04" itemprop="dateModified" datetime="2024-06-02T18:15:04+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:18:06" itemprop="dateModified" datetime="2024-06-02T18:18:06+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>437</span>
+      <span>153</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,28 +272,24 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="115&#x7EA2;&#x9ED1;&#x6811;&#x672A;&#x5B8C;&#x7ED3;"><span class="math inline">\(11.5\)</span>&#x7EA2;&#x9ED1;&#x6811;(&#x672A;&#x5B8C;&#x7ED3;)</h1>
-<h3 id="1&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;">1.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;</h3>
-<p>&#x2003;&#x2003;&#x524D;&#x9762;&#x4ECB;&#x7ECD;&#x7684;<span class="math inline">\(B\)</span>-&#x6811;&#x5F88;&#x7B26;&#x5408;&#x6211;&#x4EEC;&#x5BF9;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x7684;&#x9700;&#x8981;&#xFF0C;&#x4F46;&#x662F;&#x5B83;&#x5F88;&#x96BE;&#x7528;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x8BBE;&#x60F3;&#x521B;&#x9020;&#x4E00;&#x79CD;&#x6811;&#xFF0C;&#x5B83;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x5B9E;&#x73B0;&#xFF0C;&#x4F46;&#x7ED3;&#x6784;&#x4E0A;&#x4E0E;<span class="math inline">\(B\)</span>-&#x6811;&#x7B49;&#x4EF7;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(2-3\)</span>&#x6811;&#x4E2D;&#xFF0C;&#x53F6;&#x5B50;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#x548C;<span class="math inline">\(BST\)</span>&#x662F;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x7684;&#x3002;&#x800C;&#x5BF9;&#x4E8E;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x5C06;&#x94FE;&#x63A5;&#x5206;&#x6210;&#x4E24;&#x79CD;&#x7C7B;&#x578B;&#xFF1A;&#x7EA2;&#x8272;(<span class="math inline">\(red\)</span>)&#x7684;&#x548C;&#x9ED1;&#x8272;(<span class="math inline">\(black\)</span>)&#x7684;&#x3002;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x5982;&#x4E0B;&#x7684;&#x5F62;&#x5F0F;&#x8868;&#x793A;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
-<p>&#x2003;&#x2003;&#x8FD9;&#x4E48;&#x5904;&#x7406;&#x7684;&#x597D;&#x5904;&#x662F;&#xFF1A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E0D;&#x4FEE;&#x6539;&#x539F;&#x6709;&#x7684;<span class="math inline">\(BST\)</span>&#x6765;&#x5B9E;&#x73B0;<span class="math inline">\(2-3\)</span>&#x6811;&#x3002;&#x7ED9;&#x5B9A;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x53EF;&#x4EE5;&#x7ACB;&#x5373;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x7684;<span class="math inline">\(2-3\)</span>&#x6811;&#x5230;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x8F6C;&#x6362;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
-<h3 id="2&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;">2.&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;</h3>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x6A21;&#x62DF;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x7EA2;&#x9ED1;&#x6811;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
-<ol type="1">
-<li>&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x5DE6;&#x659C;&#x3002;</li>
-<li>&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E0E;&#x4E24;&#x4E2A;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x76F8;&#x8FDE;&#x3002;</li>
-<li>&#x7EA2;&#x9ED1;&#x6811;&#x5177;&#x6709;&#x5B8C;&#x7F8E;&#x7684;&#x201C;&#x9ED1;&#x8272;&#x5E73;&#x8861;&#x201D;&#xFF1A;&#x4ECE;&#x6839;&#x8282;&#x70B9;&#x5230;&#x7A7A;&#x8282;&#x70B9;&#x95F4;&#x7684;&#x6BCF;&#x4E2A;&#x8DEF;&#x5F84;&#x90FD;&#x5177;&#x6709;&#x76F8;&#x540C;&#x6570;&#x91CF;&#x7684;&#x8910;&#x8272;&#x94FE;&#x63A5;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5C06;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x753B;&#x6210;&#x6C34;&#x5E73;&#x7684;&#xFF0C;&#x90A3;&#x4E48;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x4E0B;&#x9762;&#x7684;&#x56FE;&#x793A;&#xFF0C;&#x8FD9;&#x548C;<span class="math inline">\(2-3\)</span>&#x6811;&#x51E0;&#x4E4E;&#x4E00;&#x81F4;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
-<h3 id="2&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;">2.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;</h3>
-<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5DE6;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
-<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x53F3;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+          <h1 id="114&#x6811;&#x7684;&#x65CB;&#x8F6C;"><span class="math inline">\(11.4\)</span>&#x6811;&#x7684;&#x65CB;&#x8F6C;</h1>
+<p>&#x2003;&#x2003;The formal definition of rotation is:</p>
+<ul>
+<li><p><code>rotateLeft(G): Let x be the right child of G. Make G the new left child of x.</code></p></li>
+<li><p><code>rotateRight(G): Let x be the left child of G. Make G the new right child of x.</code></p></li>
+</ul>
+<p>&#x2003;&#x2003;As in the picture, it means:</p>
+<ul>
+<li><span class="math inline">\(RotateLeft(G)\)</span>: G moves left,
+promote its right child in the only natural way.(Promoting P means P is
+the new parent of G.)</li>
+<li><span class="math inline">\(RotateRight(P)\)</span>: P moves right,
+promote its left child in the only natural way.</li>
+</ul>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-5.png"></p>
+<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
+<p>&#x2003;&#x2003;We can implement these operations by following codes:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -316,7 +312,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -348,7 +344,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:35</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:36</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -49,7 +49,7 @@
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-17.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-18.png">
 <meta property="article:published_time" content="2024-07-25T06:31:22.000Z">
-<meta property="article:modified_time" content="2024-07-26T08:09:55.342Z">
+<meta property="article:modified_time" content="2024-07-26T11:13:28.427Z">
 <meta property="article:author" content="fyerfyer">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/image.png">
@@ -182,7 +182,7 @@ update stage</span></a></li></ol></li></ol></li></ol></div>
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -263,7 +263,7 @@ update stage</span></a></li></ol></li></ol></li></ol></div>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 16:09:55" itemprop="dateModified" datetime="2024-07-26T16:09:55+08:00">2024-07-26</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 19:13:28" itemprop="dateModified" datetime="2024-07-26T19:13:28+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -521,7 +521,7 @@ design:</p>
 basic idea</h4>
 <ul>
 <li><p>Combinational logic does not require any sequencing or
-control&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;<strong>values propagate through a network of logic gates
+control-<strong>values propagate through a network of logic gates
 whenever the inputs change</strong>.</p></li>
 <li><p>We assume that reading from a random access memory operates much
 like combinational logic, with the output word generated based on the
@@ -632,7 +632,7 @@ as below:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcA = [</span><br><span class="line">    icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;</span><br><span class="line">    icode in { IPOPQ, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcB = [</span><br><span class="line">    icode in { IOPQ, IRMMOVQ, IMRMOVQ } : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;The HCL description of <code>dstM</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word dstM = [</span><br><span class="line">    icode in { IMRMOVQ, IPOPQ } : rA;</span><br><span class="line">    1 : RNONE; # Don&#xFFFD;&#xFFFD;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word dstM = [</span><br><span class="line">    icode in { IMRMOVQ, IPOPQ } : rA;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <h4 id="cexecute-stage">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Execute stage</h4>
 <p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-16.png"></p>
 <ul>
@@ -644,8 +644,8 @@ setting of <code>alufun</code> signal. The ALU output becomes the signal
 type, so as <code>aluB</code></p></li>
 </ul>
 <p>&#x2003;&#x2003;They can be described by the following HCL code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word aluA = [</span><br><span class="line">    icode in { IRRMOVQ, IOPQ } : valA;</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;</span><br><span class="line">    icode in { ICALL, IPUSHQ } : -8;</span><br><span class="line">    icode in { IRET, IPOPQ } : 8;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word aluB = [</span><br><span class="line">    icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,</span><br><span class="line">    IPUSHQ, IRET, IPOPQ } : valB;</span><br><span class="line">    icode in { IRRMOVQ, IIRMOVQ } : 0;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word aluA = [</span><br><span class="line">    icode in { IRRMOVQ, IOPQ } : valA;</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;</span><br><span class="line">    icode in { ICALL, IPUSHQ } : -8;</span><br><span class="line">    icode in { IRET, IPOPQ } : 8;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word aluB = [</span><br><span class="line">    icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,</span><br><span class="line">    IPUSHQ, IRET, IPOPQ } : valB;</span><br><span class="line">    icode in { IRRMOVQ, IIRMOVQ } : 0;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <ul>
 <li>The operations in ALU is <strong>mostly an adder</strong>. However,
 we want it to use the operation encoded in the <code>ifun</code> field
@@ -685,8 +685,8 @@ generates the value <code>valM</code></strong>.</p></li>
 </ul>
 <p>&#x2003;&#x2003;The HCL description of <code>mem_addr</code> and
 <code>mem_data</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word mem_addr = [</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;</span><br><span class="line">    icode in { IPOPQ, IRET } : valA;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need address</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word mem_data = [</span><br><span class="line">    # Value from register</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ } : valA;</span><br><span class="line">    # Return PC</span><br><span class="line">    icode == ICALL : valP;</span><br><span class="line">    # Default: Don&#xFFFD;&#xFFFD;t write anything</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word mem_addr = [</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;</span><br><span class="line">    icode in { IPOPQ, IRET } : valA;</span><br><span class="line">    # Other instructions don&apos;t need address</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word mem_data = [</span><br><span class="line">    # Value from register</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ } : valA;</span><br><span class="line">    # Return PC</span><br><span class="line">    icode == ICALL : valP;</span><br><span class="line">    # Default: Don&apos;t write anything</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <ul>
 <li>We set the signal <code>mem_read</code> only for instructions that
 read data from memory, so as <code>mem_write</code>:</li>
@@ -769,7 +769,7 @@ update stage</h4>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:35</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:36</span>
   </span>
 </div>
 <div class="busuanzi-count">

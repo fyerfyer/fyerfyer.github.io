@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">9.3.&#x8BED;&#x6CD5;</a>
+          <a href="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/" class="post-title-link" itemprop="url">9.4.&#x89E3;&#x6790;&#x6811;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 09:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T09:17:43+08:00">2024-04-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 12:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T12:17:43+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:18:56" itemprop="dateModified" datetime="2024-06-03T15:18:56+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:22:19" itemprop="dateModified" datetime="2024-06-03T15:22:19+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>340</span>
+      <span>196</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,56 +272,42 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="93grammars"><span class="math inline">\(9.3.\)</span>Grammars</h1>
-<h3 id="1grammar-introduction">1.Grammar introduction</h3>
-<p>&#x2003;&#x2003;In the previous unit, we gain the ability to think about the
-program as a set of tokens, but the effect that we have a set of valid
-tokens doesn&apos;t imply that we have a valid program. <strong>It&apos;s not only
-the tokens that are important, the order of the tokens is critically
-important as well</strong>.</p>
-<p>&#x2003;&#x2003;And the artifact that <strong>defines in what order we can put
-tokens together legibly</strong> is referred to as <em>grammar</em>.</p>
+          <h1 id="94parsetree"><span class="math inline">\(9.4.\)</span>Parse
+Tree</h1>
+<h3 id="1parse-tree-introduction">1.Parse tree introduction</h3>
+<p>&#x2003;&#x2003;In this part we are going to be specific about the grammatical
+structure. Take the sentence &quot;the dog ate my homework&quot; for example,
+here&apos;s the grammatical structure of it:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image.png"></p>
+<p>&#x2003;&#x2003;It&apos;s recorded using a <em>parse tree</em>. The tree is a recursive
+structure, and the grammatical structure of the inputs are
+<strong>recursive</strong>, too.</p>
 <ul>
-<li>A grammar is a set of rules, describing how tokens can be combined
-to create valid language constructs</li>
+<li>The <code>sentence</code> consists of two lower-level sub parse
+tree.</li>
+<li>We continue to expanding the tree until get to the boundary of the
+tree, called <em>leaves</em> or <em>terminal nodes</em>. In the case of
+lexical analysis, they are <strong>the tokens from which the input is
+constructed</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;Take the English language as an example:</p>
-<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image.png"></p>
-<p>&#x2003;&#x2003;It&apos;s just a subset of English language, but is sufficiently rich to
-support plenty of inputs. Consider the sentence &quot;The dog ate my
-homework&quot;:</p>
+<p>&#x2003;&#x2003;Then let&apos;s move to Jack. Take the input
+<code>while (count &lt; 100) {let count = count + 1;}</code> for
+example:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-1.png"></p>
+<blockquote>
+<p>The notion of a parse tree is an obstruct artifact that sits
+somewhere above all these nice diagrams. And this diagram here is just
+one way to describe this parse tree.</p>
+</blockquote>
+<p>&#x2003;&#x2003;To motivate this, let&apos;s focus on some subset of the prase tree:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-2.png"></p>
+<p>&#x2003;&#x2003;Another way of describing the same parse tree can be <em>XML
+format</em>:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-3.png"></p>
 <ul>
-<li>&apos;The&apos; is a det and &apos;dog&apos; is a noun, so the sentence begins with a
-noun phrase.</li>
-<li>&apos;ate&apos; is a verb and &apos;my homework&apos; is once again a noun phrase, so
-this subsentence is a verb phrase.</li>
-<li>Taken together, we have a noun phrase followed by a verb phrase,
-therefore we have a legitimate sentence.</li>
+<li>In XML, we describe the structure of data using <em>markup
+tags</em>.</li>
 </ul>
-<p>&#x2003;&#x2003;In this example, we notice that grammar is indeed made of a set of
-rules. And these rules fall into two broad categories:</p>
-<ol type="1">
-<li><em>Terminal rule</em>: Its right-hand side consists of constants
-only.</li>
-<li><em>Non-terminal rule</em>: Its right-hand side consists of names of
-other rules, and probably constants.</li>
-</ol>
-<h3 id="2jack-grammar">2.Jack grammar</h3>
-<p>&#x2003;&#x2003;Let&apos;s focus on a subset of Jack language in which we have three
-possible statements: <code>if</code>, <code>while</code>,
-<code>let</code>:</p>
-<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image-1.png"></p>
-<ul>
-<li>We use <code>*</code> to indicate 0 or more.</li>
-<li>We use <code>|</code> to denote choice.</li>
-<li>We use <code>?</code> to denote 0 or 1.</li>
-</ul>
-<p>&#x2003;&#x2003;And the process of <strong>determining if a given input conforms to
-a grammar</strong> is called <em>prasing</em>.</p>
-<p>&#x2003;&#x2003;Notice that in the process of doing this confirmation, we also
-<strong>uncover the entire grammatical structure of the given
-input</strong>, because we analyze how the input corresponds to the
-various components of the rule.</p>
 
       
     </div>
@@ -344,7 +330,7 @@ various components of the rule.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/94/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/94/">94</a><span class="page-number current">95</span><a class="page-number" href="/page/96/">96</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/96/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/94/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/94/">94</a><span class="page-number current">95</span><a class="page-number" href="/page/96/">96</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/96/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -376,7 +362,7 @@ various components of the rule.</p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:35</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:36</span>
   </span>
 </div>
 <div class="busuanzi-count">

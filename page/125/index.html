@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/3-4-%E8%AE%A1%E6%95%B0%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/" class="post-title-link" itemprop="url">3.3.&#x5B58;&#x50A8;&#x5355;&#x5143;</a>
+          <a href="/2024/04/05/3-4-%E8%AE%A1%E6%95%B0%E5%99%A8/" class="post-title-link" itemprop="url">3.4.&#x8BA1;&#x6570;&#x5668;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 20:19:31" itemprop="dateCreated datePublished" datetime="2024-04-04T20:19:31+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 08:25:29" itemprop="dateCreated datePublished" datetime="2024-04-05T08:25:29+08:00">2024-04-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 16:15:36" itemprop="dateModified" datetime="2024-06-03T16:15:36+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 09:19:14" itemprop="dateModified" datetime="2024-06-04T09:19:14+08:00">2024-06-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>364</span>
+      <span>44</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,64 +272,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="33memoryunits"><span class="math inline">\(3.3.\)</span>Memory
-Units</h1>
-<h3 id="1from-1-bit-to-register">1.From 1-bit to register</h3>
-<p>&#x2003;&#x2003;the previous unit ended up with a description of how&#xA0;a single bit
-register works.&#xA0;And it doesn&apos;t take a big stretch of imagination to
-understand that you&#xA0;can <strong>take several such one bit register and
-put them one next to the other</strong>.&#xA0;And by doing this, you can
-create <em>an abstraction of a 16-bit number</em>.</p>
-<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image.png"></p>
+          <h1 id="34counter"><span class="math inline">\(3.4.\)</span>Counter</h1>
+<h3 id="1counter-intro">1.Counter intro</h3>
+<p>&#x2003;&#x2003;A counter is used to direct certain instruction among instructions.
+It contains these features:</p>
 <ul>
-<li>The <strong>width</strong> of the register, in general, is a
-parameter called <span class="math inline">\(w\)</span>.&#xA0;In some
-computers it&apos;s 16-bit,&#xA0;in other computers it may be 32-bits or
-64-bit.</li>
-<li>The register&apos;s <strong>state</strong> refers to the value which is
-currently stored in the register.</li>
+<li><code>Reset</code>: Fetch the first instruction.</li>
+<li><code>Next</code>: Fetch the next instruction.</li>
+<li><code>Goto</code>: Fetch instruction n.</li>
 </ul>
-<p>&#x2003;&#x2003;let&apos;s take a user&apos;s perspective of this of this device:</p>
-<ul>
-<li>How do we <strong>read</strong> the value of this register? We
-simply probe the output. Because at any given point of time, the output
-simply emits the state of the register.</li>
-<li>How do we <strong>write</strong> the value of this register? We set
-<code>in</code> to the new value <span class="math inline">\(v\)</span>,
-and set <code>load</code> to 1, then the register state becomes 1.</li>
-<li>And from the next cycle onward,&#xA0;the output of the register will also
-start emitting this value <span class="math inline">\(v\)</span>.&#xA0;From
-the next cycle onward,&#xA0;the register will effectively store the value
-<span class="math inline">\(v\)</span>. And it will keep on storing this
-value forever until we decide to change&#xA0;this value in the very same
-manner.</li>
-</ul>
-<h3 id="2ram">2.RAM</h3>
-<p>&#x2003;&#x2003;A RAM can be abstracted as a sequence of n addressable registers,
-with addresses from 0 to n-1:</p>
-<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image-1.png"></p>
-<ul>
-<li>There&apos;s one thing very important to emphasize: at any given point
-of&#xA0;time, <strong>only one register is selected and only one register is
-working</strong>, all the other registers don&apos;t take any part in the
-game.</li>
-</ul>
-<p>&#x2003;&#x2003;Given this fact, we have to say <strong>which is the register on
-which we want to operate</strong>, <strong>which is the register that we
-want to read</strong>, or <strong>which is the register whose value we
-want to change</strong>.</p>
-<ul>
-<li><p>To <strong>read</strong> a particular register, we:</p>
-<ol type="1">
-<li>Sent the address to RAM.</li>
-<li>Probe the output.</li>
-</ol></li>
-<li><p>To <strong>write</strong> a particular register, we:</p>
-<ol type="1">
-<li>Sent the address to RAM.</li>
-<li>Set the value and <code>load</code>.</li>
-</ol></li>
-</ul>
+<p>&#x2003;&#x2003; Its &quot;black box&quot; diagram looks like this:</p>
+<p><img src="/2024/04/05/3-4-%E8%AE%A1%E6%95%B0%E5%99%A8/image.png"></p>
 
       
     </div>
@@ -352,7 +305,7 @@ want to change</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/124/">124</a><span class="page-number current">125</span><a class="page-number" href="/page/126/">126</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/126/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/124/">124</a><span class="page-number current">125</span><a class="page-number" href="/page/126/">126</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/126/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -384,7 +337,7 @@ want to change</strong>.</p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:35</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:36</span>
   </span>
 </div>
 <div class="busuanzi-count">
