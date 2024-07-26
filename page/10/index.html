@@ -272,87 +272,67 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
-Logic</h1>
-<h3 id="1parsing-logic">1.Parsing logic</h3>
-<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
-<code>CompilationEngine</code> class which consist of <strong>a set of
-methods, one method for every non-terminal rule</strong>.</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
+          <h1 id="959595parser-logic"><a class="markdownIt-Anchor" href="#95parser-logic"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.5.</mn></mrow><annotation encoding="application/x-tex">9.5.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">5</span><span class="mord">.</span></span></span></span>Parser Logic</h1>
+<h3 id="1parsing-logic"><a class="markdownIt-Anchor" href="#1parsing-logic"></a> 1.Parsing logic</h3>
+<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a <code>CompilationEngine</code> class which consist of <strong>a set of methods, one method for every non-terminal rule</strong>.</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png" alt></p>
 <ul>
-<li>The code of each <code>compilexxx</code> method follows the
-right-hand side of the rule xxx</li>
-<li>Each <code>compilexxx</code> method is responsible for
-<strong>advancing</strong> and <strong>handling its own part of the
-input</strong>.</li>
+<li>The code of each <code>compilexxx</code> method follows the right-hand side of the rule xxx</li>
+<li>Each <code>compilexxx</code> method is responsible for <strong>advancing</strong> and <strong>handling its own part of the input</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
-<code>compileWhileStatement</code>:</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
-<ol type="1">
-<li><p>We <strong>follow the right-hand side of the rule</strong>, and
-parse the input it dictates.</p>
+<p>&#x2003;&#x2003;To illustrate this, let&#x2019;s focus on one of these methods <code>compileWhileStatement</code>:</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png" alt></p>
+<ol>
+<li>
+<p>We <strong>follow the right-hand side of the rule</strong>, and parse the input it dictates.</p>
 <ul>
-<li>In <code>whileStatement</code>, it says we should expect to see the
-token <code>while</code>. If we find it in the input, we record the
-fact. Then the left parenthesis, and so on and so forth,</li>
-<li>At some point we will get a non-terminal rule like
-<code>expression</code>, then we go to next step:</li>
-</ul></li>
-<li><p>If the right-hand side specifies a non-terminal rule
-<code>xxx</code>, we call the corresponding method
-<code>compilexxx</code></p></li>
-<li><p>We do this recursively untile we exhaust the input.</p></li>
+<li>In <code>whileStatement</code>, it says we should expect to see the token <code>while</code>. If we find it in the input, we record the fact. Then the left parenthesis, and so on and so forth,</li>
+<li>At some point we will get a non-terminal rule like <code>expression</code>, then we go to next step:</li>
+</ul>
+</li>
+<li>
+<p>If the right-hand side specifies a non-terminal rule <code>xxx</code>, we call the corresponding method <code>compilexxx</code></p>
+</li>
+<li>
+<p>We do this recursively untile we exhaust the input.</p>
+</li>
 </ol>
 <p>&#x2003;&#x2003;And to initialize this process, we:</p>
-<ol type="1">
+<ol>
 <li>Advance the tokenizer.</li>
 <li>Call <code>compileWhileStatement</code>.</li>
 </ol>
-<h3 id="2parser-design">2.Parser design</h3>
-<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
-example:</p>
-<ol type="1">
-<li>If we look at the grammar, we first see that you should see a
-<code>while</code> , so we <strong>call a method
-<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
-eat the <code>while</code> token.</li>
+<h3 id="2parser-design"><a class="markdownIt-Anchor" href="#2parser-design"></a> 2.Parser design</h3>
+<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an example:</p>
+<ol>
+<li>If we look at the grammar, we first see that you should see a <code>while</code> , so we <strong>call a method <code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to eat the <code>while</code> token.</li>
 <li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
-<li>We meet a non-terminal rule <code>expression</code>, so we call
-<code>compileExpression();</code></li>
-<li>And so on and so forth...</li>
+<li>We meet a non-terminal rule <code>expression</code>, so we call <code>compileExpression();</code></li>
+<li>And so on and so forth&#x2026;</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
 <ul>
-<li>It&apos;s a private method.</li>
-<li>It says <strong>you should expect to see the given string</strong>,
-if not, you should <strong>throw an error</strong>.</li>
+<li>It&#x2019;s a private method.</li>
+<li>It says <strong>you should expect to see the given string</strong>, if not, you should <strong>throw an error</strong>.</li>
 <li>Otherwise, simply <strong>advance the input</strong>.</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
-about grammars and parsing</h3>
+<h3 id="3some-observation-about-grammars-and-parsing"><a class="markdownIt-Anchor" href="#3some-observation-about-grammars-and-parsing"></a> 3.Some observation about grammars and parsing</h3>
 <ul>
-<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
-a recursive descent algorithm parser without backtracking</strong>.</p>
+<li>
+<p><em>LL grammar</em>: It&#x2019;s a grammar that <strong>can be parsed by a recursive descent algorithm parser without backtracking</strong>.</p>
 <ul>
-<li>When you make a decision that what you have is a <code>while</code>
-statement, you don&apos;t have to kind of retract your progress and find out
-a mistake.</li>
-</ul></li>
-<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
-at most k tokens before you know which rule you are dealing with.</p>
+<li>When you make a decision that what you have is a <code>while</code> statement, you don&#x2019;t have to kind of retract your progress and find out a mistake.</li>
+</ul>
+</li>
+<li>
+<p><em>LL(k) parser</em>: It&#x2019;s an LL parser that needs to look ahead at most k tokens before you know which rule you are dealing with.</p>
 <ul>
-<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
-have a particular token in hand like <code>let</code>, we immediately
-know which rule we have to invoke</strong>.</li>
-<li>There are also things that don&apos;t belong to LL1, like English. For
-example, when we meet a token word &quot;lift&quot;, we still have no idea what we
-should do with it. A verb? A noun? We have to look more tokens
-downstream to know which rule to use. In this process, we may need to
-backtrack and reconsider some of the rules we have to use...</li>
-</ul></li>
+<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we have a particular token in hand like <code>let</code>, we immediately know which rule we have to invoke</strong>.</li>
+<li>There are also things that don&#x2019;t belong to LL1, like English. For example, when we meet a token word &#x201C;lift&#x201D;, we still have no idea what we should do with it. A verb? A noun? We have to look more tokens downstream to know which rule to use. In this process, we may need to backtrack and reconsider some of the rules we have to use&#x2026;</li>
+</ul>
+</li>
 </ul>
 
       
@@ -457,41 +437,26 @@ backtrack and reconsider some of the rules we have to use...</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="94parsetree"><span class="math inline">\(9.4.\)</span>Parse
-Tree</h1>
-<h3 id="1parse-tree-introduction">1.Parse tree introduction</h3>
-<p>&#x2003;&#x2003;In this part we are going to be specific about the grammatical
-structure. Take the sentence &quot;the dog ate my homework&quot; for example,
-here&apos;s the grammatical structure of it:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image.png"></p>
-<p>&#x2003;&#x2003;It&apos;s recorded using a <em>parse tree</em>. The tree is a recursive
-structure, and the grammatical structure of the inputs are
-<strong>recursive</strong>, too.</p>
+          <h1 id="949494parse-tree"><a class="markdownIt-Anchor" href="#94parse-tree"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.4.</mn></mrow><annotation encoding="application/x-tex">9.4.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">4</span><span class="mord">.</span></span></span></span>Parse Tree</h1>
+<h3 id="1parse-tree-introduction"><a class="markdownIt-Anchor" href="#1parse-tree-introduction"></a> 1.Parse tree introduction</h3>
+<p>&#x2003;&#x2003;In this part we are going to be specific about the grammatical structure. Take the sentence &#x201C;the dog ate my homework&#x201D; for example, here&#x2019;s the grammatical structure of it:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image.png" alt></p>
+<p>&#x2003;&#x2003;It&#x2019;s recorded using a <em>parse tree</em>. The tree is a recursive structure, and the grammatical structure of the inputs are <strong>recursive</strong>, too.</p>
 <ul>
-<li>The <code>sentence</code> consists of two lower-level sub parse
-tree.</li>
-<li>We continue to expanding the tree until get to the boundary of the
-tree, called <em>leaves</em> or <em>terminal nodes</em>. In the case of
-lexical analysis, they are <strong>the tokens from which the input is
-constructed</strong>.</li>
+<li>The <code>sentence</code> consists of two lower-level sub parse tree.</li>
+<li>We continue to expanding the tree until get to the boundary of the tree, called <em>leaves</em> or <em>terminal nodes</em>. In the case of lexical analysis, they are <strong>the tokens from which the input is constructed</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;Then let&apos;s move to Jack. Take the input
-<code>while (count &lt; 100) {let count = count + 1;}</code> for
-example:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-1.png"></p>
+<p>&#x2003;&#x2003;Then let&#x2019;s move to Jack. Take the input <code>while (count &lt; 100) {let count = count + 1;}</code> for example:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-1.png" alt></p>
 <blockquote>
-<p>The notion of a parse tree is an obstruct artifact that sits
-somewhere above all these nice diagrams. And this diagram here is just
-one way to describe this parse tree.</p>
+<p>The notion of a parse tree is an obstruct artifact that sits somewhere above all these nice diagrams. And this diagram here is just one way to describe this parse tree.</p>
 </blockquote>
-<p>&#x2003;&#x2003;To motivate this, let&apos;s focus on some subset of the prase tree:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-2.png"></p>
-<p>&#x2003;&#x2003;Another way of describing the same parse tree can be <em>XML
-format</em>:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-3.png"></p>
+<p>&#x2003;&#x2003;To motivate this, let&#x2019;s focus on some subset of the prase tree:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-2.png" alt></p>
+<p>&#x2003;&#x2003;Another way of describing the same parse tree can be <em>XML format</em>:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-3.png" alt></p>
 <ul>
-<li>In XML, we describe the structure of data using <em>markup
-tags</em>.</li>
+<li>In XML, we describe the structure of data using <em>markup tags</em>.</li>
 </ul>
 
       
@@ -596,56 +561,36 @@ tags</em>.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="93grammars"><span class="math inline">\(9.3.\)</span>Grammars</h1>
-<h3 id="1grammar-introduction">1.Grammar introduction</h3>
-<p>&#x2003;&#x2003;In the previous unit, we gain the ability to think about the
-program as a set of tokens, but the effect that we have a set of valid
-tokens doesn&apos;t imply that we have a valid program. <strong>It&apos;s not only
-the tokens that are important, the order of the tokens is critically
-important as well</strong>.</p>
-<p>&#x2003;&#x2003;And the artifact that <strong>defines in what order we can put
-tokens together legibly</strong> is referred to as <em>grammar</em>.</p>
+          <h1 id="939393grammars"><a class="markdownIt-Anchor" href="#93grammars"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.3.</mn></mrow><annotation encoding="application/x-tex">9.3.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">3</span><span class="mord">.</span></span></span></span>Grammars</h1>
+<h3 id="1grammar-introduction"><a class="markdownIt-Anchor" href="#1grammar-introduction"></a> 1.Grammar introduction</h3>
+<p>&#x2003;&#x2003;In the previous unit, we gain the ability to think about the program as a set of tokens, but the effect that we have a set of valid tokens doesn&#x2019;t imply that we have a valid program. <strong>It&#x2019;s not only the tokens that are important, the order of the tokens is critically important as well</strong>.</p>
+<p>&#x2003;&#x2003;And the artifact that <strong>defines in what order we can put tokens together legibly</strong> is referred to as <em>grammar</em>.</p>
 <ul>
-<li>A grammar is a set of rules, describing how tokens can be combined
-to create valid language constructs</li>
+<li>A grammar is a set of rules, describing how tokens can be combined to create valid language constructs</li>
 </ul>
 <p>&#x2003;&#x2003;Take the English language as an example:</p>
-<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image.png"></p>
-<p>&#x2003;&#x2003;It&apos;s just a subset of English language, but is sufficiently rich to
-support plenty of inputs. Consider the sentence &quot;The dog ate my
-homework&quot;:</p>
+<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image.png" alt></p>
+<p>&#x2003;&#x2003;It&#x2019;s just a subset of English language, but is sufficiently rich to support plenty of inputs. Consider the sentence &#x201C;The dog ate my homework&#x201D;:</p>
 <ul>
-<li>&apos;The&apos; is a det and &apos;dog&apos; is a noun, so the sentence begins with a
-noun phrase.</li>
-<li>&apos;ate&apos; is a verb and &apos;my homework&apos; is once again a noun phrase, so
-this subsentence is a verb phrase.</li>
-<li>Taken together, we have a noun phrase followed by a verb phrase,
-therefore we have a legitimate sentence.</li>
+<li>&#x2018;The&#x2019; is a det and &#x2018;dog&#x2019; is a noun, so the sentence begins with a noun phrase.</li>
+<li>&#x2018;ate&#x2019; is a verb and &#x2018;my homework&#x2019; is once again a noun phrase, so this subsentence is a verb phrase.</li>
+<li>Taken together, we have a noun phrase followed by a verb phrase, therefore we have a legitimate sentence.</li>
 </ul>
-<p>&#x2003;&#x2003;In this example, we notice that grammar is indeed made of a set of
-rules. And these rules fall into two broad categories:</p>
-<ol type="1">
-<li><em>Terminal rule</em>: Its right-hand side consists of constants
-only.</li>
-<li><em>Non-terminal rule</em>: Its right-hand side consists of names of
-other rules, and probably constants.</li>
+<p>&#x2003;&#x2003;In this example, we notice that grammar is indeed made of a set of rules. And these rules fall into two broad categories:</p>
+<ol>
+<li><em>Terminal rule</em>: Its right-hand side consists of constants only.</li>
+<li><em>Non-terminal rule</em>: Its right-hand side consists of names of other rules, and probably constants.</li>
 </ol>
-<h3 id="2jack-grammar">2.Jack grammar</h3>
-<p>&#x2003;&#x2003;Let&apos;s focus on a subset of Jack language in which we have three
-possible statements: <code>if</code>, <code>while</code>,
-<code>let</code>:</p>
-<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image-1.png"></p>
+<h3 id="2jack-grammar"><a class="markdownIt-Anchor" href="#2jack-grammar"></a> 2.Jack grammar</h3>
+<p>&#x2003;&#x2003;Let&#x2019;s focus on a subset of Jack language in which we have three possible statements: <code>if</code>, <code>while</code>, <code>let</code>:</p>
+<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image-1.png" alt></p>
 <ul>
 <li>We use <code>*</code> to indicate 0 or more.</li>
 <li>We use <code>|</code> to denote choice.</li>
 <li>We use <code>?</code> to denote 0 or 1.</li>
 </ul>
-<p>&#x2003;&#x2003;And the process of <strong>determining if a given input conforms to
-a grammar</strong> is called <em>prasing</em>.</p>
-<p>&#x2003;&#x2003;Notice that in the process of doing this confirmation, we also
-<strong>uncover the entire grammatical structure of the given
-input</strong>, because we analyze how the input corresponds to the
-various components of the rule.</p>
+<p>&#x2003;&#x2003;And the process of <strong>determining if a given input conforms to a grammar</strong> is called <em>prasing</em>.</p>
+<p>&#x2003;&#x2003;Notice that in the process of doing this confirmation, we also <strong>uncover the entire grammatical structure of the given input</strong>, because we analyze how the input corresponds to the various components of the rule.</p>
 
       
     </div>
@@ -749,79 +694,78 @@ various components of the rule.</p>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</h1>
-<h3 id="1-tokenizing">1. Tokenizing</h3>
-<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist
-of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
-<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of
-theory known as <em>lexical analysis</em>. Here&apos;s an example of
-tokenizing in action:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+          <h1 id="929292lexical-analysis"><a class="markdownIt-Anchor" href="#92lexical-analysis"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.2.</mn></mrow><annotation encoding="application/x-tex">9.2.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span></span></span></span>Lexical Analysis</h1>
+<h3 id="1-tokenizing"><a class="markdownIt-Anchor" href="#1-tokenizing"></a> 1. Tokenizing</h3>
+<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png" alt></p>
+<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of theory known as <em>lexical analysis</em>. Here&#x2019;s an example of tokenizing in action:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png" alt></p>
 <ul>
-<li><p>As far as <em>lexical analysis</em> is concerned, the input is
-nothing more than <strong>a stream of characters</strong>.</p></li>
-<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
-stream of characters into a stream of meaningful tokens</strong>. It
-provides a very simple yet important preliminary processing of the
-file.</p></li>
-<li><p>A <em>token</em> is <strong>a string of characters that has a
-meaning</strong>.</p>
+<li>
+<p>As far as <em>lexical analysis</em> is concerned, the input is nothing more than <strong>a stream of characters</strong>.</p>
+</li>
+<li>
+<p><em>Tokenizing</em> refers to <strong>grouping the primitive stream of characters into a stream of meaningful tokens</strong>. It provides a very simple yet important preliminary processing of the file.</p>
+</li>
+<li>
+<p>A <em>token</em> is <strong>a string of characters that has a meaning</strong>.</p>
 <ul>
-<li>Different programming languages have different definitions of token.
-For example, <code>x++</code> in C makes a lot of sense, but not in
-Jack, for it doesn&apos;t have an <code>++</code> operation.</li>
-</ul></li>
+<li>Different programming languages have different definitions of token. For example, <code>x++</code> in C makes a lot of sense, but not in Jack, for it doesn&#x2019;t have an <code>++</code> operation.</li>
 </ul>
-<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it
-over to the compiler and completely forget the original input
-file</strong>.</p>
-<h3 id="2jack-tokenizer">2.Jack tokenizer</h3>
+</li>
+</ul>
+<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it over to the compiler and completely forget the original input file</strong>.</p>
+<h3 id="2jack-tokenizer"><a class="markdownIt-Anchor" href="#2jack-tokenizer"></a> 2.Jack tokenizer</h3>
 <p>&#x2003;&#x2003;In Jack, we have 5 kinds of tokens:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png" alt></p>
 <p>&#x2003;&#x2003;And our tokenizer will provide these useful service:</p>
-<ol type="1">
-<li><p>Handle the compiler&apos;s input: It allow us to view the input as a
-stream of tokens.</p></li>
-<li><p>Allow advancing the input: It allow us to know:</p>
+<ol>
+<li>
+<p>Handle the compiler&#x2019;s input: It allow us to view the input as a stream of tokens.</p>
+</li>
+<li>
+<p>Allow advancing the input: It allow us to know:</p>
 <ul>
 <li><strong>If there are more tokens to process</strong>.</li>
 <li><strong>What the next token is</strong>.</li>
 <li><strong>The value, type of this token</strong>.</li>
-</ul></li>
-<li><p>Supply the value, type of the current token.</p></li>
-</ol>
-<p>&#x2003;&#x2003;Here&apos;s an example of a program that use these services:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the
-tokenizer object. Here&apos;s what it does:</p>
-<ul>
-<li>It goes through the input, and for every token, it <strong>lists the
-token to be out of file</strong>.</li>
-<li>In the first line, <code>if</code> is surrounded by two
-<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo
-code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<ol type="1">
-<li><p>We get the first token, and it becomes the current
-token.</p></li>
-<li><p>We enter a loop as long as we have more tokens to
-process.</p></li>
-<li><p>In each line of the program, we have to <strong>output the
-classification of the token</strong>, and we have to <strong>do it
-twice</strong>.</p></li>
-<li><p>We:</p>
-<ol type="1">
+</li>
+<li>
+<p>Supply the value, type of the current token.</p>
+</li>
+</ol>
+<p>&#x2003;&#x2003;Here&#x2019;s an example of a program that use these services:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png" alt></p>
+<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the tokenizer object. Here&#x2019;s what it does:</p>
+<ul>
+<li>It goes through the input, and for every token, it <strong>lists the token to be out of file</strong>.</li>
+<li>In the first line, <code>if</code> is surrounded by two <em>tags</em>, it <strong>describe the type of the token</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>
+<p>We get the first token, and it becomes the current token.</p>
+</li>
+<li>
+<p>We enter a loop as long as we have more tokens to process.</p>
+</li>
+<li>
+<p>In each line of the program, we have to <strong>output the classification of the token</strong>, and we have to <strong>do it twice</strong>.</p>
+</li>
+<li>
+<p>We:</p>
+<ol>
 <li>Print the <strong>opening tag</strong>, then</li>
 <li>Print the <strong>value of of the current token</strong>,</li>
 <li>Print the <strong>token itself</strong>,</li>
-<li>At last print <strong>end tag with token
-classification</strong>.</li>
-</ol></li>
-<li><p>We print a newline, and <code>advance()</code> to get the next
-token from the tokenizer, until we consume all the tokens from the input
-file.</p></li>
+<li>At last print <strong>end tag with token classification</strong>.</li>
+</ol>
+</li>
+<li>
+<p>We print a newline, and <code>advance()</code> to get the next token from the tokenizer, until we consume all the tokens from the input file.</p>
+</li>
 </ol>
 
       
@@ -926,113 +870,81 @@ file.</p></li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="83listprocessing"><span class="math inline">\(8.3.\)</span>List
-Processing</h1>
-<h3 id="1list-processing">1.List processing</h3>
-<h4 id="acreation">&#x2003;&#x2003;$a.Creation</h4>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image.png"></p>
+          <h1 id="838383list-processing"><a class="markdownIt-Anchor" href="#83list-processing"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8.3.</mn></mrow><annotation encoding="application/x-tex">8.3.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span><span class="mord">.</span><span class="mord">3</span><span class="mord">.</span></span></span></span>List Processing</h1>
+<h3 id="1list-processing"><a class="markdownIt-Anchor" href="#1list-processing"></a> 1.List processing</h3>
+<h4 id="acreation"><a class="markdownIt-Anchor" href="#acreation"></a> &#x2003;&#x2003;$a.Creation</h4>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image.png" alt></p>
 <p>&#x2003;&#x2003;The client process is described as below:</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-1.png"></p>
-<ol type="1">
-<li>We create a V pointer. We will get the variable containing 0,
-because all local variables are initialized to 0.</li>
-<li>We invoke the list constructor, and the list constructor is going to
-<strong>come back with a block of memory that represents the number 5
-and null</strong>.</li>
-<li>V is going to <strong>point to the base address</strong> of the
-object that was returned by the constructor.</li>
-<li>The previous version of V is no longer relevant, and the next
-command will do exactly the same.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-1.png" alt></p>
+<ol>
+<li>We create a V pointer. We will get the variable containing 0, because all local variables are initialized to 0.</li>
+<li>We invoke the list constructor, and the list constructor is going to <strong>come back with a block of memory that represents the number 5 and null</strong>.</li>
+<li>V is going to <strong>point to the base address</strong> of the object that was returned by the constructor.</li>
+<li>The previous version of V is no longer relevant, and the next command will do exactly the same.</li>
 </ol>
-<h4 id="bsequential-access">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Sequential access</h4>
-<p>&#x2003;&#x2003;We will use the <code>print</code> method to illustrate the
-sequential process:</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-2.png"></p>
+<h4 id="bbbsequential-access"><a class="markdownIt-Anchor" href="#bsequential-access"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">b.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord">.</span></span></span></span>Sequential access</h4>
+<p>&#x2003;&#x2003;We will use the <code>print</code> method to illustrate the sequential process:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-2.png" alt></p>
 <blockquote>
-<p>In Object-based Programming, when we call a method on an object, we
-are implicitily <strong>passing the object as a parameter to this
-method</strong>.</p>
+<p>In Object-based Programming, when we call a method on an object, we are implicitily <strong>passing the object as a parameter to this method</strong>.</p>
 </blockquote>
 <p>&#x2003;&#x2003;In the constructor, we do these things:</p>
-<ol type="1">
-<li><p>We create <code>current</code>, it&apos;s an identifier that exist
-outside the world of list. We use a special variable called
-<code>this</code> which stands for the current object.</p>
+<ol>
+<li>
+<p>We create <code>current</code>, it&#x2019;s an identifier that exist outside the world of list. We use a special variable called <code>this</code> which stands for the current object.</p>
 <ul>
-<li><code>this</code> is the point from which we are going to
-<strong>refer to the object that was passed with</strong>.</li>
-</ul></li>
+<li><code>this</code> is the point from which we are going to <strong>refer to the object that was passed with</strong>.</li>
+</ul>
+</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-3.png"></p>
-<ol start="2" type="1">
-<li>The entry point of the list is <code>this</code>, and we set
-<code>current</code> to <code>this</code>, then we get two pointers
-referring to the head of the list.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-3.png" alt></p>
+<ol start="2">
+<li>The entry point of the list is <code>this</code>, and we set <code>current</code> to <code>this</code>, then we get two pointers referring to the head of the list.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-4.png"></p>
-<ol start="3" type="1">
-<li>Now we enter the loop, we print the <code>data</code> and move
-<code>current</code> to <code>next</code>.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-4.png" alt></p>
+<ol start="3">
+<li>Now we enter the loop, we print the <code>data</code> and move <code>current</code> to <code>next</code>.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-5.png"></p>
-<ol start="4" type="1">
-<li>At last we <code>return</code>, <code>current</code> no longer
-exists and <code>this</code> is reinstated and points to the list as
-before.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-5.png" alt></p>
+<ol start="4">
+<li>At last we <code>return</code>, <code>current</code> no longer exists and <code>this</code> is reinstated and points to the list as before.</li>
 </ol>
 <p>&#x2003;&#x2003;When the client want to create a list:</p>
-<ol type="1">
-<li>It all starts by creating a <code>V</code> pointer. We <strong>get
-the variable containing value 0</strong> because all local variables are
-initialized to 0.</li>
+<ol>
+<li>It all starts by creating a <code>V</code> pointer. We <strong>get the variable containing value 0</strong> because all local variables are initialized to 0.</li>
 </ol>
-<p>&#x2003;&#x2003;Then we call the constructor, and the list constructor is going to
-come back with a block of memory that represents the
-<code>(5, null)</code>.</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-6.png"></p>
-<ol start="2" type="1">
-<li>Once the <code>List.new</code> is called, the previous vesion of
-<code>V</code> is no longer relevant. The rest steps are trival.</li>
+<p>&#x2003;&#x2003;Then we call the constructor, and the list constructor is going to come back with a block of memory that represents the <code>(5, null)</code>.</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-6.png" alt></p>
+<ol start="2">
+<li>Once the <code>List.new</code> is called, the previous vesion of <code>V</code> is no longer relevant. The rest steps are trival.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-7.png"></p>
-<h4 id="crecursive-access">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Recursive access</h4>
-<p>&#x2003;&#x2003;Let&apos;s take the <code>dispose</code> method as an example:</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-8.png"></p>
-<ol type="1">
-<li>As usual, we first call a variable <code>V</code>. The
-<code>dispose</code> method doesn&apos;t know what <code>V</code> is, so the
-variable <code>this</code> was passed to <code>dispose</code>.</li>
-<li>The <code>next</code> isn&apos;t null, so we go to the recursive call.
-The <code>this</code> now points at the tail of the list.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-7.png" alt></p>
+<h4 id="cccrecursive-access"><a class="markdownIt-Anchor" href="#crecursive-access"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">c.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span><span class="mord">.</span></span></span></span>Recursive access</h4>
+<p>&#x2003;&#x2003;Let&#x2019;s take the <code>dispose</code> method as an example:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-8.png" alt></p>
+<ol>
+<li>As usual, we first call a variable <code>V</code>. The <code>dispose</code> method doesn&#x2019;t know what <code>V</code> is, so the variable <code>this</code> was passed to <code>dispose</code>.</li>
+<li>The <code>next</code> isn&#x2019;t null, so we go to the recursive call. The <code>this</code> now points at the tail of the list.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-9.png"></p>
-<ol start="3" type="1">
-<li>We finally meet 5, do the <code>deAlloc</code> and
-<code>return</code>. Once we do the <code>return</code>, we get
-completely out of the recursive method, and <strong>what used to be
-called <code>this</code> goes back to be named
-<code>V</code></strong>.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-9.png" alt></p>
+<ol start="3">
+<li>We finally meet 5, do the <code>deAlloc</code> and <code>return</code>. Once we do the <code>return</code>, we get completely out of the recursive method, and <strong>what used to be called <code>this</code> goes back to be named <code>V</code></strong>.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-10.png"></p>
-<ol start="4" type="1">
-<li>Now the <code>V</code> points to nothing, for we basically disposed
-everything in this list.</li>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-10.png" alt></p>
+<ol start="4">
+<li>Now the <code>V</code> points to nothing, for we basically disposed everything in this list.</li>
 </ol>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-11.png"></p>
-<p>&#x2003;&#x2003;However, recursion is very inefficient operation and if you do this
-with a big list, you will probably get a <code>StackOverflow</code>
-error.</p>
-<h3 id="4list-representation">4.List representation</h3>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-11.png" alt></p>
+<p>&#x2003;&#x2003;However, recursion is very inefficient operation and if you do this with a big list, you will probably get a <code>StackOverflow</code> error.</p>
+<h3 id="4list-representation"><a class="markdownIt-Anchor" href="#4list-representation"></a> 4.List representation</h3>
 <p>&#x2003;&#x2003;The following list:</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-12.png"></p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-12.png" alt></p>
 <p>&#x2003;&#x2003;is represented in the host RAM like this:</p>
-<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-13.png"></p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-13.png" alt></p>
 <p>&#x2003;&#x2003;Then who makes these work?</p>
 <ul>
 <li>High-level: the constructor</li>
-<li>Low-level: when compiling the constructor, <strong>the compiler
-plants calls to OS routines that find, and allocate, available memory
-space for the new object</strong>.</li>
+<li>Low-level: when compiling the constructor, <strong>the compiler plants calls to OS routines that find, and allocate, available memory space for the new object</strong>.</li>
 </ul>
 
       
@@ -1137,80 +1049,70 @@ space for the new object</strong>.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="92object-based-programming"><span class="math inline">\(9.2.\)</span>Object-based Programming</h1>
-<h3 id="1object-oriented-programming">1.Object-oriented programming</h3>
+          <h1 id="929292object-based-programming"><a class="markdownIt-Anchor" href="#92object-based-programming"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.2.</mn></mrow><annotation encoding="application/x-tex">9.2.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span></span></span></span>Object-based Programming</h1>
+<h3 id="1object-oriented-programming"><a class="markdownIt-Anchor" href="#1object-oriented-programming"></a> 1.Object-oriented programming</h3>
 <p>&#x2003;&#x2003;When designing an abstraction, we</p>
-<ol type="1">
-<li><p>Consider <strong>what kind of data do we want to store
-about</strong> and <strong>the objects that this class is supposed to
-represent</strong>.</p>
+<ol>
+<li>
+<p>Consider <strong>what kind of data do we want to store about</strong> and <strong>the objects that this class is supposed to represent</strong>.</p>
 <ul>
 <li>In our case, we need to store numerator and denominator.</li>
-</ul></li>
-<li><p>We store these values into integer type of
-<code>field</code>.</p></li>
-<li><p><strong>The only way to access field values from outside the
-class is through <em>accessor</em> methods</strong>, so we create
-accessors to facilitate access.</p></li>
+</ul>
+</li>
+<li>
+<p>We store these values into integer type of <code>field</code>.</p>
+</li>
+<li>
+<p><strong>The only way to access field values from outside the class is through <em>accessor</em> methods</strong>, so we create accessors to facilitate access.</p>
+</li>
 </ol>
-<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png"></p>
-<ol start="4" type="1">
-<li><p>Then we write a <em>constructor</em> to create new objects. We
-create the object and <strong>return it to the base
-address</strong>.</p>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image.png" alt></p>
+<ol start="4">
+<li>
+<p>Then we write a <em>constructor</em> to create new objects. We create the object and <strong>return it to the base address</strong>.</p>
 <ul>
-<li><p><code>this</code> is a standard reference to the current object.
-It is actually <strong>the base address of the current object in the
-host RAM</strong>.</p></li>
-<li><p>One of the rules of the game is that a Jack constructor must</p>
+<li>
+<p><code>this</code> is a standard reference to the current object. It is actually <strong>the base address of the current object in the host RAM</strong>.</p>
+</li>
+<li>
+<p>One of the rules of the game is that a Jack constructor must</p>
 <ul>
 <li>return the <em>base address</em>.</li>
-<li>return <em>an object of the type of the surrounding class</em> or
-<em>the class to which this constructor belongs</em>.</li>
-<li>In Jack, every subroutine must <strong>always terminate with
-<code>return</code> command</strong>.</li>
-</ul></li>
-</ul></li>
-<li><p>We create several methods as we wish, this is quite simple so we
-skip this part.</p></li>
-<li><p>We create <code>dispose</code> method:</p>
+<li>return <em>an object of the type of the surrounding class</em> or <em>the class to which this constructor belongs</em>.</li>
+<li>In Jack, every subroutine must <strong>always terminate with <code>return</code> command</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>We create several methods as we wish, this is quite simple so we skip this part.</p>
+</li>
+<li>
+<p>We create <code>dispose</code> method:</p>
 <ul>
-<li>The method is implemented using a call to the host operation system.
-We call the OS routine <code>deAlloc</code>, which takes an address in
-memory and disposes the memory block that begins in this address.</li>
-<li>This is important to Jack, because Jack has no garbage collection
-services, so it&apos;s up to the programmer to do this.</li>
-</ul></li>
+<li>The method is implemented using a call to the host operation system. We call the OS routine <code>deAlloc</code>, which takes an address in memory and disposes the memory block that begins in this address.</li>
+<li>This is important to Jack, because Jack has no garbage collection services, so it&#x2019;s up to the programmer to do this.</li>
+</ul>
+</li>
 </ol>
-<h3 id="2object-representation">2.Object representation</h3>
-<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png"></p>
-<p>&#x2003;&#x2003;In client&apos;s view:</p>
+<h3 id="2object-representation"><a class="markdownIt-Anchor" href="#2object-representation"></a> 2.Object representation</h3>
+<p><img src="/2024/04/13/8-2-%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BC%96%E7%A8%8B/image-1.png" alt></p>
+<p>&#x2003;&#x2003;In client&#x2019;s view:</p>
 <ul>
-<li>Each fraction is represented by a block that includes all the field
-values of the current object.</li>
-<li>We have a reference to each of these blocks, which is <strong>the
-name of the variable</strong>.</li>
+<li>Each fraction is represented by a block that includes all the field values of the current object.</li>
+<li>We have a reference to each of these blocks, which is <strong>the name of the variable</strong>.</li>
 </ul>
 <p>&#x2003;&#x2003;In the host RAM:</p>
 <ul>
-<li>Some area of it <strong>is designated to represent the the stack of
-the currently running application</strong>.</li>
-<li>The <code>stack</code> is used to <strong>store
-variables</strong>.</li>
-<li>We have the <code>heap</code> where we <strong>represent objects and
-arrays</strong>.</li>
+<li>Some area of it <strong>is designated to represent the the stack of the currently running application</strong>.</li>
+<li>The <code>stack</code> is used to <strong>store variables</strong>.</li>
+<li>We have the <code>heap</code> where we <strong>represent objects and arrays</strong>.</li>
 </ul>
-<p>&#x2003;We see that we have a variable <code>a</code> which contains the
-number 15087. If we <strong>treat this variable as a pointer and look up
-this address in the RAM</strong>, we see that the number after the 2 is
-3. This two numbers comprise the memory block that represents our first
-object.</p>
-<p>&#x2003;&#x2003;How does this representation is established? The secret is that:
-when the compiler is going to compile your constructor, it would</p>
-<ol type="1">
+<p>&#x2003;We see that we have a variable <code>a</code> which contains the number 15087. If we <strong>treat this variable as a pointer and look up this address in the RAM</strong>, we see that the number after the 2 is 3. This two numbers comprise the memory block that represents our first object.</p>
+<p>&#x2003;&#x2003;How does this representation is established? The secret is that: when the compiler is going to compile your constructor, it would</p>
+<ol>
 <li><strong>Inject some calls to the operating system</strong>.</li>
-<li><strong>These calls are going to find available memory and allocate
-it to the object that was just constructed</strong>.</li>
+<li><strong>These calls are going to find available memory and allocate it to the object that was just constructed</strong>.</li>
 </ol>
 
       
@@ -1315,87 +1217,98 @@ it to the object that was just constructed</strong>.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="712&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;"><span class="math inline">\(7.12.\)</span>&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;</h1>
-<h3 id="1localargumentthisthattemp&#x7684;&#x5B9E;&#x73B0;">1.
-<code>local,argument,this,that,temp</code>&#x7684;&#x5B9E;&#x73B0;</h3>
+          <h1 id="712712712&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;"><a class="markdownIt-Anchor" href="#712&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.12.</mn></mrow><annotation encoding="application/x-tex">7.12.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">1</span><span class="mord">2</span><span class="mord">.</span></span></span></span>&#x7FFB;&#x8BD1;&#x5668;&#x5B9E;&#x73B0;&#x7B14;&#x8BB0;</h1>
+<h3 id="1-localargumentthisthattemp&#x7684;&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#1-localargumentthisthattemp&#x7684;&#x5B9E;&#x73B0;"></a> 1. <code>local,argument,this,that,temp</code>&#x7684;&#x5B9E;&#x73B0;</h3>
 <p>&#x2003;&#x2003;&#x8FD9;&#x51E0;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#x7684;<code>push</code>&#x5B9E;&#x73B0;&#x90FD;&#x9075;&#x5FAA;<code>*sp=*addr</code>&#x7684;&#x8FC7;&#x7A0B;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x8BE5;&#x8FC7;&#x7A0B;&#x62C6;&#x5206;&#x4E3A;&#x4E0B;&#x9762;&#x7684;&#x5B50;&#x8FC7;&#x7A0B;&#xFF1A;</p>
 <ul>
 <li><code>D=*addr</code>.</li>
 <li><code>*sp=D</code>.</li>
 <li><code>sp++</code></li>
 </ul>
-<p>&#x2003;&#x2003;&#x540C;&#x65F6;&#xFF0C;&#x6839;&#x636E;&#x5148;&#x524D;&#x7684;&#x8BA8;&#x8BBA;&#xFF0C;<code>push</code>&#x64CD;&#x4F5C;&#x4E2D;&#x7684;<code>addr</code>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<code>baseAddr+index</code>&#x6765;&#x8BA1;&#x7B97;&#x3002;<code>index</code>&#x7684;&#x503C;&#x5F88;&#x5BB9;&#x6613;&#x83B7;&#x53D6;&#xFF0C;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x7684;&#x64CD;&#x4F5C;&#x4E3A;<code>push local x</code>,
-&#x5219;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//get index</span><br><span class="line">@x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x4F46;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x83B7;&#x53D6;<code>baseAddr</code>&#xFF0C;&#x56E0;&#x4E3A;&#x6B64;&#x65F6;&#x7684;D&#x5BC4;&#x5B58;&#x5668;&#x5DF2;&#x7ECF;&#x5B58;&#x50A8;&#x4E86;<code>x</code>&#x7684;&#x5E8F;&#x53F7;&#xFF0C;
-&#x6211;&#x4EEC;&#x4F1A;&#x60F3;&#x901A;&#x8FC7;A&#x5BC4;&#x5B58;&#x5668;&#x83B7;&#x5F97;<code>baseAddr</code>,
-&#x7136;&#x540E;&#x5C06;<code>baseAddr+index</code>&#x7684;&#x5730;&#x5740;&#x5B58;&#x5165;A&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//get base addr</span><br><span class="line">@LCL</span><br><span class="line">A=M</span><br><span class="line">A=A+D</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x987A;&#x5229;&#x5B8C;&#x6210;<code>LCL</code>&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5730;&#x5740;&#x8BFB;&#x5165;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x63A5;&#x7740;&#x7528;D&#x5BC4;&#x5B58;&#x5668;&#x8BFB;&#x5165;<code>baseAddr+index</code>&#x5BF9;&#x5E94;&#x7684;&#x6570;&#x636E;&#x3002;
+<p>&#x2003;&#x2003;&#x540C;&#x65F6;&#xFF0C;&#x6839;&#x636E;&#x5148;&#x524D;&#x7684;&#x8BA8;&#x8BBA;&#xFF0C;<code>push</code>&#x64CD;&#x4F5C;&#x4E2D;&#x7684;<code>addr</code>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<code>baseAddr+index</code>&#x6765;&#x8BA1;&#x7B97;&#x3002;<code>index</code>&#x7684;&#x503C;&#x5F88;&#x5BB9;&#x6613;&#x83B7;&#x53D6;&#xFF0C;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x7684;&#x64CD;&#x4F5C;&#x4E3A;<code>push local x</code>, &#x5219;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//get index</span><br><span class="line">@x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x4F46;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x83B7;&#x53D6;<code>baseAddr</code>&#xFF0C;&#x56E0;&#x4E3A;&#x6B64;&#x65F6;&#x7684;D&#x5BC4;&#x5B58;&#x5668;&#x5DF2;&#x7ECF;&#x5B58;&#x50A8;&#x4E86;<code>x</code>&#x7684;&#x5E8F;&#x53F7;&#xFF0C; &#x6211;&#x4EEC;&#x4F1A;&#x60F3;&#x901A;&#x8FC7;A&#x5BC4;&#x5B58;&#x5668;&#x83B7;&#x5F97;<code>baseAddr</code>, &#x7136;&#x540E;&#x5C06;<code>baseAddr+index</code>&#x7684;&#x5730;&#x5740;&#x5B58;&#x5165;A&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//get base addr</span><br><span class="line">@LCL</span><br><span class="line">A=M</span><br><span class="line">A=A+D</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x987A;&#x5229;&#x5B8C;&#x6210;<code>LCL</code>&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5730;&#x5740;&#x8BFB;&#x5165;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x63A5;&#x7740;&#x7528;D&#x5BC4;&#x5B58;&#x5668;&#x8BFB;&#x5165;<code>baseAddr+index</code>&#x5BF9;&#x5E94;&#x7684;&#x6570;&#x636E;&#x3002;</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D=A+D</span><br></pre></td></tr></table></figure>
-&#x2003;&#x2003;&#x4F46;&#x662F;&#xFF0C;&#x6B64;&#x65F6;&#x7684;<code>A</code>&#x50A8;&#x5B58;&#x7684;&#x5DF2;&#x4E0D;&#x662F;&#x539F;&#x5148;&#x7684;<code>baseAddr</code>&#x4E86;&#xFF0C;&#x901A;&#x8FC7;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x66F4;&#x65B0;<code>D</code>&#x7684;&#x503C;&#x662F;&#x4E0D;&#x884C;&#x7684;&#x3002;&#x8FD9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;<strong>&#x540C;&#x65F6;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>&#x7684;&#x503C;</strong>&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x672A;&#x6539;&#x53D8;&#x7684;<code>A</code>&#x6210;&#x529F;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@x</span><br><span class="line">D=A</span><br><span class="line">@LCL</span><br><span class="line">A=M //pointer</span><br><span class="line">AD=A+D</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x4F46;&#x662F;&#xFF0C;&#x6B64;&#x65F6;&#x7684;<code>A</code>&#x50A8;&#x5B58;&#x7684;&#x5DF2;&#x4E0D;&#x662F;&#x539F;&#x5148;&#x7684;<code>baseAddr</code>&#x4E86;&#xFF0C;&#x901A;&#x8FC7;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x66F4;&#x65B0;<code>D</code>&#x7684;&#x503C;&#x662F;&#x4E0D;&#x884C;&#x7684;&#x3002;&#x8FD9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8003;&#x8651;<strong>&#x540C;&#x65F6;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>&#x7684;&#x503C;</strong>&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x672A;&#x6539;&#x53D8;&#x7684;<code>A</code>&#x6210;&#x529F;&#x66F4;&#x65B0;<code>A</code>&#x4E0E;<code>D</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@x</span><br><span class="line">D=A</span><br><span class="line">@LCL</span><br><span class="line">A=M //pointer</span><br><span class="line">AD=A+D</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;<code>D=*addr</code>&#xFF0C;&#x7531;&#x524D;&#x9762;&#x8BB2;&#x89E3;&#x7684;&#x6307;&#x9488;&#x7684;&#x8868;&#x793A;&#xFF0C;&#x53EA;&#x9700;&#x8865;&#x4E0A;<code>D=M</code>&#x8BED;&#x53E5;&#x5373;&#x53EF;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x662F;&#x8F83;&#x4E3A;&#x7B80;&#x5355;&#x7684;<code>*sp=D</code>&#x64CD;&#x4F5C;&#x4E86;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br></pre></td></tr></table></figure></p>
-<h3 id="2loop&#x5B9E;&#x73B0;">2.<code>Loop</code>&#x5B9E;&#x73B0;</h3>
-<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;<code>if-goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x6839;&#x636E;&#x6808;&#x9876;&#x5143;&#x7D20;&#x662F;&#x5426;&#x4E3A;<code>0</code>&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x6240;&#x9700;&#x5206;&#x652F;&#x3002;&#x56E0;&#x4E3A;&#x5728;&#x6808;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7528;<code>0</code>&#x8868;&#x793A;<code>false</code>&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LABEL</span><br><span class="line">D;JNE</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x800C;&#x5BF9;&#x4E8E;&#x65E0;&#x6761;&#x4EF6;&#x7684;<code>goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x5229;&#x7528;<code>0,JMP</code>&#x5373;&#x53EF;&#x5B9E;&#x73B0;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@LABEL</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p>
-<h3 id="3function&#x5B9E;&#x73B0;">3.<code>function</code>&#x5B9E;&#x73B0;</h3>
-<p>&#x2003;&#x2003;&#x5728;<code>Hack</code>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x4E3A;<code>function</code>&#x521B;&#x5EFA;&#x5BF9;&#x5E94;&#x6807;&#x7B7E;&#x5373;&#x53EF;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(LABEL)</span><br></pre></td></tr></table></figure></p>
-<h3 id="4call&#x5B9E;&#x73B0;">4.<code>Call</code>&#x5B9E;&#x73B0;</h3>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="math inline">\(8.6.\)</span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
-<ol type="1">
-<li><p>&#x5728;&#x6808;&#x4E2D;&#x653E;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6807;&#x5FD7;&#x7740;&#x6211;&#x4EEC;&#x5728;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x540E;&#x5C06;&#x8FD4;&#x56DE;&#x7684;&#x5730;&#x5740;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@return_address1</span><br></pre></td></tr></table></figure> &#x2003;&#x2003;&#x8BE5;&#x5730;&#x5740;&#x4EA6;&#x662F;&#x6808;&#x6307;&#x9488;&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x6240;&#x5728;&#x4E4B;&#x5904;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x4F9D;&#x6B21;&#x653E;&#x5165;<code>LCL</code>, <code>ARG</code>,
-<code>THIS</code>,
-<code>THAT</code>&#xFF0C;&#x4EE5;&#x4FDD;&#x5B58;&#x8C03;&#x7528;&#x8005;(caller)&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x3002;</p></li>
+<p>&#x2003;&#x2003;&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x662F;&#x8F83;&#x4E3A;&#x7B80;&#x5355;&#x7684;<code>*sp=D</code>&#x64CD;&#x4F5C;&#x4E86;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br></pre></td></tr></table></figure>
+<h3 id="2loop&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#2loop&#x5B9E;&#x73B0;"></a> 2.<code>Loop</code>&#x5B9E;&#x73B0;</h3>
+<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;<code>if-goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x6839;&#x636E;&#x6808;&#x9876;&#x5143;&#x7D20;&#x662F;&#x5426;&#x4E3A;<code>0</code>&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x6240;&#x9700;&#x5206;&#x652F;&#x3002;&#x56E0;&#x4E3A;&#x5728;&#x6808;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7528;<code>0</code>&#x8868;&#x793A;<code>false</code>&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LABEL</span><br><span class="line">D;JNE</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x800C;&#x5BF9;&#x4E8E;&#x65E0;&#x6761;&#x4EF6;&#x7684;<code>goto</code>&#x8BED;&#x53E5;&#xFF0C;&#x5229;&#x7528;<code>0,JMP</code>&#x5373;&#x53EF;&#x5B9E;&#x73B0;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@LABEL</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure>
+<h3 id="3function&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#3function&#x5B9E;&#x73B0;"></a> 3.<code>function</code>&#x5B9E;&#x73B0;</h3>
+<p>&#x2003;&#x2003;&#x5728;<code>Hack</code>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x4E3A;<code>function</code>&#x521B;&#x5EFA;&#x5BF9;&#x5E94;&#x6807;&#x7B7E;&#x5373;&#x53EF;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(LABEL)</span><br></pre></td></tr></table></figure>
+<h3 id="4call&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#4call&#x5B9E;&#x73B0;"></a> 4.<code>Call</code>&#x5B9E;&#x73B0;</h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8.6.</mn></mrow><annotation encoding="application/x-tex">8.6.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span><span class="mord">.</span><span class="mord">6</span><span class="mord">.</span></span></span></span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
+<ol>
+<li>&#x5728;&#x6808;&#x4E2D;&#x653E;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6807;&#x5FD7;&#x7740;&#x6211;&#x4EEC;&#x5728;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x540E;&#x5C06;&#x8FD4;&#x56DE;&#x7684;&#x5730;&#x5740;&#xFF1A;</li>
 </ol>
-<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;&#x6BCF;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x6211;&#x4EEC;&#x50CF;&#x666E;&#x901A;&#x7684;<code>push</code>&#x64CD;&#x4F5C;&#x4E00;&#x6837;&#xFF0C;&#x5C06;&#x5176;&#x653E;&#x5165;&#x6808;&#x6307;&#x9488;&#x6240;&#x6307;&#x4F4D;&#x7F6E;&#xFF0C;&#x7136;&#x540E;&#x79FB;&#x52A8;&#x6808;&#x6307;&#x9488;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SP = memorySegment</span><br><span class="line">SP = SP + 1</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@return_address1</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8BE5;&#x5730;&#x5740;&#x4EA6;&#x662F;&#x6808;&#x6307;&#x9488;&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x6240;&#x5728;&#x4E4B;&#x5904;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x4F9D;&#x6B21;&#x653E;&#x5165;<code>LCL</code>, <code>ARG</code>, <code>THIS</code>, <code>THAT</code>&#xFF0C;&#x4EE5;&#x4FDD;&#x5B58;&#x8C03;&#x7528;&#x8005;(caller)&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;&#x6BCF;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x6211;&#x4EEC;&#x50CF;&#x666E;&#x901A;&#x7684;<code>push</code>&#x64CD;&#x4F5C;&#x4E00;&#x6837;&#xFF0C;&#x5C06;&#x5176;&#x653E;&#x5165;&#x6808;&#x6307;&#x9488;&#x6240;&#x6307;&#x4F4D;&#x7F6E;&#xFF0C;&#x7136;&#x540E;&#x79FB;&#x52A8;&#x6808;&#x6307;&#x9488;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SP = memorySegment</span><br><span class="line">SP = SP + 1</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">@LCL</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@SRG</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@THIS</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br><span class="line"></span><br><span class="line">@THAT</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br><span class="line">@SP</span><br><span class="line">M=M+1</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
+<ol start="3">
 <li>&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x8981;&#x91CD;&#x5B9A;&#x5411;<code>ARG</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x628A;&#x5B83;&#x5B9A;&#x5411;&#x81F3;<code>ARG[0]</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x800C;&#x8BE5;&#x4F4D;&#x7F6E;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#xFF1A;</li>
 </ol>
-<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x7684;&#x51FD;&#x6570;&#x4E3A;<code>call func x</code>&#xFF0C;&#x5219;&#x5728;<code>ARG</code>&#x5185;&#x5B58;&#x6BB5;&#x524D;&#x6709;4(&#x524D;&#x56DB;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;)+x(<code>LCL</code>&#x9700;&#x8981;&#x7684;&#x4F4D;&#x7F6E;&#x4E2A;&#x6570;)&#xFF0C;&#x5BF9;&#x5E94;&#x4EE3;&#x7801;&#x4E3A;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@5+x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x6808;&#x6307;&#x9488;&#x79FB;&#x5230;&#x5BF9;&#x5E94;&#x4F4D;&#x7F6E;&#xFF0C;&#x5E76;&#x5C06;<code>ARG</code>&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x8BBE;&#x7F6E;&#x5728;&#x8FD9;&#x91CC;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">AD=A-D</span><br><span class="line">@ARG</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p>
-<ol start="4" type="1">
-<li><p>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x6B63;&#x786E;&#x8BBF;&#x95EE;<code>LCL</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;<code>LCL</code>
-<code>push</code>&#x5230;&#x6808;&#x6307;&#x9488;&#x6240;&#x5728;&#x4F4D;&#x7F6E;&#xFF1A; <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">D=M</span><br><span class="line">@LCL</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;<code>goto</code>&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x51FD;&#x6570;&#x4EE5;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@func</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x6700;&#x540E;&#x6211;&#x4EEC;&#x63D2;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6837;&#x5F53;&#x51FD;&#x6570;&#x88AB;&#x6267;&#x884C;&#x5B8C;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x5730;&#x65B9;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(return_address1)</span><br></pre></td></tr></table></figure></p></li>
+<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x7684;&#x51FD;&#x6570;&#x4E3A;<code>call func x</code>&#xFF0C;&#x5219;&#x5728;<code>ARG</code>&#x5185;&#x5B58;&#x6BB5;&#x524D;&#x6709;4(&#x524D;&#x56DB;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;)+x(<code>LCL</code>&#x9700;&#x8981;&#x7684;&#x4F4D;&#x7F6E;&#x4E2A;&#x6570;)&#xFF0C;&#x5BF9;&#x5E94;&#x4EE3;&#x7801;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@5+x</span><br><span class="line">D=A</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x6808;&#x6307;&#x9488;&#x79FB;&#x5230;&#x5BF9;&#x5E94;&#x4F4D;&#x7F6E;&#xFF0C;&#x5E76;&#x5C06;<code>ARG</code>&#x7684;&#x521D;&#x59CB;&#x4F4D;&#x7F6E;&#x8BBE;&#x7F6E;&#x5728;&#x8FD9;&#x91CC;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">A=M</span><br><span class="line">AD=A-D</span><br><span class="line">@ARG</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x6B63;&#x786E;&#x8BBF;&#x95EE;<code>LCL</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;<code>LCL</code> <code>push</code>&#x5230;&#x6808;&#x6307;&#x9488;&#x6240;&#x5728;&#x4F4D;&#x7F6E;&#xFF1A;</li>
 </ol>
-<h3 id="5return&#x5B9E;&#x73B0;">5.<code>return</code>&#x5B9E;&#x73B0;</h3>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="math inline">\(8.6.\)</span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
-<ol type="1">
-<li><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E34;&#x65F6;&#x53D8;&#x91CF;<code>frame</code>&#xFF0C;&#x5E76;&#x628A;<code>LCL</code>&#x7684;&#x503C;&#x8D4B;&#x7ED9;&#x5B83;&#x3002;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@LCL</span><br><span class="line">D=M</span><br><span class="line">@frame</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x6211;&#x4EEC;&#x5C06;<code>return</code>&#x7684;&#x503C;&#x653E;&#x5728;&#x6808;&#x9876;&#x3002;&#x7531;&#x4E8E;&#x6709;&#x56DB;&#x4E2A;&#x5360;&#x636E;&#x4E3B;&#x5185;&#x5B58;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E0A;&#x79FB;4+1=5&#x4E2A;&#xFF0C;<code>frame-5</code>&#x5373;&#x4E3A;<code>return</code>&#x7684;&#x5730;&#x5740;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@5</span><br><span class="line">A=D-A</span><br><span class="line">D=M</span><br><span class="line">@ret</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">D=M</span><br><span class="line">@LCL</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;<code>goto</code>&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x51FD;&#x6570;&#x4EE5;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF1A;</li>
 </ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@func</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>&#x6700;&#x540E;&#x6211;&#x4EEC;&#x63D2;&#x5165;<code>returnAddress</code>&#x7684;&#x6807;&#x7B7E;&#xFF0C;&#x8FD9;&#x6837;&#x5F53;&#x51FD;&#x6570;&#x88AB;&#x6267;&#x884C;&#x5B8C;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x5730;&#x65B9;&#xFF1A;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(return_address1)</span><br></pre></td></tr></table></figure>
+<h3 id="5return&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#5return&#x5B9E;&#x73B0;"></a> 5.<code>return</code>&#x5B9E;&#x73B0;</h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x6309;&#x7167;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8.6.</mn></mrow><annotation encoding="application/x-tex">8.6.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span><span class="mord">.</span><span class="mord">6</span><span class="mord">.</span></span></span></span>&#x8282;&#x6240;&#x8BB2;&#x9010;&#x6B65;&#x5B9E;&#x73B0;<code>call</code>&#x529F;&#x80FD;&#xFF1A;</p>
+<ol>
+<li>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E34;&#x65F6;&#x53D8;&#x91CF;<code>frame</code>&#xFF0C;&#x5E76;&#x628A;<code>LCL</code>&#x7684;&#x503C;&#x8D4B;&#x7ED9;&#x5B83;&#x3002;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@LCL</span><br><span class="line">D=M</span><br><span class="line">@frame</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>&#x6211;&#x4EEC;&#x5C06;<code>return</code>&#x7684;&#x503C;&#x653E;&#x5728;&#x6808;&#x9876;&#x3002;&#x7531;&#x4E8E;&#x6709;&#x56DB;&#x4E2A;&#x5360;&#x636E;&#x4E3B;&#x5185;&#x5B58;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E0A;&#x79FB;4+1=5&#x4E2A;&#xFF0C;<code>frame-5</code>&#x5373;&#x4E3A;<code>return</code>&#x7684;&#x5730;&#x5740;&#xFF1A;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@5</span><br><span class="line">A=D-A</span><br><span class="line">D=M</span><br><span class="line">@ret</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>&#x4E3A;&#x4EC0;&#x4E48;&#x6B64;&#x65F6;&#x4E0D;&#x8003;&#x8651;&#x6BCF;&#x4E2A;&#x5185;&#x5B58;&#x6BB5;&#x4E2D;&#x7684;&#x539F;&#x6709;&#x5143;&#x7D20;&#x4E86;&#x5462;&#xFF1F;&#x56E0;&#x4E3A;<strong>&#x5728;<code>return</code>&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8986;&#x76D6;&#x6240;&#x6709;&#x7684;&#x5DF2;&#x6709;&#x5143;&#x7D20;&#xFF0C;&#x8FD9;&#x8981;&#x6C42;&#x6211;&#x4EEC;&#x5C06;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5F53;&#x4F5C;&#x4E0D;&#x5B58;&#x5728;</strong>&#x3002;&#x800C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5E76;&#x5C06;<code>ret</code>&#x4E0A;&#x79FB;&#xFF0C;<strong>&#x5728;&#x4E4B;&#x540E;&#x7684;&#x6B65;&#x9AA4;&#x4E2D;&#x5C31;&#x65E0;&#x6CD5;&#x8986;&#x76D6;&#x4E00;&#x4E9B;&#x539F;&#x6709;&#x7684;&#x65E7;&#x6570;&#x636E;&#x548C;&#x6E05;&#x7A7A;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x7684;&#x6808;&#x4E86;</strong>&#x3002;</p>
 </blockquote>
-<ol start="3" type="1">
-<li><p>&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x5F85;<code>return</code>&#x7684;&#x503C;&#x590D;&#x5236;&#x5230;<code>ARG[0]</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x800C;&#x8BE5;&#x503C;&#x5C31;&#x5728;&#x6808;&#x9876;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x5730;&#x901A;&#x8FC7;&#x64CD;&#x7EB5;&#x6808;&#x6307;&#x9488;&#x8BFB;&#x53D6;&#x8BE5;&#x503C;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x8C03;&#x7528;&#x8005;&#x9700;&#x8981;&#x80FD;&#x591F;&#x83B7;&#x53D6;&#x8BE5;&#x503C;&#xFF0C;&#x56E0;&#x6B64;&#x6808;&#x6307;&#x9488;&#x5E94;&#x4E0E;<code>ARG</code>&#x76F8;&#x90BB;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@ARG</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">M=D+1</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x7740;&#x624B;&#x8986;&#x76D6;&#x539F;&#x6709;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x4ECE;&#x5148;&#x524D;&#x8BBE;&#x7F6E;&#x7684;<code>frame</code>&#x5730;&#x5740;&#x5F80;&#x4E0B;&#xFF0C;&#x4F9D;&#x6B21;&#x8BBE;&#x7F6E;&#x65B0;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x5730;&#x5740;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THAT </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THIS </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LCL </span><br><span class="line">M=D</span><br></pre></td></tr></table></figure></p></li>
-<li><p>&#x6700;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8BBE;&#x7F6E;&#x7684;<code>ret</code>&#x4F4D;&#x7F6E;&#x3002;&#x7531;&#x4E8E;<code>ret</code>&#x5E76;&#x975E;&#x6807;&#x7B7E;&#xFF0C;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x5176;&#x5730;&#x5740;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x6307;&#x9488;&#x64CD;&#x4F5C;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@ret</span><br><span class="line">A=M</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure></p></li>
+<ol start="3">
+<li>&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5C06;&#x5F85;<code>return</code>&#x7684;&#x503C;&#x590D;&#x5236;&#x5230;<code>ARG[0]</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x800C;&#x8BE5;&#x503C;&#x5C31;&#x5728;&#x6808;&#x9876;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x5730;&#x901A;&#x8FC7;&#x64CD;&#x7EB5;&#x6808;&#x6307;&#x9488;&#x8BFB;&#x53D6;&#x8BE5;&#x503C;&#xFF1A;</li>
 </ol>
-<h3 id="6initial&#x5B9E;&#x73B0;">6.<code>Initial</code>&#x5B9E;&#x73B0;</h3>
-<p>&#x2003;&#x2003;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7FFB;&#x8BD1;&#x7684;VM&#x4EE3;&#x7801;&#x662F;&#x6709;&#x6548;&#x7684;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981;&#x5BF9;&#x6211;&#x4EEC;&#x7684;&#x786C;&#x4EF6;&#x7CFB;&#x7EDF;&#x8FDB;&#x884C;&#x521D;&#x59CB;&#x5316;&#xFF1A;
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@256</span><br><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">call Sys.init// same as other call statements before.</span><br></pre></td></tr></table></figure></p>
-
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@SP</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG</span><br><span class="line">A=M</span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>&#x8C03;&#x7528;&#x8005;&#x9700;&#x8981;&#x80FD;&#x591F;&#x83B7;&#x53D6;&#x8BE5;&#x503C;&#xFF0C;&#x56E0;&#x6B64;&#x6808;&#x6307;&#x9488;&#x5E94;&#x4E0E;<code>ARG</code>&#x76F8;&#x90BB;&#xFF1A;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@ARG</span><br><span class="line">D=M</span><br><span class="line">@SP</span><br><span class="line">M=D+1</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x7740;&#x624B;&#x8986;&#x76D6;&#x539F;&#x6709;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x4ECE;&#x5148;&#x524D;&#x8BBE;&#x7F6E;&#x7684;<code>frame</code>&#x5730;&#x5740;&#x5F80;&#x4E0B;&#xFF0C;&#x4F9D;&#x6B21;&#x8BBE;&#x7F6E;&#x65B0;&#x7684;&#x5185;&#x5B58;&#x6BB5;&#x5730;&#x5740;&#xFF1A;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THAT </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@THIS </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@ARG </span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">@frame</span><br><span class="line">M=M-1</span><br><span class="line">A=M</span><br><span class="line">D=M</span><br><span class="line">@LCL </span><br><span class="line">M=D</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>&#x6700;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x56DE;&#x5230;&#x6700;&#x521D;&#x8BBE;&#x7F6E;&#x7684;<code>ret</code>&#x4F4D;&#x7F6E;&#x3002;&#x7531;&#x4E8E;<code>ret</code>&#x5E76;&#x975E;&#x6807;&#x7B7E;&#xFF0C;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x5176;&#x5730;&#x5740;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x6307;&#x9488;&#x64CD;&#x4F5C;&#xFF1A;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@ret</span><br><span class="line">A=M</span><br><span class="line">0;JMP</span><br></pre></td></tr></table></figure>
+<h3 id="6initial&#x5B9E;&#x73B0;"><a class="markdownIt-Anchor" href="#6initial&#x5B9E;&#x73B0;"></a> 6.<code>Initial</code>&#x5B9E;&#x73B0;</h3>
+<p>&#x2003;&#x2003;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7FFB;&#x8BD1;&#x7684;VM&#x4EE3;&#x7801;&#x662F;&#x6709;&#x6548;&#x7684;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981;&#x5BF9;&#x6211;&#x4EEC;&#x7684;&#x786C;&#x4EF6;&#x7CFB;&#x7EDF;&#x8FDB;&#x884C;&#x521D;&#x59CB;&#x5316;&#xFF1A;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@256</span><br><span class="line">D=A</span><br><span class="line">@SP</span><br><span class="line">M=D</span><br><span class="line"></span><br><span class="line">call Sys.init// same as other call statements before.</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1498,40 +1411,30 @@ it to the object that was just constructed</strong>.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="711vm-implementation-on-the-hackplatform"><span class="math inline">\(7.11.\)</span>VM Implementation on the Hack
-Platform</h1>
-<h3 id="1program-compilation-andtranslation">1.Program compilation and
-translation</h3>
-<p><img src="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/image.png"></p>
+          <h1 id="711711711vm-implementation-on-the-hack-platform"><a class="markdownIt-Anchor" href="#711vm-implementation-on-the-hack-platform"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.11.</mn></mrow><annotation encoding="application/x-tex">7.11.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">1</span><span class="mord">1</span><span class="mord">.</span></span></span></span>VM Implementation on the Hack Platform</h1>
+<h3 id="1program-compilation-and-translation"><a class="markdownIt-Anchor" href="#1program-compilation-and-translation"></a> 1.Program compilation and translation</h3>
+<p><img src="/2024/04/11/7-11-Hack%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84VM%E5%AE%9E%E7%8E%B0/image.png" alt></p>
 <ul>
-<li>When we translate from Jack to VM, we lost <em>the notion of
-constructors, methods</em>, because everything becomes functions.</li>
-<li>When we translate from VM to assembly, we lost <em>the notion of
-functions</em>, because we just have a long stream of assembly
-commands.</li>
+<li>When we translate from Jack to VM, we lost <em>the notion of constructors, methods</em>, because everything becomes functions.</li>
+<li>When we translate from VM to assembly, we lost <em>the notion of functions</em>, because we just have a long stream of assembly commands.</li>
 </ul>
-<h3 id="2vm-convention">2.VM convention</h3>
-<p>&#x2003;&#x2003;In order to tranlate the VM code into assembly code, we need to
-comply to certain conventions:</p>
-<ol type="1">
-<li><p><em>VM programming convention</em>: One file in any VM program is
-expected to be named <code>Main.vm</code>; one VM function in this file
-is expected to be named <code>main</code>.</p></li>
-<li><p><em>VM implementation convention</em>: When the VM implementation
-starts running, or is reset, it starts executing the argument-less OS
-function <code>Sys.init</code>.<code>Sys.init</code> then calls
-<code>Main.main</code>, and enters an infinite loop.</p></li>
-<li><p><em>Hardware platform convention</em>:</p>
+<h3 id="2vm-convention"><a class="markdownIt-Anchor" href="#2vm-convention"></a> 2.VM convention</h3>
+<p>&#x2003;&#x2003;In order to tranlate the VM code into assembly code, we need to comply to certain conventions:</p>
+<ol>
+<li>
+<p><em>VM programming convention</em>: One file in any VM program is expected to be named <code>Main.vm</code>; one VM function in this file is expected to be named <code>main</code>.</p>
+</li>
+<li>
+<p><em>VM implementation convention</em>: When the VM implementation starts running, or is reset, it starts executing the argument-less OS function <code>Sys.init</code>.<code>Sys.init</code> then calls <code>Main.main</code>, and enters an infinite loop.</p>
+</li>
+<li>
+<p><em>Hardware platform convention</em>:</p>
 <ul>
-<li>We request that the code you see here <strong>will be stored in the
-target computer&apos;s instruction memory beginning in address
-<code>0</code></strong>, for our Hack computer is programmed to start
-executing the program beginning with address <code>0</code>.</li>
-<li>So we first set <code>SP = 256</code>. By doing this, it will
-determined that the stack should begin in this address in the whole
-stream.</li>
+<li>We request that the code you see here <strong>will be stored in the target computer&#x2019;s instruction memory beginning in address <code>0</code></strong>, for our Hack computer is programmed to start executing the program beginning with address <code>0</code>.</li>
+<li>So we first set <code>SP = 256</code>. By doing this, it will determined that the stack should begin in this address in the whole stream.</li>
 <li>Then we <code>call Sys.init</code>.</li>
-</ul></li>
+</ul>
+</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SP = 256</span><br><span class="line">Call Sys.init</span><br></pre></td></tr></table></figure>
 
@@ -1637,127 +1540,112 @@ stream.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
-Implementation</h1>
-<h3 id="1the-callers-view">1.The caller&apos;s view</h3>
-<p>&#x2003;&#x2003;In the calling function&apos;s view:</p>
+          <h1 id="710710710function-call-and-return-implementation"><a class="markdownIt-Anchor" href="#710function-call-and-return-implementation"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.10.</mn></mrow><annotation encoding="application/x-tex">7.10.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">1</span><span class="mord">0</span><span class="mord">.</span></span></span></span>Function Call and Return Implementation</h1>
+<h3 id="1the-callers-view"><a class="markdownIt-Anchor" href="#1the-callers-view"></a> 1.The caller&#x2019;s view</h3>
+<p>&#x2003;&#x2003;In the calling function&#x2019;s view:</p>
 <ul>
-<li>Before calling another function, I must <strong>push as many
-arguments as the function expects to get</strong>;</li>
-<li>Next, I invoke the function using
-<code>call functionName nArgs</code>;</li>
-<li>After the called function returns, the argument values that I pushed
-before the call have disappeared from the stack, and <strong>a return
-value (that always exists) appears at the top of the
-stack</strong>;</li>
-<li>After the called function returns, <strong>all my memory segments
-are exactly the same as they were before the call</strong> (except that
-temp is undefined and some values of my static segment may have
-changed).</li>
+<li>Before calling another function, I must <strong>push as many arguments as the function expects to get</strong>;</li>
+<li>Next, I invoke the function using <code>call functionName nArgs</code>;</li>
+<li>After the called function returns, the argument values that I pushed before the call have disappeared from the stack, and <strong>a return value (that always exists) appears at the top of the stack</strong>;</li>
+<li>After the called function returns, <strong>all my memory segments are exactly the same as they were before the call</strong> (except that temp is undefined and some values of my static segment may have changed).</li>
 </ul>
-<h3 id="2the-callees-view">2.The callee&apos;s view</h3>
-<p>&#x2003;&#x2003;In the called function&apos;s view:</p>
+<h3 id="2the-callees-view"><a class="markdownIt-Anchor" href="#2the-callees-view"></a> 2.The callee&#x2019;s view</h3>
+<p>&#x2003;&#x2003;In the called function&#x2019;s view:</p>
 <ul>
-<li>Before I start executing, <strong>my<code>argument</code> segment
-has been initialized with the argument values passed by the
-caller</strong>.</li>
-<li>My <strong><code>local</code> variables segment has been allocated
-and initialized to zeros</strong>.</li>
-<li>My <code>static</code> segment has been set to <strong>the
-<code>static</code> segment of the VM file to which I belong</strong>
-(memory segments <code>this</code>, <code>that</code>,
-<code>pointer</code>, and <code>temp</code> are undefined upon
-entry).</li>
+<li>Before I start executing, <strong>my<code> argument</code> segment has been initialized with the argument values passed by the caller</strong>.</li>
+<li>My <strong><code>local</code> variables segment has been allocated and initialized to zeros</strong>.</li>
+<li>My <code>static</code> segment has been set to <strong>the <code>static</code> segment of the VM file to which I belong</strong> (memory segments <code>this</code>, <code>that</code>, <code>pointer</code>, and <code>temp</code> are undefined upon entry).</li>
 <li>My working stack is empty.</li>
-<li>Before returning, I must <strong>push a value onto the
-stack</strong>.</li>
+<li>Before returning, I must <strong>push a value onto the stack</strong>.</li>
 </ul>
-<h3 id="3handling-call">3.Handling <code>call</code></h3>
+<h3 id="3handling-call"><a class="markdownIt-Anchor" href="#3handling-call"></a> 3.Handling <code>call</code></h3>
 <p>&#x2003;&#x2003;We can implement the VM code by these steps:</p>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image.png"></p>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image.png" alt></p>
 <p>&#x2003;&#x2003;In terms of <code>call</code>, we do these steps:</p>
-<ol type="1">
-<li><p>Push a label onto the stack, and use the same label when we are
-going to return after the called function terminates.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push returnAddress</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Push some label that we generate to <strong>save the memory
-segment of the caller</strong>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">push LCL</span><br><span class="line">push ARG</span><br><span class="line">push THIS</span><br><span class="line">push THAT</span><br></pre></td></tr></table></figure></p></li>
-<li><p>The <code>argument</code> should <strong>be repositioned for the
-called function</strong>, and we should reposition it at the beginning
-of the <code>ARG</code> segment:</p>
-<ul>
-<li>We can calculate the address, because we know how many values we
-pushed. Say we push 5 values the we do : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARG = SP - 5</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>Push the <code>local</code> segment to insure that the function
-can visit its local variables correctly : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCL = SP</span><br></pre></td></tr></table></figure></p></li>
-<li><p>We execute the called function by simply writing the command
-<code>goto nameOfFunction</code>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto functionName</span><br></pre></td></tr></table></figure></p></li>
-<li><p>We insert the <code>returnAddress</code> label, so that when the
-function has been executed, we can get back to the place we invoke it :
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(returnAddress) //Declares a label for the return-address</span><br></pre></td></tr></table></figure></p></li>
+<ol>
+<li>Push a label onto the stack, and use the same label when we are going to return after the called function terminates.</li>
 </ol>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<h3 id="4handling-function">4.Handling <code>function</code></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push returnAddress</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Push some label that we generate to <strong>save the memory segment of the caller</strong>:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">push LCL</span><br><span class="line">push ARG</span><br><span class="line">push THIS</span><br><span class="line">push THAT</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p>The <code>argument</code> should <strong>be repositioned for the called function</strong>, and we should reposition it at the beginning of the <code>ARG</code> segment:</p>
+<ul>
+<li>We can calculate the address, because we know how many values we pushed. Say we push 5 values the we do :</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARG = SP - 5</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>Push the <code>local</code> segment to insure that the function can visit its local variables correctly :</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCL = SP</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>We execute the called function by simply writing the command <code>goto nameOfFunction</code>:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto functionName</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>We insert the <code>returnAddress</code> label, so that when the function has been executed, we can get back to the place we invoke it :</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(returnAddress) //Declares a label for the return-address</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-1.png" alt></p>
+<h3 id="4handling-function"><a class="markdownIt-Anchor" href="#4handling-function"></a> 4.Handling <code>function</code></h3>
 <p>&#x2003;&#x2003;The big picture of handling <code>function</code> is that:</p>
 <ul>
-<li>The first thing translator does is <strong>it takes the function
-name and generates a label</strong>, and the label will serve as
-<strong>the entry point to the translated assembly code of the
-function</strong>.</li>
-<li>We simply write some assembly code that <strong>handles the setting
-up of the function&apos;s execution</strong>.</li>
+<li>The first thing translator does is <strong>it takes the function name and generates a label</strong>, and the label will serve as <strong>the entry point to the translated assembly code of the function</strong>.</li>
+<li>We simply write some assembly code that <strong>handles the setting up of the function&#x2019;s execution</strong>.</li>
 </ul>
-<ol type="1">
+<ol>
 <li>We take the function name and generate its label:</li>
-<li>Since we know how many local variables we have to create, we do
-<code>push 0</code> <code>nVars</code> times. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(functionName)</span><br><span class="line">	//repeat nVars times</span><br><span class="line">	push 0</span><br></pre></td></tr></table></figure></li>
+<li>Since we know how many local variables we have to create, we do <code>push 0</code> <code>nVars</code> times.</li>
 </ol>
-<h3 id="4handling-return">4.Handling <code>return</code></h3>
-<p>&#x2003;&#x2003;After setting up, the function can start doing its thing. We need
-to generate assembly code that <strong>moves the return value to the
-caller, reinstates the caller&apos;s state, and finally <code>goto</code> the
-return address</strong>.</p>
-<ol type="1">
-<li>Create some temporary variable (called <code>endFrame</code>) and
-assign the value of <code>LCL</code> to it: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endFrame = LCL</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(functionName)</span><br><span class="line">	//repeat nVars times</span><br><span class="line">	push 0</span><br></pre></td></tr></table></figure>
+<h3 id="4handling-return"><a class="markdownIt-Anchor" href="#4handling-return"></a> 4.Handling <code>return</code></h3>
+<p>&#x2003;&#x2003;After setting up, the function can start doing its thing. We need to generate assembly code that <strong>moves the return value to the caller, reinstates the caller&#x2019;s state, and finally <code>goto</code> the return address</strong>.</p>
+<ol>
+<li>Create some temporary variable (called <code>endFrame</code>) and assign the value of <code>LCL</code> to it:</li>
 </ol>
-<p>&#x2003;&#x2003;If you look at the stack diagram, you will see that
-<code>endFrame</code> indeed <strong>points at the end of the frame in
-the host RAM</strong>.</p>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<ol start="2" type="1">
-<li><p>Since we should put the return value at the top of the stack, say
-we have 5 values, the <code>endFrame - 5</code> will be the exact return
-address.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endFrame = LCL</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;If you look at the stack diagram, you will see that <code>endFrame</code> indeed <strong>points at the end of the frame in the host RAM</strong>.</p>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-2.png" alt></p>
+<ol start="2">
+<li>
+<p>Since we should put the return value at the top of the stack, say we have 5 values, the <code>endFrame - 5</code> will be the exact return address.</p>
 <ul>
-<li>We need to use <code>*</code> to look inside and get the address.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retaddr = *(endFrame - 5)</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>Reposition the return value for the caller.</p>
-<ul>
-<li>The value should be copied to <code>argument 0</code>, and we
-already have a pointer <code>ARG</code> located in the position</li>
-<li><code>pop</code> is going to retrieve the return value off the
-stack. We take this value and put it in <code>ARG</code>.
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*ARG = pop()</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>The caller expects to see a return value and continue to do its
-work, so the stack pointer should <strong>be just after
-<code>ARG</code></strong>.<br>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SP = ARG + 1</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Then we can begin to recover the various segments that we saved
-on the stack before. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">THAT = *(endFrame - 1)</span><br><span class="line">THIS = *(endFrame - 2)</span><br><span class="line">ARG = *(endFrame - 3)</span><br><span class="line">LCL = *(endFrame - 4)</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Finally we can jump to the return address we copied before:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto retAddr</span><br></pre></td></tr></table></figure></p></li>
+<li>We need to use <code>*</code> to look inside and get the address.</li>
+</ul>
+</li>
 </ol>
-<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retaddr = *(endFrame - 5)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p>Reposition the return value for the caller.</p>
 <ul>
-<li>Every thing below <code>SP</code> is recycled. <strong>The next push
-is going to override the memory location where <code>SP</code>
-shows</strong>.</li>
-<li>The caller will see the return value at the top of its working
-stack.</li>
+<li>The value should be copied to <code>argument 0</code>, and we already have a pointer <code>ARG</code> located in the position</li>
+<li><code>pop</code> is going to retrieve the return value off the stack. We take this value and put it in <code>ARG</code>.</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*ARG = pop()</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>The caller expects to see a return value and continue to do its work, so the stack pointer should <strong>be just after <code>ARG</code></strong>.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SP = ARG + 1</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Then we can begin to recover the various segments that we saved on the stack before.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">THAT = *(endFrame - 1)</span><br><span class="line">THIS = *(endFrame - 2)</span><br><span class="line">ARG = *(endFrame - 3)</span><br><span class="line">LCL = *(endFrame - 4)</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>Finally we can jump to the return address we copied before:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto retAddr</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-3.png" alt></p>
+<ul>
+<li>Every thing below <code>SP</code> is recycled. <strong>The next push is going to override the memory location where <code>SP</code> shows</strong>.</li>
+<li>The caller will see the return value at the top of its working stack.</li>
 <li>The stack pointer will point at the next world in the memory.</li>
 </ul>
 
@@ -1863,97 +1751,80 @@ stack.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="79run-time-simulation"><span class="math inline">\(7.9.\)</span>Run-time Simulation</h1>
-<h3 id="1run-time-example">1.Run-time example</h3>
+          <h1 id="797979run-time-simulation"><a class="markdownIt-Anchor" href="#79run-time-simulation"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.9.</mn></mrow><annotation encoding="application/x-tex">7.9.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">9</span><span class="mord">.</span></span></span></span>Run-time Simulation</h1>
+<h3 id="1run-time-example"><a class="markdownIt-Anchor" href="#1run-time-example"></a> 1.Run-time example</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int main() {</span><br><span class="line">	return factorial(3);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">int factorial(int n) {</span><br><span class="line">	if (n == 1) return 1;</span><br><span class="line">	else return n * factorial(n - 1);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>When compiling the <code>main</code> part, we:</p>
+<li>
+<p>When compiling the <code>main</code> part, we:</p>
 <ul>
 <li><code>push 3</code></li>
 <li><code>call factorial</code></li>
 <li><code>return</code></li>
-</ul></li>
+</ul>
+</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function main</span><br><span class="line">	push 3</span><br><span class="line">	call factorial</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>Then we start to compile the function:</p>
+<li>
+<p>Then we start to compile the function:</p>
 <ul>
 <li>We declare the function.</li>
 <li>We evaluate the condition <code>n==1</code></li>
-<li>If the conitional statement returns false, we <code>push n</code>,
-and compute <code>factorial(n - 1)</code></li>
-</ul></li>
+<li>If the conitional statement returns false, we <code>push n</code>, and compute <code>factorial(n - 1)</code></li>
+</ul>
+</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function factorial(n) </span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	eq </span><br><span class="line">	if-goto BASECASE</span><br><span class="line">	</span><br><span class="line">	push n</span><br><span class="line">	push n</span><br><span class="line">	pusn 1</span><br><span class="line">	sub</span><br><span class="line">	call factorial</span><br><span class="line">	call mult</span><br><span class="line">	return</span><br><span class="line"></span><br><span class="line">label BASECASE</span><br><span class="line">	push 1</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The pseudo VM code can be translated into these VM codes:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	call factorial 1</span><br><span class="line">	return</span><br><span class="line"></span><br><span class="line">function factorial 0</span><br><span class="line">	push argument 0</span><br><span class="line">	push constant 1</span><br><span class="line">	eq</span><br><span class="line">	if-goto BASECASE</span><br><span class="line"></span><br><span class="line">	push argument 0</span><br><span class="line">	push argument 0</span><br><span class="line">	push constant 1</span><br><span class="line">	sub</span><br><span class="line">	call factorial 1</span><br><span class="line">	call mult 2</span><br><span class="line">	return </span><br><span class="line"></span><br><span class="line">label BASECASE</span><br><span class="line">	push constant 1</span><br><span class="line">	return</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The pseudo VM code can be translated into these VM codes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	call factorial 1</span><br><span class="line">	return</span><br><span class="line"></span><br><span class="line">function factorial 0</span><br><span class="line">	push argument 0</span><br><span class="line">	push constant 1</span><br><span class="line">	eq</span><br><span class="line">	if-goto BASECASE</span><br><span class="line"></span><br><span class="line">	push argument 0</span><br><span class="line">	push argument 0</span><br><span class="line">	push constant 1</span><br><span class="line">	sub</span><br><span class="line">	call factorial 1</span><br><span class="line">	call mult 2</span><br><span class="line">	return </span><br><span class="line"></span><br><span class="line">label BASECASE</span><br><span class="line">	push constant 1</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;Then what happen during the runtime?</p>
-<ol type="1">
-<li><code>main</code> starts running, and informs that it has 0 local
-variable.</li>
+<ol>
+<li><code>main</code> starts running, and informs that it has 0 local variable.</li>
 <li><code>main</code> pushes, so it starts with an empty stack.</li>
 <li><code>push constant 3</code>, then we get a 3 on the stack.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image.png"></p>
-<ol start="4" type="1">
-<li><code>call factorial 1</code>, the 1 informs that 1 argument was
-pushed onto the stack. So we can <strong>refer to the topmost value in
-the stack as argument 0</strong>.</li>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image.png" alt></p>
+<ol start="4">
+<li><code>call factorial 1</code>, the 1 informs that 1 argument was pushed onto the stack. So we can <strong>refer to the topmost value in the stack as argument 0</strong>.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-1.png"></p>
-<h3 id="2callee-process">2.Callee process</h3>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-1.png" alt></p>
+<h3 id="2callee-process"><a class="markdownIt-Anchor" href="#2callee-process"></a> 2.Callee process</h3>
 <p>&#x2003;&#x2003;Then we begin to deal with the <code>call</code> command.</p>
-<ol type="1">
-<li>We first <strong>save the frame of <code>main</code> onto the
-stack</strong>. Then we jump to execute <code>factorial</code>.</li>
+<ol>
+<li>We first <strong>save the frame of <code>main</code> onto the stack</strong>. Then we jump to execute <code>factorial</code>.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-2.png"></p>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-2.png" alt></p>
 <ul>
-<li>The blue dot shows the <em>return address</em> in the given code.
-And this is exactly where we want to return to after
-<code>factorial</code> finishes.</li>
+<li>The blue dot shows the <em>return address</em> in the given code. And this is exactly where we want to return to after <code>factorial</code> finishes.</li>
 </ul>
-<ol start="2" type="1">
-<li>The <code>eq</code> consumes <code>argument 0</code> and
-<code>constant 1</code>, so <strong>the overall effect of the first 4
-commands on the stack is <code>nil</code></strong>.</li>
-<li>We <code>push argument 0</code>, <code>push argument 0</code>,
-<code>push constant 1</code>, <code>sub</code>, so we are going to get 3
-and 2 on the stack.</li>
+<ol start="2">
+<li>The <code>eq</code> consumes <code>argument 0</code> and <code>constant 1</code>, so <strong>the overall effect of the first 4 commands on the stack is <code>nil</code></strong>.</li>
+<li>We <code>push argument 0</code>, <code>push argument 0</code>, <code>push constant 1</code>, <code>sub</code>, so we are going to get 3 and 2 on the stack.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-3.png"></p>
-<ol start="4" type="1">
-<li><code>call factorial 1</code>, we <strong>inform the implementation
-that 1 argument has been pushed onto the stack</strong>, we can refer to
-it as <code>argument 0</code>.</li>
-<li>We want to issue a <code>call</code> command, so the implementation
-is going to <strong>save the frame of the current function</strong>, and
-the return address is the green dot, we save it, too.</li>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-3.png" alt></p>
+<ol start="4">
+<li><code>call factorial 1</code>,  we <strong>inform the implementation that 1 argument has been pushed onto the stack</strong>, we can refer to it as <code>argument 0</code>.</li>
+<li>We want to issue a <code>call</code> command, so the implementation is going to <strong>save the frame of the current function</strong>, and the return address is the green dot, we save it, too.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-4.png"></p>
-<ol start="6" type="1">
-<li>After several calls, we turn to <code>f(1)</code>, and the global
-stack now looks like this:</li>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-4.png" alt></p>
+<ol start="6">
+<li>After several calls, we turn to <code>f(1)</code>, and the global stack now looks like this:</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-5.png"></p>
-<ol start="7" type="1">
-<li>This time 1 equals 1, we jump to <code>BASECASE</code>,
-<code>push constant 1</code> and do a <code>return</code>.</li>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-5.png" alt></p>
+<ol start="7">
+<li>This time 1 equals 1, we jump to <code>BASECASE</code>, <code>push constant 1</code> and do a <code>return</code>.</li>
 </ol>
-<p>&#x2003;&#x2003;When the inplementation encounters the <code>return</code> command,
-it:</p>
-<ol type="1">
+<p>&#x2003;&#x2003;When the inplementation encounters the <code>return</code> command, it:</p>
+<ol>
 <li>Gets the return address off the stack.</li>
-<li>Copy the return value. In this case, it&apos;s <code>argument 0</code>,
-so we copy 1 on <code>arg0</code>.</li>
-<li>After <code>return</code>, we can recycle the current frame, which
-is no more relevant.</li>
+<li>Copy the return value. In this case, it&#x2019;s <code>argument 0</code>, so we copy 1 on <code>arg0</code>.</li>
+<li>After <code>return</code>, we can recycle the current frame, which is no more relevant.</li>
 </ol>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-6.png"></p>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-6.png" alt></p>
 <p>&#x2003;&#x2003;And we do this step again and again:</p>
-<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-7.png"></p>
-<p>&#x2003;&#x2003;During the process, the caller is completely oblivious of all the
-drama, it takes part behind the scene.</p>
+<p><img src="/2024/04/11/7-9-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%A8%A1%E6%8B%9F/image-7.png" alt></p>
+<p>&#x2003;&#x2003;During the process, the caller is completely oblivious of all the drama, it takes part behind the scene.</p>
 
       
     </div>

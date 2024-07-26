@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(4.2.\)Logical Design and the HCL 1.Combinational Circuits &amp; HCL Boolean Expressions &#x2003;&#x2003;By assembling a number of logic gates into a network, we can construct computational blocks known as com">
+    <meta name="description" content="4.2.4.2.4.2.Logical Design and the HCL  1.Combinational Circuits &amp; HCL Boolean Expressions &#x2003;&#x2003;By assembling a number of logic gates into a network, we can construct computational blocks known as c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.2.Logical Design and the HCL">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/07/24/4-2-Logical-Design-and-the-HCL/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(4.2.\)Logical Design and the HCL 1.Combinational Circuits &amp; HCL Boolean Expressions &#x2003;&#x2003;By assembling a number of logic gates into a network, we can construct computational blocks known as com">
+<meta property="og:description" content="4.2.4.2.4.2.Logical Design and the HCL  1.Combinational Circuits &amp; HCL Boolean Expressions &#x2003;&#x2003;By assembling a number of logic gates into a network, we can construct computational blocks known as c">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/07/24/4-2-Logical-Design-and-the-HCL/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/07/24/4-2-Logical-Design-and-the-HCL/image-1.png">
@@ -147,10 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#42logical-design-and-the-hcl"><span class="nav-text">\(4.2.\)Logical Design and the HCL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1combinationalcircuits-amp-hcl-boolean-expressions"><span class="nav-text">1.Combinational
-Circuits &amp; HCL Boolean Expressions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2word-levelcombinational-circuits-and-hcl-integer-expression"><span class="nav-text">2.Word-Level
-Combinational Circuits and HCL Integer Expression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3set-membership"><span class="nav-text">3.Set Membership</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4memory-and-clock"><span class="nav-text">4.Memory and Clock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#asummary"><span class="nav-text">&#x2003;&#x2003;\(a.\)Summary</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bregister-file"><span class="nav-text">&#x2003;&#x2003;\(b.\)Register file</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cdatamemory"><span class="nav-text">&#x2003;&#x2003;\(c.\)Data
-memory</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#424242logical-design-and-the-hcl"><span class="nav-text"> 4.2.4.2.4.2.Logical Design and the HCL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1combinational-circuits-amp-hcl-boolean-expressions"><span class="nav-text"> 1.Combinational Circuits &amp; HCL Boolean Expressions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2word-level-combinational-circuits-and-hcl-integer-expression"><span class="nav-text"> 2.Word-Level Combinational Circuits and HCL Integer Expression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3set-membership"><span class="nav-text"> 3.Set Membership</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4memory-and-clock"><span class="nav-text"> 4.Memory and Clock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aaasummary"><span class="nav-text"> &#x2003;&#x2003;a.a.a.Summary</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bbbregister-file"><span class="nav-text"> &#x2003;&#x2003;b.b.b.Register file</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cccdata-memory"><span class="nav-text"> &#x2003;&#x2003;c.c.c.Data memory</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -292,175 +289,155 @@ memory</span></a></li></ol></li></ol></li></ol></div>
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="42logical-design-and-the-hcl"><span class="math inline">\(4.2.\)</span>Logical Design and the HCL</h1>
-<h3 id="1combinationalcircuits-amp-hcl-boolean-expressions">1.Combinational
-Circuits &amp; HCL Boolean Expressions</h3>
-<p>&#x2003;&#x2003;By assembling a number of logic gates into a network, we can
-construct computational blocks known as <em>combinational circuits</em>.
-There are several restrictions:</p>
-<ol type="1">
-<li><p>Every logic gate input must be connected to exactly one of the
-following:</p>
-<ol type="1">
-<li><p>one of the system inputs (known as a <em>primary
-input</em>)</p></li>
-<li><p>the output connection of some memory element</p></li>
-<li><p>the output of some logic gate.</p></li>
-</ol></li>
-<li><p>The outputs of two or more logic gates cannot be connected
-together. <strong>Otherwise, the two could try to drive the wire toward
-different voltages</strong>, possibly causing an invalid voltage or a
-circuit malfunction.</p></li>
-<li><p>The network must be acyclic. That is, there cannot be a path
-through a series of gates that forms a loop in the network.</p></li>
+    <div class="post-body" itemprop="articleBody"><h1 id="424242logical-design-and-the-hcl"><a class="markdownIt-Anchor" href="#42logical-design-and-the-hcl"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4.2.</mn></mrow><annotation encoding="application/x-tex">4.2.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span></span></span></span>Logical Design and the HCL</h1>
+<h3 id="1combinational-circuits-amp-hcl-boolean-expressions"><a class="markdownIt-Anchor" href="#1combinational-circuits-hcl-boolean-expressions"></a> 1.Combinational Circuits &amp; HCL Boolean Expressions</h3>
+<p>&#x2003;&#x2003;By assembling a number of logic gates into a network, we can construct computational blocks known as <em>combinational circuits</em>. There are several restrictions:</p>
+<ol>
+<li>
+<p>Every logic gate input must be connected to exactly one of the following:</p>
+<ol>
+<li>
+<p>one of the system inputs (known as a <em>primary input</em>)</p>
+</li>
+<li>
+<p>the output connection of some memory element</p>
+</li>
+<li>
+<p>the output of some logic gate.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>The outputs of two or more logic gates cannot be connected together. <strong>Otherwise, the two could try to drive the wire toward different voltages</strong>, possibly causing an invalid voltage or a circuit malfunction.</p>
+</li>
+<li>
+<p>The network must be acyclic. That is, there cannot be a path through a series of gates that forms a loop in the network.</p>
+</li>
 </ol>
 <p>&#x2003;&#x2003;The following shows an example of a combinational circuit:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image.png"></p>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image.png" alt></p>
 <p>&#x2003;&#x2003;The network is written in HCL as:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool eq = (a &amp;&amp; b) || (!a &amp;&amp; !b)</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The HCL uses C-sytle syntax. However, we don&apos;t view the code as
-performing a computation and assigning the result to some memory
-location. Instead, it is simply a way to <strong>give a name to an
-expression</strong>.</p>
+<p>&#x2003;&#x2003;The HCL uses C-sytle syntax. However, we don&#x2019;t view the code as performing a computation and assigning the result to some memory location. Instead, it is simply a way to <strong>give a name to an expression</strong>.</p>
 <p>&#x2003;&#x2003;There are some other differences that are worth noting:</p>
 <ul>
-<li><p>The combinational circuit has the property that the outputs
-continually respond to changes in the inputs. By contrast, a C
-expression <strong>is only evaluated when it is encountered</strong>
-during the execution of a program.</p></li>
-<li><p>The combinational circuit only operates over the bit value 0 and
-1.</p></li>
-<li><p>Logical expressions in C have the property that <strong>they
-might only be partially evaluated</strong>. If the outcome of an and or
-or operation can be determined by just evaluating the first argument,
-then the second argument will not be evaluated. In contrast,
-combinational logic <strong>doesn&apos;t have any partial evaluation
-rules</strong>.</p></li>
+<li>
+<p>The combinational circuit has the property that the outputs continually respond to changes in the inputs. By contrast, a C expression <strong>is only evaluated when it is encountered</strong> during the execution of a program.</p>
+</li>
+<li>
+<p>The combinational circuit only operates over the bit value 0 and 1.</p>
+</li>
+<li>
+<p>Logical expressions in C have the property that <strong>they might only be partially evaluated</strong>. If the outcome of an and or or operation can be determined by just evaluating the first argument, then the second argument will not be evaluated.  In contrast, combinational logic <strong>doesn&#x2019;t have any partial evaluation rules</strong>.</p>
+</li>
 </ul>
-<h3 id="2word-levelcombinational-circuits-and-hcl-integer-expression">2.Word-Level
-Combinational Circuits and HCL Integer Expression</h3>
-<p>&#x2003;&#x2003;Combinational circuits that perform word-level computations are
-constructed using logic gates to compute the individual bits of the
-output word, based on the individual bits of the input words. The
-following circuit tests if two words A and B are equal:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-1.png"></p>
-<p>&#x2003;&#x2003;HCL allows words to be compared for equality. So we can express the
-circuit as <code>bool Eq = (A == B)</code></p>
+<h3 id="2word-level-combinational-circuits-and-hcl-integer-expression"><a class="markdownIt-Anchor" href="#2word-level-combinational-circuits-and-hcl-integer-expression"></a> 2.Word-Level Combinational Circuits and HCL Integer Expression</h3>
+<p>&#x2003;&#x2003;Combinational circuits that perform word-level computations are constructed using logic gates to compute the individual bits of the output word, based on the individual bits of the input words. The following circuit tests if two words A and B are equal:</p>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-1.png" alt></p>
+<p>&#x2003;&#x2003;HCL allows words to be compared for equality. So we can express the circuit as <code>bool Eq = (A == B)</code></p>
 <hr>
-<p>&#x2003;&#x2003;Multiplexing functions are described in HCL using <em>casing
-expressions</em>. A case expressions has the following general form:</p>
-<p><span class="math display">\[
-\begin{bmatrix}
+<p>&#x2003;&#x2003;Multiplexing functions are described in HCL using <em>casing expressions</em>. A case expressions has the following general form:</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo fence="true">[</mo><mtable rowspacing="0.15999999999999992em" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mtext>select</mtext><mn>1</mn></msub><mo>:</mo><msub><mtext>expr</mtext><mn>1</mn></msub><mo separator="true">;</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mtext>select</mtext><mn>2</mn></msub><mo>:</mo><msub><mtext>expr</mtext><mn>2</mn></msub><mo separator="true">;</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi><mi mathvariant="normal">&#x22EE;</mi><mpadded height="+0em" voffset="0em"><mspace mathbackground="black" width="0em" height="1.5em"></mspace></mpadded></mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mtext>select</mtext><mi>k</mi></msub><mo>:</mo><msub><mtext>expr</mtext><mi>k</mi></msub><mo separator="true">;</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
 \text{select}_1 : \text{expr}_1; \\
 \text{select}_2 : \text{expr}_2; \\
 \vdots \\
 \text{select}_k : \text{expr}_k;
 \end{bmatrix}
-\]</span></p>
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.459999999999999em;vertical-align:-2.4799999999999995em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.953995em;"><span style="top:-1.3499850000000007em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A3;</span></span></span><span style="top:-2.4999850000000006em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A2;</span></span></span><span style="top:-3.0959850000000007em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A2;</span></span></span><span style="top:-3.6919850000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A2;</span></span></span><span style="top:-3.712975em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A2;</span></span></span><span style="top:-4.953995em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A1;</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:2.4500349999999997em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.9799999999999995em;"><span style="top:-5.8275em;"><span class="pstrut" style="height:3.6875em;"></span><span class="mord"><span class="mord"><span class="mord text"><span class="mord">select</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord text"><span class="mord">expr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mpunct">;</span></span></span><span style="top:-4.6275em;"><span class="pstrut" style="height:3.6875em;"></span><span class="mord"><span class="mord"><span class="mord text"><span class="mord">select</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord text"><span class="mord">expr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mpunct">;</span></span></span><span style="top:-2.7674999999999996em;"><span class="pstrut" style="height:3.6875em;"></span><span class="mord"><span class="mord"><span class="mord">&#x22EE;</span><span class="mord rule" style="border-right-width:0em;border-top-width:1.5em;bottom:0em;"></span></span></span></span><span style="top:-1.5675000000000006em;"><span class="pstrut" style="height:3.6875em;"></span><span class="mord"><span class="mord"><span class="mord text"><span class="mord">select</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord text"><span class="mord">expr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.24196799999999993em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mpunct">;</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:2.4799999999999995em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.953995em;"><span style="top:-1.3499850000000007em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A6;</span></span></span><span style="top:-2.4999850000000006em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A5;</span></span></span><span style="top:-3.0959850000000007em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A5;</span></span></span><span style="top:-3.6919850000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A5;</span></span></span><span style="top:-3.712975em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A5;</span></span></span><span style="top:-4.953995em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>&#x23A4;</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:2.4500349999999997em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
 <ul>
-<li><p><span class="math inline">\(select_i\)</span> indicates when this
-case should be selected.</p></li>
-<li><p>The integer expression <span class="math inline">\(expr_i\)</span> indicates the resulting
-value.</p></li>
-<li><p>The selection expressions can be <strong>arbitrary Boolean
-expressions</strong>, and there can be <strong>an arbitrary number of
-cases</strong>.</p></li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">select_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mord mathnormal">c</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> indicates when this case should be selected.</p>
+</li>
+<li>
+<p>The integer expression <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>x</mi><mi>p</mi><msub><mi>r</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">expr_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> indicates the resulting value.</p>
+</li>
+<li>
+<p>The selection expressions can be <strong>arbitrary Boolean expressions</strong>, and there can be <strong>an arbitrary number of cases</strong>.</p>
+</li>
 </ul>
-<p>&#x2003;&#x2003;Logically, the selection expressions are evaluated in sequence, and
-the case <strong>for the first one yielding 1 is selected</strong>.</p>
-<p>&#x2003;&#x2003;For example, the figure below shows the circuit of the word-level
-multiplexor:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-2.png"></p>
+<p>&#x2003;&#x2003;Logically, the selection expressions are evaluated in sequence, and the case <strong>for the first one yielding 1 is selected</strong>.</p>
+<p>&#x2003;&#x2003;For example, the figure below shows the circuit of the word-level multiplexor:</p>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-2.png" alt></p>
 <p>&#x2003;&#x2003;it can be expressed in HCL as:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word Out = [</span><br><span class="line">    s: A;</span><br><span class="line">    1: B;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;And a 4-way multiplexor can be expressed in HCL as:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word Out4 = [</span><br><span class="line">    !s1 &amp;&amp; !s0: A; </span><br><span class="line">    !s1       : B;</span><br><span class="line">    !s0       : C;</span><br><span class="line">    1         : D; </span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;If we want to design a logic circuit that finds the minimum value
-among a set of words A, B and C, we can write the following HCL
-program:</p>
+<p>&#x2003;&#x2003;If we want to design a logic circuit that finds the minimum value among a set of words A, B and C, we can write the following HCL program:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word MIN3 = [</span><br><span class="line">    A &lt;= B &amp;&amp; A &lt;= C: A;</span><br><span class="line">    B &lt;= A &amp;&amp; B &lt;= C: B;</span><br><span class="line">    1               : C;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h3 id="3set-membership">3.Set Membership</h3>
+<h3 id="3set-membership"><a class="markdownIt-Anchor" href="#3set-membership"></a> 3.Set Membership</h3>
 <p>&#x2003;&#x2003;The general form of a set membership test is:</p>
-<p><span class="math display">\[
-\text{iexpr} \in \{\text{iexpr}_1, \text{iexpr}_2, \ldots,
-\text{iexpr}_k\}
-\]</span></p>
-<p>&#x2003;&#x2003;where the value being tested(<span class="math inline">\(iexpr\)</span>) and the candidate matches(<span class="math inline">\(iexpr_1\)</span> through <span class="math inline">\(iexpr_k\)</span>) are <strong>all integer
-expressions</strong>.</p>
-<h3 id="4memory-and-clock">4.Memory and Clock</h3>
-<h4 id="asummary">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Summary</h4>
-<p>&#x2003;&#x2003;Combinational circuits don&apos;t store any information, they simply
-react to the signals at their inputs. So we must introduce devices that
-<strong>store information represented as bits</strong>.</p>
-<p>&#x2003;&#x2003;Our storage devices are all controlled by a single clock, a
-periodic signal that <strong>determines when new values are to be loaded
-into the devices</strong>.</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>iexpr</mtext><mo>&#x2208;</mo><mo stretchy="false">{</mo><msub><mtext>iexpr</mtext><mn>1</mn></msub><mo separator="true">,</mo><msub><mtext>iexpr</mtext><mn>2</mn></msub><mo separator="true">,</mo><mo>&#x2026;</mo><mo separator="true">,</mo><msub><mtext>iexpr</mtext><mi>k</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\text{iexpr} \in \{\text{iexpr}_1, \text{iexpr}_2, \ldots, \text{iexpr}_k\}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8623000000000001em;vertical-align:-0.19444em;"></span><span class="mord text"><span class="mord">iexpr</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&#x2208;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord text"><span class="mord">iexpr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord text"><span class="mord">iexpr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">&#x2026;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord text"><span class="mord">iexpr</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.24196799999999993em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></span></p>
+<p>&#x2003;&#x2003;where the value being tested(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>e</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">iexpr</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span>) and the candidate matches(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>e</mi><mi>x</mi><mi>p</mi><msub><mi>r</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">iexpr_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> through <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>e</mi><mi>x</mi><mi>p</mi><msub><mi>r</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">iexpr_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">&#x200B;</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>) are <strong>all integer expressions</strong>.</p>
+<h3 id="4memory-and-clock"><a class="markdownIt-Anchor" href="#4memory-and-clock"></a> 4.Memory and Clock</h3>
+<h4 id="aaasummary"><a class="markdownIt-Anchor" href="#asummary"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">a.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mord">.</span></span></span></span>Summary</h4>
+<p>&#x2003;&#x2003;Combinational circuits don&#x2019;t store any information, they simply react to the signals at their inputs. So we must introduce devices that <strong>store information represented as bits</strong>.</p>
+<p>&#x2003;&#x2003;Our storage devices are all controlled by a single<br>
+clock, a periodic signal that <strong>determines when new values are to be loaded into the devices</strong>.</p>
 <p>&#x2003;&#x2003;We consider two classes of memory devices:</p>
 <ul>
-<li><p><em>Clocked registers(simple registers)</em>: It stores
-individual bits or words. <strong>The clock signal controls the loading
-of the register with the value at its input</strong>.</p>
+<li>
+<p><em>Clocked registers(simple registers)</em>: It stores individual bits or words. <strong>The clock signal controls the loading of the register with the value at its input</strong>.</p>
 <ul>
-<li>Our Y86-64 processors will use clocked registers to hold the program
-counter(PC), the condition codes(CC), and the program status(Stat).</li>
-</ul></li>
-<li><p><em>Random access memories</em>(<em>simply memories</em>):It
-store multiple words, <strong>using an address to select which word
-should be read or written</strong>.</p>
+<li>Our Y86-64 processors will use clocked registers to hold the program counter(PC), the condition codes(CC), and the program status(Stat).</li>
+</ul>
+</li>
+<li>
+<p><em>Random access memories</em>(<em>simply memories</em>):It store multiple words, <strong>using an address to select which word should be read or written</strong>.</p>
 <ul>
-<li><p>Examples of random access memories include</p>
+<li>
+<p>Examples of random access memories include</p>
 <ul>
-<li><p>the virtual memory system of a processor, where a combination of
-hardware and operating system software make it appear to a processor
-that it can access any word within a large address space;</p></li>
-<li><p>the register file, where register identifiers serve as the
-addresses.</p></li>
-</ul></li>
-<li><p>In a Y86-64 processor, <strong>the register file holds the 15
-program registers</strong>(<code>%rax</code> through
-<code>%r14</code>).</p></li>
-</ul></li>
+<li>
+<p>the virtual memory system of a processor, where a combination of hardware and operating system software make it appear to a processor that it can access any word within a large address space;</p>
+</li>
+<li>
+<p>the register file, where register identifiers serve as the addresses.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In a Y86-64 processor, <strong>the register file holds the 15 program registers</strong>(<code>%rax</code> through <code>%r14</code>).</p>
+</li>
+</ul>
+</li>
 </ul>
 <blockquote>
-<p>In hardware, a register <strong>is directly connected to the rest of
-the circuit by its input and output wires</strong>. In machine-level
-programming, the registers <strong>represent a small collection of
-addressable words in the CPU</strong>, where <strong>the addresses
-consist of register IDs</strong>.</p>
+<p>In hardware, a register <strong>is directly connected to the rest of the circuit by its input and output wires</strong>. In machine-level programming, the registers <strong>represent a small collection of addressable words in the CPU</strong>, where <strong>the addresses consist of register IDs</strong>.</p>
 </blockquote>
 <p>&#x2003;&#x2003;The following figure shows the detailed register operation:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-3.png"></p>
-<p>&#x2003;&#x2003;In the figure, the register serves as <strong>barriers between the
-combinational logic</strong> in different parts of the circuit.</p>
-<h4 id="bregister-file">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Register file</h4>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-3.png" alt></p>
+<p>&#x2003;&#x2003;In the figure, the register serves as <strong>barriers between the combinational logic</strong> in different parts of the circuit.</p>
+<h4 id="bbbregister-file"><a class="markdownIt-Anchor" href="#bregister-file"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">b.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord">.</span></span></span></span>Register file</h4>
 <p>&#x2003;&#x2003;The following g diagram shows a typical register file:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-4.png"></p>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-4.png" alt></p>
 <ul>
-<li><p>The <em>multiported</em> RAM allows <strong>multiple read and
-write operations to take place simultaneously</strong>.</p></li>
-<li><p>Each port has an <em>address input</em>, indicating <strong>which
-program register should be selected</strong>, and a <em>data output or
-input</em> <strong>giving a value for that program
-register</strong>.</p></li>
-<li><p>Every time the clock rises, the value on input <code>valW</code>
-is written to the program register indicated by the register ID on input
-<code>dstW</code>.</p>
+<li>
+<p>The <em>multiported</em> RAM allows <strong>multiple read and write operations to take place simultaneously</strong>.</p>
+</li>
+<li>
+<p>Each port has an <em>address input</em>, indicating <strong>which program register should be selected</strong>, and a <em>data output or input</em> <strong>giving a value for that program register</strong>.</p>
+</li>
+<li>
+<p>Every time the clock rises, the value on input <code>valW</code> is written to the program register indicated by the register ID on input <code>dstW</code>.</p>
 <ul>
-<li>When <code>dstW</code> is set to <code>0xF</code>, no program
-register is written.</li>
-</ul></li>
+<li>When <code>dstW</code> is set to <code>0xF</code>, no program register is written.</li>
 </ul>
-<h4 id="cdatamemory">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data
-memory</h4>
+</li>
+</ul>
+<h4 id="cccdata-memory"><a class="markdownIt-Anchor" href="#cdata-memory"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">c.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span><span class="mord">.</span></span></span></span>Data memory</h4>
 <p>&#x2003;&#x2003;The Data memory is used to store program data:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-5.png"></p>
+<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-5.png" alt></p>
 <ul>
-<li><p>This memory has a single address input, a data input for writing,
-and a data output for reading.</p></li>
-<li><p>We set <code>address</code> to the desired address,
-<code>data in</code> to the desired value.</p></li>
-<li><p>The <code>error</code> signal will be set to 1 if the
-<code>address</code> is out of range.</p></li>
+<li>
+<p>This memory has a single address input, a data input for writing, and a data output for reading.</p>
+</li>
+<li>
+<p>We set <code>address</code> to the desired address, <code>data in</code> to the desired value.</p>
+</li>
+<li>
+<p>The <code>error</code> signal will be set to 1 if the <code>address</code> is out of range.</p>
+</li>
 </ul>
 
     </div>

@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(9.5.\)Parser Logic 1.Parsing logic &#x2003;&#x2003;In order to carry out parsing, we are going to build a CompilationEngine class which consist of a set of methods, one method for every non-terminal rule.">
+    <meta name="description" content="9.5.9.5.9.5.Parser Logic  1.Parsing logic &#x2003;&#x2003;In order to carry out parsing, we are going to build a CompilationEngine class which consist of a set of methods, one method for every non-terminal rule.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="9.5.&#x89E3;&#x6790;&#x5668;&#x903B;&#x8F91;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(9.5.\)Parser Logic 1.Parsing logic &#x2003;&#x2003;In order to carry out parsing, we are going to build a CompilationEngine class which consist of a set of methods, one method for every non-terminal rule.">
+<meta property="og:description" content="9.5.9.5.9.5.Parser Logic  1.Parsing logic &#x2003;&#x2003;In order to carry out parsing, we are going to build a CompilationEngine class which consist of a set of methods, one method for every non-terminal rule.">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png">
@@ -143,9 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#95parserlogic"><span class="nav-text">\(9.5.\)Parser
-Logic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1parsing-logic"><span class="nav-text">1.Parsing logic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2parser-design"><span class="nav-text">2.Parser design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3some-observationabout-grammars-and-parsing"><span class="nav-text">3.Some observation
-about grammars and parsing</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#959595parser-logic"><span class="nav-text"> 9.5.9.5.9.5.Parser Logic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1parsing-logic"><span class="nav-text"> 1.Parsing logic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2parser-design"><span class="nav-text"> 2.Parser design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3some-observation-about-grammars-and-parsing"><span class="nav-text"> 3.Some observation about grammars and parsing</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -287,87 +285,67 @@ about grammars and parsing</span></a></li></ol></li></ol></div>
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
-Logic</h1>
-<h3 id="1parsing-logic">1.Parsing logic</h3>
-<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
-<code>CompilationEngine</code> class which consist of <strong>a set of
-methods, one method for every non-terminal rule</strong>.</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="959595parser-logic"><a class="markdownIt-Anchor" href="#95parser-logic"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.5.</mn></mrow><annotation encoding="application/x-tex">9.5.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">.</span><span class="mord">5</span><span class="mord">.</span></span></span></span>Parser Logic</h1>
+<h3 id="1parsing-logic"><a class="markdownIt-Anchor" href="#1parsing-logic"></a> 1.Parsing logic</h3>
+<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a <code>CompilationEngine</code> class which consist of <strong>a set of methods, one method for every non-terminal rule</strong>.</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png" alt></p>
 <ul>
-<li>The code of each <code>compilexxx</code> method follows the
-right-hand side of the rule xxx</li>
-<li>Each <code>compilexxx</code> method is responsible for
-<strong>advancing</strong> and <strong>handling its own part of the
-input</strong>.</li>
+<li>The code of each <code>compilexxx</code> method follows the right-hand side of the rule xxx</li>
+<li>Each <code>compilexxx</code> method is responsible for <strong>advancing</strong> and <strong>handling its own part of the input</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
-<code>compileWhileStatement</code>:</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
-<ol type="1">
-<li><p>We <strong>follow the right-hand side of the rule</strong>, and
-parse the input it dictates.</p>
+<p>&#x2003;&#x2003;To illustrate this, let&#x2019;s focus on one of these methods <code>compileWhileStatement</code>:</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png" alt></p>
+<ol>
+<li>
+<p>We <strong>follow the right-hand side of the rule</strong>, and parse the input it dictates.</p>
 <ul>
-<li>In <code>whileStatement</code>, it says we should expect to see the
-token <code>while</code>. If we find it in the input, we record the
-fact. Then the left parenthesis, and so on and so forth,</li>
-<li>At some point we will get a non-terminal rule like
-<code>expression</code>, then we go to next step:</li>
-</ul></li>
-<li><p>If the right-hand side specifies a non-terminal rule
-<code>xxx</code>, we call the corresponding method
-<code>compilexxx</code></p></li>
-<li><p>We do this recursively untile we exhaust the input.</p></li>
+<li>In <code>whileStatement</code>, it says we should expect to see the token <code>while</code>. If we find it in the input, we record the fact. Then the left parenthesis, and so on and so forth,</li>
+<li>At some point we will get a non-terminal rule like <code>expression</code>, then we go to next step:</li>
+</ul>
+</li>
+<li>
+<p>If the right-hand side specifies a non-terminal rule <code>xxx</code>, we call the corresponding method <code>compilexxx</code></p>
+</li>
+<li>
+<p>We do this recursively untile we exhaust the input.</p>
+</li>
 </ol>
 <p>&#x2003;&#x2003;And to initialize this process, we:</p>
-<ol type="1">
+<ol>
 <li>Advance the tokenizer.</li>
 <li>Call <code>compileWhileStatement</code>.</li>
 </ol>
-<h3 id="2parser-design">2.Parser design</h3>
-<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
-example:</p>
-<ol type="1">
-<li>If we look at the grammar, we first see that you should see a
-<code>while</code> , so we <strong>call a method
-<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
-eat the <code>while</code> token.</li>
+<h3 id="2parser-design"><a class="markdownIt-Anchor" href="#2parser-design"></a> 2.Parser design</h3>
+<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an example:</p>
+<ol>
+<li>If we look at the grammar, we first see that you should see a <code>while</code> , so we <strong>call a method <code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to eat the <code>while</code> token.</li>
 <li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
-<li>We meet a non-terminal rule <code>expression</code>, so we call
-<code>compileExpression();</code></li>
-<li>And so on and so forth...</li>
+<li>We meet a non-terminal rule <code>expression</code>, so we call <code>compileExpression();</code></li>
+<li>And so on and so forth&#x2026;</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
 <ul>
-<li>It&apos;s a private method.</li>
-<li>It says <strong>you should expect to see the given string</strong>,
-if not, you should <strong>throw an error</strong>.</li>
+<li>It&#x2019;s a private method.</li>
+<li>It says <strong>you should expect to see the given string</strong>, if not, you should <strong>throw an error</strong>.</li>
 <li>Otherwise, simply <strong>advance the input</strong>.</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
-about grammars and parsing</h3>
+<h3 id="3some-observation-about-grammars-and-parsing"><a class="markdownIt-Anchor" href="#3some-observation-about-grammars-and-parsing"></a> 3.Some observation about grammars and parsing</h3>
 <ul>
-<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
-a recursive descent algorithm parser without backtracking</strong>.</p>
+<li>
+<p><em>LL grammar</em>: It&#x2019;s a grammar that <strong>can be parsed by a recursive descent algorithm parser without backtracking</strong>.</p>
 <ul>
-<li>When you make a decision that what you have is a <code>while</code>
-statement, you don&apos;t have to kind of retract your progress and find out
-a mistake.</li>
-</ul></li>
-<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
-at most k tokens before you know which rule you are dealing with.</p>
+<li>When you make a decision that what you have is a <code>while</code> statement, you don&#x2019;t have to kind of retract your progress and find out a mistake.</li>
+</ul>
+</li>
+<li>
+<p><em>LL(k) parser</em>: It&#x2019;s an LL parser that needs to look ahead at most k tokens before you know which rule you are dealing with.</p>
 <ul>
-<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
-have a particular token in hand like <code>let</code>, we immediately
-know which rule we have to invoke</strong>.</li>
-<li>There are also things that don&apos;t belong to LL1, like English. For
-example, when we meet a token word &quot;lift&quot;, we still have no idea what we
-should do with it. A verb? A noun? We have to look more tokens
-downstream to know which rule to use. In this process, we may need to
-backtrack and reconsider some of the rules we have to use...</li>
-</ul></li>
+<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we have a particular token in hand like <code>let</code>, we immediately know which rule we have to invoke</strong>.</li>
+<li>There are also things that don&#x2019;t belong to LL1, like English. For example, when we meet a token word &#x201C;lift&#x201D;, we still have no idea what we should do with it. A verb? A noun? We have to look more tokens downstream to know which rule to use. In this process, we may need to backtrack and reconsider some of the rules we have to use&#x2026;</li>
+</ul>
+</li>
 </ul>
 
     </div>

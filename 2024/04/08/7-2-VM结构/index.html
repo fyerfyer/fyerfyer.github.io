@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="\(7.2.\)VM Abstraction&#x2014;&#x2014;the Stack 1. The stack machine  The stack machine is an abstraction that consists of an architecture, a stack and a set of operation which we can apply to the architecture">
+    <meta name="description" content="7.2.7.2.7.2.VM Abstraction&#x2014;&#x2014;the Stack  1. The stack machine  The stack machine is an abstraction that consists of an architecture, a stack and a set of operation which we can apply to the architectur">
 <meta property="og:type" content="article">
 <meta property="og:title" content="7.2.VM&#x7ED3;&#x6784;">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="\(7.2.\)VM Abstraction&#x2014;&#x2014;the Stack 1. The stack machine  The stack machine is an abstraction that consists of an architecture, a stack and a set of operation which we can apply to the architecture">
+<meta property="og:description" content="7.2.7.2.7.2.VM Abstraction&#x2014;&#x2014;the Stack  1. The stack machine  The stack machine is an abstraction that consists of an architecture, a stack and a set of operation which we can apply to the architectur">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png">
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#72vm-abstractionthe-stack"><span class="nav-text">\(7.2.\)VM Abstraction&#x2014;&#x2014;the Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-the-stack-machine"><span class="nav-text">1. The stack machine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2stack-arithmetic"><span class="nav-text">2.Stack arithmetic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3vm-commands"><span class="nav-text">3.VM commands</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#727272vm-abstractionthe-stack"><span class="nav-text"> 7.2.7.2.7.2.VM Abstraction&#x2014;&#x2014;the Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-the-stack-machine"><span class="nav-text"> 1. The stack machine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2stack-arithmetic"><span class="nav-text"> 2.Stack arithmetic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3vm-commands"><span class="nav-text"> 3.VM commands</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -291,59 +291,50 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
-<h3 id="1-the-stack-machine">1. The stack machine</h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="727272vm-abstractionthe-stack"><a class="markdownIt-Anchor" href="#72vm-abstractionthe-stack"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.2.</mn></mrow><annotation encoding="application/x-tex">7.2.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span></span></span></span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
+<h3 id="1-the-stack-machine"><a class="markdownIt-Anchor" href="#1-the-stack-machine"></a> 1. The stack machine</h3>
 <ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
+<li>The stack machine is an <em>abstraction</em> that consists of <strong>an architecture, a stack and a set of operation which we can apply to the architecture</strong>.</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png" alt></p>
 <ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
+<li>It can be considered an <em>array</em> which offers direct access to every element in the memory, as oppose to the traditional stack which only offers a stack pointer.</li>
+<li>When we do <code>push x</code>, <strong>the address of <code>x</code></strong> will be push into the stack:</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png" alt></p>
 <ul>
-<li><p>When we do <code>pop y</code>:</p>
+<li>
+<p>When we do <code>pop y</code>:</p>
 <ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
-</ul></li>
+<li>the <strong>current top value in the stack</strong> will be removed,</li>
+<li>the <strong>popped value</strong> will override <code>y</code> (in this example, when 7 is popped, 3 becomes the new top value).</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3 id="2stack-arithmetic">2.Stack arithmetic</h3>
-<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
+</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png" alt></p>
+<h3 id="2stack-arithmetic"><a class="markdownIt-Anchor" href="#2stack-arithmetic"></a> 2.Stack arithmetic</h3>
+<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do three different things:</p>
+<ol>
 <li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
+<li>Apply the function to these operands in a separate process and get the result.</li>
 <li>Push the result back into the stack.</li>
 </ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3 id="3vm-commands">3.VM commands</h3>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png" alt></p>
+<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we have to do it to call <code>add</code> or <code>neg</code>, and these things will take place.</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png" alt></p>
+<h3 id="3vm-commands"><a class="markdownIt-Anchor" href="#3vm-commands"></a> 3.VM commands</h3>
 <ul>
 <li>Arithmetic commands:</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png" alt></p>
 <ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
+<li>Logic commands:</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png" alt></p>
+<p>&#x2003;&#x2003;Where do these commands come from? It&#x2019;s compiled from the high-level language:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png" alt></p>
 
     </div>
 
