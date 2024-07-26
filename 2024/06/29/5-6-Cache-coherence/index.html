@@ -22,12 +22,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 
 
-    <meta name="description" content="5.6.Cache Coherence  1.Cache model    2.Coherence concept  &#x2003;&#x2003;a.a.a.Coherence in detail &#x2003;&#x2003;Caching shared data introduces a new problem. The following is an example:  &#x2003;&#x2003;The two different processors hav">
+    <meta name="description" content="5.6.Cache Coherence 1.Cache model   2.Coherence concept &#x2003;&#x2003;\(a.\)Coherence in detail &#x2003;&#x2003;Caching shared data introduces a new problem. The following is an example:  &#x2003;&#x2003;The two different processor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5.6.Cache Coherence">
 <meta property="og:url" content="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/index.html">
 <meta property="og:site_name" content="fyerfyer">
-<meta property="og:description" content="5.6.Cache Coherence  1.Cache model    2.Coherence concept  &#x2003;&#x2003;a.a.a.Coherence in detail &#x2003;&#x2003;Caching shared data introduces a new problem. The following is an example:  &#x2003;&#x2003;The two different processors hav">
+<meta property="og:description" content="5.6.Cache Coherence 1.Cache model   2.Coherence concept &#x2003;&#x2003;\(a.\)Coherence in detail &#x2003;&#x2003;Caching shared data introduces a new problem. The following is an example:  &#x2003;&#x2003;The two different processor">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/image.png">
 <meta property="og:image" content="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/image-1.png">
@@ -158,7 +158,9 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#56cache-coherence"><span class="nav-text"> 5.6.Cache Coherence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1cache-model"><span class="nav-text"> 1.Cache model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2coherence-concept"><span class="nav-text"> 2.Coherence concept</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aaacoherence-in-detail"><span class="nav-text"> &#x2003;&#x2003;a.a.a.Coherence in detail</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bbbsnooping-based-cache-coherence"><span class="nav-text"> &#x2003;&#x2003;b.b.b.Snooping-based cache coherence</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3mosel-cache-coherency-protocol"><span class="nav-text"> 3.MOSEL cache coherency protocol:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aaaprotocol-design"><span class="nav-text"> &#x2003;&#x2003;a.a.a.Protocol design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bbbbasic-concepts"><span class="nav-text"> &#x2003;&#x2003;b.b.b.Basic concepts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cccexample"><span class="nav-text"> &#x2003;&#x2003;c.c.c.Example</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#56cache-coherence"><span class="nav-text">5.6.Cache Coherence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1cache-model"><span class="nav-text">1.Cache model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2coherence-concept"><span class="nav-text">2.Coherence concept</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#acoherence-in-detail"><span class="nav-text">&#x2003;&#x2003;\(a.\)Coherence in detail</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bsnooping-based-cache-coherence"><span class="nav-text">&#x2003;&#x2003;\(b.\)Snooping-based cache coherence</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3mosel-cache-coherencyprotocol"><span class="nav-text">3.MOSEL cache coherency
+protocol:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aprotocol-design"><span class="nav-text">&#x2003;&#x2003;\(a.\)Protocol design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bbasicconcepts"><span class="nav-text">&#x2003;&#x2003;\(b.\)Basic
+concepts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cexample"><span class="nav-text">&#x2003;&#x2003;\(c.\)Example</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,7 +174,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -294,62 +296,89 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="56cache-coherence"><a class="markdownIt-Anchor" href="#56cache-coherence"></a> 5.6.Cache Coherence</h1>
-<h3 id="1cache-model"><a class="markdownIt-Anchor" href="#1cache-model"></a> 1.Cache model</h3>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png" alt></p>
-<h3 id="2coherence-concept"><a class="markdownIt-Anchor" href="#2coherence-concept"></a> 2.Coherence concept</h3>
-<h4 id="aaacoherence-in-detail"><a class="markdownIt-Anchor" href="#acoherence-in-detail"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">a.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mord">.</span></span></span></span>Coherence in detail</h4>
-<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an example:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png" alt></p>
-<p>&#x2003;&#x2003;The two different processors have two different values for the same location, this is referred to as <em>cache coherence problem</em>.</p>
-<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if <strong>any read of a data item returns the most recently written value of that data item</strong>. This simple concept contains two different aspects of memory system behaviour:</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="56cache-coherence">5.6.Cache Coherence</h1>
+<h3 id="1cache-model">1.Cache model</h3>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
+<h3 id="2coherence-concept">2.Coherence concept</h3>
+<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
+<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
+example:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
+<p>&#x2003;&#x2003;The two different processors have two different values for the same
+location, this is referred to as <em>cache coherence problem</em>.</p>
+<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
+<strong>any read of a data item returns the most recently written value
+of that data item</strong>. This simple concept contains two different
+aspects of memory system behaviour:</p>
 <ul>
-<li><em>coherence</em>: defines <em>what</em> values can be returned by a read.</li>
-<li><em>consistency</em>: determines <em>when</em> a written value will be returned by a read.</li>
+<li><em>coherence</em>: defines <em>what</em> values can be returned by
+a read.</li>
+<li><em>consistency</em>: determines <em>when</em> a written value will
+be returned by a read.</li>
 </ul>
 <p>&#x2003;&#x2003;A memory system is coherent if:</p>
-<ol>
-<li>A read by a processor P to location X that follows <em>only one write</em> by P to X always returns the value written by P.</li>
+<ol type="1">
+<li>A read by a processor P to location X that follows <em>only one
+write</em> by P to X always returns the value written by P.</li>
 </ol>
 <blockquote>
 <p>This preserves program order.</p>
 </blockquote>
-<ol start="2">
-<li>A read by a processor to location X that follows <em>only one write</em> by another processor to X returns the written value if the read and write are sufficiently separated in time.</li>
+<ol start="2" type="1">
+<li>A read by a processor to location X that follows <em>only one
+write</em> by another processor to X returns the written value if the
+read and write are sufficiently separated in time.</li>
 </ol>
 <blockquote>
 <p>This defines memory coherence.</p>
 </blockquote>
-<ol start="3">
-<li>Writes to the same location are <strong>serialized</strong>; that is, two writes to the same location by any two processors <strong>are seen in the same order by all processors</strong>. For example, if CPU B stores 2 into memory at address X after time step 3, processors can never read the value at location X as 2 and then later read it as 1.</li>
+<ol start="3" type="1">
+<li>Writes to the same location are <strong>serialized</strong>; that
+is, two writes to the same location by any two processors <strong>are
+seen in the same order by all processors</strong>. For example, if CPU B
+stores 2 into memory at address X after time step 3, processors can
+never read the value at location X as 2 and then later read it as
+1.</li>
 </ol>
-<h4 id="bbbsnooping-based-cache-coherence"><a class="markdownIt-Anchor" href="#bsnooping-based-cache-coherence"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">b.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord">.</span></span></span></span>Snooping-based cache coherence</h4>
-<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor <strong>has exclusive access to a data item</strong> before it writes that item. This style of protocol is called a <em>write invalidate protocol</em> because it <strong>invalidates copies in other caches on a write</strong>.</p>
-<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by CPU A, the CPU B will get a cache miss, and is forced to fetch a new copy of data:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png" alt></p>
+<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
+<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
+<strong>has exclusive access to a data item</strong> before it writes
+that item. This style of protocol is called a <em>write invalidate
+protocol</em> because it <strong>invalidates copies in other caches on a
+write</strong>.</p>
+<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
+CPU A, the CPU B will get a cache miss, and is forced to fetch a new
+copy of data:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
 <blockquote>
-<p>Block size plays an important role in cache coherency. Large blocks can cause what&#x2019;s called <em>false sharing</em>, when two unrelated shared variables are located in the same cache block, the whole block is exchanged between processors even though the processors are accessing different variables.</p>
+<p>Block size plays an important role in cache coherency. Large blocks
+can cause what&apos;s called <em>false sharing</em>, when two unrelated
+shared variables are located in the same cache block, the whole block is
+exchanged between processors even though the processors are accessing
+different variables.</p>
 </blockquote>
-<h3 id="3mosel-cache-coherency-protocol"><a class="markdownIt-Anchor" href="#3mosel-cache-coherency-protocol"></a> 3.MOSEL cache coherency protocol:</h3>
-<h4 id="aaaprotocol-design"><a class="markdownIt-Anchor" href="#aprotocol-design"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">a.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mord">.</span></span></span></span>Protocol design</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png" alt></p>
+<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
+protocol:</h3>
+<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
 <hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png" alt></p>
-<h4 id="bbbbasic-concepts"><a class="markdownIt-Anchor" href="#bbasic-concepts"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">b.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord">.</span></span></span></span>Basic concepts</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png" alt></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
+<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
+concepts</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
 <hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png" alt></p>
-<h4 id="cccexample"><a class="markdownIt-Anchor" href="#cexample"></a> &#x2003;&#x2003;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">c.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span><span class="mord">.</span></span></span></span>Example</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png" alt></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png" alt></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
+<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
 
     </div>
 
