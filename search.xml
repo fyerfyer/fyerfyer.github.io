@@ -4230,30 +4230,6 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
-    <title>12.2.Hashing的实现方法(1)</title>
-    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
-    <content><![CDATA[<h1 id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</h1>
-<h3 id="1整数溢出">1.整数溢出</h3>
-<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
-<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
-<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
-<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
-<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
-<ol type="1">
-<li>它是一个整数</li>
-<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
-<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
-<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>12.3.Hashing的实现方法(2)</title>
     <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
     <content><![CDATA[<h1 id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</h1>
@@ -4330,6 +4306,30 @@ due to overflow).</li>
 <li>Why a small prime? Because it's easier to compute.</li>
 </ul></li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.2.Hashing的实现方法(1)</title>
+    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
+    <content><![CDATA[<h1 id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</h1>
+<h3 id="1整数溢出">1.整数溢出</h3>
+<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
+<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
+<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
+<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
+<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
+<ol type="1">
+<li>它是一个整数</li>
+<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
+<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
+<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -5992,6 +5992,94 @@ it’s currently referring to.</p>
       </categories>
   </entry>
   <entry>
+    <title>4.2.扩展</title>
+    <url>/2024/05/31/4.2.extends/</url>
+    <content><![CDATA[<h1 id="42扩展"><span class="math inline">\(4.2\)</span>扩展</h1>
+<h3 id="1扩展的引入">1.扩展的引入</h3>
+<p>  假设我们想实现<span class="math inline">\(RotatingSLList\)</span>，它具有和<span class="math inline">\(SLList\)</span>完全相同的方法，但增添了一个方法<code>rotateRight</code>，这个方法将链表的最后一个元素添加到链表前端。</p>
+<p>  为了继承<span class="math inline">\(SLList\)</span>的方法，我们可以使用<span class="math inline">\(extend\)</span>关键词： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RotatingSLList</span>&lt;Item&gt; <span class="keyword">extends</span> <span class="title class_">SLList</span>&lt;Item&gt;</span><br></pre></td></tr></table></figure></p>
+<p>  这里，<span class="math inline">\(RotatingSLList\)</span>和<span class="math inline">\(SLList\)</span>间也是<span class="math inline">\(is-a\)</span>关系，<span class="math inline">\(extends\)</span>关键词允许我们保留<span class="math inline">\(SLList\)</span>的原始功能，同时允许我们进行修改并添加其他的功能(<span class="math inline">\(functionality\)</span>)。</p>
+<p><img src="/2024/05/31/4.2.extends/image-2.png"></p>
+<p>  使用<span class="math inline">\(extends\)</span>语句后，我们便可以借助<span class="math inline">\(SLList\)</span>中的方法来实现<code>rotateRight</code>：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rotateRight</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Item</span> <span class="variable">x</span> <span class="operator">=</span> removeLast();</span><br><span class="line">    addFirst(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  在<span class="math inline">\(extend\)</span>关键词下，子类继承了父类的大部分成员：</p>
+<ul>
+<li>所有的实例和静态变量</li>
+<li>所有的方法</li>
+<li>所有的嵌套类</li>
+</ul>
+<p>  当我们要覆盖所继承的方法时，使用<code>@Override</code>即可。例如下面<span class="math inline">\(VengefulSLList\)</span>的实现：它的<code>removeLast</code>方法在删去末尾元素后会将其添加到前端：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VengefulSLList</span>&lt;Item&gt; <span class="keyword">extends</span> <span class="title class_">SLList</span>&lt;Item&gt; &#123;</span><br><span class="line">    SLList&lt;Item&gt; deletedItems;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">()</span> &#123;</span><br><span class="line">        deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Item</span> <span class="variable">x</span> <span class="operator">=</span> <span class="built_in">super</span>.removeLast();</span><br><span class="line">        deletedItems.addLast(x);</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Prints deleted items. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printLostItems</span><span class="params">()</span> &#123;</span><br><span class="line">        deletedItems.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2关于构造方法的继承">2.关于构造方法的继承</h3>
+<p>  虽然子类会继承父类的大部分成员，但是子类无法继承父类的构造方法(<span class="math inline">\(constructor\)</span>)。同时，<span class="math inline">\(Java\)</span>要求所有的构造函数必须从对一个主类(<span class="math inline">\(superclass\)</span>)的构造方式的调用开始。</p>
+<p>  以下面的两个类为例： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Human &#123;...&#125;</span><br><span class="line">public class TA extends Human &#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  由<span class="math inline">\(extends\)</span>语句，<span class="math inline">\(TA\)</span>会继承<span class="math inline">\(Human\)</span>的属性与行为。</p>
+<p>  如果我们运行下面的代码： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">TA</span> <span class="variable">Christine</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TA</span>();</span><br></pre></td></tr></table></figure></p>
+<p>  那么首先，一个<span class="math inline">\(Human\)</span>要先被创建，这样<span class="math inline">\(Human\)</span>才能把自己的特性传递给<span class="math inline">\(TA\)</span>，如果没有创建<span class="math inline">\(Human\)</span>就创建<span class="math inline">\(TA\)</span>显然是错误的。</p>
+<p>  因此，在创建一个子类时，我们可以直接先用<span class="math inline">\(super\)</span>关键词，调用主类的构造方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  或者，如果我们不这么做，<span class="math inline">\(Java\)</span>会自动调用主类的无参数(<span class="math inline">\(non-argument\)</span>)构造方法。</p>
+<p>  但有时候，如果不直接调用父类的构造方法，<span class="math inline">\(Java\)</span>的自动调用的方法可能不是我们想要的。例如我们有一个包含一个参数的单参数构造方法，<span class="math inline">\(Java\)</span>自动调用的无参数构造方法会让我们传入的参数无效！这时，我们就必须直接调用我们需要的构造方式：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(x);</span><br><span class="line">    deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3对象类">3.对象类</h3>
+<p>  <span class="math inline">\(Java\)</span>中的所有类都是对象类(<span class="math inline">\(object\;class\)</span>)的子类(<span class="math inline">\(descendant\)</span>)，或者对象类的<span class="math inline">\(extends\)</span>。不管一个类有没有显性的<span class="math inline">\(extends\)</span>关键词，它都隐性地继承了对象类。以前面为例：</p>
+<ul>
+<li><span class="math inline">\(VengefulSLList\)</span>是<span class="math inline">\(SLList\)</span>的显式<span class="math inline">\(extends\)</span>。</li>
+<li><span class="math inline">\(SLList\)</span>隐性继承了对象类。</li>
+</ul>
+<p>  对象类提供了很多所有对象都应遵循的操作，如<code>.equal(Object obj)</code>、<code>.hashCode()</code>等。</p>
+<h3 id="4封装">4.封装</h3>
+<p>  我们可以通过阶层抽象(抽象屏障)来减小程序的复杂性(<span class="math inline">\(complexity\)</span>)，以及“为准备修改而编程”的概念。这是围绕着程序应该被建造为模块化的、可内部改变(<span class="math inline">\(interchangeable\)</span>)的片段，它们可以互相交换、并且不会破坏原有的系统。同时，把他人不需要的信息隐藏起来也是减小程序复杂性的重要手段。</p>
+<p>  封装的根源即存在于将信息对外隐藏的概念。在计算机科学中，一个模块可以被定义为一系列方法，它们作为一个整体工作来解决问题。当这个模块的实现细节都被隐藏起来、只能通过接口与其进行交互，这样的模块就是已封装的(<span class="math inline">\(encapsulated\)</span>)。</p>
+<p>  在理想状态下，用户不应观察到它们所使用的数据结构的内部工作原理。而<span class="math inline">\(Java\)</span>的<span class="math inline">\(private\)</span>关键词就很好地建立了抽象屏障。</p>
+<h3 id="5类型错误-编译时类型">5.类型错误、编译时类型</h3>
+<p>  我们考虑下面的程序： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    VengefulSLList&lt;Integer&gt; vsl = <span class="keyword">new</span> <span class="title class_">VengefulSLList</span>&lt;Integer&gt;(<span class="number">9</span>);</span><br><span class="line">    SLList&lt;Integer&gt; sl = vsl;</span><br><span class="line"></span><br><span class="line">    sl.addLast(<span class="number">50</span>);</span><br><span class="line">    sl.removeLast();</span><br><span class="line"></span><br><span class="line">    sl.printLostItems();</span><br><span class="line">    VengefulSLList&lt;Integer&gt; vsl2 = sl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">VengefulSLList&lt;Integer&gt; vsl = <span class="keyword">new</span> <span class="title class_">VengefulSLList</span>&lt;Integer&gt;(<span class="number">9</span>);</span><br><span class="line">SLList&lt;Integer&gt; sl = vsl;</span><br></pre></td></tr></table></figure>
+<p>  程序的前两行没有问题，因为<span class="math inline">\(VengefulSLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(SLList\)</span>，我们可以把<span class="math inline">\(VengefulSLList\)</span>放入<span class="math inline">\(SLList\)</span>的内存盒子中。 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">sl.addLast(<span class="number">50</span>);</span><br><span class="line">sl.removeLast();</span><br></pre></td></tr></table></figure></p>
+<p>  这两行也没有问题，根据前面的讲解，第一个<code>addLast</code>会调用<span class="math inline">\(SLList\)</span>的方法，而第二个<code>removeLast</code>会调用<span class="math inline">\(VengefulSLList\)</span>的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">sl.printLostItems();</span><br></pre></td></tr></table></figure>
+<p>  但是这一行程序无法编译，因为<span class="math inline">\(SLList\)</span>及其主类都没有<code>printLostItems</code>这一方法，即使<span class="math inline">\(sl\)</span>的运行类型是<span class="math inline">\(VengefulSLList\)</span>依然不行。
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">VengefulSLList&lt;Integer&gt; vsl2 = sl;</span><br></pre></td></tr></table></figure></p>
+<p>  同样地，这一行程序也会编译错误。因为<span class="math inline">\(SLList\)</span>并不<span class="math inline">\(is-a\;\)</span><span class="math inline">\(VengefulSLList\)</span>。</p>
+<p>  这两例说明，编译器只支持编译时(<span class="math inline">\(compile-time\)</span>)的类型所包含的方法。</p>
+<p>  除了表达式，对方法的调用也会有编译时类型，即该方法声明时的类型。例如下面的程序：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">frank</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Poodle</span>(<span class="string">&quot;Frank&quot;</span>, <span class="number">5</span>);</span><br><span class="line"><span class="type">Poodle</span> <span class="variable">frankJr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Poodle</span>(<span class="string">&quot;Frank Jr.&quot;</span>, <span class="number">15</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">Dog</span> <span class="variable">largerDog</span> <span class="operator">=</span> maxDog(frank, frankJr);</span><br><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">//does not compile! RHS has compile-time type Dog</span></span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">//does not compile! RHS has compile-time type Dog</span></span><br></pre></td></tr></table></figure></p>
+<p>  该行代码也会编译错误，因为<code>maxDog</code>的编译时类型为<span class="math inline">\(Dog\)</span>。</p>
+<h3 id="6类型铸造casting">6.类型铸造<span class="math inline">\(casting\)</span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，我们可以告诉编译器某个表达式有特定的编译时类型，这样可以实现类型的“转换”。</p>
+<p>  例如，我们可以对上面的代码进行如下更改： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> (Poodle) maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">// compiles! Right hand side has compile-time type Poodle after casting</span></span><br></pre></td></tr></table></figure></p>
+<p>  但是，对两个毫不相干的类进行类型铸造，会导致<code>ClassCastException</code>的错误。</p>
+<h3 id="7高阶函数">7.高阶函数</h3>
+<p>  在<span class="math inline">\(Java\)</span>中，我们可以利用接口实现高阶函数。</p>
+<p>  先在接口中定义一个函数： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IntUnaryFunction</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  然后我们写一个类来实现接口中指定的函数： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TenX</span> <span class="keyword">implements</span> <span class="title class_">IntUnaryFunction</span> &#123;</span><br><span class="line">    <span class="comment">/* Returns ten times the argument. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span> * x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  然后，我们就可以写出高阶函数的表达式了： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">do_twice</span><span class="params">(IntUnaryFunction f, <span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> f.apply(f.apply(x));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  在调用时，我们创造一个新的<span class="math inline">\(tenX\)</span>实例，然后传入参数<span class="math inline">\(x\)</span>即可： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(do_twice(<span class="keyword">new</span> <span class="title class_">TenX</span>(), <span class="number">2</span>));</span><br></pre></td></tr></table></figure></p>
+<p>  函数式接口允许我们以优雅的方式传递函数，我们可以通过接口定义函数的签名与行为，然后通过实现接口的类来提供具体的函数。</p>
+<h3 id="8summarcopy-by-origin-text">8.summar(copy by origin text)</h3>
+<p>  VengefulSLList extends SLList means VengefulSLList "is-an" SLList,
+and inherits all of SLList's members:</p>
+<ul>
+<li>Variables, methods nested classes</li>
+<li>Not constructors Subclass constructors must invoke superclass
+constructor first. The super keyword can be used to invoke overridden
+superclass methods and constructors.</li>
+</ul>
+<p>  Invocation of overridden methods follows two simple rules:</p>
+<ul>
+<li>Compiler plays it safe and only allows us to do things according to
+the static type.</li>
+<li>For overridden methods (not overloaded methods), the actual method
+invoked is based on the dynamic type of the invoking expression</li>
+<li>Can use casting to overrule compiler type checking.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.2.隐性序列</title>
     <url>/2024/05/31/4.2.%E9%9A%90%E6%80%A7%E5%BA%8F%E5%88%97/</url>
     <content><![CDATA[<h1 id="42隐性序列implicitsequences"><span class="math inline">\(4.2\)</span>隐性序列<span class="math inline">\(Implicit\;Sequences\)</span></h1>
@@ -6220,94 +6308,6 @@ compare, we must turn to Comparator.</p>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 4.Data Processing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.2.扩展</title>
-    <url>/2024/05/31/4.2.extends/</url>
-    <content><![CDATA[<h1 id="42扩展"><span class="math inline">\(4.2\)</span>扩展</h1>
-<h3 id="1扩展的引入">1.扩展的引入</h3>
-<p>  假设我们想实现<span class="math inline">\(RotatingSLList\)</span>，它具有和<span class="math inline">\(SLList\)</span>完全相同的方法，但增添了一个方法<code>rotateRight</code>，这个方法将链表的最后一个元素添加到链表前端。</p>
-<p>  为了继承<span class="math inline">\(SLList\)</span>的方法，我们可以使用<span class="math inline">\(extend\)</span>关键词： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RotatingSLList</span>&lt;Item&gt; <span class="keyword">extends</span> <span class="title class_">SLList</span>&lt;Item&gt;</span><br></pre></td></tr></table></figure></p>
-<p>  这里，<span class="math inline">\(RotatingSLList\)</span>和<span class="math inline">\(SLList\)</span>间也是<span class="math inline">\(is-a\)</span>关系，<span class="math inline">\(extends\)</span>关键词允许我们保留<span class="math inline">\(SLList\)</span>的原始功能，同时允许我们进行修改并添加其他的功能(<span class="math inline">\(functionality\)</span>)。</p>
-<p><img src="/2024/05/31/4.2.extends/image-2.png"></p>
-<p>  使用<span class="math inline">\(extends\)</span>语句后，我们便可以借助<span class="math inline">\(SLList\)</span>中的方法来实现<code>rotateRight</code>：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rotateRight</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Item</span> <span class="variable">x</span> <span class="operator">=</span> removeLast();</span><br><span class="line">    addFirst(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  在<span class="math inline">\(extend\)</span>关键词下，子类继承了父类的大部分成员：</p>
-<ul>
-<li>所有的实例和静态变量</li>
-<li>所有的方法</li>
-<li>所有的嵌套类</li>
-</ul>
-<p>  当我们要覆盖所继承的方法时，使用<code>@Override</code>即可。例如下面<span class="math inline">\(VengefulSLList\)</span>的实现：它的<code>removeLast</code>方法在删去末尾元素后会将其添加到前端：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VengefulSLList</span>&lt;Item&gt; <span class="keyword">extends</span> <span class="title class_">SLList</span>&lt;Item&gt; &#123;</span><br><span class="line">    SLList&lt;Item&gt; deletedItems;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">()</span> &#123;</span><br><span class="line">        deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Item</span> <span class="variable">x</span> <span class="operator">=</span> <span class="built_in">super</span>.removeLast();</span><br><span class="line">        deletedItems.addLast(x);</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Prints deleted items. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printLostItems</span><span class="params">()</span> &#123;</span><br><span class="line">        deletedItems.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="2关于构造方法的继承">2.关于构造方法的继承</h3>
-<p>  虽然子类会继承父类的大部分成员，但是子类无法继承父类的构造方法(<span class="math inline">\(constructor\)</span>)。同时，<span class="math inline">\(Java\)</span>要求所有的构造函数必须从对一个主类(<span class="math inline">\(superclass\)</span>)的构造方式的调用开始。</p>
-<p>  以下面的两个类为例： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Human &#123;...&#125;</span><br><span class="line">public class TA extends Human &#123;...&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  由<span class="math inline">\(extends\)</span>语句，<span class="math inline">\(TA\)</span>会继承<span class="math inline">\(Human\)</span>的属性与行为。</p>
-<p>  如果我们运行下面的代码： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">TA</span> <span class="variable">Christine</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TA</span>();</span><br></pre></td></tr></table></figure></p>
-<p>  那么首先，一个<span class="math inline">\(Human\)</span>要先被创建，这样<span class="math inline">\(Human\)</span>才能把自己的特性传递给<span class="math inline">\(TA\)</span>，如果没有创建<span class="math inline">\(Human\)</span>就创建<span class="math inline">\(TA\)</span>显然是错误的。</p>
-<p>  因此，在创建一个子类时，我们可以直接先用<span class="math inline">\(super\)</span>关键词，调用主类的构造方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  或者，如果我们不这么做，<span class="math inline">\(Java\)</span>会自动调用主类的无参数(<span class="math inline">\(non-argument\)</span>)构造方法。</p>
-<p>  但有时候，如果不直接调用父类的构造方法，<span class="math inline">\(Java\)</span>的自动调用的方法可能不是我们想要的。例如我们有一个包含一个参数的单参数构造方法，<span class="math inline">\(Java\)</span>自动调用的无参数构造方法会让我们传入的参数无效！这时，我们就必须直接调用我们需要的构造方式：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(x);</span><br><span class="line">    deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="3对象类">3.对象类</h3>
-<p>  <span class="math inline">\(Java\)</span>中的所有类都是对象类(<span class="math inline">\(object\;class\)</span>)的子类(<span class="math inline">\(descendant\)</span>)，或者对象类的<span class="math inline">\(extends\)</span>。不管一个类有没有显性的<span class="math inline">\(extends\)</span>关键词，它都隐性地继承了对象类。以前面为例：</p>
-<ul>
-<li><span class="math inline">\(VengefulSLList\)</span>是<span class="math inline">\(SLList\)</span>的显式<span class="math inline">\(extends\)</span>。</li>
-<li><span class="math inline">\(SLList\)</span>隐性继承了对象类。</li>
-</ul>
-<p>  对象类提供了很多所有对象都应遵循的操作，如<code>.equal(Object obj)</code>、<code>.hashCode()</code>等。</p>
-<h3 id="4封装">4.封装</h3>
-<p>  我们可以通过阶层抽象(抽象屏障)来减小程序的复杂性(<span class="math inline">\(complexity\)</span>)，以及“为准备修改而编程”的概念。这是围绕着程序应该被建造为模块化的、可内部改变(<span class="math inline">\(interchangeable\)</span>)的片段，它们可以互相交换、并且不会破坏原有的系统。同时，把他人不需要的信息隐藏起来也是减小程序复杂性的重要手段。</p>
-<p>  封装的根源即存在于将信息对外隐藏的概念。在计算机科学中，一个模块可以被定义为一系列方法，它们作为一个整体工作来解决问题。当这个模块的实现细节都被隐藏起来、只能通过接口与其进行交互，这样的模块就是已封装的(<span class="math inline">\(encapsulated\)</span>)。</p>
-<p>  在理想状态下，用户不应观察到它们所使用的数据结构的内部工作原理。而<span class="math inline">\(Java\)</span>的<span class="math inline">\(private\)</span>关键词就很好地建立了抽象屏障。</p>
-<h3 id="5类型错误-编译时类型">5.类型错误、编译时类型</h3>
-<p>  我们考虑下面的程序： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    VengefulSLList&lt;Integer&gt; vsl = <span class="keyword">new</span> <span class="title class_">VengefulSLList</span>&lt;Integer&gt;(<span class="number">9</span>);</span><br><span class="line">    SLList&lt;Integer&gt; sl = vsl;</span><br><span class="line"></span><br><span class="line">    sl.addLast(<span class="number">50</span>);</span><br><span class="line">    sl.removeLast();</span><br><span class="line"></span><br><span class="line">    sl.printLostItems();</span><br><span class="line">    VengefulSLList&lt;Integer&gt; vsl2 = sl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">VengefulSLList&lt;Integer&gt; vsl = <span class="keyword">new</span> <span class="title class_">VengefulSLList</span>&lt;Integer&gt;(<span class="number">9</span>);</span><br><span class="line">SLList&lt;Integer&gt; sl = vsl;</span><br></pre></td></tr></table></figure>
-<p>  程序的前两行没有问题，因为<span class="math inline">\(VengefulSLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(SLList\)</span>，我们可以把<span class="math inline">\(VengefulSLList\)</span>放入<span class="math inline">\(SLList\)</span>的内存盒子中。 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">sl.addLast(<span class="number">50</span>);</span><br><span class="line">sl.removeLast();</span><br></pre></td></tr></table></figure></p>
-<p>  这两行也没有问题，根据前面的讲解，第一个<code>addLast</code>会调用<span class="math inline">\(SLList\)</span>的方法，而第二个<code>removeLast</code>会调用<span class="math inline">\(VengefulSLList\)</span>的方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">sl.printLostItems();</span><br></pre></td></tr></table></figure>
-<p>  但是这一行程序无法编译，因为<span class="math inline">\(SLList\)</span>及其主类都没有<code>printLostItems</code>这一方法，即使<span class="math inline">\(sl\)</span>的运行类型是<span class="math inline">\(VengefulSLList\)</span>依然不行。
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">VengefulSLList&lt;Integer&gt; vsl2 = sl;</span><br></pre></td></tr></table></figure></p>
-<p>  同样地，这一行程序也会编译错误。因为<span class="math inline">\(SLList\)</span>并不<span class="math inline">\(is-a\;\)</span><span class="math inline">\(VengefulSLList\)</span>。</p>
-<p>  这两例说明，编译器只支持编译时(<span class="math inline">\(compile-time\)</span>)的类型所包含的方法。</p>
-<p>  除了表达式，对方法的调用也会有编译时类型，即该方法声明时的类型。例如下面的程序：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">frank</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Poodle</span>(<span class="string">&quot;Frank&quot;</span>, <span class="number">5</span>);</span><br><span class="line"><span class="type">Poodle</span> <span class="variable">frankJr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Poodle</span>(<span class="string">&quot;Frank Jr.&quot;</span>, <span class="number">15</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">Dog</span> <span class="variable">largerDog</span> <span class="operator">=</span> maxDog(frank, frankJr);</span><br><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">//does not compile! RHS has compile-time type Dog</span></span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">//does not compile! RHS has compile-time type Dog</span></span><br></pre></td></tr></table></figure></p>
-<p>  该行代码也会编译错误，因为<code>maxDog</code>的编译时类型为<span class="math inline">\(Dog\)</span>。</p>
-<h3 id="6类型铸造casting">6.类型铸造<span class="math inline">\(casting\)</span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，我们可以告诉编译器某个表达式有特定的编译时类型，这样可以实现类型的“转换”。</p>
-<p>  例如，我们可以对上面的代码进行如下更改： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Poodle</span> <span class="variable">largerPoodle</span> <span class="operator">=</span> (Poodle) maxDog(frank, frankJr); </span><br><span class="line"><span class="comment">// compiles! Right hand side has compile-time type Poodle after casting</span></span><br></pre></td></tr></table></figure></p>
-<p>  但是，对两个毫不相干的类进行类型铸造，会导致<code>ClassCastException</code>的错误。</p>
-<h3 id="7高阶函数">7.高阶函数</h3>
-<p>  在<span class="math inline">\(Java\)</span>中，我们可以利用接口实现高阶函数。</p>
-<p>  先在接口中定义一个函数： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IntUnaryFunction</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  然后我们写一个类来实现接口中指定的函数： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TenX</span> <span class="keyword">implements</span> <span class="title class_">IntUnaryFunction</span> &#123;</span><br><span class="line">    <span class="comment">/* Returns ten times the argument. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span> * x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  然后，我们就可以写出高阶函数的表达式了： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">do_twice</span><span class="params">(IntUnaryFunction f, <span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> f.apply(f.apply(x));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  在调用时，我们创造一个新的<span class="math inline">\(tenX\)</span>实例，然后传入参数<span class="math inline">\(x\)</span>即可： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(do_twice(<span class="keyword">new</span> <span class="title class_">TenX</span>(), <span class="number">2</span>));</span><br></pre></td></tr></table></figure></p>
-<p>  函数式接口允许我们以优雅的方式传递函数，我们可以通过接口定义函数的签名与行为，然后通过实现接口的类来提供具体的函数。</p>
-<h3 id="8summarcopy-by-origin-text">8.summar(copy by origin text)</h3>
-<p>  VengefulSLList extends SLList means VengefulSLList "is-an" SLList,
-and inherits all of SLList's members:</p>
-<ul>
-<li>Variables, methods nested classes</li>
-<li>Not constructors Subclass constructors must invoke superclass
-constructor first. The super keyword can be used to invoke overridden
-superclass methods and constructors.</li>
-</ul>
-<p>  Invocation of overridden methods follows two simple rules:</p>
-<ul>
-<li>Compiler plays it safe and only allows us to do things according to
-the static type.</li>
-<li>For overridden methods (not overloaded methods), the actual method
-invoked is based on the dynamic type of the invoking expression</li>
-<li>Can use casting to overrule compiler type checking.</li>
-</ul>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
       </categories>
   </entry>
   <entry>
