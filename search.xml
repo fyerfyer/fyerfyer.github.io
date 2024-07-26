@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>fyerfyer&#39;s Web Intro</title>
-    <url>/2024/07/26/Introduction/</url>
+    <url>/2024/07/25/Introduction/</url>
     <content><![CDATA[<h1 id="fyerfyers-web-intro">fyerfyer's Web Intro</h1>
 <p>  ����fyerfyer�������Լ�д��ѧϰ�ʼǵ���վ���Ժ�Ҳ���ܻ�ű�Ķ�������</p>
 <p>  �ʼǵķ������£�</p>
@@ -16,6 +16,9 @@ Python�ıʼ�</a></p></li>
 ver)</a></p></li>
 </ul>
 ]]></content>
+      <categories>
+        <category>Home Page</category>
+      </categories>
   </entry>
   <entry>
     <title>4.3.Sequential Y86-64 Implementation</title>
@@ -3810,6 +3813,84 @@ environment.</p>
       </categories>
   </entry>
   <entry>
+    <title>1.7.递归函数</title>
+    <url>/2024/05/31/1.7.%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="17递归函数"><span class="math inline">\(1.7\)</span>递归函数</h1>
+<h2 id="一-递归函数的概念与分类">一、递归函数的概念与分类</h2>
+<h3 id="1概念">1.概念</h3>
+<p>  如果<strong>函数体直接或间接调用函数本身</strong>，则函数称为递归函数。也就是说，执行递归函数体的过程可能反过来又需要再次应用该函数。</p>
+<h3 id="2递归的原理">2.递归的原理</h3>
+<p>  一般的递归由以下结构构成：</p>
+<ul>
+<li>基本情况：当递归函数递归到一个或多个基本情况时，函数将直接返回某个值，跳出递归</li>
+<li>递归调用：随着递归调用，问题逐渐得到简化</li>
+</ul>
+<p>  以阶乘的求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> n==<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> n*f(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>   递归函数<span class="math inline">\(fact\)</span>用一个更简单的问题：<span class="math inline">\(fact(n-1)\)</span>表示了<span class="math inline">\(fact(n)\)</span>。该递归的基本情况是<span class="math inline">\(1!=1,0!=1\)</span>。</p>
+<p>  当递归<strong>通过递归函数的连续调用“展开”到越来越简单的问题时，结果最终会从基本情况开始构建</strong>。递归结束时将参数<span class="math inline">\(1\)</span>传递给<span class="math inline">\(fact\)</span>;
+<strong>每个调用的结果取决于下一个调用，直到达到基本情况。</strong></p>
+<p>  在我们利用以上计算模型得出递归的最终结果时，也可<strong>将递归调用看作函数抽象</strong>。在阶乘中，我们不关心<span class="math inline">\(fact(n-1)\)</span>是怎么计算出来的，我们应该简单地相信它计算的是<span class="math inline">\(n-1\)</span>的阶乘。这种对递归函数的看法被称作<span class="math inline">\(recursive\;leap\;of\;faith\)</span>，即<strong>我们相信递归调用简单情况时函数会得出正确结果，在这个认知的基础上去计算复杂情况</strong>。例如计算阶乘时，我们相信<span class="math inline">\(fact(n-1)\)</span>能正确计算出<span class="math inline">\((n-1)!\)</span>，<strong>只需检查<span class="math inline">\(n!\)</span>在这个假设成立下是否能得到正确计算</strong>。通过这种方式，验证递归函数的正确性是一种<strong>数学归纳法</strong>。</p>
+<h3 id="3递归与循环函数的区别">3.递归与循环函数的区别</h3>
+<p>  我们以阶乘函数的循环写法为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact_iter</span>(<span class="params">n</span>):</span><br><span class="line">        total, k = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> k &lt;= n:</span><br><span class="line">            total, k = total * k, k + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure></p>
+<p>  我们从两个角度看待它们的区别：</p>
+<h4 id="a实现方式">  <span class="math inline">\(a.\)</span>实现方式：</h4>
+<p>  阶乘的循环写法是通过逐项相乘实现的，而阶乘的递归写法是通过当前项<span class="math inline">\(fact(n)\)</span>与前一项<span class="math inline">\(fact(n-1)\)</span>的关系实现的。</p>
+<h4 id="b调用参数">  <span class="math inline">\(b.\)</span>调用参数</h4>
+<p>  阶乘的循环写法需要调用两个额外参数<span class="math inline">\(total,k\)</span>，而递归则没有这两个参数。在递归中，<span class="math inline">\(fact(n)\)</span>本身的返回值及相当于循环中的<span class="math inline">\(total\)</span>，而<span class="math inline">\(n\)</span>则用来隐式地跟踪<span class="math inline">\(n!\)</span>计算到哪一步，相当于循环中的<span class="math inline">\(k\)</span>。</p>
+<h2 id="二-相互递归调用">二、相互递归调用</h2>
+<h3 id="1概念">1.概念</h3>
+<p>  当一个递归过程分为<strong>两个相互调用的函数</strong>时，这两个函数被称为相互递归的。</p>
+<p>  对于<strong>多主体</strong>的问题，利用相互递归调用可以得到很完美的解决。</p>
+<h3 id="2实例讲解">2.实例讲解</h3>
+<p>  <span class="math inline">\(e.g.1.\)</span>考虑如下所述对于奇偶的定义：</p>
+<ul>
+<li><span class="math inline">\(0\)</span>为偶数</li>
+<li>若<span class="math inline">\(n-1\)</span>为偶数，则<span class="math inline">\(n\)</span>为奇数</li>
+<li>若<span class="math inline">\(n-1\)</span>为奇数，则<span class="math inline">\(n\)</span>为偶数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> is_odd(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_odd</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> is_even(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>  <span class="math inline">\(p.s.\)</span>通过<strong>打破两个函数之间的抽象边界</strong>，可以将相互递归的函数转换为单个递归函数。如上述函数可如下改写：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (n-<span class="number">1</span>) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> is_even((n-<span class="number">1</span>)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(e.g.2.\)</span>考虑一个两人博弈，在这个博弈中，一张桌子上有
+<span class="math inline">\(n\)</span>个初始卵石。玩家轮流从桌子上移走一个或两个鹅卵石，移走最后一个鹅卵石的玩家获胜。假设爱丽丝和鲍勃玩这个游戏，每个人都使用一个简单的策略:</p>
+<ul>
+<li>爱丽丝总是拿走一块鹅卵石</li>
+<li>如果桌子上的鹅卵石数量是偶数，那么鲍勃就会移除两个鹅卵石，另一个是偶数</li>
+</ul>
+<p>  给定<span class="math inline">\(n\)</span>个最初的卵石和爱丽丝开始，谁赢得了比赛？</p>
+<p>  <span class="math inline">\(solve\)</span>：这里爱丽丝与鲍勃是不同主体，分设为两个函数即可：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">alice</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bob wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> bob(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bob</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Alice wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> alice(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="三-树形递归">三、树形递归</h2>
+<h3 id="1树形递归的概念">1.树形递归的概念</h3>
+<p>  树形递归是一种常用的递归，在树形递归中，递归函数被调用不止一次。</p>
+<p>  我们以斐波那契数列的递归求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fib</span>(<span class="params">n</span>):</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">2</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fib(n-<span class="number">2</span>) + fib(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  可以看到，递归的写法与斐波那契的定义<span class="math inline">\(Fib_n=Fib_{n-1}+Fib_{n-2}\)</span>是完全契合的。</p>
+<h3 id="2实例讲解">2.实例讲解</h3>
+<p>  <span class="math inline">\(e.g.1.\)</span>将<span class="math inline">\(n\)</span>分解为某个单调递增的序列，且序列中数的最大值不超过<span class="math inline">\(m\)</span>。给出<span class="math inline">\(n,m\)</span>，求出满足条件序列的数量。</p>
+<p>  <span class="math inline">\(solve\)</span>：我们考虑下面两件事：</p>
+<ol type="1">
+<li><p>分组方法：为了保证不重不漏，我们从序列中最大值<span class="math inline">\(m\)</span>入手，可分为以下情况：</p>
+<ul>
+<li>选一个<span class="math inline">\(m\)</span>，然后对<span class="math inline">\(n-m\)</span>执行相同操作</li>
+<li>不选<span class="math inline">\(m\)</span>，此时序列中最大值变为<span class="math inline">\(m-1\)</span>，然后继续执行相同操作</li>
+</ul></li>
+<li><p>基本情况：</p>
+<ul>
+<li><code>n==0</code>：<span class="math inline">\(return
+1\)</span></li>
+<li><code>n&lt;0</code>：<span class="math inline">\(return
+0\)</span></li>
+<li><code>m==0</code>：<span class="math inline">\(return
+0\)</span></li>
+</ul></li>
+</ol>
+<p>  于是可写出如下代码： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">div</span>(<span class="params">n,m</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> n&lt;<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> m==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> div(n-m,m)+div(n,m-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+  我们可以把一个树形递归函数看作是在<strong>探索不同的可能性</strong>。在这个例子中，我们探索了使用<span class="math inline">\(m\)</span>的可能性以及不使用的可能性。第一个和第二个递归调用对应于这些可能性。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 1.Building Abstractions with Functions</category>
+      </categories>
+  </entry>
+  <entry>
     <title>1.6.高阶函数</title>
     <url>/2024/05/31/1.6.%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="16高阶函数"><span class="math inline">\(1.6\)</span>高阶函数</h1>
@@ -3929,84 +4010,6 @@ environment.</p>
       </categories>
   </entry>
   <entry>
-    <title>1.7.递归函数</title>
-    <url>/2024/05/31/1.7.%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="17递归函数"><span class="math inline">\(1.7\)</span>递归函数</h1>
-<h2 id="一-递归函数的概念与分类">一、递归函数的概念与分类</h2>
-<h3 id="1概念">1.概念</h3>
-<p>  如果<strong>函数体直接或间接调用函数本身</strong>，则函数称为递归函数。也就是说，执行递归函数体的过程可能反过来又需要再次应用该函数。</p>
-<h3 id="2递归的原理">2.递归的原理</h3>
-<p>  一般的递归由以下结构构成：</p>
-<ul>
-<li>基本情况：当递归函数递归到一个或多个基本情况时，函数将直接返回某个值，跳出递归</li>
-<li>递归调用：随着递归调用，问题逐渐得到简化</li>
-</ul>
-<p>  以阶乘的求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> n==<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> n*f(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>   递归函数<span class="math inline">\(fact\)</span>用一个更简单的问题：<span class="math inline">\(fact(n-1)\)</span>表示了<span class="math inline">\(fact(n)\)</span>。该递归的基本情况是<span class="math inline">\(1!=1,0!=1\)</span>。</p>
-<p>  当递归<strong>通过递归函数的连续调用“展开”到越来越简单的问题时，结果最终会从基本情况开始构建</strong>。递归结束时将参数<span class="math inline">\(1\)</span>传递给<span class="math inline">\(fact\)</span>;
-<strong>每个调用的结果取决于下一个调用，直到达到基本情况。</strong></p>
-<p>  在我们利用以上计算模型得出递归的最终结果时，也可<strong>将递归调用看作函数抽象</strong>。在阶乘中，我们不关心<span class="math inline">\(fact(n-1)\)</span>是怎么计算出来的，我们应该简单地相信它计算的是<span class="math inline">\(n-1\)</span>的阶乘。这种对递归函数的看法被称作<span class="math inline">\(recursive\;leap\;of\;faith\)</span>，即<strong>我们相信递归调用简单情况时函数会得出正确结果，在这个认知的基础上去计算复杂情况</strong>。例如计算阶乘时，我们相信<span class="math inline">\(fact(n-1)\)</span>能正确计算出<span class="math inline">\((n-1)!\)</span>，<strong>只需检查<span class="math inline">\(n!\)</span>在这个假设成立下是否能得到正确计算</strong>。通过这种方式，验证递归函数的正确性是一种<strong>数学归纳法</strong>。</p>
-<h3 id="3递归与循环函数的区别">3.递归与循环函数的区别</h3>
-<p>  我们以阶乘函数的循环写法为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact_iter</span>(<span class="params">n</span>):</span><br><span class="line">        total, k = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> k &lt;= n:</span><br><span class="line">            total, k = total * k, k + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure></p>
-<p>  我们从两个角度看待它们的区别：</p>
-<h4 id="a实现方式">  <span class="math inline">\(a.\)</span>实现方式：</h4>
-<p>  阶乘的循环写法是通过逐项相乘实现的，而阶乘的递归写法是通过当前项<span class="math inline">\(fact(n)\)</span>与前一项<span class="math inline">\(fact(n-1)\)</span>的关系实现的。</p>
-<h4 id="b调用参数">  <span class="math inline">\(b.\)</span>调用参数</h4>
-<p>  阶乘的循环写法需要调用两个额外参数<span class="math inline">\(total,k\)</span>，而递归则没有这两个参数。在递归中，<span class="math inline">\(fact(n)\)</span>本身的返回值及相当于循环中的<span class="math inline">\(total\)</span>，而<span class="math inline">\(n\)</span>则用来隐式地跟踪<span class="math inline">\(n!\)</span>计算到哪一步，相当于循环中的<span class="math inline">\(k\)</span>。</p>
-<h2 id="二-相互递归调用">二、相互递归调用</h2>
-<h3 id="1概念">1.概念</h3>
-<p>  当一个递归过程分为<strong>两个相互调用的函数</strong>时，这两个函数被称为相互递归的。</p>
-<p>  对于<strong>多主体</strong>的问题，利用相互递归调用可以得到很完美的解决。</p>
-<h3 id="2实例讲解">2.实例讲解</h3>
-<p>  <span class="math inline">\(e.g.1.\)</span>考虑如下所述对于奇偶的定义：</p>
-<ul>
-<li><span class="math inline">\(0\)</span>为偶数</li>
-<li>若<span class="math inline">\(n-1\)</span>为偶数，则<span class="math inline">\(n\)</span>为奇数</li>
-<li>若<span class="math inline">\(n-1\)</span>为奇数，则<span class="math inline">\(n\)</span>为偶数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> is_odd(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_odd</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> is_even(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>  <span class="math inline">\(p.s.\)</span>通过<strong>打破两个函数之间的抽象边界</strong>，可以将相互递归的函数转换为单个递归函数。如上述函数可如下改写：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (n-<span class="number">1</span>) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> is_even((n-<span class="number">1</span>)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(e.g.2.\)</span>考虑一个两人博弈，在这个博弈中，一张桌子上有
-<span class="math inline">\(n\)</span>个初始卵石。玩家轮流从桌子上移走一个或两个鹅卵石，移走最后一个鹅卵石的玩家获胜。假设爱丽丝和鲍勃玩这个游戏，每个人都使用一个简单的策略:</p>
-<ul>
-<li>爱丽丝总是拿走一块鹅卵石</li>
-<li>如果桌子上的鹅卵石数量是偶数，那么鲍勃就会移除两个鹅卵石，另一个是偶数</li>
-</ul>
-<p>  给定<span class="math inline">\(n\)</span>个最初的卵石和爱丽丝开始，谁赢得了比赛？</p>
-<p>  <span class="math inline">\(solve\)</span>：这里爱丽丝与鲍勃是不同主体，分设为两个函数即可：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">alice</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bob wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> bob(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bob</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Alice wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> alice(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<h2 id="三-树形递归">三、树形递归</h2>
-<h3 id="1树形递归的概念">1.树形递归的概念</h3>
-<p>  树形递归是一种常用的递归，在树形递归中，递归函数被调用不止一次。</p>
-<p>  我们以斐波那契数列的递归求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fib</span>(<span class="params">n</span>):</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">2</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fib(n-<span class="number">2</span>) + fib(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  可以看到，递归的写法与斐波那契的定义<span class="math inline">\(Fib_n=Fib_{n-1}+Fib_{n-2}\)</span>是完全契合的。</p>
-<h3 id="2实例讲解">2.实例讲解</h3>
-<p>  <span class="math inline">\(e.g.1.\)</span>将<span class="math inline">\(n\)</span>分解为某个单调递增的序列，且序列中数的最大值不超过<span class="math inline">\(m\)</span>。给出<span class="math inline">\(n,m\)</span>，求出满足条件序列的数量。</p>
-<p>  <span class="math inline">\(solve\)</span>：我们考虑下面两件事：</p>
-<ol type="1">
-<li><p>分组方法：为了保证不重不漏，我们从序列中最大值<span class="math inline">\(m\)</span>入手，可分为以下情况：</p>
-<ul>
-<li>选一个<span class="math inline">\(m\)</span>，然后对<span class="math inline">\(n-m\)</span>执行相同操作</li>
-<li>不选<span class="math inline">\(m\)</span>，此时序列中最大值变为<span class="math inline">\(m-1\)</span>，然后继续执行相同操作</li>
-</ul></li>
-<li><p>基本情况：</p>
-<ul>
-<li><code>n==0</code>：<span class="math inline">\(return
-1\)</span></li>
-<li><code>n&lt;0</code>：<span class="math inline">\(return
-0\)</span></li>
-<li><code>m==0</code>：<span class="math inline">\(return
-0\)</span></li>
-</ul></li>
-</ol>
-<p>  于是可写出如下代码： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">div</span>(<span class="params">n,m</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> n&lt;<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> m==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> div(n-m,m)+div(n,m-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-  我们可以把一个树形递归函数看作是在<strong>探索不同的可能性</strong>。在这个例子中，我们探索了使用<span class="math inline">\(m\)</span>的可能性以及不使用的可能性。第一个和第二个递归调用对应于这些可能性。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 1.Building Abstractions with Functions</category>
-      </categories>
-  </entry>
-  <entry>
     <title>10.1.二叉搜索树</title>
     <url>/2024/05/31/10.1.Binary%20Search%20Trees/</url>
     <content><![CDATA[<h1 id="101二叉搜索树"><span class="math inline">\(10.1\)</span>二叉搜索树</h1>
@@ -4086,6 +4089,26 @@ ordering restriction to support efficient search</li>
       </categories>
   </entry>
   <entry>
+    <title>11.3.B-树的不变量</title>
+    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
+    <content><![CDATA[<h1 id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</h1>
+<h3 id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</h3>
+<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
+<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
+<ul>
+<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
+<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
+</ul>
+<h3 id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</h3>
+<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
+n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>11.2.B树</title>
     <url>/2024/05/31/11.2%20B-Trees/</url>
     <content><![CDATA[<h1 id="112b树"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>树</h1>
@@ -4117,26 +4140,6 @@ y\)</span>。</li>
 <p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
 <p>  分开叶子的图示如下：</p>
 <p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.3.B-树的不变量</title>
-    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
-    <content><![CDATA[<h1 id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</h1>
-<h3 id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</h3>
-<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
-<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
-<ul>
-<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
-<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
-</ul>
-<h3 id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</h3>
-<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
-n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -4254,44 +4257,6 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
-    <title>12.3.Hashing的实现方法(2)</title>
-    <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
-    <content><![CDATA[<h1 id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</h1>
-<h3 id="1冲突处理">1.冲突处理</h3>
-<p>  假如我们得到一个对象的<span class="math inline">\(hashCode\)</span>为<span class="math inline">\(h\)</span>：</p>
-<ul>
-<li>当<span class="math inline">\(h\)</span>索引不存在时，我们就对<span class="math inline">\(h\)</span>索引创建一个新的<code>LinkedList</code>，并把这个对象插入链表中。</li>
-<li>当<span class="math inline">\(h\)</span>索引存在时，我们就将对象插入已有的链表中。</li>
-</ul>
-<blockquote>
-<p>  <span class="math inline">\(p.s.\)</span>我们的数据结构是不允许重复的，因此在插入时，我们必须将待插入对象与链表中所有已插入对象进行比较。当该对象已经存在时，就直接跳过。这说明我们会需要遍历整个链表。</p>
-</blockquote>
-<p>  这样，我们就可以得到<span class="math inline">\(Hashing\)</span>的具体流程了：</p>
-<ul>
-<li><p><code>add</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index has no item, create new List, and place item there.</li>
-<li>If index has a List already, check the List to see if item is
-already in there. If not, add item to List.</li>
-</ul></li>
-<li><p><code>contains</code> item</p>
-<ul>
-<li>Get hashcode (i.e., index) of item.</li>
-<li>If index is empty, return <code>false</code>.</li>
-<li>Otherwise, check all items in the List at that index, and if the
-item exists, return true.</li>
-</ul></li>
-</ul>
-<h3 id="2内存的处理">2.内存的处理</h3>
-<p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
     <title>12.4.数据结构的最终实现</title>
     <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
     <content><![CDATA[<h1 id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</h1>
@@ -4330,6 +4295,44 @@ due to overflow).</li>
 <li>Why a small prime? Because it's easier to compute.</li>
 </ul></li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.3.Hashing的实现方法(2)</title>
+    <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
+    <content><![CDATA[<h1 id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</h1>
+<h3 id="1冲突处理">1.冲突处理</h3>
+<p>  假如我们得到一个对象的<span class="math inline">\(hashCode\)</span>为<span class="math inline">\(h\)</span>：</p>
+<ul>
+<li>当<span class="math inline">\(h\)</span>索引不存在时，我们就对<span class="math inline">\(h\)</span>索引创建一个新的<code>LinkedList</code>，并把这个对象插入链表中。</li>
+<li>当<span class="math inline">\(h\)</span>索引存在时，我们就将对象插入已有的链表中。</li>
+</ul>
+<blockquote>
+<p>  <span class="math inline">\(p.s.\)</span>我们的数据结构是不允许重复的，因此在插入时，我们必须将待插入对象与链表中所有已插入对象进行比较。当该对象已经存在时，就直接跳过。这说明我们会需要遍历整个链表。</p>
+</blockquote>
+<p>  这样，我们就可以得到<span class="math inline">\(Hashing\)</span>的具体流程了：</p>
+<ul>
+<li><p><code>add</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index has no item, create new List, and place item there.</li>
+<li>If index has a List already, check the List to see if item is
+already in there. If not, add item to List.</li>
+</ul></li>
+<li><p><code>contains</code> item</p>
+<ul>
+<li>Get hashcode (i.e., index) of item.</li>
+<li>If index is empty, return <code>false</code>.</li>
+<li>Otherwise, check all items in the List at that index, and if the
+item exists, return true.</li>
+</ul></li>
+</ul>
+<h3 id="2内存的处理">2.内存的处理</h3>
+<p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -4522,6 +4525,26 @@ Edward Fredkin suggested it be pronounced as "tree"</li>
       </categories>
   </entry>
   <entry>
+    <title>15.3.字符串操作</title>
+    <url>/2024/05/31/15.3.Trie%20String%20Operations/</url>
+    <content><![CDATA[<h1 id="153字符串操作"><span class="math inline">\(15.3\)</span>字符串操作</h1>
+<h3 id="1键的收集与前缀匹配">1.键的收集与前缀匹配</h3>
+<p>  由于在<span class="math inline">\(trie\)</span>中，字符和键(<span class="math inline">\(key\)</span>)都是被隐性表示的，当我们想让我们的键变得可迭代时，我们不能只在<span class="math inline">\(trie\)</span>中直接寻找它们。我们可以用一个可迭代的<code>collect</code>方法，该方法会维护一个字符串，它用于储存路径上的字符：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  整个搜索键的过程如下：</p>
+<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
+<p>  <code>keysWithPrefix</code>方法的执行过程如下：</p>
+<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
+<h3 id="2通配符匹配">2.通配符匹配</h3>
+<p>  为了实现<code>keysThatMatch()</code>方法，我们使用一个类似的程序，但添加一个参数<span class="math inline">\(pat\)</span>来表示我们需要<span class="math inline">\(collect()\)</span>的字符串。当模式字符是通配符(<span class="math inline">\(wildcard\)</span>)时，我们调用它的所有链接；否则，我们只调用和通配符相关的链接。
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&#x27;.&#x27;</span> || next == c) &#123;</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>15.Tries</category>
+      </categories>
+  </entry>
+  <entry>
     <title>16.1.四叉树</title>
     <url>/2024/05/31/16.1.QuadTrees/</url>
     <content><![CDATA[<h1 id="161四叉树"><span class="math inline">\(16.1\)</span>四叉树</h1>
@@ -4560,26 +4583,6 @@ Edward Fredkin suggested it be pronounced as "tree"</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>16.QuadTrees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>15.3.字符串操作</title>
-    <url>/2024/05/31/15.3.Trie%20String%20Operations/</url>
-    <content><![CDATA[<h1 id="153字符串操作"><span class="math inline">\(15.3\)</span>字符串操作</h1>
-<h3 id="1键的收集与前缀匹配">1.键的收集与前缀匹配</h3>
-<p>  由于在<span class="math inline">\(trie\)</span>中，字符和键(<span class="math inline">\(key\)</span>)都是被隐性表示的，当我们想让我们的键变得可迭代时，我们不能只在<span class="math inline">\(trie\)</span>中直接寻找它们。我们可以用一个可迭代的<code>collect</code>方法，该方法会维护一个字符串，它用于储存路径上的字符：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  整个搜索键的过程如下：</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
-<p>  <code>keysWithPrefix</code>方法的执行过程如下：</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
-<h3 id="2通配符匹配">2.通配符匹配</h3>
-<p>  为了实现<code>keysThatMatch()</code>方法，我们使用一个类似的程序，但添加一个参数<span class="math inline">\(pat\)</span>来表示我们需要<span class="math inline">\(collect()\)</span>的字符串。当模式字符是通配符(<span class="math inline">\(wildcard\)</span>)时，我们调用它的所有链接；否则，我们只调用和通配符相关的链接。
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> &#123;</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&#x27;.&#x27;</span> || next == c) &#123;</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>15.Tries</category>
       </categories>
   </entry>
   <entry>
@@ -4637,22 +4640,6 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>17.1.图的构建</title>
-    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
-    <content><![CDATA[<h1 id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</h1>
-<h3 id="1图的api">1.图的<span class="math inline">\(API\)</span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2dfs">2.<span class="math inline">\(dfs\)</span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3路径的寻找">3.路径的寻找</h3>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>17.Graphs</category>
-      </categories>
-  </entry>
-  <entry>
     <title>18.1.选择排序</title>
     <url>/2024/05/31/18.1.Selection%20Sort/</url>
     <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
@@ -4685,6 +4672,22 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
       <categories>
         <category>CS61B DataStructure</category>
         <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>17.1.图的构建</title>
+    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
+    <content><![CDATA[<h1 id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</h1>
+<h3 id="1图的api">1.图的<span class="math inline">\(API\)</span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2dfs">2.<span class="math inline">\(dfs\)</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3路径的寻找">3.路径的寻找</h3>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>17.Graphs</category>
       </categories>
   </entry>
   <entry>
@@ -4838,98 +4841,6 @@ algorithm!)</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>2.1.Java语言特性</title>
-    <url>/2024/05/31/2.1.Mystery%20of%20the%20Walrus/</url>
-    <content><![CDATA[<h1 id="21-java语言特性"><span class="math inline">\(2.1\)</span> <span class="math inline">\(Java\)</span>语言特性</h1>
-<h3 id="1比特bit">1.比特(<span class="math inline">\(bit\)</span>)</h3>
-<p>  在计算机中，所有的信息都<strong>以<span class="math inline">\(01\)</span>串的形式</strong>存储于内存中，例如：</p>
-<ul>
-<li><span class="math inline">\(72\)</span>被存储为<code>01001000</code></li>
-<li><span class="math inline">\(H\)</span>字母被存储为<code>01001000</code></li>
-</ul>
-<p>  <span class="math inline">\(72\)</span>和<span class="math inline">\(H\)</span>的<span class="math inline">\(01\)</span>串是相同的，<span class="math inline">\(Java\)</span>代码通过数据类型(<span class="math inline">\(tyep\)</span>)区分它们： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> c=<span class="string">&#x27;H&#x27;</span>;</span><br><span class="line"><span class="type">int</span> x=c;</span><br><span class="line">System.out.println(c);</span><br><span class="line">System.out.println(x);</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">H</span><br><span class="line"><span class="number">72</span></span><br></pre></td></tr></table></figure>
-<p>  在这个例子中，<code>x</code>和<code>c</code>变量都有相同的<span class="math inline">\(01\)</span>串，但解释器会在打印它们的时候对其进行不同的处理。</p>
-<p>  在<span class="math inline">\(Java\)</span>中，有<span class="math inline">\(8\)</span>种基本数据类型：<code>byte</code>，<code>short</code>，<code>int</code>，<code>long</code>，<code>float</code>，<code>double</code>，<code>boolean</code>，<code>char</code>。</p>
-<h3 id="2变量的声明简化">2.变量的声明(简化)</h3>
-<p>  我们可以将计算机想象成一个一个拥有大量记忆比特(<span class="math inline">\(memory\;bits\)</span>)来存储信息的机器，<strong>每个比特都有独立的地址</strong>。</p>
-<p>  在声明某一基本数据类型的变量时，<span class="math inline">\(Java\)</span>会<strong>找到一个区域(<span class="math inline">\(blocks\)</span>)</strong>，这个区域有足够的比特来存储该类型的信息。我们可以把这些区域比喻为
-<strong>一个装着比特的盒子(<span class="math inline">\(box\)</span>)</strong>。</p>
-<p>  除了安置内存，<span class="math inline">\(Java\)</span>解释器还会<strong>创造一个内部表格的入口(<span class="math inline">\(entry\)</span>)</strong>，它<strong>将每个变量的名字与它们对应盒子的第一个比特相对应(<span class="math inline">\(map\)</span>)</strong>。</p>
-<p>  例如，当我们声明<code>int x</code>和<code>double y</code>这两个变量时，<span class="math inline">\(Java\)</span>可能会决定用内存中的第<span class="math inline">\(352\)</span>到第<span class="math inline">\(384\)</span>位比特来存储<code>x</code>，用第<span class="math inline">\(20800\)</span>到第<span class="math inline">\(20864\)</span>位比特来存储<code>y</code>。解释器会接着记录<code>x</code>从第<span class="math inline">\(352\)</span>位比特开始存储，<code>y</code>从第<span class="math inline">\(20800\)</span>位比特开始存储。在执行下面的代码后：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> x;</span><br><span class="line"><span class="type">double</span> y;</span><br></pre></td></tr></table></figure></p>
-<p>  我们会得到下面两个<span class="math inline">\(32\)</span>位和<span class="math inline">\(64\)</span>位的盒子：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image.png"></p>
-<p>  <span class="math inline">\(java\)</span>语言<strong>并没有像<span class="math inline">\(C\)</span>语言一样提供访问盒子地址的途径</strong>。这虽然阻止了某些类型优化，但也防止了一大类非常棘手的编程错误。</p>
-<p>  在变量声明后，<span class="math inline">\(Java\)</span>并不会在预留的盒子里写入任何默认的东西，也就是说，<strong>每个变量并没有默认值</strong>。因此，在这个盒子被通过<code>=</code>运算符装满比特之前，<span class="math inline">\(Java\)</span>解释器会阻止我们使用这个变量。而<strong>当我们对内存盒子(<span class="math inline">\(memory\;box\)</span>)进行赋值后，这个盒子就会装入我们指定的值</strong>。</p>
-<p>  例如，当我们执行下面的程序时： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">x = -<span class="number">1431195969</span>;</span><br><span class="line">y = <span class="number">567213.112</span>;</span><br></pre></td></tr></table></figure></p>
-<p>  每个变量的内存盒子会像下面这样被填满。这种标记被叫做盒子标记法(<span class="math inline">\(box\;notation\)</span>)：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-1.png"></p>
-<p>  为了简化，我们将盒子标记简化为如下格式：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-2.png"></p>
-<h3 id="3等式的黄金规则groe">3.等式的黄金规则(<span class="math inline">\(GRoE\)</span>)</h3>
-<p>  <strong>当我们写下<code>y=x</code>，我们在告诉<span class="math inline">\(Java\)</span>解释器把<code>x</code>的比特复制给<code>y</code></strong>。这个规则是理解下面这个谜题的基础：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br><span class="line">b.weight = <span class="number">5</span>;</span><br><span class="line">System.out.println(a);</span><br><span class="line">System.out.println(b);</span><br></pre></td></tr></table></figure></p>
-<h3 id="4引用类型referencetype">4.引用类型(<span class="math inline">\(reference\;type\)</span>)</h3>
-<p>  在之前我们介绍了<span class="math inline">\(Java\)</span>的基本类型，除了基本类型外的其他类型，如数组，被称为<strong>引用类型</strong>。</p>
-<h4 id="a对象实例化">  <span class="math inline">\(a.\)</span>对象实例化</h4>
-<p>  当我们利用<code>new</code>语句将某个对象实例化(<span class="math inline">\(instantiate\)</span>)后，<span class="math inline">\(Java\)</span>会先<strong>给这个类(<span class="math inline">\(class\)</span>)的每个实例变量分配一个盒子</strong>，然后<strong>在盒子里面装一个默认值</strong>。</p>
-<p>  例如，当我们的<span class="math inline">\(Warlus\)</span>类如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Walrus</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> weight;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> tuskSize;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Walrus</span><span class="params">(<span class="type">int</span> w, <span class="type">double</span> ts)</span> &#123;</span><br><span class="line">          weight = w;</span><br><span class="line">          tuskSize = ts;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  并且我们创造了一个实例<code>new Walrus(1000,8.3)</code>，那么我们就会得到下面这两个独立的盒子：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-3.png"></p>
-<h4 id="b引用类型变量的声明">  <span class="math inline">\(b.\)</span>引用类型变量的声明</h4>
-<p>  我们上面所举的例子是匿名的实例，它没有被存储到一个变量中。</p>
-<p>  当我们声明任何一个引用类型的变量时，<span class="math inline">\(Java\)</span><strong>会给这个变量分配一个<span class="math inline">\(64\)</span>比特的盒子，不管这个对象是什么类型的</strong>。这是因为：这个<span class="math inline">\(64\)</span>比特的盒子并不是装这个对象(例如<span class="math inline">\(Walrus\)</span>)的具体数据的，而是装<strong>这个对象在内存中的地址</strong>。</p>
-<p>  例如，当我们如下调用变量时： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Walrus someWalrus;</span><br><span class="line">someWalrus = new Walrus(1000, 8.3);</span><br></pre></td></tr></table></figure></p>
-<p>  我们假设<span class="math inline">\(Walrus\)</span>的<code>weight</code>存储在开始于<code>5051956592385990207</code>的比特里，而<code>tuskSize</code>存储在开始于<code>5051956592385990239</code>的比特里，我们会<strong>把<code>5051956592385990207</code>存储在<span class="math inline">\(Walrus\)</span>变量中</strong>：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-4.png"></p>
-<p>  我们也可以对引用变量赋予特殊值<code>null</code>：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-5.png"></p>
-<p>  这样表示引用变量的比特较为复杂，因此我们引入箭头标记：</p>
-<ul>
-<li>如果一个地址全部为空，就用<code>null</code>来表示。</li>
-<li><strong>如果一个地址非空，就用箭头指向它所代指的对象实例</strong>。</li>
-</ul>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-6.png"></p>
-<p>  回到下面这个问题： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br><span class="line">b.weight = <span class="number">5</span>;</span><br><span class="line">System.out.println(a);</span><br><span class="line">System.out.println(b);</span><br></pre></td></tr></table></figure></p>
-<p>  执行完下面的语句后，可以得到下面的标记： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-7.png"></p>
-<h3 id="5参数传递">5.参数传递</h3>
-<p>  当我们给一个函数传递参数时，我们也只是<strong>将参数的比特复制过去</strong>。<span class="math inline">\(GRoE\)</span>原则同样适用于参数的传递。比特复制也被称作传递数值(<span class="math inline">\(passing\;by\;value\)</span>)。在<span class="math inline">\(Java\)</span>中，我们经常使用这种做法。</p>
-<p>  注意到，<strong>对于基本类型变量，比特表示的是它们的数值而非地址</strong>；而<strong>对于引用类型的变量，比特表示的是它们的地址</strong>，因此<strong>函数对两者的作用并不相同</strong>。</p>
-<p>  考虑下面这个例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PassByValueFigure</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">           <span class="type">Walrus</span> <span class="variable">walrus</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">3500</span>, <span class="number">10.5</span>);</span><br><span class="line">           <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">           doStuff(walrus, x);</span><br><span class="line">           System.out.println(walrus);</span><br><span class="line">           System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">doStuff</span><span class="params">(Walrus W, <span class="type">int</span> x)</span> &#123;</span><br><span class="line">           W.weight = W.weight - <span class="number">100</span>;</span><br><span class="line">           x = x - <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   该例子对应的标记图如下：</p>
-<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-8.png"></p>
-<p>  可以看到，<span class="math inline">\(doStuff\)</span>只对<span class="math inline">\(Walrus\)</span>的对象有作用，对<code>x</code>并无作用。</p>
-<h3 id="6数组的实例化">6.数组的实例化</h3>
-<p>  像先前对引用变量的讲解，用于存储数组的变量也遵循相同的规则。例如下面这个整数数组的创建：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">x = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">95</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<code>new</code>关键词会创建<span class="math inline">\(5\)</span>个<span class="math inline">\(32\)</span>比特的盒子，并返回赋值给<code>x</code>的整个对象的地址。</p>
-<p>  如果丢失了和对象的地址相关的比特，对象可能被遗失。例如如果上例的<code>x</code>是右侧数组唯一的备份(<span class="math inline">\(copy\)</span>)，那么<code>x=null</code>的赋值语句会导致原先数组的丢失。这并非坏事，因为有时我们的确需要遗忘一些对象。</p>
-<h3 id="7整型链表intlist">7.整型链表(<span class="math inline">\(IntList\)</span>)</h3>
-<h4 id="a整型链表的构建">  <span class="math inline">\(a.\)</span>整型链表的构建</h4>
-<p>  类似<span class="math inline">\(python\)</span>中的<span class="math inline">\(Linked\;list\)</span>，可以用递归的方式实现初步的整型链表：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> first;</span><br><span class="line">    <span class="keyword">public</span> IntList rest;        </span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">IntList</span><span class="params">(<span class="type">int</span> f, IntList r)</span> &#123;</span><br><span class="line">        first = f;</span><br><span class="line">        rest = r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这种形式的链表使用起来非常不方便、容易出错，之后我们将会通过在类中添加辅助方法(<span class="math inline">\(helper\;method\)</span>)的面向对象编程策略来优化它：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, <span class="literal">null</span>);</span><br><span class="line">L.rest = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, <span class="literal">null</span>);</span><br><span class="line">L.rest.rest = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, L);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, L);</span><br></pre></td></tr></table></figure></p>
-<h4 id="bsize函数的递归与迭代实现">  <span class="math inline">\(b.\)</span><span class="math inline">\(Size\)</span>函数的递归与迭代实现</h4>
-<p>  整型链表的<span class="math inline">\(Size\)</span>函数的递归实现如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Return the size of the list using... recursion! */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (rest == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">this</span>.rest.size();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里有一个要点：为什么递归的基本条件不写<code>if(this == null)</code>呢？问题出在<code>L == null</code>这种特殊情况，我们不能对一个<code>null</code>对象使用实例方法。</p>
-<p>  <span class="math inline">\(Size\)</span>函数的迭代实现如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Return the size of the list using no recursion! */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">iterativeSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">IntList</span> <span class="variable">p</span> <span class="operator">=</span> <span class="built_in">this</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">totalSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (p != <span class="literal">null</span>) &#123;</span><br><span class="line">        totalSize += <span class="number">1</span>;</span><br><span class="line">        p = p.rest;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> totalSize;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  需要注意，在迭代时我们需要一个指针<code>p</code>，因为在<span class="math inline">\(java\)</span>中，我们不能重新分配(<span class="math inline">\(reassign\)</span>)<code>this</code>。</p>
-<blockquote>
-<p><code>this</code>refers to the current object. It's like saying: "I
-am" or "my name is". You can't change who you are.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>2.List</category>
       </categories>
   </entry>
   <entry>
@@ -5241,46 +5152,6 @@ nodes themselves are not reversed; only the labels are.
       </categories>
   </entry>
   <entry>
-    <title>2.5.数组型链表</title>
-    <url>/2024/05/31/2.5.ALists/</url>
-    <content><![CDATA[<h1 id="25数组型链表"><span class="math inline">\(2.5\)</span>数组型链表</h1>
-<h3 id="1数组型链表的引入与搭建">1.数组型链表的引入与搭建</h3>
-<p>  在<span class="math inline">\(SLList\)</span>与<span class="math inline">\(DLList\)</span>中，我们可以轻易地实现<code>getFirst</code>和<code>getLast</code>，但只能用线性的时间复杂度实现<code>get(int index)</code>。而数组可以实现常数时间复杂度的访问(参考<span class="math inline">\(cs61a\)</span>的懒惰计算)。</p>
-<p>  可以初步搭建出以下的<span class="math inline">\(AList\)</span>框架： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AList &#123;</span><br><span class="line">        items = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> items[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这一实现遵循了以下不变量：</p>
-<ul>
-<li>下一个插入元素的插入位置一直是<span class="math inline">\(size\)</span>。</li>
-<li><span class="math inline">\(AList\)</span>中的元素数量永远是<span class="math inline">\(size\)</span>。</li>
-<li>最后一个元素的位置永远是<span class="math inline">\(size-1\)</span>。</li>
-</ul>
-<h3 id="2对链表的思考">2.对链表的思考</h3>
-<p>  在实现<code>removeLast</code>操作时，我们先明确一个重要的发现：在我们实现某个方法时，对链表的任何改变都应该导致一个或多个内存盒子(<span class="math inline">\(memory\;box\)</span>)的改变。</p>
-<p>  链表是一个抽象的概念用户使用我们提供的抽象(<code>addLast</code>，<code>removeLast</code>)来对列表进行的任何更改，而我们必须将这些更改以符合用户期望的方式反映在这些内存盒子中。中间的过程并不重要，我们只需要让数组型链表的行为与用户所设想的相一致就好了。</p>
-<p>  而<span class="math inline">\(size\)</span>，<span class="math inline">\(items\)</span>，<span class="math inline">\(items[i]\)</span>的内存盒子(<span class="math inline">\(memory\;boxes\)</span>)是这个概念的具体表示，是我们已经设计好的事实。我们的目标就是通过操作这些具体的表示形式，来实现用户想要的模型。</p>
-<h3 id="3removelast的实现">3.<code>removeLast</code>的实现</h3>
-<p>  通过上面对链表的思考，我们可以只通过改变<span class="math inline">\(size\)</span>来实现<code>removeLast</code>：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> getLast();</span><br><span class="line">        size = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这种<code>removeLast</code>的实现是基于<span class="math inline">\(AList\)</span>的不变量的。只要我们改变<span class="math inline">\(Size\)</span>，那么下一个元素插入的位置就一定是<span class="math inline">\(size\)</span>，不管<span class="math inline">\(size\)</span>这个位置有没有元素，而最后一个元素的位置是<span class="math inline">\(size-1\)</span>，用户并不能去访问<span class="math inline">\(size\)</span>这个位置。因此可以通过这个手段实现元素的删除。至于<span class="math inline">\(size\)</span>位置的元素，我们想把它改为几都可以。</p>
-<p>  不过，与<span class="math inline">\(int\)</span>型的链表不同，当我们链表的存储类型为<span class="math inline">\(generic\)</span>时，我们会将<span class="math inline">\(size\)</span>位置的元素置为<code>null</code>，因为如果对<span class="math inline">\(size\)</span>位置的元素置之不理的话，这个元素就会一直占用内存，导致内存的浪费。而设为<code>null</code>后，由于对它的引用丢失了，<span class="math inline">\(Java\)</span>会在内存中删掉它。</p>
-<h3 id="4数组大小的调整">4.数组大小的调整</h3>
-<p>  在<span class="math inline">\(Java\)</span>中，数组必须有固定的大小，因此在数组容量不够时，我们需要调整数组的大小(<span class="math inline">\(resize\)</span>)。</p>
-<p>  实现调整数组的办法很简单：创建一个具有所需大小的数组，然后把原数组的元素复制过来，最后返回这个新数组即可：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[size + <span class="number">1</span>];</span><br><span class="line">System.arraycopy(items, <span class="number">0</span>, a, <span class="number">0</span>, size);</span><br><span class="line">a[size] = <span class="number">11</span>;</span><br><span class="line">items = a;</span><br><span class="line">size = size + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-<p>  但是，这种在需要扩容时增加一部分的做法过于缓慢。例如我们每次扩容<span class="math inline">\(1\)</span>，则当数组扩容到<span class="math inline">\(n\)</span>时，由于每次扩容都要先创建一个新的数组，一共创建了<span class="math inline">\(\sum_{i=1}^n i ={ {n(n+1)}\over
-2}\)</span>个单位大小的数组，时间复杂度为<span class="math inline">\(O(n^2)\)</span>，这样的效率十分低。</p>
-<p>  因此，我们一般不采用上面的扩容方式，而是在需要扩容的时候适当地多扩大一些，以减少创建数组的次数。一般的做法如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertBack</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (size == items.length) &#123;</span><br><span class="line">           resize(size * RFACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">    items[size] = x;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="5内存使用率">5.内存使用率</h3>
-<p>  数组中的实际元素个数与数组大小之比的数值是内存利用率。下面的数组的内存使用率为<span class="math inline">\(0.04\)</span>：</p>
-<p><img src="/2024/05/31/2.5.ALists/image-14.png"></p>
-<p>  当数组的内存使用率较低的时候，我们可以考虑<code>resize(size \ 2)</code>，缩小数组空间来节约内存。这种做法被称为以空间换时间。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>2.List</category>
-      </categories>
-  </entry>
-  <entry>
     <title>2.4.可变数据</title>
     <url>/2024/05/31/2.4.%E5%8F%AF%E5%8F%98%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="24可变数据"><span class="math inline">\(2.4\)</span>可变数据</h1>
@@ -5469,6 +5340,46 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
+    <title>2.5.数组型链表</title>
+    <url>/2024/05/31/2.5.ALists/</url>
+    <content><![CDATA[<h1 id="25数组型链表"><span class="math inline">\(2.5\)</span>数组型链表</h1>
+<h3 id="1数组型链表的引入与搭建">1.数组型链表的引入与搭建</h3>
+<p>  在<span class="math inline">\(SLList\)</span>与<span class="math inline">\(DLList\)</span>中，我们可以轻易地实现<code>getFirst</code>和<code>getLast</code>，但只能用线性的时间复杂度实现<code>get(int index)</code>。而数组可以实现常数时间复杂度的访问(参考<span class="math inline">\(cs61a\)</span>的懒惰计算)。</p>
+<p>  可以初步搭建出以下的<span class="math inline">\(AList\)</span>框架： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AList &#123;</span><br><span class="line">        items = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> items[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这一实现遵循了以下不变量：</p>
+<ul>
+<li>下一个插入元素的插入位置一直是<span class="math inline">\(size\)</span>。</li>
+<li><span class="math inline">\(AList\)</span>中的元素数量永远是<span class="math inline">\(size\)</span>。</li>
+<li>最后一个元素的位置永远是<span class="math inline">\(size-1\)</span>。</li>
+</ul>
+<h3 id="2对链表的思考">2.对链表的思考</h3>
+<p>  在实现<code>removeLast</code>操作时，我们先明确一个重要的发现：在我们实现某个方法时，对链表的任何改变都应该导致一个或多个内存盒子(<span class="math inline">\(memory\;box\)</span>)的改变。</p>
+<p>  链表是一个抽象的概念用户使用我们提供的抽象(<code>addLast</code>，<code>removeLast</code>)来对列表进行的任何更改，而我们必须将这些更改以符合用户期望的方式反映在这些内存盒子中。中间的过程并不重要，我们只需要让数组型链表的行为与用户所设想的相一致就好了。</p>
+<p>  而<span class="math inline">\(size\)</span>，<span class="math inline">\(items\)</span>，<span class="math inline">\(items[i]\)</span>的内存盒子(<span class="math inline">\(memory\;boxes\)</span>)是这个概念的具体表示，是我们已经设计好的事实。我们的目标就是通过操作这些具体的表示形式，来实现用户想要的模型。</p>
+<h3 id="3removelast的实现">3.<code>removeLast</code>的实现</h3>
+<p>  通过上面对链表的思考，我们可以只通过改变<span class="math inline">\(size\)</span>来实现<code>removeLast</code>：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">removeLast</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> getLast();</span><br><span class="line">        size = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这种<code>removeLast</code>的实现是基于<span class="math inline">\(AList\)</span>的不变量的。只要我们改变<span class="math inline">\(Size\)</span>，那么下一个元素插入的位置就一定是<span class="math inline">\(size\)</span>，不管<span class="math inline">\(size\)</span>这个位置有没有元素，而最后一个元素的位置是<span class="math inline">\(size-1\)</span>，用户并不能去访问<span class="math inline">\(size\)</span>这个位置。因此可以通过这个手段实现元素的删除。至于<span class="math inline">\(size\)</span>位置的元素，我们想把它改为几都可以。</p>
+<p>  不过，与<span class="math inline">\(int\)</span>型的链表不同，当我们链表的存储类型为<span class="math inline">\(generic\)</span>时，我们会将<span class="math inline">\(size\)</span>位置的元素置为<code>null</code>，因为如果对<span class="math inline">\(size\)</span>位置的元素置之不理的话，这个元素就会一直占用内存，导致内存的浪费。而设为<code>null</code>后，由于对它的引用丢失了，<span class="math inline">\(Java\)</span>会在内存中删掉它。</p>
+<h3 id="4数组大小的调整">4.数组大小的调整</h3>
+<p>  在<span class="math inline">\(Java\)</span>中，数组必须有固定的大小，因此在数组容量不够时，我们需要调整数组的大小(<span class="math inline">\(resize\)</span>)。</p>
+<p>  实现调整数组的办法很简单：创建一个具有所需大小的数组，然后把原数组的元素复制过来，最后返回这个新数组即可：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[size + <span class="number">1</span>];</span><br><span class="line">System.arraycopy(items, <span class="number">0</span>, a, <span class="number">0</span>, size);</span><br><span class="line">a[size] = <span class="number">11</span>;</span><br><span class="line">items = a;</span><br><span class="line">size = size + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>  但是，这种在需要扩容时增加一部分的做法过于缓慢。例如我们每次扩容<span class="math inline">\(1\)</span>，则当数组扩容到<span class="math inline">\(n\)</span>时，由于每次扩容都要先创建一个新的数组，一共创建了<span class="math inline">\(\sum_{i=1}^n i ={ {n(n+1)}\over
+2}\)</span>个单位大小的数组，时间复杂度为<span class="math inline">\(O(n^2)\)</span>，这样的效率十分低。</p>
+<p>  因此，我们一般不采用上面的扩容方式，而是在需要扩容的时候适当地多扩大一些，以减少创建数组的次数。一般的做法如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertBack</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (size == items.length) &#123;</span><br><span class="line">           resize(size * RFACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">    items[size] = x;</span><br><span class="line">    size += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="5内存使用率">5.内存使用率</h3>
+<p>  数组中的实际元素个数与数组大小之比的数值是内存利用率。下面的数组的内存使用率为<span class="math inline">\(0.04\)</span>：</p>
+<p><img src="/2024/05/31/2.5.ALists/image-14.png"></p>
+<p>  当数组的内存使用率较低的时候，我们可以考虑<code>resize(size \ 2)</code>，缩小数组空间来节约内存。这种做法被称为以空间换时间。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>2.List</category>
+      </categories>
+  </entry>
+  <entry>
     <title>2.5.面向对象编程</title>
     <url>/2024/05/31/2.5.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="25面向对象编程"><span class="math inline">\(2.5\)</span>面向对象编程</h1>
@@ -5598,43 +5509,95 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
-    <title>2.9.迭代对象</title>
-    <url>/2024/05/31/2.9.%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="29迭代对象"><span class="math inline">\(2.9\)</span>迭代对象</h1>
-<p>  对象可以将其他对象作为属性，当一个类中的某个对象的属性是该类的某个成员时，它就是迭代对象(<span class="math inline">\(recursive\;object\)</span>)。</p>
-<h3 id="1链表类">1.链表类</h3>
-<h4 id="a链表类定义">  <span class="math inline">\(a.\)</span>链表类定义</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Link</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;A linked list with a first element and the rest.&quot;&quot;&quot;</span></span><br><span class="line">        empty = ()</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, first, rest=empty</span>):</span><br><span class="line">            <span class="keyword">assert</span> rest <span class="keyword">is</span> Link.empty <span class="keyword">or</span> <span class="built_in">isinstance</span>(rest, Link)</span><br><span class="line">            <span class="comment"># if rest is an empty list or is a link instance</span></span><br><span class="line">            self.first = first</span><br><span class="line">            self.rest = rest</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, i</span>):</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> self.first</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> self.rest[i-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">len</span>(self.rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(s)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[<span class="number">1</span>]</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h4 id="b字符串表示">  <span class="math inline">\(b.\)</span>字符串表示</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">link_expression</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a string that would evaluate to s.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> s.rest <span class="keyword">is</span> Link.empty:</span><br><span class="line">            rest = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            rest = <span class="string">&#x27;, &#x27;</span> + link_expression(s.rest)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Link(&#123;0&#125;&#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(s.first, rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>link_expression(s)</span><br><span class="line"><span class="string">&#x27;Link(3, Link(4, Link(5)))&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>  将这个字符串表示函数与<code>__repr__</code>方法绑定，可以在显示链表实例时自动调用：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Link.__repr__ = link_expression</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br></pre></td></tr></table></figure></p>
-<h4 id="c链表的映射-筛选与字符插入">  <span class="math inline">\(c.\)</span>链表的映射、筛选与字符插入</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">map_link</span>(<span class="params">f, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(f(s.first), map_link(f, s.rest))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map_link(square, s)</span><br><span class="line">Link(<span class="number">9</span>, Link(<span class="number">16</span>, Link(<span class="number">25</span>)))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">filter_link</span>(<span class="params">f, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            filtered = filter_link(f, s.rest)</span><br><span class="line">            <span class="keyword">if</span> f(s.first):</span><br><span class="line">                <span class="keyword">return</span> Link(s.first, filtered)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> filtered</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>odd = <span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map_link(square, filter_link(odd, s))</span><br><span class="line">Link(<span class="number">9</span>, Link(<span class="number">25</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[square(x) <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>] <span class="keyword">if</span> odd(x)]</span><br><span class="line">[<span class="number">9</span>, <span class="number">25</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">join_link</span>(<span class="params">s, separator</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">elif</span> s.rest <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">str</span>(s.first)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">str</span>(s.first) + separator + join_link(s.rest, separator)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>join_link(s, <span class="string">&quot;, &quot;</span>)</span><br><span class="line"><span class="string">&#x27;3, 4, 5&#x27;</span></span><br></pre></td></tr></table></figure>
-<h4 id="d链表的一些其它迭代操作">  <span class="math inline">\(d.\)</span>链表的一些其它迭代操作</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">extend_link</span>(<span class="params">s, t</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> t</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(s.first, extend_link(s.rest, t))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>extend_link(s, s)</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>, Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>))))))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Link.__add__ = extend_link</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s + s</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>, Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>))))))</span><br></pre></td></tr></table></figure>
-<h3 id="2树类">2.树类</h3>
-<h4 id="a树类定义">  <span class="math inline">\(a.\)</span>树类定义</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Tree</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, label, branches=(<span class="params"></span>)</span>):</span><br><span class="line">            self.label = label</span><br><span class="line">            <span class="keyword">for</span> branch <span class="keyword">in</span> branches:</span><br><span class="line">                <span class="keyword">assert</span> <span class="built_in">isinstance</span>(branch, Tree)</span><br><span class="line">            self.branches = branches</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">if</span> self.branches:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Tree(&#123;0&#125;, &#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(self.label, <span class="built_in">repr</span>(self.branches))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Tree(&#123;0&#125;)&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">repr</span>(self.label))</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">is_leaf</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">not</span> self.branches</span><br></pre></td></tr></table></figure>
-<h3 id="3set">3.<span class="math inline">\(set\)</span></h3>
-<h4 id="a概念">  <span class="math inline">\(a.\)</span>概念</h4>
-<p>  <span class="math inline">\(set\)</span>是<span class="math inline">\(python\)</span>内置的容器，<span class="math inline">\(set\)</span>内部的元素会自动去重与排序。</p>
-<h4 id="b基本操作">  <span class="math inline">\(b.\)</span>基本操作</h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">3</span> <span class="keyword">in</span> s</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(s)</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.union(&#123;<span class="number">1</span>, <span class="number">5</span>&#125;)</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.intersection(&#123;<span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>&#125;)</span><br><span class="line">&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="4set的实现">4.<span class="math inline">\(set\)</span>的实现</h3>
-<h4 id="a链表实现非排序set">  <span class="math inline">\(a.\)</span>链表实现非排序<span class="math inline">\(set\)</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">empty</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="keyword">return</span> s <span class="keyword">is</span> Link.empty</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return True if and only if set s contains v.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> empty(s):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.first == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.rest, v)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(s, <span class="number">2</span>)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(s, <span class="number">5</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">adjoin_set</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements of s and element v.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> set_contains(s, v):</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(v, s)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = adjoin_set(s, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t</span><br><span class="line">Link(<span class="number">2</span>, Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>))))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">intersect_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements common to set1 and set2.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> keep_if_link(set1, <span class="keyword">lambda</span> v: set_contains(set2, v))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intersect_set(t, apply_to_all_link(s, square))</span><br><span class="line">Link(<span class="number">4</span>, Link(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">union_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements either in set1 or set2.&quot;&quot;&quot;</span></span><br><span class="line">        set1_not_set2 = keep_if_link(set1, <span class="keyword">lambda</span> v: <span class="keyword">not</span> set_contains(set2, v))</span><br><span class="line">        <span class="keyword">return</span> extend_link(set1_not_set2, set2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>union_set(t, s)</span><br><span class="line">Link(<span class="number">2</span>, Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>))))</span><br></pre></td></tr></table></figure>
-<h4 id="b排序对时间复杂度的影响">  <span class="math inline">\(b.\)</span>排序对时间复杂度的影响</h4>
-<p>  对于查询操作，非排序元素的时间复杂度为<span class="math inline">\(O(n)\)</span>；而对于排序元素，查询最小元素为<span class="math inline">\(1\)</span>，最大元素为<span class="math inline">\(n\)</span>，平均复杂度为<span class="math inline">\(O({n\over 2})=O(n)\)</span>，虽然同阶但较小。</p>
-<p>  对于合并操作，非排序元素的时间复杂度是<span class="math inline">\(O(n,m)\)</span>；而对于排序元素，可以利用双指针算法实现<span class="math inline">\(O(m+n)\)</span>的复杂度。</p>
-<h4 id="c列表实现排序set">  <span class="math inline">\(c.\)</span>列表实现排序<span class="math inline">\(set\)</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> empty(s) <span class="keyword">or</span> s.first &gt; v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.first == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.rest, v)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>u = Link(<span class="number">1</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(u, <span class="number">0</span>)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(u, <span class="number">4</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">intersect_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="keyword">if</span> empty(set1) <span class="keyword">or</span> empty(set2):</span><br><span class="line">            <span class="keyword">return</span> Link.empty</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            e1, e2 = set1.first, set2.first</span><br><span class="line">            <span class="keyword">if</span> e1 == e2:</span><br><span class="line">                <span class="keyword">return</span> Link(e1, intersect_set(set1.rest, set2.rest))</span><br><span class="line">            <span class="keyword">elif</span> e1 &lt; e2:</span><br><span class="line">                <span class="keyword">return</span> intersect_set(set1.rest, set2)</span><br><span class="line">            <span class="keyword">elif</span> e2 &lt; e1:</span><br><span class="line">                <span class="keyword">return</span> intersect_set(set1, set2.rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intersect_set(s, s.rest)</span><br><span class="line">Link(<span class="number">4</span>, Link(<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
-<h4 id="d二叉查找树树实现set">  <span class="math inline">\(d.\)</span>二叉查找树树实现<span class="math inline">\(set\)</span></h4>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.entry == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">elif</span> s.entry &lt; v:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.right, v)</span><br><span class="line">        <span class="keyword">elif</span> s.entry &gt; v:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.left, v)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">adjoin_set</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> Tree(v)</span><br><span class="line">        <span class="keyword">elif</span> s.entry == v:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">elif</span> s.entry &lt; v:</span><br><span class="line">            <span class="keyword">return</span> Tree(s.entry, s.left, adjoin_set(s.right, v))</span><br><span class="line">        <span class="keyword">elif</span> s.entry &gt; v:</span><br><span class="line">            <span class="keyword">return</span> Tree(s.entry, adjoin_set(s.left, v), s.right)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>adjoin_set(adjoin_set(adjoin_set(<span class="literal">None</span>, <span class="number">2</span>), <span class="number">3</span>), <span class="number">1</span>)</span><br><span class="line">Tree(<span class="number">2</span>, Tree(<span class="number">1</span>), Tree(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+    <title>2.1.Java语言特性</title>
+    <url>/2024/05/31/2.1.Mystery%20of%20the%20Walrus/</url>
+    <content><![CDATA[<h1 id="21-java语言特性"><span class="math inline">\(2.1\)</span> <span class="math inline">\(Java\)</span>语言特性</h1>
+<h3 id="1比特bit">1.比特(<span class="math inline">\(bit\)</span>)</h3>
+<p>  在计算机中，所有的信息都<strong>以<span class="math inline">\(01\)</span>串的形式</strong>存储于内存中，例如：</p>
+<ul>
+<li><span class="math inline">\(72\)</span>被存储为<code>01001000</code></li>
+<li><span class="math inline">\(H\)</span>字母被存储为<code>01001000</code></li>
+</ul>
+<p>  <span class="math inline">\(72\)</span>和<span class="math inline">\(H\)</span>的<span class="math inline">\(01\)</span>串是相同的，<span class="math inline">\(Java\)</span>代码通过数据类型(<span class="math inline">\(tyep\)</span>)区分它们： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> c=<span class="string">&#x27;H&#x27;</span>;</span><br><span class="line"><span class="type">int</span> x=c;</span><br><span class="line">System.out.println(c);</span><br><span class="line">System.out.println(x);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">H</span><br><span class="line"><span class="number">72</span></span><br></pre></td></tr></table></figure>
+<p>  在这个例子中，<code>x</code>和<code>c</code>变量都有相同的<span class="math inline">\(01\)</span>串，但解释器会在打印它们的时候对其进行不同的处理。</p>
+<p>  在<span class="math inline">\(Java\)</span>中，有<span class="math inline">\(8\)</span>种基本数据类型：<code>byte</code>，<code>short</code>，<code>int</code>，<code>long</code>，<code>float</code>，<code>double</code>，<code>boolean</code>，<code>char</code>。</p>
+<h3 id="2变量的声明简化">2.变量的声明(简化)</h3>
+<p>  我们可以将计算机想象成一个一个拥有大量记忆比特(<span class="math inline">\(memory\;bits\)</span>)来存储信息的机器，<strong>每个比特都有独立的地址</strong>。</p>
+<p>  在声明某一基本数据类型的变量时，<span class="math inline">\(Java\)</span>会<strong>找到一个区域(<span class="math inline">\(blocks\)</span>)</strong>，这个区域有足够的比特来存储该类型的信息。我们可以把这些区域比喻为
+<strong>一个装着比特的盒子(<span class="math inline">\(box\)</span>)</strong>。</p>
+<p>  除了安置内存，<span class="math inline">\(Java\)</span>解释器还会<strong>创造一个内部表格的入口(<span class="math inline">\(entry\)</span>)</strong>，它<strong>将每个变量的名字与它们对应盒子的第一个比特相对应(<span class="math inline">\(map\)</span>)</strong>。</p>
+<p>  例如，当我们声明<code>int x</code>和<code>double y</code>这两个变量时，<span class="math inline">\(Java\)</span>可能会决定用内存中的第<span class="math inline">\(352\)</span>到第<span class="math inline">\(384\)</span>位比特来存储<code>x</code>，用第<span class="math inline">\(20800\)</span>到第<span class="math inline">\(20864\)</span>位比特来存储<code>y</code>。解释器会接着记录<code>x</code>从第<span class="math inline">\(352\)</span>位比特开始存储，<code>y</code>从第<span class="math inline">\(20800\)</span>位比特开始存储。在执行下面的代码后：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> x;</span><br><span class="line"><span class="type">double</span> y;</span><br></pre></td></tr></table></figure></p>
+<p>  我们会得到下面两个<span class="math inline">\(32\)</span>位和<span class="math inline">\(64\)</span>位的盒子：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image.png"></p>
+<p>  <span class="math inline">\(java\)</span>语言<strong>并没有像<span class="math inline">\(C\)</span>语言一样提供访问盒子地址的途径</strong>。这虽然阻止了某些类型优化，但也防止了一大类非常棘手的编程错误。</p>
+<p>  在变量声明后，<span class="math inline">\(Java\)</span>并不会在预留的盒子里写入任何默认的东西，也就是说，<strong>每个变量并没有默认值</strong>。因此，在这个盒子被通过<code>=</code>运算符装满比特之前，<span class="math inline">\(Java\)</span>解释器会阻止我们使用这个变量。而<strong>当我们对内存盒子(<span class="math inline">\(memory\;box\)</span>)进行赋值后，这个盒子就会装入我们指定的值</strong>。</p>
+<p>  例如，当我们执行下面的程序时： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">x = -<span class="number">1431195969</span>;</span><br><span class="line">y = <span class="number">567213.112</span>;</span><br></pre></td></tr></table></figure></p>
+<p>  每个变量的内存盒子会像下面这样被填满。这种标记被叫做盒子标记法(<span class="math inline">\(box\;notation\)</span>)：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-1.png"></p>
+<p>  为了简化，我们将盒子标记简化为如下格式：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-2.png"></p>
+<h3 id="3等式的黄金规则groe">3.等式的黄金规则(<span class="math inline">\(GRoE\)</span>)</h3>
+<p>  <strong>当我们写下<code>y=x</code>，我们在告诉<span class="math inline">\(Java\)</span>解释器把<code>x</code>的比特复制给<code>y</code></strong>。这个规则是理解下面这个谜题的基础：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br><span class="line">b.weight = <span class="number">5</span>;</span><br><span class="line">System.out.println(a);</span><br><span class="line">System.out.println(b);</span><br></pre></td></tr></table></figure></p>
+<h3 id="4引用类型referencetype">4.引用类型(<span class="math inline">\(reference\;type\)</span>)</h3>
+<p>  在之前我们介绍了<span class="math inline">\(Java\)</span>的基本类型，除了基本类型外的其他类型，如数组，被称为<strong>引用类型</strong>。</p>
+<h4 id="a对象实例化">  <span class="math inline">\(a.\)</span>对象实例化</h4>
+<p>  当我们利用<code>new</code>语句将某个对象实例化(<span class="math inline">\(instantiate\)</span>)后，<span class="math inline">\(Java\)</span>会先<strong>给这个类(<span class="math inline">\(class\)</span>)的每个实例变量分配一个盒子</strong>，然后<strong>在盒子里面装一个默认值</strong>。</p>
+<p>  例如，当我们的<span class="math inline">\(Warlus\)</span>类如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Walrus</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> weight;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> tuskSize;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Walrus</span><span class="params">(<span class="type">int</span> w, <span class="type">double</span> ts)</span> &#123;</span><br><span class="line">          weight = w;</span><br><span class="line">          tuskSize = ts;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  并且我们创造了一个实例<code>new Walrus(1000,8.3)</code>，那么我们就会得到下面这两个独立的盒子：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-3.png"></p>
+<h4 id="b引用类型变量的声明">  <span class="math inline">\(b.\)</span>引用类型变量的声明</h4>
+<p>  我们上面所举的例子是匿名的实例，它没有被存储到一个变量中。</p>
+<p>  当我们声明任何一个引用类型的变量时，<span class="math inline">\(Java\)</span><strong>会给这个变量分配一个<span class="math inline">\(64\)</span>比特的盒子，不管这个对象是什么类型的</strong>。这是因为：这个<span class="math inline">\(64\)</span>比特的盒子并不是装这个对象(例如<span class="math inline">\(Walrus\)</span>)的具体数据的，而是装<strong>这个对象在内存中的地址</strong>。</p>
+<p>  例如，当我们如下调用变量时： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Walrus someWalrus;</span><br><span class="line">someWalrus = new Walrus(1000, 8.3);</span><br></pre></td></tr></table></figure></p>
+<p>  我们假设<span class="math inline">\(Walrus\)</span>的<code>weight</code>存储在开始于<code>5051956592385990207</code>的比特里，而<code>tuskSize</code>存储在开始于<code>5051956592385990239</code>的比特里，我们会<strong>把<code>5051956592385990207</code>存储在<span class="math inline">\(Walrus\)</span>变量中</strong>：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-4.png"></p>
+<p>  我们也可以对引用变量赋予特殊值<code>null</code>：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-5.png"></p>
+<p>  这样表示引用变量的比特较为复杂，因此我们引入箭头标记：</p>
+<ul>
+<li>如果一个地址全部为空，就用<code>null</code>来表示。</li>
+<li><strong>如果一个地址非空，就用箭头指向它所代指的对象实例</strong>。</li>
+</ul>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-6.png"></p>
+<p>  回到下面这个问题： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br><span class="line">b.weight = <span class="number">5</span>;</span><br><span class="line">System.out.println(a);</span><br><span class="line">System.out.println(b);</span><br></pre></td></tr></table></figure></p>
+<p>  执行完下面的语句后，可以得到下面的标记： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">Walrus b;</span><br><span class="line">b = a;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-7.png"></p>
+<h3 id="5参数传递">5.参数传递</h3>
+<p>  当我们给一个函数传递参数时，我们也只是<strong>将参数的比特复制过去</strong>。<span class="math inline">\(GRoE\)</span>原则同样适用于参数的传递。比特复制也被称作传递数值(<span class="math inline">\(passing\;by\;value\)</span>)。在<span class="math inline">\(Java\)</span>中，我们经常使用这种做法。</p>
+<p>  注意到，<strong>对于基本类型变量，比特表示的是它们的数值而非地址</strong>；而<strong>对于引用类型的变量，比特表示的是它们的地址</strong>，因此<strong>函数对两者的作用并不相同</strong>。</p>
+<p>  考虑下面这个例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PassByValueFigure</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">           <span class="type">Walrus</span> <span class="variable">walrus</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">3500</span>, <span class="number">10.5</span>);</span><br><span class="line">           <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">           doStuff(walrus, x);</span><br><span class="line">           System.out.println(walrus);</span><br><span class="line">           System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">doStuff</span><span class="params">(Walrus W, <span class="type">int</span> x)</span> &#123;</span><br><span class="line">           W.weight = W.weight - <span class="number">100</span>;</span><br><span class="line">           x = x - <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   该例子对应的标记图如下：</p>
+<p><img src="/2024/05/31/2.1.Mystery%20of%20the%20Walrus/image-8.png"></p>
+<p>  可以看到，<span class="math inline">\(doStuff\)</span>只对<span class="math inline">\(Walrus\)</span>的对象有作用，对<code>x</code>并无作用。</p>
+<h3 id="6数组的实例化">6.数组的实例化</h3>
+<p>  像先前对引用变量的讲解，用于存储数组的变量也遵循相同的规则。例如下面这个整数数组的创建：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">x = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">95</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<code>new</code>关键词会创建<span class="math inline">\(5\)</span>个<span class="math inline">\(32\)</span>比特的盒子，并返回赋值给<code>x</code>的整个对象的地址。</p>
+<p>  如果丢失了和对象的地址相关的比特，对象可能被遗失。例如如果上例的<code>x</code>是右侧数组唯一的备份(<span class="math inline">\(copy\)</span>)，那么<code>x=null</code>的赋值语句会导致原先数组的丢失。这并非坏事，因为有时我们的确需要遗忘一些对象。</p>
+<h3 id="7整型链表intlist">7.整型链表(<span class="math inline">\(IntList\)</span>)</h3>
+<h4 id="a整型链表的构建">  <span class="math inline">\(a.\)</span>整型链表的构建</h4>
+<p>  类似<span class="math inline">\(python\)</span>中的<span class="math inline">\(Linked\;list\)</span>，可以用递归的方式实现初步的整型链表：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntList</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> first;</span><br><span class="line">    <span class="keyword">public</span> IntList rest;        </span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">IntList</span><span class="params">(<span class="type">int</span> f, IntList r)</span> &#123;</span><br><span class="line">        first = f;</span><br><span class="line">        rest = r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这种形式的链表使用起来非常不方便、容易出错，之后我们将会通过在类中添加辅助方法(<span class="math inline">\(helper\;method\)</span>)的面向对象编程策略来优化它：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, <span class="literal">null</span>);</span><br><span class="line">L.rest = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, <span class="literal">null</span>);</span><br><span class="line">L.rest.rest = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">IntList</span> <span class="variable">L</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">15</span>, <span class="literal">null</span>);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">10</span>, L);</span><br><span class="line">L = <span class="keyword">new</span> <span class="title class_">IntList</span>(<span class="number">5</span>, L);</span><br></pre></td></tr></table></figure></p>
+<h4 id="bsize函数的递归与迭代实现">  <span class="math inline">\(b.\)</span><span class="math inline">\(Size\)</span>函数的递归与迭代实现</h4>
+<p>  整型链表的<span class="math inline">\(Size\)</span>函数的递归实现如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Return the size of the list using... recursion! */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (rest == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">this</span>.rest.size();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里有一个要点：为什么递归的基本条件不写<code>if(this == null)</code>呢？问题出在<code>L == null</code>这种特殊情况，我们不能对一个<code>null</code>对象使用实例方法。</p>
+<p>  <span class="math inline">\(Size\)</span>函数的迭代实现如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Return the size of the list using no recursion! */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">iterativeSize</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">IntList</span> <span class="variable">p</span> <span class="operator">=</span> <span class="built_in">this</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">totalSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (p != <span class="literal">null</span>) &#123;</span><br><span class="line">        totalSize += <span class="number">1</span>;</span><br><span class="line">        p = p.rest;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> totalSize;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  需要注意，在迭代时我们需要一个指针<code>p</code>，因为在<span class="math inline">\(java\)</span>中，我们不能重新分配(<span class="math inline">\(reassign\)</span>)<code>this</code>。</p>
+<blockquote>
+<p><code>this</code>refers to the current object. It's like saying: "I
+am" or "my name is". You can't change who you are.</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>SICP in python</category>
-        <category>Chapter 2.Building Abstraction with Data</category>
+        <category>CS61B DataStructure</category>
+        <category>2.List</category>
       </categories>
   </entry>
   <entry>
@@ -5732,6 +5695,46 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
 <p>  包含类型强制的<code>Number</code>类实现如下： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Number</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.add(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__mul__</span>(<span class="params">self, other</span>):</span><br><span class="line">            x,y=self.coerce(other)</span><br><span class="line">            <span class="keyword">return</span> x.mul(y)</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce</span>(<span class="params">self, other</span>):</span><br><span class="line">            <span class="keyword">if</span> self.type_tag==other.type_tag:</span><br><span class="line">                <span class="keyword">return</span> self,other</span><br><span class="line">            <span class="keyword">elif</span> (self.type_tag, other.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self.coerce_to(other.type_tag), other)</span><br><span class="line">            <span class="keyword">elif</span> (other.type_tag, self.type_tag) <span class="keyword">in</span> self.coercions:</span><br><span class="line">                <span class="keyword">return</span> (self, other.coerce_to(self.type_tag))</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">coerce_to</span>(<span class="params">self, other_tag</span>):</span><br><span class="line">            coercion_fn=self.coercions[(self.type_tag, other_tag)]</span><br><span class="line">            <span class="keyword">return</span> coercion_fn(self)</span><br><span class="line">        coercions=&#123;(<span class="string">&#x27;rat&#x27;</span>, <span class="string">&#x27;com&#x27;</span>): rational_to_complex&#125;</span><br></pre></td></tr></table></figure></p>
 <p>  类型强制的方法相对于类型分派有新的优势：虽然需要一个<code>coerce_to</code>函数实现类型转换，但<strong>我们只需要写这一个函数，就可以将其他所有的函数归进一个统一的范式中</strong>。这是基于以下思想：类型间的转换<strong>只与类型本身有关、与类型的具体操作无关</strong>。</p>
 <p>  类型强制给我们带来了启发：对于两种数据类型，我们可以<strong>设法找到一种中间类型(即前文说的“隐性的附加结构”)，将两种数据类型转换成这个类型</strong>。例如我们可以将矩形和菱形都转化为平行四边形。类似的，不同的中间类型可以转换为新的中间类型<span class="math inline">\(\cdots\)</span>通过这样的链式强制(<span class="math inline">\(chaining\;coercion\)</span>)，我们可以减少程序中需要的<code>coerce</code>函数数量。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 2.Building Abstraction with Data</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>2.9.迭代对象</title>
+    <url>/2024/05/31/2.9.%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="29迭代对象"><span class="math inline">\(2.9\)</span>迭代对象</h1>
+<p>  对象可以将其他对象作为属性，当一个类中的某个对象的属性是该类的某个成员时，它就是迭代对象(<span class="math inline">\(recursive\;object\)</span>)。</p>
+<h3 id="1链表类">1.链表类</h3>
+<h4 id="a链表类定义">  <span class="math inline">\(a.\)</span>链表类定义</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Link</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;A linked list with a first element and the rest.&quot;&quot;&quot;</span></span><br><span class="line">        empty = ()</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, first, rest=empty</span>):</span><br><span class="line">            <span class="keyword">assert</span> rest <span class="keyword">is</span> Link.empty <span class="keyword">or</span> <span class="built_in">isinstance</span>(rest, Link)</span><br><span class="line">            <span class="comment"># if rest is an empty list or is a link instance</span></span><br><span class="line">            self.first = first</span><br><span class="line">            self.rest = rest</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, i</span>):</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> self.first</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> self.rest[i-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">len</span>(self.rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(s)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[<span class="number">1</span>]</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h4 id="b字符串表示">  <span class="math inline">\(b.\)</span>字符串表示</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">link_expression</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a string that would evaluate to s.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> s.rest <span class="keyword">is</span> Link.empty:</span><br><span class="line">            rest = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            rest = <span class="string">&#x27;, &#x27;</span> + link_expression(s.rest)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Link(&#123;0&#125;&#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(s.first, rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>link_expression(s)</span><br><span class="line"><span class="string">&#x27;Link(3, Link(4, Link(5)))&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>  将这个字符串表示函数与<code>__repr__</code>方法绑定，可以在显示链表实例时自动调用：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Link.__repr__ = link_expression</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br></pre></td></tr></table></figure></p>
+<h4 id="c链表的映射-筛选与字符插入">  <span class="math inline">\(c.\)</span>链表的映射、筛选与字符插入</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">map_link</span>(<span class="params">f, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(f(s.first), map_link(f, s.rest))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map_link(square, s)</span><br><span class="line">Link(<span class="number">9</span>, Link(<span class="number">16</span>, Link(<span class="number">25</span>)))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">filter_link</span>(<span class="params">f, s</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            filtered = filter_link(f, s.rest)</span><br><span class="line">            <span class="keyword">if</span> f(s.first):</span><br><span class="line">                <span class="keyword">return</span> Link(s.first, filtered)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> filtered</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>odd = <span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map_link(square, filter_link(odd, s))</span><br><span class="line">Link(<span class="number">9</span>, Link(<span class="number">25</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[square(x) <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>] <span class="keyword">if</span> odd(x)]</span><br><span class="line">[<span class="number">9</span>, <span class="number">25</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">join_link</span>(<span class="params">s, separator</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">elif</span> s.rest <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">str</span>(s.first)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">str</span>(s.first) + separator + join_link(s.rest, separator)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>join_link(s, <span class="string">&quot;, &quot;</span>)</span><br><span class="line"><span class="string">&#x27;3, 4, 5&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="d链表的一些其它迭代操作">  <span class="math inline">\(d.\)</span>链表的一些其它迭代操作</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">extend_link</span>(<span class="params">s, t</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> Link.empty:</span><br><span class="line">            <span class="keyword">return</span> t</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(s.first, extend_link(s.rest, t))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>extend_link(s, s)</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>, Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>))))))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Link.__add__ = extend_link</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s + s</span><br><span class="line">Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>, Link(<span class="number">3</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>))))))</span><br></pre></td></tr></table></figure>
+<h3 id="2树类">2.树类</h3>
+<h4 id="a树类定义">  <span class="math inline">\(a.\)</span>树类定义</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">Tree</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, label, branches=(<span class="params"></span>)</span>):</span><br><span class="line">            self.label = label</span><br><span class="line">            <span class="keyword">for</span> branch <span class="keyword">in</span> branches:</span><br><span class="line">                <span class="keyword">assert</span> <span class="built_in">isinstance</span>(branch, Tree)</span><br><span class="line">            self.branches = branches</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">if</span> self.branches:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Tree(&#123;0&#125;, &#123;1&#125;)&#x27;</span>.<span class="built_in">format</span>(self.label, <span class="built_in">repr</span>(self.branches))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;Tree(&#123;0&#125;)&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">repr</span>(self.label))</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">is_leaf</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">not</span> self.branches</span><br></pre></td></tr></table></figure>
+<h3 id="3set">3.<span class="math inline">\(set\)</span></h3>
+<h4 id="a概念">  <span class="math inline">\(a.\)</span>概念</h4>
+<p>  <span class="math inline">\(set\)</span>是<span class="math inline">\(python\)</span>内置的容器，<span class="math inline">\(set\)</span>内部的元素会自动去重与排序。</p>
+<h4 id="b基本操作">  <span class="math inline">\(b.\)</span>基本操作</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">3</span> <span class="keyword">in</span> s</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(s)</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.union(&#123;<span class="number">1</span>, <span class="number">5</span>&#125;)</span><br><span class="line">&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.intersection(&#123;<span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>&#125;)</span><br><span class="line">&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4set的实现">4.<span class="math inline">\(set\)</span>的实现</h3>
+<h4 id="a链表实现非排序set">  <span class="math inline">\(a.\)</span>链表实现非排序<span class="math inline">\(set\)</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">empty</span>(<span class="params">s</span>):</span><br><span class="line">        <span class="keyword">return</span> s <span class="keyword">is</span> Link.empty</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return True if and only if set s contains v.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> empty(s):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.first == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.rest, v)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(s, <span class="number">2</span>)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(s, <span class="number">5</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">adjoin_set</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements of s and element v.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> set_contains(s, v):</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> Link(v, s)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = adjoin_set(s, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t</span><br><span class="line">Link(<span class="number">2</span>, Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>))))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">intersect_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements common to set1 and set2.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> keep_if_link(set1, <span class="keyword">lambda</span> v: set_contains(set2, v))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intersect_set(t, apply_to_all_link(s, square))</span><br><span class="line">Link(<span class="number">4</span>, Link(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">union_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a set containing all elements either in set1 or set2.&quot;&quot;&quot;</span></span><br><span class="line">        set1_not_set2 = keep_if_link(set1, <span class="keyword">lambda</span> v: <span class="keyword">not</span> set_contains(set2, v))</span><br><span class="line">        <span class="keyword">return</span> extend_link(set1_not_set2, set2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>union_set(t, s)</span><br><span class="line">Link(<span class="number">2</span>, Link(<span class="number">4</span>, Link(<span class="number">1</span>, Link(<span class="number">5</span>))))</span><br></pre></td></tr></table></figure>
+<h4 id="b排序对时间复杂度的影响">  <span class="math inline">\(b.\)</span>排序对时间复杂度的影响</h4>
+<p>  对于查询操作，非排序元素的时间复杂度为<span class="math inline">\(O(n)\)</span>；而对于排序元素，查询最小元素为<span class="math inline">\(1\)</span>，最大元素为<span class="math inline">\(n\)</span>，平均复杂度为<span class="math inline">\(O({n\over 2})=O(n)\)</span>，虽然同阶但较小。</p>
+<p>  对于合并操作，非排序元素的时间复杂度是<span class="math inline">\(O(n,m)\)</span>；而对于排序元素，可以利用双指针算法实现<span class="math inline">\(O(m+n)\)</span>的复杂度。</p>
+<h4 id="c列表实现排序set">  <span class="math inline">\(c.\)</span>列表实现排序<span class="math inline">\(set\)</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> empty(s) <span class="keyword">or</span> s.first &gt; v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.first == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.rest, v)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>u = Link(<span class="number">1</span>, Link(<span class="number">4</span>, Link(<span class="number">5</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(u, <span class="number">0</span>)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set_contains(u, <span class="number">4</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">intersect_set</span>(<span class="params">set1, set2</span>):</span><br><span class="line">        <span class="keyword">if</span> empty(set1) <span class="keyword">or</span> empty(set2):</span><br><span class="line">            <span class="keyword">return</span> Link.empty</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            e1, e2 = set1.first, set2.first</span><br><span class="line">            <span class="keyword">if</span> e1 == e2:</span><br><span class="line">                <span class="keyword">return</span> Link(e1, intersect_set(set1.rest, set2.rest))</span><br><span class="line">            <span class="keyword">elif</span> e1 &lt; e2:</span><br><span class="line">                <span class="keyword">return</span> intersect_set(set1.rest, set2)</span><br><span class="line">            <span class="keyword">elif</span> e2 &lt; e1:</span><br><span class="line">                <span class="keyword">return</span> intersect_set(set1, set2.rest)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intersect_set(s, s.rest)</span><br><span class="line">Link(<span class="number">4</span>, Link(<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="d二叉查找树树实现set">  <span class="math inline">\(d.\)</span>二叉查找树树实现<span class="math inline">\(set\)</span></h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">set_contains</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">elif</span> s.entry == v:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">elif</span> s.entry &lt; v:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.right, v)</span><br><span class="line">        <span class="keyword">elif</span> s.entry &gt; v:</span><br><span class="line">            <span class="keyword">return</span> set_contains(s.left, v)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">adjoin_set</span>(<span class="params">s, v</span>):</span><br><span class="line">        <span class="keyword">if</span> s <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> Tree(v)</span><br><span class="line">        <span class="keyword">elif</span> s.entry == v:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="keyword">elif</span> s.entry &lt; v:</span><br><span class="line">            <span class="keyword">return</span> Tree(s.entry, s.left, adjoin_set(s.right, v))</span><br><span class="line">        <span class="keyword">elif</span> s.entry &gt; v:</span><br><span class="line">            <span class="keyword">return</span> Tree(s.entry, adjoin_set(s.left, v), s.right)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>adjoin_set(adjoin_set(adjoin_set(<span class="literal">None</span>, <span class="number">2</span>), <span class="number">3</span>), <span class="number">1</span>)</span><br><span class="line">Tree(<span class="number">2</span>, Tree(<span class="number">1</span>), Tree(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>SICP in python</category>
@@ -6311,6 +6314,21 @@ compare, we must turn to Comparator.</p>
       </categories>
   </entry>
   <entry>
+    <title>5.3.泛类的创建</title>
+    <url>/2024/05/31/5.3.Creating%20Another%20Generic%20Class/</url>
+    <content><![CDATA[<h1 id="53泛类的创建"><span class="math inline">\(5.3\)</span>泛类的创建</h1>
+<h3 id="1泛型方法的创建">1.泛型方法的创建</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; V <span class="title function_">get</span><span class="params">(Map61B&lt;K,V&gt; map, K key)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> map.containsKey(key) &#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//why &lt;K,V&gt;?because the parameters takes two different</span></span><br><span class="line"><span class="comment">//genetic types,so we alse use two. </span></span><br></pre></td></tr></table></figure>
+<h3 id="2gt运算符的泛型化">2.<code>&gt;</code>运算符的泛型化</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt; K <span class="title function_">maxKey</span><span class="params">(Map61B&lt;K, V&gt; map)</span> &#123;...&#125;</span><br><span class="line"><span class="comment">// the &quot;extends&quot; assure that the object has a &quot;compareTo&quot; method.</span></span><br></pre></td></tr></table></figure>
+<p>  此处的<span class="math inline">\(extends\)</span>关键词，可以理解为“<span class="math inline">\(K\)</span>必须是可比的”的声明。<span class="math inline">\(extends\)</span>会对对象施加一个约束、而非赋予它新的能力。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>5.Generics and Autoboxing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>5.1.自动装箱</title>
     <url>/2024/05/31/5.1.Autoboxing/</url>
     <content><![CDATA[<h1 id="51自动装箱"><span class="math inline">\(5.1\)</span>自动装箱</h1>
@@ -6329,21 +6347,6 @@ compare, we must turn to Comparator.</p>
 <p>  是正确的，但： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">blahInt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    System.out.println(“<span class="type">int</span>: “ + x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt(x);</span><br></pre></td></tr></table></figure></p>
 <p>  是错误的，因为<span class="math inline">\(int\)</span>的范围小于<span class="math inline">\(double\)</span>，不能扩展到比自己更大的集合中。此时必须使用类型铸造：
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">blahInt((<span class="type">int</span>) x);</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>5.Generics and Autoboxing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>5.3.泛类的创建</title>
-    <url>/2024/05/31/5.3.Creating%20Another%20Generic%20Class/</url>
-    <content><![CDATA[<h1 id="53泛类的创建"><span class="math inline">\(5.3\)</span>泛类的创建</h1>
-<h3 id="1泛型方法的创建">1.泛型方法的创建</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; V <span class="title function_">get</span><span class="params">(Map61B&lt;K,V&gt; map, K key)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> map.containsKey(key) &#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//why &lt;K,V&gt;?because the parameters takes two different</span></span><br><span class="line"><span class="comment">//genetic types,so we alse use two. </span></span><br></pre></td></tr></table></figure>
-<h3 id="2gt运算符的泛型化">2.<code>&gt;</code>运算符的泛型化</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt; K <span class="title function_">maxKey</span><span class="params">(Map61B&lt;K, V&gt; map)</span> &#123;...&#125;</span><br><span class="line"><span class="comment">// the &quot;extends&quot; assure that the object has a &quot;compareTo&quot; method.</span></span><br></pre></td></tr></table></figure>
-<p>  此处的<span class="math inline">\(extends\)</span>关键词，可以理解为“<span class="math inline">\(K\)</span>必须是可比的”的声明。<span class="math inline">\(extends\)</span>会对对象施加一个约束、而非赋予它新的能力。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
