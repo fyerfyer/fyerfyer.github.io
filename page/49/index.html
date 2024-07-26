@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.4.Insertion%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.3.Merge%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.4.Insertion%20Sort/" class="post-title-link" itemprop="url">18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/18.3.Merge%20Sort/" class="post-title-link" itemprop="url">18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:02:34" itemprop="dateModified" datetime="2024-06-02T22:02:34+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:01:43" itemprop="dateModified" datetime="2024-06-02T22:01:43+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>323</span>
+      <span>155</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,46 +272,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="184insertion-sort"><span class="math inline">\(18.4.\)</span>Insertion Sort</h1>
-<h3 id="1the-step-of-insertion-sort">1.The step of Insertion Sort</h3>
-<p>&#x2003;&#x2003;The insertion sort follows these general strategies:</p>
+          <h1 id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
+Sort</h1>
+<h3 id="1the-step-of-merge-sort">1.The step of Merge Sort</h3>
 <ul>
-<li>Starting with an empty output sequence.</li>
-<li>Add each item from input, inserting into output at right
-places.</li>
+<li>Split items into 2 roughly even pieces.</li>
+<li>Mergesort each half (steps not shown, this is a recursive
+algorithm!)</li>
+<li>Merge the two sorted halves to form the final result.</li>
 </ul>
-<p>&#x2003;&#x2003;Also, this method requires a new array, which takes up some
-memory.As a result, we may try in place sorting by using swapping
-method.</p>
-<p>&#x2003;&#x2003;Take the below array as example.Suppose we have sorted the first
-two elements.It&apos;s worth noting that we use a <span class="math inline">\(j\)</span> to track the current spot of the
-travelling element:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-4.png"></p>
-<p>&#x2003;&#x2003;The <span class="math inline">\(2\)</span> element will experience
-the following steps:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-5.png"></p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-6.png"></p>
-<p>&#x2003;&#x2003;After these steps, the <span class="math inline">\(2\)</span>
-element reach its right place, and we get the first third elements
-sorted:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-7.png"></p>
-<p>&#x2003;&#x2003;Do it recursively, then we can get a sorted array.</p>
 <h3 id="2step-implementation">2.Step implementation</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> a.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n; i ++) {</span><br><span class="line">        <span class="comment">//compare with its front element, if it&apos;s not in order, swap it</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; <span class="number">0</span> &amp;&amp; less(a[j], a[j - <span class="number">1</span>]); j --) {</span><br><span class="line">            swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a, <span class="type">int</span> lo, <span class="type">int</span> hi)</span> {</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> lo + <span class="number">1</span>; i &lt; hi; i++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; lo &amp;&amp; less(a[j], a[j-<span class="number">1</span>]); j--) {</span><br><span class="line">                swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
-<h3 id="3some-property-of-insertionsort">3.Some property of Insertion
-Sort</h3>
-<p>&#x2003;&#x2003;Since the principle of insertion sort is to maintain the order of
-each subsequence, for arrays that are almost sorted, we only need to do
-few swaps, thus makes sorting fast.</p>
-<p>&#x2003;&#x2003;Suppose that there are <span class="math inline">\(K\)</span>
-inversions in the array, the runtime of Insertion Sort is <span class="math inline">\(\Theta (N+K)\)</span>.</p>
-<p>&#x2003;&#x2003;Moreover, we can define an almost sorted array as one in which
-numbers of inversions <span class="math inline">\(\leq\;cN\)</span>,
-insertion sort is excellent on these arrays.</p>
-<p>&#x2003;&#x2003;Ususally, for small arrays(with N less than 15), insertion sort is
-fast.</p>
-<h3 id="4sorting-summary">4.Sorting Summary</h3>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-8.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> {</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) {</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
       
     </div>
