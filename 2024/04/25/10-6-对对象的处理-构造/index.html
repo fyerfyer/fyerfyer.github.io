@@ -146,9 +146,9 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(10.6.\)Handling Objects: Construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.High level of object
-construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.The callers&apos;s side</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Resulting impact</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.The big picture of
-constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Compiling constuctor</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#106handling-objects-construction"><span class="nav-text">\(10.6.\)Handling Objects: Construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1high-level-of-objectconstruction"><span class="nav-text">1.High level of object
+construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2the-callerss-side"><span class="nav-text">2.The callers&apos;s side</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3resulting-impact"><span class="nav-text">3.Resulting impact</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4the-big-picture-ofconstructors"><span class="nav-text">4.The big picture of
+constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5compiling-constuctor"><span class="nav-text">5.Compiling constuctor</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -290,15 +290,15 @@ constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="106handling-objects-construction"><span class="math inline">\(10.6.\)</span>Handling Objects: Construction</span></h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="106handling-objects-construction"><span class="math inline">\(10.6.\)</span>Handling Objects: Construction</h1>
 <p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image.png"></p>
 <ul>
 <li>What we have here is two completely separate compilation units. We
 are facing the challenge of compiling the caller class and the callee
 class.</li>
 </ul>
-<h3><span id="1high-level-of-objectconstruction">1.High level of object
-construction</span></h3>
+<h3 id="1high-level-of-objectconstruction">1.High level of object
+construction</h3>
 <ul>
 <li>When we do <code>var Point p1</code>, the compiler will end up
 generating code on <strong>some location in the stack which is going to
@@ -309,7 +309,7 @@ be initialized to 0</strong>.</li>
 address of the newly created object</strong> and <strong>storing it in
 what we assign previously the p1 variable</strong>.</li>
 </ul>
-<h3><span id="2the-callerss-side">2.The callers&apos;s side</span></h3>
+<h3 id="2the-callerss-side">2.The callers&apos;s side</h3>
 <p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-1.png"></p>
 <ul>
 <li><p>Whenever the compiler encounters a variable declaration, it
@@ -329,7 +329,7 @@ space on the RAM and <strong>return it to the caller</strong>.</p></li>
 into <code>p1</code></strong>, because we want <code>p1</code> to point
 at the base address of this object.</p></li>
 </ul>
-<h3><span id="3resulting-impact">3.Resulting impact</span></h3>
+<h3 id="3resulting-impact">3.Resulting impact</h3>
 <p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-2.png"></p>
 <ul>
 <li>Only when we call the constructors will we actually create the
@@ -337,8 +337,8 @@ objects on RAM.</li>
 <li>Object construction is a <strong>two-stage affair that happens both
 during compile time and run time</strong>.</li>
 </ul>
-<h3><span id="4the-big-picture-ofconstructors">4.The big picture of
-constructors</span></h3>
+<h3 id="4the-big-picture-ofconstructors">4.The big picture of
+constructors</h3>
 <p><img src="/2024/04/25/10-6-%E5%AF%B9%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86-%E6%9E%84%E9%80%A0/image-3.png"></p>
 <p>&#x2003;&#x2003;A constructor is typically designed to do at least two things:</p>
 <ol type="1">
@@ -355,7 +355,7 @@ manipulate the object that the constructor juct created.</li>
 properly on the right address in the RAM</strong> using
 <code>pointer</code> segment.</li>
 </ul>
-<h3><span id="5compiling-constuctor">5.Compiling constuctor</span></h3>
+<h3 id="5compiling-constuctor">5.Compiling constuctor</h3>
 <ol type="1">
 <li>The first thing we meet is the constructor signature. The compiler
 will generate no code whatsover. The only thing it will do is <strong>it

@@ -147,8 +147,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(4.1.\)Y86-64 Instruction Set
-Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Programmer-Visible State</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Y86-64 Instruction Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Instruction Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Exceptions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Y86-64 Programs</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#41y86-64-instruction-setarchitecture"><span class="nav-text">\(4.1.\)Y86-64 Instruction Set
+Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1programmer-visible-state"><span class="nav-text">1.Programmer-Visible State</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2y86-64-instruction-set"><span class="nav-text">2.Y86-64 Instruction Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3instruction-encoding"><span class="nav-text">3.Instruction Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4exceptions"><span class="nav-text">4.Exceptions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5y86-64-programs"><span class="nav-text">5.Y86-64 Programs</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -290,9 +290,9 @@ Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="41y86-64-instruction-setarchitecture"><span class="math inline">\(4.1.\)</span>Y86-64 Instruction Set
-Architecture</span></h1>
-<h3><span id="1programmer-visible-state">1.Programmer-Visible State</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="41y86-64-instruction-setarchitecture"><span class="math inline">\(4.1.\)</span>Y86-64 Instruction Set
+Architecture</h1>
+<h3 id="1programmer-visible-state">1.Programmer-Visible State</h3>
 <p>&#x2003;&#x2003;The programmer-visible state is where the programmer can generate
 machine-level code.</p>
 <p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image.png"></p>
@@ -301,7 +301,7 @@ machine-level code.</p>
 execution. It will indicate either normal operation or that some sort of
 exception has occurred.</li>
 </ul>
-<h3><span id="2y86-64-instruction-set">2.Y86-64 Instruction Set</span></h3>
+<h3 id="2y86-64-instruction-set">2.Y86-64 Instruction Set</h3>
 <p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
 <ul>
 <li><p>The integer operation instructions operate only on register data.
@@ -315,7 +315,7 @@ call.</p></li>
 <li><p>The <code>halt</code> instruction stops instruction execution,
 and the status code is set to <code>HLT</code>.</p></li>
 </ul>
-<h3><span id="3instruction-encoding">3.Instruction Encoding</span></h3>
+<h3 id="3instruction-encoding">3.Instruction Encoding</h3>
 <p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
 <p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-2.png"></p>
 <ul>
@@ -377,7 +377,7 @@ reliably determine how to split the sequence into individual
 instructions.</li>
 </ul></li>
 </ul>
-<h3><span id="4exceptions">4.Exceptions</span></h3>
+<h3 id="4exceptions">4.Exceptions</h3>
 <p>&#x2003;&#x2003;The programmer-visible state includes a status code
 <code>Stat</code> describing the overall state of the executing program.
 The possible values for this code are as below:</p>
@@ -391,7 +391,7 @@ an instruction or while reading or writing data.</p>
 beyond this limit will trigger an ADR exception</strong>.</li>
 </ul></li>
 </ul>
-<h3><span id="5y86-64-programs">5.Y86-64 Programs</span></h3>
+<h3 id="5y86-64-programs">5.Y86-64 Programs</h3>
 <p>&#x2003;&#x2003;Take the following C program as an example:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">sum</span><span class="params">(<span class="type">long</span> *start, <span class="type">long</span> count)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (count)</span><br><span class="line">    {</span><br><span class="line">        sum += *start;</span><br><span class="line">        start++;</span><br><span class="line">        count--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;the x86-64 and Y86-64 assembly code are as below:</p>

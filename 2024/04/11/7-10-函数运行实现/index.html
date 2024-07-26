@@ -145,8 +145,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(7.10.\)Function Call and Return
-Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.The caller&apos;s view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.The callee&apos;s view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Handling call</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Handling function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Handling return</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#710function-call-and-returnimplementation"><span class="nav-text">\(7.10.\)Function Call and Return
+Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1the-callers-view"><span class="nav-text">1.The caller&apos;s view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2the-callees-view"><span class="nav-text">2.The callee&apos;s view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3handling-call"><span class="nav-text">3.Handling call</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4handling-function"><span class="nav-text">4.Handling function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4handling-return"><span class="nav-text">4.Handling return</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -288,9 +288,9 @@ Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3">
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
-Implementation</span></h1>
-<h3><span id="1the-callers-view">1.The caller&apos;s view</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
+Implementation</h1>
+<h3 id="1the-callers-view">1.The caller&apos;s view</h3>
 <p>&#x2003;&#x2003;In the calling function&apos;s view:</p>
 <ul>
 <li>Before calling another function, I must <strong>push as many
@@ -306,7 +306,7 @@ are exactly the same as they were before the call</strong> (except that
 temp is undefined and some values of my static segment may have
 changed).</li>
 </ul>
-<h3><span id="2the-callees-view">2.The callee&apos;s view</span></h3>
+<h3 id="2the-callees-view">2.The callee&apos;s view</h3>
 <p>&#x2003;&#x2003;In the called function&apos;s view:</p>
 <ul>
 <li>Before I start executing, <strong>my<code>argument</code> segment
@@ -323,7 +323,7 @@ entry).</li>
 <li>Before returning, I must <strong>push a value onto the
 stack</strong>.</li>
 </ul>
-<h3><span id="3handling-call">3.Handling <code>call</code></span></h3>
+<h3 id="3handling-call">3.Handling <code>call</code></h3>
 <p>&#x2003;&#x2003;We can implement the VM code by these steps:</p>
 <p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image.png"></p>
 <p>&#x2003;&#x2003;In terms of <code>call</code>, we do these steps:</p>
@@ -349,7 +349,7 @@ function has been executed, we can get back to the place we invoke it :
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(returnAddress) //Declares a label for the return-address</span><br></pre></td></tr></table></figure></p></li>
 </ol>
 <p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<h3><span id="4handling-function">4.Handling <code>function</code></span></h3>
+<h3 id="4handling-function">4.Handling <code>function</code></h3>
 <p>&#x2003;&#x2003;The big picture of handling <code>function</code> is that:</p>
 <ul>
 <li>The first thing translator does is <strong>it takes the function
@@ -364,7 +364,7 @@ up of the function&apos;s execution</strong>.</li>
 <li>Since we know how many local variables we have to create, we do
 <code>push 0</code> <code>nVars</code> times. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(functionName)</span><br><span class="line">	//repeat nVars times</span><br><span class="line">	push 0</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3><span id="4handling-return">4.Handling <code>return</code></span></h3>
+<h3 id="4handling-return">4.Handling <code>return</code></h3>
 <p>&#x2003;&#x2003;After setting up, the function can start doing its thing. We need
 to generate assembly code that <strong>moves the return value to the
 caller, reinstates the caller&apos;s state, and finally <code>goto</code> the

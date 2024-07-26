@@ -150,8 +150,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(7.5.\)Memory Segment implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.local implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.argument,this,that
-implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Constant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Static</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Temp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">6.Pointer</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#75memory-segment-implementation"><span class="nav-text">\(7.5.\)Memory Segment implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1local-implementation"><span class="nav-text">1.local implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2argumentthisthatimplementation"><span class="nav-text">2.argument,this,that
+implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3constant"><span class="nav-text">3.Constant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4static"><span class="nav-text">4.Static</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5temp"><span class="nav-text">5.Temp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6pointer"><span class="nav-text">6.Pointer</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -293,8 +293,8 @@ implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-lin
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="75memory-segment-implementation"><span class="math inline">\(7.5.\)</span>Memory Segment implementation</span></h1>
-<h3><span id="1local-implementation">1.<code>local</code> implementation</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="75memory-segment-implementation"><span class="math inline">\(7.5.\)</span>Memory Segment implementation</h1>
+<h3 id="1local-implementation">1.<code>local</code> implementation</h3>
 <p>&#x2003;&#x2003;The <code>local</code> segment can be placed <strong>anywhere we
 want in the host RAM</strong>, for we just need to <strong>remember the
 base address of the block</strong>.</p>
@@ -320,8 +320,8 @@ Say we want to accomplish <code>pop local 2</code>:</p>
 removed. It&apos;s common to have these wasted data in the stack, and it&apos;s
 not big deal, for <strong>the pointer indicates exactly which part of
 the stack are in play, not the data</strong>.</p>
-<h3><span id="2argumentthisthatimplementation">2.<code>argument,this,that</code>
-implementation</span></h3>
+<h3 id="2argumentthisthatimplementation">2.<code>argument,this,that</code>
+implementation</h3>
 <ul>
 <li><p>When translating the high-level code of some method into VM
 code:</p>
@@ -337,7 +337,7 @@ segments</li>
 <code>that</code> is nearly the same as <code>local</code>:</p>
 <p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
 <p>&#x2003;&#x2003;The process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//push</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">*sp = *addr</span><br><span class="line">sp++</span><br><span class="line"></span><br><span class="line">//pop</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br></pre></td></tr></table></figure></p>
-<h3><span id="3constant">3.<code>Constant</code></span></h3>
+<h3 id="3constant">3.<code>Constant</code></h3>
 <ul>
 <li><p>When the compiler translates the high-level code of some method
 into VM,</p>
@@ -355,7 +355,7 @@ command, we simply supply the specified constant
 <code>i</code>.</p></li>
 </ul>
 <p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-5.png"></p>
-<h3><span id="4static">4.<code>Static</code></span></h3>
+<h3 id="4static">4.<code>Static</code></h3>
 <ul>
 <li><p>When translating the high-level code of some method into VM code,
 the compiler:</p>
@@ -396,7 +396,7 @@ than directly accessing the value of the static variable itself. This is
 why we need to use <code>D=M</code> instead of <code>D=A</code> to get a
 <code>static</code> value.</p>
 </blockquote>
-<h3><span id="5temp">5.<code>Temp</code></span></h3>
+<h3 id="5temp">5.<code>Temp</code></h3>
 <p>&#x2003;&#x2003;When the compiler translates the Jack program into VM code, it
 sometimes has to use temporary variables.</p>
 <ul>
@@ -408,7 +408,7 @@ segment</strong>.</li>
 12.</li>
 </ul>
 <p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-7.png"></p>
-<h3><span id="6pointer">6.Pointer</span></h3>
+<h3 id="6pointer">6.Pointer</h3>
 <ul>
 <li><p>When translating a high-level method code into VM code,the
 compiler:</p>

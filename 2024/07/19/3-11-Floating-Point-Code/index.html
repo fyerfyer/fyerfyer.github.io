@@ -150,11 +150,11 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(3.11.\)Floating-Point Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Floating-Point
-Movement and Conversion Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)Basic instructions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)Conversion between floating-point</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Floating-Point Code in
-Procedure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Floating-Point
-Arithmetic Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Defining and
-Using Floating-Point Constants</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">5.Floating-Point
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#311floating-point-code"><span class="nav-text">\(3.11.\)Floating-Point Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1floating-pointmovement-and-conversion-operations"><span class="nav-text">1.Floating-Point
+Movement and Conversion Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#abasic-instructions"><span class="nav-text">&#x2003;&#x2003;\(a.\)Basic instructions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bconversion-between-floating-point"><span class="nav-text">&#x2003;&#x2003;\(b.\)Conversion between floating-point</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2floating-point-code-inprocedure"><span class="nav-text">2.Floating-Point Code in
+Procedure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3floating-pointarithmetic-operations"><span class="nav-text">3.Floating-Point
+Arithmetic Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4defining-andusing-floating-point-constants"><span class="nav-text">4.Defining and
+Using Floating-Point Constants</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5floating-pointcomparison-operations"><span class="nav-text">5.Floating-Point
 Comparison Operations</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
@@ -297,10 +297,10 @@ Comparison Operations</span></a></li></ol></li></ol></div>
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="311floating-point-code"><span class="math inline">\(3.11.\)</span>Floating-Point Code</span></h1>
-<h3><span id="1floating-pointmovement-and-conversion-operations">1.Floating-Point
-Movement and Conversion Operations</span></h3>
-<h4><span id="abasic-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic instructions</span></h4>
+    <div class="post-body" itemprop="articleBody"><h1 id="311floating-point-code"><span class="math inline">\(3.11.\)</span>Floating-Point Code</h1>
+<h3 id="1floating-pointmovement-and-conversion-operations">1.Floating-Point
+Movement and Conversion Operations</h3>
+<h4 id="abasic-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic instructions</h4>
 <ul>
 <li><p>For floating-point, the data are held either in memory (indicated
 in the table as <span class="math inline">\(M_{32}\)</span> and <span class="math inline">\(M_{64}\)</span>) or in XMM registers (shown in the
@@ -335,7 +335,7 @@ source and the destination oprands are identical:</p>
 <code>%rax</code>, converts it to data type double, and <strong>stores
 the result in the lower bytes of XMM register
 <code>%xmm1</code></strong>.</p>
-<h4><span id="bconversion-between-floating-point">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Conversion between floating-point</span></h4>
+<h4 id="bconversion-between-floating-point">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Conversion between floating-point</h4>
 <p>&#x2003;&#x2003;To convert between two different floating-point format, suppose the
 low-order 4 bytes of <code>%xmm0</code> hold a single-precision value;
 then it would seem straightforward to convert this to a double-precision
@@ -362,8 +362,8 @@ single precision:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from double to single precision</span><br><span class="line">vmovddup %xmm0, %xmm0    # Replicate first vector element</span><br><span class="line">vcvtpd2ps %xmm0, %xmm0  # Convert two vector elements to single</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;rather than by using the single instruction:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsd2ss %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<h3><span id="2floating-point-code-inprocedure">2.Floating-Point Code in
-Procedure</span></h3>
+<h3 id="2floating-point-code-inprocedure">2.Floating-Point Code in
+Procedure</h3>
 <p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
 <p>&#x2003;&#x2003;The following conventions are observed:</p>
 <ul>
@@ -386,8 +386,8 @@ registers depends on both their types and their ordering</strong>.</p>
 <p>&#x2003;&#x2003;Registers: <code>a</code> in <code>%xmm0</code>, <code>b</code> in
 <code>%rdi</code>, <code>c</code> in<code>%xmm1</code>, <code>d</code>
 in <code>%esi</code>.</p>
-<h3><span id="3floating-pointarithmetic-operations">3.Floating-Point
-Arithmetic Operations</span></h3>
+<h3 id="3floating-pointarithmetic-operations">3.Floating-Point
+Arithmetic Operations</h3>
 <p><img src="/2024/07/19/3-11-Floating-Point-Code/image-4.png"></p>
 <ul>
 <li><p>The first source operand S1 can be <strong>either an XMM register
@@ -408,8 +408,8 @@ floating-point values. The following are some examples:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vxorpd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
 <p>&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Negate</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC2(%rip), %xmm1</span><br><span class="line">vxorpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">    .long 0</span><br><span class="line">    .long -2147483648</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
-<h3><span id="4defining-andusing-floating-point-constants">4.Defining and
-Using Floating-Point Constants</span></h3>
+<h3 id="4defining-andusing-floating-point-constants">4.Defining and
+Using Floating-Point Constants</h3>
 <p>&#x2003;&#x2003;AVX floating-point operations cannot have immediate values as
 oprands. Instead, the compiler must <strong>allocate and initialize
 storage for any constant values</strong>.</p>
@@ -419,8 +419,8 @@ storage for any constant values</strong>.</p>
 <p>&#x2003;&#x2003;the function reads the value 1.8 from the memory location labeled
 <code>.LC2</code> and the value 32.0 from the memory location labeled
 <code>.LC3</code>.</p>
-<h3><span id="5floating-pointcomparison-operations">5.Floating-Point
-Comparison Operations</span></h3>
+<h3 id="5floating-pointcomparison-operations">5.Floating-Point
+Comparison Operations</h3>
 <p><img src="/2024/07/19/3-11-Floating-Point-Code/image-6.png"></p>
 <ul>
 <li><p>These instructions are similar to the <code>cmp</code>

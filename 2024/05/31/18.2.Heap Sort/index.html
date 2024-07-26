@@ -145,8 +145,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(18.2\)Heap
-Sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.The step of Heap Sorting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Step impletation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)Basic Heap operation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)Heap
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#182heapsort"><span class="nav-text">\(18.2\)Heap
+Sort</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1the-step-of-heap-sorting"><span class="nav-text">1.The step of Heap Sorting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2step-impletation"><span class="nav-text">2.Step impletation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#abasic-heap-operation"><span class="nav-text">&#x2003;&#x2003;\(a.\)Basic Heap operation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bheapsorting"><span class="nav-text">&#x2003;&#x2003;\(b.\)Heap
 Sorting</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
@@ -289,18 +289,18 @@ Sorting</span></a></li></ol></li></ol></li></ol></div>
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
-Sort</span></h1>
-<h3><span id="1the-step-of-heap-sorting">1.The step of Heap Sorting</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
+Sort</h1>
+<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
 <p>&#x2003;&#x2003;The simplest method to implement sorting via heap is to put the
 whole array into a heap, and pick out top of the heap one by one.</p>
 <p>&#x2003;&#x2003;However, this method will lead to unnecessarily memory waste, for
 we can do heap sorting in place without creating a new heap.</p>
-<h3><span id="2step-impletation">2.Step impletation</span></h3>
-<h4><span id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</span></h4>
+<h3 id="2step-impletation">2.Step impletation</h3>
+<h4 id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</h4>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4><span id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
-Sorting</span></h4>
+<h4 id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
+Sorting</h4>
 <p>&#x2003;&#x2003;The in place heap sorting use the following step: 1. Sink the
 element in the array one by one, so that the array forms a heap.</p>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
@@ -325,13 +325,13 @@ back of the array.</li>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/05/31/18.4.Insertion%20Sort/" rel="prev" title="18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;">
-                  <i class="fa fa-angle-left"></i> 18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;
+                <a href="/2024/05/31/18.3.Merge%20Sort/" rel="prev" title="18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;">
+                  <i class="fa fa-angle-left"></i> 18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/05/31/18.3.Merge%20Sort/" rel="next" title="18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F;">
-                  18.3.&#x5F52;&#x5E76;&#x6392;&#x5E8F; <i class="fa fa-angle-right"></i>
+                <a href="/2024/05/31/18.1.Selection%20Sort/" rel="next" title="18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;">
+                  18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F; <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

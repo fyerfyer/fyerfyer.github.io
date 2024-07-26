@@ -157,12 +157,12 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(3.4.\)Building a Datapath</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Basic devices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Basic phases of
-instruction execution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Implementation of
-different statement</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(a.\)Add
-instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(b.\)load &amp;
-save instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(c.\)Branch instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text">&#x2003;&#x2003;\(d.\)jal &amp;
-jalr instructions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Datapath control</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#34building-a-datapath"><span class="nav-text">\(3.4.\)Building a Datapath</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1basic-devices"><span class="nav-text">1.Basic devices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2basic-phases-ofinstruction-execution"><span class="nav-text">2.Basic phases of
+instruction execution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3implementation-ofdifferent-statement"><span class="nav-text">3.Implementation of
+different statement</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aaddinstruction"><span class="nav-text">&#x2003;&#x2003;\(a.\)Add
+instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bload-ampsave-instruction"><span class="nav-text">&#x2003;&#x2003;\(b.\)load &amp;
+save instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cbranch-instruction"><span class="nav-text">&#x2003;&#x2003;\(c.\)Branch instruction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#djal-ampjalr-instructions"><span class="nav-text">&#x2003;&#x2003;\(d.\)jal &amp;
+jalr instructions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4datapath-control"><span class="nav-text">4.Datapath control</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -304,8 +304,8 @@ jalr instructions</span></a></li></ol></li><li class="nav-item nav-level-3"><a c
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</span></h1>
-<h3><span id="1basic-devices">1.Basic devices</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
+<h3 id="1basic-devices">1.Basic devices</h3>
 <ul>
 <li><p><em>Registers</em>: It contains:</p>
 <ul>
@@ -334,17 +334,17 @@ written in 12-bit offset in the instruction. So we need to
 Imm-Gen does the job:</li>
 </ul>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
-<h3><span id="2basic-phases-ofinstruction-execution">2.Basic phases of
-instruction execution</span></h3>
+<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
+instruction execution</h3>
 <p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
 parts:</p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
 <hr>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
-<h3><span id="3implementation-ofdifferent-statement">3.Implementation of
-different statement</span></h3>
-<h4><span id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
-instruction</span></h4>
+<h3 id="3implementation-ofdifferent-statement">3.Implementation of
+different statement</h3>
+<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
+instruction</h4>
 <p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
 <code>DataA</code> and <code>DataB</code>, and calculate the result by
 ALU.</p>
@@ -354,8 +354,8 @@ rather than <code>DataB</code>. The source of Imm-Gen is from
 <code>IMEM</code>, from which we can get the instruction, and
 <code>inst[31:20]</code> is the immediate we want:</p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
-<h4><span id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
-<code>save</code> instruction</span></h4>
+<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
+<code>save</code> instruction</h4>
 <p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
 read or write data.</p>
 <ul>
@@ -365,7 +365,7 @@ address. Else, it writes the information into the address:</li>
 </ul>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
-<h4><span id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</span></h4>
+<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
 <p>&#x2003;&#x2003;The basic form of branch instruction is
 <code>beq x1 x2 offset</code>. To implement this instruction, we must
 compute the branch target address by <strong>adding the sign- extended
@@ -392,8 +392,8 @@ signal</p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
 <p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
-<h4><span id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
-<code>jalr</code> instructions</span></h4>
+<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
+<code>jalr</code> instructions</h4>
 <p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
 <ol type="1">
 <li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
@@ -415,7 +415,7 @@ of ALU with input of PC</strong>.</li>
 <li>Set <code>PC=PC+offset</code></li>
 </ol>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
-<h3><span id="4datapath-control">4.Datapath control</span></h3>
+<h3 id="4datapath-control">4.Datapath control</h3>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
 <p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
 

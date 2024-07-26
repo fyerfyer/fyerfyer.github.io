@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(3.9.\)Heterogeneous Data Structures</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Structures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Unions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Data Alignment</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#39heterogeneous-data-structures"><span class="nav-text">\(3.9.\)Heterogeneous Data Structures</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1structures"><span class="nav-text">1.Structures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2unions"><span class="nav-text">2.Unions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3data-alignment"><span class="nav-text">3.Data Alignment</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -287,8 +287,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</span></h1>
-<h3><span id="1structures">1.Structures</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</h1>
+<h3 id="1structures">1.Structures</h3>
 <p>&#x2003;&#x2003;The implementation of structures is similar to that of arrays: all
 of the components of a structure are stored <strong>in a contiguous
 region of memory</strong> and <strong>a pointer to a structure is the
@@ -316,7 +316,7 @@ the field&apos;s offset to the structure address:</li>
 completely <strong>at compile time</strong>. The machine code contains
 no information about the field declarations or the names of the
 fields.</p>
-<h3><span id="2unions">2.Unions</span></h3>
+<h3 id="2unions">2.Unions</h3>
 <p>&#x2003;&#x2003;Unions allow a single object to be referenced according to multiple
 types. Rather than having the different fields reference different
 blocks of memory, they all <strong>reference the same
@@ -360,7 +360,7 @@ sign bit, the exponent, and the significand.</p>
 <p>&#x2003;&#x2003;And with this characteristic, we can design the following program
 that gets the words of a double number:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">uu2double</span><span class="params">(<span class="type">unsigned</span> word0, <span class="type">unsigned</span> word1)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> u[<span class="number">2</span>];</span><br><span class="line">    } temp;</span><br><span class="line">    temp.u[<span class="number">0</span>] = word0; <span class="comment">// low-order 4 bytes</span></span><br><span class="line">    temp.u[<span class="number">1</span>] = word1; <span class="comment">// high-order 4 bytes</span></span><br><span class="line">    <span class="keyword">return</span> temp.d;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="3data-alignment">3.Data Alignment</span></h3>
+<h3 id="3data-alignment">3.Data Alignment</h3>
 <p>&#x2003;&#x2003;<em>Data alignment</em> is operation that <strong>enforce the
 address of some objects must be a multiple of some valueK (typically 2,
 4, or 8)</strong>.</p>

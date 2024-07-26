@@ -143,7 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">\(3.8.\)Array Allocation and Access</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">1.Pointer Arithmetic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.Nested Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">3.Fixed-sized Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">4.Variable-Size Arrays</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#38array-allocation-and-access"><span class="nav-text">\(3.8.\)Array Allocation and Access</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1pointer-arithmetic"><span class="nav-text">1.Pointer Arithmetic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2nested-arrays"><span class="nav-text">2.Nested Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3fixed-sized-arrays"><span class="nav-text">3.Fixed-sized Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4variable-size-arrays"><span class="nav-text">4.Variable-Size Arrays</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -279,8 +279,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1><span id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</span></h1>
-<h3><span id="1pointer-arithmetic">1.Pointer Arithmetic</span></h3>
+    <div class="post-body" itemprop="articleBody"><h1 id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</h1>
+<h3 id="1pointer-arithmetic">1.Pointer Arithmetic</h3>
 <p>&#x2003;&#x2003;Suppose the starting address of integer array <code>E</code> and
 integer index <code>i</code> are stored in registers <code>%rdx</code>
 and <code>%rcx</code>. Below are some assembly-code implementation of
@@ -298,13 +298,13 @@ pointers within the same data structure, with the result being data
 having type long and value equal to <strong>the difference of the two
 addresses divided by the size of the data type</strong>.</p>
 </blockquote>
-<h3><span id="2nested-arrays">2.Nested Arrays</span></h3>
+<h3 id="2nested-arrays">2.Nested Arrays</h3>
 <p>&#x2003;&#x2003;The array elements are ordered in memory in row-major order:</p>
 <p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image-1.png"></p>
 <p>&#x2003;&#x2003;Array element <code>M[i][j]</code> can be easily reached through a
 series of arithmetic operations. For example:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># A in %rdi, i in %rsi, and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2), %rax  # Compute 3i</span><br><span class="line">leaq (%rdi,%rax,4), %rax  # Compute xA + 12i</span><br><span class="line">movl (%rax,%rdx,4), %eax  # Read from M[xA + 12i + 4]</span><br></pre></td></tr></table></figure>
-<h3><span id="3fixed-sized-arrays">3.Fixed-sized Arrays</span></h3>
+<h3 id="3fixed-sized-arrays">3.Fixed-sized Arrays</h3>
 <p>&#x2003;&#x2003;The C compiler is able to make many optimizations for code
 operating on multi-dimensional arrays of fixed size. Take the inner
 product calculation program as an example. The original form is as
@@ -340,7 +340,7 @@ array</strong>.</p></li>
 </ul>
 <p>&#x2003;&#x2003;And the optimized program:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag_opt</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Abase = &amp;A[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> iend = N * (N + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        Abase[i] = val;</span><br><span class="line">        i += (N + <span class="number">1</span>);</span><br><span class="line">    } <span class="keyword">while</span> (i != iend);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3><span id="4variable-size-arrays">4.Variable-Size Arrays</span></h3>
+<h3 id="4variable-size-arrays">4.Variable-Size Arrays</h3>
 <p>&#x2003;&#x2003;Programmers requiring variable-size arrays had to allocate storage
 for these arrays using functions such as <code>malloc</code> or
 <code>calloc</code>, and they had to explicitly encode the mapping of
