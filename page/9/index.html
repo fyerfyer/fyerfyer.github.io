@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/15.2.Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-6-Control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/15.2.Implementation/" class="post-title-link" itemprop="url">15.2.Trie&#x7684;&#x5B9E;&#x73B0;</a>
+          <a href="/2024/07/15/3-6-Control/" class="post-title-link" itemprop="url">3.6.Control</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-15T16:30:22+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:17:56" itemprop="dateModified" datetime="2024-06-02T21:17:56+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:35:46" itemprop="dateModified" datetime="2024-07-16T16:35:46+08:00">2024-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/15-Tries/" itemprop="url" rel="index"><span itemprop="name">15.Tries</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>771</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
+      <span>5 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,571 +272,190 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="152trie&#x7684;&#x5B9E;&#x73B0;"><span class="math inline">\(15.2\)</span><span class="math inline">\(Trie\)</span>&#x7684;&#x5B9E;&#x73B0;</h1>
-<h3 id="1trie&#x7684;&#x4ECB;&#x7ECD;">1.<span class="math inline">\(Trie\)</span>&#x7684;&#x4ECB;&#x7ECD;</h3>
-<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(Trie\)</span>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x7684;&#x8BA1;&#x7B56;&#x6765;&#x5B58;&#x50A8;&#x4E00;&#x7CFB;&#x5217;&#x5355;&#x8BCD;(&#x5B57;&#x7B26;&#x4E32;)&#xFF1A;</p>
-<ol type="1">
-<li>&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x53EA;&#x5B58;&#x50A8;&#x4E00;&#x4E2A;&#x5B57;&#x6BCD;&#x3002;</li>
-<li>&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x53EF;&#x4EE5;&#x88AB;&#x591A;&#x4E2A;&#x952E;&#x5171;&#x7528;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x4E0B;&#x9762;&#x7684;&#x6811;&#x7ED3;&#x6784;&#x5373;&#x662F;&#x4E00;&#x7EC4;&#x5355;&#x8BCD;&#x7684;<span class="math inline">\(Trie\)</span>&#xFF0C;&#x84DD;&#x8272;&#x610F;&#x5473;&#x7740;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x5355;&#x8BCD;&#x7684;&#x7ED3;&#x5C3E;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.2.Implementation/image.png"></p>
-<p>&#x2003;&#x2003;&#x540C;&#x6837;&#x5730;&#xFF0C;<span class="math inline">\(Trie\)</span>&#x4EA6;&#x53EF;&#x7528;&#x4F5C;<span class="math inline">\(map\)</span>&#xFF1A;</p>
-<p><img src="/2024/05/31/15.2.Implementation/image-1.png"></p>
-<p>&#x2003;&#x2003;&#x9700;&#x8981;&#x6CE8;&#x610F;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5904;&#x7406;&#x67D0;&#x4E2A;&#x7279;&#x5B9A;(<span class="math inline">\(specificity\)</span>)&#x7684;&#x95EE;&#x9898;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6539;&#x8FDB;&#x6211;&#x4EEC;&#x539F;&#x6709;&#x7684;&#x3001;&#x901A;&#x7528;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;(&#x901A;&#x5E38;&#x662F;&#x5BF9;&#x5176;&#x52A0;&#x4EE5;&#x9650;&#x5236;(<span class="math inline">\(constraint\)</span>))&#xFF0C;&#x6765;&#x66F4;&#x597D;&#x5730;&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x7684;&#x529F;&#x80FD;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x7528;<span class="math inline">\(HashMap\)</span>&#x6765;&#x5B9E;&#x73B0;&#x5BF9;&#x5355;&#x8BCD;&#x7684;&#x5B58;&#x653E;&#xFF0C;&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x7684;&#x67E5;&#x627E;&#x5C31;&#x9700;&#x8981;&#x904D;&#x5386;&#x6240;&#x6709;&#x5DF2;&#x6709;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x8FD9;&#x6837;&#x7684;&#x6548;&#x7387;&#x663E;&#x7136;&#x5F88;&#x4F4E;&#x3002;</p>
+          <h1 id="36-control"><span class="math inline">\(3.6.\)</span> Control</h1>
+<h3 id="1condition-code">1.Condition Code</h3>
+<p>&#x2003;&#x2003;In addition to the integer registers, the CPU maintains <em>a set
+of single-bit condition code registers</em> <strong>describing
+attributes of the most recent arithmetic or logical operation</strong>.
+These registers can then be tested to perform conditional branches</p>
+<p><img src="/2024/07/15/3-6-Control/image.png"></p>
 <ul>
-<li><p><span class="math inline">\(ADT\)</span>&#x4E0E;&#x7279;&#x6B8A;&#x5B9E;&#x73B0;(<span class="math inline">\(specific\;implementations\)</span>)&#x662F;&#x6709;&#x533A;&#x522B;&#x7684;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5E76;&#x67E5;&#x96C6;&#x662F;&#x4E00;&#x79CD;<span class="math inline">\(ADT\)</span>&#xFF0C;&#x5B83;&#x5177;&#x6709;<code>connect(x, y)</code>&#x4E0E;<code>isConnected(x, y)</code>&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;&#x800C;&#x8FD9;&#x6765;&#x4E2A;&#x65B9;&#x6CD5;&#x6709;&#x56DB;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#xFF1A;<span class="math inline">\(Quick\;find\)</span>&#x3001;<span class="math inline">\(Quick\;union\)</span>&#x3001;<span class="math inline">\(Weight\;QU\)</span>&#x3001;<span class="math inline">\(WQUPC\)</span>&#x3002;</p></li>
-<li><p>&#x5728;&#x8FD9;&#x91CC;&#xFF0C;<span class="math inline">\(Trie\)</span>&#x5C31;&#x662F;&#x5F53;<span class="math inline">\(Set\)</span>&#x6216;<span class="math inline">\(Map\)</span>&#x5B58;&#x50A8;&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#x65F6;&#x7684;&#x7279;&#x6B8A;&#x5B9E;&#x73B0;&#xFF1A;</p>
+<li><p>The <code>leaq</code> instruction <strong>doesn&apos;t alter any
+condition codes</strong>, since it is intended to be used in address
+computations.</p></li>
+<li><p>For the logical operations, such as <code>xor</code>, <strong>the
+carry and overflow flags are set to zero</strong>.</p></li>
+<li><p>For the shift operations, <strong>the carry flag is set to the
+last bit shifted out</strong>, while <strong>the overflow flag is set to
+zero</strong>.</p></li>
+<li><p>The <code>inc</code> and <code>dec</code> instructions
+<strong>set the overflow and zero flags</strong>, but they <strong>leave
+the carry flag unchanged</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;There are two instruction classes that set condition codes without
+altering any other registers:</p>
+<p><img src="/2024/07/15/3-6-Control/image-1.png"></p>
 <ul>
-<li>We give each node a single character and each node can be a part of
-several keys inside of the trie.</li>
-<li>Searching will only fail if we hit an unmarked node or we fall off
-the tree</li>
-<li>Short for Retrieval tree, almost everyone pronounces it as &quot;try&quot; but
-Edward Fredkin suggested it be pronounced as &quot;tree&quot;</li>
+<li>In <code>TEST</code>, typically, <strong>the same operand is
+repeated</strong> (e.g., <code>testq %rax,%rax</code> to see whether
+<code>%rax</code> is negative, zero, or positive), or <strong>one of the
+operands is a mask indicating which bits should be tested</strong>.</li>
+</ul>
+<h3 id="2accessing-condition-codes">2.Accessing Condition Codes</h3>
+<p><img src="/2024/07/15/3-6-Control/image-2.png"></p>
+<ul>
+<li><p>A set instruction has either one of the low-order single-byte
+register elements or a single-byte memory location as its destination,
+<strong>setting this byte to either 0 or 1</strong>.</p></li>
+<li><p>To generate a 32-bit or 64-bit result, we must also <strong>clear
+the high-order bits</strong>. For example:</p></li>
+</ul>
+<p><img src="/2024/07/15/3-6-Control/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>movzbl</code> not only set the high-order 3 bytes of
+<code>%eax</code> to 0, but also set the high-order 4 bytes of
+<code>%rax</code> to 0 due to the 32-bit <code>mov</code>
+convention.</p>
+<blockquote>
+<p>It is important to understand that assembly code does not keep track
+of the type of a program value. Instead, <strong>the different
+instructions determine the operand sizes and whether they are signed or
+unsigned</strong>:</p>
+<p><span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-6-Control/image-4.png"></p>
+<p><img src="/2024/07/15/3-6-Control/image-5.png"></p>
+</blockquote>
+<h3 id="3jump-instructions">3.Jump Instructions</h3>
+<p><img src="/2024/07/15/3-6-Control/image-6.png"></p>
+<p>&#x2003;&#x2003;There are two kinds of jump instructions:</p>
+<ul>
+<li><p><em>Direct jump</em>: It jumps to a label. The jump target is
+encoded as part of the instructions.</p></li>
+<li><p><em>Indirect jump</em>: It is written <strong>using
+<code>*</code> followed by an operand specifier</strong>.</p>
+<ul>
+<li><p><code>jmp *%rax</code> uses <strong>the value in
+<code>%rax</code></strong> as the jump target.</p></li>
+<li><p><code>jmp *(%rax)</code> reads the jump target from memory, using
+the value in <code>%rax</code> <strong>as the read
+address</strong>.</p></li>
 </ul></li>
 </ul>
-<h3 id="2trie&#x7684;&#x6784;&#x5EFA;">2.<span class="math inline">\(Trie\)</span>&#x7684;&#x6784;&#x5EFA;</h3>
-<p>&#x2003;&#x2003;&#x5229;&#x7528;&#x5148;&#x524D;&#x7684;&#x7B56;&#x7565;&#xFF0C;&#x6211;&#x4EEC;&#x8BA9;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x5B58;&#x50A8;&#x5B57;&#x6BCD;&#x3001;&#x5B69;&#x5B50;&#x548C;&#x989C;&#x8272;&#x3002;&#x7531;&#x4E8E;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x662F;&#x4E00;&#x4E2A;&#x5B57;&#x6BCD;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<code>DataIndexedCharMap</code>&#x6765;&#x5B58;&#x50A8;&#x8282;&#x70B9;&#x7684;&#x6240;&#x6709;&#x5B69;&#x5B50;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataIndexedCharMap</span>&lt;V&gt; {</span><br><span class="line">    <span class="keyword">private</span> V[] items;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DataIndexedCharMap</span><span class="params">(<span class="type">int</span> R)</span> {</span><br><span class="line">        items = (V[]) <span class="keyword">new</span> <span class="title class_">Object</span>[R];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(<span class="type">char</span> c, V val)</span> {</span><br><span class="line">        items[c] = val;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(<span class="type">char</span> c)</span> {</span><br><span class="line">        <span class="keyword">return</span> items[c];</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> <span class="number">128</span>; <span class="comment">// ASCII</span></span><br><span class="line">   <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">      <span class="keyword">private</span> <span class="type">char</span> ch;  </span><br><span class="line">      <span class="keyword">private</span> <span class="type">boolean</span> isKey;   </span><br><span class="line">      <span class="keyword">private</span> DataIndexedCharMap next;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">char</span> c, <span class="type">boolean</span> blue, <span class="type">int</span> R)</span> {</span><br><span class="line">         ch = c; </span><br><span class="line">         isKey = blue;</span><br><span class="line">         next = <span class="keyword">new</span> <span class="title class_">DataIndexedCharMap</span>&lt;Node&gt;(R);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/15.2.Implementation/image-2.png"></p>
-<p>&#x2003;&#x2003;&#x7136;&#x800C;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x7684;&#x8282;&#x70B9;&#x53EA;&#x6709;&#x5F88;&#x5C11;&#x7684;&#x5B69;&#x5B50;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x521B;&#x5EFA;&#x4E86;<span class="math inline">\(128\)</span>&#x4E2A;&#x7A7A;&#x95F4;&#xFF0C;&#x53EA;&#x6709;&#x5F88;&#x5C11;&#x7684;&#x7A7A;&#x95F4;&#x662F;&#x771F;&#x6B63;&#x88AB;&#x4F7F;&#x7528;&#x7684;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6CE8;&#x610F;&#x5230;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x95F4;&#x5B58;&#x5728;&#x94FE;&#x63A5;&#x5F53;&#x4E14;&#x4EC5;&#x5F53;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x5B58;&#x50A8;&#x4E86;&#x5B57;&#x7B26;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5220;&#x6389;<span class="math inline">\(Node\)</span>&#x7684;<span class="math inline">\(ch\)</span>&#x53D8;&#x91CF;&#xFF0C;&#x800C;&#x7528;&#x8BE5;&#x8282;&#x70B9;&#x5728;&#x7236;&#x8282;&#x70B9;&#x7684;<span class="math inline">\(next\)</span>&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#x6765;&#x8868;&#x5F81;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> <span class="number">128</span>; <span class="comment">// ASCII</span></span><br><span class="line">   <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">      <span class="keyword">private</span> <span class="type">boolean</span> isKey;   </span><br><span class="line">      <span class="keyword">private</span> DataIndexedCharMap next;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">boolean</span> blue, <span class="type">int</span> R)</span> {</span><br><span class="line">         isKey = blue;</span><br><span class="line">         next = <span class="keyword">new</span> <span class="title class_">DataIndexedCharMap</span>&lt;Node&gt;(R);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/15.2.Implementation/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x540C;&#x65F6;&#xFF0C;&#x4E3A;&#x4E86;&#x51CF;&#x5C11;&#x7A7A;&#x95F4;&#x6D6A;&#x8D39;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<span class="math inline">\(HashMap\)</span>&#x4EE3;&#x66FF;<span class="math inline">\(DataIndexedCharMap\)</span>&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrieSet</span> {</span><br><span class="line">    <span class="keyword">private</span> Node root;    <span class="comment">// root of trie</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> {</span><br><span class="line">        <span class="keyword">private</span> <span class="type">boolean</span> isKey;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Character, Node&gt; next;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="title function_">Node</span><span class="params">(<span class="type">boolean</span> isKey)</span> {</span><br><span class="line">            <span class="built_in">this</span>.isKey = isKey;</span><br><span class="line">            <span class="built_in">this</span>.next = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h3 id="3trie&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;">3.<span class="math inline">\(Trie\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;</h3>
-<p>&#x2003;&#x2003;&#x7ED9;&#x5B9A;&#x5B57;&#x7B26;&#x4E32;&#x7684;<span class="math inline">\(Trie\)</span>&#xFF0C;&#x5176;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(Map\)</span>&#x3001;<span class="math inline">\(Set\)</span>&#x64CD;&#x4F5C;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<ul>
-<li><code>add</code>&#xFF1A;<span class="math inline">\(\Theta(1)\)</span></li>
-<li><code>contains</code>&#xFF1A;<span class="math inline">\(\Theta(1)\)</span></li>
-</ul>
-<p>&#x2003;&#x2003;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;<span class="math inline">\(Trie\)</span>&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x53EA;&#x53D6;&#x51B3;&#x4E8E;&#x5355;&#x8BCD;&#x7684;&#x957F;&#x5EA6;&#xFF0C;&#x800C;&#x4E0E;<span class="math inline">\(Trie\)</span>&#x4E2D;&#x952E;&#x7684;&#x591A;&#x5C11;&#x65E0;&#x5173;&#x3002;&#x6211;&#x4EEC;&#x5728;&#x67E5;&#x8BE2;&#x65F6;&#x53EA;&#x4F1A;&#x904D;&#x5386;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x5355;&#x8BCD;&#x3002;</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/15.3.Trie%20String%20Operations/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/15.3.Trie%20String%20Operations/" class="post-title-link" itemprop="url">15.3.&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:17:56" itemprop="dateModified" datetime="2024-06-02T21:17:56+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/15-Tries/" itemprop="url" rel="index"><span itemprop="name">15.Tries</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>424</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="153&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;"><span class="math inline">\(15.3\)</span>&#x5B57;&#x7B26;&#x4E32;&#x64CD;&#x4F5C;</h1>
-<h3 id="1&#x952E;&#x7684;&#x6536;&#x96C6;&#x4E0E;&#x524D;&#x7F00;&#x5339;&#x914D;">1.&#x952E;&#x7684;&#x6536;&#x96C6;&#x4E0E;&#x524D;&#x7F00;&#x5339;&#x914D;</h3>
-<p>&#x2003;&#x2003;&#x7531;&#x4E8E;&#x5728;<span class="math inline">\(trie\)</span>&#x4E2D;&#xFF0C;&#x5B57;&#x7B26;&#x548C;&#x952E;(<span class="math inline">\(key\)</span>)&#x90FD;&#x662F;&#x88AB;&#x9690;&#x6027;&#x8868;&#x793A;&#x7684;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x60F3;&#x8BA9;&#x6211;&#x4EEC;&#x7684;&#x952E;&#x53D8;&#x5F97;&#x53EF;&#x8FED;&#x4EE3;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x53EA;&#x5728;<span class="math inline">\(trie\)</span>&#x4E2D;&#x76F4;&#x63A5;&#x5BFB;&#x627E;&#x5B83;&#x4EEC;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x4E00;&#x4E2A;&#x53EF;&#x8FED;&#x4EE3;&#x7684;<code>collect</code>&#x65B9;&#x6CD5;&#xFF0C;&#x8BE5;&#x65B9;&#x6CD5;&#x4F1A;&#x7EF4;&#x62A4;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5B83;&#x7528;&#x4E8E;&#x50A8;&#x5B58;&#x8DEF;&#x5F84;&#x4E0A;&#x7684;&#x5B57;&#x7B26;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(String key)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> get(root, key, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> x.value;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">get</span><span class="params">(Node x, String key, <span class="type">int</span> d)</span> {</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == key.length()) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> key.charAt(d);<span class="comment">// use dth key char of key to find subtrie</span></span><br><span class="line">    <span class="keyword">return</span> get(x.next[c], key, d + <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keys</span><span class="params">()</span> { </span><br><span class="line">    <span class="keyword">return</span> keysWithPrefix(<span class="string">&quot;&quot;</span>); </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//collect keys in a trie.</span></span><br><span class="line"><span class="comment">//the &quot;get&quot; method will return the node containing the prefix</span></span><br><span class="line"><span class="comment">//so we can collect any string that starts from this node</span></span><br><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysWithPrefix</span><span class="params">(String pre)</span> {</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(get(root, pre, <span class="number">0</span>), pre, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, Queue&lt;String&gt; q)</span> {</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (x.value != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) {</span><br><span class="line">        collect(x.next[c], pre + c, q);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;&#x6574;&#x4E2A;&#x641C;&#x7D22;&#x952E;&#x7684;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-4.png"></p>
-<p>&#x2003;&#x2003;<code>keysWithPrefix</code>&#x65B9;&#x6CD5;&#x7684;&#x6267;&#x884C;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/15.3.Trie%20String%20Operations/image-5.png"></p>
-<h3 id="2&#x901A;&#x914D;&#x7B26;&#x5339;&#x914D;">2.&#x901A;&#x914D;&#x7B26;&#x5339;&#x914D;</h3>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x5B9E;&#x73B0;<code>keysThatMatch()</code>&#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x7C7B;&#x4F3C;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x4F46;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x53C2;&#x6570;<span class="math inline">\(pat\)</span>&#x6765;&#x8868;&#x793A;&#x6211;&#x4EEC;&#x9700;&#x8981;<span class="math inline">\(collect()\)</span>&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x3002;&#x5F53;&#x6A21;&#x5F0F;&#x5B57;&#x7B26;&#x662F;&#x901A;&#x914D;&#x7B26;(<span class="math inline">\(wildcard\)</span>)&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x6240;&#x6709;&#x94FE;&#x63A5;&#xFF1B;&#x5426;&#x5219;&#xFF0C;&#x6211;&#x4EEC;&#x53EA;&#x8C03;&#x7528;&#x548C;&#x901A;&#x914D;&#x7B26;&#x76F8;&#x5173;&#x7684;&#x94FE;&#x63A5;&#x3002;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title function_">keysThatMatch</span><span class="params">(String pat)</span> {</span><br><span class="line">    Queue&lt;String&gt; q = <span class="keyword">new</span> <span class="title class_">Queue</span>&lt;String&gt;();</span><br><span class="line">    collect(root, <span class="string">&quot;&quot;</span>, pat, q);</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">collect</span><span class="params">(Node x, String pre, String pat, Queue&lt;String&gt; q)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">d</span> <span class="operator">=</span> pre.length();</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length() &amp;&amp; x.val != <span class="literal">null</span>) q.enqueue(pre);</span><br><span class="line">    <span class="keyword">if</span> (d == pat.length()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> <span class="variable">next</span> <span class="operator">=</span> pat.charAt(d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0</span>; c &lt; R; c += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (next == <span class="string">&apos;.&apos;</span> || next == c) {</span><br><span class="line">            collect(x.next[c]. pre + c, pat, q);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/16.1.QuadTrees/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/16.1.QuadTrees/" class="post-title-link" itemprop="url">16.1.&#x56DB;&#x53C9;&#x6811;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:25:26" itemprop="dateModified" datetime="2024-06-02T21:25:26+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/16-QuadTrees/" itemprop="url" rel="index"><span itemprop="name">16.QuadTrees</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>567</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="161&#x56DB;&#x53C9;&#x6811;"><span class="math inline">\(16.1\)</span>&#x56DB;&#x53C9;&#x6811;</h1>
-<h3 id="1&#x95EE;&#x9898;&#x7684;&#x5F15;&#x5165;">1.&#x95EE;&#x9898;&#x7684;&#x5F15;&#x5165;</h3>
-<p>&#x2003;&#x2003;&#x8003;&#x8651;&#x8FD9;&#x6837;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x7ED9;&#x5B9A;&#x4E0B;&#x9762;&#x4E00;&#x7CFB;&#x5217;&#x70B9;&#xFF0C;&#x6C42;&#x843D;&#x5165;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x7684;&#x70B9;&#x7684;&#x6570;&#x91CF;&#x3002;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image.png"></p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x4E0D;&#x7528;&#x904D;&#x5386;&#x6240;&#x6709;&#x7684;&#x70B9;&#xFF0C;&#x4E00;&#x4E2A;&#x81EA;&#x7136;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x7684;&#x6027;&#x8D28;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#x3002;&#x5728;&#x5BF9;&#x4E00;&#x7CFB;&#x5217;&#x7684;&#x70B9;&#x5750;&#x6807;<span class="math inline">\((x,y)\)</span>&#x6784;&#x5EFA;<span class="math inline">\(BST\)</span>&#x65F6;&#x3002;&#x5BF9;&#x4E8E;&#x5355;&#x4E2A;&#x7684;<span class="math inline">\(x\)</span>&#x5750;&#x6807;&#x6216;<span class="math inline">\(y\)</span>&#x5750;&#x6807;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5F88;&#x5BB9;&#x6613;&#x5730;&#x6784;&#x5EFA;&#x51FA;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F46;&#x5BF9;&#x4E8E;&#x4E8C;&#x7EF4;&#x7684;&#x5750;&#x6807;&#xFF0C;&#x5F53;&#x4E00;&#x4E2A;&#x70B9;&#x7684;<span class="math inline">\(x\)</span>&#x5750;&#x6807;&#x5927;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x70B9;&#x3001;&#x800C;<span class="math inline">\(y\)</span>&#x5750;&#x6807;&#x5C0F;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x70B9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x8BE5;&#x600E;&#x4E48;&#x6392;&#x5E8F;&#x5462;&#xFF1F;</p>
-<h3 id="2&#x56DB;&#x53C9;&#x6811;">2.&#x56DB;&#x53C9;&#x6811;</h3>
-<p>&#x2003;&#x2003;&#x8BE5;&#x95EE;&#x9898;&#x7684;&#x89E3;&#x51B3;&#x529E;&#x6CD5;&#x4E3A;&#xFF1A;&#x8BA9;&#x6211;&#x4EEC;&#x7684;&#x6811;&#x4ECE;&#x56DB;&#x4E2A;&#x65B9;&#x5411;&#x540C;&#x65F6;(<span class="math inline">\(simultaneously\)</span>)&#x5206;&#x5272;&#x7A7A;&#x95F4;&#xFF0C;&#x5B9E;&#x73B0;&#x8FD9;&#x4E00;&#x64CD;&#x4F5C;&#x7684;&#x7ED3;&#x6784;&#x79F0;&#x4F5C;&#x56DB;&#x53C9;&#x6811;&#x3002;</p>
-<h4 id="a&#x56DB;&#x53C9;&#x6811;&#x7684;&#x6784;&#x5EFA;">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&#x56DB;&#x53C9;&#x6811;&#x7684;&#x6784;&#x5EFA;</h4>
-<p>&#x2003;&#x2003;&#x56DB;&#x53C9;&#x6811;&#x5177;&#x6709;&#x56DB;&#x4E2A;&#x6307;&#x9488;&#xFF0C;&#x6BCF;&#x4E2A;&#x6307;&#x9488;&#x5206;&#x522B;&#x6307;&#x5411;&#x4E1C;&#x5357;&#x3001;&#x4E1C;&#x5317;&#x3001;&#x897F;&#x5357;&#x3001;&#x897F;&#x5317;&#x533A;&#x57DF;&#x3002;&#x5047;&#x5982;&#x6211;&#x4EEC;&#x4EE5;<span class="math inline">\(A\)</span>&#x4E3A;&#x6839;&#x8282;&#x70B9;&#xFF0C;&#x5219;&#x521D;&#x59CB;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-1.png"></p>
-<p>&#x2003;&#x2003;&#x5BF9;&#x5E94;&#x7684;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-2.png"></p>
-<p>&#x2003;&#x2003;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x6211;&#x4EEC;&#x63D2;&#x5165;<span class="math inline">\(B(2,2)\)</span>&#x8FD9;&#x4E2A;&#x8282;&#x70B9;&#x3002;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>&#x5728;<span class="math inline">\(A\)</span>&#x7684;&#x4E1C;&#x5317;&#x65B9;&#x5411;&#xFF0C;<span class="math inline">\(A\)</span>&#x7684;<span class="math inline">\(NE\)</span>&#x6307;&#x9488;&#x6307;&#x5411;<span class="math inline">\(B\)</span>&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x6B64;&#x65F6;&#x5BF9;&#x5E94;&#x7684;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-4.png"></p>
-<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x4EE5;&#x540C;&#x6837;&#x5730;&#x65B9;&#x5F0F;&#x63D2;&#x5165;<span class="math inline">\(C\)</span>&#x3001;<span class="math inline">\(D\)</span>&#x3001;<span class="math inline">\(E\)</span>&#xFF0C;&#x53EF;&#x5F97;&#x5230;&#x4EE5;&#x4E0B;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x548C;&#x4E8C;&#x7EF4;&#x7A7A;&#x95F4;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-5.png"></p>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-6.png"></p>
-<h4 id="b&#x56DB;&#x53C9;&#x6811;&#x7684;&#x641C;&#x7D22;">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>&#x56DB;&#x53C9;&#x6811;&#x7684;&#x641C;&#x7D22;</h4>
-<p>&#x2003;&#x2003;&#x56DE;&#x5230;&#x5F00;&#x7BC7;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x6211;&#x4EEC;&#x7528;&#x6211;&#x4EEC;&#x6784;&#x5EFA;&#x7684;&#x56DB;&#x53C9;&#x6811;&#x6765;&#x641C;&#x7D22;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x8282;&#x70B9;&#x3002;</p>
+<h3 id="4jump-instruction-encodings">4.Jump Instruction Encodings</h3>
+<p>&#x2003;&#x2003;There are several kinds of encoding jump targets:</p>
 <ol type="1">
-<li>&#x4ECE;&#x6839;&#x8282;&#x70B9;<span class="math inline">\(A\)</span>&#x5F00;&#x59CB;&#x641C;&#x7D22;&#x3002;<span class="math inline">\(A\)</span>&#x4E0D;&#x5C5E;&#x4E8E;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#xFF0C;&#x6545;&#x8FD4;&#x56DE;<span class="math inline">\(null\)</span>&#x3002;</li>
-<li>&#x7136;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#xFF1A;<span class="math inline">\(A\)</span>&#x7684;&#x54EA;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;(<span class="math inline">\(subspace\)</span>)&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x70B9;&#xFF1F;&#x7531;&#x4E8E;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x5728;<span class="math inline">\(A\)</span>&#x7684;&#x4E1C;&#x5317;&#x65B9;&#x5411;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x641C;&#x7D22;<span class="math inline">\(A\)</span>&#x7684;<span class="math inline">\(NE\)</span>&#x5B50;&#x6811;&#xFF1A;</li>
+<li><p><em>PC relative</em>. They encode <strong>the difference between
+the address of the target instruction and the address of the instruction
+immediately following the jump</strong>.</p></li>
+<li><p>A second encoding method is to <strong>give an &#xFFFD;&#xFFFD;absolute&#xFFFD;&#xFFFD;
+address</strong>, using 4 bytes to directly specify the target.</p></li>
 </ol>
-<p><img src="/2024/05/31/16.1.QuadTrees/image-7.png"></p>
-<ol start="3" type="1">
-<li>&#x63A5;&#x7740;&#x6211;&#x4EEC;&#x641C;&#x7D22;<span class="math inline">\(B\)</span>&#x8282;&#x70B9;&#xFF0C;<span class="math inline">\(B\)</span>&#x5728;&#x77E9;&#x5F62;&#x533A;&#x57DF;&#x5185;&#xFF0C;&#x6240;&#x4EE5;&#x8FD4;&#x56DE;&#x5B83;&#x7684;&#x5750;&#x6807;&#x3002;</li>
-<li>&#x63A5;&#x7740;&#x6211;&#x4EEC;&#x8003;&#x8651;&#xFF1A;<span class="math inline">\(B\)</span>&#x7684;&#x54EA;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x7684;&#x70B9;&#xFF1F;&#x53EF;&#x4EE5;&#x770B;&#x5230;<span class="math inline">\(B\)</span>&#x7684;&#x56DB;&#x4E2A;&#x65B9;&#x5411;&#x90FD;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#x3002;</li>
-<li>......</li>
-</ol>
-<p>&#x2003;&#x2003;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x56DB;&#x53C9;&#x6811;&#x5177;&#x6709;&#x826F;&#x597D;&#x7684;&#x526A;&#x679D;(<span class="math inline">\(pruning\)</span>)&#x6548;&#x679C;&#xFF0C;&#x8FD9;&#x63D0;&#x9AD8;&#x4E86;&#x6211;&#x4EEC;&#x7684;&#x641C;&#x7D22;&#x6548;&#x7387;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x9012;&#x5F52;&#x8FDB;&#x884C;&#x6211;&#x4EEC;&#x7684;&#x641C;&#x7D22;&#x6D41;&#x7A0B;&#x3002;</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/16.2.K-D%20Trees/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/16.2.K-D%20Trees/" class="post-title-link" itemprop="url">16.2.K-D&#x6811;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:25:26" itemprop="dateModified" datetime="2024-06-02T21:25:26+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/16-QuadTrees/" itemprop="url" rel="index"><span itemprop="name">16.QuadTrees</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>415</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="162k-dtrees"><span class="math inline">\(16.2\)</span><span class="math inline">\(K-D\;Trees\)</span></h1>
-<h3 id="1&#x5F15;&#x5165;">1.&#x5F15;&#x5165;</h3>
-<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;&#x4E8C;&#x7EF4;&#x7684;&#x7A7A;&#x95F4;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x56DB;&#x53C9;&#x6811;&#x5B8C;&#x6210;&#x641C;&#x7D22;&#x3002;&#x90A3;&#x5BF9;&#x4E8E;&#x66F4;&#x9AD8;&#x7EF4;&#x7684;&#x7A7A;&#x95F4;&#x5462;&#xFF1F;&#x6BD4;&#x5982;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<p>&#x2003;&#x2003;Let&apos;s look at an PC relative example:</p>
+<p><img src="/2024/07/15/3-6-Control/image-7.png"></p>
+<p>&#x2003;&#x2003;In the annotations on the right, the jump targets are indicated as
+<code>0x8</code> for the jump instruction on line 2, which is equal to
+<code>0x5+0x3</code>. This is because the encoding is calculated by
+<strong><span class="math inline">\(the\;address\;of\;next\;instruction+offset\)</span></strong>.</p>
+<p>&#x2003;&#x2003;In this case, the address of next instruction is 3+2=5, and the
+offset is <code>03</code>, as is shown in the assembly code.</p>
+<p>&#x2003;&#x2003;Even though the instructions may be relocated to different
+addresses, the encoding of the target <strong>remain unchanged</strong>.
+This is because the relative position between instructions remains
+unchanged.</p>
+<h3 id="5conditional-move">5.Conditional Move</h3>
+<p>&#x2003;&#x2003;The conventional way to implement conditional operations is through
+a <em>conditional transfer of control</em>, where the program follows
+one execution path when a condition holds and another when it does
+not:</p>
+<p><img src="/2024/07/15/3-6-Control/image-8.png"></p>
+<p>&#x2003;&#x2003;An alternate strategy is through <em>condition transfer of
+data</em>. This approach <strong>computes both outcomes of a conditional
+operation</strong> and then <strong>selects one based on whether or not
+the condition holds</strong>:</p>
+<p><img src="/2024/07/15/3-6-Control/image-9.png"></p>
+<p>&#x2003;&#x2003;This strategy makes sense only in restricted cases, but it can then
+be implemented by a simple conditional move instruction that is better
+matched to the performance characteristics of modern processors due to
+the pipelining.</p>
+<blockquote>
+<p>However, due to the preprocess, If <strong>one of those two
+expressions could possibly generate an error condition or a side
+effect</strong>, this could lead to invalid behavior.</p>
+</blockquote>
+<p>&#x2003;&#x2003;The conditional move instructions are as below:</p>
+<p><img src="/2024/07/15/3-6-Control/image-10.png"></p>
 <ul>
-<li><p>Example: Want to find songs with the following features:</p>
-<ul>
-<li>Length between 3 minutes and 6 minutes.</li>
-<li>Between 1000 and 20,000 listens.</li>
-<li>Between 120 to 150 BPM.</li>
-<li>Were recorded after 2004.</li>
-</ul></li>
+<li><p>The instructions has two operands: <strong>a source register or
+memory location S</strong>, and <strong>a destination register
+R</strong>.</p></li>
+<li><p>The assembler can infer the operand length of a conditional move
+instruction, so it doesn&apos;t need suffix.</p></li>
 </ul>
-<p>&#x2003;&#x2003;&#x8FD9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x91C7;&#x7528;<span class="math inline">\(K-D\;Tree\)</span>&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x6765;&#x5BF9;&#x6570;&#x636E;&#x8FDB;&#x884C;&#x5212;&#x5206;&#xFF0C;&#x4ECE;&#x800C;&#x4F18;&#x5316;&#x641C;&#x7D22;&#x3002;</p>
-<h4 id="2k-d&#x6811;&#x7684;&#x539F;&#x7406;&#x4E0E;&#x6784;&#x9020;">2.<span class="math inline">\(K-D\)</span>&#x6811;&#x7684;&#x539F;&#x7406;&#x4E0E;&#x6784;&#x9020;</h4>
-<p>&#x2003;&#x2003;&#x4EE5;&#x4E8C;&#x7EF4;&#x5750;&#x6807;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x6309;&#x7167;&#x4EE5;&#x4E0B;&#x7684;&#x89C4;&#x5219;&#x6784;&#x5EFA;<span class="math inline">\(K-D\;Tree\)</span>&#xFF1A;</p>
+<h3 id="6loops">6.Loops</h3>
+<h4 id="ado-while">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>do-while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    body-statement</span><br><span class="line">    <span class="title function_">while</span> <span class="params">(test-expr)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<h4 id="bwhile">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The second translation method is called <em>guarded do</em>, which
+uses a <code>do-while</code> style loop:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line">if (!t)</span><br><span class="line">    goto done;</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;By this way, we only need to check the condition once before we
+enter the loop. This reduce the possibility of branch prediction
+failure.</p>
+<h4 id="cfor">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>for</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is equal to the following <code>while</code> statements:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr) {</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;And there are also two forms of <code>for</code> translation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;and:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (!t)</span><br><span class="line">        goto done;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;However, the simple translation from <code>for</code> to
+<code>while</code> will be a little tricky. Take the
+<code>continue</code> statement as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;If we simply use <code>continue</code>, this will lead to an
+infinite loop:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/* This will cause an infinite loop */</span></span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">    i ++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The general solution is to replace the continue statement with a
+goto statement that skips the rest of the loop body and goes directly to
+the update portion:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">goto</span> update;</span><br><span class="line">    sum += i;</span><br><span class="line"></span><br><span class="line">update:</span><br><span class="line">    i++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="7switch-statements">7.Switch Statements</h3>
+<p>&#x2003;&#x2003;The ordinary <code>switch</code> statements looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    {</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can rewrite this using a <em>jump table</em>. A jump table is an
+array where entry i is the address of a code segment the program should
+take when the switch index equals i.</p>
+<p>&#x2003;&#x2003;With jump table, the previous program will looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = {</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D};</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>Each level has a &quot;cutting dimension&quot;</p></li>
-<li><p>Cycle through the dimensions as you walk down the tree.</p></li>
-<li><p>Each node contains a point P = (x,y)</p></li>
-<li><p>To find (x&apos;,y&apos;) you only compare coordinate from the cutting
-dimension</p>
-<ul>
-<li>e.g. if cutting dimension is x, then you ask: is x&#x2019; &lt; x</li>
-</ul></li>
+<li><p>The <code>switch</code> locations are defined by <strong>the
+labels prefixed by <code>&amp;&amp;</code></strong>.
+<code>&amp;&amp;</code>is used to create a pointer for a code
+location.</p></li>
+<li><p>To simplify, the case value is subtracted by 100.</p></li>
 </ul>
-<p>&#x2003;&#x2003;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x62E5;&#x6709;&#x4E24;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;&#x3002;&#x5728;&#x641C;&#x7D22;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x50CF;&#x5728;&#x56DB;&#x53C9;&#x6811;&#x4E2D;&#x505A;&#x7684;&#x4E00;&#x6837;&#xFF0C;&#x53EA;&#x5728;&#x53EF;&#x80FD;&#x6709;&#x6700;&#x4F18;&#x89E3;&#x7684;&#x5B50;&#x7A7A;&#x95F4;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4F8B;&#x5982;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5982;&#x4E0B;&#x63D2;&#x5165;&#x4EE5;&#x4E0B;&#x5750;&#x6807;&#xFF1A;</p>
-<p><img src="/2024/05/31/16.2.K-D%20Trees/image-8.png"></p>
-<h4 id="3k-d&#x6811;&#x7684;&#x641C;&#x7D22;">3.<span class="math inline">\(K-D\)</span>&#x6811;&#x7684;&#x641C;&#x7D22;</h4>
-<p>&#x2003;&#x2003;&#x4EE5;&#x641C;&#x7D22;&#x5230;&#x67D0;&#x4E2A;&#x70B9;&#x8DDD;&#x79BB;&#x6700;&#x5C0F;&#x7684;&#x70B9;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x4EE5;&#x4E0B;&#x7684;&#x6B65;&#x9AA4;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#xFF1A;</p>
+<p>&#x2003;&#x2003;In the assembly code, we use this statement to access the jump
+table:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp *.L4(, %rsi, 8)  #Goto *jg[index]</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>Start at the root and store that point as the &quot;best so far&quot;.
-Compute its distance to the query point, and save that as the &quot;score to
-beat&quot;. In the image above, we start at A whose distance to the flagged
-point is 4.5.</p></li>
-<li><p>This node partitions the space around it into two subspaces. For
-each subspace, ask: &quot;Can a better point be possibly found inside of this
-space?&quot; This question can be answered by computing the shortest distance
-between the query point and the edge of our subspace (see dotted purple
-line below).</p></li>
-<li><p>Continue recursively for each subspace identified as containing a
-possibly better point.</p></li>
-<li><p>In the end, our &quot;best so far&quot; is the best point; the point
-closest to the query point.</p></li>
+<li><p>The base address is <code>L4</code>, which is the base address of
+the jump table array.</p></li>
+<li><p>The <code>(, %rsi, 8)</code> is the index, judging which case to
+switch to.</p></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.1.Selection%20Sort/" class="post-title-link" itemprop="url">18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:38:27" itemprop="dateModified" datetime="2024-06-02T21:38:27+08:00">2024-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/" itemprop="url" rel="index"><span itemprop="name">CS61B DataStructure</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>302</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
-<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
-<p>&#x2003;&#x2003;In selection sort, we basically do these three things:</p>
-<ol type="1">
-<li>Find the smallest item.</li>
-<li>Move it to the front.</li>
-<li>Selection sort the rest(using recursion).</li>
-</ol>
-<p>&#x2003;&#x2003;For each step, we can design an individual method to implement
-it.</p>
-<h3 id="2step-implementation">2.Step implementation</h3>
-<p>&#x2003;&#x2003;As the moving step requires the index of the to-moving element, the
-value we return should be index of elements, too.</p>
-<h4 id="afind">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>Find</code></h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Given that we may need to <code>Find</code> the minimun in asked
-range, we may improve our method by passing an extra parameter which
-point to the start index(We&apos;ll use it in the following procedure)&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> {</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h4 id="bswap">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swap</code></h4>
-<p>&#x2003;&#x2003;We are going to implement the method by manipulating the index of
-the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<h4 id="cmainmethod">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Main
-method</h4>
-<p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
-a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;In the assembly code, the jump table is indicated by the following
+declarations:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.section.rodata</span><br><span class="line">    .align 8  # Align address to multiple of 8</span><br><span class="line">    .L4 :</span><br><span class="line">    .quad.L3  # Case 100 : loc_A</span><br><span class="line">    .quad.L8  # Case 101 : loc_def</span><br><span class="line">    .quad.L5  # Case 102 : loc_B</span><br><span class="line">    .quad.L6  # Case 103 : loc_C</span><br><span class="line">    .quad.L7  # Case 104 : loc_D</span><br><span class="line">    .quad.L8  # Case 105 : loc_def</span><br><span class="line">    .quad.L7  # Case 106 : loc_D</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>rodata</code> refers to <em>read-only
+data</em>.</p></li>
+<li><p><code>L4</code> marks the start of the allocation.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In assembly code, the number of <code>case</code> is judged by
+<strong>the offset of the label in the jump table</strong>.</p>
 
       
     </div>
@@ -856,7 +475,7 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -909,8 +528,6 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
       </span>
     </span>
 </div>
-  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
-  </div>
 
     </div>
   </footer>
@@ -922,6 +539,7 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>

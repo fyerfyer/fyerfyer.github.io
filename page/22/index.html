@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-3-Synchronous-Digital-Systems/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
+          <a href="/2024/06/05/3-3-Synchronous-Digital-Systems/" class="post-title-link" itemprop="url">3.3.Synchronous Digital Systems</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:29:11" itemprop="dateCreated datePublished" datetime="2024-06-05T08:29:11+08:00">2024-06-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:48:39" itemprop="dateModified" datetime="2024-06-06T17:48:39+08:00">2024-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
         </span>
     </span>
 
@@ -254,468 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>250</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
-<h3 id="1-the-stack-machine">1. The stack machine</h3>
-<ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
-<ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
-<ul>
-<li><p>When we do <code>pop y</code>:</p>
-<ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3 id="2stack-arithmetic">2.Stack arithmetic</h3>
-<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
-<li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
-<li>Push the result back into the stack.</li>
-</ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3 id="3vm-commands">3.VM commands</h3>
-<ul>
-<li>Arithmetic commands:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
-<ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>239</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
-Segments</h1>
-<h3 id="1memory-segments-intro">1.Memory segments intro</h3>
-<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
-as:</p>
-<ul>
-<li>Argument variables</li>
-<li>Local variables</li>
-<li>Static variables</li>
-</ul>
-<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
-role</strong>, we need some mechanism to <strong>record the different
-roles of different variables</strong>. We can achieve this by the notion
-of <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
-<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
-<em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
-<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
-<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
-these variables.</p>
-<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
-not a big deal, however, for <strong>the VM obstruction doesn&apos;t
-recognize symbolic variable names</strong>, all the variables are
-replaced by references to memory segments.</p>
-<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
-segments:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
-<p>&#x2003;&#x2003;And the syntax of the command is:
-<code>push / pop segment i</code></p>
-<ul>
-<li><em>segment</em> is the segment you want to operate on.</li>
-<li><em>i</em> is the index of the command in that segment.</li>
-<li><span class="math inline">\(e.g.\)</span>
-:<code>push constant 17</code></li>
-<li><span class="math inline">\(e.g.\)</span> : translation of
-<code>let static 2 = argument 1</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
-<h3 id="2the-usage-of-segment">2.The usage of segment</h3>
-<ul>
-<li><p>There&apos;s a lot of semantics going on in the high-level
-language:</p>
-<ul>
-<li>static variables, local variables, argument variables, ...</li>
-<li>the <em>object</em> consisting a bundle of variables</li>
-</ul></li>
-<li><p>We can handle all the semantics using the eight virtual
-segments.</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.1.&#x7A0B;&#x5E8F;&#x7F16;&#x8BD1;&#x524D;&#x77BB;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 13:24:34" itemprop="dateCreated datePublished" datetime="2024-04-08T13:24:34+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:51:48" itemprop="dateModified" datetime="2024-06-03T07:51:48+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>266</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</h1>
-<h3 id="1problem-in-compilation">1.Problem in compilation</h3>
-<p>&#x2003;&#x2003;To start with an abstract program and end with something actually
-runs on the computer, we need</p>
-<ul>
-<li>A computer that can run machine language code.</li>
-<li>Translating the high level language into machine language.</li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
-<p>&#x2003;&#x2003;However, there are so many kinds of computers in the world, and
-many of them <strong>use different processes, which take different
-machine languages</strong>. It seems that we have to develop many
-compilers, one for each processor. This is very annoying.</p>
-<p>&#x2003;&#x2003;Luckily, this &quot;write once fix everywhere&quot; can be replaced by a
-&quot;write once run everywhere&quot; process.</p>
-<h3 id="2-2-tier-compilation">2. 2-Tier compilation</h3>
-<p>&#x2003;&#x2003;Let&apos;s take Java as example:</p>
-<ul>
-<li><p>The first tier: also called <em>the top tier</em></p>
-<ul>
-<li><p>Java compiler translates the Java program into VM code.</p>
-<ul>
-<li>The VM code is designed to run on an abstract artifact called
-<em>virtual machine</em>.</li>
-<li>It&apos;s not a real computer, so if we want to execute the code, we have
-to translate it further into machine language and realize it on real
-hardware (computer, for example).</li>
-</ul></li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
-<ul>
-<li><p>The second tier:</p>
-<ul>
-<li>We equip the target device with <em>JVM</em>, the Java machine
-implementation.</li>
-<li>The JVM is a program that takes VM code and translates it into the
-target code of the target platform.</li>
-<li>We need such translator <strong>for every platform on which we want
-to execute VM program</strong>.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
-<p>&#x2003;&#x2003;The gap between high-level language (Java, for example) and
-low-level language is huge. But by <strong>introducing an intermediate
-level</strong>, we <strong>decouple this process into two separate
-standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
-and <em>VM implementation</em>.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 18:24:54" itemprop="dateCreated datePublished" datetime="2024-04-07T18:24:54+08:00">2024-04-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:05:51" itemprop="dateModified" datetime="2024-06-03T00:05:51+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>417</span>
+      <span>419</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -733,331 +272,120 @@ and <em>VM implementation</em>.</p>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</h1>
-<h3 id="1start-reding-a-file">1.Start reding a file</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
-<ul>
-<li>Need to be able to read the input and break it into parts.</li>
-<li>Doesn&apos;t need to understand what the command means or how it will be
-translated into machine language.</li>
-<li>Need to understand the format of the input language and how it
-breaks into different components.</li>
-</ul>
-<p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
-<ol type="1">
-<li><p>Read a file with a given name.</p>
-<ul>
-<li>You may want a constructor to be able to accept the file name and
-then open the file for reading.</li>
-</ul></li>
-<li><p>Move to next command in the file:</p>
-<ol type="1">
-<li>Are we finished? <code>boolean hasMoreCommands()</code></li>
-<li>Get the next command: <code>void advance()</code></li>
-<li>Read into one line into some kind of string.</li>
-<li>Skip white space including comments.</li>
-</ol></li>
-<li><p>Get the fields of the current command</p>
-<ul>
-<li>Type of command (A, C, or label)</li>
-</ul></li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
-<h3 id="2translating-mnemonic-tocode">2.Translating mnemonic to
-code</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
-<ul>
-<li><p>Don&apos;t need to worry about how the mnemonic fields were
-obtained.</p>
-<ul>
-<li>No need to know what part of input line it is, etc.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;In detail, we:</p>
-<ol type="1">
-<li>Ask the parser to give us the string that corresponds to each part
-of the field.</li>
-<li>Once we get the three string, we go to the code object to translate
-each one of them separately according to the known table.</li>
-<li>Concatenate the output together.</li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
-<h3 id="3the-symbol-table">3.The symbol table</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
-<ul>
-<li>Don&apos;t need to know what the symbols mean.</li>
-<li>Need to maintain the association between a symbol and a memory
-address.</li>
-</ul>
-<p>&#x2003;&#x2003;In detail, we need to be able to:</p>
-<ol type="1">
-<li>Create an new empty table</li>
-<li>Add a (symbol, address) pair to the table</li>
-<li>Does the table contain a given symbol?</li>
-<li>What is the address associated with a given symbol?</li>
-</ol>
-<p>&#x2003;&#x2003;And do the following things:</p>
-<ol type="1">
-<li><p>Create a new empty table</p></li>
-<li><p>Add all the pre-defined symbols to the table</p></li>
-<li><p>While reading the input, add labels and new variables to the
-table</p>
-<ul>
-<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
-<code>&quot;xxx&quot;</code> and the address of the next machine language
-command</p>
-<ul>
-<li>Comment 1: this requires maintaining this running address (line
-number).</li>
-<li>Comment 2: this may need to be done in a first pass</li>
-</ul></li>
-<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
-<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
-<code>&quot;xxx&quot;</code> and the next free address for variable
-allocation</p></li>
-</ul></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">6.4.&#x7B26;&#x53F7;&#x7684;&#x5904;&#x7406;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 15:34:54" itemprop="dateCreated datePublished" datetime="2024-04-07T15:34:54+08:00">2024-04-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:00:56" itemprop="dateModified" datetime="2024-06-03T00:00:56+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>632</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="64handling-the-symbol"><span class="math inline">\(6.4.\)</span>Handling the Symbol</h1>
-<h3 id="1type-of-symbol">1.Type of symbol</h3>
-<p>&#x2003;&#x2003;Generally there are three types of symbol:</p>
-<ul>
-<li><em>Variable symbols</em>: Which represents memory locations where
-the programmer wants to maintain values.</li>
-<li><em>Label symbols</em>: Which represents destinations of goto
-instructions.</li>
-<li><em>Pre-defined symbols</em>: Which represents special memory
-lorations.</li>
-</ul>
-<h3 id="2pre-define-symbolstranslation">2.Pre-define symbols
-translation</h3>
-<ul>
-<li>These symbols exist only <strong>in the context of A
-instructions</strong>. So they will only be seen in expression like
-<code>@preDefinedSymbol</code></li>
-<li>Translating <code>@preDefinedSymbol</code>: Replace
-<code>preDefineSymbol</code> with its corresponding value:</li>
-</ul>
-<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
-<h3 id="3label-symbols-translation">3.Label symbols translation</h3>
-<p>&#x2003;&#x2003;To begin with, there are two sorts of label:</p>
-<ul>
-<li>Used to label destination of <code>goto</code> commands. For
-example, <code>@STOP, 0;JMP</code></li>
-<li>Declared by the <em>pseudo-command</em>. For example,
-<code>(STOP)</code></li>
-</ul>
+          <h1 id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</h1>
+<h3 id="1clock-concepts">1.Clock concepts</h3>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
+<h3 id="2d-flip-flops">2.D Flip-flops</h3>
+<h4 id="a-dffconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span> DFF
+concept</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
 <blockquote>
-<p>This is called pseudo-commands because <strong>it doesn&apos;t generate
-any code</strong>. When we translate the program into binary. we don&apos;t
-translate the label declaration instructions.</p>
+<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
+<span class="math inline">\(D\)</span> is the data input.</p>
 </blockquote>
-<p>&#x2003;&#x2003;To allocate a specific location to each label, we
-<strong>number</strong> the instruction one by one, like the left hand
-side:</p>
-<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<blockquote>
+<p>DFF only responds to the input signal on the rising edge of the clock
+signal, it captures and latches the value of data input. <strong>It will
+hold the value until the next rising edge of the clock
+signal</strong>.</p>
+</blockquote>
 <ul>
-<li>We ignore <strong>white space and pseudo-commands</strong> when
-numbering.</li>
+<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
+take for the input to propagate to the output after the clock
+trigger</strong>.</p></li>
+<li><p><em>Setup time</em> is the amount of time that the input needs to
+be stable BEFORE the clock trigger</p></li>
 </ul>
-<p>&#x2003;&#x2003;Once we complete the numbering, we can <strong>refer the label to
-its corresponding line number</strong>. For example, <code>LOOP</code>
-relates to 4 and <code>STOP</code> relates to 18. And when we see the
-instruction <code>@LOOP</code>, we actually mean <code>@4</code>.</p>
-<p>&#x2003;&#x2003;After this pre-work, the translating is plain: * Translating
-<code>@labelSymbol</code>: Replace <code>labelSymbol</code> with its
-value.</p>
-<h3 id="4varables-translation">4.Varables translation</h3>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
 <ul>
-<li>Any symbol xx appearing in an assembly program which <strong>is not
-pre-defined</strong> and <strong>is not defined elsewhere using the
-(xxx) directive</strong> is treated as a variable</li>
-<li>if a variable appears in the program for the first time, we allocate
-it to a memory address <strong>starting from address 16</strong> . If we
-see this varable popping up later in the program, we simply <strong>look
-up the value that you assigned to it before</strong>.</li>
+<li><em>Hold time</em> is the amount of time that the input needs to be
+stable AFTER the clock trigger</li>
 </ul>
-<h3 id="5symbol-table-construction">5.Symbol table construction</h3>
-<h4 id="afirstpass">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>First
-pass</h4>
-<p>&#x2003;&#x2003;In the <em>first pass</em>, we extract from the program <strong>all
-the label symbols</strong>.</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
+<h3 id="3register">3.Register</h3>
+<h4 id="asomeconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
+concept</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
+<blockquote>
+<p>Why this? Because the max hold time is to <strong>ensure that data
+input D remains stable for a period of time after the rising edge of the
+clock arrives</strong>. And the period of time equals to the delay of
+<span class="math inline">\(A\)</span> plus the combinational delay.</p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
+<blockquote>
+<p>Why this? Because the min clock cycle is to <strong>ensure that the
+signal is properly transmitted during the clock cycle and captured by
+the next register</strong>. So we must take the longest time into
+consideration.</p>
+</blockquote>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
+<h3 id="4transitor">4.Transitor</h3>
+<h4 id="ametal-oxide-semiconductor-field-effecttransistormosfet">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
+Transistor(MOSFET)</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
+<p>&#x2003;&#x2003;To know how the result comes from, we can <strong>view the value of
+<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
+an example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
 <ul>
-<li><p>Before starting any translation, create an empty table and add
-all the predefined symbos one by one.</p></li>
-<li><p>March through the entire text file that constitutes the source
-assembly program:</p>
-<ul>
-<li><p>Only <strong>look for label declarations</strong></p>
-<ul>
-<li>Line of code that begins with left parenthesis.</li>
-</ul></li>
-<li><p>Meanwhile keep track of how many lines you&apos;ve read so far (only
-count real instructions).</p></li>
-</ul></li>
+<li><p>First we need to know <strong>whether the switch is
+closed</strong>. <strong>If the switch is closed, then the state of
+<span class="math inline">\(D\)</span> is decided by the outside
+circuits</strong>.</p></li>
+<li><p>When the switch is on, we then judge <strong>if the voltage of
+<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it&apos;s true, then the FET is
+conducting, and vice versa.</p></li>
 </ul>
-<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
-<h4 id="bsecondpass">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Second
-pass</h4>
+<p>&#x2003;&#x2003;In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can&apos;t get the electronic, thus it&apos;s
+0.</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
+<h4 id="bvddand-ground">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Vdd
+and Ground</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
+<h4 id="cbuilding-an-inverter">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Building an Inverter</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
+<h4 id="dbuilding-other-gates">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Building other gates</h4>
+<p>&#x2003;&#x2003;To build a CMOS, we:</p>
+<ol type="1">
+<li><p>Implement the pull-up network and pull-down network separately to
+fit the truth table.</p>
 <ul>
-<li>We start once again to scan the entire program.</li>
-<li>Whenever we see a symbol <strong>which doesn&apos;t appear in the symbol
-table</strong>, we add it to the table, assign to it <code>16</code> or
-larger number (for it must be a varable).</li>
-<li>If we find them in the symbol table, then they&apos;ve been declared and
-we can use them.</li>
-</ul>
-<h4 id="cmore-about-the-table">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>More about the table</h4>
-<ul>
-<li>When resolving a symbol, we look it up in the table, retrieve its
-value, and put it into the instruction. What you get is <strong>the
-meaning of this symbol</strong> according to the symbol table.</li>
-<li>We maintain the table as long as the assembler is processing the
-program, and then we can toss it away.</li>
-</ul>
-<h3 id="6summary-the-assemblyprocess">6.Summary: The assembly
-process</h3>
-<ul>
-<li><p><em>Initialization</em>:</p>
-<ul>
-<li>Construct an empty symbol table,</li>
-<li>Add the pre-defined symbols to the symbol table,</li>
+<li>It&apos;s OK to get the opposite of truth table. <strong>We can simply
+convert it through an invertor</strong>.</li>
 </ul></li>
-<li><p><em>First pass</em>:</p>
-<ul>
-<li><p>Scan the entire program;</p></li>
-<li><p>For each &quot;instruction&quot; of the form <code>(xxx)</code>:</p>
-<ul>
-<li>Add the pair (xxx, address) to the symbol table, where
-<em>address</em> is <strong>the number of the instruction following
-<code>(xxx)</code></strong>.</li>
-</ul></li>
-</ul></li>
-<li><p><em>Second pass</em>:</p>
-<ul>
-<li><p>Set n to 16</p></li>
-<li><p>Scan the entire program again, for each instruction:</p>
-<ul>
-<li><p>If the instruction is <code>@symbol</code>, look up symbol in the
-symbol table:</p>
-<ul>
-<li><p>If (symbol, value) is found, use value to complete the
-instruction&apos;s translation;</p></li>
-<li><p>If not found:</p>
-<ul>
-<li>Add (symbol, n) to the symbol table,</li>
-<li>Use n to complete the instruction&apos;s translation,</li>
-<li>n++</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><p>If the instruction is a C-instruction, complete the instruction&apos;s
-translation.</p></li>
-<li><p>Write the translated instruction to the output file.</p></li>
-</ul></li>
-</ul>
+<li><p>Connect the pull-up with Vdd, and the pull-down with
+Ground.</p></li>
+</ol>
+<p>&#x2003;&#x2003;We take the <code>NAND</code> gate for example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
+<h4 id="ethe-use-of-demorgans-law">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>The use of DeMorgan&apos;s Law</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
 
       
     </div>
@@ -1077,7 +405,7 @@ translation.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1130,8 +458,6 @@ translation.</p></li>
       </span>
     </span>
 </div>
-  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
-  </div>
 
     </div>
   </footer>
@@ -1143,6 +469,7 @@ translation.</p></li>
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>

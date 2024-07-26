@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.8.&#x51FD;&#x6570;&#x5B9E;&#x73B0;&#x524D;&#x77BB;</a>
+          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-11 08:22:16" itemprop="dateCreated datePublished" datetime="2024-04-11T08:22:16+08:00">2024-04-11</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:37:35" itemprop="dateModified" datetime="2024-06-03T14:37:35+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
         </span>
     </span>
 
@@ -254,244 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>741</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="78function-impletation-preview"><span class="math inline">\(7.8.\)</span>Function Impletation Preview</h1>
-<h3 id="1program-execution">1.Program execution</h3>
-<ul>
-<li><p>When a function enters its execution, we need to create a
-<em>state</em> for this function.</p>
-<ul>
-<li>Give it an <em>empty working stack</em>, its <em>memory
-segment</em>.</li>
-</ul></li>
-<li><p>The working stack and some of the segments should be:</p>
-<ul>
-<li>Created <strong>when the function starts running</strong>.</li>
-<li><strong>Maintained as long as the function is
-executing</strong>.</li>
-<li><strong>Recycled</strong> when the function retums.</li>
-</ul></li>
-<li><p>When we call a function, we will have two states: the state of
-<em>caller</em> and the state of <em>callee</em>. Once the callee starts
-running, <strong>the state of the caller has to be saved
-somewhere</strong>. And when the callee terminates, we can
-<strong>reinstate the caller state and continue its
-execution</strong>.</p></li>
-</ul>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image.png"></p>
-<h3 id="2function-call-and-return">2.Function call and return</h3>
-<p>&#x2003;&#x2003;However, a <em>calling chain</em> may be several functions deep,
-and how can we maintain all the states of these functions?</p>
-<p>&#x2003;&#x2003;To deal with this, we can use the <em>FILO</em> (first in last out)
-pattern. The only function to be return is the function which is
-currently running, and which is also <strong>the end of the calling
-chain</strong>. Once this function returns, the calling chain shortens,
-so on and so forth.</p>
-<p>&#x2003;&#x2003;This pattern is similiar to <em>stack</em>, this implies that we
-may use a stack in order to save and retrieve all these function
-states.</p>
-<p>&#x2003;&#x2003;Take this simple function as example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mult(17, 212)</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;In the view of the caller, the effect of the procedure is that
-<strong>the function&apos;s arguements has been replaced with the function
-value</strong>:</p>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-1.png"></p>
-<p>&#x2003;And the details are as follows:</p>
-<ul>
-<li><p>We push some values in the stack, and nothing happens. And then
-we <code>call foo nArgs</code>.</p></li>
-<li><p>By the information <code>nArgs</code>, we know where to
-<strong>set <code>arg</code> pointer</strong>.</p>
-<ul>
-<li>From now on, we know what&apos;s above the <code>arg</code> is
-<strong>the working stack of the caller</strong>, and what&apos;s below the
-<code>arg</code> are <strong>the arguments to be use by
-callee</strong>.</li>
-</ul></li>
-<li><p>Before we jump to the called function, we have to save the state
-of the caller:</p>
-<ul>
-<li>The working stack is safe, it is already on the stack, so we can
-leave it alone.</li>
-<li>We have to save the <em>segment</em> and the <em>return
-address</em>. Taken together, we call these thing <em>frame</em>.</li>
-<li>The VM implementation simply <strong>push these memory segments into
-stack</strong>. In this way we save the frame, and will be able to
-return to them later on.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-2.png"></p>
-<ul>
-<li>Jump to <strong>execute foo</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;After the called function is entered, it:</p>
-<ul>
-<li><p>Create a <em>local segment</em>.</p></li>
-<li><p>Having known that we need n variables, we need to
-<strong>initialize them to 0</strong></p>
-<ul>
-<li>From now on, we can refer to these values as <code>local 0</code>,
-<code>local 1</code> and so on.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-3.png"></p>
-<p>&#x2003;&#x2003;Assume that the called function is running and doing its things, in
-this process, it:</p>
-<ul>
-<li>Grow its working stack, and it now has a working stack of its
-own.</li>
-</ul>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-4.png"></p>
-<ul>
-<li><p>When it is goint to <code>return</code> at some point, we push
-the return value <strong>at the bottom of the stack</strong>.</p></li>
-<li><p>We pop the topmost value, and <strong>copy it onto
-<code>argument 0</code></strong> to replace the pushed arguments with
-return value.</p></li>
-<li><p>We <strong>restore the segment pointers of the callers</strong>,
-take the saved <em>memory segments</em> to the <em>current
-segments</em>.</p></li>
-<li><p>Then we <strong>clear the stack of the called function</strong>,
-and <strong>set the stack pointer for the caller</strong>.</p>
-<ul>
-<li>The stack pointer should be located after
-<code>argument 0</code>.</li>
-</ul></li>
-<li><p>Finally, we <strong>jump to the return address</strong> in the
-caller, and continue executing the caller&apos;s code.</p></li>
-</ul>
-<h3 id="3global-stack">3.Global stack</h3>
-<p>&#x2003;&#x2003;Our previous discussion is only about the caller and callee, but
-there are many other pairs of callers and callees in the calling chain,
-and we have to maintain their states, too.</p>
-<p>&#x2003;&#x2003;As a result, we get a very large stack called <em>global stack</em>
-containing the information of the entire program.</p>
-<ul>
-<li><p>We refer to some subset of the global stack <em>block</em>. It&apos;s
-the world of the currently running function, and it contains:</p>
-<ul>
-<li><em>argument segment</em>. These are the function&apos;s arguments.</li>
-<li><em>saved information that belongs to caller</em>.</li>
-<li><em>local segment</em></li>
-<li><em>working stack of its own</em></li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-5.png"></p>
-<ul>
-<li>The global stack contains many more such blocks.</li>
-</ul>
-<p>&#x2003;&#x2003;And there are some more observations we can make:</p>
-<ul>
-<li>We only have to save <code>local</code>, <code>argument</code>,
-<code>this</code> and <code>that</code> segments, for the other four
-parts don&apos;t belong to the world of the function.</li>
-<li>We use the stack not only when executing the program, but also
-executing all the behind-scene apparatus that is required to service the
-program. Everything is saved on the same stack.</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/" class="post-title-link" itemprop="url">7.7.&#x51FD;&#x6570;&#x62BD;&#x8C61;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 20:12:16" itemprop="dateCreated datePublished" datetime="2024-04-10T20:12:16+08:00">2024-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:32:41" itemprop="dateModified" datetime="2024-06-03T14:32:41+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>520</span>
+      <span>527</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -509,611 +272,120 @@ program. Everything is saved on the same stack.</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="77function-abstraction"><span class="math inline">\(7.7.\)</span>Function: Abstraction</h1>
-<h3 id="1function-in-vm-language">1.Function in VM language</h3>
+          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
+<h3 id="1basic-devices">1.Basic devices</h3>
 <ul>
-<li><p>The VM language features:</p>
+<li><p><em>Registers</em>: It contains:</p>
 <ul>
-<li><em>primitive operation</em>(fixed): <code>add</code>,
-<code>sub</code></li>
-<li><em>abstract operation</em>(extensible): <code>mutiple</code></li>
+<li><p>Two data words from the register file, and <strong>write one data
+word into the register file</strong> for each instruction.</p></li>
+<li><p>An input. It <strong>specifies the register number to be
+read</strong>.</p></li>
+<li><p>An output. It <strong>carries the value that has been read from
+the register</strong>.</p></li>
+<li><p>To write a data word, we need two more inputs: one to
+<strong>specify the register number to be written</strong> and one to
+<strong>supply the data to be written into the
+register</strong>.</p></li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;When we want to call a function, we:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
 <ul>
-<li>push the required argument onto the stack.</li>
-<li>call the function. Then <strong>the result of function will replace
-the argument you push earlier</strong>.</li>
+<li><em>ALU</em></li>
 </ul>
-<p>&#x2003;&#x2003;Take this simple funtion call <code>sqrt(x-17+x*5)</code> as
-example, it can be translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">push x</span><br><span class="line">push 17</span><br><span class="line">sub</span><br><span class="line">push x </span><br><span class="line">push 5</span><br><span class="line">call Math.multiply</span><br><span class="line">add </span><br><span class="line">call Math.sqrt</span><br></pre></td></tr></table></figure></p>
-<h3 id="2function-definition">2.Function definition</h3>
-<p>&#x2003;&#x2003;Take the previous function as example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// returns x&quot;y</span><br><span class="line">int mult(int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		x ++;</span><br><span class="line">	}</span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;As is discussed before, it&apos;s pseudo VM code is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;In fact, it can be translated into this VM code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult 2</span><br><span class="line">	push constant 0 //sum = 0</span><br><span class="line">	pop local 0</span><br><span class="line">	push constant 1 //n = 1</span><br><span class="line">	pop local 1</span><br><span class="line">label LOOP</span><br><span class="line">	push local 1 //if clause</span><br><span class="line">	push argument 1</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push local 0 // sum += x</span><br><span class="line">	push argument 0</span><br><span class="line">	add</span><br><span class="line">	pop local 0</span><br><span class="line">	pop local 1 // n ++</span><br><span class="line">	push constant 1</span><br><span class="line">	add</span><br><span class="line">	pop local 1</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push local 0 // return sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Let&apos;s discuss the implementation in detail:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<ul>
+<li><em>Immediate generation unit</em>: In operations like
+<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
+written in 12-bit offset in the instruction. So we need to
+<strong>sign-extend the number to a 64-bit signed value</strong>. The
+Imm-Gen does the job:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
+<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
+instruction execution</h3>
+<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
+parts:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
+<h3 id="3implementation-ofdifferent-statement">3.Implementation of
+different statement</h3>
+<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
+instruction</h4>
+<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
+<code>DataA</code> and <code>DataB</code>, and calculate the result by
+ALU.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
+<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
+rather than <code>DataB</code>. The source of Imm-Gen is from
+<code>IMEM</code>, from which we can get the instruction, and
+<code>inst[31:20]</code> is the immediate we want:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
+<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
+<code>save</code> instruction</h4>
+<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
+read or write data.</p>
+<ul>
+<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
+<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
+address. Else, it writes the information into the address:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
+<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
+<p>&#x2003;&#x2003;The basic form of branch instruction is
+<code>beq x1 x2 offset</code>. To implement this instruction, we must
+compute the branch target address by <strong>adding the sign- extended
+offset field of the instruction to the PC</strong>. There are two
+details in the definition of branch instructions to which we must pay
+attention:</p>
+<ul>
+<li><p>The instruction set architecture specifies that <strong>the base
+for the branch address calculation is the address of the branch
+instruction</strong>.</p></li>
+<li><p>The architecture also states that <strong>the offset field is
+shifted left 1 bit so that it is a half word offset</strong>; this shift
+<strong>increases the effective range of the offset field by a factor of
+2</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
+the new PC, and we say the branch is <strong>taken</strong>. Else, we
+say the branch is <strong>not taken</strong>.</p>
+<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
+this struction:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
+<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
+signal</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
+<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
+<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
+<code>jalr</code> instructions</h4>
+<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
 <ol type="1">
-<li><p><em>Function declaration</em>:</p>
+<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
 <ul>
-<li><code>Function</code>: function declaration.</li>
-<li><code>mult</code>: the name of the function.</li>
-<li><code>2</code>: use 2 <em>local variables</em> in the function.</li>
+<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
+2 bytes!</strong></li>
 </ul></li>
-<li><p><em>Function body</em>:</p>
+<li><p>Set <code>PC=PC+offset</code></p>
 <ul>
-<li>branching.</li>
-<li>the variable declared within the body should be stored in
-<code>local</code>.</li>
-<li>the assignment of variables can be done through
-<code>push constant</code> and <code>pop local</code>.</li>
-</ul></li>
-<li><p><em>Return value</em></p>
-<ul>
-<li><code>push</code> the to-return value in the stack.</li>
-<li><code>return</code> statement at the end of program.</li>
+<li>Since the offset is calculated by ALU, we <strong>connect the output
+of ALU with input of PC</strong>.</li>
 </ul></li>
 </ol>
-<h3 id="3function-execution">3.Function execution</h3>
-<p>&#x2003;&#x2003;We can execute a function in a <code>Main</code> function:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	push constant 5</span><br><span class="line">	push constant 8</span><br><span class="line">	call mult 2</span><br><span class="line">	add </span><br><span class="line">	return </span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>the <code>2</code> next to <code>mult</code> indicates that
-<strong>the funtion takes in 2 arguments</strong>.</li>
-<li>the whole process can be described through these diagrams:</li>
-</ul>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png"></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png"></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-2.png"></p>
-<p>&#x2003;&#x2003;for each function <code>call</code> during run-time, the
-implementation of the <code>call</code> command should :</p>
-<ul>
-<li><p><strong>Pass parameters</strong> from the calling function to the
-called function;</p></li>
-<li><p><strong>Determine the return address</strong> within the caller&apos;s
-code;</p></li>
-<li><p><strong>Save the caller&apos;s return address, stack and memory
-segments</strong>;</p>
-<ul>
-<li>so that when we return to the <code>main</code>, we will be able to
-<strong>recreate the private world of <code>main</code></strong>.</li>
-</ul></li>
-<li><p>Jump to <strong>execute the called fiunction</strong>:</p></li>
-</ul>
-<p>&#x2003;&#x2003;And for each function <code>return</code> during run-time, the
-impletation has to:</p>
-<ul>
-<li><p>Return to the caller <em>the value computed by the called
-function</em>;</p>
-<ul>
-<li>The implementation knows that the topmost value on the stack must be
-the return value, so it returns the value.</li>
-</ul></li>
-<li><p><strong>Recycle the memory resources</strong> used by the called
-funetion;</p></li>
-<li><p><strong>Reinstate the caller&apos;s stack and memory
-segments</strong>;</p></li>
-<li><p>Jump to the <strong>return address in the caller&apos;s
-code</strong>.</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%88%86%E6%94%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/10/7-7-%E5%88%86%E6%94%AF/" class="post-title-link" itemprop="url">7.6.&#x5206;&#x652F;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 16:44:10" itemprop="dateCreated datePublished" datetime="2024-04-10T16:44:10+08:00">2024-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:28:40" itemprop="dateModified" datetime="2024-06-03T14:28:40+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>146</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="76branching"><span class="math inline">\(7.6.\)</span>Branching</h1>
-<h3 id="1branching-implementation">1.Branching implementation</h3>
-<p>&#x2003;&#x2003;Take the following program as example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//return x * y</span><br><span class="line">int mult (int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line"></span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		n++;</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This program can be translated into pseudo VM code as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Notice that we have three new symbols: <code>label</code>,
-<code>if-goto</code>, <code>goto</code>:</p>
-<ul>
-<li><code>label LABEL</code> declare the label.</li>
-<li><code>if-goto LABEL</code>: if the statement is true, then jump to
-<code>LABEL</code>.</li>
-<li><code>goto LABEL</code>: jump to <code>LABEL</code> with no
-condition.</li>
-</ul>
-<p>&#x2003;&#x2003;With these three statement, we can translate the branching
-expression into VM code.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.5.&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5B9E;&#x73B0;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-09 10:32:16" itemprop="dateCreated datePublished" datetime="2024-04-09T10:32:16+08:00">2024-04-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:15:56" itemprop="dateModified" datetime="2024-06-03T08:15:56+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>751</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="75memory-segment-implementation"><span class="math inline">\(7.5.\)</span>Memory Segment implementation</h1>
-<h3 id="1local-implementation">1.<code>local</code> implementation</h3>
-<p>&#x2003;&#x2003;The <code>local</code> segment can be placed <strong>anywhere we
-want in the host RAM</strong>, for we just need to <strong>remember the
-base address of the block</strong>.</p>
-<ul>
-<li>We place the <strong>base address of the <code>local</code>
-segment</strong> in a pointer called <em>LCL</em>.</li>
-<li><em>LCL</em> will refer to <code>RAM 1</code>.</li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<p>&#x2003;&#x2003;Then we can <code>push</code> or <code>pop</code> a value easily.
-Say we want to accomplish <code>pop local 2</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<p>&#x2003;&#x2003;We can do this by putting the stack-top value into
-<code>RAM[1015]</code>.</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
-<ul>
-<li>How do we know which <code>RAM</code> to add to? We get it by
-<code>base addr + index</code></li>
-</ul>
-<p>&#x2003;&#x2003;This process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//get the place to be added</span><br><span class="line">addr = addr + index</span><br><span class="line">//get the value, and put it into correct place</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br><span class="line">// D = *sp, *addr = D</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;Notice that 5 is still in <code>RAM[257]</code>, it hasn&apos;t been
-removed. It&apos;s common to have these wasted data in the stack, and it&apos;s
-not big deal, for <strong>the pointer indicates exactly which part of
-the stack are in play, not the data</strong>.</p>
-<h3 id="2argumentthisthatimplementation">2.<code>argument,this,that</code>
-implementation</h3>
-<ul>
-<li><p>When translating the high-level code of some method into VM
-code:</p>
-<ul>
-<li>Maps the method&apos;s local and argument variables onto the
-<code>local</code> and <code>argument</code> segments</li>
-<li>Maps the object fields and the array entries that the method is
-currently processing onto the <code>this</code> and <code>that</code>
-segments</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The process of <code>argument</code>, <code>this</code> and
-<code>that</code> is nearly the same as <code>local</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
-<p>&#x2003;&#x2003;The process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//push</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">*sp = *addr</span><br><span class="line">sp++</span><br><span class="line"></span><br><span class="line">//pop</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br></pre></td></tr></table></figure></p>
-<h3 id="3constant">3.<code>Constant</code></h3>
-<ul>
-<li><p>When the compiler translates the high-level code of some method
-into VM,</p>
-<ul>
-<li>it translates high-level operations involving constant into VM
-operations involving the constant segment.</li>
-</ul></li>
-<li><p>When we implement <code>constant</code>, we simply <strong>supply
-the specified constant</strong>.</p></li>
-<li><p>Since we won&apos;t store things where a <code>constant</code>
-resides, there&apos;s no <code>pop</code> in <code>constant</code>.</p></li>
-<li><p>The <code>constant</code> segment is a <strong>truly virtual
-segment</strong>. So whenever we see a <code>push constant i</code>
-command, we simply supply the specified constant
-<code>i</code>.</p></li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-5.png"></p>
-<h3 id="4static">4.<code>Static</code></h3>
-<ul>
-<li><p>When translating the high-level code of some method into VM code,
-the compiler:</p>
-<ul>
-<li>Maps the static variables that the method sees onto the
-<code>static</code> segment.</li>
-</ul></li>
-<li><p>The <code>static</code> variables should <strong>be seen by all
-the methods in a program</strong>. &#x2003;&#x2003;To complement this, we store the
-variables in a <em>&quot;global space&quot;</em>:</p></li>
-<li><p>Have the VM translator translate each VM reference
-<code>static i</code>(in file <code>Foo.vm</code>)into an <em>assembly
-reference</em> <code>Foo.i</code>.</p>
-<ul>
-<li><code>Foo</code> is the name of the file, and <code>i</code> is the
-index of VM command.</li>
-</ul></li>
-<li><p>Following assembly, the Hack assembler will map these references
-onto <code>RAM[16]</code>,<code>RAM[17]</code>,<code>RAM[18]</code>,
-...</p></li>
-</ul>
-<p>&#x2003;&#x2003;For example, the statement <code>pop static 5</code> can be
-translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Foo.5</span><br><span class="line">M = D</span><br><span class="line">//the register stores this data</span><br><span class="line"></span><br><span class="line">@Foo.2</span><br><span class="line">M = D</span><br></pre></td></tr></table></figure> * The entries of <code>static</code>
-segment will end up being mapped onto <code>RAM[16]</code>,
-<code>RAM[17]</code>, ... , in the order <strong>in which they appear in
-the program</strong> (not their names!!!).</p>
-<figure>
-<img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-6.png" alt="Alt text">
-<figcaption aria-hidden="true">Alt text</figcaption>
-</figure>
-<blockquote>
-<p>Static variables are stored <strong>in a section of memory called the
-static data segment</strong>, which is allocated when the program is
-loaded and has fixed memory addresses. When we want to retrieve the
-value of a static variable, we need to read the value stored <strong>at
-the memory location</strong> where the static variable is stored, rather
-than directly accessing the value of the static variable itself. This is
-why we need to use <code>D=M</code> instead of <code>D=A</code> to get a
-<code>static</code> value.</p>
-</blockquote>
-<h3 id="5temp">5.<code>Temp</code></h3>
-<p>&#x2003;&#x2003;When the compiler translates the Jack program into VM code, it
-sometimes has to use temporary variables.</p>
-<ul>
-<li>We let the 8 place segment called <code>temp</code> to contain and
-serve these variables when needed.</li>
-<li><code>temp</code> is going to be a <strong>fixed 8-place memory
-segment</strong>.</li>
-<li>The variables will be mapped on <code>RAM</code> locations 5 to
-12.</li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-7.png"></p>
-<h3 id="6pointer">6.Pointer</h3>
-<ul>
-<li><p>When translating a high-level method code into VM code,the
-compiler:</p>
-<ul>
-<li>Has to remember the base addresses of <code>this</code>, which
-represents <em>the current object</em>, and <code>that</code>, which
-represents <em>the current array of method be processing</em>.</li>
-<li>Generates code that <strong>keeps track of the base addresses of the
-this and that segments</strong> using the pointer segment.</li>
-</ul></li>
-<li><p><code>pointer</code> is a fixed memory segment. It has only two
-entries, <code>0</code> and <code>1</code>.</p>
-<ul>
-<li>So we can only <code>push</code> and <code>pop</code> <code>0</code>
-and <code>1</code></li>
-</ul></li>
-<li><p>Accessing <code>pointer 0</code> should result in
-<strong>accessing <code>THIS</code></strong>.</p></li>
-<li><p>Accessing <code>pointer 1</code> should result in
-<strong>accessing <code>THAT</code></strong>.</p></li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-8.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/head.png">
-      <meta itemprop="name" content="fyerfyer">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fyerfyer">
-      <meta itemprop="description" content="fyerfyer&apos;s blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | fyerfyer">
-      <meta itemprop="description" content>
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 18:24:16" itemprop="dateCreated datePublished" datetime="2024-04-08T18:24:16+08:00">2024-04-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:06:14" itemprop="dateModified" datetime="2024-06-03T08:06:14+08:00">2024-06-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
-        </span>
-          &#xFF0C;
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>311</span>
-    </span>
-    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</h1>
-<h3 id="1pointer-manipulation">1.Pointer manipulation</h3>
-<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
-represents <strong>the value stores in the address that <code>p</code>
-points to</strong>.</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;can be translated into:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>A = M</code> points the pointer to the address of register
-M.</li>
-<li><code>D = M</code> gets the value of the RAM.</li>
-</ul>
-<p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
-<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
-will get the value stored in <code>RAM[256]</code>, namely 19.</p>
-<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
-value 5. After the assignment, <code>RAM[1024]</code>stores 9
-instead.</p>
-<h3 id="2stack-machine-operation">2.Stack machine operation</h3>
-<p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
+<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
 <ol type="1">
-<li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
-<li>Stack base address will be <code>addr = 256</code>.</li>
+<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
+<code>DataD</code>)</li>
+<li>Set <code>PC=PC+offset</code></li>
 </ol>
-<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
-and our RAM looks like this:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
-the previous available space, and stack pointer moves forward:</p>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
-<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
-register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
-</blockquote>
-<h3 id="3vm-translator-perspective">3.VM translator perspective</h3>
-<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
-<ul>
-<li><p>VM translator is:</p>
-<ul>
-<li>A program that translates VM code into machine language.</li>
-<li>Each VM command generates several assembly commands.</li>
-</ul></li>
-</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
+<h3 id="4datapath-control">4.Datapath control</h3>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
 
       
     </div>
@@ -1133,7 +405,7 @@ register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual<
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/22/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&#x2026;</span><a class="page-number" href="/page/132/">132</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/22/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1186,8 +458,6 @@ register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual<
       </span>
     </span>
 </div>
-  <div class="powered-by">&#x7531; <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> &#x5F3A;&#x529B;&#x9A71;&#x52A8;
-  </div>
 
     </div>
   </footer>
@@ -1199,6 +469,7 @@ register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual<
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
