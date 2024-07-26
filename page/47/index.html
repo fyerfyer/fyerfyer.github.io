@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.4.Insertion%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.2.Heap%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.4.Insertion%20Sort/" class="post-title-link" itemprop="url">18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/18.2.Heap%20Sort/" class="post-title-link" itemprop="url">18.2.&#x5806;&#x6392;&#x5E8F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:02:34" itemprop="dateModified" datetime="2024-06-02T22:02:34+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:05:31" itemprop="dateModified" datetime="2024-06-02T22:05:31+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>323</span>
+      <span>276</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,46 +272,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="184insertion-sort"><span class="math inline">\(18.4.\)</span>Insertion Sort</h1>
-<h3 id="1the-step-of-insertion-sort">1.The step of Insertion Sort</h3>
-<p>&#x2003;&#x2003;The insertion sort follows these general strategies:</p>
-<ul>
-<li>Starting with an empty output sequence.</li>
-<li>Add each item from input, inserting into output at right
-places.</li>
-</ul>
-<p>&#x2003;&#x2003;Also, this method requires a new array, which takes up some
-memory.As a result, we may try in place sorting by using swapping
-method.</p>
-<p>&#x2003;&#x2003;Take the below array as example.Suppose we have sorted the first
-two elements.It&apos;s worth noting that we use a <span class="math inline">\(j\)</span> to track the current spot of the
-travelling element:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-4.png"></p>
-<p>&#x2003;&#x2003;The <span class="math inline">\(2\)</span> element will experience
-the following steps:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-5.png"></p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-6.png"></p>
-<p>&#x2003;&#x2003;After these steps, the <span class="math inline">\(2\)</span>
-element reach its right place, and we get the first third elements
-sorted:</p>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-7.png"></p>
-<p>&#x2003;&#x2003;Do it recursively, then we can get a sorted array.</p>
-<h3 id="2step-implementation">2.Step implementation</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> a.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n; i ++) {</span><br><span class="line">        <span class="comment">//compare with its front element, if it&apos;s not in order, swap it</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; <span class="number">0</span> &amp;&amp; less(a[j], a[j - <span class="number">1</span>]); j --) {</span><br><span class="line">            swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a, <span class="type">int</span> lo, <span class="type">int</span> hi)</span> {</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> lo + <span class="number">1</span>; i &lt; hi; i++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; lo &amp;&amp; less(a[j], a[j-<span class="number">1</span>]); j--) {</span><br><span class="line">                swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
-<h3 id="3some-property-of-insertionsort">3.Some property of Insertion
-Sort</h3>
-<p>&#x2003;&#x2003;Since the principle of insertion sort is to maintain the order of
-each subsequence, for arrays that are almost sorted, we only need to do
-few swaps, thus makes sorting fast.</p>
-<p>&#x2003;&#x2003;Suppose that there are <span class="math inline">\(K\)</span>
-inversions in the array, the runtime of Insertion Sort is <span class="math inline">\(\Theta (N+K)\)</span>.</p>
-<p>&#x2003;&#x2003;Moreover, we can define an almost sorted array as one in which
-numbers of inversions <span class="math inline">\(\leq\;cN\)</span>,
-insertion sort is excellent on these arrays.</p>
-<p>&#x2003;&#x2003;Ususally, for small arrays(with N less than 15), insertion sort is
-fast.</p>
-<h3 id="4sorting-summary">4.Sorting Summary</h3>
-<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-8.png"></p>
+          <h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
+Sort</h1>
+<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
+<p>&#x2003;&#x2003;The simplest method to implement sorting via heap is to put the
+whole array into a heap, and pick out top of the heap one by one.</p>
+<p>&#x2003;&#x2003;However, this method will lead to unnecessarily memory waste, for
+we can do heap sorting in place without creating a new heap.</p>
+<h3 id="2step-impletation">2.Step impletation</h3>
+<h4 id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h4 id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
+Sorting</h4>
+<p>&#x2003;&#x2003;The in place heap sorting use the following step: 1. Sink the
+element in the array one by one, so that the array forms a heap.</p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
+<ol start="2" type="1">
+<li>Pop the front element one by one, and move the popped element to the
+back of the array.</li>
+</ol>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
       
     </div>
