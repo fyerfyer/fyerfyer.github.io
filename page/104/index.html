@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%88%86%E6%94%AF/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/10/7-7-%E5%88%86%E6%94%AF/" class="post-title-link" itemprop="url">7.6.&#x5206;&#x652F;</a>
+          <a href="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/" class="post-title-link" itemprop="url">7.7.&#x51FD;&#x6570;&#x62BD;&#x8C61;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 16:44:10" itemprop="dateCreated datePublished" datetime="2024-04-10T16:44:10+08:00">2024-04-10</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 20:12:16" itemprop="dateCreated datePublished" datetime="2024-04-10T20:12:16+08:00">2024-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:28:40" itemprop="dateModified" datetime="2024-06-03T14:28:40+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:32:41" itemprop="dateModified" datetime="2024-06-03T14:32:41+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>146</span>
+      <span>520</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,23 +272,94 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="76branching"><span class="math inline">\(7.6.\)</span>Branching</h1>
-<h3 id="1branching-implementation">1.Branching implementation</h3>
-<p>&#x2003;&#x2003;Take the following program as example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//return x * y</span><br><span class="line">int mult (int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line"></span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		n++;</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This program can be translated into pseudo VM code as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Notice that we have three new symbols: <code>label</code>,
-<code>if-goto</code>, <code>goto</code>:</p>
+          <h1 id="77function-abstraction"><span class="math inline">\(7.7.\)</span>Function: Abstraction</h1>
+<h3 id="1function-in-vm-language">1.Function in VM language</h3>
 <ul>
-<li><code>label LABEL</code> declare the label.</li>
-<li><code>if-goto LABEL</code>: if the statement is true, then jump to
-<code>LABEL</code>.</li>
-<li><code>goto LABEL</code>: jump to <code>LABEL</code> with no
-condition.</li>
+<li><p>The VM language features:</p>
+<ul>
+<li><em>primitive operation</em>(fixed): <code>add</code>,
+<code>sub</code></li>
+<li><em>abstract operation</em>(extensible): <code>mutiple</code></li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;With these three statement, we can translate the branching
-expression into VM code.</p>
+<p>&#x2003;&#x2003;When we want to call a function, we:</p>
+<ul>
+<li>push the required argument onto the stack.</li>
+<li>call the function. Then <strong>the result of function will replace
+the argument you push earlier</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Take this simple funtion call <code>sqrt(x-17+x*5)</code> as
+example, it can be translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">push x</span><br><span class="line">push 17</span><br><span class="line">sub</span><br><span class="line">push x </span><br><span class="line">push 5</span><br><span class="line">call Math.multiply</span><br><span class="line">add </span><br><span class="line">call Math.sqrt</span><br></pre></td></tr></table></figure></p>
+<h3 id="2function-definition">2.Function definition</h3>
+<p>&#x2003;&#x2003;Take the previous function as example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// returns x&quot;y</span><br><span class="line">int mult(int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		x ++;</span><br><span class="line">	}</span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;As is discussed before, it&apos;s pseudo VM code is as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In fact, it can be translated into this VM code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult 2</span><br><span class="line">	push constant 0 //sum = 0</span><br><span class="line">	pop local 0</span><br><span class="line">	push constant 1 //n = 1</span><br><span class="line">	pop local 1</span><br><span class="line">label LOOP</span><br><span class="line">	push local 1 //if clause</span><br><span class="line">	push argument 1</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push local 0 // sum += x</span><br><span class="line">	push argument 0</span><br><span class="line">	add</span><br><span class="line">	pop local 0</span><br><span class="line">	pop local 1 // n ++</span><br><span class="line">	push constant 1</span><br><span class="line">	add</span><br><span class="line">	pop local 1</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push local 0 // return sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Let&apos;s discuss the implementation in detail:</p>
+<ol type="1">
+<li><p><em>Function declaration</em>:</p>
+<ul>
+<li><code>Function</code>: function declaration.</li>
+<li><code>mult</code>: the name of the function.</li>
+<li><code>2</code>: use 2 <em>local variables</em> in the function.</li>
+</ul></li>
+<li><p><em>Function body</em>:</p>
+<ul>
+<li>branching.</li>
+<li>the variable declared within the body should be stored in
+<code>local</code>.</li>
+<li>the assignment of variables can be done through
+<code>push constant</code> and <code>pop local</code>.</li>
+</ul></li>
+<li><p><em>Return value</em></p>
+<ul>
+<li><code>push</code> the to-return value in the stack.</li>
+<li><code>return</code> statement at the end of program.</li>
+</ul></li>
+</ol>
+<h3 id="3function-execution">3.Function execution</h3>
+<p>&#x2003;&#x2003;We can execute a function in a <code>Main</code> function:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	push constant 5</span><br><span class="line">	push constant 8</span><br><span class="line">	call mult 2</span><br><span class="line">	add </span><br><span class="line">	return </span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>the <code>2</code> next to <code>mult</code> indicates that
+<strong>the funtion takes in 2 arguments</strong>.</li>
+<li>the whole process can be described through these diagrams:</li>
+</ul>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png"></p>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png"></p>
+<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-2.png"></p>
+<p>&#x2003;&#x2003;for each function <code>call</code> during run-time, the
+implementation of the <code>call</code> command should :</p>
+<ul>
+<li><p><strong>Pass parameters</strong> from the calling function to the
+called function;</p></li>
+<li><p><strong>Determine the return address</strong> within the caller&apos;s
+code;</p></li>
+<li><p><strong>Save the caller&apos;s return address, stack and memory
+segments</strong>;</p>
+<ul>
+<li>so that when we return to the <code>main</code>, we will be able to
+<strong>recreate the private world of <code>main</code></strong>.</li>
+</ul></li>
+<li><p>Jump to <strong>execute the called fiunction</strong>:</p></li>
+</ul>
+<p>&#x2003;&#x2003;And for each function <code>return</code> during run-time, the
+impletation has to:</p>
+<ul>
+<li><p>Return to the caller <em>the value computed by the called
+function</em>;</p>
+<ul>
+<li>The implementation knows that the topmost value on the stack must be
+the return value, so it returns the value.</li>
+</ul></li>
+<li><p><strong>Recycle the memory resources</strong> used by the called
+funetion;</p></li>
+<li><p><strong>Reinstate the caller&apos;s stack and memory
+segments</strong>;</p></li>
+<li><p>Jump to the <strong>return address in the caller&apos;s
+code</strong>.</p></li>
+</ul>
 
       
     </div>
@@ -311,7 +382,7 @@ expression into VM code.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

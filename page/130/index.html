@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/2-3-%E4%BA%8C%E8%BF%9B%E5%88%B6%E8%BF%90%E7%AE%97/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/2-3-%E4%BA%8C%E8%BF%9B%E5%88%B6%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">2.3.&#x4E8C;&#x8FDB;&#x5236;&#x8FD0;&#x7B97;</a>
+          <a href="/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/" class="post-title-link" itemprop="url">2.4.&#x7B97;&#x672F;&#x903B;&#x8F91;&#x5355;&#x5143;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 09:23:25" itemprop="dateCreated datePublished" datetime="2024-04-04T09:23:25+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 10:27:29" itemprop="dateCreated datePublished" datetime="2024-04-04T10:27:29+08:00">2024-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>335</span>
+      <span>157</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,53 +272,36 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="23binary-arithmetic"><span class="math inline">\(2.3.\)</span>Binary Arithmetic</h1>
-<h3 id="1negative-numberrepresentation">1.Negative number
-representation</h3>
-<p>&#x2003;&#x2003;For a negative number <span class="math inline">\(x\)</span>, we
-use <span class="math inline">\(2^n - x\)</span> to represent it.</p>
+          <h1 id="24arthimetic-logic-unit"><span class="math inline">\(2.4.\)</span>Arthimetic Logic Unit</h1>
+<h3 id="1alu-intro">1.ALU intro</h3>
+<p>&#x2003;&#x2003;The Arithmetic Logic Unit (ALU) is a crucial component in
+computers, responsible for <em>executing various arithmetic and logic
+operations</em>. Typically <em>part of the CPU</em>, it handles
+arithmetic operations such as addition, subtraction, multiplication, and
+division, as well as logic operations including <code>AND</code>,
+<code>OR</code>, <code>NOT</code>, and <code>XOR</code>, based on
+instructions provided.</p>
+<h3 id="2alu-structure">2.ALU structure</h3>
+<p>&#x2003;&#x2003;We can describe the ALU through the diagram below:</p>
+<p><img src="/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/image.png"></p>
 <ul>
-<li><span class="math inline">\(e.g.\)</span>-4 is represent as
-<code>1100</code> in four-bit binary number, also equal to 16-4=12.</li>
+<li><p>The ALU computes a function on the two inputs, and outputs the
+result.</p></li>
+<li><p><strong>f</strong>:one out of a family of pre-defined arithmetic
+and logical functions. It contains:</p>
+<ul>
+<li>Arithmetic operations:integer addition, multiplication, division,
+...</li>
+<li>Logical operations: And, Or, Xor....</li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;In order not to mistake this representation with positive number,
-we prescribe that <em>a positive number cannot use the left-most bit to
-represent number</em>.</p>
-<h3 id="2binary-addition">2.Binary addition</h3>
-<p>&#x2003;&#x2003;Before discuss the numerical addition, we first take a look at the
-bit-to-bit addition. We use the folloing API to deal with the carry:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CHIP AddBit {</span><br><span class="line">	IN a, b;</span><br><span class="line">	OUT out, carry;</span><br><span class="line"></span><br><span class="line">	PARTS:</span><br><span class="line">	......</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;After the implementation, for a number, we just need to do
-<code>AddBit</code> for each bit of it.</p>
 <blockquote>
-<p><span class="math inline">\(p.s.:\)</span>How do we deal with the
-following 4-bit addition<code>1000 + 1100</code>? &#x2003;&#x2003;The answer is
-<code>0100</code>. This is because the left-most bit addition gets a
-carry, but it is out of the bit range. This is called <em>integer
-overflow</em>. When facing this, the computer will do <span class="math inline">\(\mod 2^n\)</span> to the true result, where <span class="math inline">\(n\)</span> is the bit number.</p>
+<p><span class="math inline">\(p.s.\)</span>There is a interesting
+question towards ALU: Which operation should ALU operate? If we choose
+to ignore some operation in ALU, when we want to use it, we have to
+implement it in the software. This is also called a <em>Hardware and
+Software trade off</em>.</p>
 </blockquote>
-<blockquote>
-<p><span class="math inline">\(p.s:\)</span>By the <em>integer
-overflow</em> theory, we can prove that the <em>simple positive addition
-also suits negative numbers</em>.</p>
-<p><span class="math inline">\(proof:\)</span>Assume there are two
-negative number <span class="math inline">\(x,y\)</span>, they are
-represented as <span class="math inline">\(2^n-x,2^n-y\)</span>. Add
-them together, and we get <span class="math inline">\(2^{n+1}-x-y\)</span>. The result apparently
-overflow the range, so<span class="math inline">\(\mod 2^n\)</span>, and
-we get <span class="math inline">\(2^n - x - y\)</span>. This is the
-binary representation of <span class="math inline">\(-x-y\)</span>,
-<span class="math inline">\(QED\)</span>.</p>
-</blockquote>
-<h3 id="3binary-subtraction">3.Binary subtraction</h3>
-<p>&#x2003;&#x2003;To do subtraction, we just need to add a number&apos;s negation. We know
-that <span class="math inline">\(-x\)</span> is represented as <span class="math inline">\(2^n-x\)</span>. Let&apos;s do some transformation
-like:</p>
-<p><span class="math display">\[(2^n-1)-x+1\]</span></p>
-<p>&#x2003;&#x2003;Why this? Notice that <span class="math inline">\(2^n-1\)</span> is
-<code>1111</code>, and it&apos;s easy to subtract other number, for carry
-will never occur in this instance. For <span class="math inline">\(+1\)</span>, since we have implement addition,
-it&apos;s also easy.</p>
 
       
     </div>
@@ -341,7 +324,7 @@ it&apos;s also easy.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/129/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/129/">129</a><span class="page-number current">130</span><a class="page-number" href="/page/131/">131</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/131/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/129/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/129/">129</a><span class="page-number current">130</span><a class="page-number" href="/page/131/">131</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/131/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

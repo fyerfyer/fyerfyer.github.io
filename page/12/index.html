@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-5-Arithmetic-and-Logical-Operations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
+          <a href="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/" class="post-title-link" itemprop="url">3.5.Arithmetic and Logical Operations</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 09:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;17:11:58" itemprop="dateCreated datePublished" datetime="2024-07-15T09:30:22+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>628</span>
+      <span>503</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,130 +266,109 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</h1>
-<h3 id="1machine-code-properties">1.Machine code properties</h3>
+          <h1 id="35arithmetic-and-logicaloperations"><span class="math inline">\(3.5.\)</span>Arithmetic and Logical
+Operations</h1>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image.png"></p>
+<h3 id="1load-effective-address">1.Load Effective Address</h3>
 <ul>
-<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
-isn&apos;t fixed.</p></li>
-<li><p>The instruction format is designed to insure that <strong>there&apos;s
-a unique decoding of the bytes into machine instructions</strong>. For
-example, only <code>pushq %rbx</code> can start with <code>53</code>(can
-be analogied with opcode in RISC-V).</p></li>
-<li><p>The disassembler determines the assembly code based
-<strong>purely on the byte sequences in the machine-code
-file</strong>.</p></li>
+<li>The <code>leaq</code> instruction <strong>doesn&apos;t reference memory
+at all</strong>. Instead of reading from the designated location, it
+<strong>copies the effective address to the destination</strong>.</li>
 </ul>
-<h3 id="2registers">2.Registers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
+<p>&#x2003;&#x2003;The instruction can be used to <strong>generate pointers for later
+memory reference</strong>. For example, if register <code>%rdx</code>
+represents <span class="math inline">\(x\)</span>, then
+<code>leaq 7(%rdx, %rdx, 4), %rdx</code> will set <code>%rdx</code> to
+<span class="math inline">\(5x+7\)</span>.</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-1.png"></p>
+<h3 id="2unary-amp-binary-operations">2.Unary &amp; Binary Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-2.png"></p>
+<p>&#x2003;&#x2003;Operations in the first group are unary operations:</p>
 <ul>
-<li><p>When we present instructions copying and generating 1-, 2-, 4-,
-8-byte values, we follow the two conventions:</p>
-<ul>
-<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
-remaining bytes unchanged</strong>.</p></li>
-<li><p>Those that generate 4-byte quantities <strong>set the upper 4
-bytes of the register to zero</strong>.</p></li>
-</ul></li>
-<li><p>A function returns a value by <strong>storing it in register
-<code>%rax</code></strong>, or <strong>in one of the low-order portions
-of this register</strong>.</p></li>
+<li><p>The single operand serves as both source and
+destination.</p></li>
+<li><p>This operand can be either a register or a memory
+location.</p></li>
 </ul>
-<h3 id="3operand-specifiers">3.Operand specifiers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
-<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
+<p>&#x2003;&#x2003;The second group consists of binary operations.</p>
 <ul>
-<li><p><em>Immediate</em>: It refers to constant value. In ATT format
-assembly code, it is written with a <code>$</code> along with an
-integer.</p></li>
-<li><p><em>Register</em>: It denotes the content of a register. We use
-the notation <span class="math inline">\(r_a\)</span> to denote a
-register <span class="math inline">\(a\)</span> and indicate its value
-with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
-<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
-<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
-<ul>
-<li><span class="math inline">\(Imm\)</span> is the immediate offset,
-<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
-</ul></li>
+<li>The second operand is used as both a source and a destination, the
+first operand is another operand.</li>
 </ul>
+<blockquote>
+<p>This syntax is reminiscent of the C assignment operators, such as
+<code>x -= y</code>.</p>
+</blockquote>
+<ul>
+<li>The first operand can be either an immediate value, a register, or a
+memory location. The second can be either a register or a memory
+location.</li>
+</ul>
+<blockquote>
+<p>The operation: <code>xor %rcx %rcx</code> is simply to set</p>
+</blockquote>
+<h3 id="3shift-operations">3.Shift operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-3.png"></p>
+<ul>
+<li><p>The shift amount is either <strong>an immediate value</strong> or
+<strong>a single-byte register <code>%cl</code></strong>.</p></li>
+<li><p>In x86-64, if the data values are <span class="math inline">\(w\)</span> bits, then its shift amount will be
+<strong>the low-order <span class="math inline">\(m\)</span> bits of
+<code>%cl</code>, where <span class="math inline">\(2^m=w\)</span></strong>. For example, when
+<code>%cl</code> has value 0xFF, then <code>salb</code> would shift by
+7, while <code>salw</code> would shift by 15.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Convert 64-bits into
+32-bits)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-4.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-5.png"></p>
+<ul>
+<li>The <code>movl %esi %ecx</code> is worth noting. Because we only
+need 4 bytes of data, we can use <code>movl</code> operation to set the
+low-order 32 bits of <code>rcx</code> to <code>%esi</code> while
+high-order 32 bits to 0. Since we only need the low-order 4 bytes, doing
+this implies that the high-order 4 bytes is meaningless, which makes
+code safer, more accurate and more readable.</li>
+</ul>
+<h3 id="4special-arithmeticoperations">4.Special Arithmetic
+Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-6.png"></p>
+<h4 id="aone-operand-multiply">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&quot;One-operand&quot; multiply</h4>
+<p>&#x2003;&#x2003;The <code>mulq</code>(unsigned) and <code>imulq</code>(signed) can
+also act as &quot;one-operand&quot; instructions to <strong>compute the full
+128-bits product of 2 64-bits values</strong>.</p>
+<ul>
+<li><p><strong>One of the multiplicand is value in
+<code>%rax</code></strong>, another is the operand.</p></li>
+<li><p>The product is stored in <code>%rdx</code> (high-order 64 bits)
+and <code>%rax</code> (low-order 64 bits).</p></li>
+</ul>
+<p>&#x2003;&#x2003;We will need to take two steps to store an oct word:</p>
 <p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
-<h3 id="4data-movement-instructions">4.Data Movement Instructions</h3>
-<h4 id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-7.png"></p>
+<h4 id="bdivision">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Division</h4>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-8.png"></p>
 <ul>
-<li><p>The source operand designates a value that is <strong>immediate,
-stored in a register, or stored in memory</strong>.</p></li>
-<li><p>The destination operand designates a location that is
-<strong>either a register or a memory address</strong>.</p></li>
-<li><p>The value is first passed <strong>from source to a register, then
-from the register to the destination</strong>.</p></li>
-</ul>
-<blockquote>
-<p>The regular <code>movq</code> instruction can only have immediate
-source operands that can be represented as 32-bit two&#xFFFD;s-complement
-numbers. This value is then sign extended to produce the 64-bit value
-for the destination. The <code>movabsq</code> instruction can have an
-<strong>arbitrary 64-bit immediate value</strong> as its source operand
-and can only have a register as a destination.</p>
-</blockquote>
-<blockquote>
-<p>In x86-64, any instruction that generates a 32-bit value for a
-register also <strong>sets the high-order portion of the register to
-0</strong>.</p>
-</blockquote>
-<h4 id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
-instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
+<li><p>For a division, <code>%rdx</code> stores the remainder and
+<code>%rax</code> stores the quotient.</p></li>
+<li><p>For most applications of 64-bit addition, the dividend is given
+as a 64-bit value. The bits of <code>%rdx</code> should then be set to
+either <strong>all zeros (unsigned arithmetic) or the sign bit of %rax
+(signed arithmetic)</strong>.</p>
 <ul>
-<li><p>Each instruction name has <strong>size designators</strong> as
-its final two characters&#xFFFD;the first specifying the source size, and the
-second specifying the destination size.</p></li>
-<li><p>The source can be either a register or stored in memory.</p></li>
-<li><p>The destination is a register.</p></li>
+<li><p>The former can be implemented by <code>movl $0 %reg</code>, this
+can set upper 8 bytes of diviend to 0.</p></li>
+<li><p>The latter can be implemented by <code>cqto</code>. It takes no
+operands, implicitly reads the sign bit from %rax and copies it across
+all of %rdx.</p></li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
-points to note:</p>
-<ol type="1">
-<li><p>In x86-64, we always <strong>give quad word registers to memory
-reference</strong>, such as <code>%rax</code>.</p></li>
-<li><p>We <strong>first decide which suffix to use by the
-destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
-<li><p>If <strong>the destination is a memory address(such as
-<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
-the source</strong>.</p></li>
-</ol>
-<blockquote>
-<p>Note that if both the source and the destination are from memory,
-<strong>we can use all four suffix</strong>. The x86-64 imposes the
-restriction that <strong>a move instruction cannot have both operands
-refer to memory locations</strong>.</p>
-</blockquote>
-<h4 id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
-<ul>
-<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
-stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
-<li><p>Dereferencing a pointer involves <strong>copying that pointer
-into a register</strong>, and then <strong>using this register in a
-memory reference</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
-fact <strong>the extension of bits</strong>. For example, if we want to
-convert <code>char</code> to <code>int</code>, because <code>char</code>
-takes word bits while <code>int</code> takes 32 bits, we use
-<code>movsbl</code> to implement operations
-like<code>int x = (int) char_element</code>:</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
-<h4 id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Signed and Unsigned)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-9.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-10.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-11.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-12.png"></p>
 
       
     </div>
@@ -418,7 +391,7 @@ like<code>int x = (int) char_element</code>:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

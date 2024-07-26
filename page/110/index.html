@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;</a>
+          <a href="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.1.&#x7A0B;&#x5E8F;&#x7F16;&#x8BD1;&#x524D;&#x77BB;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 18:24:54" itemprop="dateCreated datePublished" datetime="2024-04-07T18:24:54+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 13:24:34" itemprop="dateCreated datePublished" datetime="2024-04-08T13:24:34+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:05:51" itemprop="dateModified" datetime="2024-06-03T00:05:51+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:51:48" itemprop="dateModified" datetime="2024-06-03T07:51:48+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>417</span>
+      <span>266</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,90 +272,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</h1>
-<h3 id="1start-reding-a-file">1.Start reding a file</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+          <h1 id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</h1>
+<h3 id="1problem-in-compilation">1.Problem in compilation</h3>
+<p>&#x2003;&#x2003;To start with an abstract program and end with something actually
+runs on the computer, we need</p>
 <ul>
-<li>Need to be able to read the input and break it into parts.</li>
-<li>Doesn&apos;t need to understand what the command means or how it will be
-translated into machine language.</li>
-<li>Need to understand the format of the input language and how it
-breaks into different components.</li>
+<li>A computer that can run machine language code.</li>
+<li>Translating the high level language into machine language.</li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
-<ol type="1">
-<li><p>Read a file with a given name.</p>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
+<p>&#x2003;&#x2003;However, there are so many kinds of computers in the world, and
+many of them <strong>use different processes, which take different
+machine languages</strong>. It seems that we have to develop many
+compilers, one for each processor. This is very annoying.</p>
+<p>&#x2003;&#x2003;Luckily, this &quot;write once fix everywhere&quot; can be replaced by a
+&quot;write once run everywhere&quot; process.</p>
+<h3 id="2-2-tier-compilation">2. 2-Tier compilation</h3>
+<p>&#x2003;&#x2003;Let&apos;s take Java as example:</p>
 <ul>
-<li>You may want a constructor to be able to accept the file name and
-then open the file for reading.</li>
+<li><p>The first tier: also called <em>the top tier</em></p>
+<ul>
+<li><p>Java compiler translates the Java program into VM code.</p>
+<ul>
+<li>The VM code is designed to run on an abstract artifact called
+<em>virtual machine</em>.</li>
+<li>It&apos;s not a real computer, so if we want to execute the code, we have
+to translate it further into machine language and realize it on real
+hardware (computer, for example).</li>
 </ul></li>
-<li><p>Move to next command in the file:</p>
-<ol type="1">
-<li>Are we finished? <code>boolean hasMoreCommands()</code></li>
-<li>Get the next command: <code>void advance()</code></li>
-<li>Read into one line into some kind of string.</li>
-<li>Skip white space including comments.</li>
-</ol></li>
-<li><p>Get the fields of the current command</p>
-<ul>
-<li>Type of command (A, C, or label)</li>
-</ul></li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
-<h3 id="2translating-mnemonic-tocode">2.Translating mnemonic to
-code</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
-<ul>
-<li><p>Don&apos;t need to worry about how the mnemonic fields were
-obtained.</p>
-<ul>
-<li>No need to know what part of input line it is, etc.</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we:</p>
-<ol type="1">
-<li>Ask the parser to give us the string that corresponds to each part
-of the field.</li>
-<li>Once we get the three string, we go to the code object to translate
-each one of them separately according to the known table.</li>
-<li>Concatenate the output together.</li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
-<h3 id="3the-symbol-table">3.The symbol table</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
 <ul>
-<li>Don&apos;t need to know what the symbols mean.</li>
-<li>Need to maintain the association between a symbol and a memory
-address.</li>
+<li><p>The second tier:</p>
+<ul>
+<li>We equip the target device with <em>JVM</em>, the Java machine
+implementation.</li>
+<li>The JVM is a program that takes VM code and translates it into the
+target code of the target platform.</li>
+<li>We need such translator <strong>for every platform on which we want
+to execute VM program</strong>.</li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we need to be able to:</p>
-<ol type="1">
-<li>Create an new empty table</li>
-<li>Add a (symbol, address) pair to the table</li>
-<li>Does the table contain a given symbol?</li>
-<li>What is the address associated with a given symbol?</li>
-</ol>
-<p>&#x2003;&#x2003;And do the following things:</p>
-<ol type="1">
-<li><p>Create a new empty table</p></li>
-<li><p>Add all the pre-defined symbols to the table</p></li>
-<li><p>While reading the input, add labels and new variables to the
-table</p>
-<ul>
-<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
-<code>&quot;xxx&quot;</code> and the address of the next machine language
-command</p>
-<ul>
-<li>Comment 1: this requires maintaining this running address (line
-number).</li>
-<li>Comment 2: this may need to be done in a first pass</li>
-</ul></li>
-<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
-<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
-<code>&quot;xxx&quot;</code> and the next free address for variable
-allocation</p></li>
-</ul></li>
-</ol>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
+<p>&#x2003;&#x2003;The gap between high-level language (Java, for example) and
+low-level language is huge. But by <strong>introducing an intermediate
+level</strong>, we <strong>decouple this process into two separate
+standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
+and <em>VM implementation</em>.</p>
 
       
     </div>
@@ -378,7 +342,7 @@ allocation</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/109/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/109/">109</a><span class="page-number current">110</span><a class="page-number" href="/page/111/">111</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/111/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/109/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/109/">109</a><span class="page-number current">110</span><a class="page-number" href="/page/111/">111</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/111/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

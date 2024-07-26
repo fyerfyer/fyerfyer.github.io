@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/" class="post-title-link" itemprop="url">4.5.&#x8F93;&#x5165;&#x4E0E;&#x8F93;&#x51FA;</a>
+          <a href="/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">4.6.&#x5BC4;&#x5B58;&#x5668;&#x4E0E;&#x5185;&#x5B58;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 10:23:14" itemprop="dateCreated datePublished" datetime="2024-04-05T10:23:14+08:00">2024-04-05</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 12:34:04" itemprop="dateCreated datePublished" datetime="2024-04-05T12:34:04+08:00">2024-04-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>524</span>
+      <span>110</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,96 +272,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="45inputand-output"><span class="math inline">\(4.5.\)</span>Input
-and Output</h1>
-<h3 id="1-output">1. Output</h3>
-<h4 id="adisplay">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Display</h4>
+          <h1 id="46working-with-register-and-memory"><span class="math inline">\(4.6.\)</span>Working with register and memory</h1>
+<h3 id="1operations-towards-d">1.Operations towards D</h3>
 <ul>
-<li>The most important player in manipulating the display element is
-called <em>screen memory map</em>.</li>
-<li>It is a designated area which is part of the data memory(RAM).</li>
-<li>The physical display unit is continuously refreshed from the
-contents of the memory map, and this happens many times each second. in
-the next refresh cycle,what is changed in the memory is going to be
-reflected on the screen.</li>
+<li><p>Storing value: It turns out that there&apos;s no direct way to do it,
+we have to do it indirectly. For example, if we want to store 10 in
+register D: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@10</span><br><span class="line">D = A</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Incresing value: We can use C instructions directly:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = D + 1</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Setting D to RAM value: It&apos;s similar to storing value:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@10</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure></p></li>
 </ul>
-<p><img src="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/image.png"></p>
-<h4 id="bscreen-memory-map">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Screen memory map</h4>
-<p>&#x2003;&#x2003;Our display unit looks like this:</p>
-<p><img src="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/image-1.png"></p>
-<p>&#x2003;&#x2003;It&apos;s a <em>table</em>, or a <em>matrix</em>, consisting of 256 rows
-and 512 columns. And in each intersection of a row and a column, we have
-what is known as a <em>pixel</em>. This is a black and white screen, so
-we can either turn the pixel on or we can turn it off.</p>
-<p>&#x2003;&#x2003;We can use out screen memory map to manipulate it, which looks like
-this:</p>
-<p><img src="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/image-2.png"></p>
-<ul>
-<li><p>It&apos;s a sequense of 16-bit values. Each one of these values is
-called <em>word</em>.</p></li>
-<li><p>For every pixel on the physical display unit, we have a bit that
-represents this pixel in the screen memory map. If I want to turn on
-this pixel, I put 1 in this bit, if I want to turn it off,I put 0 in
-this bit.</p></li>
-<li><p>To set <code>pixel(row, col)</code>on/off:</p>
-<ol type="1">
-<li><p><code>word = Screen[row*32 + col/16]</code></p>
-<ul>
-<li><strong>We cannot access individual bits</strong>.If we want to
-access an individual bit, we have to first figure out <strong>in which
-word this bit resides</strong>. And then I have to retrieve the entire
-word, manipulate this particular bit and finally write it back into
-memory.</li>
-</ul></li>
-<li><p><code>word = RAM[16384 + row*32 + col/16]</code></p>
-<ul>
-<li>If we access the <strong>screen chip</strong>, we simply use <span class="math inline">\(row\times 32+{col\over 16}\)</span>. But if we
-access the <strong>OVERALL RAM</strong>, we have to take this
-<strong>relative address</strong> and add it to the <strong>base
-address</strong> of the memory of the memory map in the overall memory,
-which happens to be 16384.</li>
-</ul></li>
-<li><p>Set <code>col%16</code> bit of <code>word</code> to 0 or
-1</p></li>
-<li><p>Commit <code>word</code> to the RAM</p></li>
-<li><ol type="1">
-<li>and (4) are done using 16-bit RAM access operations.</li>
-</ol></li>
-</ol></li>
-</ul>
-<h3 id="2input">2.Input</h3>
-<h4 id="akeyboard">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Keyboard</h4>
-<ul>
-<li>The physical keyboard is connected to the computer using a cable. If
-you will trace this cable, you will see that it goes into <strong>an
-area in the RAM</strong> which is called <em>keyboard memory
-map</em>.</li>
-</ul>
-<h4 id="bkeyboard-memory-map">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Keyboard memory map</h4>
-<ul>
-<li>Keyboard memory map is a single 16-bit register:</li>
-</ul>
-<p><img src="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/image-3.png"></p>
-<ul>
-<li><p>When a key is pressed on the keyboard, the key&apos;s
-<strong>scan-code</strong>, which is an agreed-upon value, travels
-through the cable and appears in the keyboard memory map.</p>
-<ul>
-<li><span class="math inline">\(e.g.\)</span> If I press &apos;K&apos;, 75 is
-going to appear in its binary manifestation in the in the keyboard
-chip.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/05/4-5-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/image-4.png"></p>
-<ul>
-<li><p>if you want to check if which key is currently pressed, all we
-have to do is <strong>probe the contents of the keyboard
-chip</strong>.</p>
-<ul>
-<li>In Hack computer, We probe the contents of RAM in address 24576, for
-this is where the keyboard memory map happens to reside.</li>
-</ul></li>
-</ul>
+<h3 id="2usage-of-d-register">2.Usage of D register</h3>
+<p>&#x2003;&#x2003;D register is of great importance in assignment operations:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//set RAM[10] to 5</span><br><span class="line">@5</span><br><span class="line">D = A</span><br><span class="line">@10</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">//set RAM[10] to RAM[5]</span><br><span class="line">@ 5</span><br><span class="line">D = M</span><br><span class="line">@10</span><br><span class="line">M = D</span><br></pre></td></tr></table></figure></p>
+<h3 id="3built-in-symbol">3.Built-in symbol</h3>
+<p><img src="/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/image.png"></p>
 
       
     </div>
@@ -384,7 +310,7 @@ this is where the keyboard memory map happens to reside.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/120/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/120/">120</a><span class="page-number current">121</span><a class="page-number" href="/page/122/">122</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/120/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/120/">120</a><span class="page-number current">121</span><a class="page-number" href="/page/122/">122</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

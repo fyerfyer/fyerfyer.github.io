@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-6-Control/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/16/3-7-Procedures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/15/3-6-Control/" class="post-title-link" itemprop="url">3.6.Control</a>
+          <a href="/2024/07/16/3-7-Procedures/" class="post-title-link" itemprop="url">3.7.Procedure</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-15T16:30:22+08:00">2024-07-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-16T16:30:22+08:00">2024-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:35:46" itemprop="dateModified" datetime="2024-07-16T16:35:46+08:00">2024-07-16</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:31:59" itemprop="dateModified" datetime="2024-07-17T17:31:59+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -272,190 +272,146 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="36-control"><span class="math inline">\(3.6.\)</span> Control</h1>
-<h3 id="1condition-code">1.Condition Code</h3>
-<p>&#x2003;&#x2003;In addition to the integer registers, the CPU maintains <em>a set
-of single-bit condition code registers</em> <strong>describing
-attributes of the most recent arithmetic or logical operation</strong>.
-These registers can then be tested to perform conditional branches</p>
-<p><img src="/2024/07/15/3-6-Control/image.png"></p>
+          <h1 id="37procedure"><span class="math inline">\(3.7.\)</span>Procedure</h1>
+<h3 id="1procedure-in-a-highprospective">1.Procedure in A High
+Prospective</h3>
 <ul>
-<li><p>The <code>leaq</code> instruction <strong>doesn&apos;t alter any
-condition codes</strong>, since it is intended to be used in address
-computations.</p></li>
-<li><p>For the logical operations, such as <code>xor</code>, <strong>the
-carry and overflow flags are set to zero</strong>.</p></li>
-<li><p>For the shift operations, <strong>the carry flag is set to the
-last bit shifted out</strong>, while <strong>the overflow flag is set to
-zero</strong>.</p></li>
-<li><p>The <code>inc</code> and <code>dec</code> instructions
-<strong>set the overflow and zero flags</strong>, but they <strong>leave
-the carry flag unchanged</strong>.</p></li>
+<li>Procedures are a key abstraction in software. They provide a way to
+<strong>package code that implements some functionality with a
+designated set of arguments and an optional return value</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;There are two instruction classes that set condition codes without
-altering any other registers:</p>
-<p><img src="/2024/07/15/3-6-Control/image-1.png"></p>
+<p>&#x2003;&#x2003;Well-designed software uses procedures as an abstraction mechanism,
+<strong>hiding the detailed implementation of some action</strong> while
+p<strong>roviding a clear and concise interface definition of what
+values will be computed and what effects the procedure will have on the
+program state</strong>.</p>
+<p>&#x2003;&#x2003;To provide machine-level support for procedures, we need to take
+the following aspect into consideration:</p>
+<ol type="1">
+<li><p><em>Passing control</em>.</p></li>
+<li><p><em>Passing data</em>.</p></li>
+<li><p><em>Allocating and deallocating memory</em>.</p></li>
+</ol>
+<h3 id="2the-run-time-stack">2.The Run-time Stack</h3>
 <ul>
-<li>In <code>TEST</code>, typically, <strong>the same operand is
-repeated</strong> (e.g., <code>testq %rax,%rax</code> to see whether
-<code>%rax</code> is negative, zero, or positive), or <strong>one of the
-operands is a mask indicating which bits should be tested</strong>.</li>
-</ul>
-<h3 id="2accessing-condition-codes">2.Accessing Condition Codes</h3>
-<p><img src="/2024/07/15/3-6-Control/image-2.png"></p>
+<li><p>A program can manage the storage required by its procedures using
+a stack, where the stack and the program registers <strong>store the
+information required for passing control and data, and for allocating
+memory</strong>. As P calls Q, <strong>control and data information are
+added to the end of the stack</strong>. This information <strong>gets
+deallocated when P returns</strong>.</p></li>
+<li><p>When an x86-64 procedure requires storage beyond what it can hold
+in registers, it <strong>allocates space on the stack</strong>. This
+region is referred to as the procedure&apos;s <strong>stack
+frame</strong>.</p>
 <ul>
-<li><p>A set instruction has either one of the low-order single-byte
-register elements or a single-byte memory location as its destination,
-<strong>setting this byte to either 0 or 1</strong>.</p></li>
-<li><p>To generate a 32-bit or 64-bit result, we must also <strong>clear
-the high-order bits</strong>. For example:</p></li>
-</ul>
-<p><img src="/2024/07/15/3-6-Control/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>movzbl</code> not only set the high-order 3 bytes of
-<code>%eax</code> to 0, but also set the high-order 4 bytes of
-<code>%rax</code> to 0 due to the 32-bit <code>mov</code>
-convention.</p>
-<blockquote>
-<p>It is important to understand that assembly code does not keep track
-of the type of a program value. Instead, <strong>the different
-instructions determine the operand sizes and whether they are signed or
-unsigned</strong>:</p>
-<p><span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/15/3-6-Control/image-4.png"></p>
-<p><img src="/2024/07/15/3-6-Control/image-5.png"></p>
-</blockquote>
-<h3 id="3jump-instructions">3.Jump Instructions</h3>
-<p><img src="/2024/07/15/3-6-Control/image-6.png"></p>
-<p>&#x2003;&#x2003;There are two kinds of jump instructions:</p>
-<ul>
-<li><p><em>Direct jump</em>: It jumps to a label. The jump target is
-encoded as part of the instructions.</p></li>
-<li><p><em>Indirect jump</em>: It is written <strong>using
-<code>*</code> followed by an operand specifier</strong>.</p>
-<ul>
-<li><p><code>jmp *%rax</code> uses <strong>the value in
-<code>%rax</code></strong> as the jump target.</p></li>
-<li><p><code>jmp *(%rax)</code> reads the jump target from memory, using
-the value in <code>%rax</code> <strong>as the read
-address</strong>.</p></li>
+<li>When procedure P calls procedure Q, it will <strong>push the return
+address onto the stack</strong>, indicating where <strong>within P the
+program should resume</strong> execution once Q returns. We consider the
+return address to be <strong>part of P&apos;s stack frame</strong>, since it
+holds state relevant to P.</li>
 </ul></li>
 </ul>
-<h3 id="4jump-instruction-encodings">4.Jump Instruction Encodings</h3>
-<p>&#x2003;&#x2003;There are several kinds of encoding jump targets:</p>
+<p>&#x2003;&#x2003;The stack frames for most procedures are <strong>of fixed
+size</strong>, allocated at the beginning of the procedure. Some
+procedures, however, require variable-size frames.</p>
+<h3 id="3control-transfer">3.Control Transfer</h3>
+<ul>
+<li><p>Passing control from function P to function Q involves simply
+<strong>setting the program counter (PC) to the starting address of the
+code for Q</strong>. This information is recorded in x86-64 machines by
+invoking procedure Q with the instruction <code>call Q</code>.</p>
+<ul>
+<li>This instruction <strong>pushes an address A onto the stack</strong>
+and <strong>sets the PC to the beginning of Q</strong>. The pushed
+address A is referred to as <strong>the return address</strong> and is
+computed as <strong>the address of the instruction immediately following
+the call instruction</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The general forms of the <code>call</code> and <code>ret</code>
+instructions are as below:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image.png"></p>
+<p><img src="/2024/07/16/3-7-Procedures/image-1.png"></p>
+<h3 id="4data-transfer">4.Data Transfer</h3>
+<p>&#x2003;&#x2003;In x86-64, data passing to and from a procedure takes place via
+registers.</p>
+<p>&#x2003;&#x2003;<strong>Up to six</strong> integral (i.e., integer and pointer)
+arguments can be passed via registers. The registers are used in a
+specified order:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image-2.png"></p>
+<p>&#x2003;&#x2003;Arguments are allocated to these registers according to
+<strong>their ordering in the argument list</strong>, and arguments
+smaller than 64 bits can be accessed using the appropriate
+<strong>subsection of the 64-bit register</strong>.</p>
+<p>&#x2003;&#x2003;When a function has more than six integral arguments, the other
+ones are passed <strong>on the stack</strong>. When passing parameters
+on the stack, all data size <strong>are rounded up to be multiples of
+8</strong>.</p>
+<p>&#x2003;&#x2003;Let&apos;s take the following code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># void proc(a1, a1p, a2, a2p, a3, a3p, a4, a4p)</span><br><span class="line"># Arguments passed as follows:</span><br><span class="line"># a1 in %rdi (64 bits)</span><br><span class="line"># a1p in %rsi (64 bits)</span><br><span class="line"># a2 in %edx (32 bits)</span><br><span class="line"># a2p in %rcx (64 bits)</span><br><span class="line"># a3 in %r8w (16 bits)</span><br><span class="line"># a3p in %r9 (64 bits)</span><br><span class="line"># a4 at %rsp+8 ( 8 bits)</span><br><span class="line"># a4p at %rsp+16 (64 bits)</span><br><span class="line"></span><br><span class="line">proc:</span><br><span class="line">    movq 16(%rsp), %rax # Fetch a4p (64 bits)</span><br><span class="line">    addq %rdi, (%rsi)   # *a1p += a1 (64 bits)</span><br><span class="line">    addl %edx, (%rcx)   # *a2p += a2 (32 bits)</span><br><span class="line">    addw %r8w, (%r9)    # *a3p += a3 (16 bits)</span><br><span class="line">    movl 8(%rsp), %edx  # Fetch a4 (8 bits)</span><br><span class="line">    addb %dl, (%rax)    # *a4p += a4 (8 bits)</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/16/3-7-Procedures/image-3.png"></p>
+<h3 id="5local-storage-on-the-stack">5.Local Storage on the Stack</h3>
+<p>&#x2003;&#x2003;In most cases, local data is stored in registers. However, there
+are cases that local data must be stored in memory:</p>
 <ol type="1">
-<li><p><em>PC relative</em>. They encode <strong>the difference between
-the address of the target instruction and the address of the instruction
-immediately following the jump</strong>.</p></li>
-<li><p>A second encoding method is to <strong>give an &#xFFFD;&#xFFFD;absolute&#xFFFD;&#xFFFD;
-address</strong>, using 4 bytes to directly specify the target.</p></li>
+<li><p>There are not enough registers to hold all of the local
+data.</p></li>
+<li><p>The address operator &apos;&amp;&apos; is applied to a local variable, and
+hence we must be able to <strong>generate an address for it</strong>.
+However, data that is stored in register doesn&apos;t have unique
+address.</p></li>
+<li><p>Some of the local variables are arrays or structures and hence
+must be accessed by array or structure references.</p></li>
 </ol>
-<p>&#x2003;&#x2003;Let&apos;s look at an PC relative example:</p>
-<p><img src="/2024/07/15/3-6-Control/image-7.png"></p>
-<p>&#x2003;&#x2003;In the annotations on the right, the jump targets are indicated as
-<code>0x8</code> for the jump instruction on line 2, which is equal to
-<code>0x5+0x3</code>. This is because the encoding is calculated by
-<strong><span class="math inline">\(the\;address\;of\;next\;instruction+offset\)</span></strong>.</p>
-<p>&#x2003;&#x2003;In this case, the address of next instruction is 3+2=5, and the
-offset is <code>03</code>, as is shown in the assembly code.</p>
-<p>&#x2003;&#x2003;Even though the instructions may be relocated to different
-addresses, the encoding of the target <strong>remain unchanged</strong>.
-This is because the relative position between instructions remains
-unchanged.</p>
-<h3 id="5conditional-move">5.Conditional Move</h3>
-<p>&#x2003;&#x2003;The conventional way to implement conditional operations is through
-a <em>conditional transfer of control</em>, where the program follows
-one execution path when a condition holds and another when it does
-not:</p>
-<p><img src="/2024/07/15/3-6-Control/image-8.png"></p>
-<p>&#x2003;&#x2003;An alternate strategy is through <em>condition transfer of
-data</em>. This approach <strong>computes both outcomes of a conditional
-operation</strong> and then <strong>selects one based on whether or not
-the condition holds</strong>:</p>
-<p><img src="/2024/07/15/3-6-Control/image-9.png"></p>
-<p>&#x2003;&#x2003;This strategy makes sense only in restricted cases, but it can then
-be implemented by a simple conditional move instruction that is better
-matched to the performance characteristics of modern processors due to
-the pipelining.</p>
+<p>&#x2003;&#x2003;Take the following program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp;</span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># long caller()</span><br><span class="line">caller:</span><br><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br><span class="line">call swap_add        # Call swap_add(&amp;arg1, &amp;arg2)</span><br><span class="line">movq (%rsp), %rdx    # Get arg1</span><br><span class="line">subq 8(%rsp), %rdx   # Compute diff = arg1 - arg2</span><br><span class="line">imulq %rdx, %rax     # Compute sum * diff</span><br><span class="line">addq $16, %rsp       # Deallocate stack frame</span><br><span class="line">ret                  # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Because we need to use the address of <code>arg1</code> and
+<code>arg2</code>, we need to store them in memory. We do this by
+leaving enough place in the stack and push the arguments onto the
+stack:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Once we need to use the value, we fetch it from the stacK:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The following program is a more complicated one. It includes the
+details of setting up the stack frame for the local variables and
+function parameters:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">call_proc:</span><br><span class="line"></span><br><span class="line">    # set up arguments to proc</span><br><span class="line">    subq $32, %rsp          # Allocate 32-byte stack frame</span><br><span class="line">    movq $1, 24(%rsp)       # Store 1 in &amp;x1</span><br><span class="line">    movl $2, 20(%rsp)       # Store 2 in &amp;x2</span><br><span class="line">    movw $3, 18(%rsp)       # Store 3 in &amp;x3</span><br><span class="line">    movb $4, 17(%rsp)       # Store 4 in &amp;x4</span><br><span class="line">    leaq 17(%rsp), %rax     # Create &amp;x4</span><br><span class="line">    movq %rax, 8(%rsp)      # Store &amp;x4 as argument 8</span><br><span class="line">    movl $4, (%rsp)         # Store 4 as argument 7</span><br><span class="line">    leaq 18(%rsp), %r9      # Pass &amp;x3 as argument 6</span><br><span class="line">    movl $3, %r8d           # Pass 3 as argument 5</span><br><span class="line">    leaq 20(%rsp), %rcx     # Pass &amp;x2 as argument 4</span><br><span class="line">    movl $2, %edx           # Pass 2 as argument 3</span><br><span class="line">    leaq 24(%rsp), %rsi     # Pass &amp;x1 as argument 2</span><br><span class="line">    movl $1, %edi           # Pass 1 as argument 1</span><br><span class="line"></span><br><span class="line">    # call proc</span><br><span class="line">    call proc               # Call proc</span><br><span class="line"></span><br><span class="line">    # retrieve changes to memory</span><br><span class="line">    movslq 20(%rsp), %rdx   # Get x2 and convert to long</span><br><span class="line">    addq 24(%rsp), %rdx     # Compute x1+x2</span><br><span class="line">    movswl 18(%rsp), %eax   # Get x3 and convert to int</span><br><span class="line">    movsbl 17(%rsp), %ecx   # Get x4 and convert to int</span><br><span class="line">    subl %ecx, %eax         # Compute x3-x4</span><br><span class="line">    cltq                    # Convert to long</span><br><span class="line">    imulq %rdx, %rax        # Compute (x1+x2) * (x3-x4)</span><br><span class="line">    addq $32, %rsp          # Deallocate stack frame</span><br><span class="line">    ret                     # Return</span><br></pre></td></tr></table></figure>
+<h3 id="6local-storage-in-registers">6.Local Storage in Registers</h3>
+<p>&#x2003;&#x2003;When calling another procedure, we must make sure that <strong>the
+callee does not overwrite some register value that the caller planned to
+use later</strong>.</p>
+<ul>
+<li><p>By convention, registers <code>%rbx</code>, <code>%rbp</code>,
+and <code>%r12&#xFFFD;C%r15</code> are classified as <strong>callee saved
+registers</strong>.</p>
+<ul>
+<li>When procedure P calls procedure Q, <strong>Q must preserve the
+values of these registers</strong>, ensuring that they have the same
+values when Q returns to P as they did when Q was called.</li>
+</ul></li>
+<li><p>Procedure Q can preserve a register value by either <strong>not
+changing it at all</strong> or by <strong>pushing the original value on
+the stack, altering it, and then popping the old value from the stack
+before returning</strong>.</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushq %rbp  # Save %rbp</span><br><span class="line">pushq %rbx  # Save %rbx</span><br><span class="line">...</span><br><span class="line">popq %rbx   # Restore %rbx</span><br><span class="line">popq %rbp   # Restore %rbp</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>However, due to the preprocess, If <strong>one of those two
-expressions could possibly generate an error condition or a side
-effect</strong>, this could lead to invalid behavior.</p>
+<p>Note how they are popped is <strong>in the reverse order
+from</strong> how they were pushed, to account for the last-in,
+first-out discipline of a stack.</p>
 </blockquote>
-<p>&#x2003;&#x2003;The conditional move instructions are as below:</p>
-<p><img src="/2024/07/15/3-6-Control/image-10.png"></p>
 <ul>
-<li><p>The instructions has two operands: <strong>a source register or
-memory location S</strong>, and <strong>a destination register
-R</strong>.</p></li>
-<li><p>The assembler can infer the operand length of a conditional move
-instruction, so it doesn&apos;t need suffix.</p></li>
+<li>All other registers, except for the stack pointer <code>%rsp</code>,
+are classified as <strong>caller saved registers</strong>.</li>
 </ul>
-<h3 id="6loops">6.Loops</h3>
-<h4 id="ado-while">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>do-while</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    body-statement</span><br><span class="line">    <span class="title function_">while</span> <span class="params">(test-expr)</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<h4 id="bwhile">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>while</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The second translation method is called <em>guarded do</em>, which
-uses a <code>do-while</code> style loop:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line">if (!t)</span><br><span class="line">    goto done;</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;By this way, we only need to check the condition once before we
-enter the loop. This reduce the possibility of branch prediction
-failure.</p>
-<h4 id="cfor">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>for</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;is equal to the following <code>while</code> statements:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr) {</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;And there are also two forms of <code>for</code> translation:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;and:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (!t)</span><br><span class="line">        goto done;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;However, the simple translation from <code>for</code> to
-<code>while</code> will be a little tricky. Take the
-<code>continue</code> statement as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;If we simply use <code>continue</code>, this will lead to an
-infinite loop:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/* This will cause an infinite loop */</span></span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">    i ++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The general solution is to replace the continue statement with a
-goto statement that skips the rest of the loop body and goes directly to
-the update portion:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">goto</span> update;</span><br><span class="line">    sum += i;</span><br><span class="line"></span><br><span class="line">update:</span><br><span class="line">    i++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="7switch-statements">7.Switch Statements</h3>
-<p>&#x2003;&#x2003;The ordinary <code>switch</code> statements looks like this:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    {</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We can rewrite this using a <em>jump table</em>. A jump table is an
-array where entry i is the address of a code segment the program should
-take when the switch index equals i.</p>
-<p>&#x2003;&#x2003;With jump table, the previous program will looks like this:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = {</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D};</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The <code>switch</code> locations are defined by <strong>the
-labels prefixed by <code>&amp;&amp;</code></strong>.
-<code>&amp;&amp;</code>is used to create a pointer for a code
-location.</p></li>
-<li><p>To simplify, the case value is subtracted by 100.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In the assembly code, we use this statement to access the jump
-table:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp *.L4(, %rsi, 8)  #Goto *jg[index]</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The base address is <code>L4</code>, which is the base address of
-the jump table array.</p></li>
-<li><p>The <code>(, %rsi, 8)</code> is the index, judging which case to
-switch to.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In the assembly code, the jump table is indicated by the following
-declarations:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.section.rodata</span><br><span class="line">    .align 8  # Align address to multiple of 8</span><br><span class="line">    .L4 :</span><br><span class="line">    .quad.L3  # Case 100 : loc_A</span><br><span class="line">    .quad.L8  # Case 101 : loc_def</span><br><span class="line">    .quad.L5  # Case 102 : loc_B</span><br><span class="line">    .quad.L6  # Case 103 : loc_C</span><br><span class="line">    .quad.L7  # Case 104 : loc_D</span><br><span class="line">    .quad.L8  # Case 105 : loc_def</span><br><span class="line">    .quad.L7  # Case 106 : loc_D</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The <code>rodata</code> refers to <em>read-only
-data</em>.</p></li>
-<li><p><code>L4</code> marks the start of the allocation.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In assembly code, the number of <code>case</code> is judged by
-<strong>the offset of the label in the jump table</strong>.</p>
+<h3 id="7recursive-procedures">7.Recursive Procedures</h3>
+<p>&#x2003;&#x2003;The stack discipline of allocation and deallocation naturally
+matches the call-return ordering of functions. So the recursive
+procedures is the same as other procedures:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = n * rfact(n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rfact:</span><br><span class="line">    pushq %rbx              # Save %rbx</span><br><span class="line">    movq %rdi, %rbx         # Store n in callee-saved register</span><br><span class="line">    movl $1, %eax           # Set return value = 1</span><br><span class="line">    cmpq $1, %rdi           # Compare n:1</span><br><span class="line">    jle .L35                # If &lt;=, goto done</span><br><span class="line">    leaq -1(%rdi), %rdi     # Compute n-1</span><br><span class="line">    call rfact              # Call rfact(n-1)</span><br><span class="line">    imulq %rbx, %rax        # Multiply result by n</span><br><span class="line">.L35: done:</span><br><span class="line">    popq %rbx               # Restore %rbx</span><br><span class="line">    ret                     # Return</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -478,7 +434,7 @@ data</em>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

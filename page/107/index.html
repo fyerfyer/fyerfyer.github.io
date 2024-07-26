@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
+          <a href="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 18:24:16" itemprop="dateCreated datePublished" datetime="2024-04-08T18:24:16+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:06:14" itemprop="dateModified" datetime="2024-06-03T08:06:14+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>250</span>
+      <span>311</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,59 +272,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
-<h3 id="1-the-stack-machine">1. The stack machine</h3>
+          <h1 id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</h1>
+<h3 id="1pointer-manipulation">1.Pointer manipulation</h3>
+<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
+represents <strong>the value stores in the address that <code>p</code>
+points to</strong>.</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
+<p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
 <ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
+<li><code>A = M</code> points the pointer to the address of register
+M.</li>
+<li><code>D = M</code> gets the value of the RAM.</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
+<p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
+<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
+will get the value stored in <code>RAM[256]</code>, namely 19.</p>
+<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
+value 5. After the assignment, <code>RAM[1024]</code>stores 9
+instead.</p>
+<h3 id="2stack-machine-operation">2.Stack machine operation</h3>
+<p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
+<ol type="1">
+<li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
+<li>Stack base address will be <code>addr = 256</code>.</li>
+</ol>
+<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
+<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
+and our RAM looks like this:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
+<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
+the previous available space, and stack pointer moves forward:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
+register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
+</blockquote>
+<h3 id="3vm-translator-perspective">3.VM translator perspective</h3>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
 <ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
+<li><p>VM translator is:</p>
 <ul>
-<li><p>When we do <code>pop y</code>:</p>
-<ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
+<li>A program that translates VM code into machine language.</li>
+<li>Each VM command generates several assembly commands.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3 id="2stack-arithmetic">2.Stack arithmetic</h3>
-<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
-<li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
-<li>Push the result back into the stack.</li>
-</ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3 id="3vm-commands">3.VM commands</h3>
-<ul>
-<li>Arithmetic commands:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
-<ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
 
       
     </div>
@@ -347,7 +347,7 @@ high-level language:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/106/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/106/">106</a><span class="page-number current">107</span><a class="page-number" href="/page/108/">108</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/108/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/106/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/106/">106</a><span class="page-number current">107</span><a class="page-number" href="/page/108/">108</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/108/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
