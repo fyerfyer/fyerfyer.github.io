@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-9-Heterogeneous-Data-Structures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/25/4-3-Sequential-Y86-64-Implementation/" class="post-title-link" itemprop="url">4.3.Sequential Y86-64 Implementation</a>
+          <a href="/2024/07/17/3-9-Heterogeneous-Data-Structures/" class="post-title-link" itemprop="url">3.9.Heterogeneous Data Structures</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-25 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-25T14:31:22+08:00">2024-07-25</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 22:31:22" itemprop="dateCreated datePublished" datetime="2024-07-17T22:31:22+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 09:08:04" itemprop="dateModified" datetime="2024-07-26T09:08:04+08:00">2024-07-26</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-18 18:01:14" itemprop="dateModified" datetime="2024-07-18T18:01:14+08:00">2024-07-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-4-Processor-Architecture/" itemprop="url" rel="index"><span itemprop="name">Chapter 4.Processor Architecture</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>2.4k</span>
+      <span>860</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>9 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,400 +272,1034 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="43sequential-y86-64-implementation"><span class="math inline">\(4.3.\)</span>Sequential Y86-64 Implementation</h1>
-<h3 id="1organizing-processing-intostages">1.Organizing Processing into
-Stages</h3>
-<h4 id="asummary">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Summary</h4>
-<p>&#x2003;&#x2003;The following is an informal description of the stages and the
-operations performed within them:</p>
+          <h1 id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</h1>
+<h3 id="1structures">1.Structures</h3>
+<p>&#x2003;&#x2003;The implementation of structures is similar to that of arrays: all
+of the components of a structure are stored <strong>in a contiguous
+region of memory</strong> and <strong>a pointer to a structure is the
+address of its first byte</strong>.</p>
+<p>&#x2003;&#x2003;The compiler maintains information about each structure type
+indicating <strong>the byte offset of each field</strong>.</p>
+<ul>
+<li>It generates references to structure elements <strong>using these
+offsets as displacements</strong> in memory referencing
+instructions.</li>
+</ul>
+<p>&#x2003;&#x2003;For example, the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rec</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">    <span class="type">int</span> a[<span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span> *p;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is represented in memory like this:</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image.png"></p>
+<p>&#x2003;&#x2003;and the compiler access the code by <strong>adding the appropriate
+offset to the address of the structure</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi</span><br><span class="line">movl (%rdi), %eax   # Get r-&gt;i</span><br><span class="line">movl %eax, 4(%rdi)  # Store in r-&gt;j</span><br></pre></td></tr></table></figure>
+<ul>
+<li>To generate a pointer to an object within a structure, we simply add
+the field&apos;s offset to the structure address:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi, i %rsi</span><br><span class="line">leaq 8(%rdi,%rsi,4), %rax    # Set %rax to &amp;r-&gt;a[i]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The selection of the different fields of a structure is handled
+completely <strong>at compile time</strong>. The machine code contains
+no information about the field declarations or the names of the
+fields.</p>
+<h3 id="2unions">2.Unions</h3>
+<p>&#x2003;&#x2003;Unions allow a single object to be referenced according to multiple
+types. Rather than having the different fields reference different
+blocks of memory, they all <strong>reference the same
+block</strong>.</p>
+<ul>
+<li>The overall size of a union equals <strong>the maximum size of any
+of its fields</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Unions are used in several cases:</p>
 <ol type="1">
-<li><p><em>Fetch</em>: The fetch stage <strong>reads the bytes of an
-instruction from memory, using the program counter(PC) as the memory
-address</strong>.</p>
-<ul>
-<li><p>From the instruction it <strong>extracts the two 4-bit portions
-of the instruction specifier byte</strong>, referred to as
-<code>icode</code>(the instruction code) and <code>ifun</code>(the
-instruction function).</p></li>
-<li><p>It computes <code>valP</code> to be <strong>the address of the
-instruction following the current one in sequential order</strong>. That
-is, <code>valP</code> equals <strong>the value of the PC plus the length
-of the fetched instruction</strong>.</p></li>
-</ul></li>
-<li><p><em>Decode</em>: The decode stage <strong>reads up to two
-operands from the register file</strong>, giving values
-<code>valA</code> and/or <code>valB</code>.</p></li>
-<li><p><em>Execute</em>: In the execute stage, the arithmetic/logic
-unit(ALU) either <strong>performs the operation specified by the
-instruction</strong>(according to <strong>the value of
-<code>ifun</code></strong>), <strong>computes the effective address of a
-memory reference</strong>, or <strong>increments or decrements the stack
-pointer</strong>. We refer to the resulting value as
-<code>valE</code>.</p>
-<ul>
-<li>For a conditional move instruction, the stage will evaluate the
-condition codes and move condition (given by <code>ifun</code>) and
-<strong>enable the updating of the destination register only if the
-condition holds</strong>.</li>
-</ul></li>
-<li><p><em>Memory</em>: The memory stage may write data to memory, or it
-may read data from memory. We refer to the value read as
-<code>valM</code>.</p></li>
-<li><p><em>Write Back</em>: The write-back stage writes up to two
-results to the register file.</p></li>
-<li><p><em>PC Update</em>: The PC is set to the address of the next
-instruction.</p></li>
+<li>We know in advance that the use of two different fields in a data
+structure will be <strong>mutually exclusive</strong>.</li>
 </ol>
-<p>&#x2003;&#x2003;In our simplified implementation, the processor will stop when any
-exception occurs&#xFFFD;&#xFFFD;that is, when it executes a <code>halt</code> or
-invalid instruction, or it attempts to read or write an invalid
-address.</p>
-<h4 id="barithmetic-operations">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Arithmetic operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image.png"></p>
+<p>&#x2003;&#x2003;For example, we can represent a binary tree using structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> {</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">right</span>;</span></span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;which use 32 bytes. But if we use union:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">node_u</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">left</span>;</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">right</span>;</span></span><br><span class="line">    } internal;</span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;it will only take up 16 bytes.</p>
+<p>&#x2003;&#x2003;Moreover, to identify <code>leaf</code> with <code>internal</code>
+node, we can use <strong>an enumerated type defining the different
+possible choices for the union</strong>, and then create a structure
+<strong>containing a tag field and the union</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span> N_LEAF, N_INTERNAL } <span class="type">nodetype_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> {</span></span><br><span class="line">    <span class="type">nodetype_t</span> type;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">left</span>;</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">right</span>;</span></span><br><span class="line">        } internal;</span><br><span class="line">        <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">    } info;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// example</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// leaves</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">leaf</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    leaf-&gt;type = N_LEAF;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">0</span>] = <span class="number">1.23</span>;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">1</span>] = <span class="number">4.56</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// internal</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">internal</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    internal-&gt;type = N_INTERNAL;</span><br><span class="line">    internal-&gt;info.internal.left = leaf;</span><br><span class="line">    internal-&gt;info.internal.right = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>The union <strong>won&apos;t change the bit it stored according to
+different types</strong>, even if the value is stored in one type but
+access in another.</li>
+</ol>
+<p>&#x2003;&#x2003;Say we convert a <code>double d</code> to an
+<code>unsigned long</code> variable:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> u = (<span class="type">unsigned</span> <span class="type">long</span>) d;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Value <code>u</code> will be an integer representation of
+<code>d</code>. Except for the case where <code>d</code> is
+<code>0.0</code>, the bit representation of <code>u</code> will
+<strong>be very different from that of <code>d</code></strong>.</p>
+<p>&#x2003;&#x2003;However, if we use unions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> <span class="title function_">double2bits</span><span class="params">(<span class="type">double</span> d)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">long</span> u;</span><br><span class="line">    } temp;</span><br><span class="line">    temp.d = d;</span><br><span class="line">    <span class="keyword">return</span> temp.u;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result will be that <strong><code>u</code> will have the same
+bit representation as <code>d</code></strong>, including fields for the
+sign bit, the exponent, and the significand.</p>
+<p>&#x2003;&#x2003;And with this characteristic, we can design the following program
+that gets the words of a double number:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">uu2double</span><span class="params">(<span class="type">unsigned</span> word0, <span class="type">unsigned</span> word1)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> u[<span class="number">2</span>];</span><br><span class="line">    } temp;</span><br><span class="line">    temp.u[<span class="number">0</span>] = word0; <span class="comment">// low-order 4 bytes</span></span><br><span class="line">    temp.u[<span class="number">1</span>] = word1; <span class="comment">// high-order 4 bytes</span></span><br><span class="line">    <span class="keyword">return</span> temp.d;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3data-alignment">3.Data Alignment</h3>
+<p>&#x2003;&#x2003;<em>Data alignment</em> is operation that <strong>enforce the
+address of some objects must be a multiple of some valueK (typically 2,
+4, or 8)</strong>.</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-1.png"></p>
 <ul>
-<li><p>For the integer-operation instruction:</p>
-<ol type="1">
-<li><p>In the fetch stage, we do not require a constant word, and so
-<code>valP</code> is computed as <code>PC+2</code>.</p></li>
-<li><p>During the decode stage, we read both operands. These are
-supplied to the ALU in the execute stage, along with the function
-specifier <code>ifun</code>.</p></li>
-<li><p><code>valE</code> equals to the instruction result
-<code>valB OP valA</code>. The <code>OP</code> is specified by
-<code>ifun</code>.</p></li>
-</ol></li>
-<li><p>For the <code>rmmovq</code> instruction:</p>
-<ol type="1">
-<li><p>The process is similar to integer-operation operation, but we
-don&apos;t need to fetch the second register operand. Instead, we <strong>set
-the second ALU input to zero and add this to the first</strong>, giving
-<code>valE = valA</code>.</p></li>
-<li><p>In addition, we must increment the program counter by 10 for
-<code>irmovq</code> <strong>due to the long instruction
-format</strong>.</p></li>
-</ol></li>
+<li>The align operation can be declared by the following statement:</li>
 </ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-1.png"></p>
-<h4 id="coperations-involving-memoryoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Operations involving memory
-operation</h4>
-<p>&#x2003;&#x2003;The following instructions involve memory write and read stage:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-2.png"></p>
-<ul>
-<li><p>The process <strong>use the ALU to add <code>valC</code> to
-<code>valB</code>, giving the effective address for memory
-operation</strong>.</p></li>
-<li><p>In the memory stage, we either write the register value
-<code>valA</code> to memory or read <code>valM</code> from
-memory.</p></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-3.png"></p>
-<h4 id="dpushq-amppopq-operations">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>pushq</code> &amp;
-<code>popq</code> operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-4.png"></p>
-<p>&#x2003;&#x2003;The <code>pushq</code> and <code>popq</code> involve both accessing
-memory and incrementing or decrementing the stack pointer.</p>
-<ul>
-<li><p>For the <code>pushq</code> instruction:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.align 8</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This ensures that <strong>the data following it will start with an
+address that is a multiple of 8</strong>.</p>
+<p>&#x2003;&#x2003;To do data alignment, the compiler uses these two techniques. Take
+the following C struction as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S1</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
 <ol type="1">
-<li><p>In decode stage, we use <code>%rsp</code> as the identifier for
-the second register operand, giving the stack pointer as
-<code>valB</code>.</p></li>
-<li><p>In the execute stage, we <strong>use the ALU to decrement the
-stack pointer by 8</strong>. This decremented value is used for the
-memory write address and is also <strong>stored back to
-<code>%rsp</code> in the write-back stage</strong>.</p></li>
-<li><p>We use <code>valE</code> as the address for the write
-operation.</p></li>
-</ol></li>
-</ul>
+<li><em>Byte gap</em>:</li>
+</ol>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-2.png"></p>
+<ol start="2" type="1">
+<li><em>End padding</em>: This is to ensure that the latter data will
+also be aligned:</li>
+</ol>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-3.png"></p>
 <blockquote>
-<p>we adhere to the Y86-64 convention that <code>pushq</code> should
-<strong>decrement the stack pointer before writing</strong>.</p>
+<p><span class="math inline">\(p.s.\)</span>Each type of data has its
+own alignment requirement, so we can minimize the wasted place by
+<strong>rearrange the fields of structure</strong>. Note that <strong>we
+don&apos;t have to make all variables applied to an only alignment
+rule</strong>!</p>
+</blockquote>
+<p><span class="math inline">\(e.g.\)</span> The structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">int</span> *a;</span><br><span class="line">    <span class="type">float</span> b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">short</span> d;</span><br><span class="line">    <span class="type">long</span> e;</span><br><span class="line">    <span class="type">double</span> f;</span><br><span class="line">    <span class="type">int</span> g;</span><br><span class="line">    <span class="type">char</span> *h;</span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is rearranged to the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">double</span> f;   <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">long</span> e;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> *a;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">char</span> *h;    <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> g;      <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">float</span> b;    <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">short</span> d;    <span class="comment">// 2 bytes</span></span><br><span class="line">    <span class="type">char</span> c;     <span class="comment">// 1 byte</span></span><br><span class="line">    <span class="comment">// 3 bytes padding to make the total size a multiple of 8</span></span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Following the strategy of <strong>putting the fields required for
+larger alignment first</strong>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-8-Array-Allocation-and-Access/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/17/3-8-Array-Allocation-and-Access/" class="post-title-link" itemprop="url">3.8.Array Allocation and Access</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:32:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:13:52" itemprop="dateCreated datePublished" datetime="2024-07-17T17:32:22+08:00">2024-07-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>878</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>3 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</h1>
+<h3 id="1pointer-arithmetic">1.Pointer Arithmetic</h3>
+<p>&#x2003;&#x2003;Suppose the starting address of integer array <code>E</code> and
+integer index <code>i</code> are stored in registers <code>%rdx</code>
+and <code>%rcx</code>. Below are some assembly-code implementation of
+array expressions, with the result being stored in either
+<code>%eax</code>(for data) or register <code>%rax</code>(for
+pointers):</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image.png"></p>
+<blockquote>
+<p>The dereference of a pointer is through
+<code>(register_name)</code>.</p>
+</blockquote>
+<blockquote>
+<p>The final example shows that one can compute the difference of two
+pointers within the same data structure, with the result being data
+having type long and value equal to <strong>the difference of the two
+addresses divided by the size of the data type</strong>.</p>
+</blockquote>
+<h3 id="2nested-arrays">2.Nested Arrays</h3>
+<p>&#x2003;&#x2003;The array elements are ordered in memory in row-major order:</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image-1.png"></p>
+<p>&#x2003;&#x2003;Array element <code>M[i][j]</code> can be easily reached through a
+series of arithmetic operations. For example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># A in %rdi, i in %rsi, and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2), %rax  # Compute 3i</span><br><span class="line">leaq (%rdi,%rax,4), %rax  # Compute xA + 12i</span><br><span class="line">movl (%rax,%rdx,4), %eax  # Read from M[xA + 12i + 4]</span><br></pre></td></tr></table></figure>
+<h3 id="3fixed-sized-arrays">3.Fixed-sized Arrays</h3>
+<p>&#x2003;&#x2003;The C compiler is able to make many optimizations for code
+operating on multi-dimensional arrays of fixed size. Take the inner
+product calculation program as an example. The original form is as
+below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimized C code is as below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele_opt</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">int</span> *Aptr = &amp;A[i][<span class="number">0</span>]; <span class="comment">/* Points to elements in row i of A */</span></span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k]; <span class="comment">/* Points to elements in column k of B */</span></span><br><span class="line">    <span class="type">int</span> *Bend = &amp;B[N][k]; <span class="comment">/* Marks stopping point for Bptr */</span></span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> {                         <span class="comment">/* No need for initial test */</span></span><br><span class="line">        result += *Aptr * *Bptr; <span class="comment">/* Add next product to sum */</span></span><br><span class="line">        Aptr ++;                 <span class="comment">/* Move Aptr to next column */</span></span><br><span class="line">        Bptr += N;               <span class="comment">/* Move Bptr to next row */</span></span><br><span class="line">    } <span class="keyword">while</span> (Bptr != Bend);      <span class="comment">/* Test for stopping point */</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimization follows the following steps:</p>
+<ol type="1">
+<li><p>Generating a pointer, which we have named <code>Aptr</code>, that
+points to successive elements in row <code>i</code> of
+<code>A</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bptr</code>, that
+points to successive elements in column <code>k</code> of
+<code>B</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bend</code>, that
+equals the value <code>Bptr</code> will have <strong>when it is time to
+terminate the loop</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;The key points of optimization are as below:</p>
+<ol type="1">
+<li><p>Decide the <strong>starting address and end address of the
+array</strong>.</p></li>
+<li><p>Decide <strong>how to move the address forward</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>The C program below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Set all diagonal elements to val */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">        A[i][i] = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;With the properties:</p>
+<ul>
+<li><p>Starting address: <code>&amp;A[0][0]</code>.</p></li>
+<li><p>Ending address: <code>&amp;A[N+1][0]</code>.</p></li>
+<li><p>Moving stride: <code>index += N + 1</code>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;And the optimized program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag_opt</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Abase = &amp;A[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> iend = N * (N + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        Abase[i] = val;</span><br><span class="line">        i += (N + <span class="number">1</span>);</span><br><span class="line">    } <span class="keyword">while</span> (i != iend);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="4variable-size-arrays">4.Variable-Size Arrays</h3>
+<p>&#x2003;&#x2003;Programmers requiring variable-size arrays had to allocate storage
+for these arrays using functions such as <code>malloc</code> or
+<code>calloc</code>, and they had to explicitly encode the mapping of
+multidimensional arrays into single-dimension ones via row-major
+indexing.</p>
+<p>&#x2003;&#x2003;If we declare an array <code>int A[exp1][exp2]</code>, the
+dimensions of the array are determined by evaluating the expressions
+<code>expr1</code> and <code>expr2</code> <strong>at the time the
+declaration is encountered</strong>.</p>
+<p>&#x2003;&#x2003;For example, the following C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">long</span> i, <span class="type">long</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> A[i][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var_ele:</span><br><span class="line">    imulq %rdx, %rdi          # Compute n * i</span><br><span class="line">    leaq (%rsi,%rdi,4), %rax  # Compute xA + 4(n * i)</span><br><span class="line">    movl (%rax,%rcx,4), %eax  # Read from M[xA + 4(n * i) + 4 * j]</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<strong>Instead of using <code>leaq</code>, the dynamic version
+must use <code>imul</code> to scale <code>i</code> by
+<code>n</code></strong>. This is because we don&apos;t know the exact size of
+array until encounter the declaration.</p>
+<p>&#x2003;&#x2003;The optimization of variable-size arrays is similar to that of the
+fixed-size:</p>
+<p>&#x2003;&#x2003;For example, the C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be optimized as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of variable matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele_opt</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Arow = A[i];</span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k];</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    {</span><br><span class="line">        result += Arow[j] * *Bptr;</span><br><span class="line">        Bptr += n;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>We can see that <code>GCC</code> is able to recognize patterns that
+arise when a program steps through the elements of a multidimensional
+array, and generate the <strong>pointer-based code</strong> or the
+<strong>array-based code</strong> to <strong>avoid direct multiple
+calculation</strong>.</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/16/3-7-Procedures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/16/3-7-Procedures/" class="post-title-link" itemprop="url">3.7.Procedure</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-16T16:30:22+08:00">2024-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:31:59" itemprop="dateModified" datetime="2024-07-17T17:31:59+08:00">2024-07-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>5 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="37procedure"><span class="math inline">\(3.7.\)</span>Procedure</h1>
+<h3 id="1procedure-in-a-highprospective">1.Procedure in A High
+Prospective</h3>
+<ul>
+<li>Procedures are a key abstraction in software. They provide a way to
+<strong>package code that implements some functionality with a
+designated set of arguments and an optional return value</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Well-designed software uses procedures as an abstraction mechanism,
+<strong>hiding the detailed implementation of some action</strong> while
+p<strong>roviding a clear and concise interface definition of what
+values will be computed and what effects the procedure will have on the
+program state</strong>.</p>
+<p>&#x2003;&#x2003;To provide machine-level support for procedures, we need to take
+the following aspect into consideration:</p>
+<ol type="1">
+<li><p><em>Passing control</em>.</p></li>
+<li><p><em>Passing data</em>.</p></li>
+<li><p><em>Allocating and deallocating memory</em>.</p></li>
+</ol>
+<h3 id="2the-run-time-stack">2.The Run-time Stack</h3>
+<ul>
+<li><p>A program can manage the storage required by its procedures using
+a stack, where the stack and the program registers <strong>store the
+information required for passing control and data, and for allocating
+memory</strong>. As P calls Q, <strong>control and data information are
+added to the end of the stack</strong>. This information <strong>gets
+deallocated when P returns</strong>.</p></li>
+<li><p>When an x86-64 procedure requires storage beyond what it can hold
+in registers, it <strong>allocates space on the stack</strong>. This
+region is referred to as the procedure&apos;s <strong>stack
+frame</strong>.</p>
+<ul>
+<li>When procedure P calls procedure Q, it will <strong>push the return
+address onto the stack</strong>, indicating where <strong>within P the
+program should resume</strong> execution once Q returns. We consider the
+return address to be <strong>part of P&apos;s stack frame</strong>, since it
+holds state relevant to P.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The stack frames for most procedures are <strong>of fixed
+size</strong>, allocated at the beginning of the procedure. Some
+procedures, however, require variable-size frames.</p>
+<h3 id="3control-transfer">3.Control Transfer</h3>
+<ul>
+<li><p>Passing control from function P to function Q involves simply
+<strong>setting the program counter (PC) to the starting address of the
+code for Q</strong>. This information is recorded in x86-64 machines by
+invoking procedure Q with the instruction <code>call Q</code>.</p>
+<ul>
+<li>This instruction <strong>pushes an address A onto the stack</strong>
+and <strong>sets the PC to the beginning of Q</strong>. The pushed
+address A is referred to as <strong>the return address</strong> and is
+computed as <strong>the address of the instruction immediately following
+the call instruction</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The general forms of the <code>call</code> and <code>ret</code>
+instructions are as below:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image.png"></p>
+<p><img src="/2024/07/16/3-7-Procedures/image-1.png"></p>
+<h3 id="4data-transfer">4.Data Transfer</h3>
+<p>&#x2003;&#x2003;In x86-64, data passing to and from a procedure takes place via
+registers.</p>
+<p>&#x2003;&#x2003;<strong>Up to six</strong> integral (i.e., integer and pointer)
+arguments can be passed via registers. The registers are used in a
+specified order:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image-2.png"></p>
+<p>&#x2003;&#x2003;Arguments are allocated to these registers according to
+<strong>their ordering in the argument list</strong>, and arguments
+smaller than 64 bits can be accessed using the appropriate
+<strong>subsection of the 64-bit register</strong>.</p>
+<p>&#x2003;&#x2003;When a function has more than six integral arguments, the other
+ones are passed <strong>on the stack</strong>. When passing parameters
+on the stack, all data size <strong>are rounded up to be multiples of
+8</strong>.</p>
+<p>&#x2003;&#x2003;Let&apos;s take the following code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># void proc(a1, a1p, a2, a2p, a3, a3p, a4, a4p)</span><br><span class="line"># Arguments passed as follows:</span><br><span class="line"># a1 in %rdi (64 bits)</span><br><span class="line"># a1p in %rsi (64 bits)</span><br><span class="line"># a2 in %edx (32 bits)</span><br><span class="line"># a2p in %rcx (64 bits)</span><br><span class="line"># a3 in %r8w (16 bits)</span><br><span class="line"># a3p in %r9 (64 bits)</span><br><span class="line"># a4 at %rsp+8 ( 8 bits)</span><br><span class="line"># a4p at %rsp+16 (64 bits)</span><br><span class="line"></span><br><span class="line">proc:</span><br><span class="line">    movq 16(%rsp), %rax # Fetch a4p (64 bits)</span><br><span class="line">    addq %rdi, (%rsi)   # *a1p += a1 (64 bits)</span><br><span class="line">    addl %edx, (%rcx)   # *a2p += a2 (32 bits)</span><br><span class="line">    addw %r8w, (%r9)    # *a3p += a3 (16 bits)</span><br><span class="line">    movl 8(%rsp), %edx  # Fetch a4 (8 bits)</span><br><span class="line">    addb %dl, (%rax)    # *a4p += a4 (8 bits)</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/16/3-7-Procedures/image-3.png"></p>
+<h3 id="5local-storage-on-the-stack">5.Local Storage on the Stack</h3>
+<p>&#x2003;&#x2003;In most cases, local data is stored in registers. However, there
+are cases that local data must be stored in memory:</p>
+<ol type="1">
+<li><p>There are not enough registers to hold all of the local
+data.</p></li>
+<li><p>The address operator &apos;&amp;&apos; is applied to a local variable, and
+hence we must be able to <strong>generate an address for it</strong>.
+However, data that is stored in register doesn&apos;t have unique
+address.</p></li>
+<li><p>Some of the local variables are arrays or structures and hence
+must be accessed by array or structure references.</p></li>
+</ol>
+<p>&#x2003;&#x2003;Take the following program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp;</span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># long caller()</span><br><span class="line">caller:</span><br><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br><span class="line">call swap_add        # Call swap_add(&amp;arg1, &amp;arg2)</span><br><span class="line">movq (%rsp), %rdx    # Get arg1</span><br><span class="line">subq 8(%rsp), %rdx   # Compute diff = arg1 - arg2</span><br><span class="line">imulq %rdx, %rax     # Compute sum * diff</span><br><span class="line">addq $16, %rsp       # Deallocate stack frame</span><br><span class="line">ret                  # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Because we need to use the address of <code>arg1</code> and
+<code>arg2</code>, we need to store them in memory. We do this by
+leaving enough place in the stack and push the arguments onto the
+stack:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Once we need to use the value, we fetch it from the stacK:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The following program is a more complicated one. It includes the
+details of setting up the stack frame for the local variables and
+function parameters:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">call_proc:</span><br><span class="line"></span><br><span class="line">    # set up arguments to proc</span><br><span class="line">    subq $32, %rsp          # Allocate 32-byte stack frame</span><br><span class="line">    movq $1, 24(%rsp)       # Store 1 in &amp;x1</span><br><span class="line">    movl $2, 20(%rsp)       # Store 2 in &amp;x2</span><br><span class="line">    movw $3, 18(%rsp)       # Store 3 in &amp;x3</span><br><span class="line">    movb $4, 17(%rsp)       # Store 4 in &amp;x4</span><br><span class="line">    leaq 17(%rsp), %rax     # Create &amp;x4</span><br><span class="line">    movq %rax, 8(%rsp)      # Store &amp;x4 as argument 8</span><br><span class="line">    movl $4, (%rsp)         # Store 4 as argument 7</span><br><span class="line">    leaq 18(%rsp), %r9      # Pass &amp;x3 as argument 6</span><br><span class="line">    movl $3, %r8d           # Pass 3 as argument 5</span><br><span class="line">    leaq 20(%rsp), %rcx     # Pass &amp;x2 as argument 4</span><br><span class="line">    movl $2, %edx           # Pass 2 as argument 3</span><br><span class="line">    leaq 24(%rsp), %rsi     # Pass &amp;x1 as argument 2</span><br><span class="line">    movl $1, %edi           # Pass 1 as argument 1</span><br><span class="line"></span><br><span class="line">    # call proc</span><br><span class="line">    call proc               # Call proc</span><br><span class="line"></span><br><span class="line">    # retrieve changes to memory</span><br><span class="line">    movslq 20(%rsp), %rdx   # Get x2 and convert to long</span><br><span class="line">    addq 24(%rsp), %rdx     # Compute x1+x2</span><br><span class="line">    movswl 18(%rsp), %eax   # Get x3 and convert to int</span><br><span class="line">    movsbl 17(%rsp), %ecx   # Get x4 and convert to int</span><br><span class="line">    subl %ecx, %eax         # Compute x3-x4</span><br><span class="line">    cltq                    # Convert to long</span><br><span class="line">    imulq %rdx, %rax        # Compute (x1+x2) * (x3-x4)</span><br><span class="line">    addq $32, %rsp          # Deallocate stack frame</span><br><span class="line">    ret                     # Return</span><br></pre></td></tr></table></figure>
+<h3 id="6local-storage-in-registers">6.Local Storage in Registers</h3>
+<p>&#x2003;&#x2003;When calling another procedure, we must make sure that <strong>the
+callee does not overwrite some register value that the caller planned to
+use later</strong>.</p>
+<ul>
+<li><p>By convention, registers <code>%rbx</code>, <code>%rbp</code>,
+and <code>%r12&#xFFFD;C%r15</code> are classified as <strong>callee saved
+registers</strong>.</p>
+<ul>
+<li>When procedure P calls procedure Q, <strong>Q must preserve the
+values of these registers</strong>, ensuring that they have the same
+values when Q returns to P as they did when Q was called.</li>
+</ul></li>
+<li><p>Procedure Q can preserve a register value by either <strong>not
+changing it at all</strong> or by <strong>pushing the original value on
+the stack, altering it, and then popping the old value from the stack
+before returning</strong>.</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushq %rbp  # Save %rbp</span><br><span class="line">pushq %rbx  # Save %rbx</span><br><span class="line">...</span><br><span class="line">popq %rbx   # Restore %rbx</span><br><span class="line">popq %rbp   # Restore %rbp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Note how they are popped is <strong>in the reverse order
+from</strong> how they were pushed, to account for the last-in,
+first-out discipline of a stack.</p>
 </blockquote>
 <ul>
-<li><p>For the <code>popq</code> instruction:</p>
+<li>All other registers, except for the stack pointer <code>%rsp</code>,
+are classified as <strong>caller saved registers</strong>.</li>
+</ul>
+<h3 id="7recursive-procedures">7.Recursive Procedures</h3>
+<p>&#x2003;&#x2003;The stack discipline of allocation and deallocation naturally
+matches the call-return ordering of functions. So the recursive
+procedures is the same as other procedures:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = n * rfact(n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rfact:</span><br><span class="line">    pushq %rbx              # Save %rbx</span><br><span class="line">    movq %rdi, %rbx         # Store n in callee-saved register</span><br><span class="line">    movl $1, %eax           # Set return value = 1</span><br><span class="line">    cmpq $1, %rdi           # Compare n:1</span><br><span class="line">    jle .L35                # If &lt;=, goto done</span><br><span class="line">    leaq -1(%rdi), %rdi     # Compute n-1</span><br><span class="line">    call rfact              # Call rfact(n-1)</span><br><span class="line">    imulq %rbx, %rax        # Multiply result by n</span><br><span class="line">.L35: done:</span><br><span class="line">    popq %rbx               # Restore %rbx</span><br><span class="line">    ret                     # Return</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-6-Control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/15/3-6-Control/" class="post-title-link" itemprop="url">3.6.Control</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-15T16:30:22+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:35:46" itemprop="dateModified" datetime="2024-07-16T16:35:46+08:00">2024-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>5 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="36-control"><span class="math inline">\(3.6.\)</span> Control</h1>
+<h3 id="1condition-code">1.Condition Code</h3>
+<p>&#x2003;&#x2003;In addition to the integer registers, the CPU maintains <em>a set
+of single-bit condition code registers</em> <strong>describing
+attributes of the most recent arithmetic or logical operation</strong>.
+These registers can then be tested to perform conditional branches</p>
+<p><img src="/2024/07/15/3-6-Control/image.png"></p>
+<ul>
+<li><p>The <code>leaq</code> instruction <strong>doesn&apos;t alter any
+condition codes</strong>, since it is intended to be used in address
+computations.</p></li>
+<li><p>For the logical operations, such as <code>xor</code>, <strong>the
+carry and overflow flags are set to zero</strong>.</p></li>
+<li><p>For the shift operations, <strong>the carry flag is set to the
+last bit shifted out</strong>, while <strong>the overflow flag is set to
+zero</strong>.</p></li>
+<li><p>The <code>inc</code> and <code>dec</code> instructions
+<strong>set the overflow and zero flags</strong>, but they <strong>leave
+the carry flag unchanged</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;There are two instruction classes that set condition codes without
+altering any other registers:</p>
+<p><img src="/2024/07/15/3-6-Control/image-1.png"></p>
+<ul>
+<li>In <code>TEST</code>, typically, <strong>the same operand is
+repeated</strong> (e.g., <code>testq %rax,%rax</code> to see whether
+<code>%rax</code> is negative, zero, or positive), or <strong>one of the
+operands is a mask indicating which bits should be tested</strong>.</li>
+</ul>
+<h3 id="2accessing-condition-codes">2.Accessing Condition Codes</h3>
+<p><img src="/2024/07/15/3-6-Control/image-2.png"></p>
+<ul>
+<li><p>A set instruction has either one of the low-order single-byte
+register elements or a single-byte memory location as its destination,
+<strong>setting this byte to either 0 or 1</strong>.</p></li>
+<li><p>To generate a 32-bit or 64-bit result, we must also <strong>clear
+the high-order bits</strong>. For example:</p></li>
+</ul>
+<p><img src="/2024/07/15/3-6-Control/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>movzbl</code> not only set the high-order 3 bytes of
+<code>%eax</code> to 0, but also set the high-order 4 bytes of
+<code>%rax</code> to 0 due to the 32-bit <code>mov</code>
+convention.</p>
+<blockquote>
+<p>It is important to understand that assembly code does not keep track
+of the type of a program value. Instead, <strong>the different
+instructions determine the operand sizes and whether they are signed or
+unsigned</strong>:</p>
+<p><span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-6-Control/image-4.png"></p>
+<p><img src="/2024/07/15/3-6-Control/image-5.png"></p>
+</blockquote>
+<h3 id="3jump-instructions">3.Jump Instructions</h3>
+<p><img src="/2024/07/15/3-6-Control/image-6.png"></p>
+<p>&#x2003;&#x2003;There are two kinds of jump instructions:</p>
+<ul>
+<li><p><em>Direct jump</em>: It jumps to a label. The jump target is
+encoded as part of the instructions.</p></li>
+<li><p><em>Indirect jump</em>: It is written <strong>using
+<code>*</code> followed by an operand specifier</strong>.</p>
+<ul>
+<li><p><code>jmp *%rax</code> uses <strong>the value in
+<code>%rax</code></strong> as the jump target.</p></li>
+<li><p><code>jmp *(%rax)</code> reads the jump target from memory, using
+the value in <code>%rax</code> <strong>as the read
+address</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4jump-instruction-encodings">4.Jump Instruction Encodings</h3>
+<p>&#x2003;&#x2003;There are several kinds of encoding jump targets:</p>
 <ol type="1">
-<li><p>The <code>popq</code> instruction proceeds much like
-<code>pushq</code>, except that we <strong>read two copies of the stack
-pointer</strong> in the decode stage. This is clearly redundant, but we
-will see that having the stack pointer as both <code>valA</code> and
-<code>valB</code> makes the subsequent flow more similar to that of
-other instructions, enhancing the overall uniformity of the
-design.</p></li>
-<li><p>We use <strong>the unincremented value as the address for the
-memory operation</strong>.</p></li>
-<li><p>In the write-back stage, we update both <strong>the stack pointer
-register with the incremented stack pointer</strong> and
-<strong>register <code>rA</code> with the value read from
-memory</strong>.</p></li>
-</ol></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-5.png"></p>
-<h4 id="econtrol-transfer-instructions">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Control transfer instructions</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-6.png"></p>
-<ul>
-<li><p>A jump instruction proceeds through fetch and decode much like
-the previous instructions, except that <strong>it does not require a
-register specifier byte</strong>.</p></li>
-<li><p>In the execute stage, we check the condition codes and the jump
-condition to determine whether or not to take the branch, yielding a
-1-bit signal <code>Cnd</code>.</p></li>
-<li><p>We test this flag and set the PC to <code>valC</code>(the jump
-target) if the flag is 1 and to <code>valP</code>(the address of the
-following instruction) if the flag is 0.</p></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-7.png"></p>
-<h4 id="fcall-ampret-operations">&#x2003;&#x2003;<span class="math inline">\(f.\)</span><code>call</code> &amp;
-<code>ret</code> operations</h4>
-<ul>
-<li><p>Instructions <code>call</code> and <code>ret</code> is similar to
-<code>pushq</code> and <code>popq</code>, except that we push and pop
-program counter values.</p>
-<ul>
-<li><p>With instruction call, we push <code>valP</code>, <strong>the
-address of the instruction that follows the call instruction</strong>.
-During the PC update stage, we <strong>set the PC to <code>valC</code>,
-the call destination</strong>.</p></li>
-<li><p>With instruction <code>ret</code>, we assign <code>valM</code>,
-<strong>the value popped from the stack</strong>, to the PC in the PC
-update stage.</p></li>
-</ul></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-8.png"></p>
-<h3 id="2seq-hardware-structure">2.SEQ Hardware Structure</h3>
-<p>&#x2003;&#x2003;The following figure shows an abstract view of a hardware structure
-that performs the six stages:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-9.png"></p>
-<ul>
-<li><p>Information then flows along wires(shown grouped together as a
-heavy gray line), first upward and then around to the right.</p></li>
-<li><p>The feedback paths coming back down on the right-hand side
-<strong>contain the updated values to write to the register file and the
-updated program counter</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The six stages are executed as below:</p>
-<ol type="1">
-<li><p><em>Fetch</em>: <strong>Using the program counter register as an
-address</strong>, the <em>instruction memory</em> reads the bytes of an
-instruction. The PC incrementer computes <code>valP</code>.</p></li>
-<li><p><em>Decode</em>: The two register values <code>valA</code> and
-<code>valB</code> are read simultaneously from the read ports A and
-B.</p></li>
-<li><p><em>Execute</em>:</p>
-<ul>
-<li><p>The ALU do the operations for different purposes.</p></li>
-<li><p>The condition code register(CC) holds the three condition code
-bits. New values for the condition codes are computed by the ALU. The
-execution of move instruction and the <code>Cnd</code> of the jump
-instruction is computed based on the CC.</p></li>
-</ul></li>
-<li><p><em>Memory</em>: The data memory reads or writes a word of memory
-when executing a memory instruction.</p>
-<ul>
-<li>The instruction and data memories access the same memory locations,
-but for different purposes.</li>
-</ul></li>
-<li><p><em>Write Back</em>: The register file has two write ports. Port
-E is used to write values computed by the ALU, while port M is used to
-write values read from the data memory.</p></li>
-<li><p><em>PC Update</em>: The new value of the program counter is
-selected to be either <code>valP</code>, <strong>the address of the next
-instruction</strong>, <code>valC</code>, <strong>the destination address
-specified by a call or jump instruction</strong>, or <code>valM</code>,
-<strong>the return address read from memory</strong>.</p></li>
+<li><p><em>PC relative</em>. They encode <strong>the difference between
+the address of the target instruction and the address of the instruction
+immediately following the jump</strong>.</p></li>
+<li><p>A second encoding method is to <strong>give an &#xFFFD;&#xFFFD;absolute&#xFFFD;&#xFFFD;
+address</strong>, using 4 bytes to directly specify the target.</p></li>
 </ol>
-<p>&#x2003;&#x2003;The following figure gives a more detailed view of the hardware
-design:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-10.png"></p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-11.png"></p>
-<h3 id="3seq-timing">3.SEQ Timing</h3>
-<h4 id="asomebasic-idea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-basic idea</h4>
+<p>&#x2003;&#x2003;Let&apos;s look at an PC relative example:</p>
+<p><img src="/2024/07/15/3-6-Control/image-7.png"></p>
+<p>&#x2003;&#x2003;In the annotations on the right, the jump targets are indicated as
+<code>0x8</code> for the jump instruction on line 2, which is equal to
+<code>0x5+0x3</code>. This is because the encoding is calculated by
+<strong><span class="math inline">\(the\;address\;of\;next\;instruction+offset\)</span></strong>.</p>
+<p>&#x2003;&#x2003;In this case, the address of next instruction is 3+2=5, and the
+offset is <code>03</code>, as is shown in the assembly code.</p>
+<p>&#x2003;&#x2003;Even though the instructions may be relocated to different
+addresses, the encoding of the target <strong>remain unchanged</strong>.
+This is because the relative position between instructions remains
+unchanged.</p>
+<h3 id="5conditional-move">5.Conditional Move</h3>
+<p>&#x2003;&#x2003;The conventional way to implement conditional operations is through
+a <em>conditional transfer of control</em>, where the program follows
+one execution path when a condition holds and another when it does
+not:</p>
+<p><img src="/2024/07/15/3-6-Control/image-8.png"></p>
+<p>&#x2003;&#x2003;An alternate strategy is through <em>condition transfer of
+data</em>. This approach <strong>computes both outcomes of a conditional
+operation</strong> and then <strong>selects one based on whether or not
+the condition holds</strong>:</p>
+<p><img src="/2024/07/15/3-6-Control/image-9.png"></p>
+<p>&#x2003;&#x2003;This strategy makes sense only in restricted cases, but it can then
+be implemented by a simple conditional move instruction that is better
+matched to the performance characteristics of modern processors due to
+the pipelining.</p>
+<blockquote>
+<p>However, due to the preprocess, If <strong>one of those two
+expressions could possibly generate an error condition or a side
+effect</strong>, this could lead to invalid behavior.</p>
+</blockquote>
+<p>&#x2003;&#x2003;The conditional move instructions are as below:</p>
+<p><img src="/2024/07/15/3-6-Control/image-10.png"></p>
 <ul>
-<li><p>Combinational logic does not require any sequencing or
-control&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;<strong>values propagate through a network of logic gates
-whenever the inputs change</strong>.</p></li>
-<li><p>We assume that reading from a random access memory operates much
-like combinational logic, with the output word generated based on the
-address input.</p></li>
-<li><p>The program counter is loaded with a new instruction address
-every clock cycle.</p></li>
-<li><p>The condition code register is loaded only <strong>when an
-integer operation instruction is executed</strong>.</p></li>
-<li><p>The data memory is written only when an <code>rmmovq</code>,
-<code>pushq</code>, or <code>call</code> instruction is
-executed.</p></li>
-<li><p>The two write ports of the register file allow two program
-registers to be updated on every cycle, but we can use the special
-register ID 0xF as a port address to indicate that no write should be
-performed for this port.</p></li>
-<li><p><em>Principle</em>: The processor <strong>never needs to read
-back the state updated by an instruction</strong> in order to complete
-the processing of this instruction.</p></li>
+<li><p>The instructions has two operands: <strong>a source register or
+memory location S</strong>, and <strong>a destination register
+R</strong>.</p></li>
+<li><p>The assembler can infer the operand length of a conditional move
+instruction, so it doesn&apos;t need suffix.</p></li>
 </ul>
-<h4 id="bprogram-example">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Program example</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-12.png"></p>
-<p>&#x2003;&#x2003;Every time the clock transitions from low to high, the processor
-begins executing a new instruction.</p>
-<h3 id="4seq-stage-implementation">4.SEQ Stage Implementation</h3>
-<p>&#x2003;&#x2003;The used constant are shown below:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-13.png"></p>
-<h4 id="afetchstage">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Fetch
-stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-14.png"></p>
+<h3 id="6loops">6.Loops</h3>
+<h4 id="ado-while">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>do-while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    body-statement</span><br><span class="line">    <span class="title function_">while</span> <span class="params">(test-expr)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<h4 id="bwhile">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The second translation method is called <em>guarded do</em>, which
+uses a <code>do-while</code> style loop:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line">if (!t)</span><br><span class="line">    goto done;</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;By this way, we only need to check the condition once before we
+enter the loop. This reduce the possibility of branch prediction
+failure.</p>
+<h4 id="cfor">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>for</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is equal to the following <code>while</code> statements:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr) {</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;And there are also two forms of <code>for</code> translation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;and:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (!t)</span><br><span class="line">        goto done;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;However, the simple translation from <code>for</code> to
+<code>while</code> will be a little tricky. Take the
+<code>continue</code> statement as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;If we simply use <code>continue</code>, this will lead to an
+infinite loop:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/* This will cause an infinite loop */</span></span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">    i ++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The general solution is to replace the continue statement with a
+goto statement that skips the rest of the loop body and goes directly to
+the update portion:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">goto</span> update;</span><br><span class="line">    sum += i;</span><br><span class="line"></span><br><span class="line">update:</span><br><span class="line">    i++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="7switch-statements">7.Switch Statements</h3>
+<p>&#x2003;&#x2003;The ordinary <code>switch</code> statements looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    {</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can rewrite this using a <em>jump table</em>. A jump table is an
+array where entry i is the address of a code segment the program should
+take when the switch index equals i.</p>
+<p>&#x2003;&#x2003;With jump table, the previous program will looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = {</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D};</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>The instruction memory hardware unit reads 10 bytes from memory
-at a time, <strong>using the PC as the address of the first byte(byte
-0)</strong>. This byte is interpreted as the instruction byte and is
-<strong>split(by the unit labeled &quot;Split&quot;) into two 4-bit
-quantities</strong>.</p></li>
-<li><p>The control logic blocks labeled &quot;icode&quot; and &quot;ifun&quot; then compute
-the instruction and function codes as equaling either <strong>the values
-read from memory</strong> or the values corresponding to a nop
-instruction(as indicated by the signal
-<code>imem_error</code>).</p></li>
+<li><p>The <code>switch</code> locations are defined by <strong>the
+labels prefixed by <code>&amp;&amp;</code></strong>.
+<code>&amp;&amp;</code>is used to create a pointer for a code
+location.</p></li>
+<li><p>To simplify, the case value is subtracted by 100.</p></li>
 </ul>
-<p>&#x2003;&#x2003;Based on the value of <code>icode</code>, we can compute three
-1-bit signals:</p>
-<ol type="1">
-<li><p><code>instr_valid</code>: This signal is used to <strong>detect
-an illegal instruction</strong>.</p></li>
-<li><p><code>need_regids</code>: Does this instruction <strong>include a
-register specifier byte</strong>?</p></li>
-<li><p><code>need_valC</code>: Does this instruction <strong>include a
-constant word</strong>?</p></li>
-</ol>
-<p>&#x2003;&#x2003;The signals <code>instr_valid</code> and
-<code>imem_error</code>(generated when the instruction address is out of
-bounds) are used to <strong>generate the status code in the memory
-stage</strong>.</p>
-<p>&#x2003;&#x2003;The HCL description for <code>need_regids</code> and
-<code>need_valC</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bool need_regids =</span><br><span class="line">    icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ,</span><br><span class="line">               IIRMOVQ, IRMMOVQ, IMRMOVQ };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool need_valC =</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In the assembly code, we use this statement to access the jump
+table:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp *.L4(, %rsi, 8)  #Goto *jg[index]</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>The remaining 9 bytes read from the instruction memory encode
-some combination of the register specifier byte and the constant
-word.</p>
+<li><p>The base address is <code>L4</code>, which is the base address of
+the jump table array.</p></li>
+<li><p>The <code>(, %rsi, 8)</code> is the index, judging which case to
+switch to.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In the assembly code, the jump table is indicated by the following
+declarations:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.section.rodata</span><br><span class="line">    .align 8  # Align address to multiple of 8</span><br><span class="line">    .L4 :</span><br><span class="line">    .quad.L3  # Case 100 : loc_A</span><br><span class="line">    .quad.L8  # Case 101 : loc_def</span><br><span class="line">    .quad.L5  # Case 102 : loc_B</span><br><span class="line">    .quad.L6  # Case 103 : loc_C</span><br><span class="line">    .quad.L7  # Case 104 : loc_D</span><br><span class="line">    .quad.L8  # Case 105 : loc_def</span><br><span class="line">    .quad.L7  # Case 106 : loc_D</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Byte 1 <strong>is split into register specifiers <code>rA</code> and
-<code>rB</code> when the computed signal need_regids is 1</strong>. If
-<code>need_regids</code> is 0, both register specifiers are set to
-0xF(<code>RNONE</code>).</li>
+<li><p>The <code>rodata</code> refers to <em>read-only
+data</em>.</p></li>
+<li><p><code>L4</code> marks the start of the allocation.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In assembly code, the number of <code>case</code> is judged by
+<strong>the offset of the label in the jump table</strong>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-5-Arithmetic-and-Logical-Operations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/" class="post-title-link" itemprop="url">3.5.Arithmetic and Logical Operations</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 09:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;17:11:58" itemprop="dateCreated datePublished" datetime="2024-07-15T09:30:22+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>503</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="35arithmetic-and-logicaloperations"><span class="math inline">\(3.5.\)</span>Arithmetic and Logical
+Operations</h1>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image.png"></p>
+<h3 id="1load-effective-address">1.Load Effective Address</h3>
+<ul>
+<li>The <code>leaq</code> instruction <strong>doesn&apos;t reference memory
+at all</strong>. Instead of reading from the designated location, it
+<strong>copies the effective address to the destination</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;The instruction can be used to <strong>generate pointers for later
+memory reference</strong>. For example, if register <code>%rdx</code>
+represents <span class="math inline">\(x\)</span>, then
+<code>leaq 7(%rdx, %rdx, 4), %rdx</code> will set <code>%rdx</code> to
+<span class="math inline">\(5x+7\)</span>.</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-1.png"></p>
+<h3 id="2unary-amp-binary-operations">2.Unary &amp; Binary Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-2.png"></p>
+<p>&#x2003;&#x2003;Operations in the first group are unary operations:</p>
+<ul>
+<li><p>The single operand serves as both source and
+destination.</p></li>
+<li><p>This operand can be either a register or a memory
+location.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The second group consists of binary operations.</p>
+<ul>
+<li>The second operand is used as both a source and a destination, the
+first operand is another operand.</li>
+</ul>
+<blockquote>
+<p>This syntax is reminiscent of the C assignment operators, such as
+<code>x -= y</code>.</p>
+</blockquote>
+<ul>
+<li>The first operand can be either an immediate value, a register, or a
+memory location. The second can be either a register or a memory
+location.</li>
+</ul>
+<blockquote>
+<p>The operation: <code>xor %rcx %rcx</code> is simply to set</p>
+</blockquote>
+<h3 id="3shift-operations">3.Shift operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-3.png"></p>
+<ul>
+<li><p>The shift amount is either <strong>an immediate value</strong> or
+<strong>a single-byte register <code>%cl</code></strong>.</p></li>
+<li><p>In x86-64, if the data values are <span class="math inline">\(w\)</span> bits, then its shift amount will be
+<strong>the low-order <span class="math inline">\(m\)</span> bits of
+<code>%cl</code>, where <span class="math inline">\(2^m=w\)</span></strong>. For example, when
+<code>%cl</code> has value 0xFF, then <code>salb</code> would shift by
+7, while <code>salw</code> would shift by 15.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Convert 64-bits into
+32-bits)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-4.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-5.png"></p>
+<ul>
+<li>The <code>movl %esi %ecx</code> is worth noting. Because we only
+need 4 bytes of data, we can use <code>movl</code> operation to set the
+low-order 32 bits of <code>rcx</code> to <code>%esi</code> while
+high-order 32 bits to 0. Since we only need the low-order 4 bytes, doing
+this implies that the high-order 4 bytes is meaningless, which makes
+code safer, more accurate and more readable.</li>
+</ul>
+<h3 id="4special-arithmeticoperations">4.Special Arithmetic
+Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-6.png"></p>
+<h4 id="aone-operand-multiply">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&quot;One-operand&quot; multiply</h4>
+<p>&#x2003;&#x2003;The <code>mulq</code>(unsigned) and <code>imulq</code>(signed) can
+also act as &quot;one-operand&quot; instructions to <strong>compute the full
+128-bits product of 2 64-bits values</strong>.</p>
+<ul>
+<li><p><strong>One of the multiplicand is value in
+<code>%rax</code></strong>, another is the operand.</p></li>
+<li><p>The product is stored in <code>%rdx</code> (high-order 64 bits)
+and <code>%rax</code> (low-order 64 bits).</p></li>
+</ul>
+<p>&#x2003;&#x2003;We will need to take two steps to store an oct word:</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-7.png"></p>
+<h4 id="bdivision">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Division</h4>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-8.png"></p>
+<ul>
+<li><p>For a division, <code>%rdx</code> stores the remainder and
+<code>%rax</code> stores the quotient.</p></li>
+<li><p>For most applications of 64-bit addition, the dividend is given
+as a 64-bit value. The bits of <code>%rdx</code> should then be set to
+either <strong>all zeros (unsigned arithmetic) or the sign bit of %rax
+(signed arithmetic)</strong>.</p>
+<ul>
+<li><p>The former can be implemented by <code>movl $0 %reg</code>, this
+can set upper 8 bytes of diviend to 0.</p></li>
+<li><p>The latter can be implemented by <code>cqto</code>. It takes no
+operands, implicitly reads the sign bit from %rax and copies it across
+all of %rdx.</p></li>
 </ul></li>
-<li><p>The PC incrementer hardware unit generates the signal
-<code>valP</code>, based on the current value of the PC, and the two
-signals <code>need_regids</code> and <code>need_valC</code>. For PC
-value <span class="math inline">\(p\)</span>, <code>need_regids</code>
-value <span class="math inline">\(r\)</span>, and <code>need_valC</code>
-value <span class="math inline">\(i\)</span>, the incrementer generates
-the value <span class="math inline">\(p+1+r+8i\)</span>.</p></li>
 </ul>
-<h4 id="bdecode-and-write-back-stagess">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Decode and write-back stagess</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-15.png"></p>
-<ul>
-<li><p>The register file has four ports. It supports up to two
-simultaneous reads(on ports A and B) and two simultaneous writes(on
-ports E and M).</p>
-<ul>
-<li><p>Each port has <strong>both an address connection and a data
-connection</strong>, where the address connection is a register ID, and
-the data connection is a set of 64 wires serving as either an output
-word (for a read port) or an input word (for a write port) of the
-register file.</p></li>
-<li><p>The two read ports have address inputs <code>srcA</code> and
-<code>srcB</code>, while the two write ports have address inputs
-<code>dstE</code> and <code>dstM</code>. The 0xF(<code>RNONE</code>) on
-an address port indicates that no register should be accessed.</p></li>
-</ul></li>
-<li><p>The four blocks at the bottom generate <strong>the four different
-register IDs</strong> for the register file based on <code>icode</code>,
-<code>rA</code>, <code>rB</code> and <code>Cnd</code>.</p>
-<ul>
-<li><p><code>srcA</code> indicates which register should be read to
-generate <code>valA</code>, so as <code>srcB</code>.</p></li>
-<li><p><code>dstE</code> indicates <strong>the destination register for
-write port E</strong>, where the computed value <code>valE</code> is
-stored, so as <code>dstM</code>.</p></li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The HCL description of <code>srcA</code> and <code>srcB</code> are
-as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcA = [</span><br><span class="line">    icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;</span><br><span class="line">    icode in { IPOPQ, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcB = [</span><br><span class="line">    icode in { IOPQ, IRMMOVQ, IMRMOVQ } : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The HCL description of <code>dstM</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word dstM = [</span><br><span class="line">    icode in { IMRMOVQ, IPOPQ } : rA;</span><br><span class="line">    1 : RNONE; # Don&#xFFFD;&#xFFFD;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="cexecute-stage">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Execute stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-16.png"></p>
-<ul>
-<li><p>The stage includes ALU, which performs operations based on the
-setting of <code>alufun</code> signal. The ALU output becomes the signal
-<code>valE</code>.</p></li>
-<li><p>The value of <code>aluA</code> can be <code>valA</code>,
-<code>valC</code>, or either ?8 or +8, depending on the instruction
-type, so as <code>aluB</code></p></li>
-</ul>
-<p>&#x2003;&#x2003;They can be described by the following HCL code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word aluA = [</span><br><span class="line">    icode in { IRRMOVQ, IOPQ } : valA;</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;</span><br><span class="line">    icode in { ICALL, IPUSHQ } : -8;</span><br><span class="line">    icode in { IRET, IPOPQ } : 8;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word aluB = [</span><br><span class="line">    icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,</span><br><span class="line">    IPUSHQ, IRET, IPOPQ } : valB;</span><br><span class="line">    icode in { IRRMOVQ, IIRMOVQ } : 0;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The operations in ALU is <strong>mostly an adder</strong>. However,
-we want it to use the operation encoded in the <code>ifun</code> field
-of the instruction. So we describe the ALU control as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word alufun = [</span><br><span class="line">    icode == IOPQ : ifun;</span><br><span class="line">    1 : ALUADD;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>We only want to set the condition codes when an <code>OPq</code>
-instruction is executed. The logic is described in HCL as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool set_cc = icode in { IOPQ };</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The hardware unit labeled &quot;cond&quot; uses <strong>a combination of
-the condition codes and the function code</strong> to <strong>determine
-whether a conditional branch or data transfer should take
-place</strong>.</p>
-<ul>
-<li>It generates the <code>Cnd</code> signal used both for the setting
-of <code>dstE</code> with conditional moves and in the next PC logic for
-conditional branches.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;By using the <code>Cnd</code> signal, we can describe
-<code>dstE</code> as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word dstE = [</span><br><span class="line">    icode in { IRRMOVQ } &amp;&amp; Cnd : rB;</span><br><span class="line">    icode in { IIRMOVQ, IOPQ} : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="dmemorystage">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Memory
-stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-17.png"></p>
-<ul>
-<li><p>Two control blocks generate the values for the memory address and
-the memory input data(for write operations).</p></li>
-<li><p>Two other blocks generate the control signals indicating
-<strong>whether to perform a read or a write
-operation</strong>.</p></li>
-<li><p>When a read operation is performed, <strong>the data memory
-generates the value <code>valM</code></strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The HCL description of <code>mem_addr</code> and
-<code>mem_data</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word mem_addr = [</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;</span><br><span class="line">    icode in { IPOPQ, IRET } : valA;</span><br><span class="line">    # Other instructions don&#xFFFD;&#xFFFD;t need address</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word mem_data = [</span><br><span class="line">    # Value from register</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ } : valA;</span><br><span class="line">    # Return PC</span><br><span class="line">    icode == ICALL : valP;</span><br><span class="line">    # Default: Don&#xFFFD;&#xFFFD;t write anything</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>We set the signal <code>mem_read</code> only for instructions that
-read data from memory, so as <code>mem_write</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_read = icode in { IMRMOVQ, IPOPQ, IRET };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_write = icode in { IRMMOVQ, IPUSHQ, ICALL };</span><br></pre></td></tr></table></figure>
-<ul>
-<li>A final function for the memory stage is to compute the status code
-<code>Stat</code>. It is generated from <code>icode</code>,
-<code>imem_error</code>, <code>instr_valid</code> and
-<code>dmem_error</code>. It&apos;s described in HCL as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## Determine instruction status</span><br><span class="line">word Stat = [</span><br><span class="line">    imem_error || dmem_error : SADR;</span><br><span class="line">    !instr_valid: SINS;</span><br><span class="line">    icode == IHALT : SHLT;</span><br><span class="line">    1 : SAOK;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="epcupdate-stage">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>PC
-update stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-18.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">word new_pc = [</span><br><span class="line">    # Call. Use instruction constant</span><br><span class="line">    icode == ICALL : valC;</span><br><span class="line">    # Taken branch. Use instruction constant</span><br><span class="line">    icode == IJXX &amp;&amp; Cnd : valC;</span><br><span class="line">    # Completion of RET instruction. Use value from stack</span><br><span class="line">    icode == IRET : valM;</span><br><span class="line">    # Default: Use incremented PC</span><br><span class="line">    1 : valP;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Signed and Unsigned)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-9.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-10.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-11.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-12.png"></p>
 
       
     </div>
@@ -685,7 +1319,7 @@ update stage</h4>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

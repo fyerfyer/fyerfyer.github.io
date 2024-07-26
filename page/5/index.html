@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/19/3-11-Floating-Point-Code/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/19/3-11-Floating-Point-Code/" class="post-title-link" itemprop="url">3.11.Floating-Point Code</a>
+          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-19 21:31:22" itemprop="dateCreated datePublished" datetime="2024-07-19T21:31:22+08:00">2024-07-19</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-20 18:35:52" itemprop="dateModified" datetime="2024-07-20T18:35:52+08:00">2024-07-20</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.2k</span>
+      <span>527</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,164 +272,908 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="311floating-point-code"><span class="math inline">\(3.11.\)</span>Floating-Point Code</h1>
-<h3 id="1floating-pointmovement-and-conversion-operations">1.Floating-Point
-Movement and Conversion Operations</h3>
-<h4 id="abasic-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic instructions</h4>
+          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
+<h3 id="1basic-devices">1.Basic devices</h3>
 <ul>
-<li><p>For floating-point, the data are held either in memory (indicated
-in the table as <span class="math inline">\(M_{32}\)</span> and <span class="math inline">\(M_{64}\)</span>) or in XMM registers (shown in the
-table as <code>X</code>).</p>
+<li><p><em>Registers</em>: It contains:</p>
 <ul>
-<li>Each YMM register is 32 bytes long. When operating on scalar data,
-these registers only hold floating-point data, and <strong>only the
-low-order 32 bits (for float) or 64 bits (for double) are
-used</strong>.</li>
+<li><p>Two data words from the register file, and <strong>write one data
+word into the register file</strong> for each instruction.</p></li>
+<li><p>An input. It <strong>specifies the register number to be
+read</strong>.</p></li>
+<li><p>An output. It <strong>carries the value that has been read from
+the register</strong>.</p></li>
+<li><p>To write a data word, we need two more inputs: one to
+<strong>specify the register number to be written</strong> and one to
+<strong>supply the data to be written into the
+register</strong>.</p></li>
 </ul></li>
 </ul>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
+<ul>
+<li><em>ALU</em></li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<ul>
+<li><em>Immediate generation unit</em>: In operations like
+<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
+written in 12-bit offset in the instruction. So we need to
+<strong>sign-extend the number to a 64-bit signed value</strong>. The
+Imm-Gen does the job:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
+<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
+instruction execution</h3>
+<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
+parts:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
 <hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-1.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
+<h3 id="3implementation-ofdifferent-statement">3.Implementation of
+different statement</h3>
+<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
+instruction</h4>
+<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
+<code>DataA</code> and <code>DataB</code>, and calculate the result by
+ALU.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
+<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
+rather than <code>DataB</code>. The source of Imm-Gen is from
+<code>IMEM</code>, from which we can get the instruction, and
+<code>inst[31:20]</code> is the immediate we want:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
+<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
+<code>save</code> instruction</h4>
+<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
+read or write data.</p>
 <ul>
-<li>The &apos;a&apos; stands for &apos;aligned&apos;.</li>
+<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
+<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
+address. Else, it writes the information into the address:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
+<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
+<p>&#x2003;&#x2003;The basic form of branch instruction is
+<code>beq x1 x2 offset</code>. To implement this instruction, we must
+compute the branch target address by <strong>adding the sign- extended
+offset field of the instruction to the PC</strong>. There are two
+details in the definition of branch instructions to which we must pay
+attention:</p>
+<ul>
+<li><p>The instruction set architecture specifies that <strong>the base
+for the branch address calculation is the address of the branch
+instruction</strong>.</p></li>
+<li><p>The architecture also states that <strong>the offset field is
+shifted left 1 bit so that it is a half word offset</strong>; this shift
+<strong>increases the effective range of the offset field by a factor of
+2</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
+the new PC, and we say the branch is <strong>taken</strong>. Else, we
+say the branch is <strong>not taken</strong>.</p>
+<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
+this struction:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
+<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
+signal</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
+<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
+<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
+<code>jalr</code> instructions</h4>
+<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
+<ol type="1">
+<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
+<ul>
+<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
+2 bytes!</strong></li>
+</ul></li>
+<li><p>Set <code>PC=PC+offset</code></p>
+<ul>
+<li>Since the offset is calculated by ALU, we <strong>connect the output
+of ALU with input of PC</strong>.</li>
+</ul></li>
+</ol>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
+<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
+<ol type="1">
+<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
+<code>DataD</code>)</li>
+<li>Set <code>PC=PC+offset</code></li>
+</ol>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
+<h3 id="4datapath-control">4.Datapath control</h3>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-3-Synchronous-Digital-Systems/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/05/3-3-Synchronous-Digital-Systems/" class="post-title-link" itemprop="url">3.3.Synchronous Digital Systems</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:29:11" itemprop="dateCreated datePublished" datetime="2024-06-05T08:29:11+08:00">2024-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:48:39" itemprop="dateModified" datetime="2024-06-06T17:48:39+08:00">2024-06-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>419</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</h1>
+<h3 id="1clock-concepts">1.Clock concepts</h3>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
+<h3 id="2d-flip-flops">2.D Flip-flops</h3>
+<h4 id="a-dffconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span> DFF
+concept</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
+<blockquote>
+<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
+<span class="math inline">\(D\)</span> is the data input.</p>
+</blockquote>
+<blockquote>
+<p>DFF only responds to the input signal on the rising edge of the clock
+signal, it captures and latches the value of data input. <strong>It will
+hold the value until the next rising edge of the clock
+signal</strong>.</p>
+</blockquote>
+<ul>
+<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
+take for the input to propagate to the output after the clock
+trigger</strong>.</p></li>
+<li><p><em>Setup time</em> is the amount of time that the input needs to
+be stable BEFORE the clock trigger</p></li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
+<ul>
+<li><em>Hold time</em> is the amount of time that the input needs to be
+stable AFTER the clock trigger</li>
+</ul>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
+<h3 id="3register">3.Register</h3>
+<h4 id="asomeconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
+concept</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
+<blockquote>
+<p>Why this? Because the max hold time is to <strong>ensure that data
+input D remains stable for a period of time after the rising edge of the
+clock arrives</strong>. And the period of time equals to the delay of
+<span class="math inline">\(A\)</span> plus the combinational delay.</p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
+<blockquote>
+<p>Why this? Because the min clock cycle is to <strong>ensure that the
+signal is properly transmitted during the clock cycle and captured by
+the next register</strong>. So we must take the longest time into
+consideration.</p>
+</blockquote>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
+<h3 id="4transitor">4.Transitor</h3>
+<h4 id="ametal-oxide-semiconductor-field-effecttransistormosfet">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
+Transistor(MOSFET)</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
+<p>&#x2003;&#x2003;To know how the result comes from, we can <strong>view the value of
+<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
+an example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
+<ul>
+<li><p>First we need to know <strong>whether the switch is
+closed</strong>. <strong>If the switch is closed, then the state of
+<span class="math inline">\(D\)</span> is decided by the outside
+circuits</strong>.</p></li>
+<li><p>When the switch is on, we then judge <strong>if the voltage of
+<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it&apos;s true, then the FET is
+conducting, and vice versa.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can&apos;t get the electronic, thus it&apos;s
+0.</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
+<h4 id="bvddand-ground">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Vdd
+and Ground</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
+<h4 id="cbuilding-an-inverter">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Building an Inverter</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
+<h4 id="dbuilding-other-gates">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Building other gates</h4>
+<p>&#x2003;&#x2003;To build a CMOS, we:</p>
+<ol type="1">
+<li><p>Implement the pull-up network and pull-down network separately to
+fit the truth table.</p>
+<ul>
+<li>It&apos;s OK to get the opposite of truth table. <strong>We can simply
+convert it through an invertor</strong>.</li>
+</ul></li>
+<li><p>Connect the pull-up with Vdd, and the pull-down with
+Ground.</p></li>
+</ol>
+<p>&#x2003;&#x2003;We take the <code>NAND</code> gate for example:</p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
+<h4 id="ethe-use-of-demorgans-law">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>The use of DeMorgan&apos;s Law</h4>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
+<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/04/3-2-Introduction-to-Digital-System/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/04/3-2-Introduction-to-Digital-System/" class="post-title-link" itemprop="url">3.2.Introduction to Digital System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 23:03:11" itemprop="dateCreated datePublished" datetime="2024-06-04T23:03:11+08:00">2024-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:19:08" itemprop="dateModified" datetime="2024-06-05T08:19:08+08:00">2024-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>208</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="32introduction-to-digital-system"><span class="math inline">\(3.2.\)</span>Introduction to Digital System</h1>
+<h3 id="1logic-gate-representation">1.Logic gate representation</h3>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-1.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-2.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-3.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-4.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-5.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-6.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-7.png"></p>
+<h3 id="2using-booleanalgebra-to-simplify-circuits">2.Using boolean
+algebra to simplify circuits</h3>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
+<h3 id="3build-an-adder">3.Build an Adder</h3>
+<h4 id="ahalfadder">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Half
+adder</h4>
+<p>&#x2003;&#x2003;A half adder&apos;s output consists of:</p>
+<ul>
+<li>The <em>sum</em>. It can be computed by <code>xor</code>
+method.</li>
+<li>The <em>carry</em>. It can be computed by <code>and</code>
+method.</li>
+</ul>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
+<h4 id="bfulladder">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Full
+adder</h4>
+<p>&#x2003;&#x2003;To implement full adder, we just need to add <code>A</code>,
+<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
+<p>&#x2003;&#x2003;The output of a full adder is the same as the half adder. Then how
+can we calculate each of them?</p>
+<ul>
+<li><p>For <span class="math inline">\(C_0\)</span>, it&apos;s decided by the
+sum of <code>A</code> and <code>B</code> &amp; the current carry in the
+position. There are two cases that make the carry 1:</p>
+<ol type="1">
+<li><code>A + B</code> is 1, and current carry is 1.</li>
+<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
+</ol></li>
+</ul>
+<p>&#x2003;&#x2003;So we can compute <span class="math inline">\(C_0\)</span> by this
+expression:</p>
+<p><span class="math display">\[
+C_0 = C_i(A+B) + AB
+\]</span></p>
+<ul>
+<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
+<code>B</code> and current carry is 1:</li>
+</ul>
+<p><span class="math display">\[
+S = A \; xor B \; xor C_i
+\]</span></p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
+<h4 id="c4-bit-adder">&#x2003;&#x2003;{{c.}}4-bit Adder</h4>
+<p>&#x2003;&#x2003;To make a multi-bit Adder, we simply <strong>connect full adder
+together</strong>:</p>
+<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/03/3-1-Translating-Starting-a-Program/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/03/3-1-Translating-Starting-a-Program/" class="post-title-link" itemprop="url">3.1.Translating &amp; Starting a Program</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 22:15:12" itemprop="dateCreated datePublished" datetime="2024-06-03T22:15:12+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 08:19:21" itemprop="dateModified" datetime="2024-06-04T08:19:21+08:00">2024-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>4 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="31translating-amp-starting-aprogram"><span class="math inline">\(3.1.\)</span>Translating &amp; Starting a
+Program</h1>
+<h3 id="1a-complex-example">1.A complex example</h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image.png"></p>
+<p>&#x2003;&#x2003;When we are going to translate the program, we should follow the
+following process:</p>
+<ol type="1">
+<li><p>Need to decide on what variables go in what registers</p></li>
+<li><p>Need to determine which registers we need to save on function
+entry (the function preamble/prolog)</p>
+<ol type="1">
+<li>Decrement the stack</li>
+<li>Save all the callee saved registers we will use</li>
+<li>Save ra or any other caller saved registers we need to live across
+calls to other functions</li>
+</ol></li>
+<li><p>Translate the code itself</p></li>
+<li><p>Restore all the registers necessary (the function
+postamble/epilog)</p>
+<ol type="1">
+<li>Restore the callee saved registers we used</li>
+<li>Restore <code>ra</code></li>
+<li>Increment the stack</li>
+</ol></li>
+<li><p>Return using <code>jr</code></p></li>
+</ol>
+<p>&#x2003;&#x2003;There are some points in the process:</p>
+<ul>
+<li>Return <code>null</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">li a0 0</span><br><span class="line">j postamble</span><br></pre></td></tr></table></figure>
+<ul>
+<li>When calling function, we can <strong>use the <code>call</code>
+pseudo-instruction for <code>jal ra (location)</code></strong>. For
+example, <code>call malloc</code>.</li>
+</ul>
+<h3 id="2interpretation">2.Interpretation</h3>
+<ul>
+<li><p>Interpreter <strong>directly executes a program in the source
+language</strong>.</p></li>
+<li><p>Since interpreter <strong>is closer to high-level</strong>, it
+can give better error messages during interpreting.</p></li>
+<li><p>Because the interpreter executes intermediate representations
+rather than direct machine code, <strong>the same source code can be run
+from one machine to another without modification of the source
+code</strong>.</p></li>
+</ul>
+<h3 id="3calling-chain">3.Calling chain</h3>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-1.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-2.png"></p>
+<h3 id="4compilation">4.Compilation</h3>
+<h4 id="aconcepts">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts</h4>
+<p>&#x2003;&#x2003;The compiler transforms the C program into <strong>an assembly
+language program</strong>, a symbolic form of what the machine
+understands. High-level language programs take many fewer lines of code
+than assembly language, so programmer productivity is much higher.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-3.png"></p>
+<h4 id="bassembler">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Assembler</h4>
+<ul>
+<li><p>The assembler <strong>converts the assembly language instruction
+into machine language</strong>. It turns the assembly language program
+into an <strong>object file, which is a combination of machine language
+instructions, data, and information needed to place instructions
+properly in memory.</strong></p></li>
+<li><p>Assembler will also <strong>accept numbers in a variety of
+bases</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;To produce the binary version of each instruction in the assembly
+language program, the assembler must determine the address corresponding
+to all labels. This is done by a <strong>symbol table</strong>.</p>
+<ul>
+<li><p>The object file for UNIX mainly consists of:</p>
+<ul>
+<li><p>The object file header describes <strong>the size and position of
+the other pieces of the object file</strong>.</p></li>
+<li><p>The text segment contains <strong>the machine language
+code</strong>.</p></li>
+<li><p>The static data segment contains <strong>data allocated for the
+life of the program</strong>.</p></li>
+<li><p>The relocation information identifies instructions and data words
+that <strong>depend on absolute addresses when the program is loaded
+into memory</strong>.</p></li>
+<li><p>The symbol table contains <strong>the remaining labels that are
+not defined</strong>, such as external references.</p>
+<ul>
+<li>Use <strong>dummy &quot;placeholders&quot;</strong> for unresolved absolute
+and external references.</li>
+</ul></li>
+<li><p>The debugging information contains <strong>a concise description
+of how the modules were compiled</strong>.</p></li>
+</ul></li>
 </ul>
 <hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-2.png"></p>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-3.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-4.png"></p>
+<blockquote>
+<p><span class="math inline">\(p.s.\)</span> The <code>auipc</code>
+instruction <strong>adds an immediate number to the current PC
+value</strong>. This means that the generated address <strong>is
+relative to the current instruction</strong>. It add an offset to the PC
+(upper 20 bits to the left of the instant number by 12 bits), and use
+<code>addi</code> to load the lower 12 bits.</p>
+<p><code>lui</code> instructions are used to generate absolute
+addresses, which are fixed addresses of data in memory. This approach
+works for memory addresses that do not move. It loads an instant number
+to the upper 20 bits of the register.</p>
+</blockquote>
+<h4 id="clinker">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Linker</h4>
+<p>&#x2003;&#x2003;Linker is used for <strong>compiling and assembling each procedure
+independently</strong>, so that a change to one line would require
+resolving only one procedure. It&apos;s a system that <strong>combines
+independently assembled machine language programs</strong> and
+<strong>resolves all undefined labels into an executable
+file</strong>.</p>
+<p>&#x2003;&#x2003;There are three steps for the linker:</p>
+<ol type="1">
+<li>Place code and data modules symbolically in memory.</li>
+<li>Determine the addresses of data and instruction labels.</li>
+<li>Patch both the internal and external references.</li>
+</ol>
+<p>&#x2003;&#x2003;The linker uses the relocation information and symbol table in each
+object module to <strong>resolve all undefined labels</strong>.</p>
 <ul>
-<li>When converting floating-point values to integers, the two-operand
-floating-point conversion operations <strong>perform truncation,
-rounding values toward zero</strong>.</li>
+<li>For each entry in the relocation table, it replaces it with
+<strong>the actual address for the symbol table of the item</strong> we
+are linking to.</li>
 </ul>
-<p>&#x2003;&#x2003;For three-operand floating-point conversion operations, we can
-<strong>ignore the second operand, since its value only affects the
-upper bytes of the result</strong>. In common use, both the second
-source and the destination oprands are identical:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsi2sdq %rax, %xmm1, %xmm1</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This instruction reads a long integer from register
-<code>%rax</code>, converts it to data type double, and <strong>stores
-the result in the lower bytes of XMM register
-<code>%xmm1</code></strong>.</p>
-<h4 id="bconversion-between-floating-point">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Conversion between floating-point</h4>
-<p>&#x2003;&#x2003;To convert between two different floating-point format, suppose the
-low-order 4 bytes of <code>%xmm0</code> hold a single-precision value;
-then it would seem straightforward to convert this to a double-precision
-value and store the result in the lower 8 bytes of register
-<code>%xmm0</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtss2sd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;However, GCC will generate the following code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from single to double precision</span><br><span class="line">vunpcklps %xmm0, %xmm0, %xmm0   # Replicate first vector element</span><br><span class="line">vcvtps2pd %xmm0, %xmm0          # Convert two vector elements to double</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;If all external references are resolved, the linker next
+<strong>determines the memory locations each module will
+occupy</strong>. Since the files were assembled in isolation,
+<strong>the assembler couldn&apos;t know where a module&apos;s instructions and
+data would be placed relative to other modules</strong>. So when the
+linker places a module in memory, all <strong>absolute references, that
+is, memory addresses that are not relative to a register</strong>, must
+<strong>be relocated to reflect its true location</strong>.</p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-7.png"></p>
+<h4 id="dtype-of-addressing">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Type of addressing</h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-5.png"></p>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-6.png"></p>
+<h4 id="eloader">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Loader</h4>
+<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-8.png"></p>
+<h3 id="5dynamically-linkedlibraries">5.Dynamically linked
+libraries</h3>
+<p>&#x2003;&#x2003;In tradition, before the program is run, the library has been
+linked. Although this static approach is the fastest way to call library
+routines,it has a few disadvantages:</p>
+<ol type="1">
+<li><p>The library routines become <strong>part of the executable
+code</strong>. If a new version of the library is released, <strong>the
+statically linked program keeps using the old version</strong>.</p></li>
+<li><p>It loads <strong>all routines in the library that are called
+anywhere in the executable</strong>, even if those calls are not
+executed.</p></li>
+</ol>
+<p>&#x2003;&#x2003;A replacement of it is called <em>dynamically linked
+libraries</em>, where the library routines are not linked and loaded
+<strong>until the program is run</strong>.</p>
+<ol type="1">
+<li><p>The first time the library routine is called, the program
+<strong>calls the dummy entry and follows the indirect branch</strong>,
+which points to a piece of code.</p></li>
+<li><p>The code <strong>puts a number in a register</strong> to
+<strong>identify the desired library routine</strong>.</p></li>
+<li><p>Then it branches to the dynamic linker/loader.</p></li>
+<li><p>The linker/loader finds the wanted routine, <strong>remaps it
+into the memory</strong>, and <strong>changes the address in the
+indirect branch location to point to that routine</strong>. Then it
+branches to it.</p></li>
+</ol>
+<blockquote>
+<p>The dynamic linker loads the library function into memory on the
+first call and updates the indirect branch address. In this way, if the
+following call to the library function, the program can directly jump to
+the correct memory address, avoid repeated symbol parsing and address
+calculation, which improves the efficiency of the program.</p>
+</blockquote>
+<ol start="5" type="1">
+<li>When the routine completes, it <strong>returns to the original
+calling site</strong>.</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/1.1-1.5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/31/1.1-1.5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%A6%82%E5%BF%B5/" class="post-title-link" itemprop="url">1.1~1.5&#x7684;&#x4E00;&#x4E9B;&#x6982;&#x5FF5;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-05-31 17:48:59" itemprop="dateCreated datePublished" datetime="2024-05-31T17:48:59+08:00">2024-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 13:23:57" itemprop="dateModified" datetime="2024-06-02T13:23:57+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SICP-in-python/" itemprop="url" rel="index"><span itemprop="name">SICP in python</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SICP-in-python/Chapter-1-Building-Abstractions-with-Functions/" itemprop="url" rel="index"><span itemprop="name">Chapter 1.Building Abstractions with Functions</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>382</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="someconceptsinfrom11to15"><span class="math inline">\(some\;concepts\;in\;from\;1.1\;to\;1.5\)</span></h1>
+<h3 id="1environment">1.<span class="math inline">\(Environment\)</span></h3>
+<blockquote>
+<p>&#x2003;&#x2003;An environment in which an expression is evaluated consists of a
+sequence of frames, depicted as boxes. Each frame contains bindings,
+each of which associates a name with its corresponding value. Assignment
+and import statements add entries to the first frame of the current
+environment.</p>
+</blockquote>
+<h3 id="2function-as-abstractions">2.<span class="math inline">\(Function\)</span> <span class="math inline">\(as\)</span> <span class="math inline">\(abstractions\)</span></h3>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x4EE5;&#x4E0B;&#x9762;&#x8FD9;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x7A0B;&#x5E8F;&#x4E3A;&#x4F8B;&#xFF1A; <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add, mul</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">square</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> mul(x, x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sum_squares</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> add(square(x), square(y))</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;<strong>&#x5199;&#x51FA;&#x6C42;&#x548C;&#x5E73;&#x65B9;&#xFF0C;&#x800C;&#x4E0D;&#x5FC5;&#x8003;&#x8651;&#x5982;&#x4F55;&#x6C42;&#x4E00;&#x4E2A;&#x6570;&#x7684;&#x5E73;&#x65B9;</strong>&#x3002;&#x5982;&#x4F55;&#x8BA1;&#x7B97;&#x5E73;&#x65B9;&#x7684;&#x7EC6;&#x8282;&#x53EF;&#x4EE5;&#x53BB;&#x6389;&#xFF0C;&#x4EE5;&#x540E;&#x518D;&#x8003;&#x8651;&#x3002;&#x4E8B;&#x5B9E;&#x4E0A;&#xFF0C;&#x5C31;<span class="math inline">\(sum\_square\)</span>&#x800C;&#x8A00;&#xFF0C;<span class="math inline">\(square\)</span>&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x51FD;&#x6570;&#x4F53;&#xFF0C;&#x800C;&#x662F;<strong>&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x62BD;&#x8C61;&#xFF0C;&#x5373;&#x51FD;&#x6570;&#x62BD;&#x8C61;</strong>&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;<span class="math inline">\(square\)</span>&#x770B;&#x4F5C;&#x4E00;&#x4E2A;&#x201C;&#x9ED1;&#x5323;&#x5B50;&#x201D;&#xFF0C;&#x6211;&#x4EEC;&#x653E;&#x5165;&#x4E00;&#x4E2A;&#x503C;&#xFF0C;&#x7136;&#x540E;&#x51FD;&#x6570;&#x8F93;&#x51FA;&#x4E00;&#x4E2A;&#x503C;&#xFF0C;&#x800C;<strong>&#x4E2D;&#x95F4;&#x7684;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;&#x6211;&#x4EEC;&#x5E76;&#x4E0D;&#x5173;&#x5FC3;</strong>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x638C;&#x63E1;&#x51FD;&#x6570;&#x62BD;&#x8C61;&#x7684;&#x4F7F;&#x7528;&#xFF0C;&#x8003;&#x8651;&#x5B83;&#x7684;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x5C5E;&#x6027;&#x901A;&#x5E38;&#x662F;&#x6709;&#x7528;&#x7684;&#xFF1A;</p>
 <ul>
-<li><p>The <code>vunpcklps</code> instruction <strong>interleaves the
-values in two XMM registers and store them in a third</strong>. That is,
-if one source register contains words <span class="math inline">\([s_3,
-s_2, s_1, s_0]\)</span> and the other contains words <span class="math inline">\([d_3, d_2, d_1, d_0]\)</span>, then the value of
-the destination register will be <span class="math inline">\([s_1, d_1,
-s_0, d_0]\)</span>.</p></li>
-<li><p>The <code>vcvtps2pd</code> instruction <strong>expands the two
-low-order single precision values in the source XMM register to be the
-two double-precision values in the destination XMM register</strong>.
-Applying this to the result of the preceding <code>vunpcklps</code>
-instruction would give values <span class="math inline">\([dx_0,dx_0]\)</span>, where <span class="math inline">\(dx_0\)</span> is the result of converting <span class="math inline">\(x\)</span> to double precision.</p></li>
+<li><strong>&#x51FD;&#x6570;&#x7684;&#x57DF;(domain)</strong> &#x662F;&#x5B83;&#x53EF;&#x4EE5;&#x63A5;&#x53D7;&#x7684;&#x4E00;&#x7EC4;&#x53C2;&#x6570;&#x3002;</li>
+<li><strong>&#x51FD;&#x6570;&#x7684;&#x8303;&#x56F4;(range)</strong> &#x662F;&#x5B83;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE;&#x7684;&#x503C;&#x7684;&#x96C6;&#x5408;&#x3002;</li>
+<li><strong>&#x51FD;&#x6570;&#x7684;&#x76EE;&#x7684;(intent)</strong>
+&#x662F;&#x5B83;&#x8BA1;&#x7B97;&#x8F93;&#x5165;&#x548C;&#x8F93;&#x51FA;&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;(&#x4EE5;&#x53CA;&#x5B83;&#x53EF;&#x80FD;&#x4EA7;&#x751F;&#x7684;&#x4EFB;&#x4F55;&#x526F;&#x4F5C;&#x7528;)&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x4F5C;&#x662F;&#x8F93;&#x5165;&#x5230;&#x8F93;&#x51FA;&#x7684;&#x62BD;&#x8C61;&#x6620;&#x5C04;&#x3002;</li>
 </ul>
-<p>&#x2003;&#x2003;GCC generates similar code for converting from double precision to
-single precision:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from double to single precision</span><br><span class="line">vmovddup %xmm0, %xmm0    # Replicate first vector element</span><br><span class="line">vcvtpd2ps %xmm0, %xmm0  # Convert two vector elements to single</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;rather than by using the single instruction:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsd2ss %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<h3 id="2floating-point-code-inprocedure">2.Floating-Point Code in
-Procedure</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
-<p>&#x2003;&#x2003;The following conventions are observed:</p>
+<p>&#x2003;&#x2003;&#x4F8B;&#x5982;&#x5BF9;&#x4E8E;<span class="math inline">\(sum\_square\)</span>&#xFF0C;&#x5176;&#xFF1A;</p>
 <ul>
-<li><p>Up to eight floating-point arguments can be passed in XMM
-registers <code>%xmm0~%xmm7</code>. These registers are used in the
-order the arguments are listed. Additional floating-point arguments can
-be passed on the stack.</p></li>
-<li><p>A function that returns a floating-point value does so in
-register <code>%xmm0</code>.</p></li>
-<li><p><strong>All XMM registers are caller saved</strong>. The callee
-may overwrite any of these registers without first saving it.</p></li>
+<li><span class="math inline">\(domain\)</span>&#xFF1A;&#x4E24;&#x4E2A;&#x6570;&#x3002;</li>
+<li><span class="math inline">\(range\)</span>&#xFF1A;&#x975E;&#x8D1F;&#x5B9E;&#x6570;&#x3002;</li>
+<li><span class="math inline">\(intent\)</span>&#xFF1A;&#x8FD4;&#x56DE;&#x4E24;&#x4E2A;&#x6570;&#x7684;&#x5E73;&#x65B9;&#x548C;&#x3002;</li>
 </ul>
-<p>&#x2003;&#x2003;When a function contains a combination of pointer, integer, and
-floating-point arguments, the pointers and integers are passed in
-general-purpose registers, while the floating-point values are passed in
-XMM registers. This means that <strong>the mapping of arguments to
-registers depends on both their types and their ordering</strong>.</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">g1</span><span class="params">(<span class="type">double</span> a, <span class="type">long</span> b, <span class="type">float</span> c, <span class="type">int</span> d)</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Registers: <code>a</code> in <code>%xmm0</code>, <code>b</code> in
-<code>%rdi</code>, <code>c</code> in<code>%xmm1</code>, <code>d</code>
-in <code>%esi</code>.</p>
-<h3 id="3floating-pointarithmetic-operations">3.Floating-Point
-Arithmetic Operations</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-4.png"></p>
-<ul>
-<li><p>The first source operand S1 can be <strong>either an XMM register
-or a memory location</strong>.</p></li>
-<li><p>The second source operand and the destination operands
-<strong>must be XMM registers</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">funct</span><span class="params">(<span class="type">double</span> a, <span class="type">float</span> x, <span class="type">double</span> b, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="keyword">return</span> a * x - b / i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># double funct(double a, float x, double b, int i)</span><br><span class="line"># a in %xmm0, x in %xmm1, b in %xmm2, i in %edi</span><br><span class="line"></span><br><span class="line">funct:</span><br><span class="line">    vunpcklps %xmm1, %xmm1, %xmm1  # Convert x to double</span><br><span class="line">    vcvtps2pd %xmm1, %xmm1         # Convert x to double</span><br><span class="line">    vmulsd %xmm0, %xmm1, %xmm0     # Multiply a by x</span><br><span class="line">    vcvtsi2sd %edi, %xmm1, %xmm1   # Convert i to double</span><br><span class="line">    vdivsd %xmm1, %xmm2, %xmm2     # Compute b/i</span><br><span class="line">    vsubsd %xmm2, %xmm0, %xmm0     # Subtract from a*x</span><br><span class="line">    ret                            # Return</span><br></pre></td></tr></table></figure>
-<hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-5.png"></p>
-<p>&#x2003;&#x2003;Sometimes the bitwise operations are a useful way to manipulate
-floating-point values. The following are some examples:</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Taking absolute value:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC1(%rip), %xmm1</span><br><span class="line">vandpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">    .long 4294967295</span><br><span class="line">    .long 2147483647</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Set value to zero:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vxorpd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Negate</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC2(%rip), %xmm1</span><br><span class="line">vxorpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">    .long 0</span><br><span class="line">    .long -2147483648</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
-<h3 id="4defining-andusing-floating-point-constants">4.Defining and
-Using Floating-Point Constants</h3>
-<p>&#x2003;&#x2003;AVX floating-point operations cannot have immediate values as
-oprands. Instead, the compiler must <strong>allocate and initialize
-storage for any constant values</strong>.</p>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">cel2fahr</span><span class="params">(<span class="type">double</span> temp)</span> {</span><br><span class="line"><span class="keyword">return</span> <span class="number">1.8</span> * temp + <span class="number">32.0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cel2fahr:</span><br><span class="line">vmulsd .LC2(%rip), %xmm0, %xmm0  # Multiply by 1.8</span><br><span class="line">vaddsd .LC3(%rip), %xmm0, %xmm0  # Add 32.0</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">.long 3435973837                 # Low-order 4 bytes of 1.8</span><br><span class="line">.long 1073532108                 # High-order 4 bytes of 1.8</span><br><span class="line"></span><br><span class="line">.LC3:</span><br><span class="line">.long 0                          # Low-order 4 bytes of 32.0</span><br><span class="line">.long 1077936128                 # High-order 4 bytes of 32.0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;the function reads the value 1.8 from the memory location labeled
-<code>.LC2</code> and the value 32.0 from the memory location labeled
-<code>.LC3</code>.</p>
-<h3 id="5floating-pointcomparison-operations">5.Floating-Point
-Comparison Operations</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-6.png"></p>
-<ul>
-<li><p>These instructions are similar to the <code>cmp</code>
-instructions for integer: they <strong>compare operands S1 and S2 and
-set the condition codes to indicate their relative
-values</strong>.</p></li>
-<li><p>As with <code>cmpq</code>, they follow the ATT-format convention
-of <strong>listing the operands in reverse order</strong>.</p></li>
-<li><p>Argument S2 must be in <strong>an XMM register</strong>, while S1
-can be <strong>either in an XMM register or in memory</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The floating-point comparison instructions set three condition
-codes: the zero flag, the carry flag, and the parity flag:</p>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-7.png"></p>
-<ul>
-<li><p>The parity flag is set when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
-<li><p>By convention, <strong>any comparison in C is considered to fail
-when one of the arguments is <span class="math inline">\(NaN\)</span></strong>, and this flag is used to
-detect such a condition. For example, even the comparison
-<code>x == x</code> yields 0 when x is <span class="math inline">\(NaN\)</span>.</p></li>
-<li><p>The unordered case occurs when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;There are also three relative jump statements:</p>
-<ul>
-<li><p><code>jp</code>: It conditionally jump when a floating-point
-comparison <strong>yields an unordered result</strong>.</p></li>
-<li><p><code>ja</code>: It conditionally jump when <code>CF=0</code> and
-<code>ZF=0</code>.</p></li>
-<li><p><code>jb</code>: It conditionally jump when
-<code>CF=1</code></p></li>
-</ul>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span>NEG, ZERO, POS, OTHER} <span class="type">range_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">range_t</span> <span class="title function_">find_range</span><span class="params">(<span class="type">float</span> x)</span> {</span><br><span class="line">    <span class="type">int</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; <span class="number">0</span>)</span><br><span class="line">        result = NEG;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x == <span class="number">0</span>)</span><br><span class="line">        result = ZERO;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x &gt; <span class="number">0</span>)</span><br><span class="line">        result = POS;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = OTHER;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">find_range:</span><br><span class="line">    vxorps %xmm1, %xmm1, %xmm1  # Set %xmm1 = 0</span><br><span class="line">    vucomiss %xmm0, %xmm1       # Compare 0:x</span><br><span class="line">    ja .L5                      # If &gt;, goto neg</span><br><span class="line">    vucomiss %xmm1, %xmm0       # Compare x:0</span><br><span class="line">    jp .L8                      # If NaN, goto posornan</span><br><span class="line">    movl $1, %eax               # result = ZERO</span><br><span class="line">    je .L3                      # If =, goto done</span><br><span class="line">.L8: posornan:</span><br><span class="line">    vucomiss .LC0(%rip), %xmm0  # Compare x:0</span><br><span class="line">    setbe %al                   # Set result = NaN?1:0</span><br><span class="line">    movzbl %al, %eax            # Zero-extend</span><br><span class="line">    addl $2, %eax               # result += 2 (POS for &gt; 0, OTHER for NaN)</span><br><span class="line">    ret                         # Return</span><br><span class="line">.L5: neg:</span><br><span class="line">    movl $0, %eax               # result = NEG</span><br><span class="line">.L3: done:</span><br><span class="line">    rep; ret                    # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4E9B;&#x5C5E;&#x6027;&#x6CA1;&#x6709;&#x6307;&#x5B9A;&#x5982;&#x4F55;&#x6267;&#x884C;&#x610F;&#x56FE;&#xFF1B;<strong>&#x8FD9;&#x4E9B;&#x7EC6;&#x8282;&#x88AB;&#x62BD;&#x8C61;&#x6389;&#x4E86;</strong>&#x3002;</p>
 
       
     </div>
@@ -449,7 +1193,7 @@ comparison <strong>yields an unordered result</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

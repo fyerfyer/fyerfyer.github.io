@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
+          <a href="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">9.5.&#x89E3;&#x6790;&#x5668;&#x903B;&#x8F91;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 17:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T17:17:43+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:27:03" itemprop="dateModified" datetime="2024-06-03T15:27:03+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
         </span>
     </span>
 
@@ -248,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>473</span>
+      <span>482</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,96 +272,768 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
-Vector</h1>
-<h3 id="1basic-concepts">1.Basic concepts</h3>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
+          <h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
+Logic</h1>
+<h3 id="1parsing-logic">1.Parsing logic</h3>
+<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
+<code>CompilationEngine</code> class which consist of <strong>a set of
+methods, one method for every non-terminal rule</strong>.</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
 <ul>
-<li><p>In SIMD, all the parallel execution units are
-<strong>synchronized</strong>, and they all respond to a single
-instruction <strong>that emanates from a single program
-counter</strong>.</p></li>
-<li><p>Each execution unit <strong>has its own address register, and so
-have different data address</strong>.</p></li>
+<li>The code of each <code>compilexxx</code> method follows the
+right-hand side of the rule xxx</li>
+<li>Each <code>compilexxx</code> method is responsible for
+<strong>advancing</strong> and <strong>handling its own part of the
+input</strong>.</li>
 </ul>
-<blockquote>
-<p>The original motivation behind SIMD was to <strong>amortize the cost
-of the control unit over execution units</strong>. The SIMD can also
-save instrustion bandwidth and space: SIMD needs <strong>only one copy
-of the code that is being simultaneously executed</strong>.</p>
-</blockquote>
-<blockquote>
-<p>Since the instruction is single, SIMD works best when dealing with
-<strong>identically structured data</strong>, which is called
-<em>data-level parallelism</em>, e.g., for loop.</p>
-</blockquote>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
-<ul>
-<li><p>SPMD: The programmer write a single program that runs on all
-processors of a <em>MIMD computer</em>, relying on conditional
-statements when different processors should execute distinct section of
-code.</p></li>
-<li><p>The SIMD computers operate on <strong>vectors of
-data</strong>.</p></li>
-</ul>
-<h3 id="2vector">2.Vector</h3>
-<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
-<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
-data elements from memory, put them in order into a large set of
-registers</strong>, and operate on them sequentially in registers using
-<em>pipelined execution units</em>.</p>
-<ul>
-<li>A key feature of vector architectures is <strong>a set of vector
-registers</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
-loop):</p>
-<p><span class="math display">\[
-Y = a \times X + Y
-\]</span></p>
-<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
-<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
-<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
-also the pipeline stalls are required only <strong>once per vector
-operation</strong>, rather than once per vector element.</p>
-<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
+<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
+<code>compileWhileStatement</code>:</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
 <ol type="1">
-<li><p>The compiler indicates that <strong>the computation of each
-result in the vector is independent</strong>. So compiler doesn&apos;t have
-to check for data hazards within an instruction.</p></li>
-<li><p>Since the element in a vector is adjacent, <strong>the cost of
-the latency to main memory is seen only once for the entire
-vector</strong>.</p></li>
-<li><p>Because a complete loop is replaced by a vector instruction whose
-<strong>behaviour is predetermined</strong>, control hazards are
-nonexistent.</p></li>
+<li><p>We <strong>follow the right-hand side of the rule</strong>, and
+parse the input it dictates.</p>
+<ul>
+<li>In <code>whileStatement</code>, it says we should expect to see the
+token <code>while</code>. If we find it in the input, we record the
+fact. Then the left parenthesis, and so on and so forth,</li>
+<li>At some point we will get a non-terminal rule like
+<code>expression</code>, then we go to next step:</li>
+</ul></li>
+<li><p>If the right-hand side specifies a non-terminal rule
+<code>xxx</code>, we call the corresponding method
+<code>compilexxx</code></p></li>
+<li><p>We do this recursively untile we exhaust the input.</p></li>
 </ol>
-<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
+<p>&#x2003;&#x2003;And to initialize this process, we:</p>
+<ol type="1">
+<li>Advance the tokenizer.</li>
+<li>Call <code>compileWhileStatement</code>.</li>
+</ol>
+<h3 id="2parser-design">2.Parser design</h3>
+<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
+example:</p>
+<ol type="1">
+<li>If we look at the grammar, we first see that you should see a
+<code>while</code> , so we <strong>call a method
+<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
+eat the <code>while</code> token.</li>
+<li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
+<li>We meet a non-terminal rule <code>expression</code>, so we call
+<code>compileExpression();</code></li>
+<li>And so on and so forth...</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
 <ul>
-<li>Unlike multimedia extensions, the number of elements in a vector
-operation isn&apos;t in the opcode but in <strong>a separate
-register</strong>.</li>
+<li>It&apos;s a private method.</li>
+<li>It says <strong>you should expect to see the given string</strong>,
+if not, you should <strong>throw an error</strong>.</li>
+<li>Otherwise, simply <strong>advance the input</strong>.</li>
 </ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
+about grammars and parsing</h3>
+<ul>
+<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
+a recursive descent algorithm parser without backtracking</strong>.</p>
+<ul>
+<li>When you make a decision that what you have is a <code>while</code>
+statement, you don&apos;t have to kind of retract your progress and find out
+a mistake.</li>
+</ul></li>
+<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
+at most k tokens before you know which rule you are dealing with.</p>
+<ul>
+<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
+have a particular token in hand like <code>let</code>, we immediately
+know which rule we have to invoke</strong>.</li>
+<li>There are also things that don&apos;t belong to LL1, like English. For
+example, when we meet a token word &quot;lift&quot;, we still have no idea what we
+should do with it. A verb? A noun? We have to look more tokens
+downstream to know which rule to use. In this process, we may need to
+backtrack and reconsider some of the rules we have to use...</li>
+</ul></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/" class="post-title-link" itemprop="url">9.4.&#x89E3;&#x6790;&#x6811;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 12:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T12:17:43+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:22:19" itemprop="dateModified" datetime="2024-06-03T15:22:19+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>196</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="94parsetree"><span class="math inline">\(9.4.\)</span>Parse
+Tree</h1>
+<h3 id="1parse-tree-introduction">1.Parse tree introduction</h3>
+<p>&#x2003;&#x2003;In this part we are going to be specific about the grammatical
+structure. Take the sentence &quot;the dog ate my homework&quot; for example,
+here&apos;s the grammatical structure of it:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image.png"></p>
+<p>&#x2003;&#x2003;It&apos;s recorded using a <em>parse tree</em>. The tree is a recursive
+structure, and the grammatical structure of the inputs are
+<strong>recursive</strong>, too.</p>
+<ul>
+<li>The <code>sentence</code> consists of two lower-level sub parse
+tree.</li>
+<li>We continue to expanding the tree until get to the boundary of the
+tree, called <em>leaves</em> or <em>terminal nodes</em>. In the case of
+lexical analysis, they are <strong>the tokens from which the input is
+constructed</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Then let&apos;s move to Jack. Take the input
+<code>while (count &lt; 100) {let count = count + 1;}</code> for
+example:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-1.png"></p>
 <blockquote>
-<p>This means different versions of the vector architecture can simply
-be implemented by changing the contents of the register, thus retain
-binary compatibility.</p>
+<p>The notion of a parse tree is an obstruct artifact that sits
+somewhere above all these nice diagrams. And this diagram here is just
+one way to describe this parse tree.</p>
 </blockquote>
+<p>&#x2003;&#x2003;To motivate this, let&apos;s focus on some subset of the prase tree:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-2.png"></p>
+<p>&#x2003;&#x2003;Another way of describing the same parse tree can be <em>XML
+format</em>:</p>
+<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-3.png"></p>
 <ul>
-<li>The parallel semantics of a vector instruction allows using a
-<em>deeply pipelined functional unit</em> to execute vector
-operations:</li>
+<li>In XML, we describe the structure of data using <em>markup
+tags</em>.</li>
 </ul>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
-<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
-register to take part in operations with element N from other vector
-registers, and the structure is called <em>vector lanes</em>:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
-<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
-vector unit by <strong>adding more lanes</strong>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">9.3.&#x8BED;&#x6CD5;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 09:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T09:17:43+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:18:56" itemprop="dateModified" datetime="2024-06-03T15:18:56+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>340</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>1 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="93grammars"><span class="math inline">\(9.3.\)</span>Grammars</h1>
+<h3 id="1grammar-introduction">1.Grammar introduction</h3>
+<p>&#x2003;&#x2003;In the previous unit, we gain the ability to think about the
+program as a set of tokens, but the effect that we have a set of valid
+tokens doesn&apos;t imply that we have a valid program. <strong>It&apos;s not only
+the tokens that are important, the order of the tokens is critically
+important as well</strong>.</p>
+<p>&#x2003;&#x2003;And the artifact that <strong>defines in what order we can put
+tokens together legibly</strong> is referred to as <em>grammar</em>.</p>
+<ul>
+<li>A grammar is a set of rules, describing how tokens can be combined
+to create valid language constructs</li>
+</ul>
+<p>&#x2003;&#x2003;Take the English language as an example:</p>
+<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image.png"></p>
+<p>&#x2003;&#x2003;It&apos;s just a subset of English language, but is sufficiently rich to
+support plenty of inputs. Consider the sentence &quot;The dog ate my
+homework&quot;:</p>
+<ul>
+<li>&apos;The&apos; is a det and &apos;dog&apos; is a noun, so the sentence begins with a
+noun phrase.</li>
+<li>&apos;ate&apos; is a verb and &apos;my homework&apos; is once again a noun phrase, so
+this subsentence is a verb phrase.</li>
+<li>Taken together, we have a noun phrase followed by a verb phrase,
+therefore we have a legitimate sentence.</li>
+</ul>
+<p>&#x2003;&#x2003;In this example, we notice that grammar is indeed made of a set of
+rules. And these rules fall into two broad categories:</p>
+<ol type="1">
+<li><em>Terminal rule</em>: Its right-hand side consists of constants
+only.</li>
+<li><em>Non-terminal rule</em>: Its right-hand side consists of names of
+other rules, and probably constants.</li>
+</ol>
+<h3 id="2jack-grammar">2.Jack grammar</h3>
+<p>&#x2003;&#x2003;Let&apos;s focus on a subset of Jack language in which we have three
+possible statements: <code>if</code>, <code>while</code>,
+<code>let</code>:</p>
+<p><img src="/2024/04/16/10-3-%E8%AF%AD%E6%B3%95/image-1.png"></p>
+<ul>
+<li>We use <code>*</code> to indicate 0 or more.</li>
+<li>We use <code>|</code> to denote choice.</li>
+<li>We use <code>?</code> to denote 0 or 1.</li>
+</ul>
+<p>&#x2003;&#x2003;And the process of <strong>determining if a given input conforms to
+a grammar</strong> is called <em>prasing</em>.</p>
+<p>&#x2003;&#x2003;Notice that in the process of doing this confirmation, we also
+<strong>uncover the entire grammatical structure of the given
+input</strong>, because we analyze how the input corresponds to the
+various components of the rule.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">9.2.&#x8BCD;&#x6CD5;&#x5206;&#x6790;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-15 20:17:43" itemprop="dateCreated datePublished" datetime="2024-04-15T20:17:43+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:16:17" itemprop="dateModified" datetime="2024-06-03T15:16:17+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>442</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</h1>
+<h3 id="1-tokenizing">1. Tokenizing</h3>
+<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist
+of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
+<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of
+theory known as <em>lexical analysis</em>. Here&apos;s an example of
+tokenizing in action:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+<ul>
+<li><p>As far as <em>lexical analysis</em> is concerned, the input is
+nothing more than <strong>a stream of characters</strong>.</p></li>
+<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
+stream of characters into a stream of meaningful tokens</strong>. It
+provides a very simple yet important preliminary processing of the
+file.</p></li>
+<li><p>A <em>token</em> is <strong>a string of characters that has a
+meaning</strong>.</p>
+<ul>
+<li>Different programming languages have different definitions of token.
+For example, <code>x++</code> in C makes a lot of sense, but not in
+Jack, for it doesn&apos;t have an <code>++</code> operation.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it
+over to the compiler and completely forget the original input
+file</strong>.</p>
+<h3 id="2jack-tokenizer">2.Jack tokenizer</h3>
+<p>&#x2003;&#x2003;In Jack, we have 5 kinds of tokens:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
+<p>&#x2003;&#x2003;And our tokenizer will provide these useful service:</p>
+<ol type="1">
+<li><p>Handle the compiler&apos;s input: It allow us to view the input as a
+stream of tokens.</p></li>
+<li><p>Allow advancing the input: It allow us to know:</p>
+<ul>
+<li><strong>If there are more tokens to process</strong>.</li>
+<li><strong>What the next token is</strong>.</li>
+<li><strong>The value, type of this token</strong>.</li>
+</ul></li>
+<li><p>Supply the value, type of the current token.</p></li>
+</ol>
+<p>&#x2003;&#x2003;Here&apos;s an example of a program that use these services:</p>
+<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the
+tokenizer object. Here&apos;s what it does:</p>
+<ul>
+<li>It goes through the input, and for every token, it <strong>lists the
+token to be out of file</strong>.</li>
+<li>In the first line, <code>if</code> is surrounded by two
+<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo
+code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<ol type="1">
+<li><p>We get the first token, and it becomes the current
+token.</p></li>
+<li><p>We enter a loop as long as we have more tokens to
+process.</p></li>
+<li><p>In each line of the program, we have to <strong>output the
+classification of the token</strong>, and we have to <strong>do it
+twice</strong>.</p></li>
+<li><p>We:</p>
+<ol type="1">
+<li>Print the <strong>opening tag</strong>, then</li>
+<li>Print the <strong>value of of the current token</strong>,</li>
+<li>Print the <strong>token itself</strong>,</li>
+<li>At last print <strong>end tag with token
+classification</strong>.</li>
+</ol></li>
+<li><p>We print a newline, and <code>advance()</code> to get the next
+token from the tokenizer, until we consume all the tokens from the input
+file.</p></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">8.3.&#x5217;&#x8868;&#x5904;&#x7406;</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-13 19:17:43" itemprop="dateCreated datePublished" datetime="2024-04-13T19:17:43+08:00">2024-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:08:02" itemprop="dateModified" datetime="2024-06-03T15:08:02+08:00">2024-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/" itemprop="url" rel="index"><span itemprop="name">The Elements of Computer System</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/The-Elements-of-Computer-System/Module-8-High-Level-Language/" itemprop="url" rel="index"><span itemprop="name">Module 8.High Level Language</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>532</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="83listprocessing"><span class="math inline">\(8.3.\)</span>List
+Processing</h1>
+<h3 id="1list-processing">1.List processing</h3>
+<h4 id="acreation">&#x2003;&#x2003;$a.Creation</h4>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image.png"></p>
+<p>&#x2003;&#x2003;The client process is described as below:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-1.png"></p>
+<ol type="1">
+<li>We create a V pointer. We will get the variable containing 0,
+because all local variables are initialized to 0.</li>
+<li>We invoke the list constructor, and the list constructor is going to
+<strong>come back with a block of memory that represents the number 5
+and null</strong>.</li>
+<li>V is going to <strong>point to the base address</strong> of the
+object that was returned by the constructor.</li>
+<li>The previous version of V is no longer relevant, and the next
+command will do exactly the same.</li>
+</ol>
+<h4 id="bsequential-access">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Sequential access</h4>
+<p>&#x2003;&#x2003;We will use the <code>print</code> method to illustrate the
+sequential process:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-2.png"></p>
+<blockquote>
+<p>In Object-based Programming, when we call a method on an object, we
+are implicitily <strong>passing the object as a parameter to this
+method</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;In the constructor, we do these things:</p>
+<ol type="1">
+<li><p>We create <code>current</code>, it&apos;s an identifier that exist
+outside the world of list. We use a special variable called
+<code>this</code> which stands for the current object.</p>
+<ul>
+<li><code>this</code> is the point from which we are going to
+<strong>refer to the object that was passed with</strong>.</li>
+</ul></li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-3.png"></p>
+<ol start="2" type="1">
+<li>The entry point of the list is <code>this</code>, and we set
+<code>current</code> to <code>this</code>, then we get two pointers
+referring to the head of the list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-4.png"></p>
+<ol start="3" type="1">
+<li>Now we enter the loop, we print the <code>data</code> and move
+<code>current</code> to <code>next</code>.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-5.png"></p>
+<ol start="4" type="1">
+<li>At last we <code>return</code>, <code>current</code> no longer
+exists and <code>this</code> is reinstated and points to the list as
+before.</li>
+</ol>
+<p>&#x2003;&#x2003;When the client want to create a list:</p>
+<ol type="1">
+<li>It all starts by creating a <code>V</code> pointer. We <strong>get
+the variable containing value 0</strong> because all local variables are
+initialized to 0.</li>
+</ol>
+<p>&#x2003;&#x2003;Then we call the constructor, and the list constructor is going to
+come back with a block of memory that represents the
+<code>(5, null)</code>.</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-6.png"></p>
+<ol start="2" type="1">
+<li>Once the <code>List.new</code> is called, the previous vesion of
+<code>V</code> is no longer relevant. The rest steps are trival.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-7.png"></p>
+<h4 id="crecursive-access">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Recursive access</h4>
+<p>&#x2003;&#x2003;Let&apos;s take the <code>dispose</code> method as an example:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-8.png"></p>
+<ol type="1">
+<li>As usual, we first call a variable <code>V</code>. The
+<code>dispose</code> method doesn&apos;t know what <code>V</code> is, so the
+variable <code>this</code> was passed to <code>dispose</code>.</li>
+<li>The <code>next</code> isn&apos;t null, so we go to the recursive call.
+The <code>this</code> now points at the tail of the list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-9.png"></p>
+<ol start="3" type="1">
+<li>We finally meet 5, do the <code>deAlloc</code> and
+<code>return</code>. Once we do the <code>return</code>, we get
+completely out of the recursive method, and <strong>what used to be
+called <code>this</code> goes back to be named
+<code>V</code></strong>.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-10.png"></p>
+<ol start="4" type="1">
+<li>Now the <code>V</code> points to nothing, for we basically disposed
+everything in this list.</li>
+</ol>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-11.png"></p>
+<p>&#x2003;&#x2003;However, recursion is very inefficient operation and if you do this
+with a big list, you will probably get a <code>StackOverflow</code>
+error.</p>
+<h3 id="4list-representation">4.List representation</h3>
+<p>&#x2003;&#x2003;The following list:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-12.png"></p>
+<p>&#x2003;&#x2003;is represented in the host RAM like this:</p>
+<p><img src="/2024/04/13/8-3-%E5%88%97%E8%A1%A8%E5%A4%84%E7%90%86/image-13.png"></p>
+<p>&#x2003;&#x2003;Then who makes these work?</p>
+<ul>
+<li>High-level: the constructor</li>
+<li>Low-level: when compiling the constructor, <strong>the compiler
+plants calls to OS routines that find, and allocate, available memory
+space for the new object</strong>.</li>
+</ul>
 
       
     </div>
@@ -375,7 +1053,7 @@ vector unit by <strong>adding more lanes</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

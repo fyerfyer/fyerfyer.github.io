@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-3-Hardware-Multithreading/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/" class="post-title-link" itemprop="url">4.1.Y86-64 Instruction Set Architecture</a>
+          <a href="/2024/06/29/5-3-Hardware-Multithreading/" class="post-title-link" itemprop="url">5.3.Hardware Multithreading</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-24 09:31:22" itemprop="dateCreated datePublished" datetime="2024-07-24T09:31:22+08:00">2024-07-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-25 09:49:13" itemprop="dateModified" datetime="2024-07-25T09:49:13+08:00">2024-07-25</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 10:38:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;15:30:21" itemprop="dateCreated datePublished" datetime="2024-06-29T10:38:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +233,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-4-Processor-Architecture/" itemprop="url" rel="index"><span itemprop="name">Chapter 4.Processor Architecture</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.1k</span>
+      <span>259</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,159 +266,1435 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="41y86-64-instruction-setarchitecture"><span class="math inline">\(4.1.\)</span>Y86-64 Instruction Set
-Architecture</h1>
-<h3 id="1programmer-visible-state">1.Programmer-Visible State</h3>
-<p>&#x2003;&#x2003;The programmer-visible state is where the programmer can generate
-machine-level code.</p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image.png"></p>
+          <h1 id="53hardware-multithreading">5.3.Hardware Multithreading</h1>
+<h3 id="1basic-concepts-of-threads">1.Basic concepts of threads</h3>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image.png"></p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-1.png"></p>
+<h3 id="2multithreading-intro">2.Multithreading intro</h3>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-2.png"></p>
+<p>&#x2003;&#x2003;Hardware multithreading allows multiple threads to <strong>share
+the functional units of a single processor in an overlapping
+fashion</strong> to try to utilize the hardware resources
+efficiently.</p>
+<p>&#x2003;&#x2003;To permit this sharing, the processor must <strong>duplicate the
+independent state of each thread</strong>.</p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-3.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-4.png"></p>
+<h3 id="3types-of-hardwaremultithreading">3.Types of hardware
+multithreading</h3>
+<p>&#x2003;&#x2003;There are 3 types of hardware multithreading approaches:</p>
 <ul>
-<li>The <code>Stat</code> indicates the overall state of program
-execution. It will indicate either normal operation or that some sort of
-exception has occurred.</li>
-</ul>
-<h3 id="2y86-64-instruction-set">2.Y86-64 Instruction Set</h3>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
+<li><p><em>Fine-grained multithreading</em>: It <strong>switches between
+threads on each instruction</strong>, resulting in interleaved execution
+of multiple threads.</p>
 <ul>
-<li><p>The integer operation instructions operate only on register data.
-This instructions set the three condition codes <code>ZF</code>,
-<code>SF</code>, and <code>OF</code> (zero, sign, and
-overflow).</p></li>
-<li><p>The <code>call</code> instruction <strong>pushes the return
-address on the stack</strong> and <strong>jumps to the destination
-address</strong>. The <code>ret</code> instruction returns from such a
-call.</p></li>
-<li><p>The <code>halt</code> instruction stops instruction execution,
-and the status code is set to <code>HLT</code>.</p></li>
-</ul>
-<h3 id="3instruction-encoding">3.Instruction Encoding</h3>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-2.png"></p>
-<ul>
-<li>Every instruction has an <strong>initial byte identifying the
-instruction type</strong>. This byte is split into two 4-bit parts: the
-high-order, or code, part, and the low-order, or function, part.</li>
-</ul>
-<p>&#x2003;&#x2003;Instructions that need operands have longer encodings:</p>
-<ul>
-<li><p>There can be an additional register specifier byte
-<strong>specifying either one or two registers</strong>. These register
-fields are called <code>rA</code> and <code>rB</code> in figure
-above.</p>
-<ul>
-<li><p>Instructions that have no register operands do not have a
-register specifier byte.</p></li>
-<li><p>Those that require just one register operand have the other
-register specifier set to 0xF.</p></li>
+<li><p>It&apos;s advantage is that it can hide the throughput losses that
+arise from both short and long stalls, since instructions from other
+threads can be executed when one thread stalls. Also, since it switches
+threads frequently, it doesn&apos;t need to clear the pipeline
+everytime.</p></li>
+<li><p>However, it slows down the execution of the individual
+threads.</p></li>
 </ul></li>
-<li><p>Some instructions require an additional 8-byte constant word.
-This word can serve as the immediate data for <code>irmovq</code>, the
-displacement for <code>rmmovq</code> and <code>mrmovq</code> address
-specifiers, and the destination of branches and calls.</p>
+<li><p><em>Coarse-grained multithreading</em>: It switch threads
+<strong>only on expensive stalls</strong>, such as last-level cache
+misses.</p>
 <ul>
-<li>Note that branch and call destinations are given as <strong>absolute
-addresses</strong>, rather than using the PC-relative addressing seen in
-x86-64.</li>
+<li><p>It&apos;s much less likely to slow down individual execution.</p></li>
+<li><p>However, it is limited from overcoming throughput losses for
+pipeline start-up time.</p></li>
 </ul></li>
+<li><p><em>Simultaneous multithreading</em>: It uses a multiple-issue,
+dynamically scheduled <em>pipelined processor</em> to <strong>exploit
+thread-level parallelism while exploiting ILP</strong>.</p></li>
 </ul>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-3.png"></p>
+<blockquote>
+<p>With register renaming and dynamic scheduling, multiple instructions
+from independent threads can be issued without regard to the dependences
+among them; <strong>the resolution of the dependences can be handled by
+the dynamic scheduling capability</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;SMT is always executing instructions from multiple threads, leaving
+it up to the hardware to associate instruction slots and renamed
+registers with their proper threads.</p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-5.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-1-Parallelism-via-Instructions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/29/5-1-Parallelism-via-Instructions/" class="post-title-link" itemprop="url">5.1.Parallelism via Instruction</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;09:11:34" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>6 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="51parallelism-via-instructions"><span class="math inline">\(5.1.\)</span>Parallelism via Instructions</h1>
+<h3 id="1pipelining">1.Pipelining</h3>
+<p>&#x2003;&#x2003;Exploiting the potential parallelism among instructions is called
+<em>instruction-level parallelism</em>.</p>
 <ul>
-<li>The program registers are stored within the CPU in a register file,
-a small random access memory where <strong>the register IDs serve as
-addresses</strong>.</li>
+<li><p>The first is <strong>increasing the depth of the pipeline to
+overlap more instructions</strong>.</p></li>
+<li><p>We also need to <strong>reblance the remaining steps so they are
+the same length</strong>.</p></li>
+<li><p>Another approach is to <strong>replicate the internal components
+so that it can launch multiple instruction in every pipeline
+stage</strong>. The general name of this approach is <em>multiple
+issue</em>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;Let&apos;s take the instruction
-<code>rmmovq %rsp, 0x123456789abcd(%rdx)</code> as an example:</p>
+<h3 id="2multiple-issue-processor">2.Multiple issue processor</h3>
+<p>&#x2003;&#x2003;There are two main ways to implement a multiple-issue processor,
+with the major difference being <strong>the division of work between the
+compiler and the hardware</strong>. One is called <em>static multiple
+issue</em> and the other <em>dynamic multiple issue</em>.</p>
+<p>&#x2003;&#x2003;There are two primary distinct responsibilities within a
+multiple-issue pipeline:</p>
 <ol type="1">
-<li><p><code>rmmovq</code> has initial byte <code>40</code>.</p></li>
-<li><p>The source register <code>%rsp</code> is encoded in
-<code>rA</code> field, and base register <code>%rdx</code> is encoded in
-<code>rB</code> field. So we get the register specifier byte of
-<code>42</code>.</p></li>
-<li><p>The displacement is encoded in the 8-byte constant word:
-<code>00 01 23 45 67 89 ab cd</code>, and we write it in byte-reversed
-order.</p></li>
+<li><p>Packaging instructions into <em>issue slots</em>. It refers to
+<strong>the position from which instructions could issue in a given
+clock cycle</strong>. In dynamic multiple issue, it is normally dealt
+with <strong>at runtime by processor</strong>.</p></li>
+<li><p>Dealing with data and control hazards. The compiler handles it
+statically. In contrast, most dynamic issue processors attempt to
+alleviate them <strong>using hardware techniques operation at execution
+time</strong>.</p></li>
 </ol>
-<p>&#x2003;&#x2003;So the final result is <code>4042cdab896745230100</code>.</p>
+<h3 id="3speculationconceptsextracted-from-textbook">3.Speculation
+concepts(extracted from textbook)</h3>
+<p>&#x2003;&#x2003;Speculation is an approach that <strong>allows the
+compilator/processor to &quot;guess&quot; about the properties of an
+instruction</strong>. Any speculation mechanism must include both a
+method to <strong>check if the guess was right</strong> and a method to
+<strong>unroll or back out the effects of the instructions that were
+executed speculatively</strong>.</p>
+<p>&#x2003;&#x2003;Speculation may be done in the compiler or by the hardware. For
+example,the compiler can use speculation to <strong>reorder
+instructions, moving an instruction across a branch or a load across a
+store</strong>. The processor hardware can perform the same
+transformation at runtime using techniques we discuss later in this
+section.</p>
+<p>&#x2003;&#x2003;The recovery mechanisms used for incorrect speculation are rather
+different. In the case of speculation in software, the compiler usually
+<strong>inserts additional instructions that check the accuracy of the
+speculation and provide a fix-up routine to use when the speculation is
+wrong</strong>. In hardware speculation, the processor usually
+<strong>buffers the speculative results until it knows they are no
+longer speculative</strong>. If the speculation is correct, the
+instructions are completed by <strong>allowing the contents of the
+buffers to be written to the registers or memory</strong>. If the
+speculation is incorrect, the hardware flushes the buffers and
+re-executes the correct instruction sequence. Misspeculation typically
+requires the pipeline to be flushed, or at least stalled, and thus
+further reduces performance.</p>
+<p>&#x2003;&#x2003;Speculation introduces one other possible problem: speculating on
+certain instructions may <strong>introduce exceptions that were formerly
+not present</strong>. For example, suppose a load instruction is moved
+in a speculative manner, but the address it uses is not within bounds
+when the speculation is incorrect. The result would be that an exception
+that should not have occurred would occur. The problem is complicated by
+the fact that if the load instruction were not speculative, then the
+exception must occur! In compiler-based speculation, such problems are
+avoided by <strong>adding special speculation support that allows such
+exceptions to be ignored until it is clear that they really should
+occur</strong>. In hardware-based speculation, <strong>exceptions are
+simply buffered until it is clear that the instruction causing them is
+no longer speculative and is ready to complete;</strong> at that point,
+the exception is raised,and normal exception handling proceeds.</p>
+<h3 id="4static-multiple-issue">4.Static multiple issue</h3>
+<p>&#x2003;&#x2003;Static multiple-issue processors all use the compiler to assist
+with packaging instructions and handling hazards. In a static issue
+processor, we can think of the set of instructions issued in a given
+clock cycle called <em>issue packet</em>. And it&apos;s useful to think of
+the issue packet as a single instuction allowing weveral operations in
+certain predefined fields.</p>
+<p>&#x2003;&#x2003;When it comes to the certain instructions:</p>
 <ul>
-<li><p>One important property of any instruction set is that <strong>the
-byte encodings must have a unique interpretation</strong>. An arbitrary
-sequence of bytes either encodes a unique instruction sequence or is not
-a legal byte sequence</p>
-<ul>
-<li>This property ensures that a processor can execute an object-code
-program without any ambiguity about the meaning of the code. However, if
-we do not know the starting position of a code sequence, we cannot
-reliably determine how to split the sequence into individual
-instructions.</li>
-</ul></li>
+<li><p>We require that the instructions <strong>be paired and aligned on
+a 64-bit boundary</strong>.</p></li>
+<li><p>If on instruction of the pair cannot be used, we require that
+<strong>it be replaced with nop</strong>.</p></li>
 </ul>
-<h3 id="4exceptions">4.Exceptions</h3>
-<p>&#x2003;&#x2003;The programmer-visible state includes a status code
-<code>Stat</code> describing the overall state of the executing program.
-The possible values for this code are as below:</p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-4.png"></p>
+<p>&#x2003;&#x2003;However, the overlapping of instructions <strong>increase the
+relative performance loss from data and control hazards</strong>.</p>
+<blockquote>
+<p>For example, in our simple five-stage pipeline, loads have a use
+latency of one clock cycle, which <strong>prevents one instruction from
+using the result without stalling</strong>. In the two-issue, five-stage
+pipeline the result of a load instruction <strong>cannot be used on the
+next clock cycle</strong>. This means that the next two instructions
+cannot use the load result without stalling.</p>
+</blockquote>
+<p>&#x2003;&#x2003;An important compiler technique to get more performance from loops
+is <em>loop unrolling</em>:</p>
 <ul>
-<li><p>The <code>ADR</code>indicates that the processor attempted to
-read from or write to an invalid memory address, either while fetching
-an instruction or while reading or writing data.</p>
-<ul>
-<li>We limit the maximum address, and <strong>any access to an address
-beyond this limit will trigger an ADR exception</strong>.</li>
-</ul></li>
+<li>Say we are going to deal with this program:</li>
 </ul>
-<h3 id="5y86-64-programs">5.Y86-64 Programs</h3>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">sum</span><span class="params">(<span class="type">long</span> *start, <span class="type">long</span> count)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (count)</span><br><span class="line">    {</span><br><span class="line">        sum += *start;</span><br><span class="line">        start++;</span><br><span class="line">        count--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;the x86-64 and Y86-64 assembly code are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># x86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    movl $0, %eax        # sum = 0</span><br><span class="line">    jmp .L2              # Goto test</span><br><span class="line">.L3:                     # loop:</span><br><span class="line">    addq (%rdi), %rax    # Add *start to sum</span><br><span class="line">    addq $8, %rdi        # start++</span><br><span class="line">    subq $1, %rsi        # count--</span><br><span class="line">.L2:                     # test:</span><br><span class="line">    testq %rsi, %rsi     # Test sum</span><br><span class="line">    jne .L3              # If !=0, goto loop</span><br><span class="line">    rep; ret             # Return</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Y86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    irmovq $8,%r8       # Constant 8</span><br><span class="line">    irmovq $1,%r9       # Constant 1</span><br><span class="line">    xorq %rax,%rax      # sum = 0</span><br><span class="line">    andq %rsi,%rsi      # Set CC</span><br><span class="line">    jmp test            # Goto test</span><br><span class="line">loop:</span><br><span class="line">    mrmovq (%rdi),%r10  # Get *start</span><br><span class="line">    addq %r10,%rax      # Add to sum</span><br><span class="line">    addq %r8,%rdi       # start++</span><br><span class="line">    subq %r9,%rsi       # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">    jne loop            # Stop when 0</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The Y86-64 codes have the following differences:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) {</span><br><span class="line">    A[i] = B[i] + C[i];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line">    addi xA, xA, 8      ; Increment A pointer</span><br><span class="line">    addi xB, xB, 8      ; Increment B pointer</span><br><span class="line">    addi xC, xC, 8      ; Increment C pointer</span><br><span class="line">    addi xI, xI, 1      ; Increment loop counter</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can do this iteration part for more times:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i += <span class="number">4</span>) {</span><br><span class="line">    A[i]   = B[i]   + C[i];</span><br><span class="line">    A[i+<span class="number">1</span>] = B[i+<span class="number">1</span>] + C[i+<span class="number">1</span>];</span><br><span class="line">    A[i+<span class="number">2</span>] = B[i+<span class="number">2</span>] + C[i+<span class="number">2</span>];</span><br><span class="line">    A[i+<span class="number">3</span>] = B[i+<span class="number">3</span>] + C[i+<span class="number">3</span>];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line"></span><br><span class="line">    ld  x5, 8(xA)       ; Load A[i+1]</span><br><span class="line">    ld  x6, 8(xB)       ; Load B[i+1]</span><br><span class="line">    ld  x7, 8(xC)       ; Load C[i+1]</span><br><span class="line">    add x8, x6, x7      ; A[i+1] = B[i+1] + C[i+1]</span><br><span class="line">    sd  8(xA), x8       ; Store A[i+1]</span><br><span class="line"></span><br><span class="line">    ld  x9, 16(xA)      ; Load A[i+2]</span><br><span class="line">    ld  x10, 16(xB)     ; Load B[i+2]</span><br><span class="line">    ld  x11, 16(xC)     ; Load C[i+2]</span><br><span class="line">    add x12, x10, x11   ; A[i+2] = B[i+2] + C[i+2]</span><br><span class="line">    sd  16(xA), x12     ; Store A[i+2]</span><br><span class="line"></span><br><span class="line">    ld  x13, 24(xA)     ; Load A[i+3]</span><br><span class="line">    ld  x14, 24(xB)     ; Load B[i+3]</span><br><span class="line">    ld  x15, 24(xC)     ; Load C[i+3]</span><br><span class="line">    add x16, x14, x15   ; A[i+3] = B[i+3] + C[i+3]</span><br><span class="line">    sd  24(xA), x16     ; Store A[i+3]</span><br><span class="line"></span><br><span class="line">    addi xA, xA, 32     ; Increment A pointer by 4</span><br><span class="line">    addi xB, xB, 32     ; Increment B pointer by 4</span><br><span class="line">    addi xC, xC, 32     ; Increment C pointer by 4</span><br><span class="line">    addi xI, xI, 4      ; Increment loop counter by 4</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This operation has the following advantages:</p>
 <ol type="1">
-<li><p>The Y86-64 code <strong>loads constants into registers</strong>
-(lines 2&#xFFFD;C3), since it cannot use immediate data in arithmetic
-instructions.</p></li>
-<li><p>The Y86-64 code requires two instructions (lines 8&#xFFFD;C9) to
-<strong>read a value from memory and add it to a
-register</strong>.</p></li>
+<li><p><strong>Reduce cycle control overhead</strong>: cycle control
+operations are less frequent when the cycle is expanded. In the above
+example, the loop control operation is reduced from one generation per
+generation to one generation per four.</p></li>
+<li><p><strong>Increase instruction level parallelism</strong>: the more
+instructions expanded, the compiler can better schedule these
+instructions, improve parallelism.</p></li>
+<li><p><strong>Reduced branch prediction failure</strong>: the
+probability of branch prediction failure is reduced due to the reduction
+in the number of branch instructions and the frequency of loop control
+operations.</p></li>
 </ol>
-<p>&#x2003;&#x2003;The following shows a complete program file written in Y86-64
-assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">.pos 0                                      # Execution begins at address 0</span><br><span class="line">irmovq stack, %rsp                          # Set up stack pointer</span><br><span class="line">call main                                   # Execute main program</span><br><span class="line">halt                                        # Terminate program</span><br><span class="line"></span><br><span class="line">.align 8                                    # Array of 4 elements</span><br><span class="line">array:</span><br><span class="line">.quad 0x000d000d000d</span><br><span class="line">.quad 0x00c000c000c0</span><br><span class="line">.quad 0x0b000b000b00</span><br><span class="line">.quad 0xa000a000a000</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">irmovq array, %rdi</span><br><span class="line">irmovq $4, %rsi</span><br><span class="line">call sum                                    # sum(array, 4)</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">sum:                                        # long sum(long *start, long count)</span><br><span class="line">irmovq $8, %r8                              # Constant 8</span><br><span class="line">irmovq $1, %r9                              # Constant 1</span><br><span class="line">xorq %rax, %rax                             # sum = 0</span><br><span class="line">andq %rsi, %rsi                             # Set CC</span><br><span class="line">jmp test                                    # Goto test</span><br><span class="line">loop:</span><br><span class="line">mrmovq (%rdi), %r10                         # Get *start</span><br><span class="line">addq %r10, %rax                             # Add to sum</span><br><span class="line">addq %r8, %rdi                              # start++</span><br><span class="line">subq %r9, %rsi                              # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">jne loop                                    # Stop when 0</span><br><span class="line">ret                                         # Return</span><br><span class="line"></span><br><span class="line">.pos 0x200                                  # Stack starts here and grows to lower addresses</span><br><span class="line">stack:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;During the unrolling process, the compiler introduce additional
+registers. The goal of the process, called <em>register renaming</em>,
+it to <strong>eliminate dependences that are not true data
+dependences</strong>, but could either lead to potential hazards or
+prevent the compiler from flexibly scheduling the code.</p>
+<h3 id="5dynamic-multiple-issueprocessor">5.Dynamic multiple-issue
+processor</h3>
+<p>&#x2003;&#x2003;Dynamic multiple-issue processors are also known as <em>superscalar
+processors</em>.</p>
+<p>&#x2003;&#x2003;Many superscalars extend the basic framework of dynamic issue
+decisions to include <em>dynamic pipeline scheduling</em>. Dynamic
+pipeline scheduling <strong>chooses which instructions to execute in a
+given clock cycle while trying to avoid hazards and stalls</strong>.</p>
 <ul>
-<li><p>Words beginning with &apos;.&apos; are assembler directives telling the
-assembler to <strong>adjust the address at which it is generating code
-or to insert some words of data</strong>.</p>
+<li><p><em>Dynamic pipeline scheduling</em> <strong>chooses which
+instructions to execute next, possibly reordering them to avoid
+stalls</strong>. The pipeline is divided into three major units: an
+instruction fetch and issue unit, multiple functional units, and a
+commit unit.</p>
 <ul>
-<li><p>The directive <code>.pos 0</code> indicates that <strong>the
-assembler should begin generating code starting at address
-0</strong>.</p></li>
-<li><p>The next instruction <code>irmovq stack, %rsp</code> initializes
-the stack pointer.</p>
-<ul>
-<li>The label <code>stack</code> is declared at the end of the program,
-to indicate address 0x200 using a .pos directive. Our stack will
-therefore <strong>start at this address and grow toward lower
-addresses</strong>.</li>
-</ul></li>
-<li><p>The label <code>array</code> denotes the start of this array, and
-is aligned on an 8-byte boundary using the <code>.align</code>
-directive. The array stores 4 words.</p></li>
+<li><p>The first unit fetch instructions, decodes them and sends them to
+corresponding function unit for execution.</p></li>
+<li><p>Each function unit has <em>buffers</em> called <em>reservation
+stations</em>, which <strong>hold the operands and the
+operation</strong>. As soon as the buffer contains all its operands and
+the functional unit is ready to execute, the result calculated. The
+result is sent to <strong>any reservation stations waiting for this
+particular result</strong> and <strong>the commit
+unit</strong>.</p></li>
+<li><p>The commit unit <strong>buffers the result until it&apos;s safe to put
+the result into the register file/memory</strong>. The buffer in the
+commit unit, often called the <em>reorder buffer</em>, is also used to
+supply operands.</p></li>
+<li><p>Once a result is committed to the register file, it can be
+fetched directly from there like in a normal pipeline.</p></li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;Since our only tool for creating Y86-64 code is an assembler, the
-programmer must perform tasks we ordinarily delegate to the compiler,
-linker, and run-time system.</p>
-<p>&#x2003;&#x2003;The <code>YIS</code> tools is used to simulate the execution of the
-Y86-64 machine-code program. If we run our object code on
-<code>YIS</code>, we will get the following output:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Stopped in 34 steps at PC = 0x13. Status &apos;HLT&apos;, CC Z=1 S=0 O=0</span><br><span class="line">Changes to registers:</span><br><span class="line">%rax:   0x0000000000000000 0x0000abcdabcdabcd</span><br><span class="line">%rsp:   0x0000000000000000 0x0000000000000200</span><br><span class="line">%rdi:   0x0000000000000000 0x0000000000000038</span><br><span class="line">%r8:    0x0000000000000000 0x0000000000000008</span><br><span class="line">%r9:    0x0000000000000000 0x0000000000000001</span><br><span class="line">%r10:   0x0000000000000000 0x0000a000a000a000</span><br><span class="line"></span><br><span class="line">Changes to memory:</span><br><span class="line">0x01f0: 0x0000000000000000 0x0000000000000055</span><br><span class="line">0x01f8: 0x0000000000000000 0x0000000000000013</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/06/29/5-1-Parallelism-via-Instructions/image-23.png"></p>
+<blockquote>
+<p>If an operand is not in the register file or reorder buffer, it must
+<strong>be waiting to be produced by a functional unit</strong>.
+<strong>The name of the functional unit that will produce the result is
+tracked</strong>. When that unit eventually produces the result,
+<strong>it is copied directly into the waiting reservation
+statio</strong>n from the functional unit bypassing the registers.</p>
+</blockquote>
+<p>&#x2003;&#x2003;We may think of a dynamically scheduled pipeline as an
+<em>out-of-order execution</em>. To make programs behave as if they were
+running on a simple in-order pipeline, the instruction fetch and decode
+unit is required to <strong>issue instructions in order</strong>, which
+allows dependences to be tracked, and the commit unit is required to
+<strong>write results to registers and memory in program fetch
+order</strong>. This conservative mode is called <em>in-order
+commit</em>. Hence, if an exception occurs, the computer can point to
+the last instruction executed.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>473</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>2 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
+Vector</h1>
+<h3 id="1basic-concepts">1.Basic concepts</h3>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
 <ul>
-<li><p>The first line of the simulation output summarizes the execution
-and the resulting values of the PC and program status.</p></li>
-<li><p>The original values of the register are shown on the
-left.</p></li>
+<li><p>In SIMD, all the parallel execution units are
+<strong>synchronized</strong>, and they all respond to a single
+instruction <strong>that emanates from a single program
+counter</strong>.</p></li>
+<li><p>Each execution unit <strong>has its own address register, and so
+have different data address</strong>.</p></li>
 </ul>
+<blockquote>
+<p>The original motivation behind SIMD was to <strong>amortize the cost
+of the control unit over execution units</strong>. The SIMD can also
+save instrustion bandwidth and space: SIMD needs <strong>only one copy
+of the code that is being simultaneously executed</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Since the instruction is single, SIMD works best when dealing with
+<strong>identically structured data</strong>, which is called
+<em>data-level parallelism</em>, e.g., for loop.</p>
+</blockquote>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
+<ul>
+<li><p>SPMD: The programmer write a single program that runs on all
+processors of a <em>MIMD computer</em>, relying on conditional
+statements when different processors should execute distinct section of
+code.</p></li>
+<li><p>The SIMD computers operate on <strong>vectors of
+data</strong>.</p></li>
+</ul>
+<h3 id="2vector">2.Vector</h3>
+<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
+<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
+data elements from memory, put them in order into a large set of
+registers</strong>, and operate on them sequentially in registers using
+<em>pipelined execution units</em>.</p>
+<ul>
+<li>A key feature of vector architectures is <strong>a set of vector
+registers</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
+loop):</p>
+<p><span class="math display">\[
+Y = a \times X + Y
+\]</span></p>
+<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
+<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
+<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
+also the pipeline stalls are required only <strong>once per vector
+operation</strong>, rather than once per vector element.</p>
+<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
+<ol type="1">
+<li><p>The compiler indicates that <strong>the computation of each
+result in the vector is independent</strong>. So compiler doesn&apos;t have
+to check for data hazards within an instruction.</p></li>
+<li><p>Since the element in a vector is adjacent, <strong>the cost of
+the latency to main memory is seen only once for the entire
+vector</strong>.</p></li>
+<li><p>Because a complete loop is replaced by a vector instruction whose
+<strong>behaviour is predetermined</strong>, control hazards are
+nonexistent.</p></li>
+</ol>
+<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
+<ul>
+<li>Unlike multimedia extensions, the number of elements in a vector
+operation isn&apos;t in the opcode but in <strong>a separate
+register</strong>.</li>
+</ul>
+<blockquote>
+<p>This means different versions of the vector architecture can simply
+be implemented by changing the contents of the register, thus retain
+binary compatibility.</p>
+</blockquote>
+<ul>
+<li>The parallel semantics of a vector instruction allows using a
+<em>deeply pipelined functional unit</em> to execute vector
+operations:</li>
+</ul>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
+<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
+register to take part in operations with element N from other vector
+registers, and the structure is called <em>vector lanes</em>:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
+<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
+vector unit by <strong>adding more lanes</strong>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/14/4-1-Caches/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/14/4-1-Caches/" class="post-title-link" itemprop="url">4.1.Caches</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-14 08:36:22" itemprop="dateCreated datePublished" datetime="2024-06-14T08:36:22+08:00">2024-06-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-15 15:07:48" itemprop="dateModified" datetime="2024-06-15T15:07:48+08:00">2024-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-4-Cache/" itemprop="url" rel="index"><span itemprop="name">Module 4.Cache</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>11 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="41caches"><span class="math inline">\(4.1.\)</span>Caches</h1>
+<h3 id="1-some-concepts-amp-libraryanalogy">1. Some concepts &amp; Library
+analogy</h3>
+<blockquote>
+<p>Suppose you were a student writing a term paper on important
+historical developments in computer hardware. You are sitting at a desk
+in a library with a collection of books that you have pulled from the
+shelves and are examining. You find that several of the important
+computers that you need to write about are described in the books you
+have, but there is nothing about the EDSAC. Therefore, you go back to
+the shelves and look for an additional book. You find a book on early
+British computers that covers the EDSAC. Once you have a good selection
+of books on the desk in front of you, there is a high probability that
+<strong>many of the topics you need can be found in them, and you may
+spend most of your time just using the books on the desk without
+returning to the shelves</strong>. Having several books on the desk in
+front of you saves time compared to having only one book there and
+constantly having to go back to the shelves to return it and take out
+another.</p>
+<p>The same principle allows us to create the illusion of a large memory
+that we can access as fast as a very small memory. Just as you did not
+need to access all the books in the library at once with equal
+probability, <strong>a program does not access all of its code or data
+at once with equal probability</strong>. Otherwise,it would be
+impossible to make most memory accesses fast and still have large memory
+in computers, just as it would be impossible for you to fit all the
+library books on your desk and still find what you wanted quickly.</p>
+</blockquote>
+<p>&#x2003;&#x2003;The above line illustrates the <em>principel of locality</em>.
+There are two kinds of localities:</p>
+<ul>
+<li><p>Temporal locality(locality in time): <strong>If an item is
+referenced, it will tend to be referenced again soon.</strong> (If you
+recently brought a book to your desk to look at, you will probably need
+to look at it again soon.)</p></li>
+<li><p>Spatial locality (locality in space): <strong>If an item is
+referenced, items whose addresses are close by will tend to be
+referenced soon.</strong> (For example, when you brought out the book on
+early English computers to learn about the EDSAC, you also noticed that
+there was another book shelved next to it about early mechanical
+computers, so you likewise brought back that book and, later on, found
+something useful in that book.)</p></li>
+</ul>
+<p>&#x2003;&#x2003;We take advantage of the principle of locality by implementing the
+memory as a <em>memory hierarchy</em>. It contains multiple levels, but
+<strong>data are copied between only two adjacent levels at a
+time</strong>.</p>
+<p><img src="/2024/06/14/4-1-Caches/image.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-1.png"></p>
+<blockquote>
+<p>The faster memories are <strong>more expensive per bit</strong> than
+the slower and thus are <strong>smaller</strong>.</p>
+</blockquote>
+<p><img src="/2024/06/14/4-1-Caches/image-2.png"></p>
+<ul>
+<li>If <strong>the data requested by the processor appear in some block
+in the upper level</strong>, it&apos;s called a <em>hit</em>(like you find a
+book on your desk). Else it&apos;s called a <em>miss</em>.</li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-28.png"></p>
+<h3 id="2memory-technologies">2.Memory technologies</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-3.png"></p>
+<h3 id="3caches-basics">3.Caches basics</h3>
+<h4 id="adirect-mapped-structure">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Direct-mapped structure</h4>
+<p>&#x2003;&#x2003;For each word, we can assign a location in cache based on the
+<em>address</em> of the word in memory, and this is called
+<strong>direct-mapped</strong>.</p>
+<p>&#x2003;&#x2003;The struction uses this mapping to find a block:</p>
+<p><span class="math display">\[
+(blockAddress)\mod (numberOfBlockInCache)
+\]</span></p>
+<ul>
+<li>We add a set of <em>tags</em> to the cache to judge if the data in
+the cache corresponds to a requested word. The tag needs to contain
+<strong>the upper portion of the address</strong>:</li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-4.png"></p>
+<ul>
+<li><p>We add a <em>valid bit</em> to <strong>indicate whether an entry
+contains a valid address</strong>. If the bit isn&apos;s set, there cannot be
+a match for this block.</p></li>
+<li><p>A <em>cache index</em> is used to <strong>select the
+block</strong>.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-5.png"></p>
+<p>&#x2003;&#x2003;The digit capacity of tage field and the total number of bits in
+the struction can be calculated by the following steps:</p>
+<p><img src="/2024/06/14/4-1-Caches/image-6.png"></p>
+<h4 id="bdealing-with-missing-rate">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Dealing with missing rate</h4>
+<ul>
+<li><p><strong>Larger blocks exploit spatial locality to lower miss
+rates</strong>. This is because larger blocks <strong>contain more
+adjacent data</strong>, taking advantage of locality of reference,
+making it more likely that programs will hit the cache when they access
+the data.</p></li>
+<li><p>However, the miss rate may go up eventually if <strong>the block
+size becomes a significant fraction of the cache size</strong>, for
+<strong>there will be a great deal of competition for those
+blocks</strong>. As a result, a block will be bumped out of the cache
+before its words are accessed.</p></li>
+<li><p>Also, enlarging the block size makes the <em>miss penalty</em>
+larger.</p>
+<ul>
+<li><p>The miss penalty is determined by <strong>the time required to
+fetch the block from the next lower level of the hierarchy and load it
+into the cache</strong>.</p></li>
+<li><p>The time to fetch the block has two parts: <strong>the latency to
+the first word</strong> and <strong>the transfer time for the rest of
+the block</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4handling-cache-misses">4.Handling cache misses</h3>
+<p>&#x2003;&#x2003;The cache miss handling is done in collaboration with the
+<em>process control unit</em> and with a separate <em>controller</em>
+that initiates the memory access and refills the cache.</p>
+<ul>
+<li>The control unit in cache must detect a miss and process the miss by
+fetching the requested data from memory. If the cache reports a hit, it
+uses the data as usual.</li>
+</ul>
+<p>&#x2003;&#x2003;To handle the <em>instruction misses</em>, we need to:</p>
+<ol type="1">
+<li><p>Send the original PC value to the memory. It equals to
+<code>PC-4</code>.</p></li>
+<li><p>Instruct main memory to perform a read and wait for the memory to
+complete its access.</p></li>
+<li><p>Write the cache entry, putting the data from memory in the data
+portion of the entry, writing the upper bits of the address(from the
+ALU)into the tag field, and turning the valid bit on.</p></li>
+<li><p><strong>Restart the instruction execution at the first
+step</strong>, which will refetch the instruction, this time
+<strong>finding it in the cache</strong>.</p></li>
+</ol>
+<h3 id="5handling-writes">5.Handling writes</h3>
+<h4 id="awrite-through">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Write-through</h4>
+<p>&#x2003;&#x2003;One simple way to deal with write hit is <strong>always to write
+the data into both the memory and the cache</strong>. However, the write
+to main memory takes a long time, thus reduce the performance.</p>
+<p>&#x2003;&#x2003;One solution is to use a <em>write buffer</em>. It <strong>stores
+the data while they are waiting to be written to memory</strong>.</p>
+<ul>
+<li><p>After writing the data into the cache and the write buffer, the
+processor continues execution.</p></li>
+<li><p>When a write to main memory completes, the entry in the write
+buffer is freed.</p></li>
+<li><p>If the write buffer is full when the processor reaches a write,
+the processor must <strong>stall until there&apos;s an empty position in the
+buffer</strong>.</p></li>
+</ul>
+<h4 id="bwrite-back">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Write-back</h4>
+<p>&#x2003;&#x2003;When a write occurs, the new value is written only to the block in
+the cache. The modified block is written to the lower level of the
+hierarchy when <strong>it&apos;s replaced</strong>. This scheme is called
+<em>write-back</em>. It can improve performance especially if
+<strong>processors can generate writes faster than writes can be handled
+by the main memory</strong>.</p>
+<ul>
+<li><p>In the write-through process, we can simply overwrite the block.
+But in a write-back process, if we overwrite a block <strong>before we
+knew whether the store had hit the cache</strong>, we may destroy the
+contents of the block which isn&apos;t backed up. To avoid this, we take the
+two methods:</p>
+<ul>
+<li><p>We use two cycles, one to <strong>check for hit</strong> and one
+to <strong>perform the write</strong>.</p></li>
+<li><p>Or we can use a <em>store buffer</em> to hold the data. When it&apos;s
+used, the processor does the cache lookup and <strong>places the data in
+the store buffer during the normal cache access cycle</strong>. The new
+data <strong>are written from the store buffer into the cache on the
+next unused cache access cycle</strong>.</p></li>
+</ul></li>
+</ul>
+<blockquote>
+<p>By comparison, we can always use one cycle to do writing in
+write-through process. We read the tag and write the data portion of the
+selected block. If the tag matches the address of the current block, the
+processor continues normally, since the correct block has been updated.
+Otherwise, the processor <strong>generates a write miss to fetch the
+rest of the block corresponding to that address</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Many write-back caches also include <em>write buffers</em> that are
+used to <strong>reduce the miss penalty when a miss replaces a modified
+block</strong>. In such a case, <strong>the modified block is moved to a
+write-back buffer associated with the cache</strong> while the requested
+block is read from memory. The write-back buffer is later written back
+to memory.</p>
+<blockquote>
+<p>The main idea is not to touch the main memory as much as
+possible.</p>
+</blockquote>
+<p><img src="/2024/06/14/4-1-Caches/image-11.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-20.png"></p>
+<h4 id="cwrite-allocate-amp-nowrite-allocate">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Write-allocate &amp; No
+write-allocate</h4>
+<p>&#x2003;&#x2003;In write-through process, to deal with the write miss, we
+<strong>allocate a block in the cache called write allocate</strong>.
+The block is fetched from memory and then the appropriate portion of the
+block is overwritten.</p>
+<blockquote>
+<p>This reduces the number of accesses to main memory and increases the
+speed of access.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Another strategy is to update the portion of the block <strong>in
+memory but not put it in the cache</strong>. This is because sometimes
+we need to write in the entire blocks of data, and in such situation
+writing in cache is unnecessary.</p>
+<p><img src="/2024/06/14/4-1-Caches/image-21.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-22.png"></p>
+<blockquote>
+<p>Since write-through strategy ensures the consistence between memory
+and cache, if we use write-allocate strategy, the cache will contain
+reduntant data block, which makes cache management more difficult.</p>
+<p>And for write-back, this ensures the data consistence.</p>
+</blockquote>
+<h4 id="danexample">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>An
+example</h4>
+<p><img src="/2024/06/14/4-1-Caches/image-7.png"></p>
+<p>&#x2003;&#x2003;In this design, the steps for reading request are as follows:</p>
+<ol type="1">
+<li><p>Send the address to the appropriate cache.</p></li>
+<li><p>If the cache signal hit, the requested word is available on the
+data lines. A <em>block index</em> field is used to control the
+multiplexor to select the required word from the 16 words in the indexed
+block.</p></li>
+<li><p>If the cache signals miss, <strong>we send the address to the
+main memory. When the memory returns with the data</strong>, we write it
+into the cache and then read it to fulfill the request.</p></li>
+</ol>
+<h3 id="6cache-performanceimprovement">6.Cache performance
+improvement</h3>
+<p>&#x2003;&#x2003;There are two different techniques to improve cache performance.
+One focuses on reducing the miss rate by <strong>reducing the
+probability that two distinct memory blocks will contend for the same
+cache location</strong>. The other reduces the miss penalty by
+<strong>adding an additional level to the hierarchy</strong>. The second
+technique is called <em>multilevel caching</em>.</p>
+<h4 id="amore-flexible-placement-of-blocks">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>More flexible placement of blocks</h4>
+<ul>
+<li><p><em>Fully associative</em>: In this scheme, a block can be placed
+in <strong>any location in the cache</strong>, that is, <strong>the
+block may be associated with any entry in the cache</strong>.</p>
+<ul>
+<li><p>To find a given block in a fully-associative cache, <strong>all
+the entries in the cache must be searched</strong>.</p></li>
+<li><p>This process is done <strong>in parallel with a comparator
+associated with each cache entry</strong>. This comparators
+significantly increase the hardware cost, so the scheme only suits for
+caches with small numbers of blocks.</p></li>
+</ul></li>
+<li><p><em>Set associative</em>: In this scheme, there are a fixed
+number of locations where each block can be placed. An <em>n-way set
+associative</em> cache consists of a number of sets, each of which has
+<span class="math inline">\(n\)</span> blocks.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-8.png"></p>
+<p>&#x2003;&#x2003;The advantage of increasing the degree of associativity is that
+<strong>it usually decrease the miss rate</strong>. However, there&apos;s
+little further improvement in going to rather higher associativity.</p>
+<h4 id="blocating-a-block-in-the-cache">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Locating a block in the cache</h4>
+<p>&#x2003;&#x2003;Let&apos;s first take a block in a set-associative cache for
+example:</p>
+<p><img src="/2024/06/14/4-1-Caches/image-9.png"></p>
+<ul>
+<li><p>The <em>tag</em> is checked to see <strong>if it matches the
+block address from the processor</strong>.</p></li>
+<li><p>The <em>index</em> is used to <strong>select the set containing
+the address of interest</strong>.</p></li>
+<li><p>All the tags in the selected set are searched <strong>in
+parallel</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In a direct-mapped cache, only a single comparator is needed, and
+we access the cache simply by indexing. In a <em>four-way
+set-associative</em> cache, four comparators are needed, together with a
+<strong>4-to-1 multiplexor to choose among the four potential
+sets</strong>. The cache access consists of indexing the appropriate set
+and then searching the tags of the set.</p>
+<p><img src="/2024/06/14/4-1-Caches/image-10.png"></p>
+<p>&#x2003;&#x2003;The choice among these three scheme depends on <strong>the cost of
+a miss</strong> versus <strong>the cost of implementing
+associativity</strong>.</p>
+<h4 id="cchoosing-which-block-to-replace">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Choosing which block to replace</h4>
+<p>&#x2003;&#x2003;There are two primary strategies for replacement in set-associative
+or fully associative caches:</p>
+<ul>
+<li><p><em>Random</em>: Candidate blocks are randomly selected, possibly
+using some hardware assistance.</p></li>
+<li><p><em>Least recently used</em>(LRU): The block replaced is the one
+that has been unused for the longest time.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In practice, LRU is too costly to implement for hierarchies with
+more than a small degree of associativity, since <strong>tracking the
+usage information is expensive</strong>.</p>
+<h5 id="iapproximate-lru">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Approximate LRU</h5>
+<p><img src="/2024/06/14/4-1-Caches/image-23.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-24.png"></p>
+<h4 id="dmultilevel-caches">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Multilevel caches</h4>
+<p>&#x2003;&#x2003;To close the gap between the fast clock rates of processors and the
+long time to access DRAMs, most microprocessors support <strong>an
+addition level of caching</strong>.</p>
+<ul>
+<li><p>The second-level cache is normally on the chip, and is access
+<strong>whenever a miss occurs in the primary cache</strong>.</p></li>
+<li><p>If the second-level cache contains the desired data, the miss
+penalty for the first-level cache will be <strong>the access time of the
+second-level cache</strong>, which is much less time.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The design considerations for a primary and secondary cache are
+different. This two-level structure allows the primary cache to focus on
+<strong>minimizing hit time</strong> to yield a shorter clock cycle or
+fewer pipeline stages, while allowing the second cache to focus on
+<strong>miss rate</strong> to reduce the penalty of long memory access
+times.</p>
+<ul>
+<li><p>The primary cache is <strong>smaller</strong>, and may use
+<strong>a smaller block size</strong> to go with the smaller cache size
+and reduce miss penalty.</p></li>
+<li><p>The second cache will be <strong>much larger than in a
+single-level cache</strong>. It also use higher associativity than the
+primary cache, both for reducing the miss rates.</p></li>
+</ul>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-41.png"></p>
+<h3 id="7three-cs">7.Three Cs</h3>
+<p>&#x2003;&#x2003;In the hierarchy model, all misses are classified into one of three
+categories:</p>
+<ul>
+<li><p>Compulsory misses: These are cache misses caused by <strong>the
+first access to a block that has never been in the cache</strong>. These
+are also called cold-start misses.</p></li>
+<li><p>Capacity misses: These are cache misses caused when <strong>the
+cache cannot contain all the blocks needed during execution of a
+program</strong>. Capacity misses occur <strong>when blocks are replaced
+and then later retrieved</strong>.</p></li>
+<li><p>Conflict misses: These are cache misses that occur in
+set-associative or direct-mapped caches when <strong>multiple blocks
+compete for the same set</strong>. These cache misses are also called
+collision misses.</p></li>
+</ul>
+<hr>
+<ul>
+<li><p>Increasing associativity reduces conflict misses, but
+associativity may <strong>slow access time</strong>, leading to lower
+overall performance.</p></li>
+<li><p>Capacity misses can be reduced by enlarging the cache(so
+second-level caches is large). Meanwhile, when we make the cache larger,
+we must also be careful about <strong>increasing the access
+time</strong>(so the first-level caches is small).</p></li>
+<li><p>Since compulsory misses are generated by the first reference to a
+block, we can simple increase the block size to reduce the block
+number.</p></li>
+</ul>
+<h3 id="8using-fsm-to-control-acache">8.Using FSM to control a
+cache</h3>
+<h4 id="afinite-state-machines">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Finite-State Machines</h4>
+<p>&#x2003;&#x2003;A FSM consists of a set of states and directions on how to change
+states.</p>
+<ul>
+<li><p>The directions are defined by a <em>next-state function</em>,
+which maps the current state and the inputs to a new state.</p></li>
+<li><p>Each state of FSM specifies a set of outputs that are asserted
+when the machine is in this state.</p></li>
+<li><p>A FSM can be implemented with a temporary register that
+<strong>holds the current state</strong> and <strong>a block of
+combinatinoal logic</strong> that determines both the data-path signals
+to be asserted and the next state.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-12.png"></p>
+<h4 id="bcontroller">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Controller</h4>
+<p><img src="/2024/06/14/4-1-Caches/image-13.png"></p>
+<ul>
+<li><p><em>Ideal</em>: This state <strong>waits for a valid read or
+write request from the processor</strong>, which <strong>moves the FSM
+to the Compare Tag state</strong>.</p></li>
+<li><p><em>Compare Tag</em>: This state tests to see <strong>if the
+requested read or write is a hit or a miss</strong>. The index portion
+of the address <strong>selects the tag to be compared</strong>. If the
+data in the cache block referred to by the index portion of the address
+are valid, and the tag portion of the address matches the tag, then it
+is a hit. Either the data are read from the selected word if it is a
+load or written to the selected word if it is a store. The Cache Ready
+signal is then set. <strong>If it is a write,the dirty bit is set to
+1</strong>. Note that a write hit also sets the valid bit and the tag
+field; while it seems unnecessary, it is included because the tag is a
+single memory, so <strong>to change the dirty bit we likewise need to
+change the valid and tag fields</strong>. If it is a hit and the block
+is valid, the FSM <strong>returns to the idle state</strong>. A miss
+<strong>first updates the cache tag</strong> and then goes either to the
+Write-Back state, if the block at this location has dirty bit value of
+1, or to the Allocate state if it is 0.</p></li>
+<li><p><em>Write-Back</em>: This state writes the 128-bit block to
+memory using <strong>the address composed from the tag and cache
+index</strong>. We remain in this state waiting for the Ready signal
+from memory. When the memory write is complete, the FSM <strong>goes to
+the Allocate state</strong>.</p></li>
+<li><p><em>Allocate</em>: The new block <strong>is fetched from
+memory</strong>. We <strong>remain in this state waiting for the Ready
+signal from memory</strong>. When the memory read is complete, the FSM
+goes to the Compare Tag state.</p></li>
+</ul>
+<h3 id="9fully-associative-cacheintroduction">9.Fully associative cache
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-14.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-15.png"></p>
+<h3 id="10direct-mapped-cacheintroduction">10.Direct-mapped cache
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-16.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-17.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-29.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-30.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-31.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-32.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-33.png"></p>
+<h3 id="11set-associativeintroduction">11.Set-associative
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-18.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-19.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-34.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-35.png"></p>
+<h3 id="12fully-associativeintroduction">12.Fully-associative
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-25.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-26.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-27.png"></p>
+<h3 id="13analyzing-cache-performance">13.Analyzing cache performance</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-36.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-37.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-38.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-39.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-40.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/07/3-5-Pipelined-Datapath-and-Control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/07/3-5-Pipelined-Datapath-and-Control/" class="post-title-link" itemprop="url">3.5.Pipelined Datapath and Control</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-07 11:36:22" itemprop="dateCreated datePublished" datetime="2024-06-07T11:36:22+08:00">2024-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:08:24" itemprop="dateModified" datetime="2024-06-29T09:08:24+08:00">2024-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>6 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="35pipelined-datapath-and-control"><span class="math inline">\(3.5.\)</span>Pipelined Datapath and Control</h1>
+<h3 id="1some-point">1.Some point</h3>
+<ul>
+<li><p>All the instructions go from left to right through the datapath
+except the write-back stage and the selection of the next value of PC,
+and they never move backward.</p>
+<ul>
+<li>So the first right-to-left flow of data can lead to data hazards
+while the second leads to control hazards.</li>
+</ul></li>
+<li><p>One way to show what happens in pipelined execution is to pretend
+that each instruction has its own datapath, and then to place these
+datapaths on a timeline to show their relationship:</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image.png"></p>
+<p>&#x2003;&#x2003;All instructions advance during each clock cycle from one pipeline
+register to the next.</p>
+<h3 id="2pipeline-registers">2.Pipeline registers</h3>
+<ul>
+<li><p>A separate pipeline register is redundant to the state that is
+updated. For example, a load instruction will place its result in one of
+the 32 registers, and any later instruction that needs that data will
+<strong>simply read the appropriate register</strong>.</p>
+<ul>
+<li>Every instruction updates PC, and the PC can be thought of as a
+pipeline register: one <strong>that feeds the IF stage of the
+pipeline</strong>.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-1.png"></p>
+<p>&#x2003;&#x2003;We use the command <code>ld</code> to illustrate the pipe stage
+that is active in each stage:</p>
+<ol type="1">
+<li><em>Instruction fetch</em>: The PC is saved in the IF/ID pipeline
+register in case it&apos;s needed later for an instruction. This stage occurs
+<strong>before the instruction is identified</strong>.</li>
+</ol>
+<blockquote>
+<p>The computer cannot know which type of instruction is being fetched,
+so it must <strong>prepare for any instruction, passing potentially
+needed information down the pipeline</strong>.</p>
+</blockquote>
+<ol start="2" type="1">
+<li><em>Instruction decode and register file read</em>: Both the two
+read value and sign-extended immediate are stored in the ID/EX pipeline
+register, along with PC address.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-2.png"></p>
+<ol start="3" type="1">
+<li><em>Execute/address calculation</em>: It reads the information from
+the ID/EX pipeline register and add then using ALU. The result is placed
+in EX/MEM pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-3.png"></p>
+<ol start="4" type="1">
+<li><em>Memory access</em>: It uses the data from EX/MEM register and
+loads the data into MEM/WB pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-4.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-5.png"></p>
+<ol start="5" type="1">
+<li><em>Write back</em>: There&apos;s nothing to do in this stage.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-6.png"></p>
+<p>&#x2003;&#x2003;From the analysis above, we can get some key point:</p>
+<ul>
+<li><p>The information must be placed in a pipeline register, otherwise,
+<strong>the information is lost when the next instruction enters that
+pipeline stage</strong>.</p></li>
+<li><p>Each logical component of the datapath(ALU, data memory, etc),
+can be used <strong>only within a single pipeline stage</strong>. That
+is, <strong>each pipeline register can only be used by one phase in one
+clock cycle</strong>, which ensures that <strong>no more than one
+instruction can access the same hardware resources simultaneously in one
+clock cycle</strong>, thus avoiding structural dangers.</p></li>
+</ul>
+<p>&#x2003;&#x2003;We know that the instruction in IF/ID pipeline register supplies
+the writer register number, but the instruction fetch procedure occurs
+after the <code>ld</code> instruction(because it is conducted before an
+instruction is identified, so only when we complete the <code>ld</code>
+instruction will this step be done)! Hence, we need to <strong>preserve
+the distination register number in the <code>ld</code>
+instruction</strong>. The <code>ld</code> must pass the register number
+from ID/EX through EX/MEM to the MEM/WB pipeline register for use in the
+WB stage.</p>
+<h3 id="3data-hazards-amp-forwarding">3.Data hazards &amp; forwarding</h3>
+<h4 id="adatahazards">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Data
+hazards</h4>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-7.png"></p>
+<h4 id="bdetact-hazards">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Detact hazards</h4>
+<p>&#x2003;&#x2003;We first introduce a notation: we use &quot;ID/EX.RegisterRs1&quot; to refer
+to the number of 1 register whose value is found in the pipeline
+register ID/EX.</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-8.png"></p>
+<p>&#x2003;&#x2003;Using this notation, the two pairs of hazard conditions are:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-9.png"></p>
+<ul>
+<li>The <code>sub-and</code> is a type 1a hazard:</li>
+</ul>
+<p><span class="math display">\[
+MEM/WB.RegisterRd=ID/EX.RegisterRs2=x2
+\]</span></p>
+<ul>
+<li><p>The <code>sub-or</code> is a type 2a hazard.</p></li>
+<li><p>There&apos;s no data hazard between <code>sub</code> and
+<code>sd</code> because <strong><code>sd</code> reads <code>x2</code>
+the clock cycle after <code>sub</code> writes
+<code>x2</code></strong>.</p></li>
+</ul>
+<blockquote>
+<p>Pay attention to the clock cycle, not the name!!!</p>
+</blockquote>
+<p>&#x2003;&#x2003;One way to detact the hazards is simple <strong>check if the
+<code>RegWrite</code> signal is active</strong>. This can be done by
+<strong>examing the <code>WB</code> control field of the pipeline
+register during the <code>EX</code> and <code>MEM</code>
+stages</strong>.</p>
+<blockquote>
+<p>Recall that RISC-V requires that <code>x0</code> is taken as an
+oprand value of 0, if an instruction in the pipeline has <code>x0</code>
+as its destination, we want to <strong>avoid forwarding its possibly
+nonzero value</strong>.</p>
+</blockquote>
+<h4 id="csolution">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Solution</h4>
+<p>&#x2003;&#x2003;If we can take the inputs to the ALU <strong>from any pipeline
+register rather than just ID/EX</strong>, then we can forward the
+correct data.</p>
+<p>&#x2003;&#x2003;By <strong>adding multiplexors to the input of the ALU, and with
+the proper controls</strong>, we can run the pipeline at full speed in
+the presence of these data hazards:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-10.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-11.png"></p>
+<blockquote>
+<p>Before forwarding, the ID/EX register has no need to include space to
+hold the rs1 and rs2 fields, so they are added to ID/EX.</p>
+</blockquote>
+<h4 id="ddetailed-detection-ampresolution">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Detailed detection &amp;
+resolution</h4>
+<ul>
+<li><p>EX hazard:</p>
+<ul>
+<li>If there&apos;s a write operation and a load operation at the same time,
+and the loaded object is under writting, then there&apos;s an EX hazard:</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-12.png"></p>
+<p>&#x2003;&#x2003;This case forwards the result from the previous instruction to
+either input of the ALU instead of the pipeline register EX/MEM</p>
+<ul>
+<li><p>MEM hazard</p>
+<ul>
+<li>If the writting part is just loaded.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-13.png"> <img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-14.png"></p>
+<blockquote>
+<p>What happens when a register is read and written in the same clock
+cycle? We assume that <strong>the write is in the first half of the
+clock cycle and the read is in the second half</strong>, so the read
+delivers what is written. As is the case for many implementations of
+register files, we have no data hazard in this case.</p>
+<p>As mentioned above, there is no hazard in the WB stage, because
+<strong>we assume that the register file supplies the correct
+result</strong> if the instruction in the ID stage reads the same
+register written by the instruction in the WB stage.</p>
+</blockquote>
+<p>&#x2003;&#x2003;One complication occurs when we all read and write to a same
+register:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add x1 x1 x2</span><br><span class="line">add x1 x1 x3</span><br><span class="line">add x1 x1 x4</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In this case, <strong>the result should be forwarded from the MEM
+stage, because the MEM stage is the more recent result</strong>. Thus,
+the control for the MEM should be:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-15.png"></p>
+<blockquote>
+<p>Why <code>not EX/MEM.RegisterRd = ID/EX.RegisterRs1</code>? Because
+if this is true, then <strong>the instruction of EX/MEM should be
+written back into the register</strong>(because it&apos;s the most current),
+and it will cover the result of MEM/WB. So we take EX/MEM first.</p>
+</blockquote>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-16.png"></p>
+<h4 id="estalls">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Stalls</h4>
+<p>&#x2003;&#x2003;One case where forwarding cannot help is when <strong>an
+instruction tries to read a register following a load instruction that
+writes the same register</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
+<blockquote>
+<p>The RAM is used by <code>add</code> before it&apos;s updated, and it won&apos;t
+be updated until the <code>lw</code> ends. Since it must be used in the
+first step, forwarding cannot help.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Hence, we also need a <em>hazard detection unit</em>. It operates
+during the ID stage so that it can insert the stall between the load and
+the instruction depentent on it:</p>
+<ul>
+<li>If it&apos;s in a load process, and the being-loaded object involves in
+other process.</li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-18.png"></p>
+<p>&#x2003;&#x2003;If the instruction in the ID stage is stalled, then the instruction
+in the IF stage must also be stalled, or we will lose the fetch of
+instruction. Therefore, <strong>the instruction in the IF stage will
+continue to be read using the same PC</strong>. The EX stage must also
+be doing something, so we let it <strong>execute instructions that have
+no effect: nops</strong>.</p>
+<p>&#x2003;&#x2003;<strong>Deasserting all seven control signals(setting them to 0) in
+the EX, MEM, WB stages</strong> will create a nop instruction:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-19.png"></p>
+<ul>
+<li><p>The forwarding unit controls the ALU multiplexor s to replace the
+value from a general-purpose register with that in the pipeline
+register.</p></li>
+<li><p>The hazard detection unit controls the writing of the PC and
+IF/ID registers plus the multiplexor that choose between the real
+control values and all 0s.</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-20.png"></p>
+<h3 id="4control-hazards">4.Control hazards</h3>
+<h4 id="aassume-branch-not-taken">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Assume branch not taken</h4>
+<p>&#x2003;&#x2003;We can assume the branch is not taken. If the condition branch is
+taken instead, <strong>the instructions that are being fetched and
+decoded must be discarded</strong>.</p>
+<p>&#x2003;&#x2003;To discard instructions, we merely change the original control
+values to 0s. Notice that we must also change the three instructions in
+the IF, ID and EX stages when the branch reaches the MEM stage, which is
+called <em>flush</em>.</p>
+<p>&#x2003;&#x2003;To flush instructions in the IF, we <strong>add a control line
+called IF.Flush</strong>, it zeros the instruction field of the IF/ID
+pipeline register.</p>
+<h4 id="breducing-the-delay-of-branches">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Reducing the delay of branches</h4>
+<p>&#x2003;&#x2003;One way to improve conditional branch performance is to reduce the
+cost of taken branch. We have assumed that the next PC for a branch is
+selected in the MEM stage, but <strong>if we move the conditional branch
+execution earlier in the pipeline, then fewer instructions need be
+flushed</strong>.</p>
+<p>&#x2003;&#x2003;Moving the branch decision up requires two actions to occur
+earlier: computing the branch target address and evaluating the branch
+decision.</p>
+<p>&#x2003;&#x2003;Moving up the address calculation is easy, we can <strong>move the
+branch adder from EX stage to ID stage</strong>.</p>
+<p>&#x2003;&#x2003;The harder part is branch decision itself. We must deal with two
+complicate factors:</p>
+<ol type="1">
+<li><p>The introduction of equlity test unit.</p></li>
+<li><p>Because <strong>the value in a branch comparison is needed during
+ID but may be produced later in time</strong>, it is possible that a
+data hazard can occur and a stall will be needed.</p></li>
+</ol>
+<h3 id="5dynamic-branch-prediction">5.Dynamic branch prediction</h3>
+<ul>
+<li>This method looks up the address of the instruction to see
+<strong>if the conditional branch was taken the last time this
+instruction was executed</strong>, and, if so, to <strong>begin fetching
+new instructions from the same place as the last time</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;One implementation of this approach is a <em>branch prediction
+buffer</em> or <em>branch history table</em>. A branch prediction buffer
+is a small memory indexed by the lower portion of the address of the
+branch instruction. The memory contains <strong>a bit that says whether
+the branch was recently taken or not</strong>.</p>
+<ul>
+<li>Fetching begins in the predicted direction. If the predition turns
+out to be wrong, the incorrectly predicted instructions are deleted, the
+predition bit is inverted and stored back, and the proper sequence is
+fetched and executed.</li>
+</ul>
+<blockquote>
+<p>&#x2003;&#x2003;To improve the accuracy, the <em>2-bit prediction schemes</em> are
+often used. In a 2-bit scheme, <strong>a prediction must be wrong twive
+before it is changed</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-21.png"></p>
+</blockquote>
+<hr>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-22.png"></p>
 
       
     </div>
@@ -444,7 +1714,7 @@ left.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&#x2026;</span><a class="page-number" href="/page/133/">133</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&#x2026;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
