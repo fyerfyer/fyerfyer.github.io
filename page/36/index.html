@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.4.Rotating%20Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.3.%20B-Tree%20invariants/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.4.Rotating%20Trees/" class="post-title-link" itemprop="url">11.4.&#x6811;&#x7684;&#x65CB;&#x8F6C;</a>
+          <a href="/2024/05/31/11.3.%20B-Tree%20invariants/" class="post-title-link" itemprop="url">11.3.B-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:18:06" itemprop="dateModified" datetime="2024-06-02T18:18:06+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:11:21" itemprop="dateModified" datetime="2024-06-02T18:11:21+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>153</span>
+      <span>233</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,24 +272,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="114&#x6811;&#x7684;&#x65CB;&#x8F6C;"><span class="math inline">\(11.4\)</span>&#x6811;&#x7684;&#x65CB;&#x8F6C;</h1>
-<p>&#x2003;&#x2003;The formal definition of rotation is:</p>
+          <h1 id="113b-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x4E0D;&#x53D8;&#x91CF;</h1>
+<h3 id="1b-&#x6811;&#x7684;&#x6027;&#x8D28;">1.<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6027;&#x8D28;</h3>
+<p>&#x2003;&#x2003;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>-&#x6811;&#x4F1A;&#x5728;&#x53F6;&#x5B50;&#x5BB9;&#x91CF;&#x8FC7;&#x5927;&#x65F6;&#x5C06;&#x53F6;&#x5B50;&#x5BF9;&#x534A;&#x5206;&#x5F00;&#x3001;&#x7136;&#x540E;&#x91CD;&#x6784;&#x5B50;&#x6811;&#xFF0C;&#x8FD9;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4EE5;&#x4EFB;&#x610F;&#x6B21;&#x5E8F;&#x63D2;&#x5165;&#x5143;&#x7D20;&#xFF0C;&#x800C;&#x4E0D;&#x7528;&#x62C5;&#x5FC3;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x53D1;&#x751F;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E00;&#x68F5;<span class="math inline">\(B\)</span>-&#x6811;&#x5177;&#x6709;&#x5982;&#x4E0B;&#x6709;&#x7528;&#x7684;&#x6027;&#x8D28;&#xFF1A;</p>
 <ul>
-<li><p><code>rotateLeft(G): Let x be the right child of G. Make G the new left child of x.</code></p></li>
-<li><p><code>rotateRight(G): Let x be the left child of G. Make G the new right child of x.</code></p></li>
+<li>&#x6BCF;&#x4E2A;&#x53F6;&#x5B50;&#x5230;&#x5B83;&#x7684;&#x6E90;&#x5934;(<span class="math inline">\(source\)</span>)&#x7684;&#x8DDD;&#x79BB;&#x5FC5;&#x987B;&#x76F8;&#x7B49;&#x3002;</li>
+<li>&#x4E00;&#x4E2A;&#x6709;<span class="math inline">\(k\)</span>&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x975E;&#x53F6;&#x5B50;&#x8282;&#x70B9;&#xFF0C;&#x5B83;&#x5FC5;&#x987B;&#x6709;<span class="math inline">\(k+1\)</span>&#x4E2A;&#x5B69;&#x5B50;&#x3002;</li>
 </ul>
-<p>&#x2003;&#x2003;As in the picture, it means:</p>
-<ul>
-<li><span class="math inline">\(RotateLeft(G)\)</span>: G moves left,
-promote its right child in the only natural way.(Promoting P means P is
-the new parent of G.)</li>
-<li><span class="math inline">\(RotateRight(P)\)</span>: P moves right,
-promote its left child in the only natural way.</li>
-</ul>
-<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-5.png"></p>
-<p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
-<p>&#x2003;&#x2003;We can implement these operations by following codes:
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h3 id="2b-&#x6811;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5206;&#x6790;">2.<span class="math inline">\(B\)</span>-&#x6811;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5206;&#x6790;</h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x60C5;&#x51B5;&#x662F;&#xFF1A;&#x5728;&#x6811;&#x7684;&#x5E95;&#x90E8;&#x7684;&#x53F6;&#x5B50;&#x7684;&#x6700;&#x53F3;&#x4FA7;&#x7684;&#x8282;&#x70B9;&#x627E;&#x5230;&#x67D0;&#x4E2A;&#x5143;&#x7D20;&#x3002;&#x7531;&#x4E8E;<span class="math inline">\(B\)</span>-&#x6811;&#x7684;&#x6784;&#x9020;&#x65B9;&#x5F0F;&#xFF0C;&#x6811;&#x7684;&#x6DF1;&#x5EA6;<span class="math inline">\(O(\log
+n)\)</span>&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x9650;&#x5236;&#x4E86;&#x6BCF;&#x4E2A;&#x53F6;&#x5B50;&#x7ED3;&#x70B9;&#x627F;&#x8F7D;&#x5143;&#x7D20;&#x7684;&#x6570;&#x91CF;&#xFF0C;&#x56E0;&#x6B64;&#x4ECE;&#x53F6;&#x5B50;&#x5DE6;&#x7AEF;&#x5230;&#x53F3;&#x7AEF;&#x7684;&#x641C;&#x7D22;&#x65F6;&#x95F4;&#x4E3A;&#x5E38;&#x6570;&#x3002;&#x5219;&#x603B;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x4E3A;<span class="math inline">\(O(\log n)\)</span>&#x3002;</p>
 
       
     </div>
@@ -312,7 +305,7 @@ promote its left child in the only natural way.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/35/">35</a><span class="page-number current">36</span><a class="page-number" href="/page/37/">37</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/37/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/35/">35</a><span class="page-number current">36</span><a class="page-number" href="/page/37/">37</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/37/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -344,7 +337,7 @@ promote its left child in the only natural way.</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:49</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
+          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>401</span>
+      <span>628</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,89 +272,130 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="56cache-coherence">5.6.Cache Coherence</h1>
-<h3 id="1cache-model">1.Cache model</h3>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
-<h3 id="2coherence-concept">2.Coherence concept</h3>
-<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
-<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
-example:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
-<p>&#x2003;&#x2003;The two different processors have two different values for the same
-location, this is referred to as <em>cache coherence problem</em>.</p>
-<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
-<strong>any read of a data item returns the most recently written value
-of that data item</strong>. This simple concept contains two different
-aspects of memory system behaviour:</p>
+          <h1 id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</h1>
+<h3 id="1machine-code-properties">1.Machine code properties</h3>
 <ul>
-<li><em>coherence</em>: defines <em>what</em> values can be returned by
-a read.</li>
-<li><em>consistency</em>: determines <em>when</em> a written value will
-be returned by a read.</li>
+<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
+isn&apos;t fixed.</p></li>
+<li><p>The instruction format is designed to insure that <strong>there&apos;s
+a unique decoding of the bytes into machine instructions</strong>. For
+example, only <code>pushq %rbx</code> can start with <code>53</code>(can
+be analogied with opcode in RISC-V).</p></li>
+<li><p>The disassembler determines the assembly code based
+<strong>purely on the byte sequences in the machine-code
+file</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;A memory system is coherent if:</p>
+<h3 id="2registers">2.Registers</h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
+<ul>
+<li><p>When we present instructions copying and generating 1-, 2-, 4-,
+8-byte values, we follow the two conventions:</p>
+<ul>
+<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
+remaining bytes unchanged</strong>.</p></li>
+<li><p>Those that generate 4-byte quantities <strong>set the upper 4
+bytes of the register to zero</strong>.</p></li>
+</ul></li>
+<li><p>A function returns a value by <strong>storing it in register
+<code>%rax</code></strong>, or <strong>in one of the low-order portions
+of this register</strong>.</p></li>
+</ul>
+<h3 id="3operand-specifiers">3.Operand specifiers</h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
+<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
+<ul>
+<li><p><em>Immediate</em>: It refers to constant value. In ATT format
+assembly code, it is written with a <code>$</code> along with an
+integer.</p></li>
+<li><p><em>Register</em>: It denotes the content of a register. We use
+the notation <span class="math inline">\(r_a\)</span> to denote a
+register <span class="math inline">\(a\)</span> and indicate its value
+with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
+<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
+<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
+<ul>
+<li><span class="math inline">\(Imm\)</span> is the immediate offset,
+<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
+<h3 id="4data-movement-instructions">4.Data Movement Instructions</h3>
+<h4 id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
+<ul>
+<li><p>The source operand designates a value that is <strong>immediate,
+stored in a register, or stored in memory</strong>.</p></li>
+<li><p>The destination operand designates a location that is
+<strong>either a register or a memory address</strong>.</p></li>
+<li><p>The value is first passed <strong>from source to a register, then
+from the register to the destination</strong>.</p></li>
+</ul>
+<blockquote>
+<p>The regular <code>movq</code> instruction can only have immediate
+source operands that can be represented as 32-bit two&#xFFFD;s-complement
+numbers. This value is then sign extended to produce the 64-bit value
+for the destination. The <code>movabsq</code> instruction can have an
+<strong>arbitrary 64-bit immediate value</strong> as its source operand
+and can only have a register as a destination.</p>
+</blockquote>
+<blockquote>
+<p>In x86-64, any instruction that generates a 32-bit value for a
+register also <strong>sets the high-order portion of the register to
+0</strong>.</p>
+</blockquote>
+<h4 id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
+instructions</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
+<ul>
+<li><p>Each instruction name has <strong>size designators</strong> as
+its final two characters&#xFFFD;the first specifying the source size, and the
+second specifying the destination size.</p></li>
+<li><p>The source can be either a register or stored in memory.</p></li>
+<li><p>The destination is a register.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
+points to note:</p>
 <ol type="1">
-<li>A read by a processor P to location X that follows <em>only one
-write</em> by P to X always returns the value written by P.</li>
+<li><p>In x86-64, we always <strong>give quad word registers to memory
+reference</strong>, such as <code>%rax</code>.</p></li>
+<li><p>We <strong>first decide which suffix to use by the
+destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
+<li><p>If <strong>the destination is a memory address(such as
+<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
+the source</strong>.</p></li>
 </ol>
 <blockquote>
-<p>This preserves program order.</p>
+<p>Note that if both the source and the destination are from memory,
+<strong>we can use all four suffix</strong>. The x86-64 imposes the
+restriction that <strong>a move instruction cannot have both operands
+refer to memory locations</strong>.</p>
 </blockquote>
-<ol start="2" type="1">
-<li>A read by a processor to location X that follows <em>only one
-write</em> by another processor to X returns the written value if the
-read and write are sufficiently separated in time.</li>
-</ol>
-<blockquote>
-<p>This defines memory coherence.</p>
-</blockquote>
-<ol start="3" type="1">
-<li>Writes to the same location are <strong>serialized</strong>; that
-is, two writes to the same location by any two processors <strong>are
-seen in the same order by all processors</strong>. For example, if CPU B
-stores 2 into memory at address X after time step 3, processors can
-never read the value at location X as 2 and then later read it as
-1.</li>
-</ol>
-<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
-<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
-<strong>has exclusive access to a data item</strong> before it writes
-that item. This style of protocol is called a <em>write invalidate
-protocol</em> because it <strong>invalidates copies in other caches on a
-write</strong>.</p>
-<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
-CPU A, the CPU B will get a cache miss, and is forced to fetch a new
-copy of data:</p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
-<blockquote>
-<p>Block size plays an important role in cache coherency. Large blocks
-can cause what&apos;s called <em>false sharing</em>, when two unrelated
-shared variables are located in the same cache block, the whole block is
-exchanged between processors even though the processors are accessing
-different variables.</p>
-</blockquote>
-<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
-protocol:</h3>
-<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
-<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
-concepts</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
-<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
-<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
+<h4 id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
+<ul>
+<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
+stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
+<li><p>Dereferencing a pointer involves <strong>copying that pointer
+into a register</strong>, and then <strong>using this register in a
+memory reference</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
+fact <strong>the extension of bits</strong>. For example, if we want to
+convert <code>char</code> to <code>int</code>, because <code>char</code>
+takes word bits while <code>int</code> takes 32 bits, we use
+<code>movsbl</code> to implement operations
+like<code>int x = (int) char_element</code>:</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
+<h4 id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
 
       
     </div>
@@ -371,7 +418,7 @@ concepts</h4>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -403,7 +450,7 @@ concepts</h4>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:49</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
   </span>
 </div>
 <div class="busuanzi-count">

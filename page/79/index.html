@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/9.1.Introduction%20to%20Disjoint%20Sets/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/8.2.Asymptotics%20I/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/9.1.Introduction%20to%20Disjoint%20Sets/" class="post-title-link" itemprop="url">9.1.&#x5E76;&#x67E5;&#x96C6;&#x4ECB;&#x7ECD;</a>
+          <a href="/2024/05/31/8.2.Asymptotics%20I/" class="post-title-link" itemprop="url">8.2.&#x6E10;&#x8FDB;&#x5206;&#x6790;&#x4ECB;&#x7ECD;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 17:51:08" itemprop="dateModified" datetime="2024-06-02T17:51:08+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 17:46:49" itemprop="dateModified" datetime="2024-06-02T17:46:49+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/9-Disjoint-sets/" itemprop="url" rel="index"><span itemprop="name">9.Disjoint sets</span></a>
+          <a href="/categories/CS61B-DataStructure/8-Effecient-Programming/" itemprop="url" rel="index"><span itemprop="name">8.Effecient Programming</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>43</span>
+      <span>200</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,9 +272,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="91&#x5E76;&#x67E5;&#x96C6;&#x4ECB;&#x7ECD;"><span class="math inline">\(9.1\)</span>&#x5E76;&#x67E5;&#x96C6;&#x4ECB;&#x7ECD;</h1>
-<h3 id="1&#x5E76;&#x67E5;&#x96C6;&#x7684;&#x63A5;&#x53E3;">1.&#x5E76;&#x67E5;&#x96C6;&#x7684;&#x63A5;&#x53E3;</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DisjointSets</span> {</span><br><span class="line">    <span class="comment">/** connects two items P and Q */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** checks to see if two items are connected */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>; </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+          <h1 id="82&#x6E10;&#x8FDB;&#x5206;&#x6790;&#x4ECB;&#x7ECD;"><span class="math inline">\(8.2\)</span>
+&#x6E10;&#x8FDB;&#x5206;&#x6790;&#x4ECB;&#x7ECD;</h1>
+<h3 id="1&#x7B80;&#x5316;&#x7684;&#x5206;&#x6790;&#x6D41;&#x7A0B;">1.&#x7B80;&#x5316;&#x7684;&#x5206;&#x6790;&#x6D41;&#x7A0B;</h3>
+<blockquote>
+<p>We can do the following steps to simplify our analysis: * Only
+consider the worst case. * Pick a representative operation (aka: cost
+model) * Ignore lower order terms * Ignore multiplicative constants.</p>
+</blockquote>
+<h3 id="2big-theta">2.<span class="math inline">\(Big-Theta\)</span></h3>
+<p>&#x2003;&#x2003;&#x5F53;&#x5BF9;&#x4E8E;&#x4EFB;&#x4E00;&#x6BD4;<span class="math inline">\(N_0\)</span>&#x5927;&#x7684;<span class="math inline">\(N\)</span>&#xFF0C;&#x5B58;&#x5728;<span class="math inline">\(k_1\)</span>&#x3001;<span class="math inline">\(k_2\)</span>&#x4F7F;&#x5F97;<span class="math inline">\(k_1&#xB7;f(N)\leq R(N)\leq
+k_2&#xB7;f(N)\)</span>&#xFF0C;&#x90A3;&#x4E48;&#xFF1A;<span class="math inline">\(R(N)\in
+\Theta(f(N))\)</span>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;<span class="math inline">\(\Theta\)</span>&#x6765;&#x8861;&#x91CF;&#x7A0B;&#x5E8F;&#x7684;&#x589E;&#x957F;&#x9636;&#x6570;&#xFF0C;&#x901A;&#x8FC7;&#x786E;&#x5B9A;&#x589E;&#x957F;&#x51FD;&#x6570;&#x7684;&#x4E0A;&#x754C;&#x548C;&#x4E0B;&#x754C;&#xFF0C;&#x6211;&#x4EEC;&#x76F8;&#x5F53;&#x4E8E;&#x201C;&#x786E;&#x5B9A;&#x201D;&#x4E86;&#x589E;&#x957F;&#x51FD;&#x6570;&#x3002;</p>
+<h3 id="3big-o">3.<span class="math inline">\(Big-O\)</span></h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(O\)</span>&#x53EF;&#x4EE5;&#x770B;&#x4F5C;&#x662F;&#x589E;&#x957F;&#x51FD;&#x6570;&#x7684;&#x201C;&#x4E0D;&#x7B49;&#x5173;&#x7CFB;&#x201D;&#xFF0C;&#x5373;&#x201C;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;&#x201D;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8BF4;<span class="math inline">\(R(N)\in O(f(n^2))\)</span>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E00;&#x822C;&#x5730;&#xFF0C;&#x5982;&#x679C;&#x5BF9;&#x4E8E;&#x4EFB;&#x4E00;&#x6BD4;<span class="math inline">\(N_0\)</span>&#x5927;&#x7684;<span class="math inline">\(N\)</span>&#xFF0C;&#x5B58;&#x5728;<span class="math inline">\(k_1\)</span>&#x4F7F;&#x5F97;<span class="math inline">\(R(N)\leq k_1&#xB7;f(N)\)</span>&#xFF0C;&#x6709;&#xFF1A;<span class="math inline">\(R(n)\in O(f(n))\)</span>&#x3002;</p>
 
       
     </div>
@@ -297,7 +310,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/78/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/78/">78</a><span class="page-number current">79</span><a class="page-number" href="/page/80/">80</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/80/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/78/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/78/">78</a><span class="page-number current">79</span><a class="page-number" href="/page/80/">80</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/80/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -329,7 +342,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:49</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
   </span>
 </div>
 <div class="busuanzi-count">

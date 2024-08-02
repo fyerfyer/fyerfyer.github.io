@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">6.1.&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x4E0E;&#x7A0B;&#x5E8F;</a>
+          <a href="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">6.4.&#x7B26;&#x53F7;&#x7684;&#x5904;&#x7406;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 09:34:24" itemprop="dateCreated datePublished" datetime="2024-04-07T09:34:24+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 15:34:54" itemprop="dateCreated datePublished" datetime="2024-04-07T15:34:54+08:00">2024-04-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:47:54" itemprop="dateModified" datetime="2024-06-03T07:47:54+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:00:56" itemprop="dateModified" datetime="2024-06-03T00:00:56+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>214</span>
+      <span>632</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,48 +272,143 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="61assemble-program-and-assembler"><span class="math inline">\(6.1.\)</span>Assemble Program and Assembler</h1>
-<h3 id="1basic-assembler-logic">1.Basic assembler logic</h3>
+          <h1 id="64handling-the-symbol"><span class="math inline">\(6.4.\)</span>Handling the Symbol</h1>
+<h3 id="1type-of-symbol">1.Type of symbol</h3>
+<p>&#x2003;&#x2003;Generally there are three types of symbol:</p>
 <ul>
-<li><p>Repeat:</p>
+<li><em>Variable symbols</em>: Which represents memory locations where
+the programmer wants to maintain values.</li>
+<li><em>Label symbols</em>: Which represents destinations of goto
+instructions.</li>
+<li><em>Pre-defined symbols</em>: Which represents special memory
+lorations.</li>
+</ul>
+<h3 id="2pre-define-symbolstranslation">2.Pre-define symbols
+translation</h3>
 <ul>
-<li>Read the next Assembly language command.</li>
-<li>Break it into the different fields it is composed of.</li>
-<li>Lookup the binary code for each field.</li>
-<li>Combine these codes into a single machine language command.</li>
-<li>Output this machine language command.</li>
+<li>These symbols exist only <strong>in the context of A
+instructions</strong>. So they will only be seen in expression like
+<code>@preDefinedSymbol</code></li>
+<li>Translating <code>@preDefinedSymbol</code>: Replace
+<code>preDefineSymbol</code> with its corresponding value:</li>
+</ul>
+<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<h3 id="3label-symbols-translation">3.Label symbols translation</h3>
+<p>&#x2003;&#x2003;To begin with, there are two sorts of label:</p>
+<ul>
+<li>Used to label destination of <code>goto</code> commands. For
+example, <code>@STOP, 0;JMP</code></li>
+<li>Declared by the <em>pseudo-command</em>. For example,
+<code>(STOP)</code></li>
+</ul>
+<blockquote>
+<p>This is called pseudo-commands because <strong>it doesn&apos;t generate
+any code</strong>. When we translate the program into binary. we don&apos;t
+translate the label declaration instructions.</p>
+</blockquote>
+<p>&#x2003;&#x2003;To allocate a specific location to each label, we
+<strong>number</strong> the instruction one by one, like the left hand
+side:</p>
+<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<ul>
+<li>We ignore <strong>white space and pseudo-commands</strong> when
+numbering.</li>
+</ul>
+<p>&#x2003;&#x2003;Once we complete the numbering, we can <strong>refer the label to
+its corresponding line number</strong>. For example, <code>LOOP</code>
+relates to 4 and <code>STOP</code> relates to 18. And when we see the
+instruction <code>@LOOP</code>, we actually mean <code>@4</code>.</p>
+<p>&#x2003;&#x2003;After this pre-work, the translating is plain: * Translating
+<code>@labelSymbol</code>: Replace <code>labelSymbol</code> with its
+value.</p>
+<h3 id="4varables-translation">4.Varables translation</h3>
+<ul>
+<li>Any symbol xx appearing in an assembly program which <strong>is not
+pre-defined</strong> and <strong>is not defined elsewhere using the
+(xxx) directive</strong> is treated as a variable</li>
+<li>if a variable appears in the program for the first time, we allocate
+it to a memory address <strong>starting from address 16</strong> . If we
+see this varable popping up later in the program, we simply <strong>look
+up the value that you assigned to it before</strong>.</li>
+</ul>
+<h3 id="5symbol-table-construction">5.Symbol table construction</h3>
+<h4 id="afirstpass">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>First
+pass</h4>
+<p>&#x2003;&#x2003;In the <em>first pass</em>, we extract from the program <strong>all
+the label symbols</strong>.</p>
+<ul>
+<li><p>Before starting any translation, create an empty table and add
+all the predefined symbos one by one.</p></li>
+<li><p>March through the entire text file that constitutes the source
+assembly program:</p>
+<ul>
+<li><p>Only <strong>look for label declarations</strong></p>
+<ul>
+<li>Line of code that begins with left parenthesis.</li>
 </ul></li>
-<li><p>One thing we need to worry about: <em>Symbols</em>:</p>
-<ul>
-<li><p>Two cases:</p>
-<ul>
-<li><em>Labels</em>: When jumping into a certain part, you give it a
-name instead of hard core the address. <code>JMP loop</code></li>
-<li><em>Variables</em>: You give a variable name rather than always
-refer to its exact address in memory. <code>load R1, weight</code></li>
-</ul></li>
-<li><p>To convert it into concrete address, we use a <em>symbol
-table</em>:</p></li>
+<li><p>Meanwhile keep track of how many lines you&apos;ve read so far (only
+count real instructions).</p></li>
 </ul></li>
 </ul>
-<p><img src="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/image.png"></p>
+<p><img src="/2024/04/07/6-4-%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<h4 id="bsecondpass">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Second
+pass</h4>
 <ul>
-<li><p>To maintain such table:</p>
+<li>We start once again to scan the entire program.</li>
+<li>Whenever we see a symbol <strong>which doesn&apos;t appear in the symbol
+table</strong>, we add it to the table, assign to it <code>16</code> or
+larger number (for it must be a varable).</li>
+<li>If we find them in the symbol table, then they&apos;ve been declared and
+we can use them.</li>
+</ul>
+<h4 id="cmore-about-the-table">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>More about the table</h4>
 <ul>
-<li>When we first meet a symbol, we need to <strong>allocate a new
-memory location</strong> to hold it. For the assembler, it will find the
-<strong>next memory location that&apos;s available</strong>.</li>
-<li>When we meet it again, we simply refer to its address in the
-table.</li>
+<li>When resolving a symbol, we look it up in the table, retrieve its
+value, and put it into the instruction. What you get is <strong>the
+meaning of this symbol</strong> according to the symbol table.</li>
+<li>We maintain the table as long as the assembler is processing the
+program, and then we can toss it away.</li>
+</ul>
+<h3 id="6summary-the-assemblyprocess">6.Summary: The assembly
+process</h3>
+<ul>
+<li><p><em>Initialization</em>:</p>
+<ul>
+<li>Construct an empty symbol table,</li>
+<li>Add the pre-defined symbols to the symbol table,</li>
 </ul></li>
-<li><p>One special case: <em>Forward references</em>: We can jump into a
-label before where it was defined. There are two ways to handle it:</p>
-<ol type="1">
-<li>Use a little bit to remember that we&apos;ve set the labels but don&apos;t
-know where it is yet. We leave it blank until label appears.(more
-complicated)</li>
-<li>In first pass just figure out all address.</li>
-</ol></li>
+<li><p><em>First pass</em>:</p>
+<ul>
+<li><p>Scan the entire program;</p></li>
+<li><p>For each &quot;instruction&quot; of the form <code>(xxx)</code>:</p>
+<ul>
+<li>Add the pair (xxx, address) to the symbol table, where
+<em>address</em> is <strong>the number of the instruction following
+<code>(xxx)</code></strong>.</li>
+</ul></li>
+</ul></li>
+<li><p><em>Second pass</em>:</p>
+<ul>
+<li><p>Set n to 16</p></li>
+<li><p>Scan the entire program again, for each instruction:</p>
+<ul>
+<li><p>If the instruction is <code>@symbol</code>, look up symbol in the
+symbol table:</p>
+<ul>
+<li><p>If (symbol, value) is found, use value to complete the
+instruction&apos;s translation;</p></li>
+<li><p>If not found:</p>
+<ul>
+<li>Add (symbol, n) to the symbol table,</li>
+<li>Use n to complete the instruction&apos;s translation,</li>
+<li>n++</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>If the instruction is a C-instruction, complete the instruction&apos;s
+translation.</p></li>
+<li><p>Write the translated instruction to the output file.</p></li>
+</ul></li>
 </ul>
 
       
@@ -337,7 +432,7 @@ complicated)</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/114/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/114/">114</a><span class="page-number current">115</span><a class="page-number" href="/page/116/">116</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/116/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/114/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/114/">114</a><span class="page-number current">115</span><a class="page-number" href="/page/116/">116</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/116/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -369,7 +464,7 @@ complicated)</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:49</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
   </span>
 </div>
 <div class="busuanzi-count">

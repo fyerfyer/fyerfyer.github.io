@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
+          <a href="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 18:24:16" itemprop="dateCreated datePublished" datetime="2024-04-08T18:24:16+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:06:14" itemprop="dateModified" datetime="2024-06-03T08:06:14+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>239</span>
+      <span>311</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,56 +272,58 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
-Segments</h1>
-<h3 id="1memory-segments-intro">1.Memory segments intro</h3>
-<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
-as:</p>
+          <h1 id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</h1>
+<h3 id="1pointer-manipulation">1.Pointer manipulation</h3>
+<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
+represents <strong>the value stores in the address that <code>p</code>
+points to</strong>.</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
+<p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Argument variables</li>
-<li>Local variables</li>
-<li>Static variables</li>
+<li><code>A = M</code> points the pointer to the address of register
+M.</li>
+<li><code>D = M</code> gets the value of the RAM.</li>
 </ul>
-<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
-role</strong>, we need some mechanism to <strong>record the different
-roles of different variables</strong>. We can achieve this by the notion
-of <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
-<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
-<em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
-<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
-<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
-these variables.</p>
-<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
-not a big deal, however, for <strong>the VM obstruction doesn&apos;t
-recognize symbolic variable names</strong>, all the variables are
-replaced by references to memory segments.</p>
-<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
-segments:</p>
-<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
-<p>&#x2003;&#x2003;And the syntax of the command is:
-<code>push / pop segment i</code></p>
+<p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
+<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
+will get the value stored in <code>RAM[256]</code>, namely 19.</p>
+<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
+value 5. After the assignment, <code>RAM[1024]</code>stores 9
+instead.</p>
+<h3 id="2stack-machine-operation">2.Stack machine operation</h3>
+<p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
+<ol type="1">
+<li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
+<li>Stack base address will be <code>addr = 256</code>.</li>
+</ol>
+<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
+<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
+and our RAM looks like this:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
+<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
+the previous available space, and stack pointer moves forward:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
+register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
+</blockquote>
+<h3 id="3vm-translator-perspective">3.VM translator perspective</h3>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
 <ul>
-<li><em>segment</em> is the segment you want to operate on.</li>
-<li><em>i</em> is the index of the command in that segment.</li>
-<li><span class="math inline">\(e.g.\)</span>
-:<code>push constant 17</code></li>
-<li><span class="math inline">\(e.g.\)</span> : translation of
-<code>let static 2 = argument 1</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
-<h3 id="2the-usage-of-segment">2.The usage of segment</h3>
+<li><p>VM translator is:</p>
 <ul>
-<li><p>There&apos;s a lot of semantics going on in the high-level
-language:</p>
-<ul>
-<li>static variables, local variables, argument variables, ...</li>
-<li>the <em>object</em> consisting a bundle of variables</li>
+<li>A program that translates VM code into machine language.</li>
+<li>Each VM command generates several assembly commands.</li>
 </ul></li>
-<li><p>We can handle all the semantics using the eight virtual
-segments.</p></li>
 </ul>
 
       
@@ -345,7 +347,7 @@ segments.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/109/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/109/">109</a><span class="page-number current">110</span><a class="page-number" href="/page/111/">111</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/111/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/109/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/109/">109</a><span class="page-number current">110</span><a class="page-number" href="/page/111/">111</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/111/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -377,7 +379,7 @@ segments.</p></li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:49</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
   </span>
 </div>
 <div class="busuanzi-count">
