@@ -18,6 +18,234 @@ ver）</a></p></li>
 ]]></content>
   </entry>
   <entry>
+    <title>5.8.Loop Unrolling</title>
+    <url>/2024/08/03/5-8-Loop-Unrolling/</url>
+    <content><![CDATA[<h1 id="58loopunrolling"><span class="math inline">\(5.8.\)</span>Loop
+Unrolling</h1>
+<p>  Loop unrolling can improve performance in two ways.</p>
+<ol type="1">
+<li><p>It reduces the number of operations that do not contribute
+directly to the program result, such as loop indexing and conditional
+branching.</p></li>
+<li><p>It exposes ways in which we can further transform the code to
+reduce the number of operations in the critical paths of the overall
+computation.</p></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 2 x 1 loop unrolling */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine5</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">long</span> limit = length - <span class="number">1</span>;</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Combine 2 elements at a time */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>) &#123;</span><br><span class="line">        acc = (acc OP data[i]) OP data[i + <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Finish any remaining elements */</span></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) &#123;</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    &#125;</span><br><span class="line">    *dest = acc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  The performance of different unrolling is as below:</p>
+<p><img src="/2024/08/03/5-8-Loop-Unrolling/image.png"></p>
+<p>  We see that the CPE improves little when <span class="math inline">\(k \geq 2\)</span>. To understand this, consider
+the case when <span class="math inline">\(k=2\)</span>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Inner loop of combine5. data_t = double, OP = *</span><br><span class="line"># i in %rdx, data %rax, limit in %rbx, acc in %xmm0</span><br><span class="line">.L35: loop:</span><br><span class="line">    vmulsd   (%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i]</span><br><span class="line">    vmulsd  8(%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i+1]</span><br><span class="line">    addq     $2, %rdx                       # Increment i by 2</span><br><span class="line">    cmpq     %rdx, %rbp                     # Compare to limit: i</span><br><span class="line">    jg      .L35                            # If &gt;, goto loop</span><br></pre></td></tr></table></figure>
+<p>  The <code>vmulsd</code> instructions each get translated into two
+operations: one to load an array element from memory and one to multiply
+this value by the accumulated value. The data-flow representation of the
+program is as below:</p>
+<p><img src="/2024/08/03/5-8-Loop-Unrolling/image-1.png"></p>
+<p>  There's still a critical path of <span class="math inline">\(n\)</span></p>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 5.Optimizing Program Performance</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>5.7.Understanding Modern Processors</title>
+    <url>/2024/08/02/5-7-Understanding-Modern-Processors/</url>
+    <content><![CDATA[<h1 id="57understanding-modern-processors"><span class="math inline">\(5.7.\)</span>Understanding Modern Processors</h1>
+<h3 id="1overall-operation">1.Overall Operation</h3>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image.png"></p>
+<ul>
+<li><p>The overall design of the <em>superscalar</em> processor(meaning
+that they can perform multiple operations on every clock cycle and out
+of order) has two main parts:</p>
+<ul>
+<li><p>The <em>instruction control unit</em>(ICU), which is responsible
+for <strong>reading a sequence of instructions from memory</strong> and
+<strong>generating from these a set of primitive operations to perform
+on program data</strong>.</p></li>
+<li><p>The <em>execution unit</em>(EU), which then <strong>executes
+these operations</strong>.</p></li>
+</ul></li>
+</ul>
+<h4 id="aicu">  <span class="math inline">\(a.\)</span>ICU</h4>
+<ul>
+<li><p>THe ICU reads the instructions from an <em>instruction
+cache</em>.</p></li>
+<li><p>When a program hits a branch, processors perform <em>branch
+prediction</em>. If it later determines that the branch was predicted
+incorrectly, it <strong>resets the state to that at the branch
+point</strong> and begins <strong>fetching and executing instructions in
+the other direction</strong>.</p>
+<ul>
+<li>The block labeled "Fetch control" incorporates branch prediction to
+perform the task of <strong>determining which instructions to
+fetch</strong>.</li>
+</ul></li>
+<li><p>The instruction decoding logic takes the actual program
+instructions and <strong>converts them into a set of primitive
+operations</strong>(<em>micro-operations</em>).</p>
+<ul>
+<li>The decoding allows a division of labor among a set of dedicated
+hardware units, which then allows parallelism.</li>
+</ul></li>
+</ul>
+<p>  For example, the instruction <code>addq %rax,%rdx</code> will be
+decoded as three operations: one to load a value from memory into the
+processor, one to add the loaded value to the value in register
+<code>%eax</code>, and one to store the result back to memory.</p>
+<ul>
+<li><p>The retirement unit keeps track of the ongoing processing and
+makes sure that it obeys the sequential semantics of the machine-level
+program.</p>
+<ul>
+<li><p>As an instruction is decoded, information about it is placed into
+a <strong>first-in, first-out queue</strong>. The information of an
+instruction remains in the queue until one of two outcomes occurs:</p>
+<ul>
+<li><p>Once the operations for the instruction have completed and any
+branch points leading to this instruction are confirmed as having been
+correctly predicted, <strong>the instruction can be retired, with any
+updates to the program registers being made</strong>.</p></li>
+<li><p>If some branch point leading to this instruction was
+mispredicted, the instruction will be <em>flushed</em>, discarding any
+results that may have been computed.</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="beu">  <span class="math inline">\(b.\)</span>EU</h4>
+<ul>
+<li><p>The EU receives operations from the <em>instruction fetch
+unit</em>. These operations are dispatched to <strong>a set of
+functional units that perform the actual operations</strong>.</p></li>
+<li><p>Reading and writing memory is implemented by the <em>load and
+store units</em>. Both the load unit and store unit have an
+<em>adder</em> to perform address computations. They access memory via a
+<em>data cache</em>.</p></li>
+<li><p>With speculative execution, the operations are evaluated, but
+<strong>the final results are not stored in the program registers or
+data memory</strong> until <strong>the processor can be certain that
+these instructions should actually have been executed</strong>.</p>
+<ul>
+<li><p>Branch operations are sent to the EU to <strong>determine whether
+or not they were predicted correctly</strong>.</p></li>
+<li><p>If the prediction was incorrect, the EU will d<strong>iscard the
+results that have been computed beyond the branch point</strong>. It
+will also <strong>signal the branch unit that the prediction was
+incorrect and indicate the correct branch destination</strong>.</p></li>
+</ul></li>
+</ul>
+<p>  The result of operations is exchanged among the EU. The control of
+the communication of operands is called <em>register renaming</em>.</p>
+<ul>
+<li><p>When an instruction <strong>that updates register r</strong> is
+decoded, a tag t is generated giving a unique identifier to the result
+of the operation. An entry <span class="math inline">\((r,t)\)</span> is
+added to a table maintaining the association <strong>between program
+register r and tag t</strong> for an operation that will update this
+register.</p></li>
+<li><p>When a subsequent instruction using register r as an operand is
+decoded, the operation sent to the execution unit will <strong>contain t
+as the source for the operand value</strong>.</p></li>
+<li><p>When some execution unit completes the first operation, it
+generates a result <span class="math inline">\((v,t)\)</span>,
+indicating that the operation with tag t produced value v. Any operation
+waiting for t as a source will then <strong>use v as the source
+value</strong></p></li>
+</ul>
+<p>  This form of <strong>data forwarding</strong> enables values to be
+forwarded without being written to and read from the register file, so
+that <strong>the second operation to begin as soon as the first has
+completed</strong>.</p>
+<h3 id="2functional-unit-performance">2.Functional Unit Performance</h3>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-1.png"></p>
+<ul>
+<li><p>The addition and multiplication operations all have issue times
+of 1, meaning that <strong>on each clock cycle, the processor can start
+a new one of these operations</strong>. They are called <em>fully
+pipelined</em>.</p></li>
+<li><p>The divider isn't pipelined-its issue time equals its latency. It
+means that the divider <strong>must perform a complete division before
+it can begin a new one</strong>.</p></li>
+</ul>
+<hr>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-2.png"></p>
+<ul>
+<li><p>The <em>latency bound</em> gives <strong>a minimum value for the
+CPE for any function</strong> that must perform the combining operation
+in a strict sequence.</p></li>
+<li><p>The <em>throughput bound</em> gives <strong>a minimum bound for
+the CPE</strong> based on the maximum rate at which the functional units
+can produce results.</p></li>
+</ul>
+<h3 id="3an-abstract-model-ofprocessor-operation">3.An Abstract Model of
+Processor Operation</h3>
+<p>  We will take <code>combine4</code> as an example. First, let's see
+the CPE measurements of the program:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-3.png"></p>
+<ul>
+<li>The performance of these functions is dictated by <strong>the
+latency of the sum or product computation being performed</strong>.
+Computing the product or sum of <span class="math inline">\(n\)</span>
+elements <strong>requires around <span class="math inline">\(L \cdot
+n+K\)</span> clock cycles</strong>, where <span class="math inline">\(L\)</span> is the latency of the combining
+operation and <span class="math inline">\(K\)</span> represents the
+overhead of calling the function and initiating and terminating the
+loop. The CPE is therefore <span class="math inline">\(L+{K \over
+n}\)</span>, which is close to <span class="math inline">\(L\)</span>
+when <span class="math inline">\(n\)</span> is large.</li>
+</ul>
+<h4 id="adata-flow-graphs">  <span class="math inline">\(a.\)</span>Data-flow graphs</h4>
+<p>  First take a look at the assembly codes of
+<code>combine4</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
+<p>  The graphical representation of inner-loop code for
+<code>combine4</code> is as below:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-4.png"></p>
+<p>  And the data-flow representation of <span class="math inline">\(n\)</span> iterations in the inner loop is as
+below:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-5.png"></p>
+<p>  We can see that the program has two chains of data dependencies,
+corresponding to the updating of program values <code>acc</code> and
+<code>data+i</code> with operations <code>mul</code> and
+<code>add</code>, respectively. And since <strong>the left chain is the
+longest</strong>, it will form a <em>critical path</em>, requiring <span class="math inline">\(5n\)</span> cycles to execute.</p>
+<p>  The figure shows that when executing the function, <strong>the
+floating-point multiplier becomes the limiting resource</strong>. The
+other operations required during the loop—manipulating and testing
+pointer value <code>data+i</code> and reading data from memory—proceed
+<strong>in parallel with the multiplication</strong>.</p>
+<h4 id="botherfactors">  <span class="math inline">\(b.\)</span>Other
+factors</h4>
+<p>  The critical paths in a data-flow representation provide
+<strong>only a lower bound on how many cycles a program will
+require</strong>. Other factors can also limit performance, including
+the total number of functional units available and the number of data
+values that can be passed among the functional units on any given
+step.</p>
+<hr>
+<p>  <span class="math inline">\(e.g.\)</span>(CPE analysis)Illustrate
+why the CPE of the former program is 5.00 while the latter is 8.00:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">poly</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> &#123;</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[<span class="number">0</span>];</span><br><span class="line">    <span class="type">double</span> xpwr = x; <span class="comment">/* Equals x^i at start of loop */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= degree; i++) &#123;</span><br><span class="line">        result += a[i] * xpwr;</span><br><span class="line">        xpwr = x * xpwr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Apply Horner&#x27;s method */</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">polyh</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> &#123;</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[degree];</span><br><span class="line">    <span class="keyword">for</span> (i = degree - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        result = a[i] + x * result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <span class="math inline">\(solution:\)</span>The CPE of the
+<code>poly</code> is decided by the instruction
+<code>result += a[i] * xpwr;</code> and
+<code>xpwr = x * xpwr;</code>.</p>
+<p>  For <code>result += a[i] * xpwr</code>, after the first sequential
+operation of 8 cycle, the <code>+</code> and <code>*</code> can be
+executed in pipeline. So the CPE is $ $.</p>
+<p>  The analysis for <code>polyh</code> is the same. The
+<code>result = a[i] + x * result</code> cannot be executed in
+pipeline(because both LHS and RHS contain <code>result</code>), so the
+CPE is 5+3=8.</p>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 5.Optimizing Program Performance</category>
+      </categories>
+  </entry>
+  <entry>
     <title>5.3.Optimizing Methods</title>
     <url>/2024/08/02/5-3-Optimizing-Methods/</url>
     <content><![CDATA[<h1 id="53optimizing-methods">5.3.Optimizing Methods</h1>
@@ -5319,38 +5547,6 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>18.2.堆排序</title>
-    <url>/2024/05/31/18.2.Heap%20Sort/</url>
-    <content><![CDATA[<h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
-Sort</h1>
-<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
-<p>  The simplest method to implement sorting via heap is to put the
-whole array into a heap, and pick out top of the heap one by one.</p>
-<p>  However, this method will lead to unnecessarily memory waste, for
-we can do heap sorting in place without creating a new heap.</p>
-<h3 id="2step-impletation">2.Step impletation</h3>
-<h4 id="abasic-heap-operation">  <span class="math inline">\(a.\)</span>Basic Heap operation</h4>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="bheapsorting">  <span class="math inline">\(b.\)</span>Heap
-Sorting</h4>
-<p>  The in place heap sorting use the following step: 1. Sink the
-element in the array one by one, so that the array forms a heap.</p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
-<ol start="2" type="1">
-<li>Pop the front element one by one, and move the popped element to the
-back of the array.</li>
-</ol>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
     <title>18.1.选择排序</title>
     <url>/2024/05/31/18.1.Selection%20Sort/</url>
     <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
@@ -5379,6 +5575,38 @@ the elements: <figure class="highlight java"><table><tr><td class="code"><pre><s
 method</h4>
 <p>  Since we would like to do the sorting recursively, we may introduce
 a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>18.2.堆排序</title>
+    <url>/2024/05/31/18.2.Heap%20Sort/</url>
+    <content><![CDATA[<h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
+Sort</h1>
+<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
+<p>  The simplest method to implement sorting via heap is to put the
+whole array into a heap, and pick out top of the heap one by one.</p>
+<p>  However, this method will lead to unnecessarily memory waste, for
+we can do heap sorting in place without creating a new heap.</p>
+<h3 id="2step-impletation">2.Step impletation</h3>
+<h4 id="abasic-heap-operation">  <span class="math inline">\(a.\)</span>Basic Heap operation</h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="bheapsorting">  <span class="math inline">\(b.\)</span>Heap
+Sorting</h4>
+<p>  The in place heap sorting use the following step: 1. Sink the
+element in the array one by one, so that the array forms a heap.</p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
+<ol start="2" type="1">
+<li>Pop the front element one by one, and move the popped element to the
+back of the array.</li>
+</ol>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
+<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6597,67 +6825,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
-    <title>4.1.接口</title>
-    <url>/2024/05/31/4.1.interface/</url>
-    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
-<h3 id="1上位词-下位词">1.上位词、下位词</h3>
-<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
-<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
-<ul>
-<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
-<li>狗<span class="math inline">\(is-a\)</span>动物</li>
-</ul>
-<p><img src="/2024/05/31/4.1.interface/image.png"></p>
-<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
-<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
-<h3 id="2接口">2.接口</h3>
-<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
-<ul>
-<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
-<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
-</ul>
-<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
-<h3 id="3覆盖">3.覆盖</h3>
-<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="4接口的继承">4.接口的继承</h3>
-<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
-<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
-<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
-<h3 id="5实现的继承">5.实现的继承</h3>
-<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
-<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
-<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
-<h3 id="6动态方法选择">6.动态方法选择</h3>
-<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
-<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
-<blockquote>
-<p>  Aside: the name “dynamic type” is actually quite semantic in its
-origin! Should lst be reassigned to point to an object of another type,
-say a AList object, lst’s dynamic type would now be AList and not
-SLList! It’s dynamic because it changes based on the type of the object
-it’s currently referring to.</p>
-</blockquote>
-<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
-<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
     <title>4.2.扩展</title>
     <url>/2024/05/31/4.2.extends/</url>
     <content><![CDATA[<h1 id="42扩展"><span class="math inline">\(4.2\)</span>扩展</h1>
@@ -6739,6 +6906,116 @@ the static type.</li>
 invoked is based on the dynamic type of the invoking expression</li>
 <li>Can use casting to overrule compiler type checking.</li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.1.接口</title>
+    <url>/2024/05/31/4.1.interface/</url>
+    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
+<h3 id="1上位词-下位词">1.上位词、下位词</h3>
+<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
+<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
+<ul>
+<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
+<li>狗<span class="math inline">\(is-a\)</span>动物</li>
+</ul>
+<p><img src="/2024/05/31/4.1.interface/image.png"></p>
+<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
+<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
+<h3 id="2接口">2.接口</h3>
+<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
+<ul>
+<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
+<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
+</ul>
+<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
+<h3 id="3覆盖">3.覆盖</h3>
+<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4接口的继承">4.接口的继承</h3>
+<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
+<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
+<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
+<h3 id="5实现的继承">5.实现的继承</h3>
+<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
+<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
+<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
+<h3 id="6动态方法选择">6.动态方法选择</h3>
+<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
+<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
+<blockquote>
+<p>  Aside: the name “dynamic type” is actually quite semantic in its
+origin! Should lst be reassigned to point to an object of another type,
+say a AList object, lst’s dynamic type would now be AList and not
+SLList! It’s dynamic because it changes based on the type of the object
+it’s currently referring to.</p>
+</blockquote>
+<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
+<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.3.子类多态性</title>
+    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
+    <content><![CDATA[<h1 id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</h1>
+<h3 id="1多态性的概念">1.多态性的概念</h3>
+<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
+<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
+<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
+<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
+<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
+<h3 id="2子类多态性的应用">2.子类多态性的应用</h3>
+<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
+<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
+<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
+<h3 id="3comparable接口">3.<code>comparable</code>接口</h3>
+<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
+<h3 id="4comparator接口">4.<code>comparator</code>接口</h3>
+<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
+<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
+<h3 id="5接口的功能">5.接口的功能</h3>
+<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
+<blockquote>
+<p>  A Comparable says, "I want to compare myself to another object". It
+is imbedded within the object itself, and it defines the natural
+ordering of a type. A Comparator, on the other hand, is more like a
+third party machine that compares two objects to each other. Since
+there's only room for one compareTo method, if we want multiple ways to
+compare, we must turn to Comparator.</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6829,55 +7106,6 @@ invoked is based on the dynamic type of the invoking expression</li>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 4.Data Processing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.3.子类多态性</title>
-    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
-    <content><![CDATA[<h1 id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</h1>
-<h3 id="1多态性的概念">1.多态性的概念</h3>
-<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
-<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
-<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
-<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
-<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
-<h3 id="2子类多态性的应用">2.子类多态性的应用</h3>
-<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
-<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
-<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
-<h3 id="3comparable接口">3.<code>comparable</code>接口</h3>
-<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
-<h3 id="4comparator接口">4.<code>comparator</code>接口</h3>
-<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
-<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
-<h3 id="5接口的功能">5.接口的功能</h3>
-<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
-<blockquote>
-<p>  A Comparable says, "I want to compare myself to another object". It
-is imbedded within the object itself, and it defines the natural
-ordering of a type. A Comparator, on the other hand, is more like a
-third party machine that compares two objects to each other. Since
-there's only room for one compareTo method, if we want multiple ways to
-compare, we must turn to Comparator.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
       </categories>
   </entry>
   <entry>

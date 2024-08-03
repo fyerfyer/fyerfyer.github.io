@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-4-General-Principles-of-pipelining/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/01/5-2-Expression-Program-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/26/4-4-General-Principles-of-pipelining/" class="post-title-link" itemprop="url">4.4.General Principles of Pipelining</a>
+          <a href="/2024/08/01/5-2-Expression-Program-Performance/" class="post-title-link" itemprop="url">5.2.Expressing Program Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T14:31:22+08:00">2024-07-26</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-01 15:31:22" itemprop="dateCreated datePublished" datetime="2024-08-01T15:31:22+08:00">2024-08-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-30 08:15:23" itemprop="dateModified" datetime="2024-07-30T08:15:23+08:00">2024-07-30</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 08:44:59" itemprop="dateModified" datetime="2024-08-02T08:44:59+08:00">2024-08-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-4-Processor-Architecture/" itemprop="url" rel="index"><span itemprop="name">Chapter 4.Processor Architecture</span></a>
+          <a href="/categories/CSAPP/Chapter-5-Optimizing-Program-Performance/" itemprop="url" rel="index"><span itemprop="name">Chapter 5.Optimizing Program Performance</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>296</span>
+      <span>153</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,67 +272,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="44general-principles-of-pipelining"><span class="math inline">\(4.4.\)</span>General Principles of Pipelining</h1>
-<h3 id="1computational-pipelines">1.Computational Pipelines</h3>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image.png"></p>
-<p>&#x2003;&#x2003;The detail at the timing and operation of this process are shown as
-below:</p>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-2.png"></p>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-1.png"></p>
-<ul>
-<li>Slowing down the clock would not change the pipeline behavior. The
-signals propagate to the pipeline register inputs, but <strong>no change
-in the register states will occur until the clock rises</strong>.</li>
-</ul>
-<h3 id="2limitations-of-pipelining">2.Limitations of Pipelining</h3>
-<h4 id="athroughput">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Throughput</h4>
-<p>&#x2003;&#x2003;Suppose the maximum delay of a process is <span class="math inline">\(x\)</span> ps, then we can calculate the
-<em>throughput</em> as:</p>
-<p><span class="math display">\[
-throughput={ {1\;instruction}\over{x\;ps} } \cdot { {1000\;ps} \over
-{1\;ns}}={1000\over x}GIPS
-\]</span></p>
-<p>&#x2003;&#x2003;And the <em>latency</em> is the <strong>overall time the process
-takes</strong>.</p>
-<h4 id="bnonuniform-partition">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Nonuniform partition</h4>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-3.png"></p>
-<ul>
-<li><p>The latency of piplining is decided by <strong>the slowest clock
-rate</strong>.</p>
-<ul>
-<li>For the process above, delays of A and C are 50ps and 100+20 = 120
-ps, while delay of B is 150+20 = 170ps, so we have to <strong>set the
-clock cycle to 170ps</strong>.</li>
-</ul></li>
-</ul>
-<blockquote>
-<p>Note that the delay of pipeline register is included in
-<strong>register that fetch data from it</strong>. So in the process
-above, B and C should add the 20ps delay.</p>
-</blockquote>
-<h4 id="cdiminishing-returns-of-deeppipelining">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Diminishing returns of deep
-pipelining</h4>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-4.png"></p>
-<h3 id="3piplining-a-system-withfeedback">3.Piplining a System with
-Feedback</h3>
-<p>&#x2003;&#x2003;For a system that executes machine programs such as Y86-64, there
-are <strong>potential dependencies between successive
-instructions</strong>.</p>
-<ul>
-<li>The following codes describe what is called <em>data
-dependency</em>. The <code>irmovq</code> instruction stores its result
-in <code>%rax</code>, which then must be read by the <code>addq</code>
-instruction.</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">irmovq $50, %rax</span><br><span class="line">addq %rax, %rbx</span><br><span class="line">mrmovq 100(%rbx), %rdx</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The following codes describe what is called <em>control
-dependency</em>. The outcome of the conditional test determines whether
-the next instruction to execute:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    subq %rdx,%rbx</span><br><span class="line">    jne targ</span><br><span class="line">    irmovq $10,%rdx</span><br><span class="line">    jmp loop</span><br><span class="line">targ:</span><br><span class="line">    halt</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-5.png"></p>
-<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-6.png"></p>
+          <h1 id="52expressing-program-performance"><span class="math inline">\(5.2.\)</span>Expressing Program Performance</h1>
+<p>&#x2003;&#x2003;We introduce the metric <strong>cycles per element, abbreviated
+CPE</strong>, to express program performance in a way that can guide us
+in improving the code.</p>
+<hr>
+<p>&#x2003;&#x2003;The time required by a iteration procedure can be characterized as
+<strong>a constant plus a factor proportional to the number of elements
+processed</strong>. Take the following two C programs as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute prefix sum of vector a */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">psum1</span><span class="params">(<span class="type">float</span> a[], <span class="type">float</span> p[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    p[<span class="number">0</span>] = a[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">        p[i] = p[i<span class="number">-1</span>] + a[i];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">psum2</span><span class="params">(<span class="type">float</span> a[], <span class="type">float</span> p[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    p[<span class="number">0</span>] = a[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; n<span class="number">-1</span>; i+=<span class="number">2</span>) {</span><br><span class="line">        <span class="type">float</span> mid_val = p[i<span class="number">-1</span>] + a[i];</span><br><span class="line">        p[i] = mid_val;</span><br><span class="line">        p[i+<span class="number">1</span>] = mid_val + a[i+<span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/* For even n, finish remaining element */</span></span><br><span class="line">    <span class="keyword">if</span> (i &lt; n)</span><br><span class="line">        p[i] = p[i<span class="number">-1</span>] + a[i];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/01/5-2-Expression-Program-Performance/image.png"></p>
 
       
     </div>
@@ -355,7 +304,7 @@ the next instruction to execute:</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/139/">139</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -380,14 +329,14 @@ the next instruction to execute:</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">113k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
   </span>
 </div>
 <div class="busuanzi-count">

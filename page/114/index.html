@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;</a>
+          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 18:24:54" itemprop="dateCreated datePublished" datetime="2024-04-07T18:24:54+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:05:51" itemprop="dateModified" datetime="2024-06-03T00:05:51+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>417</span>
+      <span>239</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,90 +272,57 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</h1>
-<h3 id="1start-reding-a-file">1.Start reding a file</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+          <h1 id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
+Segments</h1>
+<h3 id="1memory-segments-intro">1.Memory segments intro</h3>
+<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
+as:</p>
 <ul>
-<li>Need to be able to read the input and break it into parts.</li>
-<li>Doesn&apos;t need to understand what the command means or how it will be
-translated into machine language.</li>
-<li>Need to understand the format of the input language and how it
-breaks into different components.</li>
+<li>Argument variables</li>
+<li>Local variables</li>
+<li>Static variables</li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
-<ol type="1">
-<li><p>Read a file with a given name.</p>
+<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
+role</strong>, we need some mechanism to <strong>record the different
+roles of different variables</strong>. We can achieve this by the notion
+of <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
+<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
+<em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
+<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
+<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
+these variables.</p>
+<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
+not a big deal, however, for <strong>the VM obstruction doesn&apos;t
+recognize symbolic variable names</strong>, all the variables are
+replaced by references to memory segments.</p>
+<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
+segments:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
+<p>&#x2003;&#x2003;And the syntax of the command is:
+<code>push / pop segment i</code></p>
 <ul>
-<li>You may want a constructor to be able to accept the file name and
-then open the file for reading.</li>
-</ul></li>
-<li><p>Move to next command in the file:</p>
-<ol type="1">
-<li>Are we finished? <code>boolean hasMoreCommands()</code></li>
-<li>Get the next command: <code>void advance()</code></li>
-<li>Read into one line into some kind of string.</li>
-<li>Skip white space including comments.</li>
-</ol></li>
-<li><p>Get the fields of the current command</p>
-<ul>
-<li>Type of command (A, C, or label)</li>
-</ul></li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
-<h3 id="2translating-mnemonic-tocode">2.Translating mnemonic to
-code</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
-<ul>
-<li><p>Don&apos;t need to worry about how the mnemonic fields were
-obtained.</p>
-<ul>
-<li>No need to know what part of input line it is, etc.</li>
-</ul></li>
+<li><em>segment</em> is the segment you want to operate on.</li>
+<li><em>i</em> is the index of the command in that segment.</li>
+<li><span class="math inline">\(e.g.\)</span>
+:<code>push constant 17</code></li>
+<li><span class="math inline">\(e.g.\)</span> : translation of
+<code>let static 2 = argument 1</code>:</li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we:</p>
-<ol type="1">
-<li>Ask the parser to give us the string that corresponds to each part
-of the field.</li>
-<li>Once we get the three string, we go to the code object to translate
-each one of them separately according to the known table.</li>
-<li>Concatenate the output together.</li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
-<h3 id="3the-symbol-table">3.The symbol table</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
+<h3 id="2the-usage-of-segment">2.The usage of segment</h3>
 <ul>
-<li>Don&apos;t need to know what the symbols mean.</li>
-<li>Need to maintain the association between a symbol and a memory
-address.</li>
+<li><p>There&apos;s a lot of semantics going on in the high-level
+language:</p>
+<ul>
+<li>static variables, local variables, argument variables, ...</li>
+<li>the <em>object</em> consisting a bundle of variables</li>
+</ul></li>
+<li><p>We can handle all the semantics using the eight virtual
+segments.</p></li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we need to be able to:</p>
-<ol type="1">
-<li>Create an new empty table</li>
-<li>Add a (symbol, address) pair to the table</li>
-<li>Does the table contain a given symbol?</li>
-<li>What is the address associated with a given symbol?</li>
-</ol>
-<p>&#x2003;&#x2003;And do the following things:</p>
-<ol type="1">
-<li><p>Create a new empty table</p></li>
-<li><p>Add all the pre-defined symbols to the table</p></li>
-<li><p>While reading the input, add labels and new variables to the
-table</p>
-<ul>
-<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
-<code>&quot;xxx&quot;</code> and the address of the next machine language
-command</p>
-<ul>
-<li>Comment 1: this requires maintaining this running address (line
-number).</li>
-<li>Comment 2: this may need to be done in a first pass</li>
-</ul></li>
-<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
-<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
-<code>&quot;xxx&quot;</code> and the next free address for variable
-allocation</p></li>
-</ul></li>
-</ol>
 
       
     </div>
@@ -378,7 +345,7 @@ allocation</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/113/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/113/">113</a><span class="page-number current">114</span><a class="page-number" href="/page/115/">115</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/115/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/113/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/113/">113</a><span class="page-number current">114</span><a class="page-number" href="/page/115/">115</a><span class="space">&#x2026;</span><a class="page-number" href="/page/139/">139</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/115/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -403,14 +370,14 @@ allocation</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">113k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
   </span>
 </div>
 <div class="busuanzi-count">

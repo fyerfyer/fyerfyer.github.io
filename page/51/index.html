@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.2.Heap%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/16.2.K-D%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.2.Heap%20Sort/" class="post-title-link" itemprop="url">18.2.&#x5806;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/16.2.K-D%20Trees/" class="post-title-link" itemprop="url">16.2.K-D&#x6811;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:05:31" itemprop="dateModified" datetime="2024-06-02T22:05:31+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:25:26" itemprop="dateModified" datetime="2024-06-02T21:25:26+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
+          <a href="/categories/CS61B-DataStructure/16-QuadTrees/" itemprop="url" rel="index"><span itemprop="name">16.QuadTrees</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>276</span>
+      <span>415</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,29 +272,51 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
-Sort</h1>
-<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
-<p>&#x2003;&#x2003;The simplest method to implement sorting via heap is to put the
-whole array into a heap, and pick out top of the heap one by one.</p>
-<p>&#x2003;&#x2003;However, this method will lead to unnecessarily memory waste, for
-we can do heap sorting in place without creating a new heap.</p>
-<h3 id="2step-impletation">2.Step impletation</h3>
-<h4 id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
-Sorting</h4>
-<p>&#x2003;&#x2003;The in place heap sorting use the following step: 1. Sink the
-element in the array one by one, so that the array forms a heap.</p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
-<ol start="2" type="1">
-<li>Pop the front element one by one, and move the popped element to the
-back of the array.</li>
-</ol>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+          <h1 id="162k-dtrees"><span class="math inline">\(16.2\)</span><span class="math inline">\(K-D\;Trees\)</span></h1>
+<h3 id="1&#x5F15;&#x5165;">1.&#x5F15;&#x5165;</h3>
+<p>&#x2003;&#x2003;&#x5BF9;&#x4E8E;&#x4E8C;&#x7EF4;&#x7684;&#x7A7A;&#x95F4;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x56DB;&#x53C9;&#x6811;&#x5B8C;&#x6210;&#x641C;&#x7D22;&#x3002;&#x90A3;&#x5BF9;&#x4E8E;&#x66F4;&#x9AD8;&#x7EF4;&#x7684;&#x7A7A;&#x95F4;&#x5462;&#xFF1F;&#x6BD4;&#x5982;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<ul>
+<li><p>Example: Want to find songs with the following features:</p>
+<ul>
+<li>Length between 3 minutes and 6 minutes.</li>
+<li>Between 1000 and 20,000 listens.</li>
+<li>Between 120 to 150 BPM.</li>
+<li>Were recorded after 2004.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;&#x8FD9;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x91C7;&#x7528;<span class="math inline">\(K-D\;Tree\)</span>&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x6765;&#x5BF9;&#x6570;&#x636E;&#x8FDB;&#x884C;&#x5212;&#x5206;&#xFF0C;&#x4ECE;&#x800C;&#x4F18;&#x5316;&#x641C;&#x7D22;&#x3002;</p>
+<h4 id="2k-d&#x6811;&#x7684;&#x539F;&#x7406;&#x4E0E;&#x6784;&#x9020;">2.<span class="math inline">\(K-D\)</span>&#x6811;&#x7684;&#x539F;&#x7406;&#x4E0E;&#x6784;&#x9020;</h4>
+<p>&#x2003;&#x2003;&#x4EE5;&#x4E8C;&#x7EF4;&#x5750;&#x6807;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x6309;&#x7167;&#x4EE5;&#x4E0B;&#x7684;&#x89C4;&#x5219;&#x6784;&#x5EFA;<span class="math inline">\(K-D\;Tree\)</span>&#xFF1A;</p>
+<ul>
+<li><p>Each level has a &quot;cutting dimension&quot;</p></li>
+<li><p>Cycle through the dimensions as you walk down the tree.</p></li>
+<li><p>Each node contains a point P = (x,y)</p></li>
+<li><p>To find (x&apos;,y&apos;) you only compare coordinate from the cutting
+dimension</p>
+<ul>
+<li>e.g. if cutting dimension is x, then you ask: is x&#x2019; &lt; x</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x62E5;&#x6709;&#x4E24;&#x4E2A;&#x5B50;&#x7A7A;&#x95F4;&#x3002;&#x5728;&#x641C;&#x7D22;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x50CF;&#x5728;&#x56DB;&#x53C9;&#x6811;&#x4E2D;&#x505A;&#x7684;&#x4E00;&#x6837;&#xFF0C;&#x53EA;&#x5728;&#x53EF;&#x80FD;&#x6709;&#x6700;&#x4F18;&#x89E3;&#x7684;&#x5B50;&#x7A7A;&#x95F4;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4F8B;&#x5982;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5982;&#x4E0B;&#x63D2;&#x5165;&#x4EE5;&#x4E0B;&#x5750;&#x6807;&#xFF1A;</p>
+<p><img src="/2024/05/31/16.2.K-D%20Trees/image-8.png"></p>
+<h4 id="3k-d&#x6811;&#x7684;&#x641C;&#x7D22;">3.<span class="math inline">\(K-D\)</span>&#x6811;&#x7684;&#x641C;&#x7D22;</h4>
+<p>&#x2003;&#x2003;&#x4EE5;&#x641C;&#x7D22;&#x5230;&#x67D0;&#x4E2A;&#x70B9;&#x8DDD;&#x79BB;&#x6700;&#x5C0F;&#x7684;&#x70B9;&#x4E3A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x4EE5;&#x4E0B;&#x7684;&#x6B65;&#x9AA4;&#x8FDB;&#x884C;&#x641C;&#x7D22;&#xFF1A;</p>
+<ul>
+<li><p>Start at the root and store that point as the &quot;best so far&quot;.
+Compute its distance to the query point, and save that as the &quot;score to
+beat&quot;. In the image above, we start at A whose distance to the flagged
+point is 4.5.</p></li>
+<li><p>This node partitions the space around it into two subspaces. For
+each subspace, ask: &quot;Can a better point be possibly found inside of this
+space?&quot; This question can be answered by computing the shortest distance
+between the query point and the edge of our subspace (see dotted purple
+line below).</p></li>
+<li><p>Continue recursively for each subspace identified as containing a
+possibly better point.</p></li>
+<li><p>In the end, our &quot;best so far&quot; is the best point; the point
+closest to the query point.</p></li>
+</ul>
 
       
     </div>
@@ -317,7 +339,7 @@ back of the array.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/50/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/50/">50</a><span class="page-number current">51</span><a class="page-number" href="/page/52/">52</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/52/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/50/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/50/">50</a><span class="page-number current">51</span><a class="page-number" href="/page/52/">52</a><span class="space">&#x2026;</span><a class="page-number" href="/page/139/">139</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/52/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -342,14 +364,14 @@ back of the array.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">113k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
   </span>
 </div>
 <div class="busuanzi-count">

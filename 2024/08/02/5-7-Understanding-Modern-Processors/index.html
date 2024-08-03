@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":2,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(5.7.\)Understanding Modern Processors 1.Overall Operation   The overall design of the superscalar processor(meaning that they can perform multiple operations on every clock cycle and out of or">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.7.Understanding Modern Processors">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(5.7.\)Understanding Modern Processors 1.Overall Operation   The overall design of the superscalar processor(meaning that they can perform multiple operations on every clock cycle and out of or">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image-3.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image-4.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image-5.png">
+<meta property="article:published_time" content="2024-08-02T05:31:22.000Z">
+<meta property="article:modified_time" content="2024-08-03T04:43:40.831Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/","path":"2024/08/02/5-7-Understanding-Modern-Processors/","title":"5.7.Understanding Modern Processors"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5.7.Understanding Modern Processors | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>&#x641C;&#x7D22;
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80" placeholder="&#x641C;&#x7D22;..." spellcheck="false" type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#57understanding-modern-processors"><span class="nav-text">\(5.7.\)Understanding Modern Processors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1overall-operation"><span class="nav-text">1.Overall Operation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aicu"><span class="nav-text">&#x2003;&#x2003;\(a.\)ICU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#beu"><span class="nav-text">&#x2003;&#x2003;\(b.\)EU</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2functional-unit-performance"><span class="nav-text">2.Functional Unit Performance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3an-abstract-model-ofprocessor-operation"><span class="nav-text">3.An Abstract Model of
+Processor Operation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#adata-flow-graphs"><span class="nav-text">&#x2003;&#x2003;\(a.\)Data-flow graphs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#botherfactors"><span class="nav-text">&#x2003;&#x2003;\(b.\)Other
+factors</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">139</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5.7.Understanding Modern Processors | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5.7.Understanding Modern Processors
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 13:31:22" itemprop="dateCreated datePublished" datetime="2024-08-02T13:31:22+08:00">2024-08-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 12:43:40" itemprop="dateModified" datetime="2024-08-03T12:43:40+08:00">2024-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-5-Optimizing-Program-Performance/" itemprop="url" rel="index"><span itemprop="name">Chapter 5.Optimizing Program Performance</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>5 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="57understanding-modern-processors"><span class="math inline">\(5.7.\)</span>Understanding Modern Processors</h1>
+<h3 id="1overall-operation">1.Overall Operation</h3>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image.png"></p>
+<ul>
+<li><p>The overall design of the <em>superscalar</em> processor(meaning
+that they can perform multiple operations on every clock cycle and out
+of order) has two main parts:</p>
+<ul>
+<li><p>The <em>instruction control unit</em>(ICU), which is responsible
+for <strong>reading a sequence of instructions from memory</strong> and
+<strong>generating from these a set of primitive operations to perform
+on program data</strong>.</p></li>
+<li><p>The <em>execution unit</em>(EU), which then <strong>executes
+these operations</strong>.</p></li>
+</ul></li>
+</ul>
+<h4 id="aicu">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>ICU</h4>
+<ul>
+<li><p>THe ICU reads the instructions from an <em>instruction
+cache</em>.</p></li>
+<li><p>When a program hits a branch, processors perform <em>branch
+prediction</em>. If it later determines that the branch was predicted
+incorrectly, it <strong>resets the state to that at the branch
+point</strong> and begins <strong>fetching and executing instructions in
+the other direction</strong>.</p>
+<ul>
+<li>The block labeled &quot;Fetch control&quot; incorporates branch prediction to
+perform the task of <strong>determining which instructions to
+fetch</strong>.</li>
+</ul></li>
+<li><p>The instruction decoding logic takes the actual program
+instructions and <strong>converts them into a set of primitive
+operations</strong>(<em>micro-operations</em>).</p>
+<ul>
+<li>The decoding allows a division of labor among a set of dedicated
+hardware units, which then allows parallelism.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;For example, the instruction <code>addq %rax,%rdx</code> will be
+decoded as three operations: one to load a value from memory into the
+processor, one to add the loaded value to the value in register
+<code>%eax</code>, and one to store the result back to memory.</p>
+<ul>
+<li><p>The retirement unit keeps track of the ongoing processing and
+makes sure that it obeys the sequential semantics of the machine-level
+program.</p>
+<ul>
+<li><p>As an instruction is decoded, information about it is placed into
+a <strong>first-in, first-out queue</strong>. The information of an
+instruction remains in the queue until one of two outcomes occurs:</p>
+<ul>
+<li><p>Once the operations for the instruction have completed and any
+branch points leading to this instruction are confirmed as having been
+correctly predicted, <strong>the instruction can be retired, with any
+updates to the program registers being made</strong>.</p></li>
+<li><p>If some branch point leading to this instruction was
+mispredicted, the instruction will be <em>flushed</em>, discarding any
+results that may have been computed.</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="beu">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>EU</h4>
+<ul>
+<li><p>The EU receives operations from the <em>instruction fetch
+unit</em>. These operations are dispatched to <strong>a set of
+functional units that perform the actual operations</strong>.</p></li>
+<li><p>Reading and writing memory is implemented by the <em>load and
+store units</em>. Both the load unit and store unit have an
+<em>adder</em> to perform address computations. They access memory via a
+<em>data cache</em>.</p></li>
+<li><p>With speculative execution, the operations are evaluated, but
+<strong>the final results are not stored in the program registers or
+data memory</strong> until <strong>the processor can be certain that
+these instructions should actually have been executed</strong>.</p>
+<ul>
+<li><p>Branch operations are sent to the EU to <strong>determine whether
+or not they were predicted correctly</strong>.</p></li>
+<li><p>If the prediction was incorrect, the EU will d<strong>iscard the
+results that have been computed beyond the branch point</strong>. It
+will also <strong>signal the branch unit that the prediction was
+incorrect and indicate the correct branch destination</strong>.</p></li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The result of operations is exchanged among the EU. The control of
+the communication of operands is called <em>register renaming</em>.</p>
+<ul>
+<li><p>When an instruction <strong>that updates register r</strong> is
+decoded, a tag t is generated giving a unique identifier to the result
+of the operation. An entry <span class="math inline">\((r,t)\)</span> is
+added to a table maintaining the association <strong>between program
+register r and tag t</strong> for an operation that will update this
+register.</p></li>
+<li><p>When a subsequent instruction using register r as an operand is
+decoded, the operation sent to the execution unit will <strong>contain t
+as the source for the operand value</strong>.</p></li>
+<li><p>When some execution unit completes the first operation, it
+generates a result <span class="math inline">\((v,t)\)</span>,
+indicating that the operation with tag t produced value v. Any operation
+waiting for t as a source will then <strong>use v as the source
+value</strong></p></li>
+</ul>
+<p>&#x2003;&#x2003;This form of <strong>data forwarding</strong> enables values to be
+forwarded without being written to and read from the register file, so
+that <strong>the second operation to begin as soon as the first has
+completed</strong>.</p>
+<h3 id="2functional-unit-performance">2.Functional Unit Performance</h3>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-1.png"></p>
+<ul>
+<li><p>The addition and multiplication operations all have issue times
+of 1, meaning that <strong>on each clock cycle, the processor can start
+a new one of these operations</strong>. They are called <em>fully
+pipelined</em>.</p></li>
+<li><p>The divider isn&apos;t pipelined-its issue time equals its latency. It
+means that the divider <strong>must perform a complete division before
+it can begin a new one</strong>.</p></li>
+</ul>
+<hr>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-2.png"></p>
+<ul>
+<li><p>The <em>latency bound</em> gives <strong>a minimum value for the
+CPE for any function</strong> that must perform the combining operation
+in a strict sequence.</p></li>
+<li><p>The <em>throughput bound</em> gives <strong>a minimum bound for
+the CPE</strong> based on the maximum rate at which the functional units
+can produce results.</p></li>
+</ul>
+<h3 id="3an-abstract-model-ofprocessor-operation">3.An Abstract Model of
+Processor Operation</h3>
+<p>&#x2003;&#x2003;We will take <code>combine4</code> as an example. First, let&apos;s see
+the CPE measurements of the program:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-3.png"></p>
+<ul>
+<li>The performance of these functions is dictated by <strong>the
+latency of the sum or product computation being performed</strong>.
+Computing the product or sum of <span class="math inline">\(n\)</span>
+elements <strong>requires around <span class="math inline">\(L \cdot
+n+K\)</span> clock cycles</strong>, where <span class="math inline">\(L\)</span> is the latency of the combining
+operation and <span class="math inline">\(K\)</span> represents the
+overhead of calling the function and initiating and terminating the
+loop. The CPE is therefore <span class="math inline">\(L+{K \over
+n}\)</span>, which is close to <span class="math inline">\(L\)</span>
+when <span class="math inline">\(n\)</span> is large.</li>
+</ul>
+<h4 id="adata-flow-graphs">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Data-flow graphs</h4>
+<p>&#x2003;&#x2003;First take a look at the assembly codes of
+<code>combine4</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The graphical representation of inner-loop code for
+<code>combine4</code> is as below:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-4.png"></p>
+<p>&#x2003;&#x2003;And the data-flow representation of <span class="math inline">\(n\)</span> iterations in the inner loop is as
+below:</p>
+<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-5.png"></p>
+<p>&#x2003;&#x2003;We can see that the program has two chains of data dependencies,
+corresponding to the updating of program values <code>acc</code> and
+<code>data+i</code> with operations <code>mul</code> and
+<code>add</code>, respectively. And since <strong>the left chain is the
+longest</strong>, it will form a <em>critical path</em>, requiring <span class="math inline">\(5n\)</span> cycles to execute.</p>
+<p>&#x2003;&#x2003;The figure shows that when executing the function, <strong>the
+floating-point multiplier becomes the limiting resource</strong>. The
+other operations required during the loop&#x2014;manipulating and testing
+pointer value <code>data+i</code> and reading data from memory&#x2014;proceed
+<strong>in parallel with the multiplication</strong>.</p>
+<h4 id="botherfactors">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Other
+factors</h4>
+<p>&#x2003;&#x2003;The critical paths in a data-flow representation provide
+<strong>only a lower bound on how many cycles a program will
+require</strong>. Other factors can also limit performance, including
+the total number of functional units available and the number of data
+values that can be passed among the functional units on any given
+step.</p>
+<hr>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(CPE analysis)Illustrate
+why the CPE of the former program is 5.00 while the latter is 8.00:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">poly</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[<span class="number">0</span>];</span><br><span class="line">    <span class="type">double</span> xpwr = x; <span class="comment">/* Equals x^i at start of loop */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= degree; i++) {</span><br><span class="line">        result += a[i] * xpwr;</span><br><span class="line">        xpwr = x * xpwr;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Apply Horner&apos;s method */</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">polyh</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[degree];</span><br><span class="line">    <span class="keyword">for</span> (i = degree - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {</span><br><span class="line">        result = a[i] + x * result;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The CPE of the
+<code>poly</code> is decided by the instruction
+<code>result += a[i] * xpwr;</code> and
+<code>xpwr = x * xpwr;</code>.</p>
+<p>&#x2003;&#x2003;For <code>result += a[i] * xpwr</code>, after the first sequential
+operation of 8 cycle, the <code>+</code> and <code>*</code> can be
+executed in pipeline. So the CPE is $ $.</p>
+<p>&#x2003;&#x2003;The analysis for <code>polyh</code> is the same. The
+<code>result = a[i] + x * result</code> cannot be executed in
+pipeline(because both LHS and RHS contain <code>result</code>), so the
+CPE is 5+3=8.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/02/5-3-Optimizing-Methods/" rel="prev" title="5.3.Optimizing Methods">
+                  <i class="fa fa-angle-left"></i> 5.3.Optimizing Methods
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/03/5-8-Loop-Unrolling/" rel="next" title="5.8.Loop Unrolling">
+                  5.8.Loop Unrolling <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+    <!--  -->
+    
+  </article>
+</div>
+
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fyerfyer","repo":"fyerfyer.github.io","client_id":"Ov23liESIp4eoFZzzDEq","client_secret":"2e451e3f77791ed6a3a4b0d07790e83fd1a3c8d0","admin_user":"fyerfyer","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"be41b7f0c650ac2cac547a1970aae304"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

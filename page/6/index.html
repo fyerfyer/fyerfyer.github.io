@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-5-Pipelined-Y86-64-Implementations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/25/4-3-Sequential-Y86-64-Implementation/" class="post-title-link" itemprop="url">4.3.Sequential Y86-64 Implementation</a>
+          <a href="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/" class="post-title-link" itemprop="url">4.5.Pipelined Y86-64 Implementations</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-25 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-25T14:31:22+08:00">2024-07-25</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 19:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T19:31:22+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 19:13:28" itemprop="dateModified" datetime="2024-07-26T19:13:28+08:00">2024-07-26</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-31 20:33:52" itemprop="dateModified" datetime="2024-07-31T20:33:52+08:00">2024-07-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>2.4k</span>
+      <span>3.6k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>9 &#x5206;&#x949F;</span>
+      <span>13 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,400 +272,532 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="43sequential-y86-64-implementation"><span class="math inline">\(4.3.\)</span>Sequential Y86-64 Implementation</h1>
-<h3 id="1organizing-processing-intostages">1.Organizing Processing into
-Stages</h3>
-<h4 id="asummary">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Summary</h4>
-<p>&#x2003;&#x2003;The following is an informal description of the stages and the
-operations performed within them:</p>
-<ol type="1">
-<li><p><em>Fetch</em>: The fetch stage <strong>reads the bytes of an
-instruction from memory, using the program counter(PC) as the memory
-address</strong>.</p>
+          <h1 id="45pipelined-y86-64-implementations"><span class="math inline">\(4.5.\)</span>Pipelined Y86-64 Implementations</h1>
+<h3 id="1seq-rearranging-thecomputation-stages">1.SEQ+ Rearranging the
+Computation Stages</h3>
+<p>&#x2003;&#x2003;We slightly rearrange the order of the five stages in SEQ so that
+<strong>the PC update stage comes at the beginning of the clock
+cycle</strong>, rather than at the end. We refer to this modified design
+as SEQ+.</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image.png"></p>
 <ul>
-<li><p>From the instruction it <strong>extracts the two 4-bit portions
-of the instruction specifier byte</strong>, referred to as
-<code>icode</code>(the instruction code) and <code>ifun</code>(the
-instruction function).</p></li>
-<li><p>It computes <code>valP</code> to be <strong>the address of the
-instruction following the current one in sequential order</strong>. That
-is, <code>valP</code> equals <strong>the value of the PC plus the length
-of the fetched instruction</strong>.</p></li>
-</ul></li>
-<li><p><em>Decode</em>: The decode stage <strong>reads up to two
-operands from the register file</strong>, giving values
-<code>valA</code> and/or <code>valB</code>.</p></li>
-<li><p><em>Execute</em>: In the execute stage, the arithmetic/logic
-unit(ALU) either <strong>performs the operation specified by the
-instruction</strong>(according to <strong>the value of
-<code>ifun</code></strong>), <strong>computes the effective address of a
-memory reference</strong>, or <strong>increments or decrements the stack
-pointer</strong>. We refer to the resulting value as
-<code>valE</code>.</p>
-<ul>
-<li>For a conditional move instruction, the stage will evaluate the
-condition codes and move condition (given by <code>ifun</code>) and
-<strong>enable the updating of the destination register only if the
-condition holds</strong>.</li>
-</ul></li>
-<li><p><em>Memory</em>: The memory stage may write data to memory, or it
-may read data from memory. We refer to the value read as
-<code>valM</code>.</p></li>
-<li><p><em>Write Back</em>: The write-back stage writes up to two
-results to the register file.</p></li>
-<li><p><em>PC Update</em>: The PC is set to the address of the next
-instruction.</p></li>
-</ol>
-<p>&#x2003;&#x2003;In our simplified implementation, the processor will stop when any
-exception occurs - that is, when it executes a <code>halt</code> or
-invalid instruction, or it attempts to read or write an invalid
-address.</p>
-<h4 id="barithmetic-operations">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Arithmetic operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image.png"></p>
-<ul>
-<li><p>For the integer-operation instruction:</p>
-<ol type="1">
-<li><p>In the fetch stage, we do not require a constant word, and so
-<code>valP</code> is computed as <code>PC+2</code>.</p></li>
-<li><p>During the decode stage, we read both operands. These are
-supplied to the ALU in the execute stage, along with the function
-specifier <code>ifun</code>.</p></li>
-<li><p><code>valE</code> equals to the instruction result
-<code>valB OP valA</code>. The <code>OP</code> is specified by
-<code>ifun</code>.</p></li>
-</ol></li>
-<li><p>For the <code>rmmovq</code> instruction:</p>
-<ol type="1">
-<li><p>The process is similar to integer-operation operation, but we
-don&apos;t need to fetch the second register operand. Instead, we <strong>set
-the second ALU input to zero and add this to the first</strong>, giving
-<code>valE = valA</code>.</p></li>
-<li><p>In addition, we must increment the program counter by 10 for
-<code>irmovq</code> <strong>due to the long instruction
-format</strong>.</p></li>
-</ol></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-1.png"></p>
-<h4 id="coperations-involving-memoryoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Operations involving memory
-operation</h4>
-<p>&#x2003;&#x2003;The following instructions involve memory write and read stage:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-2.png"></p>
-<ul>
-<li><p>The process <strong>use the ALU to add <code>valC</code> to
-<code>valB</code>, giving the effective address for memory
-operation</strong>.</p></li>
-<li><p>In the memory stage, we either write the register value
-<code>valA</code> to memory or read <code>valM</code> from
-memory.</p></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-3.png"></p>
-<h4 id="dpushq-amppopq-operations">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>pushq</code> &amp;
-<code>popq</code> operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-4.png"></p>
-<p>&#x2003;&#x2003;The <code>pushq</code> and <code>popq</code> involve both accessing
-memory and incrementing or decrementing the stack pointer.</p>
-<ul>
-<li><p>For the <code>pushq</code> instruction:</p>
-<ol type="1">
-<li><p>In decode stage, we use <code>%rsp</code> as the identifier for
-the second register operand, giving the stack pointer as
-<code>valB</code>.</p></li>
-<li><p>In the execute stage, we <strong>use the ALU to decrement the
-stack pointer by 8</strong>. This decremented value is used for the
-memory write address and is also <strong>stored back to
-<code>%rsp</code> in the write-back stage</strong>.</p></li>
-<li><p>We use <code>valE</code> as the address for the write
-operation.</p></li>
-</ol></li>
+<li><p>The old SEQ computes the PC register based on the values of
+signals computed during the current clock cycle.</p></li>
+<li><p>While with SEQ+, we <strong>create state registers to hold the
+signals computed during an instruction</strong>. Then as the new clock
+cycle begins, <strong>the values propagate through the exact same logic
+to compute the PC for the now-current instruction</strong>.</p></li>
 </ul>
 <blockquote>
-<p>we adhere to the Y86-64 convention that <code>pushq</code> should
-<strong>decrement the stack pointer before writing</strong>.</p>
+<p>In SEQ+, there is no hardware register storing the program counter.
+Instead, the PC <strong>is computed dynamically based on some state
+information stored from the previous instruction</strong>.</p>
 </blockquote>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-1.png"></p>
+<h3 id="2inserting-pipelineregisters">2.Inserting Pipeline
+Registers</h3>
+<p>&#x2003;&#x2003;We first try to insert pipeline registers between the stages of
+SEQ+. This kind of processor is called <em>PIPE-</em>, where the &apos;-&apos;
+represents the decrement in performance. It uses the same hardware as
+before, but with the pipeline registers separating the stages:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-2.png"></p>
 <ul>
-<li><p>For the <code>popq</code> instruction:</p>
+<li><p><em>F</em> holds a predicted value of the program
+counter.</p></li>
+<li><p><em>D</em> holds <strong>information about the most recently
+fetched instruction</strong> for processing <strong>by the decode
+stage</strong>.</p></li>
+<li><p><em>E</em> holds information about <strong>the most recently
+decoded instruction</strong> and <strong>the values read from the
+register file</strong> for processing by the execute stage.</p></li>
+<li><p><em>M</em> holds <strong>the results of the most recently
+executed instruction</strong> for processing by the memory stage. It
+also holds <strong>information about branch conditions and branch
+targets</strong> for processing conditional jumps.</p></li>
+<li><p><em>W</em> supply <strong>the computed results to the register
+file</strong> for writing and <strong>the return address to the PC
+selection logic</strong> when completing a <code>ret</code>
+instruction.</p></li>
+</ul>
+<blockquote>
+<p>Since normal program flow goes from top to bottom of a listing, we
+preserve this ordering by having the pipeline flow go from bottom to
+top.</p>
+</blockquote>
+<h3 id="3rearranging-and-relabelingsignals">3.Rearranging and Relabeling
+Signals</h3>
+<h4 id="asome-name-reference">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some name reference</h4>
+<ul>
+<li><p>We use uppercase suffix to specified where data is stored. For
+example, <code>D_stat</code>.</p></li>
+<li><p>We use lowercase suffix to specified which stage data has been
+computed. For example, <code>f_stat</code>.</p></li>
+</ul>
+<blockquote>
+<p>The uppercase letters refer to pipeline registers, while the
+lowercase letters refer to pipeline stages.</p>
+</blockquote>
+<h4 id="bdetails">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Details</h4>
+<p>&#x2003;&#x2003;The decode stages generate <code>dstE</code> and
+<code>dstM</code>:</p>
+<ul>
+<li><p>In SEQ+, we <strong>connect these signals directly to the address
+inputs of the register file write ports</strong>.</p></li>
+<li><p>With PIPE&#x2212;, these signals are directed to the register file
+<strong>only once they reach</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;These are to make sure <strong>the write port address and data
+inputs hold values from the same instruction</strong>.</p>
+<ul>
+<li><p>The &quot;Select A&quot; block generates the value <code>valA</code> for
+the pipeline register E by <strong>choosing either <code>valP</code>
+from pipeline register D or the value read from the A port of the
+register file</strong>. This block is included to <strong>reduce the
+amount of state that must be carried forward to pipeline registers E and
+M</strong>.</p>
+<ul>
+<li>This is because only <code>call</code> instruction requires
+<code>valP</code> in the memory stage, only <code>jump</code>
+instruction requires <code>valP</code> in the execute stage(when the
+jump isn&apos;t taken). None of these instructions requires a value read from
+the register file.</li>
+</ul></li>
+</ul>
+<h3 id="4next-pc-prediction">4.Next PC Prediction</h3>
+<h4 id="abranch-prediction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Branch prediction</h4>
+<p>&#x2003;&#x2003;When we fetch a conditional branch instruction, to decide which
+branch to take, we try to predict the next value of the PC.</p>
+<ul>
+<li><p>For conditional jumps, if we predict that a jump will be taken,
+the PC will be <code>valC</code>(computed by the PC
+incrementer).</p></li>
+<li><p>If we predict that it won&apos;t be taken, the PC will be
+<code>valP</code>(from the fetch instruction).</p></li>
+</ul>
+<p>&#x2003;&#x2003;There are several prediction strategies:</p>
 <ol type="1">
-<li><p>The <code>popq</code> instruction proceeds much like
-<code>pushq</code>, except that we <strong>read two copies of the stack
-pointer</strong> in the decode stage. This is clearly redundant, but we
-will see that having the stack pointer as both <code>valA</code> and
-<code>valB</code> makes the subsequent flow more similar to that of
-other instructions, enhancing the overall uniformity of the
-design.</p></li>
-<li><p>We use <strong>the unincremented value as the address for the
-memory operation</strong>.</p></li>
-<li><p>In the write-back stage, we update both <strong>the stack pointer
-register with the incremented stack pointer</strong> and
-<strong>register <code>rA</code> with the value read from
-memory</strong>.</p></li>
-</ol></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-5.png"></p>
-<h4 id="econtrol-transfer-instructions">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Control transfer instructions</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-6.png"></p>
-<ul>
-<li><p>A jump instruction proceeds through fetch and decode much like
-the previous instructions, except that <strong>it does not require a
-register specifier byte</strong>.</p></li>
-<li><p>In the execute stage, we check the condition codes and the jump
-condition to determine whether or not to take the branch, yielding a
-1-bit signal <code>Cnd</code>.</p></li>
-<li><p>We test this flag and set the PC to <code>valC</code>(the jump
-target) if the flag is 1 and to <code>valP</code>(the address of the
-following instruction) if the flag is 0.</p></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-7.png"></p>
-<h4 id="fcall-ampret-operations">&#x2003;&#x2003;<span class="math inline">\(f.\)</span><code>call</code> &amp;
-<code>ret</code> operations</h4>
-<ul>
-<li><p>Instructions <code>call</code> and <code>ret</code> is similar to
-<code>pushq</code> and <code>popq</code>, except that we push and pop
-program counter values.</p>
-<ul>
-<li><p>With instruction call, we push <code>valP</code>, <strong>the
-address of the instruction that follows the call instruction</strong>.
-During the PC update stage, we <strong>set the PC to <code>valC</code>,
-the call destination</strong>.</p></li>
-<li><p>With instruction <code>ret</code>, we assign <code>valM</code>,
-<strong>the value popped from the stack</strong>, to the PC in the PC
-update stage.</p></li>
-</ul></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-8.png"></p>
-<h3 id="2seq-hardware-structure">2.SEQ Hardware Structure</h3>
-<p>&#x2003;&#x2003;The following figure shows an abstract view of a hardware structure
-that performs the six stages:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-9.png"></p>
-<ul>
-<li><p>Information then flows along wires(shown grouped together as a
-heavy gray line), first upward and then around to the right.</p></li>
-<li><p>The feedback paths coming back down on the right-hand side
-<strong>contain the updated values to write to the register file and the
-updated program counter</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The six stages are executed as below:</p>
-<ol type="1">
-<li><p><em>Fetch</em>: <strong>Using the program counter register as an
-address</strong>, the <em>instruction memory</em> reads the bytes of an
-instruction. The PC incrementer computes <code>valP</code>.</p></li>
-<li><p><em>Decode</em>: The two register values <code>valA</code> and
-<code>valB</code> are read simultaneously from the read ports A and
-B.</p></li>
-<li><p><em>Execute</em>:</p>
-<ul>
-<li><p>The ALU do the operations for different purposes.</p></li>
-<li><p>The condition code register(CC) holds the three condition code
-bits. New values for the condition codes are computed by the ALU. The
-execution of move instruction and the <code>Cnd</code> of the jump
-instruction is computed based on the CC.</p></li>
-</ul></li>
-<li><p><em>Memory</em>: The data memory reads or writes a word of memory
-when executing a memory instruction.</p>
-<ul>
-<li>The instruction and data memories access the same memory locations,
-but for different purposes.</li>
-</ul></li>
-<li><p><em>Write Back</em>: The register file has two write ports. Port
-E is used to write values computed by the ALU, while port M is used to
-write values read from the data memory.</p></li>
-<li><p><em>PC Update</em>: The new value of the program counter is
-selected to be either <code>valP</code>, <strong>the address of the next
-instruction</strong>, <code>valC</code>, <strong>the destination address
-specified by a call or jump instruction</strong>, or <code>valM</code>,
-<strong>the return address read from memory</strong>.</p></li>
+<li><p><em>Always Taken</em>.</p></li>
+<li><p><em>Never Taken</em>.</p></li>
+<li><p><em>Backward Taken, Forward Not Taken</em>. That is, branches to
+lower addresses than the next instruction will be taken, while those to
+higher addresses will not be taken. This strategy stems from the fact
+that <strong>loops are closed by backward branches and loops are
+generally executed multiple times</strong>.</p></li>
 </ol>
-<p>&#x2003;&#x2003;The following figure gives a more detailed view of the hardware
-design:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-10.png"></p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-11.png"></p>
-<h3 id="3seq-timing">3.SEQ Timing</h3>
-<h4 id="asomebasic-idea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-basic idea</h4>
+<p>&#x2003;&#x2003;We simply use &quot;Always Taken&quot; for branch prediction.</p>
+<p>&#x2003;&#x2003;the block labeled &quot;Predict PC&quot; chooses either <code>valP</code> or
+<code>valC</code>. This value <strong>is stored in pipeline register
+F</strong> as the predicted value of the program counter.</p>
+<h4 id="bret">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>ret</code></h4>
+<p>&#x2003;&#x2003;For <code>ret</code> instruction, we don&apos;t use any prediction.
+Instead, we will simply <strong>hold off processing any more
+instructions until the <code>ret</code> instruction passes through the
+write-back stage</strong>.</p>
+<h3 id="5pipeline-hazards">5.Pipeline Hazards</h3>
+<p>&#x2003;&#x2003;When the dependencies referred before have the potential to cause
+an erroneous computation by the pipeline, they are called
+<em>hazards</em>. Hazards can be classified as either <em>data
+hazards</em> or <em>control hazards</em>.</p>
+<h4 id="astalling">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Stalling</h4>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-3.png"></p>
+<p>&#x2003;&#x2003;One very general technique for avoiding hazards involves stalling,
+where the processor holds back one or more instructions in the pipeline
+until the hazard condition no longer holds.</p>
 <ul>
-<li><p>Combinational logic does not require any sequencing or
-control-<strong>values propagate through a network of logic gates
-whenever the inputs change</strong>.</p></li>
-<li><p>We assume that reading from a random access memory operates much
-like combinational logic, with the output word generated based on the
-address input.</p></li>
-<li><p>The program counter is loaded with a new instruction address
-every clock cycle.</p></li>
-<li><p>The condition code register is loaded only <strong>when an
-integer operation instruction is executed</strong>.</p></li>
-<li><p>The data memory is written only when an <code>rmmovq</code>,
-<code>pushq</code>, or <code>call</code> instruction is
-executed.</p></li>
-<li><p>The two write ports of the register file allow two program
-registers to be updated on every cycle, but we can use the special
-register ID 0xF as a port address to indicate that no write should be
-performed for this port.</p></li>
-<li><p><em>Principle</em>: The processor <strong>never needs to read
-back the state updated by an instruction</strong> in order to complete
-the processing of this instruction.</p></li>
+<li>Our processor can avoid data hazards by <strong>holding back an
+instruction in the decode stage</strong> until <strong>the instructions
+generating its source operands have passed through the write-back
+stage</strong>.</li>
 </ul>
-<h4 id="bprogram-example">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Program example</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-12.png"></p>
-<p>&#x2003;&#x2003;Every time the clock transitions from low to high, the processor
-begins executing a new instruction.</p>
-<h3 id="4seq-stage-implementation">4.SEQ Stage Implementation</h3>
-<p>&#x2003;&#x2003;The used constant are shown below:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-13.png"></p>
-<h4 id="afetchstage">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Fetch
-stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-14.png"></p>
+<p>&#x2003;&#x2003;In holding back the <code>addq</code> instruction in the decode
+stage, we must also <strong>hold back the <code>halt</code> instruction
+following it in the fetch stage</strong>. We can do this by
+<strong>keeping the program counter at a fixed value</strong>, so that
+the halt instruction will be fetched repeatedly until the stall has
+completed.</p>
+<p>&#x2003;&#x2003;During the processing of <code>addq</code>, to perform the
+stalling, we <strong>inject a <em>bubble</em></strong>, which is a
+dynamically generated <code>nop</code> instruction, <strong>into the
+execute stage</strong>.</p>
+<h4 id="bforwarding">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Forwarding</h4>
+<h5 id="iforwarding-process">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Forwarding process</h5>
+<p>&#x2003;&#x2003;Rather than stalling until the write has completed, it can simply
+<strong>pass the value</strong> that is about to be written to pipeline
+register E <strong>as the source operand</strong>. This technique of
+<strong>passing a result value directly from one pipeline stage to an
+earlier one</strong> is commonly known as <em>data forwarding</em>:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-4.png"></p>
+<p>&#x2003;&#x2003;For forwarding, we can <strong>pass the newly computed values from
+the execute stage to the decode stage</strong>.</p>
 <ul>
-<li><p>The instruction memory hardware unit reads 10 bytes from memory
-at a time, <strong>using the PC as the address of the first byte(byte
-0)</strong>. This byte is interpreted as the instruction byte and is
-<strong>split(by the unit labeled &quot;Split&quot;) into two 4-bit
-quantities</strong>.</p></li>
-<li><p>The control logic blocks labeled &quot;icode&quot; and &quot;ifun&quot; then compute
-the instruction and function codes as equaling either <strong>the values
-read from memory</strong> or the values corresponding to a nop
-instruction(as indicated by the signal
-<code>imem_error</code>).</p></li>
+<li><p>The decode-stage logic <strong>detects a pending write to
+register <code>%rdx</code> in the memory stage</strong>, and also that
+<strong>the value being computed by the ALU in the execute stage will
+later be written to register <code>%rax</code></strong>.</p></li>
+<li><p>It can use the value in the memory stage(signal
+<code>M_valE</code>) for operand <code>valA</code>. It can also use the
+ALU output(signal <code>e_valE</code>) for operand
+<code>valB</code>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;Based on the value of <code>icode</code>, we can compute three
-1-bit signals:</p>
+<p>&#x2003;&#x2003;Forwarding can also be used with values read from the memory and
+destined for write port M:</p>
+<ul>
+<li><p>From the memory stage, we can forward <strong>the value that has
+just been read from the data memory</strong>(signal
+<code>m_valM</code>).</p></li>
+<li><p>From the write-back stage, we can forward <strong>the pending
+write to port M(signal <code>W_valM</code>)</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;This gives a total of five different forwarding
+sources(<code>e_valE</code>, <code>m_valM</code>, <code>M_valE</code>,
+<code>W_valM</code>, and <code>W_valE</code>) and two different
+forwarding destinations (<code>valA</code> and <code>valB</code>).</p>
+<p>&#x2003;&#x2003;The following figure shows the structure of PIPE that can handle
+data hazards by forwarding. We can see that the values from the five
+forwarding sources are fed back to the <strong>two blocks labeled
+&apos;Sel+Fwd A&quot; and &quot;Fwd B&quot; in the decode stage</strong>.</p>
+<ul>
+<li>The block labeled &quot;Sel+Fwd A&quot; combines the role of the block labeled
+&quot;Select A&quot; in PIPE with the forwarding logic.</li>
+</ul>
+<h5 id="iiforwarding-judgement">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Forwarding judgement</h5>
+<p>&#x2003;&#x2003;Associated with every value that will be written back to the
+register file is the destination register ID. The logic can compare
+these IDs with the source register IDs srcA and srcB to detect a case
+for forwarding.</p>
+<h4 id="cloaduse-hazards">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Load/Use hazards</h4>
+<p>&#x2003;&#x2003;One class of data hazards cannot be handled purely by forwarding is
+called <em>load/use hazards</em>:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-5.png"></p>
+<p>&#x2003;&#x2003;The <code>addq</code> instruction requires the value of the
+register in cycle 7, but <strong>it is not generated by the
+<code>mrmovq</code> instruction until cycle 8. In order to &quot;forward&quot;
+from the <code>mrmovq</code> to the <code>addq</code></strong>, the
+forwarding logic would have to make the value go backward in time(or no
+register will store our desired value)!</p>
+<p>&#x2003;&#x2003;We can avoid a load/use data hazard <strong>with a combination of
+stalling and forwarding</strong>:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-6.png"></p>
+<p>&#x2003;&#x2003;This technique is called <em>load interlock</em>. Since only load
+interlocks reduce the pipeline throughput, we can nearly achieve our
+throughput goal of issuing one new instruction on every clock cycle.</p>
+<h4 id="davoiding-control-hazards">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Avoiding control hazards</h4>
+<p>&#x2003;&#x2003;Control hazards arise when the processor <strong>cannot reliably
+determine the address of the next instruction</strong> based on the
+current instruction in the fetch stage.</p>
+<h5 id="iret">&#x2003;&#x2003;<span class="math inline">\(i.\)</span><code>ret</code></h5>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-7.png"></p>
+<ul>
+<li><p>While the <code>ret</code> instruction passes through the decode,
+execute, and memory stages, the pipeline cannot do any useful
+activity.</p></li>
+<li><p>Once the <code>ret</code> instruction reaches the write-back
+stage, the PC selection logic will <strong>set the program counter to
+the return address</strong>, and therefore the fetch stage will fetch
+the <code>irmovq</code> instruction at the return point(address
+0x013).</p></li>
+</ul>
+<h5 id="iijump-instruction">&#x2003;&#x2003;<span class="math inline">\(ii\)</span>Jump instruction</h5>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-8.png"></p>
+<ul>
+<li><p>By the time the branch logic detects that the jump should not be
+taken during cycle 4, two instructions have been fetched that should not
+continue being executed.</p></li>
+<li><p>Neither of these instructions has caused a change in the
+programmer-visible state. So the pipeline can simply cancel (sometimes
+called <em>instruction squashing</em>) the two misfetched instructions
+by <strong>injecting bubbles into the decode and execute stages</strong>
+on the following cycle while also fetching the instruction following the
+jump instruction.</p></li>
+</ul>
+<h3 id="6exception-handling">6.Exception Handling</h3>
+<h4 id="aseveral-exception-subleties">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Several exception subleties</h4>
 <ol type="1">
-<li><p><code>instr_valid</code>: This signal is used to <strong>detect
-an illegal instruction</strong>.</p></li>
-<li><p><code>need_regids</code>: Does this instruction <strong>include a
-register specifier byte</strong>?</p></li>
-<li><p><code>need_valC</code>: Does this instruction <strong>include a
-constant word</strong>?</p></li>
+<li><p>It is possible to have exceptions <strong>triggered by multiple
+instructions simultaneously</strong>.</p>
+<ul>
+<li>For example, we could have a <code>halt</code> instruction in the
+fetch stage, and the data memory could report an out-of-bounds data
+address for the instruction in the memory stage.</li>
+</ul></li>
+<li><p>When an instruction is first fetched and begins execution, causes
+an exception, and later is canceled due to a mispredicted branch. But we
+want to avoid rasing the exception.</p></li>
+<li><p>It&apos;s possible for an instruction following one causing an
+exception to <strong>alter some part of the state before the excepting
+instruction completes</strong>.</p>
+<ul>
+<li>Take the assembly program below as an example, The exception of
+<code>pushq %rax</code> is detected in memory stage, while the
+<code>addq %rax, %rax</code> has reached execute stage, and has already
+cause the condition codes to be set to new values(and other
+<code>stat</code>):</li>
+</ul></li>
 </ol>
-<p>&#x2003;&#x2003;The signals <code>instr_valid</code> and
-<code>imem_error</code>(generated when the instruction address is out of
-bounds) are used to <strong>generate the status code in the memory
-stage</strong>.</p>
-<p>&#x2003;&#x2003;The HCL description for <code>need_regids</code> and
-<code>need_valC</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bool need_regids =</span><br><span class="line">    icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ,</span><br><span class="line">               IIRMOVQ, IRMMOVQ, IMRMOVQ };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool need_valC =</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">irmovq $1,%rax           </span><br><span class="line">xorq %rsp,%rsp   # Set stack pointer to 0 and CC to 100</span><br><span class="line">pushq %rax       # Attempt to write to 0xfffffffffffffff8</span><br><span class="line">addq %rax,%rax   # (Should not be executed) Would set CC to 000</span><br></pre></td></tr></table></figure>
+<h4 id="bhandling-exception">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Handling exception</h4>
+<p>&#x2003;&#x2003;When an exception occurs in one or more stages of a pipeline,
+<strong>the information is simply stored in the status fields of the
+pipeline registers</strong>. The event has no effect on the flow of
+instructions in the pipeline <strong>until an excepting instruction
+reaches the final pipeline stage</strong>, except to <strong>disable any
+updating of the programmer-visible state</strong>.</p>
 <ul>
-<li><p>The remaining 9 bytes read from the instruction memory encode
-some combination of the register specifier byte and the constant
-word.</p>
-<ul>
-<li>Byte 1 <strong>is split into register specifiers <code>rA</code> and
-<code>rB</code> when the computed signal need_regids is 1</strong>. If
-<code>need_regids</code> is 0, both register specifiers are set to
-0xF(<code>RNONE</code>).</li>
-</ul></li>
-<li><p>The PC incrementer hardware unit generates the signal
-<code>valP</code>, based on the current value of the PC, and the two
-signals <code>need_regids</code> and <code>need_valC</code>. For PC
-value <span class="math inline">\(p\)</span>, <code>need_regids</code>
-value <span class="math inline">\(r\)</span>, and <code>need_valC</code>
-value <span class="math inline">\(i\)</span>, the incrementer generates
-the value <span class="math inline">\(p+1+r+8i\)</span>.</p></li>
+<li><p>For the first problem, we are guaranteed that the first
+instruction encountering an exception will <strong>arrive first in the
+write-back stage</strong>, at which point <strong>program execution can
+stop</strong> and <strong>the status code in pipeline register W can be
+recorded as the program status</strong>.</p></li>
+<li><p>For the second problem, if some instruction is fetched but later
+canceled, <strong>any exception status information about the instruction
+gets canceled as well</strong>.</p></li>
+<li><p>For the third problem, no instruction following one that causes
+an exception can alter the programmer-visible state.</p></li>
 </ul>
-<h4 id="bdecode-and-write-back-stagess">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Decode and write-back stagess</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-15.png"></p>
+<h3 id="7pipe-stage-implementation">7.PIPE Stage Implementation</h3>
+<h4 id="apc-selection-and-fetch-stage">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>PC selection and Fetch stage</h4>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-9.png"></p>
 <ul>
-<li><p>The register file has four ports. It supports up to two
-simultaneous reads(on ports A and B) and two simultaneous writes(on
-ports E and M).</p>
+<li><p>The hardware units for reading the instruction from memory and
+for extracting the different instruction fields are the same as those we
+considered for SEQ.</p></li>
+<li><p>The PC selection logic chooses between three program counter
+sources:</p>
 <ul>
-<li><p>Each port has <strong>both an address connection and a data
-connection</strong>, where the address connection is a register ID, and
-the data connection is a set of 64 wires serving as either an output
-word (for a read port) or an input word (for a write port) of the
-register file.</p></li>
-<li><p>The two read ports have address inputs <code>srcA</code> and
-<code>srcB</code>, while the two write ports have address inputs
-<code>dstE</code> and <code>dstM</code>. The 0xF(<code>RNONE</code>) on
-an address port indicates that no register should be accessed.</p></li>
-</ul></li>
-<li><p>The four blocks at the bottom generate <strong>the four different
-register IDs</strong> for the register file based on <code>icode</code>,
-<code>rA</code>, <code>rB</code> and <code>Cnd</code>.</p>
-<ul>
-<li><p><code>srcA</code> indicates which register should be read to
-generate <code>valA</code>, so as <code>srcB</code>.</p></li>
-<li><p><code>dstE</code> indicates <strong>the destination register for
-write port E</strong>, where the computed value <code>valE</code> is
-stored, so as <code>dstM</code>.</p></li>
+<li><p>For <em>mispredicted branches</em>, The value of
+<code>valP</code>(indicating the address of the following instruction)
+is read from pipeline register M(signal <code>M_valA</code>).</p></li>
+<li><p>For <em><code>ret</code> instruction</em>, the return address is
+read from pipeline register W(signal <code>W_valM</code>).</p></li>
+<li><p>All other cases use <em>the predicted value of the PC</em>,
+stored in pipeline register F (signal <code>F_predPC</code>)</p></li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;The HCL description of <code>srcA</code> and <code>srcB</code> are
-as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcA = [</span><br><span class="line">    icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;</span><br><span class="line">    icode in { IPOPQ, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcB = [</span><br><span class="line">    icode in { IOPQ, IRMMOVQ, IMRMOVQ } : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The HCL description of <code>dstM</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word dstM = [</span><br><span class="line">    icode in { IMRMOVQ, IPOPQ } : rA;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">word f_pc = [</span><br><span class="line">    # Mispredicted branch. Fetch at incremented PC</span><br><span class="line">    M_icode == IJXX &amp;&amp; !M_Cnd : M_valA;</span><br><span class="line">    # Completion of RET instruction</span><br><span class="line">    W_icode == IRET : W_valM;</span><br><span class="line">    # Default: Use predicted value of PC</span><br><span class="line">    1 : F_predPC;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>The PC prediction logic chooses <code>valC</code> for the fetched
+instruction when <strong>it is either a call or a jump</strong>, and
+<code>valP</code> otherwise:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word f_predPC = [</span><br><span class="line">    f_icode in { IJXX, ICALL } : f_valC;</span><br><span class="line">    1 : f_valP;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Unlike in SEQ, we must <strong>split the computation of the
+instruction status into two parts</strong>:</p>
+<ul>
+<li><p>In the fetch stage, we can test for a memory error <strong>due to
+an out-of-range instruction address</strong>, and we can <strong>detect
+an illegal instruction or a <code>halt</code>
+instruction</strong>.</p></li>
+<li><p>Detecting an invalid data address must <strong>be deferred to the
+memory stage</strong>.</p></li>
+</ul>
+<h4 id="bdecode-and-write-back-stages">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Decode and Write-back stages</h4>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-10.png"></p>
+<ul>
+<li><p>The register IDs supplied to the write ports come from the
+write-back stage(signals <code>W_dstE</code> and <code>W_dstM</code>),
+rather than from the decode stage. This is to ensure that the final
+result is written back to the specified register <strong>only after the
+instruction has actually completed all operations</strong>, including
+memory access and execution.</p></li>
+<li><p>The block labeled &quot;Sel+Fwd A&quot; serves two roles: It <strong>merges
+the <code>valP</code> signal into the <code>valA</code> signal</strong>
+for later stages in order to reduce the amount of state in the pipeline
+register. It also <strong>implements the forwarding logic for source
+operand <code>valA</code></strong>.</p></li>
+<li><p><strong>Only the <code>call</code> and jump instructions need the
+value of <code>valP</code> in later stages</strong>, and these
+instructions do not need the value read from the A port of the register
+file.</p>
+<ul>
+<li>This selection is controlled by the <code>icode</code> signal for
+this stage. When <strong>signal <code>D_icode</code> matches the
+instruction code for either <code>call</code> or
+<code>jXX</code></strong>, this block should <strong>select
+<code>D_valP</code> as it output</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;there are five different forwarding sources, each with a data word
+and a destination register ID:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-11.png"></p>
+<p>&#x2003;&#x2003;If <strong>none of the forwarding conditions hold</strong>, the
+block should select <code>d_rvalA</code>, the value read from register
+port A, as its output.</p>
+<p>&#x2003;&#x2003;The overall HCL description for the <code>d_valA</code> is as
+below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">word d_valA = [</span><br><span class="line">    D_icode in { ICALL, IJXX } : D_valP; # Use incremented PC</span><br><span class="line">    d_srcA == e_dstE : e_valE; # Forward valE from execute</span><br><span class="line">    d_srcA == M_dstM : m_valM; # Forward valM from memory</span><br><span class="line">    d_srcA == M_dstE : M_valE; # Forward valE from memory</span><br><span class="line">    d_srcA == W_dstM : W_valM; # Forward valM from write back</span><br><span class="line">    d_srcA == W_dstE : W_valE; # Forward valE from write back</span><br><span class="line">    1 : d_rvalA; # Use value read from register file</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The priority given to the five forwarding sources in the above HCL
+code is very important. This priority is determined in the HCL code
+<strong>by the order in which the five destination register IDs are
+tested</strong>.</p>
+<blockquote>
+<p>To imitate this behavior, our pipelined implementation should always
+give priority to the forwarding source <strong>in the earliest pipeline
+stage</strong>, since it holds the latest instruction in the program
+sequence setting the register.</p>
+</blockquote>
+<p>&#x2003;&#x2003;In previous part, we know that the overall processor status
+<code>Stat</code> is computed by a block based on the status value:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-12.png"></p>
+<p>&#x2003;&#x2003;Since pipeline register W holds the state of the most recently
+completed instruction, it is natural to <strong>use this value as an
+indication of the overall processor status</strong>. The only special
+case to consider is when <strong>there is a bubble in the write-back
+stage</strong>. This is part of normal operation, and so we want
+<strong>the status code to be AOK for this case as well</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word Stat = [</span><br><span class="line">    W_stat == SBUB : SAOK;</span><br><span class="line">    1 : W_stat;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 <h4 id="cexecute-stage">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Execute stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-16.png"></p>
-<ul>
-<li><p>The stage includes ALU, which performs operations based on the
-setting of <code>alufun</code> signal. The ALU output becomes the signal
-<code>valE</code>.</p></li>
-<li><p>The value of <code>aluA</code> can be <code>valA</code>,
-<code>valC</code>, or either ?8 or +8, depending on the instruction
-type, so as <code>aluB</code></p></li>
-</ul>
-<p>&#x2003;&#x2003;They can be described by the following HCL code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word aluA = [</span><br><span class="line">    icode in { IRRMOVQ, IOPQ } : valA;</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;</span><br><span class="line">    icode in { ICALL, IPUSHQ } : -8;</span><br><span class="line">    icode in { IRET, IPOPQ } : 8;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word aluB = [</span><br><span class="line">    icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,</span><br><span class="line">    IPUSHQ, IRET, IPOPQ } : valB;</span><br><span class="line">    icode in { IRRMOVQ, IIRMOVQ } : 0;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The operations in ALU is <strong>mostly an adder</strong>. However,
-we want it to use the operation encoded in the <code>ifun</code> field
-of the instruction. So we describe the ALU control as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word alufun = [</span><br><span class="line">    icode == IOPQ : ifun;</span><br><span class="line">    1 : ALUADD;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>We only want to set the condition codes when an <code>OPq</code>
-instruction is executed. The logic is described in HCL as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool set_cc = icode in { IOPQ };</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The hardware unit labeled &quot;cond&quot; uses <strong>a combination of
-the condition codes and the function code</strong> to <strong>determine
-whether a conditional branch or data transfer should take
-place</strong>.</p>
-<ul>
-<li>It generates the <code>Cnd</code> signal used both for the setting
-of <code>dstE</code> with conditional moves and in the next PC logic for
-conditional branches.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;By using the <code>Cnd</code> signal, we can describe
-<code>dstE</code> as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word dstE = [</span><br><span class="line">    icode in { IRRMOVQ } &amp;&amp; Cnd : rB;</span><br><span class="line">    icode in { IIRMOVQ, IOPQ} : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-13.png"></p>
+<p>&#x2003;&#x2003;The logic labeled &quot;Set CC&quot;, which <strong>determines whether or not
+to update the condition codes</strong>, has signals <code>m_stat</code>
+and <code>W_stat</code> as inputs. These signals are used to detect
+cases where an instruction causing an exception is passing through later
+pipeline stages, and therefore <strong>any updating of the condition
+codes should be suppressed</strong>.</p>
+<blockquote>
+<p>We need to ensure that <strong>the impact of the exception
+instruction is dealt with first</strong> to avoid incorrect barcode
+updates, so we suppress the condition codes.</p>
+</blockquote>
 <h4 id="dmemorystage">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Memory
 stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-17.png"></p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-14.png"></p>
+<h3 id="8pipeline-control-logic">8.Pipeline Control Logic</h3>
+<h4 id="adesired-handling-of-special-controlcases">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Desired handling of special control
+cases</h4>
+<p>&#x2003;&#x2003;Implement the pipeline flow requires d<strong>etecting the hazard
+condition</strong>, <strong>keeping pipeline registers F and D
+fixed</strong>, and <strong>injecting a bubble into the execute
+stage</strong>.</p>
 <ul>
-<li><p>Two control blocks generate the values for the memory address and
-the memory input data(for write operations).</p></li>
-<li><p>Two other blocks generate the control signals indicating
-<strong>whether to perform a read or a write
-operation</strong>.</p></li>
-<li><p>When a read operation is performed, <strong>the data memory
-generates the value <code>valM</code></strong>.</p></li>
+<li>The pipeline holds back an instruction in the decode stage by
+<strong>keeping pipeline register D in a fixed state</strong>. It should
+also keep pipeline register F in a fixed state, <strong>so that the next
+instruction will be fetched a second time</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The HCL description of <code>mem_addr</code> and
-<code>mem_data</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word mem_addr = [</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;</span><br><span class="line">    icode in { IPOPQ, IRET } : valA;</span><br><span class="line">    # Other instructions don&apos;t need address</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word mem_data = [</span><br><span class="line">    # Value from register</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ } : valA;</span><br><span class="line">    # Return PC</span><br><span class="line">    icode == ICALL : valP;</span><br><span class="line">    # Default: Don&apos;t write anything</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<h5 id="iret">&#x2003;&#x2003;<span class="math inline">\(i.\)</span><code>ret</code></h5>
+<p>&#x2003;&#x2003;The figure below provides a detailed view of the processing of the
+<code>ret</code> instruction for the example program:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-15.png"></p>
 <ul>
-<li>We set the signal <code>mem_read</code> only for instructions that
-read data from memory, so as <code>mem_write</code>:</li>
+<li>The fetch stage stalls, causing the <code>rrmovq</code> instruction
+to be fetched but then replaced by a bubble in the decode stage.</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_read = icode in { IMRMOVQ, IPOPQ, IRET };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_write = icode in { IRMMOVQ, IPUSHQ, ICALL };</span><br></pre></td></tr></table></figure>
+<h5 id="iimispredicted-branch">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Mispredicted branch</h5>
+<p>&#x2003;&#x2003;When a mispredicted branch occurs, the control logic
+<strong>injects bubbles into the decode and execute stages on the next
+cycle</strong>, causing the two incorrectly fetched instructions to be
+canceled. On the same cycle, <strong>the pipeline reads the correct
+instruction into the fetch stage</strong>.</p>
+<p>&#x2003;&#x2003;For an instruction that causes an exception, to make the pipeline
+implementation matches the desired ISA behaviour:</p>
 <ul>
-<li>A final function for the memory stage is to compute the status code
-<code>Stat</code>. It is generated from <code>icode</code>,
-<code>imem_error</code>, <code>instr_valid</code> and
-<code>dmem_error</code>. It&apos;s described in HCL as below:</li>
+<li><p>We record the status of each instruction by the status code
+<code>stat</code>, and continue fetching, decoding, and executing
+instructions as if nothing were amiss.</p></li>
+<li><p>As the excepting instruction reaches the memory stage, we take
+steps to prevent later instructions from modifying the
+programmer-visible state by:</p>
+<ol type="1">
+<li><p>disabling the setting of condition codes by instructions in the
+execute stage,</p></li>
+<li><p>injecting bubbles into the memory stage to disable any writing to
+the data memory,</p></li>
+<li><p><strong>stalling the write-back stage when it has an excepting
+instruction</strong>, thus bringing the pipeline to a halt.</p></li>
+</ol></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## Determine instruction status</span><br><span class="line">word Stat = [</span><br><span class="line">    imem_error || dmem_error : SADR;</span><br><span class="line">    !instr_valid: SINS;</span><br><span class="line">    icode == IHALT : SHLT;</span><br><span class="line">    1 : SAOK;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="epcupdate-stage">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>PC
-update stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-18.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">word new_pc = [</span><br><span class="line">    # Call. Use instruction constant</span><br><span class="line">    icode == ICALL : valC;</span><br><span class="line">    # Taken branch. Use instruction constant</span><br><span class="line">    icode == IJXX &amp;&amp; Cnd : valC;</span><br><span class="line">    # Completion of RET instruction. Use value from stack</span><br><span class="line">    icode == IRET : valM;</span><br><span class="line">    # Default: Use incremented PC</span><br><span class="line">    1 : valP;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-16.png"></p>
+<ul>
+<li>We disable the setting of condition codes when an excepting
+instruction is in the memory or write-back stage(by examining the
+signals <code>m_stat</code> and <code>W_stat</code> and then setting the
+signal <code>set_cc</code> to zero)</li>
+</ul>
+<h4 id="bdetecting-special-controlconditions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Detecting special control
+conditions</h4>
+<p>&#x2003;&#x2003;The following figure give expressions describing the conditions
+under which the three special cases arise:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-17.png"></p>
+<ul>
+<li><p>Detecting a <code>ret</code> instruction involves
+<strong>checking the instruction codes of the instructions in the
+decode, execute, and memory stages</strong>.</p></li>
+<li><p>Detecting a load/use hazard involves <strong>checking the
+instruction type(<code>mrmovq</code> or <code>popq</code>) of the
+instruction in the execute stage</strong> and <strong>comparing its
+destination register with the source registers of the instruction in the
+decode stage</strong>.</p></li>
+<li><p>The pipeline control logic should detect a mispredicted branch
+while <strong>the jump instruction is in the execute stage</strong>, so
+that it can <strong>set up the conditions required to recover from the
+misprediction</strong> as the instruction enters the memory
+stage.</p></li>
+</ul>
+<h4 id="cpipeline-control-mechanisms">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Pipeline control mechanisms</h4>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-18.png"></p>
+<ul>
+<li>When the bubble signal is set to 1, the state of the register
+<strong>will be set to some fixed reset configuration</strong>, giving
+<strong>a state equivalent to that of a nop instruction</strong>.</li>
+</ul>
+<h4 id="dcontrol-logic-implementation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Control logic implementation</h4>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-19.png"></p>
+<ul>
+<li>Pipeline register F must be stalled for either a load/use hazard or
+a <code>ret</code> instruction:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool F_stall =</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB } ||</span><br><span class="line">    # Stalling at fetch while ret passes through pipeline</span><br><span class="line">    IRET in { D_icode, E_icode, M_icode };</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Pipeline register E must be set to bubble for a load/use hazard or
+for a mispredicted branch:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool E_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Pipeline register D must be stalled for a load/use hazard:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bool D_stall =</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB };</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Pipeline register D must be set to bubble for a mispredicted branch
+or a <code>ret</code> instruction. However, it should not inject a
+bubble when there is a load/use hazard in combination with a
+<code>ret</code> instruction:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bool D_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Stalling at fetch while ret passes through pipeline</span><br><span class="line">    # but not condition for a load/use hazard</span><br><span class="line">    !(E_icode in { IMRMOVQ, IPOPQ } &amp;&amp; E_dstM in { d_srcA, d_srcB }) &amp;&amp;</span><br><span class="line">    IRET in { D_icode, E_icode, M_icode };</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Pipeline register E must be set to bubble for a load/use hazard or
+for a mispredicted branch:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool E_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB};</span><br></pre></td></tr></table></figure>
+<h3 id="9performance-analysis">9.Performance Analysis</h3>
+<p>&#x2003;&#x2003;We measure the overall performance by computing an estimate of
+<strong>the average number of clock cycles PIPE would require per
+instruction it executes</strong>, a measure known as the CPI (for
+&quot;cycles per instruction&quot;).</p>
+<ul>
+<li>If the stage processes a total of <span class="math inline">\(C_i\)</span> instructions and <span class="math inline">\(C_b\)</span> bubbles, then the processor has
+required around <span class="math inline">\(C_i+C_b\)</span> total clock
+cycles to execute <span class="math inline">\(C_i\)</span> instructions,
+and we can calculate the CPI as follows:</li>
+</ul>
+<p><span class="math display">\[
+CPI={ {C_i+C_b} \over C_i}=1.0+ {C_b \over C_i}
+\]</span></p>
+<p>&#x2003;&#x2003;We can analyze the total penalty like below:</p>
+<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-20.png"></p>
+<h3 id="9multicycle-instructions">9.Multicycle Instructions</h3>
+<p>&#x2003;&#x2003;In a more complete instruction set, we would also need to implement
+instructions requiring more complex operations such as integer
+multiplication and division and floating-point operations. However,
+these operations require more than 1 cycle, so they need to be computed
+specially.</p>
+<p>&#x2003;&#x2003;We can design a functional unit for performing integer
+multiplication and division, and another for performing floating-point
+operations.</p>
+<ul>
+<li><p>As an instruction enters the decode stage, it can be issued to
+the special unit. <strong>While the unit performs the operation, the
+pipeline continues processing other instructions</strong>.</p></li>
+<li><p>Typically, <strong>the floating-point unit is itself
+pipelined</strong>, and thus multiple operations can execute
+concurrently in the main pipeline and in the different units</p></li>
+</ul>
+<p>&#x2003;&#x2003;The operations of the different units must be synchronized to avoid
+incorrect behavior. Often, <strong>different forms of
+forwarding</strong> are used to convey results from one part of the
+system to other parts, just as we saw between the different stages of
+PIPE.</p>
 
       
     </div>
@@ -688,7 +820,7 @@ update stage</h4>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/139/">139</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -713,14 +845,14 @@ update stage</h4>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">113k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:52</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
   </span>
 </div>
 <div class="busuanzi-count">
