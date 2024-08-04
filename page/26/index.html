@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">139</span>
+          <span class="site-state-item-count">140</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/14/4-1-Caches/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/14/4-1-Caches/" class="post-title-link" itemprop="url">4.1.Caches</a>
+          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-14 08:36:22" itemprop="dateCreated datePublished" datetime="2024-06-14T08:36:22+08:00">2024-06-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-15 15:07:48" itemprop="dateModified" datetime="2024-06-15T15:07:48+08:00">2024-06-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-4-Cache/" itemprop="url" rel="index"><span itemprop="name">Module 4.Cache</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>2.9k</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>11 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,444 +266,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="41caches"><span class="math inline">\(4.1.\)</span>Caches</h1>
-<h3 id="1-some-concepts-amp-libraryanalogy">1. Some concepts &amp; Library
-analogy</h3>
-<blockquote>
-<p>Suppose you were a student writing a term paper on important
-historical developments in computer hardware. You are sitting at a desk
-in a library with a collection of books that you have pulled from the
-shelves and are examining. You find that several of the important
-computers that you need to write about are described in the books you
-have, but there is nothing about the EDSAC. Therefore, you go back to
-the shelves and look for an additional book. You find a book on early
-British computers that covers the EDSAC. Once you have a good selection
-of books on the desk in front of you, there is a high probability that
-<strong>many of the topics you need can be found in them, and you may
-spend most of your time just using the books on the desk without
-returning to the shelves</strong>. Having several books on the desk in
-front of you saves time compared to having only one book there and
-constantly having to go back to the shelves to return it and take out
-another.</p>
-<p>The same principle allows us to create the illusion of a large memory
-that we can access as fast as a very small memory. Just as you did not
-need to access all the books in the library at once with equal
-probability, <strong>a program does not access all of its code or data
-at once with equal probability</strong>. Otherwise,it would be
-impossible to make most memory accesses fast and still have large memory
-in computers, just as it would be impossible for you to fit all the
-library books on your desk and still find what you wanted quickly.</p>
-</blockquote>
-<p>&#x2003;&#x2003;The above line illustrates the <em>principel of locality</em>.
-There are two kinds of localities:</p>
+          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
+Vector</h1>
+<h3 id="1basic-concepts">1.Basic concepts</h3>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
 <ul>
-<li><p>Temporal locality(locality in time): <strong>If an item is
-referenced, it will tend to be referenced again soon.</strong> (If you
-recently brought a book to your desk to look at, you will probably need
-to look at it again soon.)</p></li>
-<li><p>Spatial locality (locality in space): <strong>If an item is
-referenced, items whose addresses are close by will tend to be
-referenced soon.</strong> (For example, when you brought out the book on
-early English computers to learn about the EDSAC, you also noticed that
-there was another book shelved next to it about early mechanical
-computers, so you likewise brought back that book and, later on, found
-something useful in that book.)</p></li>
+<li><p>In SIMD, all the parallel execution units are
+<strong>synchronized</strong>, and they all respond to a single
+instruction <strong>that emanates from a single program
+counter</strong>.</p></li>
+<li><p>Each execution unit <strong>has its own address register, and so
+have different data address</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;We take advantage of the principle of locality by implementing the
-memory as a <em>memory hierarchy</em>. It contains multiple levels, but
-<strong>data are copied between only two adjacent levels at a
-time</strong>.</p>
-<p><img src="/2024/06/14/4-1-Caches/image.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-1.png"></p>
 <blockquote>
-<p>The faster memories are <strong>more expensive per bit</strong> than
-the slower and thus are <strong>smaller</strong>.</p>
+<p>The original motivation behind SIMD was to <strong>amortize the cost
+of the control unit over execution units</strong>. The SIMD can also
+save instrustion bandwidth and space: SIMD needs <strong>only one copy
+of the code that is being simultaneously executed</strong>.</p>
 </blockquote>
-<p><img src="/2024/06/14/4-1-Caches/image-2.png"></p>
+<blockquote>
+<p>Since the instruction is single, SIMD works best when dealing with
+<strong>identically structured data</strong>, which is called
+<em>data-level parallelism</em>, e.g., for loop.</p>
+</blockquote>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
 <ul>
-<li>If <strong>the data requested by the processor appear in some block
-in the upper level</strong>, it&apos;s called a <em>hit</em>(like you find a
-book on your desk). Else it&apos;s called a <em>miss</em>.</li>
+<li><p>SPMD: The programmer write a single program that runs on all
+processors of a <em>MIMD computer</em>, relying on conditional
+statements when different processors should execute distinct section of
+code.</p></li>
+<li><p>The SIMD computers operate on <strong>vectors of
+data</strong>.</p></li>
 </ul>
-<p><img src="/2024/06/14/4-1-Caches/image-28.png"></p>
-<h3 id="2memory-technologies">2.Memory technologies</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-3.png"></p>
-<h3 id="3caches-basics">3.Caches basics</h3>
-<h4 id="adirect-mapped-structure">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Direct-mapped structure</h4>
-<p>&#x2003;&#x2003;For each word, we can assign a location in cache based on the
-<em>address</em> of the word in memory, and this is called
-<strong>direct-mapped</strong>.</p>
-<p>&#x2003;&#x2003;The struction uses this mapping to find a block:</p>
+<h3 id="2vector">2.Vector</h3>
+<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
+<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
+data elements from memory, put them in order into a large set of
+registers</strong>, and operate on them sequentially in registers using
+<em>pipelined execution units</em>.</p>
+<ul>
+<li>A key feature of vector architectures is <strong>a set of vector
+registers</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
+loop):</p>
 <p><span class="math display">\[
-(blockAddress)\mod (numberOfBlockInCache)
+Y = a \times X + Y
 \]</span></p>
-<ul>
-<li>We add a set of <em>tags</em> to the cache to judge if the data in
-the cache corresponds to a requested word. The tag needs to contain
-<strong>the upper portion of the address</strong>:</li>
-</ul>
-<p><img src="/2024/06/14/4-1-Caches/image-4.png"></p>
-<ul>
-<li><p>We add a <em>valid bit</em> to <strong>indicate whether an entry
-contains a valid address</strong>. If the bit isn&apos;s set, there cannot be
-a match for this block.</p></li>
-<li><p>A <em>cache index</em> is used to <strong>select the
-block</strong>.</p></li>
-</ul>
-<p><img src="/2024/06/14/4-1-Caches/image-5.png"></p>
-<p>&#x2003;&#x2003;The digit capacity of tage field and the total number of bits in
-the struction can be calculated by the following steps:</p>
-<p><img src="/2024/06/14/4-1-Caches/image-6.png"></p>
-<h4 id="bdealing-with-missing-rate">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Dealing with missing rate</h4>
-<ul>
-<li><p><strong>Larger blocks exploit spatial locality to lower miss
-rates</strong>. This is because larger blocks <strong>contain more
-adjacent data</strong>, taking advantage of locality of reference,
-making it more likely that programs will hit the cache when they access
-the data.</p></li>
-<li><p>However, the miss rate may go up eventually if <strong>the block
-size becomes a significant fraction of the cache size</strong>, for
-<strong>there will be a great deal of competition for those
-blocks</strong>. As a result, a block will be bumped out of the cache
-before its words are accessed.</p></li>
-<li><p>Also, enlarging the block size makes the <em>miss penalty</em>
-larger.</p>
-<ul>
-<li><p>The miss penalty is determined by <strong>the time required to
-fetch the block from the next lower level of the hierarchy and load it
-into the cache</strong>.</p></li>
-<li><p>The time to fetch the block has two parts: <strong>the latency to
-the first word</strong> and <strong>the transfer time for the rest of
-the block</strong>.</p></li>
-</ul></li>
-</ul>
-<h3 id="4handling-cache-misses">4.Handling cache misses</h3>
-<p>&#x2003;&#x2003;The cache miss handling is done in collaboration with the
-<em>process control unit</em> and with a separate <em>controller</em>
-that initiates the memory access and refills the cache.</p>
-<ul>
-<li>The control unit in cache must detect a miss and process the miss by
-fetching the requested data from memory. If the cache reports a hit, it
-uses the data as usual.</li>
-</ul>
-<p>&#x2003;&#x2003;To handle the <em>instruction misses</em>, we need to:</p>
+<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
+<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
+<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
+also the pipeline stalls are required only <strong>once per vector
+operation</strong>, rather than once per vector element.</p>
+<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
 <ol type="1">
-<li><p>Send the original PC value to the memory. It equals to
-<code>PC-4</code>.</p></li>
-<li><p>Instruct main memory to perform a read and wait for the memory to
-complete its access.</p></li>
-<li><p>Write the cache entry, putting the data from memory in the data
-portion of the entry, writing the upper bits of the address(from the
-ALU)into the tag field, and turning the valid bit on.</p></li>
-<li><p><strong>Restart the instruction execution at the first
-step</strong>, which will refetch the instruction, this time
-<strong>finding it in the cache</strong>.</p></li>
+<li><p>The compiler indicates that <strong>the computation of each
+result in the vector is independent</strong>. So compiler doesn&apos;t have
+to check for data hazards within an instruction.</p></li>
+<li><p>Since the element in a vector is adjacent, <strong>the cost of
+the latency to main memory is seen only once for the entire
+vector</strong>.</p></li>
+<li><p>Because a complete loop is replaced by a vector instruction whose
+<strong>behaviour is predetermined</strong>, control hazards are
+nonexistent.</p></li>
 </ol>
-<h3 id="5handling-writes">5.Handling writes</h3>
-<h4 id="awrite-through">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Write-through</h4>
-<p>&#x2003;&#x2003;One simple way to deal with write hit is <strong>always to write
-the data into both the memory and the cache</strong>. However, the write
-to main memory takes a long time, thus reduce the performance.</p>
-<p>&#x2003;&#x2003;One solution is to use a <em>write buffer</em>. It <strong>stores
-the data while they are waiting to be written to memory</strong>.</p>
+<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
 <ul>
-<li><p>After writing the data into the cache and the write buffer, the
-processor continues execution.</p></li>
-<li><p>When a write to main memory completes, the entry in the write
-buffer is freed.</p></li>
-<li><p>If the write buffer is full when the processor reaches a write,
-the processor must <strong>stall until there&apos;s an empty position in the
-buffer</strong>.</p></li>
-</ul>
-<h4 id="bwrite-back">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Write-back</h4>
-<p>&#x2003;&#x2003;When a write occurs, the new value is written only to the block in
-the cache. The modified block is written to the lower level of the
-hierarchy when <strong>it&apos;s replaced</strong>. This scheme is called
-<em>write-back</em>. It can improve performance especially if
-<strong>processors can generate writes faster than writes can be handled
-by the main memory</strong>.</p>
-<ul>
-<li><p>In the write-through process, we can simply overwrite the block.
-But in a write-back process, if we overwrite a block <strong>before we
-knew whether the store had hit the cache</strong>, we may destroy the
-contents of the block which isn&apos;t backed up. To avoid this, we take the
-two methods:</p>
-<ul>
-<li><p>We use two cycles, one to <strong>check for hit</strong> and one
-to <strong>perform the write</strong>.</p></li>
-<li><p>Or we can use a <em>store buffer</em> to hold the data. When it&apos;s
-used, the processor does the cache lookup and <strong>places the data in
-the store buffer during the normal cache access cycle</strong>. The new
-data <strong>are written from the store buffer into the cache on the
-next unused cache access cycle</strong>.</p></li>
-</ul></li>
+<li>Unlike multimedia extensions, the number of elements in a vector
+operation isn&apos;t in the opcode but in <strong>a separate
+register</strong>.</li>
 </ul>
 <blockquote>
-<p>By comparison, we can always use one cycle to do writing in
-write-through process. We read the tag and write the data portion of the
-selected block. If the tag matches the address of the current block, the
-processor continues normally, since the correct block has been updated.
-Otherwise, the processor <strong>generates a write miss to fetch the
-rest of the block corresponding to that address</strong>.</p>
+<p>This means different versions of the vector architecture can simply
+be implemented by changing the contents of the register, thus retain
+binary compatibility.</p>
 </blockquote>
-<p>&#x2003;&#x2003;Many write-back caches also include <em>write buffers</em> that are
-used to <strong>reduce the miss penalty when a miss replaces a modified
-block</strong>. In such a case, <strong>the modified block is moved to a
-write-back buffer associated with the cache</strong> while the requested
-block is read from memory. The write-back buffer is later written back
-to memory.</p>
-<blockquote>
-<p>The main idea is not to touch the main memory as much as
-possible.</p>
-</blockquote>
-<p><img src="/2024/06/14/4-1-Caches/image-11.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-20.png"></p>
-<h4 id="cwrite-allocate-amp-nowrite-allocate">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Write-allocate &amp; No
-write-allocate</h4>
-<p>&#x2003;&#x2003;In write-through process, to deal with the write miss, we
-<strong>allocate a block in the cache called write allocate</strong>.
-The block is fetched from memory and then the appropriate portion of the
-block is overwritten.</p>
-<blockquote>
-<p>This reduces the number of accesses to main memory and increases the
-speed of access.</p>
-</blockquote>
-<p>&#x2003;&#x2003;Another strategy is to update the portion of the block <strong>in
-memory but not put it in the cache</strong>. This is because sometimes
-we need to write in the entire blocks of data, and in such situation
-writing in cache is unnecessary.</p>
-<p><img src="/2024/06/14/4-1-Caches/image-21.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-22.png"></p>
-<blockquote>
-<p>Since write-through strategy ensures the consistence between memory
-and cache, if we use write-allocate strategy, the cache will contain
-reduntant data block, which makes cache management more difficult.</p>
-<p>And for write-back, this ensures the data consistence.</p>
-</blockquote>
-<h4 id="danexample">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>An
-example</h4>
-<p><img src="/2024/06/14/4-1-Caches/image-7.png"></p>
-<p>&#x2003;&#x2003;In this design, the steps for reading request are as follows:</p>
-<ol type="1">
-<li><p>Send the address to the appropriate cache.</p></li>
-<li><p>If the cache signal hit, the requested word is available on the
-data lines. A <em>block index</em> field is used to control the
-multiplexor to select the required word from the 16 words in the indexed
-block.</p></li>
-<li><p>If the cache signals miss, <strong>we send the address to the
-main memory. When the memory returns with the data</strong>, we write it
-into the cache and then read it to fulfill the request.</p></li>
-</ol>
-<h3 id="6cache-performanceimprovement">6.Cache performance
-improvement</h3>
-<p>&#x2003;&#x2003;There are two different techniques to improve cache performance.
-One focuses on reducing the miss rate by <strong>reducing the
-probability that two distinct memory blocks will contend for the same
-cache location</strong>. The other reduces the miss penalty by
-<strong>adding an additional level to the hierarchy</strong>. The second
-technique is called <em>multilevel caching</em>.</p>
-<h4 id="amore-flexible-placement-of-blocks">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>More flexible placement of blocks</h4>
 <ul>
-<li><p><em>Fully associative</em>: In this scheme, a block can be placed
-in <strong>any location in the cache</strong>, that is, <strong>the
-block may be associated with any entry in the cache</strong>.</p>
-<ul>
-<li><p>To find a given block in a fully-associative cache, <strong>all
-the entries in the cache must be searched</strong>.</p></li>
-<li><p>This process is done <strong>in parallel with a comparator
-associated with each cache entry</strong>. This comparators
-significantly increase the hardware cost, so the scheme only suits for
-caches with small numbers of blocks.</p></li>
-</ul></li>
-<li><p><em>Set associative</em>: In this scheme, there are a fixed
-number of locations where each block can be placed. An <em>n-way set
-associative</em> cache consists of a number of sets, each of which has
-<span class="math inline">\(n\)</span> blocks.</p></li>
+<li>The parallel semantics of a vector instruction allows using a
+<em>deeply pipelined functional unit</em> to execute vector
+operations:</li>
 </ul>
-<p><img src="/2024/06/14/4-1-Caches/image-8.png"></p>
-<p>&#x2003;&#x2003;The advantage of increasing the degree of associativity is that
-<strong>it usually decrease the miss rate</strong>. However, there&apos;s
-little further improvement in going to rather higher associativity.</p>
-<h4 id="blocating-a-block-in-the-cache">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Locating a block in the cache</h4>
-<p>&#x2003;&#x2003;Let&apos;s first take a block in a set-associative cache for
-example:</p>
-<p><img src="/2024/06/14/4-1-Caches/image-9.png"></p>
-<ul>
-<li><p>The <em>tag</em> is checked to see <strong>if it matches the
-block address from the processor</strong>.</p></li>
-<li><p>The <em>index</em> is used to <strong>select the set containing
-the address of interest</strong>.</p></li>
-<li><p>All the tags in the selected set are searched <strong>in
-parallel</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In a direct-mapped cache, only a single comparator is needed, and
-we access the cache simply by indexing. In a <em>four-way
-set-associative</em> cache, four comparators are needed, together with a
-<strong>4-to-1 multiplexor to choose among the four potential
-sets</strong>. The cache access consists of indexing the appropriate set
-and then searching the tags of the set.</p>
-<p><img src="/2024/06/14/4-1-Caches/image-10.png"></p>
-<p>&#x2003;&#x2003;The choice among these three scheme depends on <strong>the cost of
-a miss</strong> versus <strong>the cost of implementing
-associativity</strong>.</p>
-<h4 id="cchoosing-which-block-to-replace">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Choosing which block to replace</h4>
-<p>&#x2003;&#x2003;There are two primary strategies for replacement in set-associative
-or fully associative caches:</p>
-<ul>
-<li><p><em>Random</em>: Candidate blocks are randomly selected, possibly
-using some hardware assistance.</p></li>
-<li><p><em>Least recently used</em>(LRU): The block replaced is the one
-that has been unused for the longest time.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In practice, LRU is too costly to implement for hierarchies with
-more than a small degree of associativity, since <strong>tracking the
-usage information is expensive</strong>.</p>
-<h5 id="iapproximate-lru">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Approximate LRU</h5>
-<p><img src="/2024/06/14/4-1-Caches/image-23.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-24.png"></p>
-<h4 id="dmultilevel-caches">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Multilevel caches</h4>
-<p>&#x2003;&#x2003;To close the gap between the fast clock rates of processors and the
-long time to access DRAMs, most microprocessors support <strong>an
-addition level of caching</strong>.</p>
-<ul>
-<li><p>The second-level cache is normally on the chip, and is access
-<strong>whenever a miss occurs in the primary cache</strong>.</p></li>
-<li><p>If the second-level cache contains the desired data, the miss
-penalty for the first-level cache will be <strong>the access time of the
-second-level cache</strong>, which is much less time.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The design considerations for a primary and secondary cache are
-different. This two-level structure allows the primary cache to focus on
-<strong>minimizing hit time</strong> to yield a shorter clock cycle or
-fewer pipeline stages, while allowing the second cache to focus on
-<strong>miss rate</strong> to reduce the penalty of long memory access
-times.</p>
-<ul>
-<li><p>The primary cache is <strong>smaller</strong>, and may use
-<strong>a smaller block size</strong> to go with the smaller cache size
-and reduce miss penalty.</p></li>
-<li><p>The second cache will be <strong>much larger than in a
-single-level cache</strong>. It also use higher associativity than the
-primary cache, both for reducing the miss rates.</p></li>
-</ul>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-41.png"></p>
-<h3 id="7three-cs">7.Three Cs</h3>
-<p>&#x2003;&#x2003;In the hierarchy model, all misses are classified into one of three
-categories:</p>
-<ul>
-<li><p>Compulsory misses: These are cache misses caused by <strong>the
-first access to a block that has never been in the cache</strong>. These
-are also called cold-start misses.</p></li>
-<li><p>Capacity misses: These are cache misses caused when <strong>the
-cache cannot contain all the blocks needed during execution of a
-program</strong>. Capacity misses occur <strong>when blocks are replaced
-and then later retrieved</strong>.</p></li>
-<li><p>Conflict misses: These are cache misses that occur in
-set-associative or direct-mapped caches when <strong>multiple blocks
-compete for the same set</strong>. These cache misses are also called
-collision misses.</p></li>
-</ul>
-<hr>
-<ul>
-<li><p>Increasing associativity reduces conflict misses, but
-associativity may <strong>slow access time</strong>, leading to lower
-overall performance.</p></li>
-<li><p>Capacity misses can be reduced by enlarging the cache(so
-second-level caches is large). Meanwhile, when we make the cache larger,
-we must also be careful about <strong>increasing the access
-time</strong>(so the first-level caches is small).</p></li>
-<li><p>Since compulsory misses are generated by the first reference to a
-block, we can simple increase the block size to reduce the block
-number.</p></li>
-</ul>
-<h3 id="8using-fsm-to-control-acache">8.Using FSM to control a
-cache</h3>
-<h4 id="afinite-state-machines">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Finite-State Machines</h4>
-<p>&#x2003;&#x2003;A FSM consists of a set of states and directions on how to change
-states.</p>
-<ul>
-<li><p>The directions are defined by a <em>next-state function</em>,
-which maps the current state and the inputs to a new state.</p></li>
-<li><p>Each state of FSM specifies a set of outputs that are asserted
-when the machine is in this state.</p></li>
-<li><p>A FSM can be implemented with a temporary register that
-<strong>holds the current state</strong> and <strong>a block of
-combinatinoal logic</strong> that determines both the data-path signals
-to be asserted and the next state.</p></li>
-</ul>
-<p><img src="/2024/06/14/4-1-Caches/image-12.png"></p>
-<h4 id="bcontroller">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Controller</h4>
-<p><img src="/2024/06/14/4-1-Caches/image-13.png"></p>
-<ul>
-<li><p><em>Ideal</em>: This state <strong>waits for a valid read or
-write request from the processor</strong>, which <strong>moves the FSM
-to the Compare Tag state</strong>.</p></li>
-<li><p><em>Compare Tag</em>: This state tests to see <strong>if the
-requested read or write is a hit or a miss</strong>. The index portion
-of the address <strong>selects the tag to be compared</strong>. If the
-data in the cache block referred to by the index portion of the address
-are valid, and the tag portion of the address matches the tag, then it
-is a hit. Either the data are read from the selected word if it is a
-load or written to the selected word if it is a store. The Cache Ready
-signal is then set. <strong>If it is a write,the dirty bit is set to
-1</strong>. Note that a write hit also sets the valid bit and the tag
-field; while it seems unnecessary, it is included because the tag is a
-single memory, so <strong>to change the dirty bit we likewise need to
-change the valid and tag fields</strong>. If it is a hit and the block
-is valid, the FSM <strong>returns to the idle state</strong>. A miss
-<strong>first updates the cache tag</strong> and then goes either to the
-Write-Back state, if the block at this location has dirty bit value of
-1, or to the Allocate state if it is 0.</p></li>
-<li><p><em>Write-Back</em>: This state writes the 128-bit block to
-memory using <strong>the address composed from the tag and cache
-index</strong>. We remain in this state waiting for the Ready signal
-from memory. When the memory write is complete, the FSM <strong>goes to
-the Allocate state</strong>.</p></li>
-<li><p><em>Allocate</em>: The new block <strong>is fetched from
-memory</strong>. We <strong>remain in this state waiting for the Ready
-signal from memory</strong>. When the memory read is complete, the FSM
-goes to the Compare Tag state.</p></li>
-</ul>
-<h3 id="9fully-associative-cacheintroduction">9.Fully associative cache
-introduction</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-14.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-15.png"></p>
-<h3 id="10direct-mapped-cacheintroduction">10.Direct-mapped cache
-introduction</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-16.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-17.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-29.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-30.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-31.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-32.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-33.png"></p>
-<h3 id="11set-associativeintroduction">11.Set-associative
-introduction</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-18.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-19.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-34.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-35.png"></p>
-<h3 id="12fully-associativeintroduction">12.Fully-associative
-introduction</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-25.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-26.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-27.png"></p>
-<h3 id="13analyzing-cache-performance">13.Analyzing cache performance</h3>
-<p><img src="/2024/06/14/4-1-Caches/image-36.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-37.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-38.png"></p>
-<hr>
-<p><img src="/2024/06/14/4-1-Caches/image-39.png"></p>
-<p><img src="/2024/06/14/4-1-Caches/image-40.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
+<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
+register to take part in operations with element N from other vector
+registers, and the structure is called <em>vector lanes</em>:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
+<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
+vector unit by <strong>adding more lanes</strong>.</p>
 
       
     </div>
@@ -732,7 +378,7 @@ introduction</h3>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/139/">139</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -764,7 +410,7 @@ introduction</h3>
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:57</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
   </span>
 </div>
 <div class="busuanzi-count">
