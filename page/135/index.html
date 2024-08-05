@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">3.1.&#x65F6;&#x5E8F;&#x903B;&#x8F91;</a>
+          <a href="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/" class="post-title-link" itemprop="url">3.3.&#x5B58;&#x50A8;&#x5355;&#x5143;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 15:23:21" itemprop="dateCreated datePublished" datetime="2024-04-04T15:23:21+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 20:19:31" itemprop="dateCreated datePublished" datetime="2024-04-04T20:19:31+08:00">2024-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>573</span>
+      <span>364</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,88 +272,63 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</h1>
-<h3 id="1background">1.Background</h3>
-<p>&#x2003;&#x2003;In the previous chapter, we&apos;ve completely ignored the issue of
-time:</p>
+          <h1 id="33memoryunits"><span class="math inline">\(3.3.\)</span>Memory
+Units</h1>
+<h3 id="1from-1-bit-to-register">1.From 1-bit to register</h3>
+<p>&#x2003;&#x2003;the previous unit ended up with a description of how&#xA0;a single bit
+register works.&#xA0;And it doesn&apos;t take a big stretch of imagination to
+understand that you&#xA0;can <strong>take several such one bit register and
+put them one next to the other</strong>.&#xA0;And by doing this, you can
+create <em>an abstraction of a 16-bit number</em>.</p>
+<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image.png"></p>
 <ul>
-<li><p><strong>Everything happened immediately</strong>, there were
-inputs and&#xA0;immediately the outputs were some function of them.</p></li>
-<li><p><strong>The inputs never change</strong>, we didn&apos;t have any
-notion of change.</p></li>
-<li><p>We didn&apos;t have any notion of things <strong>happening one thing
-after another</strong>. Just was some kind of logical mapping from
-inputs to outputs.</p></li>
+<li>The <strong>width</strong> of the register, in general, is a
+parameter called <span class="math inline">\(w\)</span>.&#xA0;In some
+computers it&apos;s 16-bit,&#xA0;in other computers it may be 32-bits or
+64-bit.</li>
+<li>The register&apos;s <strong>state</strong> refers to the value which is
+currently stored in the register.</li>
 </ul>
-<p>&#x2003;&#x2003;So, there are two things that we want to complement:</p>
+<p>&#x2003;&#x2003;let&apos;s take a user&apos;s perspective of this of this device:</p>
+<ul>
+<li>How do we <strong>read</strong> the value of this register? We
+simply probe the output. Because at any given point of time, the output
+simply emits the state of the register.</li>
+<li>How do we <strong>write</strong> the value of this register? We set
+<code>in</code> to the new value <span class="math inline">\(v\)</span>,
+and set <code>load</code> to 1, then the register state becomes 1.</li>
+<li>And from the next cycle onward,&#xA0;the output of the register will also
+start emitting this value <span class="math inline">\(v\)</span>.&#xA0;From
+the next cycle onward,&#xA0;the register will effectively store the value
+<span class="math inline">\(v\)</span>. And it will keep on storing this
+value forever until we decide to change&#xA0;this value in the very same
+manner.</li>
+</ul>
+<h3 id="2ram">2.RAM</h3>
+<p>&#x2003;&#x2003;A RAM can be abstracted as a sequence of n addressable registers,
+with addresses from 0 to n-1:</p>
+<p><img src="/2024/04/04/3-3-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83/image-1.png"></p>
+<ul>
+<li>There&apos;s one thing very important to emphasize: at any given point
+of&#xA0;time, <strong>only one register is selected and only one register is
+working</strong>, all the other registers don&apos;t take any part in the
+game.</li>
+</ul>
+<p>&#x2003;&#x2003;Given this fact, we have to say <strong>which is the register on
+which we want to operate</strong>, <strong>which is the register that we
+want to read</strong>, or <strong>which is the register whose value we
+want to change</strong>.</p>
+<ul>
+<li><p>To <strong>read</strong> a particular register, we:</p>
 <ol type="1">
-<li><p>Be able to&#xA0;use the same hardware to <strong>compute many things
-one time after another</strong>. We need to be able to reuse our
-hardware.</p>
-<ul>
-<li>For example, if we take some kind of loop in a hard,&#xA0;in a, in some
-kind of software program, that the loop calls for doing the same&#xA0;thing
-many times, we want to be able to use a same hardware to do that.</li>
-</ul></li>
-<li><p><strong>Remember things from the past</strong>.When we need to
-remember intermediate results,we need to remember where we are in a
-computation.</p></li>
-</ol>
-<h3 id="2the-clock">2.The clock</h3>
-<p>&#x2003;&#x2003;What we&apos;re going to do is to <strong>convert the continuous
-physical time into discrete time</strong>.</p>
-<p>&#x2003;&#x2003;To do this, we&apos;re going to have a <em>clock</em>:</p>
-<ul>
-<li>It is some kind of <em>oscillator going up and down at a certain
-fixed rate</em>.</li>
-<li>Each cycle of the clock is treated as one <em>digital integer time
-unit</em>.</li>
-</ul>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image.png"></p>
-<ul>
-<li><p>With each time unit, we are going to deal it as a indivisible
-thing. <em>Nothing changes in a time unit</em>.</p></li>
-<li><p>In a time unit, it will compute the output from the input <em>in
-an instantaneous manner</em>.</p></li>
-</ul>
-<h3 id="3delay">3.Delay</h3>
-<p>&#x2003;&#x2003;However, for a physical signal, it doesn&apos;t change instantaneously
-in a number time between time as we suppose. In reality, the little
-course current builds slowly, and the voltage may change slowly. That is
-to say, the actual analog signal takes time to reach its final stage,
-both input and output.</p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-1.png"></p>
-<p>&#x2003;&#x2003;Therefore, we will give ourselves enough time between consecutive
-time units. For example, we will give the logical operations <em>at the
-end of the grey area</em> to make sure that <em>all the hardware there
-really stabilizes:</em></p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-2.png"></p>
-<p>&#x2003;&#x2003;And then,we can simply ignore these inconsistencies because
-now,whatever happened before the gray area,we don&apos;t need to worry about
-it because we know it&apos;s gone by the end of the clock cycle.</p>
-<h3 id="4combinatorial-logic">4.Combinatorial logic</h3>
-<ul>
-<li>Combinatorial logic: It&apos;s a stateless logic, where <em>the output
-depends solely on the current input state:</em><span class="math inline">\(out(t)=f(in(t))\)</span>. Our ALU and bool chips
-take this logic.</li>
-<li>Sequential logic: <span class="math inline">\(out(t)=f(in(t-1))\)</span>.</li>
-</ul>
-<h3 id="5state-feedback">5.State feedback</h3>
-<ul>
-<li><p>The sequential logic points out a new way of thinking, which is
-to <strong>consider inputs and outputs as the same bits, capable of
-being transmitted on the same bus and occupying the same hardware
-location</strong>. This design allows us to <strong>feed output values
-back to the input</strong>, creating a <strong>state</strong> rather
-than simply passing data. Thus, we can use a particular bit in the
-circuit to store state information rather than solely transmitting
-data.</p></li>
-<li><p>This new way of thinking alters our understanding of time.
-Instead of viewing time as continuous, we now divide it into discrete
-integer time steps and observe the events happening sequentially at each
-time step. This approach enables us to <strong>change the state
-incrementally</strong>, remembering the result from the previous time
-step at each subsequent step and building upon it.</p></li>
+<li>Sent the address to RAM.</li>
+<li>Probe the output.</li>
+</ol></li>
+<li><p>To <strong>write</strong> a particular register, we:</p>
+<ol type="1">
+<li>Sent the address to RAM.</li>
+<li>Set the value and <code>load</code>.</li>
+</ol></li>
 </ul>
 
       
@@ -377,7 +352,7 @@ step at each subsequent step and building upon it.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/134/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><span class="page-number current">135</span><a class="page-number" href="/page/136/">136</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/134/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><span class="page-number current">135</span><a class="page-number" href="/page/136/">136</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -402,14 +377,14 @@ step at each subsequent step and building upon it.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">

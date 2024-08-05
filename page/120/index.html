@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">6.1.&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x4E0E;&#x7A0B;&#x5E8F;</a>
+          <a href="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.1.&#x7A0B;&#x5E8F;&#x7F16;&#x8BD1;&#x524D;&#x77BB;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 09:34:24" itemprop="dateCreated datePublished" datetime="2024-04-07T09:34:24+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 13:24:34" itemprop="dateCreated datePublished" datetime="2024-04-08T13:24:34+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:47:54" itemprop="dateModified" datetime="2024-06-03T07:47:54+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:51:48" itemprop="dateModified" datetime="2024-06-03T07:51:48+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>214</span>
+      <span>266</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,49 +272,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="61assemble-program-and-assembler"><span class="math inline">\(6.1.\)</span>Assemble Program and Assembler</h1>
-<h3 id="1basic-assembler-logic">1.Basic assembler logic</h3>
+          <h1 id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</h1>
+<h3 id="1problem-in-compilation">1.Problem in compilation</h3>
+<p>&#x2003;&#x2003;To start with an abstract program and end with something actually
+runs on the computer, we need</p>
 <ul>
-<li><p>Repeat:</p>
+<li>A computer that can run machine language code.</li>
+<li>Translating the high level language into machine language.</li>
+</ul>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
+<p>&#x2003;&#x2003;However, there are so many kinds of computers in the world, and
+many of them <strong>use different processes, which take different
+machine languages</strong>. It seems that we have to develop many
+compilers, one for each processor. This is very annoying.</p>
+<p>&#x2003;&#x2003;Luckily, this &quot;write once fix everywhere&quot; can be replaced by a
+&quot;write once run everywhere&quot; process.</p>
+<h3 id="2-2-tier-compilation">2. 2-Tier compilation</h3>
+<p>&#x2003;&#x2003;Let&apos;s take Java as example:</p>
 <ul>
-<li>Read the next Assembly language command.</li>
-<li>Break it into the different fields it is composed of.</li>
-<li>Lookup the binary code for each field.</li>
-<li>Combine these codes into a single machine language command.</li>
-<li>Output this machine language command.</li>
+<li><p>The first tier: also called <em>the top tier</em></p>
+<ul>
+<li><p>Java compiler translates the Java program into VM code.</p>
+<ul>
+<li>The VM code is designed to run on an abstract artifact called
+<em>virtual machine</em>.</li>
+<li>It&apos;s not a real computer, so if we want to execute the code, we have
+to translate it further into machine language and realize it on real
+hardware (computer, for example).</li>
 </ul></li>
-<li><p>One thing we need to worry about: <em>Symbols</em>:</p>
-<ul>
-<li><p>Two cases:</p>
-<ul>
-<li><em>Labels</em>: When jumping into a certain part, you give it a
-name instead of hard core the address. <code>JMP loop</code></li>
-<li><em>Variables</em>: You give a variable name rather than always
-refer to its exact address in memory. <code>load R1, weight</code></li>
-</ul></li>
-<li><p>To convert it into concrete address, we use a <em>symbol
-table</em>:</p></li>
 </ul></li>
 </ul>
-<p><img src="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/image.png"></p>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
 <ul>
-<li><p>To maintain such table:</p>
+<li><p>The second tier:</p>
 <ul>
-<li>When we first meet a symbol, we need to <strong>allocate a new
-memory location</strong> to hold it. For the assembler, it will find the
-<strong>next memory location that&apos;s available</strong>.</li>
-<li>When we meet it again, we simply refer to its address in the
-table.</li>
+<li>We equip the target device with <em>JVM</em>, the Java machine
+implementation.</li>
+<li>The JVM is a program that takes VM code and translates it into the
+target code of the target platform.</li>
+<li>We need such translator <strong>for every platform on which we want
+to execute VM program</strong>.</li>
 </ul></li>
-<li><p>One special case: <em>Forward references</em>: We can jump into a
-label before where it was defined. There are two ways to handle it:</p>
-<ol type="1">
-<li>Use a little bit to remember that we&apos;ve set the labels but don&apos;t
-know where it is yet. We leave it blank until label appears.(more
-complicated)</li>
-<li>In first pass just figure out all address.</li>
-</ol></li>
 </ul>
+<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
+<p>&#x2003;&#x2003;The gap between high-level language (Java, for example) and
+low-level language is huge. But by <strong>introducing an intermediate
+level</strong>, we <strong>decouple this process into two separate
+standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
+and <em>VM implementation</em>.</p>
 
       
     </div>
@@ -337,7 +342,7 @@ complicated)</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/119/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/119/">119</a><span class="page-number current">120</span><a class="page-number" href="/page/121/">121</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/121/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/119/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/119/">119</a><span class="page-number current">120</span><a class="page-number" href="/page/121/">121</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/121/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -362,14 +367,14 @@ complicated)</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">

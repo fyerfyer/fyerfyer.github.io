@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-3-Hardware-Multithreading/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-3-Hardware-Multithreading/" class="post-title-link" itemprop="url">5.3.Hardware Multithreading</a>
+          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 10:38:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;15:30:21" itemprop="dateCreated datePublished" datetime="2024-06-29T10:38:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>259</span>
+      <span>265</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,59 +272,55 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53hardware-multithreading">5.3.Hardware Multithreading</h1>
-<h3 id="1basic-concepts-of-threads">1.Basic concepts of threads</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image.png"></p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-1.png"></p>
-<h3 id="2multithreading-intro">2.Multithreading intro</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-2.png"></p>
-<p>&#x2003;&#x2003;Hardware multithreading allows multiple threads to <strong>share
-the functional units of a single processor in an overlapping
-fashion</strong> to try to utilize the hardware resources
-efficiently.</p>
-<p>&#x2003;&#x2003;To permit this sharing, the processor must <strong>duplicate the
-independent state of each thread</strong>.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-3.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-4.png"></p>
-<h3 id="3types-of-hardwaremultithreading">3.Types of hardware
-multithreading</h3>
-<p>&#x2003;&#x2003;There are 3 types of hardware multithreading approaches:</p>
-<ul>
-<li><p><em>Fine-grained multithreading</em>: It <strong>switches between
-threads on each instruction</strong>, resulting in interleaved execution
-of multiple threads.</p>
-<ul>
-<li><p>It&apos;s advantage is that it can hide the throughput losses that
-arise from both short and long stalls, since instructions from other
-threads can be executed when one thread stalls. Also, since it switches
-threads frequently, it doesn&apos;t need to clear the pipeline
-everytime.</p></li>
-<li><p>However, it slows down the execution of the individual
-threads.</p></li>
-</ul></li>
-<li><p><em>Coarse-grained multithreading</em>: It switch threads
-<strong>only on expensive stalls</strong>, such as last-level cache
-misses.</p>
-<ul>
-<li><p>It&apos;s much less likely to slow down individual execution.</p></li>
-<li><p>However, it is limited from overcoming throughput losses for
-pipeline start-up time.</p></li>
-</ul></li>
-<li><p><em>Simultaneous multithreading</em>: It uses a multiple-issue,
-dynamically scheduled <em>pipelined processor</em> to <strong>exploit
-thread-level parallelism while exploiting ILP</strong>.</p></li>
-</ul>
+          <h1 id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</h1>
+<h3 id="1program-execution-process">1.Program execution process</h3>
+<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
+<code>p2.c</code>, we input the command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>The C preprocessor expands the source code to <strong>include any
+files specified with <code>#include</code> commands and with
+<code>#define</code> declarations</strong>.</p></li>
+<li><p>Compiler generates assembly code having name <code>p1.s</code>
+and <code>p2.s</code>.</p></li>
+<li><p>Assembler converts the assembly code into <em>binary
+object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
+</ol>
 <blockquote>
-<p>With register renaming and dynamic scheduling, multiple instructions
-from independent threads can be issued without regard to the dependences
-among them; <strong>the resolution of the dependences can be handled by
-the dynamic scheduling capability</strong>.</p>
+<p>The object code contains binary representations of all instructions,
+but doesn&apos;t include the address of the global value.</p>
 </blockquote>
-<p>&#x2003;&#x2003;SMT is always executing instructions from multiple threads, leaving
-it up to the hardware to associate instruction slots and renamed
-registers with their proper threads.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-5.png"></p>
+<ol start="4" type="1">
+<li>Linker merges these two object-code files along with <em>code
+implementing library functions</em> (e.g., <code>printf</code>) and
+generates the final executable code file <code>p</code>(specified by
+<code>-o p</code>).</li>
+</ol>
+<h3 id="2machine-code">2.Machine code</h3>
+<h4 id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</h4>
+<p>&#x2003;&#x2003;The program memory contains:</p>
+<ul>
+<li><p>the executable machine code for the program</p></li>
+<li><p>some information required by the operating system</p></li>
+<li><p>a run-time stack for managing procedure calls and
+returns</p></li>
+<li><p>blocks of memory allocated by the user (e.g., by using the
+<code>malloc</code> library function).</p></li>
+</ul>
+<h4 id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
+command</h4>
+<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
+compiler:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
+<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
+<em>disassembler</em>. The program <code>objdump</code> can serve the
+role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result is as below:</p>
+<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
 
       
     </div>
@@ -341,7 +343,7 @@ registers with their proper threads.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -366,14 +368,14 @@ registers with their proper threads.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">

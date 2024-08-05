@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-6-Control/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/18/3-10-Combining-Control-and-Data-in-Machine-Level-Programs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/15/3-6-Control/" class="post-title-link" itemprop="url">3.6.Control</a>
+          <a href="/2024/07/18/3-10-Combining-Control-and-Data-in-Machine-Level-Programs/" class="post-title-link" itemprop="url">3.10.Combining Control and Data in Machine-Level Programs</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-15T16:30:22+08:00">2024-07-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-18 15:31:22" itemprop="dateCreated datePublished" datetime="2024-07-18T15:31:22+08:00">2024-07-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:35:46" itemprop="dateModified" datetime="2024-07-16T16:35:46+08:00">2024-07-16</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-19 21:33:07" itemprop="dateModified" datetime="2024-07-19T21:33:07+08:00">2024-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.4k</span>
+      <span>1.7k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>6 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,190 +272,204 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="36-control"><span class="math inline">\(3.6.\)</span> Control</h1>
-<h3 id="1condition-code">1.Condition Code</h3>
-<p>&#x2003;&#x2003;In addition to the integer registers, the CPU maintains <em>a set
-of single-bit condition code registers</em> <strong>describing
-attributes of the most recent arithmetic or logical operation</strong>.
-These registers can then be tested to perform conditional branches</p>
-<p><img src="/2024/07/15/3-6-Control/image.png"></p>
+          <h1 id="310combining-control-and-data-inmachine-level-programs"><span class="math inline">\(3.10.\)</span>Combining Control and Data in
+Machine-Level Programs</h1>
+<h3 id="1understanding-pointers">1.Understanding Pointers</h3>
+<p>&#x2003;&#x2003;Pointers serve as a uniform way to <strong>generate references to
+elements</strong> within different data structures.</p>
+<p>&#x2003;&#x2003;They are some key principles of pointers:</p>
+<ol type="1">
+<li><p>Every pointer has an associated type. This type indicates
+<strong>what kind of object the pointer points to</strong>. The
+<code>void *</code> pointer represents a generic pointer.</p></li>
+<li><p>Every pointer has a value. This value is <strong>an address of
+some object of the designated type</strong>.</p></li>
+<li><p>Pointers are created with the <code>&amp;</code> operator. This
+operator can be applied to any C expression that is categorized as an
+<em>lvalue</em>, meaning an expression that <strong>can appear on the
+left side of an assignment</strong>.</p>
 <ul>
-<li><p>The <code>leaq</code> instruction <strong>doesn&apos;t alter any
-condition codes</strong>, since it is intended to be used in address
-computations.</p></li>
-<li><p>For the logical operations, such as <code>xor</code>, <strong>the
-carry and overflow flags are set to zero</strong>.</p></li>
-<li><p>For the shift operations, <strong>the carry flag is set to the
-last bit shifted out</strong>, while <strong>the overflow flag is set to
-zero</strong>.</p></li>
-<li><p>The <code>inc</code> and <code>dec</code> instructions
-<strong>set the overflow and zero flags</strong>, but they <strong>leave
-the carry flag unchanged</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;There are two instruction classes that set condition codes without
-altering any other registers:</p>
-<p><img src="/2024/07/15/3-6-Control/image-1.png"></p>
+<li>The operation is often realized by <code>leaq</code>.</li>
+</ul></li>
+<li><p>Pointers are dereferenced with the `*`` operator. It&apos;s
+implemented by a memory reference.</p></li>
+<li><p><em>Casting</em> the type of pointer <strong>don&apos;t change its
+value</strong> but lead to other changes. One effect is to
+<strong>change any scaling of pointer arithmetic</strong>.</p>
 <ul>
-<li>In <code>TEST</code>, typically, <strong>the same operand is
-repeated</strong> (e.g., <code>testq %rax,%rax</code> to see whether
-<code>%rax</code> is negative, zero, or positive), or <strong>one of the
-operands is a mask indicating which bits should be tested</strong>.</li>
-</ul>
-<h3 id="2accessing-condition-codes">2.Accessing Condition Codes</h3>
-<p><img src="/2024/07/15/3-6-Control/image-2.png"></p>
+<li>For example, if we have a char pointer with value <code>p</code>,
+then <code>(int*)p + 7</code> computes <code>p + 28</code>, while
+<code>(int*)(p + 7)</code> computes <code>p + 7</code>.</li>
+</ul></li>
+<li><p>Pointers can also point to functions, and the value of a function
+pointer is <strong>the address of the first instruction in the
+machine-code representatio</strong>n of the function.</p>
 <ul>
-<li><p>A set instruction has either one of the low-order single-byte
-register elements or a single-byte memory location as its destination,
-<strong>setting this byte to either 0 or 1</strong>.</p></li>
-<li><p>To generate a 32-bit or 64-bit result, we must also <strong>clear
-the high-order bits</strong>. For example:</p></li>
-</ul>
-<p><img src="/2024/07/15/3-6-Control/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>movzbl</code> not only set the high-order 3 bytes of
-<code>%eax</code> to 0, but also set the high-order 4 bytes of
-<code>%rax</code> to 0 due to the 32-bit <code>mov</code>
-convention.</p>
+<li>Take the following function as an example:</li>
+</ul></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fun</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> *p)</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x2003;&#x2003;and we declare a fucntions pointer <code>fp</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> (*fp)(<span class="type">int</span>, <span class="type">int</span> *);</span><br><span class="line">fp = fun;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x2003;&#x2003;Then we can use <code>fp</code> to invoke the function:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> y = <span class="number">1</span>;</span><br><span class="line"><span class="type">int</span> result = fp(<span class="number">3</span>, &amp;y);</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>It is important to understand that assembly code does not keep track
-of the type of a program value. Instead, <strong>the different
-instructions determine the operand sizes and whether they are signed or
-unsigned</strong>:</p>
-<p><span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/15/3-6-Control/image-4.png"></p>
-<p><img src="/2024/07/15/3-6-Control/image-5.png"></p>
+<p><strong>The parentheses around <code>*fp</code> are
+required</strong>, or it will be recognized as
+<code>(int *) fp(int, int *)</code>, which is a function prototype.</p>
 </blockquote>
-<h3 id="3jump-instructions">3.Jump Instructions</h3>
-<p><img src="/2024/07/15/3-6-Control/image-6.png"></p>
-<p>&#x2003;&#x2003;There are two kinds of jump instructions:</p>
+<h3 id="2thwarting-buffer-overflowattacks">2.Thwarting Buffer Overflow
+Attacks</h3>
+<h4 id="abuffer-overflow-amp-attacks">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Buffer overflow &amp; attacks</h4>
+<p>&#x2003;&#x2003;<em>Buffer overflow</em> is a specific type of out-of-bound memory
+reference. A typical case of <em>buffer overflow</em> is that: some
+character array is allocated on the stack to hold a string, but
+<strong>the size of the string exceeds the space allocated for the
+array</strong>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">gets</span><span class="params">(<span class="type">char</span> *s)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> c;</span><br><span class="line">    <span class="type">char</span> *dest = s;</span><br><span class="line">    <span class="keyword">while</span> ((c = getchar()) != <span class="string">&apos;\n&apos;</span> &amp;&amp; c != EOF)</span><br><span class="line">        *dest++ = c;</span><br><span class="line">    <span class="keyword">if</span> (c == EOF &amp;&amp; dest == s)</span><br><span class="line">        <span class="comment">/* No characters read */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    *dest++ = <span class="string">&apos;\0&apos;</span>; <span class="comment">/* Terminate string */</span></span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read input line and write it back */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">echo</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8</span>]; <span class="comment">/* Way too small! */</span></span><br><span class="line">    gets(buf);</span><br><span class="line">    <span class="built_in">puts</span>(buf);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The problem with <code>gets</code> is that <strong>it has no way to
+determine whether sufficient space has been allocated to hold the entire
+string</strong>. In our <code>echo</code> example, any string longer
+than seven characters will cause an out-of-bounds write. This will
+<strong>overwrite some of the information stored on the stack</strong>,
+and as the string gets longer, the following information will get
+corrupted.</p>
 <ul>
-<li><p><em>Direct jump</em>: It jumps to a label. The jump target is
-encoded as part of the instructions.</p></li>
-<li><p><em>Indirect jump</em>: It is written <strong>using
-<code>*</code> followed by an operand specifier</strong>.</p>
+<li><p>Buffer overflow is used to <strong>get a program to perform a
+function that it would otherwise be unwilling to do</strong>.</p>
 <ul>
-<li><p><code>jmp *%rax</code> uses <strong>the value in
-<code>%rax</code></strong> as the jump target.</p></li>
-<li><p><code>jmp *(%rax)</code> reads the jump target from memory, using
-the value in <code>%rax</code> <strong>as the read
-address</strong>.</p></li>
+<li>Typically, the program is fed with a string that contains the byte
+encoding of some executable code, called the <em>exploit code</em>, plus
+some extra bytes that <strong>overwrite the return address with a
+pointer to the exploit code</strong>. The effect of executing the
+<code>ret</code> instruction is then to <strong>jump to the exploit
+code</strong>.</li>
 </ul></li>
 </ul>
-<h3 id="4jump-instruction-encodings">4.Jump Instruction Encodings</h3>
-<p>&#x2003;&#x2003;There are several kinds of encoding jump targets:</p>
-<ol type="1">
-<li><p><em>PC relative</em>. They encode <strong>the difference between
-the address of the target instruction and the address of the instruction
-immediately following the jump</strong>.</p></li>
-<li><p>A second encoding method is to <strong>give an &#xFFFD;&#xFFFD;absolute&#xFFFD;&#xFFFD;
-address</strong>, using 4 bytes to directly specify the target.</p></li>
-</ol>
-<p>&#x2003;&#x2003;Let&apos;s look at an PC relative example:</p>
-<p><img src="/2024/07/15/3-6-Control/image-7.png"></p>
-<p>&#x2003;&#x2003;In the annotations on the right, the jump targets are indicated as
-<code>0x8</code> for the jump instruction on line 2, which is equal to
-<code>0x5+0x3</code>. This is because the encoding is calculated by
-<strong><span class="math inline">\(the\;address\;of\;next\;instruction+offset\)</span></strong>.</p>
-<p>&#x2003;&#x2003;In this case, the address of next instruction is 3+2=5, and the
-offset is <code>03</code>, as is shown in the assembly code.</p>
-<p>&#x2003;&#x2003;Even though the instructions may be relocated to different
-addresses, the encoding of the target <strong>remain unchanged</strong>.
-This is because the relative position between instructions remains
-unchanged.</p>
-<h3 id="5conditional-move">5.Conditional Move</h3>
-<p>&#x2003;&#x2003;The conventional way to implement conditional operations is through
-a <em>conditional transfer of control</em>, where the program follows
-one execution path when a condition holds and another when it does
-not:</p>
-<p><img src="/2024/07/15/3-6-Control/image-8.png"></p>
-<p>&#x2003;&#x2003;An alternate strategy is through <em>condition transfer of
-data</em>. This approach <strong>computes both outcomes of a conditional
-operation</strong> and then <strong>selects one based on whether or not
-the condition holds</strong>:</p>
-<p><img src="/2024/07/15/3-6-Control/image-9.png"></p>
-<p>&#x2003;&#x2003;This strategy makes sense only in restricted cases, but it can then
-be implemented by a simple conditional move instruction that is better
-matched to the performance characteristics of modern processors due to
-the pipelining.</p>
-<blockquote>
-<p>However, due to the preprocess, If <strong>one of those two
-expressions could possibly generate an error condition or a side
-effect</strong>, this could lead to invalid behavior.</p>
-</blockquote>
-<p>&#x2003;&#x2003;The conditional move instructions are as below:</p>
-<p><img src="/2024/07/15/3-6-Control/image-10.png"></p>
+<h4 id="bstack-randomization">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Stack randomization</h4>
+<p>&#x2003;&#x2003;In order to insert exploit code into a system, the attacker needs
+to inject <strong>both the code as well as a pointer</strong> to this
+code as part of the attack string. Generating this pointer requires
+<strong>knowing the stack address</strong> where the string will be
+located.</p>
 <ul>
-<li><p>The instructions has two operands: <strong>a source register or
-memory location S</strong>, and <strong>a destination register
-R</strong>.</p></li>
-<li><p>The assembler can infer the operand length of a conditional move
-instruction, so it doesn&apos;t need suffix.</p></li>
-</ul>
-<h3 id="6loops">6.Loops</h3>
-<h4 id="ado-while">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>do-while</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    body-statement</span><br><span class="line">    <span class="title function_">while</span> <span class="params">(test-expr)</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<h4 id="bwhile">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>while</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The second translation method is called <em>guarded do</em>, which
-uses a <code>do-while</code> style loop:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line">if (!t)</span><br><span class="line">    goto done;</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;By this way, we only need to check the condition once before we
-enter the loop. This reduce the possibility of branch prediction
-failure.</p>
-<h4 id="cfor">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>for</code></h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;is equal to the following <code>while</code> statements:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr) {</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;And there are also two forms of <code>for</code> translation:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;and:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (!t)</span><br><span class="line">        goto done;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;However, the simple translation from <code>for</code> to
-<code>while</code> will be a little tricky. Take the
-<code>continue</code> statement as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;If we simply use <code>continue</code>, this will lead to an
-infinite loop:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/* This will cause an infinite loop */</span></span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">    i ++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The general solution is to replace the continue statement with a
-goto statement that skips the rest of the loop body and goes directly to
-the update portion:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">goto</span> update;</span><br><span class="line">    sum += i;</span><br><span class="line"></span><br><span class="line">update:</span><br><span class="line">    i++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="7switch-statements">7.Switch Statements</h3>
-<p>&#x2003;&#x2003;The ordinary <code>switch</code> statements looks like this:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    {</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We can rewrite this using a <em>jump table</em>. A jump table is an
-array where entry i is the address of a code segment the program should
-take when the switch index equals i.</p>
-<p>&#x2003;&#x2003;With jump table, the previous program will looks like this:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = {</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D};</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<li><p>The idea of stack randomization is to <strong>make the position
+of the stack vary from one run of a program to another</strong>. This is
+implemented by <strong>allocating a random amount of space between 0 and
+n bytes on the stack at the start of a program</strong>.</p>
 <ul>
-<li><p>The <code>switch</code> locations are defined by <strong>the
-labels prefixed by <code>&amp;&amp;</code></strong>.
-<code>&amp;&amp;</code>is used to create a pointer for a code
-location.</p></li>
-<li><p>To simplify, the case value is subtracted by 100.</p></li>
+<li>for example, by using the allocation function <code>alloca</code>,
+which allocates space for a specified number of bytes on the stack.
+<strong>This allocated space is not used by the program, but it causes
+all subsequent stack locations to vary from one execution of a program
+to another</strong>.</li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;In the assembly code, we use this statement to access the jump
-table:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp *.L4(, %rsi, 8)  #Goto *jg[index]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Stack randomization is one of a larger class of techniques known as
+<strong>address-space layout randomization, or ASLR</strong>. With ASLR,
+different parts of the program, including program code, library code,
+stack, global variables, and heap data, <strong>are loaded into
+different regions of memory each time a program is run</strong>.</p>
+<h4 id="cstack-corruption-detection">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Stack corruption detection</h4>
+<p>&#x2003;&#x2003;A second line of defense is to <strong>be able to detect when a
+stack has been corrupted</strong>. It&apos; hard to prevent the behavious,
+however, the program can attempt to <strong>detect when such a write has
+occurred before it can have any harmful effects</strong>.</p>
 <ul>
-<li><p>The base address is <code>L4</code>, which is the base address of
-the jump table array.</p></li>
-<li><p>The <code>(, %rsi, 8)</code> is the index, judging which case to
-switch to.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In the assembly code, the jump table is indicated by the following
-declarations:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.section.rodata</span><br><span class="line">    .align 8  # Align address to multiple of 8</span><br><span class="line">    .L4 :</span><br><span class="line">    .quad.L3  # Case 100 : loc_A</span><br><span class="line">    .quad.L8  # Case 101 : loc_def</span><br><span class="line">    .quad.L5  # Case 102 : loc_B</span><br><span class="line">    .quad.L6  # Case 103 : loc_C</span><br><span class="line">    .quad.L7  # Case 104 : loc_D</span><br><span class="line">    .quad.L8  # Case 105 : loc_def</span><br><span class="line">    .quad.L7  # Case 106 : loc_D</span><br></pre></td></tr></table></figure>
+<li><p>The GCC use a mechanisim known as a <em>stack protector</em> into
+the generated code to detect buffer overruns.</p>
 <ul>
-<li><p>The <code>rodata</code> refers to <em>read-only
-data</em>.</p></li>
-<li><p><code>L4</code> marks the start of the allocation.</p></li>
+<li><p>The idea is to <strong>store a special <em>canary value(guard
+value)</em> in the stack frame between any local buffer and the rest of
+the stack state</strong>. The value is generated randomly each time the
+program runs:</p></li>
+<li><p>Before restoring the register state and returning from the
+function, <strong>the program checks if the canary has been altered by
+some operation of this function or one that it has called</strong>. If
+so, the program <strong>aborts with an error</strong>.</p></li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;In assembly code, the number of <code>case</code> is judged by
-<strong>the offset of the label in the jump table</strong>.</p>
+<p><img src="/2024/07/18/3-10-Combining-Control-and-Data-in-Machine-Level-Programs/image.png"></p>
+<p>&#x2003;&#x2003;Recent version of GCC inserts this type of overflow detection
+automatically. We have to give the command-line option
+<code>-fno-stack-protector</code>.</p>
+<p>&#x2003;&#x2003;The following code uses the overflow detection techniques:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">echo:</span><br><span class="line">    subq $24, %rsp        # Allocate 24 bytes on stack</span><br><span class="line">    movq %fs:40, %rax     # Retrieve canary</span><br><span class="line">    movq %rax, 8(%rsp)    # Store on stack</span><br><span class="line">    xorl %eax, %eax       # Zero out register</span><br><span class="line">    movq %rsp, %rdi       # Compute buf as %rsp</span><br><span class="line">    call gets             # Call gets</span><br><span class="line">    movq %rsp, %rdi       # Compute buf as %rsp</span><br><span class="line">    call puts             # Call puts</span><br><span class="line">    movq 8(%rsp), %rax    # Retrieve canary</span><br><span class="line">    xorq %fs:40, %rax     # Compare to stored value</span><br><span class="line">    je .L9                # If =, goto ok</span><br><span class="line">    call __stack_chk_fail # Stack corrupted!</span><br><span class="line">.L9:</span><br><span class="line">    addq $24, %rsp        # Deallocate stack space</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003; The instruction argument <code>%fs:40</code> is an indication that
+<strong>the canary value is read from memory using <em>segmented
+addressing</em></strong>.</p>
+<ul>
+<li><p>By storing the canary in a special segment, it can be marked as
+<strong>&quot;read only&quot;</strong>, so that an attacker cannot overwrite the
+stored canary value.</p></li>
+<li><p>Before restoring the register state and returning, the function
+<strong>compares the value stored at the stack location with the canary
+value</strong> (<strong>via the <code>xorq</code> instruction on line
+11</strong>). <strong>A nonzero value indicates that the canary on the
+stack has been modified</strong>, and so the code will call an error
+routine.</p></li>
+</ul>
+<h4 id="dordering-rearrangement">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Ordering rearrangement</h4>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>Let&apos;s discuss the
+following C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">len</span><span class="params">(<span class="type">char</span> *s)</span> {</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">strlen</span>(s);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">iptoa</span><span class="params">(<span class="type">char</span> *s, <span class="type">long</span> *p)</span> {</span><br><span class="line">    <span class="type">long</span> val = *p;</span><br><span class="line">    <span class="built_in">sprintf</span>(s, <span class="string">&quot;%ld&quot;</span>, val);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">intlen</span><span class="params">(<span class="type">long</span> x)</span> {</span><br><span class="line">    <span class="type">long</span> v;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">12</span>];</span><br><span class="line">    v = x;</span><br><span class="line">    iptoa(buf, &amp;v);</span><br><span class="line">    <span class="keyword">return</span> len(buf);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;And the following show portions of the code for
+<code>intlen</code>, compiled both with and without stack protector:</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(a.\)</span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># int intlen(long x)</span><br><span class="line"># x in %rdi</span><br><span class="line">intlen:</span><br><span class="line">    subq $40, %rsp</span><br><span class="line">    movq %rdi, 24(%rsp)</span><br><span class="line">    leaq 24(%rsp), %rsi</span><br><span class="line">    movq %rsp, %rdi</span><br><span class="line">    call iptoa</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<span class="math inline">\(b.\)</span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># int intlen(long x)</span><br><span class="line"># x in %rdi</span><br><span class="line">intlen:</span><br><span class="line">    subq $56, %rsp</span><br><span class="line">    movq %fs:40, %rax</span><br><span class="line">    movq %rax, 40(%rsp)</span><br><span class="line">    xorl %eax, %eax</span><br><span class="line">    movq %rdi, 8(%rsp)</span><br><span class="line">    leaq 8(%rsp), %rsi</span><br><span class="line">    leaq 16(%rsp), %rdi</span><br><span class="line">    call iptoa</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In the protected code, <strong>local variable <code>v</code> is
+positioned closer to the top of the stack than
+<code>buf</code></strong>, and so a<strong>n overrun of <code>buf</code>
+will not corrupt the value of <code>v</code></strong>.</p>
+<h4 id="elimiting-executable-code-regions">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Limiting executable code regions</h4>
+<p>&#x2003;&#x2003;A final step is to eliminate the ability of an attacker to insert
+executable code into a system. One method is to <strong>limit which
+memory regions hold executable code</strong>. In typical programs,
+<strong>only the portion of memory holding the code generated by the
+compiler need be executable</strong>. <strong>The other portions can be
+restricted to allow just reading and writing</strong>.</p>
+<ul>
+<li><p>Many systems allow control over three forms of access:
+<strong>read</strong> (reading data from memory), <strong>write</strong>
+(storing data into memory), and <strong>execute</strong> (treating the
+memory contents as machine-level code).</p></li>
+<li><p><code>AMD</code> introduced an <code>NX</code> (for &quot;no-execute&quot;)
+bit into the memory protection for its 64-bit processors,
+<strong>separating the read and execute access modes</strong>. With this
+feature, the stack can be marked as being readable and writable, but not
+executable, and <strong>the checking of whether a page is executable is
+performed in hardware</strong>, with no penalty in efficiency.</p></li>
+</ul>
+<h3 id="3variable-size-stack-frames">3.Variable-Size Stack Frames</h3>
+<p>&#x2003;&#x2003;Some functions require a variable amount of space that must be
+allocated for their stack frames, such as a local array declared with
+variable size:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">vframe</span><span class="params">(<span class="type">long</span> n, <span class="type">long</span> idx, <span class="type">long</span> *q)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> *p[n];</span><br><span class="line">    p[<span class="number">0</span>] = &amp;i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">        p[i] = q;</span><br><span class="line">    <span class="keyword">return</span> *p[idx];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;To manage a variable-size stack frame, x86-64 code uses
+<code>%rbp</code> to serve as a <em>frame pointer</em>(sometimes
+referred to as a <em>base pointer</em>). When using a frame pointer, the
+stack frame is organized as below:</p>
+<p><img src="/2024/07/18/3-10-Combining-Control-and-Data-in-Machine-Level-Programs/image-1.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># long vframe(long n, long idx, long *q)</span><br><span class="line"># n in %rdi, idx in %rsi, q in %rdx</span><br><span class="line"># Only portions of code shown</span><br><span class="line"></span><br><span class="line">vframe:</span><br><span class="line">    pushq %rbp      # Save old %rbp</span><br><span class="line">    movq %rsp, %rbp # Set frame pointer</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    leave           # Restore %rbp and %rsp</span><br><span class="line">    ret             # Return</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The code must save the previous version of <code>%rbp</code> on
+the stack, since it is a callee-saved register. It then <strong>keeps
+<code>%rbp</code> pointing to this position throughout the execution of
+the function</strong>, and it references fixed-length local variables,
+such as <code>i</code>, at <strong>offsets relative to
+<code>%rbp</code></strong>.</p>
+<ul>
+<li>So the code start by pushing the current value of <code>%rbp</code>
+onto the stack and setting %rbp to point to this stack position</li>
+</ul></li>
+<li><p>At the end of the function, the frame pointer is restored to its
+previous value using the <code>leave</code> instruction. This
+instruction takes no arguments. It is equivalent to executing the
+following two instructions:</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movq %rbp, %rsp     # Set stack pointer to beginning of frame</span><br><span class="line">popq %rbp           # Restore saved %rbp and set stack ptr</span><br><span class="line">                    # to end of caller&#xFFFD;&#xFFFD;s frame</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -478,7 +492,7 @@ data</em>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -503,14 +517,14 @@ data</em>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">

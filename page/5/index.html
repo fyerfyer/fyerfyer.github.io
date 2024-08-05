@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/02/5-3-Optimizing-Methods/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/04/5-10-Some-Limiting-Factors/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/02/5-3-Optimizing-Methods/" class="post-title-link" itemprop="url">5.3.Optimizing Methods</a>
+          <a href="/2024/08/04/5-10-Some-Limiting-Factors/" class="post-title-link" itemprop="url">5.10.Some Limiting Factors</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:58:48" itemprop="dateCreated datePublished" datetime="2024-08-02T08:31:22+08:00">2024-08-02</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-04 21:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;23:33:25" itemprop="dateCreated datePublished" datetime="2024-08-04T21:31:22+08:00">2024-08-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>518</span>
+      <span>575</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,39 +266,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53optimizing-methods">5.3.Optimizing Methods</h1>
-<h3 id="1code-motion">1.Code Motion</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine1</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; vec_length(v); i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Since the length of <code>v</code> is fixed, it&apos;s needless to
-compute its length for each iteration. So we can take this computation
-alone:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine2</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="2reduce-procedure-calls">2.Reduce Procedure Calls</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">data_t</span> *<span class="title function_">get_vec_start</span><span class="params">(vec_ptr v)</span> {</span><br><span class="line">    <span class="keyword">return</span> v-&gt;data;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Direct access to vector data */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        *dest = *dest OP data[i];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="3eliminating-unneededmemory-references">3.Eliminating Unneeded
-Memory References</h3>
-<p>&#x2003;&#x2003;The assembly code for <code>combine3</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = * </span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We can see that the accumulated values read from and written to
-memory on each iteration. We can eliminate this needless reading and
-writing of memory by rewriting the code in the style of
-<code>combine4</code>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine4</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;With the following assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The key is to <strong>dereference the pointer as fewer as
-possible</strong>.</p>
-<p>&#x2003;&#x2003;However, this program will lead to different result due to
-<em>memory alias</em>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v) + <span class="number">2</span>);</span><br><span class="line">combine4(v, get_vec_start(v) + <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/02/5-3-Optimizing-Methods/image.png"></p>
+          <h1 id="510some-limiting-factors"><span class="math inline">\(5.10.\)</span>Some Limiting Factors</h1>
+<h3 id="1register-spilling">1.Register Spilling</h3>
+<p>&#x2003;&#x2003;If a program has a degree of parallelism <span class="math inline">\(P\)</span> that <strong>exceeds the number of
+available registers</strong>, then the compiler will resort to
+<em>spilling</em>, <strong>storing some of the temporary values in
+memory</strong>, typically by <strong>allocating space on the run-time
+stack</strong>:</p>
+<p><img src="/2024/08/04/5-10-Some-Limiting-Factors/image.png"></p>
+<p>&#x2003;&#x2003;Once the number of loop variables exceeds the number of available
+registers, the program must <strong>allocate some on the
+stack</strong>.</p>
+<p>&#x2003;&#x2003;Take the following <span class="math inline">\(10 \times
+10\)</span> unrolling loop for example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Updating of accumulator acc0 in 10 x 10 urolling</span><br><span class="line">vmulsd (%rdx), %xmm0, %xmm0    # acc0 *= data[i]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The comparable part of the code for <span class="math inline">\(20
+\times 20\)</span> unrolling has a much different form:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Updating of accumulator acc0 in 20 x 20 unrolling</span><br><span class="line">vmovsd 40(%rsp), %xmm0</span><br><span class="line">vmulsd (%rdx), %xmm0, %xmm0</span><br><span class="line">vmovsd %xmm0, 40(%rsp)</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The accumulator is kept as a local variable on the stack, at offset
+40 from the stack pointer. The program must <strong>read both its value
+and the value of <code>data[i]</code> from memory</strong>, multiply
+them, and store the result back to memory.</p>
+<h3 id="2branch-prediction">2.Branch Prediction</h3>
+<p>&#x2003;&#x2003;gcc don&apos;t use conditional transfers of control to generate code for
+branch prediction, but rather <strong>compute the values</strong> along
+both branches of a conditional expression or statement and then
+<strong>use conditional moves to select the desired value</strong>.</p>
 <hr>
-<p>&#x2003;&#x2003;As a result, we modify the <code>combine3</code> as below:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Make sure dest updated on each iteration */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3w</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize in event length &lt;= 0 */</span></span><br><span class="line">    *dest = acc;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">        *dest = acc;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;with the following assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = *. Compiled -O1</span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This program dereferences the <code>dest</code> less while avoiding
-the memory alias.</p>
+<p>&#x2003;&#x2003;To illustrate this, we use the program with branch prediction and
+that without predition as examples:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine4</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Include bounds check in loop */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine4b</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= <span class="number">0</span> &amp;&amp; i &lt; v-&gt;len) {</span><br><span class="line">            acc = acc OP v-&gt;data[i];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/04/5-10-Some-Limiting-Factors/image-1.png"></p>
+<p>&#x2003;&#x2003;The additional computation required to perform bounds checking can
+take place <strong>in parallel with the combining operations</strong>.
+The processor is able to predict the outcomes of these branches, and so
+<strong>none of this evaluation has much effect on the fetching and
+processing of the instructions</strong> that form the critical path in
+the program execution.</p>
+<h3 id="3writecode-suitable-for-implementation-with-conditional-moves">3.Write
+Code Suitable for Implementation with Conditional Moves</h3>
+<ul>
+<li>gcc is able to generate conditional moves for code written in a more
+&quot;functional&quot; style, where we use conditional operations to
+<strong>compute values</strong> and then update the program state with
+these values, as opposed to a more &quot;imperative&quot; style, where we use
+conditionals to <strong>selectively update program state</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Take the program that set <code>a[i]</code> to be the maximum of
+<code>a[i], b[i]</code> and <code>b[i]</code> the minimum.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* imperative style */</span></span><br><span class="line"><span class="comment">/* Rearrange two vectors so that for each i, b[i] &gt;= a[i] */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">minmax1</span><span class="params">(<span class="type">long</span> a[], <span class="type">long</span> b[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        <span class="keyword">if</span> (a[i] &gt; b[i]) {</span><br><span class="line">            <span class="type">long</span> t = a[i];</span><br><span class="line">            a[i] = b[i];</span><br><span class="line">            b[i] = t;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* functional style */</span></span><br><span class="line"><span class="comment">/* Rearrange two vectors so that for each i, b[i] &gt;= a[i] */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">minmax2</span><span class="params">(<span class="type">long</span> a[], <span class="type">long</span> b[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        <span class="type">long</span> min = a[i] &lt; b[i] ? a[i] : b[i];</span><br><span class="line">        <span class="type">long</span> max = a[i] &lt; b[i] ? b[i] : a[i];</span><br><span class="line">        a[i] = min;</span><br><span class="line">        b[i] = max;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The method is like <em>data transfer</em>, we use less conditional
+expression to reduce misprediction rate.</p>
 
       
     </div>
@@ -321,7 +341,7 @@ the memory alias.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -346,14 +366,14 @@ the memory alias.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">

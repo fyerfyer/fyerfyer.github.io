@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-3-Synchronous-Digital-Systems/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-3-Synchronous-Digital-Systems/" class="post-title-link" itemprop="url">3.3.Synchronous Digital Systems</a>
+          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:29:11" itemprop="dateCreated datePublished" datetime="2024-06-05T08:29:11+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:48:39" itemprop="dateModified" datetime="2024-06-06T17:48:39+08:00">2024-06-06</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
         </span>
     </span>
 
@@ -254,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>419</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,120 +266,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</h1>
-<h3 id="1clock-concepts">1.Clock concepts</h3>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
-<h3 id="2d-flip-flops">2.D Flip-flops</h3>
-<h4 id="a-dffconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span> DFF
-concept</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
-<blockquote>
-<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
-<span class="math inline">\(D\)</span> is the data input.</p>
-</blockquote>
-<blockquote>
-<p>DFF only responds to the input signal on the rising edge of the clock
-signal, it captures and latches the value of data input. <strong>It will
-hold the value until the next rising edge of the clock
-signal</strong>.</p>
-</blockquote>
+          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
+Vector</h1>
+<h3 id="1basic-concepts">1.Basic concepts</h3>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
 <ul>
-<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
-take for the input to propagate to the output after the clock
-trigger</strong>.</p></li>
-<li><p><em>Setup time</em> is the amount of time that the input needs to
-be stable BEFORE the clock trigger</p></li>
+<li><p>In SIMD, all the parallel execution units are
+<strong>synchronized</strong>, and they all respond to a single
+instruction <strong>that emanates from a single program
+counter</strong>.</p></li>
+<li><p>Each execution unit <strong>has its own address register, and so
+have different data address</strong>.</p></li>
 </ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
-<ul>
-<li><em>Hold time</em> is the amount of time that the input needs to be
-stable AFTER the clock trigger</li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
-<h3 id="3register">3.Register</h3>
-<h4 id="asomeconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-concept</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
 <blockquote>
-<p>Why this? Because the max hold time is to <strong>ensure that data
-input D remains stable for a period of time after the rising edge of the
-clock arrives</strong>. And the period of time equals to the delay of
-<span class="math inline">\(A\)</span> plus the combinational delay.</p>
+<p>The original motivation behind SIMD was to <strong>amortize the cost
+of the control unit over execution units</strong>. The SIMD can also
+save instrustion bandwidth and space: SIMD needs <strong>only one copy
+of the code that is being simultaneously executed</strong>.</p>
 </blockquote>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
 <blockquote>
-<p>Why this? Because the min clock cycle is to <strong>ensure that the
-signal is properly transmitted during the clock cycle and captured by
-the next register</strong>. So we must take the longest time into
-consideration.</p>
+<p>Since the instruction is single, SIMD works best when dealing with
+<strong>identically structured data</strong>, which is called
+<em>data-level parallelism</em>, e.g., for loop.</p>
 </blockquote>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
-<h3 id="4transitor">4.Transitor</h3>
-<h4 id="ametal-oxide-semiconductor-field-effecttransistormosfet">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
-Transistor(MOSFET)</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
-<p>&#x2003;&#x2003;To know how the result comes from, we can <strong>view the value of
-<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
-an example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
 <ul>
-<li><p>First we need to know <strong>whether the switch is
-closed</strong>. <strong>If the switch is closed, then the state of
-<span class="math inline">\(D\)</span> is decided by the outside
-circuits</strong>.</p></li>
-<li><p>When the switch is on, we then judge <strong>if the voltage of
-<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it&apos;s true, then the FET is
-conducting, and vice versa.</p></li>
+<li><p>SPMD: The programmer write a single program that runs on all
+processors of a <em>MIMD computer</em>, relying on conditional
+statements when different processors should execute distinct section of
+code.</p></li>
+<li><p>The SIMD computers operate on <strong>vectors of
+data</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can&apos;t get the electronic, thus it&apos;s
-0.</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
-<h4 id="bvddand-ground">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Vdd
-and Ground</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
-<h4 id="cbuilding-an-inverter">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Building an Inverter</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
-<h4 id="dbuilding-other-gates">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Building other gates</h4>
-<p>&#x2003;&#x2003;To build a CMOS, we:</p>
+<h3 id="2vector">2.Vector</h3>
+<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
+<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
+data elements from memory, put them in order into a large set of
+registers</strong>, and operate on them sequentially in registers using
+<em>pipelined execution units</em>.</p>
+<ul>
+<li>A key feature of vector architectures is <strong>a set of vector
+registers</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
+loop):</p>
+<p><span class="math display">\[
+Y = a \times X + Y
+\]</span></p>
+<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
+<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
+<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
+also the pipeline stalls are required only <strong>once per vector
+operation</strong>, rather than once per vector element.</p>
+<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
 <ol type="1">
-<li><p>Implement the pull-up network and pull-down network separately to
-fit the truth table.</p>
-<ul>
-<li>It&apos;s OK to get the opposite of truth table. <strong>We can simply
-convert it through an invertor</strong>.</li>
-</ul></li>
-<li><p>Connect the pull-up with Vdd, and the pull-down with
-Ground.</p></li>
+<li><p>The compiler indicates that <strong>the computation of each
+result in the vector is independent</strong>. So compiler doesn&apos;t have
+to check for data hazards within an instruction.</p></li>
+<li><p>Since the element in a vector is adjacent, <strong>the cost of
+the latency to main memory is seen only once for the entire
+vector</strong>.</p></li>
+<li><p>Because a complete loop is replaced by a vector instruction whose
+<strong>behaviour is predetermined</strong>, control hazards are
+nonexistent.</p></li>
 </ol>
-<p>&#x2003;&#x2003;We take the <code>NAND</code> gate for example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
-<h4 id="ethe-use-of-demorgans-law">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>The use of DeMorgan&apos;s Law</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
+<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
+<ul>
+<li>Unlike multimedia extensions, the number of elements in a vector
+operation isn&apos;t in the opcode but in <strong>a separate
+register</strong>.</li>
+</ul>
+<blockquote>
+<p>This means different versions of the vector architecture can simply
+be implemented by changing the contents of the register, thus retain
+binary compatibility.</p>
+</blockquote>
+<ul>
+<li>The parallel semantics of a vector instruction allows using a
+<em>deeply pipelined functional unit</em> to execute vector
+operations:</li>
+</ul>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
+<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
+register to take part in operations with element N from other vector
+registers, and the structure is called <em>vector lanes</em>:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
+<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
+vector unit by <strong>adding more lanes</strong>.</p>
 
       
     </div>
@@ -408,7 +378,7 @@ Ground.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -433,14 +403,14 @@ Ground.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">115k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">6:59</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
   </span>
 </div>
 <div class="busuanzi-count">
