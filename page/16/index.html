@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/19/3-11-Floating-Point-Code/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/19/3-11-Floating-Point-Code/" class="post-title-link" itemprop="url">3.11.Floating-Point Code</a>
+          <a href="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/" class="post-title-link" itemprop="url">4.1.Y86-64 Instruction Set Architecture</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-19 21:31:22" itemprop="dateCreated datePublished" datetime="2024-07-19T21:31:22+08:00">2024-07-19</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-24 09:31:22" itemprop="dateCreated datePublished" datetime="2024-07-24T09:31:22+08:00">2024-07-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-20 18:35:52" itemprop="dateModified" datetime="2024-07-20T18:35:52+08:00">2024-07-20</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 11:32:30" itemprop="dateModified" datetime="2024-07-26T11:32:30+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
+          <a href="/categories/CSAPP/Chapter-4-Processor-Architecture/" itemprop="url" rel="index"><span itemprop="name">Chapter 4.Processor Architecture</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.2k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>4 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,164 +272,159 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="311floating-point-code"><span class="math inline">\(3.11.\)</span>Floating-Point Code</h1>
-<h3 id="1floating-pointmovement-and-conversion-operations">1.Floating-Point
-Movement and Conversion Operations</h3>
-<h4 id="abasic-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic instructions</h4>
+          <h1 id="41y86-64-instruction-setarchitecture"><span class="math inline">\(4.1.\)</span>Y86-64 Instruction Set
+Architecture</h1>
+<h3 id="1programmer-visible-state">1.Programmer-Visible State</h3>
+<p>&#x2003;&#x2003;The programmer-visible state is where the programmer can generate
+machine-level code.</p>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image.png"></p>
 <ul>
-<li><p>For floating-point, the data are held either in memory (indicated
-in the table as <span class="math inline">\(M_{32}\)</span> and <span class="math inline">\(M_{64}\)</span>) or in XMM registers (shown in the
-table as <code>X</code>).</p>
+<li>The <code>Stat</code> indicates the overall state of program
+execution. It will indicate either normal operation or that some sort of
+exception has occurred.</li>
+</ul>
+<h3 id="2y86-64-instruction-set">2.Y86-64 Instruction Set</h3>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
 <ul>
-<li>Each YMM register is 32 bytes long. When operating on scalar data,
-these registers only hold floating-point data, and <strong>only the
-low-order 32 bits (for float) or 64 bits (for double) are
-used</strong>.</li>
+<li><p>The integer operation instructions operate only on register data.
+This instructions set the three condition codes <code>ZF</code>,
+<code>SF</code>, and <code>OF</code> (zero, sign, and
+overflow).</p></li>
+<li><p>The <code>call</code> instruction <strong>pushes the return
+address on the stack</strong> and <strong>jumps to the destination
+address</strong>. The <code>ret</code> instruction returns from such a
+call.</p></li>
+<li><p>The <code>halt</code> instruction stops instruction execution,
+and the status code is set to <code>HLT</code>.</p></li>
+</ul>
+<h3 id="3instruction-encoding">3.Instruction Encoding</h3>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-2.png"></p>
+<ul>
+<li>Every instruction has an <strong>initial byte identifying the
+instruction type</strong>. This byte is split into two 4-bit parts: the
+high-order, or code, part, and the low-order, or function, part.</li>
+</ul>
+<p>&#x2003;&#x2003;Instructions that need operands have longer encodings:</p>
+<ul>
+<li><p>There can be an additional register specifier byte
+<strong>specifying either one or two registers</strong>. These register
+fields are called <code>rA</code> and <code>rB</code> in figure
+above.</p>
+<ul>
+<li><p>Instructions that have no register operands do not have a
+register specifier byte.</p></li>
+<li><p>Those that require just one register operand have the other
+register specifier set to 0xF.</p></li>
+</ul></li>
+<li><p>Some instructions require an additional 8-byte constant word.
+This word can serve as the immediate data for <code>irmovq</code>, the
+displacement for <code>rmmovq</code> and <code>mrmovq</code> address
+specifiers, and the destination of branches and calls.</p>
+<ul>
+<li>Note that branch and call destinations are given as <strong>absolute
+addresses</strong>, rather than using the PC-relative addressing seen in
+x86-64.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
-<hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-1.png"></p>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-3.png"></p>
 <ul>
-<li>The &apos;a&apos; stands for &apos;aligned&apos;.</li>
+<li>The program registers are stored within the CPU in a register file,
+a small random access memory where <strong>the register IDs serve as
+addresses</strong>.</li>
 </ul>
-<hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-2.png"></p>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-3.png"></p>
+<p>&#x2003;&#x2003;Let&apos;s take the instruction
+<code>rmmovq %rsp, 0x123456789abcd(%rdx)</code> as an example:</p>
+<ol type="1">
+<li><p><code>rmmovq</code> has initial byte <code>40</code>.</p></li>
+<li><p>The source register <code>%rsp</code> is encoded in
+<code>rA</code> field, and base register <code>%rdx</code> is encoded in
+<code>rB</code> field. So we get the register specifier byte of
+<code>42</code>.</p></li>
+<li><p>The displacement is encoded in the 8-byte constant word:
+<code>00 01 23 45 67 89 ab cd</code>, and we write it in byte-reversed
+order.</p></li>
+</ol>
+<p>&#x2003;&#x2003;So the final result is <code>4042cdab896745230100</code>.</p>
 <ul>
-<li>When converting floating-point values to integers, the two-operand
-floating-point conversion operations <strong>perform truncation,
-rounding values toward zero</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;For three-operand floating-point conversion operations, we can
-<strong>ignore the second operand, since its value only affects the
-upper bytes of the result</strong>. In common use, both the second
-source and the destination oprands are identical:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsi2sdq %rax, %xmm1, %xmm1</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This instruction reads a long integer from register
-<code>%rax</code>, converts it to data type double, and <strong>stores
-the result in the lower bytes of XMM register
-<code>%xmm1</code></strong>.</p>
-<h4 id="bconversion-between-floating-point">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Conversion between floating-point</h4>
-<p>&#x2003;&#x2003;To convert between two different floating-point format, suppose the
-low-order 4 bytes of <code>%xmm0</code> hold a single-precision value;
-then it would seem straightforward to convert this to a double-precision
-value and store the result in the lower 8 bytes of register
-<code>%xmm0</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtss2sd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;However, GCC will generate the following code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from single to double precision</span><br><span class="line">vunpcklps %xmm0, %xmm0, %xmm0   # Replicate first vector element</span><br><span class="line">vcvtps2pd %xmm0, %xmm0          # Convert two vector elements to double</span><br></pre></td></tr></table></figure>
+<li><p>One important property of any instruction set is that <strong>the
+byte encodings must have a unique interpretation</strong>. An arbitrary
+sequence of bytes either encodes a unique instruction sequence or is not
+a legal byte sequence</p>
 <ul>
-<li><p>The <code>vunpcklps</code> instruction <strong>interleaves the
-values in two XMM registers and store them in a third</strong>. That is,
-if one source register contains words <span class="math inline">\([s_3,
-s_2, s_1, s_0]\)</span> and the other contains words <span class="math inline">\([d_3, d_2, d_1, d_0]\)</span>, then the value of
-the destination register will be <span class="math inline">\([s_1, d_1,
-s_0, d_0]\)</span>.</p></li>
-<li><p>The <code>vcvtps2pd</code> instruction <strong>expands the two
-low-order single precision values in the source XMM register to be the
-two double-precision values in the destination XMM register</strong>.
-Applying this to the result of the preceding <code>vunpcklps</code>
-instruction would give values <span class="math inline">\([dx_0,dx_0]\)</span>, where <span class="math inline">\(dx_0\)</span> is the result of converting <span class="math inline">\(x\)</span> to double precision.</p></li>
+<li>This property ensures that a processor can execute an object-code
+program without any ambiguity about the meaning of the code. However, if
+we do not know the starting position of a code sequence, we cannot
+reliably determine how to split the sequence into individual
+instructions.</li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;GCC generates similar code for converting from double precision to
-single precision:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Conversion from double to single precision</span><br><span class="line">vmovddup %xmm0, %xmm0    # Replicate first vector element</span><br><span class="line">vcvtpd2ps %xmm0, %xmm0  # Convert two vector elements to single</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;rather than by using the single instruction:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vcvtsd2ss %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<h3 id="2floating-point-code-inprocedure">2.Floating-Point Code in
-Procedure</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image.png"></p>
-<p>&#x2003;&#x2003;The following conventions are observed:</p>
+<h3 id="4exceptions">4.Exceptions</h3>
+<p>&#x2003;&#x2003;The programmer-visible state includes a status code
+<code>Stat</code> describing the overall state of the executing program.
+The possible values for this code are as below:</p>
+<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-4.png"></p>
 <ul>
-<li><p>Up to eight floating-point arguments can be passed in XMM
-registers <code>%xmm0~%xmm7</code>. These registers are used in the
-order the arguments are listed. Additional floating-point arguments can
-be passed on the stack.</p></li>
-<li><p>A function that returns a floating-point value does so in
-register <code>%xmm0</code>.</p></li>
-<li><p><strong>All XMM registers are caller saved</strong>. The callee
-may overwrite any of these registers without first saving it.</p></li>
-</ul>
-<p>&#x2003;&#x2003;When a function contains a combination of pointer, integer, and
-floating-point arguments, the pointers and integers are passed in
-general-purpose registers, while the floating-point values are passed in
-XMM registers. This means that <strong>the mapping of arguments to
-registers depends on both their types and their ordering</strong>.</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">g1</span><span class="params">(<span class="type">double</span> a, <span class="type">long</span> b, <span class="type">float</span> c, <span class="type">int</span> d)</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Registers: <code>a</code> in <code>%xmm0</code>, <code>b</code> in
-<code>%rdi</code>, <code>c</code> in<code>%xmm1</code>, <code>d</code>
-in <code>%esi</code>.</p>
-<h3 id="3floating-pointarithmetic-operations">3.Floating-Point
-Arithmetic Operations</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-4.png"></p>
+<li><p>The <code>ADR</code>indicates that the processor attempted to
+read from or write to an invalid memory address, either while fetching
+an instruction or while reading or writing data.</p>
 <ul>
-<li><p>The first source operand S1 can be <strong>either an XMM register
-or a memory location</strong>.</p></li>
-<li><p>The second source operand and the destination operands
-<strong>must be XMM registers</strong>.</p></li>
+<li>We limit the maximum address, and <strong>any access to an address
+beyond this limit will trigger an ADR exception</strong>.</li>
+</ul></li>
 </ul>
+<h3 id="5y86-64-programs">5.Y86-64 Programs</h3>
 <p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">funct</span><span class="params">(<span class="type">double</span> a, <span class="type">float</span> x, <span class="type">double</span> b, <span class="type">int</span> i)</span> {</span><br><span class="line">    <span class="keyword">return</span> a * x - b / i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># double funct(double a, float x, double b, int i)</span><br><span class="line"># a in %xmm0, x in %xmm1, b in %xmm2, i in %edi</span><br><span class="line"></span><br><span class="line">funct:</span><br><span class="line">    vunpcklps %xmm1, %xmm1, %xmm1  # Convert x to double</span><br><span class="line">    vcvtps2pd %xmm1, %xmm1         # Convert x to double</span><br><span class="line">    vmulsd %xmm0, %xmm1, %xmm0     # Multiply a by x</span><br><span class="line">    vcvtsi2sd %edi, %xmm1, %xmm1   # Convert i to double</span><br><span class="line">    vdivsd %xmm1, %xmm2, %xmm2     # Compute b/i</span><br><span class="line">    vsubsd %xmm2, %xmm0, %xmm0     # Subtract from a*x</span><br><span class="line">    ret                            # Return</span><br></pre></td></tr></table></figure>
-<hr>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-5.png"></p>
-<p>&#x2003;&#x2003;Sometimes the bitwise operations are a useful way to manipulate
-floating-point values. The following are some examples:</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Taking absolute value:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC1(%rip), %xmm1</span><br><span class="line">vandpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC1:</span><br><span class="line">    .long 4294967295</span><br><span class="line">    .long 2147483647</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Set value to zero:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vxorpd %xmm0, %xmm0, %xmm0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Negate</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vmovsd .LC2(%rip), %xmm1</span><br><span class="line">vxorpd %xmm1, %xmm0, %xmm0</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">    .long 0</span><br><span class="line">    .long -2147483648</span><br><span class="line">    .long 0</span><br><span class="line">    .long 0</span><br></pre></td></tr></table></figure>
-<h3 id="4defining-andusing-floating-point-constants">4.Defining and
-Using Floating-Point Constants</h3>
-<p>&#x2003;&#x2003;AVX floating-point operations cannot have immediate values as
-oprands. Instead, the compiler must <strong>allocate and initialize
-storage for any constant values</strong>.</p>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">cel2fahr</span><span class="params">(<span class="type">double</span> temp)</span> {</span><br><span class="line"><span class="keyword">return</span> <span class="number">1.8</span> * temp + <span class="number">32.0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cel2fahr:</span><br><span class="line">vmulsd .LC2(%rip), %xmm0, %xmm0  # Multiply by 1.8</span><br><span class="line">vaddsd .LC3(%rip), %xmm0, %xmm0  # Add 32.0</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">.LC2:</span><br><span class="line">.long 3435973837                 # Low-order 4 bytes of 1.8</span><br><span class="line">.long 1073532108                 # High-order 4 bytes of 1.8</span><br><span class="line"></span><br><span class="line">.LC3:</span><br><span class="line">.long 0                          # Low-order 4 bytes of 32.0</span><br><span class="line">.long 1077936128                 # High-order 4 bytes of 32.0</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;the function reads the value 1.8 from the memory location labeled
-<code>.LC2</code> and the value 32.0 from the memory location labeled
-<code>.LC3</code>.</p>
-<h3 id="5floating-pointcomparison-operations">5.Floating-Point
-Comparison Operations</h3>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-6.png"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">sum</span><span class="params">(<span class="type">long</span> *start, <span class="type">long</span> count)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (count)</span><br><span class="line">    {</span><br><span class="line">        sum += *start;</span><br><span class="line">        start++;</span><br><span class="line">        count--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;the x86-64 and Y86-64 assembly code are as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># x86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    movl $0, %eax        # sum = 0</span><br><span class="line">    jmp .L2              # Goto test</span><br><span class="line">.L3:                     # loop:</span><br><span class="line">    addq (%rdi), %rax    # Add *start to sum</span><br><span class="line">    addq $8, %rdi        # start++</span><br><span class="line">    subq $1, %rsi        # count--</span><br><span class="line">.L2:                     # test:</span><br><span class="line">    testq %rsi, %rsi     # Test sum</span><br><span class="line">    jne .L3              # If !=0, goto loop</span><br><span class="line">    rep; ret             # Return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Y86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    irmovq $8,%r8       # Constant 8</span><br><span class="line">    irmovq $1,%r9       # Constant 1</span><br><span class="line">    xorq %rax,%rax      # sum = 0</span><br><span class="line">    andq %rsi,%rsi      # Set CC</span><br><span class="line">    jmp test            # Goto test</span><br><span class="line">loop:</span><br><span class="line">    mrmovq (%rdi),%r10  # Get *start</span><br><span class="line">    addq %r10,%rax      # Add to sum</span><br><span class="line">    addq %r8,%rdi       # start++</span><br><span class="line">    subq %r9,%rsi       # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">    jne loop            # Stop when 0</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The Y86-64 codes have the following differences:</p>
+<ol type="1">
+<li><p>The Y86-64 code <strong>loads constants into registers</strong>
+(lines 2&#xFFFD;C3), since it cannot use immediate data in arithmetic
+instructions.</p></li>
+<li><p>The Y86-64 code requires two instructions (lines 8&#xFFFD;C9) to
+<strong>read a value from memory and add it to a
+register</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;The following shows a complete program file written in Y86-64
+assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">.pos 0                                      # Execution begins at address 0</span><br><span class="line">irmovq stack, %rsp                          # Set up stack pointer</span><br><span class="line">call main                                   # Execute main program</span><br><span class="line">halt                                        # Terminate program</span><br><span class="line"></span><br><span class="line">.align 8                                    # Array of 4 elements</span><br><span class="line">array:</span><br><span class="line">.quad 0x000d000d000d</span><br><span class="line">.quad 0x00c000c000c0</span><br><span class="line">.quad 0x0b000b000b00</span><br><span class="line">.quad 0xa000a000a000</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">irmovq array, %rdi</span><br><span class="line">irmovq $4, %rsi</span><br><span class="line">call sum                                    # sum(array, 4)</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">sum:                                        # long sum(long *start, long count)</span><br><span class="line">irmovq $8, %r8                              # Constant 8</span><br><span class="line">irmovq $1, %r9                              # Constant 1</span><br><span class="line">xorq %rax, %rax                             # sum = 0</span><br><span class="line">andq %rsi, %rsi                             # Set CC</span><br><span class="line">jmp test                                    # Goto test</span><br><span class="line">loop:</span><br><span class="line">mrmovq (%rdi), %r10                         # Get *start</span><br><span class="line">addq %r10, %rax                             # Add to sum</span><br><span class="line">addq %r8, %rdi                              # start++</span><br><span class="line">subq %r9, %rsi                              # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">jne loop                                    # Stop when 0</span><br><span class="line">ret                                         # Return</span><br><span class="line"></span><br><span class="line">.pos 0x200                                  # Stack starts here and grows to lower addresses</span><br><span class="line">stack:</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>These instructions are similar to the <code>cmp</code>
-instructions for integer: they <strong>compare operands S1 and S2 and
-set the condition codes to indicate their relative
-values</strong>.</p></li>
-<li><p>As with <code>cmpq</code>, they follow the ATT-format convention
-of <strong>listing the operands in reverse order</strong>.</p></li>
-<li><p>Argument S2 must be in <strong>an XMM register</strong>, while S1
-can be <strong>either in an XMM register or in memory</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The floating-point comparison instructions set three condition
-codes: the zero flag, the carry flag, and the parity flag:</p>
-<p><img src="/2024/07/19/3-11-Floating-Point-Code/image-7.png"></p>
+<li><p>Words beginning with &apos;.&apos; are assembler directives telling the
+assembler to <strong>adjust the address at which it is generating code
+or to insert some words of data</strong>.</p>
 <ul>
-<li><p>The parity flag is set when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
-<li><p>By convention, <strong>any comparison in C is considered to fail
-when one of the arguments is <span class="math inline">\(NaN\)</span></strong>, and this flag is used to
-detect such a condition. For example, even the comparison
-<code>x == x</code> yields 0 when x is <span class="math inline">\(NaN\)</span>.</p></li>
-<li><p>The unordered case occurs when <strong>either operand is <span class="math inline">\(NaN\)</span></strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;There are also three relative jump statements:</p>
+<li><p>The directive <code>.pos 0</code> indicates that <strong>the
+assembler should begin generating code starting at address
+0</strong>.</p></li>
+<li><p>The next instruction <code>irmovq stack, %rsp</code> initializes
+the stack pointer.</p>
 <ul>
-<li><p><code>jp</code>: It conditionally jump when a floating-point
-comparison <strong>yields an unordered result</strong>.</p></li>
-<li><p><code>ja</code>: It conditionally jump when <code>CF=0</code> and
-<code>ZF=0</code>.</p></li>
-<li><p><code>jb</code>: It conditionally jump when
-<code>CF=1</code></p></li>
+<li>The label <code>stack</code> is declared at the end of the program,
+to indicate address 0x200 using a .pos directive. Our stack will
+therefore <strong>start at this address and grow toward lower
+addresses</strong>.</li>
+</ul></li>
+<li><p>The label <code>array</code> denotes the start of this array, and
+is aligned on an 8-byte boundary using the <code>.align</code>
+directive. The array stores 4 words.</p></li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span>NEG, ZERO, POS, OTHER} <span class="type">range_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">range_t</span> <span class="title function_">find_range</span><span class="params">(<span class="type">float</span> x)</span> {</span><br><span class="line">    <span class="type">int</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; <span class="number">0</span>)</span><br><span class="line">        result = NEG;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x == <span class="number">0</span>)</span><br><span class="line">        result = ZERO;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (x &gt; <span class="number">0</span>)</span><br><span class="line">        result = POS;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = OTHER;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">find_range:</span><br><span class="line">    vxorps %xmm1, %xmm1, %xmm1  # Set %xmm1 = 0</span><br><span class="line">    vucomiss %xmm0, %xmm1       # Compare 0:x</span><br><span class="line">    ja .L5                      # If &gt;, goto neg</span><br><span class="line">    vucomiss %xmm1, %xmm0       # Compare x:0</span><br><span class="line">    jp .L8                      # If NaN, goto posornan</span><br><span class="line">    movl $1, %eax               # result = ZERO</span><br><span class="line">    je .L3                      # If =, goto done</span><br><span class="line">.L8: posornan:</span><br><span class="line">    vucomiss .LC0(%rip), %xmm0  # Compare x:0</span><br><span class="line">    setbe %al                   # Set result = NaN?1:0</span><br><span class="line">    movzbl %al, %eax            # Zero-extend</span><br><span class="line">    addl $2, %eax               # result += 2 (POS for &gt; 0, OTHER for NaN)</span><br><span class="line">    ret                         # Return</span><br><span class="line">.L5: neg:</span><br><span class="line">    movl $0, %eax               # result = NEG</span><br><span class="line">.L3: done:</span><br><span class="line">    rep; ret                    # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Since our only tool for creating Y86-64 code is an assembler, the
+programmer must perform tasks we ordinarily delegate to the compiler,
+linker, and run-time system.</p>
+<p>&#x2003;&#x2003;The <code>YIS</code> tools is used to simulate the execution of the
+Y86-64 machine-code program. If we run our object code on
+<code>YIS</code>, we will get the following output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Stopped in 34 steps at PC = 0x13. Status &apos;HLT&apos;, CC Z=1 S=0 O=0</span><br><span class="line">Changes to registers:</span><br><span class="line">%rax:   0x0000000000000000 0x0000abcdabcdabcd</span><br><span class="line">%rsp:   0x0000000000000000 0x0000000000000200</span><br><span class="line">%rdi:   0x0000000000000000 0x0000000000000038</span><br><span class="line">%r8:    0x0000000000000000 0x0000000000000008</span><br><span class="line">%r9:    0x0000000000000000 0x0000000000000001</span><br><span class="line">%r10:   0x0000000000000000 0x0000a000a000a000</span><br><span class="line"></span><br><span class="line">Changes to memory:</span><br><span class="line">0x01f0: 0x0000000000000000 0x0000000000000055</span><br><span class="line">0x01f8: 0x0000000000000000 0x0000000000000013</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The first line of the simulation output summarizes the execution
+and the resulting values of the PC and program status.</p></li>
+<li><p>The original values of the register are shown on the
+left.</p></li>
+</ul>
 
       
     </div>
@@ -452,7 +447,7 @@ comparison <strong>yields an unordered result</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -477,14 +472,14 @@ comparison <strong>yields an unordered result</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">

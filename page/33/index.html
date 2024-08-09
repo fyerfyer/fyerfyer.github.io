@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/07/3-5-Pipelined-Datapath-and-Control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
+          <a href="/2024/06/07/3-5-Pipelined-Datapath-and-Control/" class="post-title-link" itemprop="url">3.5.Pipelined Datapath and Control</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-07 11:36:22" itemprop="dateCreated datePublished" datetime="2024-06-07T11:36:22+08:00">2024-06-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:08:24" itemprop="dateModified" datetime="2024-06-29T09:08:24+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>527</span>
+      <span>1.7k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>6 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,120 +272,279 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
-<h3 id="1basic-devices">1.Basic devices</h3>
+          <h1 id="35pipelined-datapath-and-control"><span class="math inline">\(3.5.\)</span>Pipelined Datapath and Control</h1>
+<h3 id="1some-point">1.Some point</h3>
 <ul>
-<li><p><em>Registers</em>: It contains:</p>
+<li><p>All the instructions go from left to right through the datapath
+except the write-back stage and the selection of the next value of PC,
+and they never move backward.</p>
 <ul>
-<li><p>Two data words from the register file, and <strong>write one data
-word into the register file</strong> for each instruction.</p></li>
-<li><p>An input. It <strong>specifies the register number to be
-read</strong>.</p></li>
-<li><p>An output. It <strong>carries the value that has been read from
-the register</strong>.</p></li>
-<li><p>To write a data word, we need two more inputs: one to
-<strong>specify the register number to be written</strong> and one to
-<strong>supply the data to be written into the
-register</strong>.</p></li>
+<li>So the first right-to-left flow of data can lead to data hazards
+while the second leads to control hazards.</li>
+</ul></li>
+<li><p>One way to show what happens in pipelined execution is to pretend
+that each instruction has its own datapath, and then to place these
+datapaths on a timeline to show their relationship:</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image.png"></p>
+<p>&#x2003;&#x2003;All instructions advance during each clock cycle from one pipeline
+register to the next.</p>
+<h3 id="2pipeline-registers">2.Pipeline registers</h3>
+<ul>
+<li><p>A separate pipeline register is redundant to the state that is
+updated. For example, a load instruction will place its result in one of
+the 32 registers, and any later instruction that needs that data will
+<strong>simply read the appropriate register</strong>.</p>
+<ul>
+<li>Every instruction updates PC, and the PC can be thought of as a
+pipeline register: one <strong>that feeds the IF stage of the
+pipeline</strong>.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-1.png"></p>
+<p>&#x2003;&#x2003;We use the command <code>ld</code> to illustrate the pipe stage
+that is active in each stage:</p>
+<ol type="1">
+<li><em>Instruction fetch</em>: The PC is saved in the IF/ID pipeline
+register in case it&apos;s needed later for an instruction. This stage occurs
+<strong>before the instruction is identified</strong>.</li>
+</ol>
+<blockquote>
+<p>The computer cannot know which type of instruction is being fetched,
+so it must <strong>prepare for any instruction, passing potentially
+needed information down the pipeline</strong>.</p>
+</blockquote>
+<ol start="2" type="1">
+<li><em>Instruction decode and register file read</em>: Both the two
+read value and sign-extended immediate are stored in the ID/EX pipeline
+register, along with PC address.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-2.png"></p>
+<ol start="3" type="1">
+<li><em>Execute/address calculation</em>: It reads the information from
+the ID/EX pipeline register and add then using ALU. The result is placed
+in EX/MEM pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-3.png"></p>
+<ol start="4" type="1">
+<li><em>Memory access</em>: It uses the data from EX/MEM register and
+loads the data into MEM/WB pipeline register.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-4.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-5.png"></p>
+<ol start="5" type="1">
+<li><em>Write back</em>: There&apos;s nothing to do in this stage.</li>
+</ol>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-6.png"></p>
+<p>&#x2003;&#x2003;From the analysis above, we can get some key point:</p>
 <ul>
-<li><em>ALU</em></li>
+<li><p>The information must be placed in a pipeline register, otherwise,
+<strong>the information is lost when the next instruction enters that
+pipeline stage</strong>.</p></li>
+<li><p>Each logical component of the datapath(ALU, data memory, etc),
+can be used <strong>only within a single pipeline stage</strong>. That
+is, <strong>each pipeline register can only be used by one phase in one
+clock cycle</strong>, which ensures that <strong>no more than one
+instruction can access the same hardware resources simultaneously in one
+clock cycle</strong>, thus avoiding structural dangers.</p></li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<p>&#x2003;&#x2003;We know that the instruction in IF/ID pipeline register supplies
+the writer register number, but the instruction fetch procedure occurs
+after the <code>ld</code> instruction(because it is conducted before an
+instruction is identified, so only when we complete the <code>ld</code>
+instruction will this step be done)! Hence, we need to <strong>preserve
+the distination register number in the <code>ld</code>
+instruction</strong>. The <code>ld</code> must pass the register number
+from ID/EX through EX/MEM to the MEM/WB pipeline register for use in the
+WB stage.</p>
+<h3 id="3data-hazards-amp-forwarding">3.Data hazards &amp; forwarding</h3>
+<h4 id="adatahazards">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Data
+hazards</h4>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-7.png"></p>
+<h4 id="bdetact-hazards">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Detact hazards</h4>
+<p>&#x2003;&#x2003;We first introduce a notation: we use &quot;ID/EX.RegisterRs1&quot; to refer
+to the number of 1 register whose value is found in the pipeline
+register ID/EX.</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-8.png"></p>
+<p>&#x2003;&#x2003;Using this notation, the two pairs of hazard conditions are:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-9.png"></p>
 <ul>
-<li><em>Immediate generation unit</em>: In operations like
-<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
-written in 12-bit offset in the instruction. So we need to
-<strong>sign-extend the number to a 64-bit signed value</strong>. The
-Imm-Gen does the job:</li>
+<li>The <code>sub-and</code> is a type 1a hazard:</li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
-<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
-instruction execution</h3>
-<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
-parts:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
+<p><span class="math display">\[
+MEM/WB.RegisterRd=ID/EX.RegisterRs2=x2
+\]</span></p>
+<ul>
+<li><p>The <code>sub-or</code> is a type 2a hazard.</p></li>
+<li><p>There&apos;s no data hazard between <code>sub</code> and
+<code>sd</code> because <strong><code>sd</code> reads <code>x2</code>
+the clock cycle after <code>sub</code> writes
+<code>x2</code></strong>.</p></li>
+</ul>
+<blockquote>
+<p>Pay attention to the clock cycle, not the name!!!</p>
+</blockquote>
+<p>&#x2003;&#x2003;One way to detact the hazards is simple <strong>check if the
+<code>RegWrite</code> signal is active</strong>. This can be done by
+<strong>examing the <code>WB</code> control field of the pipeline
+register during the <code>EX</code> and <code>MEM</code>
+stages</strong>.</p>
+<blockquote>
+<p>Recall that RISC-V requires that <code>x0</code> is taken as an
+oprand value of 0, if an instruction in the pipeline has <code>x0</code>
+as its destination, we want to <strong>avoid forwarding its possibly
+nonzero value</strong>.</p>
+</blockquote>
+<h4 id="csolution">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Solution</h4>
+<p>&#x2003;&#x2003;If we can take the inputs to the ALU <strong>from any pipeline
+register rather than just ID/EX</strong>, then we can forward the
+correct data.</p>
+<p>&#x2003;&#x2003;By <strong>adding multiplexors to the input of the ALU, and with
+the proper controls</strong>, we can run the pipeline at full speed in
+the presence of these data hazards:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-10.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-11.png"></p>
+<blockquote>
+<p>Before forwarding, the ID/EX register has no need to include space to
+hold the rs1 and rs2 fields, so they are added to ID/EX.</p>
+</blockquote>
+<h4 id="ddetailed-detection-ampresolution">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Detailed detection &amp;
+resolution</h4>
+<ul>
+<li><p>EX hazard:</p>
+<ul>
+<li>If there&apos;s a write operation and a load operation at the same time,
+and the loaded object is under writting, then there&apos;s an EX hazard:</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-12.png"></p>
+<p>&#x2003;&#x2003;This case forwards the result from the previous instruction to
+either input of the ALU instead of the pipeline register EX/MEM</p>
+<ul>
+<li><p>MEM hazard</p>
+<ul>
+<li>If the writting part is just loaded.</li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-13.png"> <img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-14.png"></p>
+<blockquote>
+<p>What happens when a register is read and written in the same clock
+cycle? We assume that <strong>the write is in the first half of the
+clock cycle and the read is in the second half</strong>, so the read
+delivers what is written. As is the case for many implementations of
+register files, we have no data hazard in this case.</p>
+<p>As mentioned above, there is no hazard in the WB stage, because
+<strong>we assume that the register file supplies the correct
+result</strong> if the instruction in the ID stage reads the same
+register written by the instruction in the WB stage.</p>
+</blockquote>
+<p>&#x2003;&#x2003;One complication occurs when we all read and write to a same
+register:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add x1 x1 x2</span><br><span class="line">add x1 x1 x3</span><br><span class="line">add x1 x1 x4</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In this case, <strong>the result should be forwarded from the MEM
+stage, because the MEM stage is the more recent result</strong>. Thus,
+the control for the MEM should be:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-15.png"></p>
+<blockquote>
+<p>Why <code>not EX/MEM.RegisterRd = ID/EX.RegisterRs1</code>? Because
+if this is true, then <strong>the instruction of EX/MEM should be
+written back into the register</strong>(because it&apos;s the most current),
+and it will cover the result of MEM/WB. So we take EX/MEM first.</p>
+</blockquote>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-16.png"></p>
+<h4 id="estalls">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Stalls</h4>
+<p>&#x2003;&#x2003;One case where forwarding cannot help is when <strong>an
+instruction tries to read a register following a load instruction that
+writes the same register</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
+<blockquote>
+<p>The RAM is used by <code>add</code> before it&apos;s updated, and it won&apos;t
+be updated until the <code>lw</code> ends. Since it must be used in the
+first step, forwarding cannot help.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Hence, we also need a <em>hazard detection unit</em>. It operates
+during the ID stage so that it can insert the stall between the load and
+the instruction depentent on it:</p>
+<ul>
+<li>If it&apos;s in a load process, and the being-loaded object involves in
+other process.</li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-18.png"></p>
+<p>&#x2003;&#x2003;If the instruction in the ID stage is stalled, then the instruction
+in the IF stage must also be stalled, or we will lose the fetch of
+instruction. Therefore, <strong>the instruction in the IF stage will
+continue to be read using the same PC</strong>. The EX stage must also
+be doing something, so we let it <strong>execute instructions that have
+no effect: nops</strong>.</p>
+<p>&#x2003;&#x2003;<strong>Deasserting all seven control signals(setting them to 0) in
+the EX, MEM, WB stages</strong> will create a nop instruction:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-19.png"></p>
+<ul>
+<li><p>The forwarding unit controls the ALU multiplexor s to replace the
+value from a general-purpose register with that in the pipeline
+register.</p></li>
+<li><p>The hazard detection unit controls the writing of the PC and
+IF/ID registers plus the multiplexor that choose between the real
+control values and all 0s.</p></li>
+</ul>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-20.png"></p>
+<h3 id="4control-hazards">4.Control hazards</h3>
+<h4 id="aassume-branch-not-taken">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Assume branch not taken</h4>
+<p>&#x2003;&#x2003;We can assume the branch is not taken. If the condition branch is
+taken instead, <strong>the instructions that are being fetched and
+decoded must be discarded</strong>.</p>
+<p>&#x2003;&#x2003;To discard instructions, we merely change the original control
+values to 0s. Notice that we must also change the three instructions in
+the IF, ID and EX stages when the branch reaches the MEM stage, which is
+called <em>flush</em>.</p>
+<p>&#x2003;&#x2003;To flush instructions in the IF, we <strong>add a control line
+called IF.Flush</strong>, it zeros the instruction field of the IF/ID
+pipeline register.</p>
+<h4 id="breducing-the-delay-of-branches">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Reducing the delay of branches</h4>
+<p>&#x2003;&#x2003;One way to improve conditional branch performance is to reduce the
+cost of taken branch. We have assumed that the next PC for a branch is
+selected in the MEM stage, but <strong>if we move the conditional branch
+execution earlier in the pipeline, then fewer instructions need be
+flushed</strong>.</p>
+<p>&#x2003;&#x2003;Moving the branch decision up requires two actions to occur
+earlier: computing the branch target address and evaluating the branch
+decision.</p>
+<p>&#x2003;&#x2003;Moving up the address calculation is easy, we can <strong>move the
+branch adder from EX stage to ID stage</strong>.</p>
+<p>&#x2003;&#x2003;The harder part is branch decision itself. We must deal with two
+complicate factors:</p>
+<ol type="1">
+<li><p>The introduction of equlity test unit.</p></li>
+<li><p>Because <strong>the value in a branch comparison is needed during
+ID but may be produced later in time</strong>, it is possible that a
+data hazard can occur and a stall will be needed.</p></li>
+</ol>
+<h3 id="5dynamic-branch-prediction">5.Dynamic branch prediction</h3>
+<ul>
+<li>This method looks up the address of the instruction to see
+<strong>if the conditional branch was taken the last time this
+instruction was executed</strong>, and, if so, to <strong>begin fetching
+new instructions from the same place as the last time</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;One implementation of this approach is a <em>branch prediction
+buffer</em> or <em>branch history table</em>. A branch prediction buffer
+is a small memory indexed by the lower portion of the address of the
+branch instruction. The memory contains <strong>a bit that says whether
+the branch was recently taken or not</strong>.</p>
+<ul>
+<li>Fetching begins in the predicted direction. If the predition turns
+out to be wrong, the incorrectly predicted instructions are deleted, the
+predition bit is inverted and stored back, and the proper sequence is
+fetched and executed.</li>
+</ul>
+<blockquote>
+<p>&#x2003;&#x2003;To improve the accuracy, the <em>2-bit prediction schemes</em> are
+often used. In a 2-bit scheme, <strong>a prediction must be wrong twive
+before it is changed</strong>:</p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-21.png"></p>
+</blockquote>
 <hr>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
-<h3 id="3implementation-ofdifferent-statement">3.Implementation of
-different statement</h3>
-<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
-instruction</h4>
-<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
-<code>DataA</code> and <code>DataB</code>, and calculate the result by
-ALU.</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
-<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
-rather than <code>DataB</code>. The source of Imm-Gen is from
-<code>IMEM</code>, from which we can get the instruction, and
-<code>inst[31:20]</code> is the immediate we want:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
-<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
-<code>save</code> instruction</h4>
-<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
-read or write data.</p>
-<ul>
-<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
-<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
-address. Else, it writes the information into the address:</li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
-<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
-<p>&#x2003;&#x2003;The basic form of branch instruction is
-<code>beq x1 x2 offset</code>. To implement this instruction, we must
-compute the branch target address by <strong>adding the sign- extended
-offset field of the instruction to the PC</strong>. There are two
-details in the definition of branch instructions to which we must pay
-attention:</p>
-<ul>
-<li><p>The instruction set architecture specifies that <strong>the base
-for the branch address calculation is the address of the branch
-instruction</strong>.</p></li>
-<li><p>The architecture also states that <strong>the offset field is
-shifted left 1 bit so that it is a half word offset</strong>; this shift
-<strong>increases the effective range of the offset field by a factor of
-2</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
-the new PC, and we say the branch is <strong>taken</strong>. Else, we
-say the branch is <strong>not taken</strong>.</p>
-<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
-this struction:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
-<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
-signal</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
-<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
-<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
-<code>jalr</code> instructions</h4>
-<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
-<ol type="1">
-<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
-<ul>
-<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
-2 bytes!</strong></li>
-</ul></li>
-<li><p>Set <code>PC=PC+offset</code></p>
-<ul>
-<li>Since the offset is calculated by ALU, we <strong>connect the output
-of ALU with input of PC</strong>.</li>
-</ul></li>
-</ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
-<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
-<ol type="1">
-<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
-<code>DataD</code>)</li>
-<li>Set <code>PC=PC+offset</code></li>
-</ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
-<h3 id="4datapath-control">4.Datapath control</h3>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
+<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-22.png"></p>
 
       
     </div>
@@ -408,7 +567,7 @@ of ALU with input of PC</strong>.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -433,14 +592,14 @@ of ALU with input of PC</strong>.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">

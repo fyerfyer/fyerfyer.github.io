@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-5-Synchronization/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-5-Synchronization/" class="post-title-link" itemprop="url">5.5.Synchronization</a>
+          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:55:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;14:56:03" itemprop="dateCreated datePublished" datetime="2024-06-29T11:55:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>450</span>
+      <span>401</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,74 +266,89 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="55synchronization">5.5.Synchronization</h1>
-<h3 id="1some-concepts">1.Some concepts</h3>
-<p><img src="/2024/06/29/5-5-Synchronization/image.png"></p>
-<h3 id="2lock-synchronization">2.Lock synchronization</h3>
-<p><img src="/2024/06/29/5-5-Synchronization/image-1.png"></p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-2.png"></p>
-<h3 id="3hardware-synchronization">3.Hardware synchronization</h3>
-<h4 id="apossible-lock-problem">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Possible lock problem</h4>
-<p><img src="/2024/06/29/5-5-Synchronization/image-3.png"></p>
-<p>&#x2003;&#x2003;To solve the problem, the multiprocessor must have the ability ot
-<strong>atomically read and modify a memory location</strong>. That is,
-<strong>nothing else can interpose itself between the read and the write
-of the memory location</strong>.</p>
-<blockquote>
-<p>For example, consider two processors that each try to do
-<code>lw</code> operation. This race is prevented, since exactly one of
-the processors will perform <code>lw</code> first, returning 0, and the
-second processor will return 1 when it does this. This is because
-<strong>the operation is atomic: the exchange is indivisible, and two
-simultaneous exchanges will be ordered by the hardware.</strong></p>
-</blockquote>
-<p><img src="/2024/06/29/5-5-Synchronization/image-4.png"></p>
-<h4 id="binstruction-pair">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>instruction pair</h4>
-<p>&#x2003;&#x2003;To implement atomical property, we can <strong>set a pair of
-instructions</strong> in which the second instruction <strong>returns a
-value showing whether the pair of instructions was executed as if the
-pair was atomic</strong>.</p>
-<p>&#x2003;&#x2003;In RISC-V, this pair of instructions includes a
-<code>(lr, d)</code> and a <code>(sc, d)</code>:</p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-5.png"></p>
+          <h1 id="56cache-coherence">5.6.Cache Coherence</h1>
+<h3 id="1cache-model">1.Cache model</h3>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
+<h3 id="2coherence-concept">2.Coherence concept</h3>
+<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
+<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
+example:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
+<p>&#x2003;&#x2003;The two different processors have two different values for the same
+location, this is referred to as <em>cache coherence problem</em>.</p>
+<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
+<strong>any read of a data item returns the most recently written value
+of that data item</strong>. This simple concept contains two different
+aspects of memory system behaviour:</p>
 <ul>
-<li>Thus, <code>sc.d</code> specifies three registers: one to hold the
-address, one to indicate whether the atomic operation failed or
-succeeded, and one to hold the value to be stored in memory if it
-succeeded.</li>
+<li><em>coherence</em>: defines <em>what</em> values can be returned by
+a read.</li>
+<li><em>consistency</em>: determines <em>when</em> a written value will
+be returned by a read.</li>
 </ul>
+<p>&#x2003;&#x2003;A memory system is coherent if:</p>
+<ol type="1">
+<li>A read by a processor P to location X that follows <em>only one
+write</em> by P to X always returns the value written by P.</li>
+</ol>
 <blockquote>
-<p>Notice that <code>(lr, d)</code> operation not only load a word into
-pointed memory, but also <strong>record the memory address
-internally</strong>, namely <em>reservation</em>. That&apos;s why we can use
-<code>(sc, d)</code> to check if the operation is atomical.</p>
+<p>This preserves program order.</p>
 </blockquote>
-<p>&#x2003;&#x2003;We can use this pair to implement atomic swap:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">again: lr.d x10, (x20)</span><br><span class="line">       sc.d x11, x23, (x20)</span><br><span class="line">       bne x11, x0, again   // branch if store fails</span><br><span class="line">       addi x23, x10, 0     // put loaded value in x23</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Any time a processor intervenes and modifies the value in memory
-between the <code>lr.d</code> and <code>sc.d</code> instructions, the
-<code>sc.d</code> writes a nonzero value into <code>x11</code>, causing
-the code sequence to try again.</p>
+<ol start="2" type="1">
+<li>A read by a processor to location X that follows <em>only one
+write</em> by another processor to X returns the written value if the
+read and write are sufficiently separated in time.</li>
+</ol>
 <blockquote>
-<p>Since the store-conditional will fail after either another attempted
-store to the load reservation address or any exception, care must be
-taken in choosing which instructions are inserted between the two
-instructions. In particular, only <strong>integer arithmetic, forward
-branches, and backward branches out of the
-load-reserved/store-conditional block</strong> can safely be permitted;
-otherwise, it is possible to create <em>deadlock situations</em> where
-the processor can never complete the sc.d because of repeated page
-faults. In addition, the number of instructions between the
-load-reserved and the store-conditional should be small to minimize the
-probability that <strong>either an unrelated event or a competing
-processor causes the store-conditional to fail frequently</strong>.</p>
+<p>This defines memory coherence.</p>
 </blockquote>
-<p>&#x2003;&#x2003;Other atomic memory operations can be built using
-<code>lr/sc</code> pairs, some are listed below:</p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-6.png"></p>
-<h4 id="ctest-and-set-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Test-and-Set instruction</h4>
-<p><img src="/2024/06/29/5-5-Synchronization/image-7.png"></p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-8.png"></p>
+<ol start="3" type="1">
+<li>Writes to the same location are <strong>serialized</strong>; that
+is, two writes to the same location by any two processors <strong>are
+seen in the same order by all processors</strong>. For example, if CPU B
+stores 2 into memory at address X after time step 3, processors can
+never read the value at location X as 2 and then later read it as
+1.</li>
+</ol>
+<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
+<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
+<strong>has exclusive access to a data item</strong> before it writes
+that item. This style of protocol is called a <em>write invalidate
+protocol</em> because it <strong>invalidates copies in other caches on a
+write</strong>.</p>
+<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
+CPU A, the CPU B will get a cache miss, and is forced to fetch a new
+copy of data:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
+<blockquote>
+<p>Block size plays an important role in cache coherency. Large blocks
+can cause what&apos;s called <em>false sharing</em>, when two unrelated
+shared variables are located in the same cache block, the whole block is
+exchanged between processors even though the processors are accessing
+different variables.</p>
+</blockquote>
+<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
+protocol:</h3>
+<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
+<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
+concepts</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
+<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
 
       
     </div>
@@ -356,7 +371,7 @@ processor causes the store-conditional to fail frequently</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -381,14 +396,14 @@ processor causes the store-conditional to fail frequently</strong>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">

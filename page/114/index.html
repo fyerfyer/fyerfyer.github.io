@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/" class="post-title-link" itemprop="url">7.7.&#x51FD;&#x6570;&#x62BD;&#x8C61;</a>
+          <a href="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.8.&#x51FD;&#x6570;&#x5B9E;&#x73B0;&#x524D;&#x77BB;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 20:12:16" itemprop="dateCreated datePublished" datetime="2024-04-10T20:12:16+08:00">2024-04-10</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-11 08:22:16" itemprop="dateCreated datePublished" datetime="2024-04-11T08:22:16+08:00">2024-04-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:32:41" itemprop="dateModified" datetime="2024-06-03T14:32:41+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:37:35" itemprop="dateModified" datetime="2024-06-03T14:37:35+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>520</span>
+      <span>741</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,93 +272,139 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="77function-abstraction"><span class="math inline">\(7.7.\)</span>Function: Abstraction</h1>
-<h3 id="1function-in-vm-language">1.Function in VM language</h3>
+          <h1 id="78function-impletation-preview"><span class="math inline">\(7.8.\)</span>Function Impletation Preview</h1>
+<h3 id="1program-execution">1.Program execution</h3>
 <ul>
-<li><p>The VM language features:</p>
+<li><p>When a function enters its execution, we need to create a
+<em>state</em> for this function.</p>
 <ul>
-<li><em>primitive operation</em>(fixed): <code>add</code>,
-<code>sub</code></li>
-<li><em>abstract operation</em>(extensible): <code>mutiple</code></li>
+<li>Give it an <em>empty working stack</em>, its <em>memory
+segment</em>.</li>
+</ul></li>
+<li><p>The working stack and some of the segments should be:</p>
+<ul>
+<li>Created <strong>when the function starts running</strong>.</li>
+<li><strong>Maintained as long as the function is
+executing</strong>.</li>
+<li><strong>Recycled</strong> when the function retums.</li>
+</ul></li>
+<li><p>When we call a function, we will have two states: the state of
+<em>caller</em> and the state of <em>callee</em>. Once the callee starts
+running, <strong>the state of the caller has to be saved
+somewhere</strong>. And when the callee terminates, we can
+<strong>reinstate the caller state and continue its
+execution</strong>.</p></li>
+</ul>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image.png"></p>
+<h3 id="2function-call-and-return">2.Function call and return</h3>
+<p>&#x2003;&#x2003;However, a <em>calling chain</em> may be several functions deep,
+and how can we maintain all the states of these functions?</p>
+<p>&#x2003;&#x2003;To deal with this, we can use the <em>FILO</em> (first in last out)
+pattern. The only function to be return is the function which is
+currently running, and which is also <strong>the end of the calling
+chain</strong>. Once this function returns, the calling chain shortens,
+so on and so forth.</p>
+<p>&#x2003;&#x2003;This pattern is similiar to <em>stack</em>, this implies that we
+may use a stack in order to save and retrieve all these function
+states.</p>
+<p>&#x2003;&#x2003;Take this simple function as example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mult(17, 212)</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;In the view of the caller, the effect of the procedure is that
+<strong>the function&apos;s arguements has been replaced with the function
+value</strong>:</p>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-1.png"></p>
+<p>&#x2003;And the details are as follows:</p>
+<ul>
+<li><p>We push some values in the stack, and nothing happens. And then
+we <code>call foo nArgs</code>.</p></li>
+<li><p>By the information <code>nArgs</code>, we know where to
+<strong>set <code>arg</code> pointer</strong>.</p>
+<ul>
+<li>From now on, we know what&apos;s above the <code>arg</code> is
+<strong>the working stack of the caller</strong>, and what&apos;s below the
+<code>arg</code> are <strong>the arguments to be use by
+callee</strong>.</li>
+</ul></li>
+<li><p>Before we jump to the called function, we have to save the state
+of the caller:</p>
+<ul>
+<li>The working stack is safe, it is already on the stack, so we can
+leave it alone.</li>
+<li>We have to save the <em>segment</em> and the <em>return
+address</em>. Taken together, we call these thing <em>frame</em>.</li>
+<li>The VM implementation simply <strong>push these memory segments into
+stack</strong>. In this way we save the frame, and will be able to
+return to them later on.</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;When we want to call a function, we:</p>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-2.png"></p>
 <ul>
-<li>push the required argument onto the stack.</li>
-<li>call the function. Then <strong>the result of function will replace
-the argument you push earlier</strong>.</li>
+<li>Jump to <strong>execute foo</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;Take this simple funtion call <code>sqrt(x-17+x*5)</code> as
-example, it can be translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">push x</span><br><span class="line">push 17</span><br><span class="line">sub</span><br><span class="line">push x </span><br><span class="line">push 5</span><br><span class="line">call Math.multiply</span><br><span class="line">add </span><br><span class="line">call Math.sqrt</span><br></pre></td></tr></table></figure></p>
-<h3 id="2function-definition">2.Function definition</h3>
-<p>&#x2003;&#x2003;Take the previous function as example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// returns x&quot;y</span><br><span class="line">int mult(int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		x ++;</span><br><span class="line">	}</span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;As is discussed before, it&apos;s pseudo VM code is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;In fact, it can be translated into this VM code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult 2</span><br><span class="line">	push constant 0 //sum = 0</span><br><span class="line">	pop local 0</span><br><span class="line">	push constant 1 //n = 1</span><br><span class="line">	pop local 1</span><br><span class="line">label LOOP</span><br><span class="line">	push local 1 //if clause</span><br><span class="line">	push argument 1</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push local 0 // sum += x</span><br><span class="line">	push argument 0</span><br><span class="line">	add</span><br><span class="line">	pop local 0</span><br><span class="line">	pop local 1 // n ++</span><br><span class="line">	push constant 1</span><br><span class="line">	add</span><br><span class="line">	pop local 1</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push local 0 // return sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Let&apos;s discuss the implementation in detail:</p>
-<ol type="1">
-<li><p><em>Function declaration</em>:</p>
+<p>&#x2003;&#x2003;After the called function is entered, it:</p>
 <ul>
-<li><code>Function</code>: function declaration.</li>
-<li><code>mult</code>: the name of the function.</li>
-<li><code>2</code>: use 2 <em>local variables</em> in the function.</li>
+<li><p>Create a <em>local segment</em>.</p></li>
+<li><p>Having known that we need n variables, we need to
+<strong>initialize them to 0</strong></p>
+<ul>
+<li>From now on, we can refer to these values as <code>local 0</code>,
+<code>local 1</code> and so on.</li>
 </ul></li>
-<li><p><em>Function body</em>:</p>
-<ul>
-<li>branching.</li>
-<li>the variable declared within the body should be stored in
-<code>local</code>.</li>
-<li>the assignment of variables can be done through
-<code>push constant</code> and <code>pop local</code>.</li>
-</ul></li>
-<li><p><em>Return value</em></p>
-<ul>
-<li><code>push</code> the to-return value in the stack.</li>
-<li><code>return</code> statement at the end of program.</li>
-</ul></li>
-</ol>
-<h3 id="3function-execution">3.Function execution</h3>
-<p>&#x2003;&#x2003;We can execute a function in a <code>Main</code> function:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function main 0</span><br><span class="line">	push constant 3</span><br><span class="line">	push constant 5</span><br><span class="line">	push constant 8</span><br><span class="line">	call mult 2</span><br><span class="line">	add </span><br><span class="line">	return </span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>the <code>2</code> next to <code>mult</code> indicates that
-<strong>the funtion takes in 2 arguments</strong>.</li>
-<li>the whole process can be described through these diagrams:</li>
 </ul>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image.png"></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-1.png"></p>
-<p><img src="/2024/04/10/7-7-%E5%87%BD%E6%95%B0%E6%8A%BD%E8%B1%A1/image-2.png"></p>
-<p>&#x2003;&#x2003;for each function <code>call</code> during run-time, the
-implementation of the <code>call</code> command should :</p>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-3.png"></p>
+<p>&#x2003;&#x2003;Assume that the called function is running and doing its things, in
+this process, it:</p>
 <ul>
-<li><p><strong>Pass parameters</strong> from the calling function to the
-called function;</p></li>
-<li><p><strong>Determine the return address</strong> within the caller&apos;s
-code;</p></li>
-<li><p><strong>Save the caller&apos;s return address, stack and memory
-segments</strong>;</p>
-<ul>
-<li>so that when we return to the <code>main</code>, we will be able to
-<strong>recreate the private world of <code>main</code></strong>.</li>
-</ul></li>
-<li><p>Jump to <strong>execute the called fiunction</strong>:</p></li>
+<li>Grow its working stack, and it now has a working stack of its
+own.</li>
 </ul>
-<p>&#x2003;&#x2003;And for each function <code>return</code> during run-time, the
-impletation has to:</p>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-4.png"></p>
 <ul>
-<li><p>Return to the caller <em>the value computed by the called
-function</em>;</p>
+<li><p>When it is goint to <code>return</code> at some point, we push
+the return value <strong>at the bottom of the stack</strong>.</p></li>
+<li><p>We pop the topmost value, and <strong>copy it onto
+<code>argument 0</code></strong> to replace the pushed arguments with
+return value.</p></li>
+<li><p>We <strong>restore the segment pointers of the callers</strong>,
+take the saved <em>memory segments</em> to the <em>current
+segments</em>.</p></li>
+<li><p>Then we <strong>clear the stack of the called function</strong>,
+and <strong>set the stack pointer for the caller</strong>.</p>
 <ul>
-<li>The implementation knows that the topmost value on the stack must be
-the return value, so it returns the value.</li>
+<li>The stack pointer should be located after
+<code>argument 0</code>.</li>
 </ul></li>
-<li><p><strong>Recycle the memory resources</strong> used by the called
-funetion;</p></li>
-<li><p><strong>Reinstate the caller&apos;s stack and memory
-segments</strong>;</p></li>
-<li><p>Jump to the <strong>return address in the caller&apos;s
-code</strong>.</p></li>
+<li><p>Finally, we <strong>jump to the return address</strong> in the
+caller, and continue executing the caller&apos;s code.</p></li>
+</ul>
+<h3 id="3global-stack">3.Global stack</h3>
+<p>&#x2003;&#x2003;Our previous discussion is only about the caller and callee, but
+there are many other pairs of callers and callees in the calling chain,
+and we have to maintain their states, too.</p>
+<p>&#x2003;&#x2003;As a result, we get a very large stack called <em>global stack</em>
+containing the information of the entire program.</p>
+<ul>
+<li><p>We refer to some subset of the global stack <em>block</em>. It&apos;s
+the world of the currently running function, and it contains:</p>
+<ul>
+<li><em>argument segment</em>. These are the function&apos;s arguments.</li>
+<li><em>saved information that belongs to caller</em>.</li>
+<li><em>local segment</em></li>
+<li><em>working stack of its own</em></li>
+</ul></li>
+</ul>
+<p><img src="/2024/04/11/7-8-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%89%8D%E7%9E%BB/image-5.png"></p>
+<ul>
+<li>The global stack contains many more such blocks.</li>
+</ul>
+<p>&#x2003;&#x2003;And there are some more observations we can make:</p>
+<ul>
+<li>We only have to save <code>local</code>, <code>argument</code>,
+<code>this</code> and <code>that</code> segments, for the other four
+parts don&apos;t belong to the world of the function.</li>
+<li>We use the stack not only when executing the program, but also
+executing all the behind-scene apparatus that is required to service the
+program. Everything is saved on the same stack.</li>
 </ul>
 
       
@@ -382,7 +428,7 @@ code</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/113/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/113/">113</a><span class="page-number current">114</span><a class="page-number" href="/page/115/">115</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/115/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/113/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/113/">113</a><span class="page-number current">114</span><a class="page-number" href="/page/115/">115</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/115/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -407,14 +453,14 @@ code</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">

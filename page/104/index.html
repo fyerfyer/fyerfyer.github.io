@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/" class="post-title-link" itemprop="url">9.4.&#x89E3;&#x6790;&#x6811;</a>
+          <a href="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">9.5.&#x89E3;&#x6790;&#x5668;&#x903B;&#x8F91;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 12:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T12:17:43+08:00">2024-04-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 17:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T17:17:43+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:22:19" itemprop="dateModified" datetime="2024-06-03T15:22:19+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:27:03" itemprop="dateModified" datetime="2024-06-03T15:27:03+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>196</span>
+      <span>482</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,41 +272,87 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="94parsetree"><span class="math inline">\(9.4.\)</span>Parse
-Tree</h1>
-<h3 id="1parse-tree-introduction">1.Parse tree introduction</h3>
-<p>&#x2003;&#x2003;In this part we are going to be specific about the grammatical
-structure. Take the sentence &quot;the dog ate my homework&quot; for example,
-here&apos;s the grammatical structure of it:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image.png"></p>
-<p>&#x2003;&#x2003;It&apos;s recorded using a <em>parse tree</em>. The tree is a recursive
-structure, and the grammatical structure of the inputs are
-<strong>recursive</strong>, too.</p>
+          <h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
+Logic</h1>
+<h3 id="1parsing-logic">1.Parsing logic</h3>
+<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
+<code>CompilationEngine</code> class which consist of <strong>a set of
+methods, one method for every non-terminal rule</strong>.</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
 <ul>
-<li>The <code>sentence</code> consists of two lower-level sub parse
-tree.</li>
-<li>We continue to expanding the tree until get to the boundary of the
-tree, called <em>leaves</em> or <em>terminal nodes</em>. In the case of
-lexical analysis, they are <strong>the tokens from which the input is
-constructed</strong>.</li>
+<li>The code of each <code>compilexxx</code> method follows the
+right-hand side of the rule xxx</li>
+<li>Each <code>compilexxx</code> method is responsible for
+<strong>advancing</strong> and <strong>handling its own part of the
+input</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;Then let&apos;s move to Jack. Take the input
-<code>while (count &lt; 100) {let count = count + 1;}</code> for
-example:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-1.png"></p>
-<blockquote>
-<p>The notion of a parse tree is an obstruct artifact that sits
-somewhere above all these nice diagrams. And this diagram here is just
-one way to describe this parse tree.</p>
-</blockquote>
-<p>&#x2003;&#x2003;To motivate this, let&apos;s focus on some subset of the prase tree:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-2.png"></p>
-<p>&#x2003;&#x2003;Another way of describing the same parse tree can be <em>XML
-format</em>:</p>
-<p><img src="/2024/04/16/10-4-%E8%A7%A3%E6%9E%90%E6%A0%91/image-3.png"></p>
+<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
+<code>compileWhileStatement</code>:</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
+<ol type="1">
+<li><p>We <strong>follow the right-hand side of the rule</strong>, and
+parse the input it dictates.</p>
 <ul>
-<li>In XML, we describe the structure of data using <em>markup
-tags</em>.</li>
+<li>In <code>whileStatement</code>, it says we should expect to see the
+token <code>while</code>. If we find it in the input, we record the
+fact. Then the left parenthesis, and so on and so forth,</li>
+<li>At some point we will get a non-terminal rule like
+<code>expression</code>, then we go to next step:</li>
+</ul></li>
+<li><p>If the right-hand side specifies a non-terminal rule
+<code>xxx</code>, we call the corresponding method
+<code>compilexxx</code></p></li>
+<li><p>We do this recursively untile we exhaust the input.</p></li>
+</ol>
+<p>&#x2003;&#x2003;And to initialize this process, we:</p>
+<ol type="1">
+<li>Advance the tokenizer.</li>
+<li>Call <code>compileWhileStatement</code>.</li>
+</ol>
+<h3 id="2parser-design">2.Parser design</h3>
+<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
+example:</p>
+<ol type="1">
+<li>If we look at the grammar, we first see that you should see a
+<code>while</code> , so we <strong>call a method
+<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
+eat the <code>while</code> token.</li>
+<li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
+<li>We meet a non-terminal rule <code>expression</code>, so we call
+<code>compileExpression();</code></li>
+<li>And so on and so forth...</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
+<ul>
+<li>It&apos;s a private method.</li>
+<li>It says <strong>you should expect to see the given string</strong>,
+if not, you should <strong>throw an error</strong>.</li>
+<li>Otherwise, simply <strong>advance the input</strong>.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
+about grammars and parsing</h3>
+<ul>
+<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
+a recursive descent algorithm parser without backtracking</strong>.</p>
+<ul>
+<li>When you make a decision that what you have is a <code>while</code>
+statement, you don&apos;t have to kind of retract your progress and find out
+a mistake.</li>
+</ul></li>
+<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
+at most k tokens before you know which rule you are dealing with.</p>
+<ul>
+<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
+have a particular token in hand like <code>let</code>, we immediately
+know which rule we have to invoke</strong>.</li>
+<li>There are also things that don&apos;t belong to LL1, like English. For
+example, when we meet a token word &quot;lift&quot;, we still have no idea what we
+should do with it. A verb? A noun? We have to look more tokens
+downstream to know which rule to use. In this process, we may need to
+backtrack and reconsider some of the rules we have to use...</li>
+</ul></li>
 </ul>
 
       
@@ -330,7 +376,7 @@ tags</em>.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -355,14 +401,14 @@ tags</em>.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">

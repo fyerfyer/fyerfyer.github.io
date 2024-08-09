@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.4.Insertion%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.5.Radix%20Sort/" class="post-title-link" itemprop="url">18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/18.4.Insertion%20Sort/" class="post-title-link" itemprop="url">18.4.&#x63D2;&#x5165;&#x6392;&#x5E8F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:04:02" itemprop="dateModified" datetime="2024-06-02T22:04:02+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:02:34" itemprop="dateModified" datetime="2024-06-02T22:02:34+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>342</span>
+      <span>323</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,49 +272,46 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="186radixsort"><span class="math inline">\(18.6.\)</span>Radix
-Sort</h1>
-<h3 id="1counting-sort">1.Counting Sort</h3>
-<p>&#x2003;&#x2003; In the previous text, we have proved that sorting using comparison
-has a worst case running time of <span class="math inline">\(\Theta(n\log n)\)</span>.However, what if we don&apos;t
-compare at all?</p>
-<p>&#x2003;&#x2003;Suppose we have a couple of characters, saying <span class="math inline">\(acdsjlfkm\)</span>, we can sort them in alphabet
-order through the following steps:</p>
-<ol type="1">
-<li>Creat an array with the same size of an alphabet(<span class="math inline">\(26\)</span>).</li>
-<li>For each character, put it in the <span class="math inline">\(ch-&apos;a&apos;\)</span> index.</li>
-<li>Scan the whole array, and the former character are always less than
-the latter. Insert the character into a new array in order, then we get
-a sorted array.</li>
-</ol>
-<p>&#x2003;&#x2003;This kind of sorting method is called counting sort. If the length
-of data is <span class="math inline">\(N\)</span>, and the size of
-alphabet is <span class="math inline">\(R\)</span>, then the runtime of
-counting sort is <span class="math inline">\(\Theta(N+R)\)</span>. It&apos;s
-liner runtime!</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-9.png"></p>
-<p>&#x2003;&#x2003;However, the algorithm falls to sort hard-to-count items like
-String, so we need improvement.</p>
-<h3 id="2lsd-radix-sort">2.LSD Radix Sort</h3>
-<p>&#x2003;&#x2003;The LSD(Least Significant Digit) radix sort sort each digit of the
-item independently form rightmost digit towards left, take the below
-table as example:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-10.png"></p>
-<p>&#x2003;&#x2003;The runtime of LSD radix sort is <span class="math inline">\(\Theta(WN+WR)\)</span>,where N is Number of items,
-R is size of alphabet, and W is the maximun length of these items.</p>
-<p>&#x2003;&#x2003;What if the length of each item isn&apos;t same? We can treat empty
-spaces as less than all other characters:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-11.png"></p>
-<h3 id="3msd-radix-sort">3.MSD Radix Sort</h3>
-<p>&#x2003;&#x2003;The MSD(Most Significant Digit) radix sort is similiar to LSD radix
-sort. However, it sorts from the left digit to the right.</p>
-<p>&#x2003;&#x2003;After first sorting process, we may get items as below:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-12.png"></p>
-<p>&#x2003;&#x2003;The items are not in correct order yet! To solve this, we can treat
-items with same left digit as a group, and compare the next left
-character within groups:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png"></p>
-<p>&#x2003;&#x2003;The runtime of MSD radix sort is the same as LSD radix sort.</p>
+          <h1 id="184insertion-sort"><span class="math inline">\(18.4.\)</span>Insertion Sort</h1>
+<h3 id="1the-step-of-insertion-sort">1.The step of Insertion Sort</h3>
+<p>&#x2003;&#x2003;The insertion sort follows these general strategies:</p>
+<ul>
+<li>Starting with an empty output sequence.</li>
+<li>Add each item from input, inserting into output at right
+places.</li>
+</ul>
+<p>&#x2003;&#x2003;Also, this method requires a new array, which takes up some
+memory.As a result, we may try in place sorting by using swapping
+method.</p>
+<p>&#x2003;&#x2003;Take the below array as example.Suppose we have sorted the first
+two elements.It&apos;s worth noting that we use a <span class="math inline">\(j\)</span> to track the current spot of the
+travelling element:</p>
+<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-4.png"></p>
+<p>&#x2003;&#x2003;The <span class="math inline">\(2\)</span> element will experience
+the following steps:</p>
+<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-5.png"></p>
+<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-6.png"></p>
+<p>&#x2003;&#x2003;After these steps, the <span class="math inline">\(2\)</span>
+element reach its right place, and we get the first third elements
+sorted:</p>
+<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-7.png"></p>
+<p>&#x2003;&#x2003;Do it recursively, then we can get a sorted array.</p>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> a.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n; i ++) {</span><br><span class="line">        <span class="comment">//compare with its front element, if it&apos;s not in order, swap it</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; <span class="number">0</span> &amp;&amp; less(a[j], a[j - <span class="number">1</span>]); j --) {</span><br><span class="line">            swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] a, <span class="type">int</span> lo, <span class="type">int</span> hi)</span> {</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> lo + <span class="number">1</span>; i &lt; hi; i++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &gt; lo &amp;&amp; less(a[j], a[j-<span class="number">1</span>]); j--) {</span><br><span class="line">                swap(a, j, j - <span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<h3 id="3some-property-of-insertionsort">3.Some property of Insertion
+Sort</h3>
+<p>&#x2003;&#x2003;Since the principle of insertion sort is to maintain the order of
+each subsequence, for arrays that are almost sorted, we only need to do
+few swaps, thus makes sorting fast.</p>
+<p>&#x2003;&#x2003;Suppose that there are <span class="math inline">\(K\)</span>
+inversions in the array, the runtime of Insertion Sort is <span class="math inline">\(\Theta (N+K)\)</span>.</p>
+<p>&#x2003;&#x2003;Moreover, we can define an almost sorted array as one in which
+numbers of inversions <span class="math inline">\(\leq\;cN\)</span>,
+insertion sort is excellent on these arrays.</p>
+<p>&#x2003;&#x2003;Ususally, for small arrays(with N less than 15), insertion sort is
+fast.</p>
+<h3 id="4sorting-summary">4.Sorting Summary</h3>
+<p><img src="/2024/05/31/18.4.Insertion%20Sort/image-8.png"></p>
 
       
     </div>
@@ -337,7 +334,7 @@ character within groups:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/61/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/61/">61</a><span class="page-number current">62</span><a class="page-number" href="/page/63/">63</a><span class="space">&#x2026;</span><a class="page-number" href="/page/144/">144</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/63/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/61/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/61/">61</a><span class="page-number current">62</span><a class="page-number" href="/page/63/">63</a><span class="space">&#x2026;</span><a class="page-number" href="/page/145/">145</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/63/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -362,14 +359,14 @@ character within groups:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">117k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:04</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:10</span>
   </span>
 </div>
 <div class="busuanzi-count">
