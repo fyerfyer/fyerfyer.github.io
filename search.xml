@@ -18,6 +18,32 @@ ver）</a></p></li>
 ]]></content>
   </entry>
   <entry>
+    <title>6.2.Locality</title>
+    <url>/2024/08/09/6-2-Locality/</url>
+    <content><![CDATA[<h1 id="62locality"><span class="math inline">\(6.2.\)</span>Locality</h1>
+<h3 id="1basic-idea-amp-example">1.Basic Idea &amp; Example</h3>
+<p><img src="/2024/08/09/6-2-Locality/image.png"></p>
+<p><img src="/2024/08/09/6-2-Locality/image-1.png"></p>
+<p><img src="/2024/08/09/6-2-Locality/image-2.png"></p>
+<h3 id="2locality-of-instructionfetch">2.Locality of Instruction
+Fetch</h3>
+<p>  In Figure 6.17 the instructions in the body of the <code>for</code>
+loop are executed in sequential memory order, and thus the loop enjoys
+good spatial locality. Since the loop body is executed multiple times,
+it also enjoys good temporal locality.</p>
+<blockquote>
+<p>An important property of code that distinguishes it from program data
+is that it is rarely modified at run time. While a program is executing,
+the CPU reads its instructions from memory. The CPU <strong>rarely
+overwrites or modifies these instructions</strong>.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 6.The Memory Hierarchy</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.1.Storage Technologies</title>
     <url>/2024/08/07/6-1-Storage-Technologies/</url>
     <content><![CDATA[<h1 id="61storage-technologies"><span class="math inline">\(6.1.\)</span>Storage Technologies</h1>
@@ -5684,6 +5710,30 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
+    <title>12.2.Hashing的实现方法(1)</title>
+    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
+    <content><![CDATA[<h1 id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</h1>
+<h3 id="1整数溢出">1.整数溢出</h3>
+<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
+<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
+<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
+<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
+<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
+<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
+<ol type="1">
+<li>它是一个整数</li>
+<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
+<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
+<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
+      </categories>
+  </entry>
+  <entry>
     <title>12.1.Hashing的引入</title>
     <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
     <content><![CDATA[<h1 id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</h1>
@@ -5705,30 +5755,6 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
 <p>  以字符串为例，我们可以考虑将字符串按如下的方式转换成一个整数：
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">letterNum</span><span class="params">(String s, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="comment">/** Converts ith character of String to a letter number.</span></span><br><span class="line"><span class="comment">    * e.g. &#x27;a&#x27; -&gt; 1, &#x27;b&#x27; -&gt; 2, &#x27;z&#x27; -&gt; 26 */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ithChar</span> <span class="operator">=</span> s.charAt(i)</span><br><span class="line">    <span class="keyword">if</span> ((ithChar &lt; <span class="string">&#x27;a&#x27;</span>) || (ithChar &gt; <span class="string">&#x27;z&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ithChar - <span class="string">&#x27;a&#x27;</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">englishToInt</span><span class="params">(String s)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">intRep</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0l</span> i &lt; s.length(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        intRep = intRep * <span class="number">26</span>;</span><br><span class="line">        intRep += letterNum(s, i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> intRep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>  这样，我们就实现了字符串到整数的转换。然而，这并未解决我们提出的问题。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.2.Hashing的实现方法(1)</title>
-    <url>/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/</url>
-    <content><![CDATA[<h1 id="122hashing的实现方法1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>的实现方法(1)</h1>
-<h3 id="1整数溢出">1.整数溢出</h3>
-<p>  在先前将字符串转换为整数的操作中，我们忽略了一个问题：转换得到的整数过大导致溢出怎么办？例如，溢出后的<code>melt banana</code>与<code>subterresetrial anticosmetic</code>的<span class="math inline">\(Hash\)</span>值是一样的，如果我们通过比较它们的<span class="math inline">\(Hash\)</span>值来确定它们是否相等，会得到相反的答案。</p>
-<p>  整数的溢出是无法避免的，因为<span class="math inline">\(Java\)</span>能够表示的最大整数只有<span class="math inline">\(2147483647\)</span>。因此我们引入下面的方法：</p>
-<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
-<p>  在<span class="math inline">\(Java\)</span>中，每个对象都有一个默认的<code>.hashcode()</code>方法。<span class="math inline">\(Java\)</span>通过该对象在内存中的位置来得出它的<span class="math inline">\(hashCode\)</span>。这个方法对每个独立的对象都会给出不重复的<span class="math inline">\(hashCode\)</span>。</p>
-<p>  有时，我们也会自己定义<code>.hashcode()</code>方法，来满足自己定义的一些类的需要。</p>
-<p>  <span class="math inline">\(hashCode\)</span>具有如下性质：</p>
-<ol type="1">
-<li>它是一个整数</li>
-<li>对同一对象多次调用<code>.hashcode()</code>，得到的结果都相同。</li>
-<li>两个<code>.equal()</code> 的对象必须具有相同的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<p>  然而，并不是所有<span class="math inline">\(hashCode\)</span>相等的对象都<code>.equal()</code>，因此，我们应当让对象的<span class="math inline">\(.hashode()\)</span>方法生成的<span class="math inline">\(hashCode\)</span>尽可能分布均匀。</p>
-<p>  到此为止，我们实现了<span class="math inline">\(Hashing\)</span>的普适性。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6170,6 +6196,26 @@ a helper method and invoke it recursively: <figure class="highlight java"><table
       </categories>
   </entry>
   <entry>
+    <title>18.3.归并排序</title>
+    <url>/2024/05/31/18.3.Merge%20Sort/</url>
+    <content><![CDATA[<h1 id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
+Sort</h1>
+<h3 id="1the-step-of-merge-sort">1.The step of Merge Sort</h3>
+<ul>
+<li>Split items into 2 roughly even pieces.</li>
+<li>Mergesort each half (steps not shown, this is a recursive
+algorithm!)</li>
+<li>Merge the two sorted halves to form the final result.</li>
+</ul>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> &#123;</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
     <title>18.2.堆排序</title>
     <url>/2024/05/31/18.2.Heap%20Sort/</url>
     <content><![CDATA[<h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
@@ -6195,26 +6241,6 @@ back of the array.</li>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>18.3.归并排序</title>
-    <url>/2024/05/31/18.3.Merge%20Sort/</url>
-    <content><![CDATA[<h1 id="183mergesort"><span class="math inline">\(18.3.\)</span>Merge
-Sort</h1>
-<h3 id="1the-step-of-merge-sort">1.The step of Merge Sort</h3>
-<ul>
-<li>Split items into 2 roughly even pieces.</li>
-<li>Mergesort each half (steps not shown, this is a recursive
-algorithm!)</li>
-<li>Merge the two sorted halves to form the final result.</li>
-</ul>
-<h3 id="2step-implementation">2.Step implementation</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">merge</span><span class="params">(<span class="type">double</span>[] a, <span class="type">double</span>[] b)</span> &#123;</span><br><span class="line">    <span class="type">double</span>[] c = <span class="keyword">new</span> <span class="title class_">double</span>[a.length + b.length];</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>; k &lt; c.length; k += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= a.length) c[k] = b[j++];</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= b.length) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt;= b[j]) c[k] = a[i++];</span><br><span class="line">        <span class="keyword">else</span> c[k] = b[j++]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span>[] mergeSort(<span class="type">double</span>[] input) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> input.length;</span><br><span class="line">    <span class="keyword">if</span> (N &lt;= <span class="number">1</span>) <span class="keyword">return</span> input;</span><br><span class="line">    <span class="type">double</span>[] a = <span class="type">double</span>[N / <span class="number">2</span>];</span><br><span class="line">    <span class="type">double</span>[] b = <span class="type">double</span>[N - N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i += <span class="number">1</span>) a[i] = input[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; b.length; j += <span class="number">1</span>) b[j] = input[j + N / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> merge(mergeSort(a), mergeSort(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -7562,6 +7588,55 @@ invoked is based on the dynamic type of the invoking expression</li>
       </categories>
   </entry>
   <entry>
+    <title>4.3.子类多态性</title>
+    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
+    <content><![CDATA[<h1 id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</h1>
+<h3 id="1多态性的概念">1.多态性的概念</h3>
+<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
+<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
+<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
+<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
+<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
+<h3 id="2子类多态性的应用">2.子类多态性的应用</h3>
+<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
+<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
+<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
+<h3 id="3comparable接口">3.<code>comparable</code>接口</h3>
+<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
+<h3 id="4comparator接口">4.<code>comparator</code>接口</h3>
+<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
+<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
+<h3 id="5接口的功能">5.接口的功能</h3>
+<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
+<blockquote>
+<p>  A Comparable says, "I want to compare myself to another object". It
+is imbedded within the object itself, and it defines the natural
+ordering of a type. A Comparator, on the other hand, is more like a
+third party machine that compares two objects to each other. Since
+there's only room for one compareTo method, if we want multiple ways to
+compare, we must turn to Comparator.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.2.隐性序列</title>
     <url>/2024/05/31/4.2.%E9%9A%90%E6%80%A7%E5%BA%8F%E5%88%97/</url>
     <content><![CDATA[<h1 id="42隐性序列implicitsequences"><span class="math inline">\(4.2\)</span>隐性序列<span class="math inline">\(Implicit\;Sequences\)</span></h1>
@@ -7645,55 +7720,6 @@ invoked is based on the dynamic type of the invoking expression</li>
       <categories>
         <category>SICP in python</category>
         <category>Chapter 4.Data Processing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.3.子类多态性</title>
-    <url>/2024/05/31/4.3.subtype%20polymorphism/</url>
-    <content><![CDATA[<h1 id="43子类多态性"><span class="math inline">\(4.3\)</span>子类多态性</h1>
-<h3 id="1多态性的概念">1.多态性的概念</h3>
-<p>  在前面，我们学习了如何运用继承来重复利用已有的代码。继承也可以用于设计具有多态性的通用数据结构与方法。</p>
-<p>  在<span class="math inline">\(Java\)</span>中，多态性(<span class="math inline">\(polymorphism\)</span>)代指对象具有不同形式的类型(<span class="math inline">\(types\)</span>)的性质；在面向对象编程中，多态性代指对象具有的不同身份：自己类中的一个实例、主类的一个实例...</p>
-<p>  考虑下面的问题：我们要实现一个比较函数，用于比较两个对象的大小。我们可以用高阶函数实现：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
-<p>  还可以用子类多态性实现： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
-<p>  高阶函数给出的是普适的方法，对任何对象都适用。而在子类多态性的方法中，需要对象自己做出决定，执行相应的方法，<code>x.largerThan</code>方法是由<span class="math inline">\(x\)</span>与<span class="math inline">\(y\)</span>来决定的。</p>
-<h3 id="2子类多态性的应用">2.子类多态性的应用</h3>
-<p>  假设我们想要实现一个普适的<code>max</code>函数，这个函数接受任意类型的数组，并返回数组中的最大元素。</p>
-<p>  一个简单的想法是用<code>&gt;</code>比较： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  我们默认<code>&gt;</code>可以比较任意类型的对象，但是实际上不行。因为<code>&gt;</code>只能用于确定类型的对象。</p>
-<p>  于是问题转为实现能比较任意类型对象的<code>&gt;</code>。我们可以为此创建一个方法接口<code>compareTo</code>，来确保每个对象都可以调用该方法来比较大小:
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，我们对每个子类逐一实现对应的<span class="math inline">\(implements\)</span>即可。以<span class="math inline">\(Dog\)</span>类为例： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  实现<code>compareTo</code>后，便可自然地实现<code>max</code>了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            maxDex = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  利用继承，我们优雅地实现了通用的<code>max</code>函数。</p>
-<h3 id="3comparable接口">3.<code>comparable</code>接口</h3>
-<p>  <span class="math inline">\(Java\)</span>中已有的<code>comparable</code>接口可以更好地实现<code>max</code>，它的形式如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  与<span class="math inline">\(OurComparable\)</span>相比，该接口接受一个通用类型，这使得我们不需要使用类型铸造，同时即使一个类没有继承接口，它也可以调用<code>max</code>。这样，我们的<span class="math inline">\(Dog\)</span>类可以如此实现： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  通过内置(<span class="math inline">\(built-in\)</span>)的接口，我们得以利用已有的库(<span class="math inline">\(libraries\)</span>)和<span class="math inline">\(Comparable\)</span>接口。</p>
-<h3 id="4comparator接口">4.<code>comparator</code>接口</h3>
-<p>  考虑下面的问题：假如我们不想让<span class="math inline">\(Dog\)</span>以<span class="math inline">\(size\)</span>排列，该怎么写<code>max</code>呢？</p>
-<p>  <span class="math inline">\(Java\)</span>的内置接口<code>comparator</code>内部如下：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这说明<code>comparator</code>需要子类实现<code>compare</code>方法，它和<code>compareTo</code>的规则相似。我们可以如下实现<span class="math inline">\(Dog\)</span>的<code>compare</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&#x27;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<span class="math inline">\(Dog\)</span>类通过<code>Comparator</code>的内部接口实现了继承的层次性：我们可以在<span class="math inline">\(Dog\)</span>内部定义自己需要的比较方法：<code>NameComparator</code>、<code>SizeComparator</code>...</p>
-<h3 id="5接口的功能">5.接口的功能</h3>
-<p>  <span class="math inline">\(Java\)</span>中的接口为我们提供了函数回调(<span class="math inline">\(callback\)</span>)的能力。有时，一个函数需要其他还未实现的函数的帮助，如<code>max</code>需要<code>compareTo</code>。而回调函数就是辅助函数(<span class="math inline">\(helper\;function\)</span>)，如<code>compareTo</code>。在<span class="math inline">\(Java\)</span>中，我们把需要的函数封装在接口内。</p>
-<blockquote>
-<p>  A Comparable says, "I want to compare myself to another object". It
-is imbedded within the object itself, and it defines the natural
-ordering of a type. A Comparator, on the other hand, is more like a
-third party machine that compares two objects to each other. Since
-there's only room for one compareTo method, if we want multiple ways to
-compare, we must turn to Comparator.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
       </categories>
   </entry>
   <entry>
@@ -7886,6 +7912,58 @@ over time.</p>
       </categories>
   </entry>
   <entry>
+    <title>6.4.对象方法</title>
+    <url>/2024/05/31/6.4.Object%20Methods/</url>
+    <content><![CDATA[<h1 id="64对象方法"><span class="math inline">\(6.4\)</span>对象方法</h1>
+<h3 id="1对象方法概述">1.对象方法概述</h3>
+<p>  所有的类都继承了<span class="math inline">\(Object\)</span>类。它们继承的方法如下：</p>
+<ul>
+<li>String toString()</li>
+<li>boolean equals(Object obj)</li>
+<li>Class &lt;?&gt; getClass()</li>
+<li>int hashCode()</li>
+<li>protected Objectclone()</li>
+<li>protected void finalize()</li>
+<li>void notify()</li>
+<li>void notifyAll()</li>
+<li>void wait()</li>
+<li>void wait(long timeout)</li>
+<li>void wait(long timeout, int nanos)</li>
+</ul>
+<p>  下面我们重点讨论前两个。</p>
+<h3 id="2tostring">2.<code>toString()</code></h3>
+<p>  <code>toString</code>方法返回一个对象的字符串表示。对于特定的类，我们可以覆盖对象原有的方法。考虑下面的问题：</p>
+<p>  Exercise 6.4.1: Write the toString() method so that when we print
+an ArraySet, it prints the elements separated by commas inside of curly
+braces. i.e {1, 2, 3, 4}. Remember, the toString() method should return
+a string: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">/* hmmm */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(solution\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">returnString</span> <span class="operator">=</span> <span class="string">&quot;&#123;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">        returnString += keys[i];</span><br><span class="line">        returnString += <span class="string">&quot;, &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    returnString += <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> returnString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这种写法看似简洁优雅，但每次使用<code>+=</code>运算符后，都需要创建一个新的字符串，这样的时间复杂度为<span class="math inline">\(O(n^2)\)</span>。为了优化该方法，<span class="math inline">\(Java\)</span>内置了<code>StringBuilder</code>方法。这个方法创造一个<span class="math inline">\(String\)</span>的可变对象，我们可以向对象内添加其它<span class="math inline">\(String\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">returnSB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&#123;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size - <span class="number">1</span>; i += <span class="number">1</span>) &#123;</span><br><span class="line">            returnSB.append(items[i].toString());</span><br><span class="line">            returnSB.append(<span class="string">&quot;, &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        returnSB.append(items[size - <span class="number">1</span>]);</span><br><span class="line">        returnSB.append(<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> returnSB.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3equals">3.<code>equals()</code></h3>
+<h4 id="aequals的实现">  <span class="math inline">\(a.\)</span><code>equals()</code>的实现</h4>
+<p>  在<span class="math inline">\(Java\)</span>中，<code>==</code>检查两个对象在内存中的是否为同一个对象。由之前<span class="math inline">\(pass-by-value\)</span>原则，<code>==</code>会检查两个盒子放的是不是同一个东西：</p>
+<ul>
+<li>对于基本类型的变量，这表示比较它们的值是否相等。</li>
+<li>对于对象(<span class="math inline">\(objects\)</span>)，这表示比较两个对象的地址或指针是否相等。</li>
+</ul>
+<p>  而<code>equals()</code>方法在比较对象时，只会比较两者的值是否相等，这便是我们实现它的目的。我们可以如下实现<span class="math inline">\(ArraySet\)</span>的<code>equals()</code>方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object other)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span> == other) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other.getClass() != <span class="built_in">this</span>.getClass()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ArraySet&lt;T&gt; o = (ArraySet&lt;T&gt;) other;</span><br><span class="line">        <span class="keyword">if</span> (o.size() != <span class="built_in">this</span>.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (T item : <span class="built_in">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!o.contains(item)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>   在上面的<code>equals()</code>方法中，我们加入了对<span class="math inline">\(null\)</span>与跨类对象的比较的判断。我们也通过预先判断<code>==</code>的情况优化了方法。</p>
+<h4 id="bequals方法的规则">  <span class="math inline">\(b.\)</span><code>equals()</code>方法的规则</h4>
+<p>  <code>equals()</code>方法要符合以下规则：</p>
+<ol type="1">
+<li>反身性(<span class="math inline">\(reflexive\)</span>)：<code>x.equals(x) == true</code>。</li>
+<li>对称性(<span class="math inline">\(symmetric\)</span>)：<code>x.equals(y) == true</code>当且仅当<code>y.equals(x) == true</code>。</li>
+<li>传递性(<span class="math inline">\(transitive\)</span>)：<code>x.equals(y), y.equals(z) == true</code>，则<code>x.equals(z) == true</code>。</li>
+<li><code>x.equals(null) == false</code>，不论<span class="math inline">\(x\)</span>是什么。</li>
+<li><code>equals()</code>方法的参数必须是<span class="math inline">\(object\)</span>型的，这样才能覆盖原有的<code>.equals()</code>方法。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.3.迭代</title>
     <url>/2024/05/31/6.3.Iteration/</url>
     <content><![CDATA[<h1 id="63迭代"><span class="math inline">\(6.3\)</span>迭代</h1>
@@ -7937,58 +8015,6 @@ which the iterator is performing.</p>
 </blockquote>
 <h3 id="3可迭代arrayset的完整实现">3.可迭代<span class="math inline">\(ArraySet\)</span>的完整实现</h3>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArraySet</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Iterable</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T[] items;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size; <span class="comment">// the next item to be added will be at position size</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ArraySet</span><span class="params">()</span> &#123;</span><br><span class="line">        items = (T[]) <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns true if this map contains a mapping for the specified key.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">contains</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (items[i].equals(x)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Associates the specified value with the specified key in this map.</span></span><br><span class="line"><span class="comment">       Throws an IllegalArgumentException if the key is null. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(T x)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;can&#x27;t add null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (contains(x)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        items[size] = x;</span><br><span class="line">        size += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Returns the number of key-value mappings in this map. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** returns an iterator (a.k.a. seer) into ME */</span></span><br><span class="line">    <span class="keyword">public</span> Iterator&lt;T&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArraySetIterator</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ArraySetIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;T&gt; &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> wizPos;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">ArraySetIterator</span><span class="params">()</span> &#123;</span><br><span class="line">            wizPos = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> wizPos &lt; size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> T <span class="title function_">next</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="type">T</span> <span class="variable">returnItem</span> <span class="operator">=</span> items[wizPos];</span><br><span class="line">            wizPos += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> returnItem;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArraySet&lt;Integer&gt; aset = <span class="keyword">new</span> <span class="title class_">ArraySet</span>&lt;&gt;();</span><br><span class="line">        aset.add(<span class="number">5</span>);</span><br><span class="line">        aset.add(<span class="number">23</span>);</span><br><span class="line">        aset.add(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//iteration</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i : aset) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>6.Exception &amp; Iterator &amp; Iterables &amp; Object Methods</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>6.4.对象方法</title>
-    <url>/2024/05/31/6.4.Object%20Methods/</url>
-    <content><![CDATA[<h1 id="64对象方法"><span class="math inline">\(6.4\)</span>对象方法</h1>
-<h3 id="1对象方法概述">1.对象方法概述</h3>
-<p>  所有的类都继承了<span class="math inline">\(Object\)</span>类。它们继承的方法如下：</p>
-<ul>
-<li>String toString()</li>
-<li>boolean equals(Object obj)</li>
-<li>Class &lt;?&gt; getClass()</li>
-<li>int hashCode()</li>
-<li>protected Objectclone()</li>
-<li>protected void finalize()</li>
-<li>void notify()</li>
-<li>void notifyAll()</li>
-<li>void wait()</li>
-<li>void wait(long timeout)</li>
-<li>void wait(long timeout, int nanos)</li>
-</ul>
-<p>  下面我们重点讨论前两个。</p>
-<h3 id="2tostring">2.<code>toString()</code></h3>
-<p>  <code>toString</code>方法返回一个对象的字符串表示。对于特定的类，我们可以覆盖对象原有的方法。考虑下面的问题：</p>
-<p>  Exercise 6.4.1: Write the toString() method so that when we print
-an ArraySet, it prints the elements separated by commas inside of curly
-braces. i.e {1, 2, 3, 4}. Remember, the toString() method should return
-a string: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">/* hmmm */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(solution\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">returnString</span> <span class="operator">=</span> <span class="string">&quot;&#123;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i += <span class="number">1</span>) &#123;</span><br><span class="line">        returnString += keys[i];</span><br><span class="line">        returnString += <span class="string">&quot;, &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    returnString += <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> returnString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这种写法看似简洁优雅，但每次使用<code>+=</code>运算符后，都需要创建一个新的字符串，这样的时间复杂度为<span class="math inline">\(O(n^2)\)</span>。为了优化该方法，<span class="math inline">\(Java\)</span>内置了<code>StringBuilder</code>方法。这个方法创造一个<span class="math inline">\(String\)</span>的可变对象，我们可以向对象内添加其它<span class="math inline">\(String\)</span>： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">returnSB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&#123;&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size - <span class="number">1</span>; i += <span class="number">1</span>) &#123;</span><br><span class="line">            returnSB.append(items[i].toString());</span><br><span class="line">            returnSB.append(<span class="string">&quot;, &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        returnSB.append(items[size - <span class="number">1</span>]);</span><br><span class="line">        returnSB.append(<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> returnSB.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="3equals">3.<code>equals()</code></h3>
-<h4 id="aequals的实现">  <span class="math inline">\(a.\)</span><code>equals()</code>的实现</h4>
-<p>  在<span class="math inline">\(Java\)</span>中，<code>==</code>检查两个对象在内存中的是否为同一个对象。由之前<span class="math inline">\(pass-by-value\)</span>原则，<code>==</code>会检查两个盒子放的是不是同一个东西：</p>
-<ul>
-<li>对于基本类型的变量，这表示比较它们的值是否相等。</li>
-<li>对于对象(<span class="math inline">\(objects\)</span>)，这表示比较两个对象的地址或指针是否相等。</li>
-</ul>
-<p>  而<code>equals()</code>方法在比较对象时，只会比较两者的值是否相等，这便是我们实现它的目的。我们可以如下实现<span class="math inline">\(ArraySet\)</span>的<code>equals()</code>方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object other)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span> == other) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (other.getClass() != <span class="built_in">this</span>.getClass()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ArraySet&lt;T&gt; o = (ArraySet&lt;T&gt;) other;</span><br><span class="line">        <span class="keyword">if</span> (o.size() != <span class="built_in">this</span>.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (T item : <span class="built_in">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!o.contains(item)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>   在上面的<code>equals()</code>方法中，我们加入了对<span class="math inline">\(null\)</span>与跨类对象的比较的判断。我们也通过预先判断<code>==</code>的情况优化了方法。</p>
-<h4 id="bequals方法的规则">  <span class="math inline">\(b.\)</span><code>equals()</code>方法的规则</h4>
-<p>  <code>equals()</code>方法要符合以下规则：</p>
-<ol type="1">
-<li>反身性(<span class="math inline">\(reflexive\)</span>)：<code>x.equals(x) == true</code>。</li>
-<li>对称性(<span class="math inline">\(symmetric\)</span>)：<code>x.equals(y) == true</code>当且仅当<code>y.equals(x) == true</code>。</li>
-<li>传递性(<span class="math inline">\(transitive\)</span>)：<code>x.equals(y), y.equals(z) == true</code>，则<code>x.equals(z) == true</code>。</li>
-<li><code>x.equals(null) == false</code>，不论<span class="math inline">\(x\)</span>是什么。</li>
-<li><code>equals()</code>方法的参数必须是<span class="math inline">\(object\)</span>型的，这样才能覆盖原有的<code>.equals()</code>方法。</li>
-</ol>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
