@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/02/5-7-Understanding-Modern-Processors/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/03/5-8-Loop-Unrolling/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/02/5-7-Understanding-Modern-Processors/" class="post-title-link" itemprop="url">5.7.Understanding Modern Processors</a>
+          <a href="/2024/08/03/5-8-Loop-Unrolling/" class="post-title-link" itemprop="url">5.8.Loop Unrolling</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 13:31:22" itemprop="dateCreated datePublished" datetime="2024-08-02T13:31:22+08:00">2024-08-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 12:43:40" itemprop="dateModified" datetime="2024-08-03T12:43:40+08:00">2024-08-03</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 13:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:21:40" itemprop="dateCreated datePublished" datetime="2024-08-03T13:31:22+08:00">2024-08-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.3k</span>
+      <span>272</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,193 +266,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="57understanding-modern-processors"><span class="math inline">\(5.7.\)</span>Understanding Modern Processors</h1>
-<h3 id="1overall-operation">1.Overall Operation</h3>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image.png"></p>
-<ul>
-<li><p>The overall design of the <em>superscalar</em> processor(meaning
-that they can perform multiple operations on every clock cycle and out
-of order) has two main parts:</p>
-<ul>
-<li><p>The <em>instruction control unit</em>(ICU), which is responsible
-for <strong>reading a sequence of instructions from memory</strong> and
-<strong>generating from these a set of primitive operations to perform
-on program data</strong>.</p></li>
-<li><p>The <em>execution unit</em>(EU), which then <strong>executes
-these operations</strong>.</p></li>
-</ul></li>
-</ul>
-<h4 id="aicu">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>ICU</h4>
-<ul>
-<li><p>THe ICU reads the instructions from an <em>instruction
-cache</em>.</p></li>
-<li><p>When a program hits a branch, processors perform <em>branch
-prediction</em>. If it later determines that the branch was predicted
-incorrectly, it <strong>resets the state to that at the branch
-point</strong> and begins <strong>fetching and executing instructions in
-the other direction</strong>.</p>
-<ul>
-<li>The block labeled &quot;Fetch control&quot; incorporates branch prediction to
-perform the task of <strong>determining which instructions to
-fetch</strong>.</li>
-</ul></li>
-<li><p>The instruction decoding logic takes the actual program
-instructions and <strong>converts them into a set of primitive
-operations</strong>(<em>micro-operations</em>).</p>
-<ul>
-<li>The decoding allows a division of labor among a set of dedicated
-hardware units, which then allows parallelism.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;For example, the instruction <code>addq %rax,%rdx</code> will be
-decoded as three operations: one to load a value from memory into the
-processor, one to add the loaded value to the value in register
-<code>%eax</code>, and one to store the result back to memory.</p>
-<ul>
-<li><p>The retirement unit keeps track of the ongoing processing and
-makes sure that it obeys the sequential semantics of the machine-level
-program.</p>
-<ul>
-<li><p>As an instruction is decoded, information about it is placed into
-a <strong>first-in, first-out queue</strong>. The information of an
-instruction remains in the queue until one of two outcomes occurs:</p>
-<ul>
-<li><p>Once the operations for the instruction have completed and any
-branch points leading to this instruction are confirmed as having been
-correctly predicted, <strong>the instruction can be retired, with any
-updates to the program registers being made</strong>.</p></li>
-<li><p>If some branch point leading to this instruction was
-mispredicted, the instruction will be <em>flushed</em>, discarding any
-results that may have been computed.</p></li>
-</ul></li>
-</ul></li>
-</ul>
-<h4 id="beu">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>EU</h4>
-<ul>
-<li><p>The EU receives operations from the <em>instruction fetch
-unit</em>. These operations are dispatched to <strong>a set of
-functional units that perform the actual operations</strong>.</p></li>
-<li><p>Reading and writing memory is implemented by the <em>load and
-store units</em>. Both the load unit and store unit have an
-<em>adder</em> to perform address computations. They access memory via a
-<em>data cache</em>.</p></li>
-<li><p>With speculative execution, the operations are evaluated, but
-<strong>the final results are not stored in the program registers or
-data memory</strong> until <strong>the processor can be certain that
-these instructions should actually have been executed</strong>.</p>
-<ul>
-<li><p>Branch operations are sent to the EU to <strong>determine whether
-or not they were predicted correctly</strong>.</p></li>
-<li><p>If the prediction was incorrect, the EU will d<strong>iscard the
-results that have been computed beyond the branch point</strong>. It
-will also <strong>signal the branch unit that the prediction was
-incorrect and indicate the correct branch destination</strong>.</p></li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The result of operations is exchanged among the EU. The control of
-the communication of operands is called <em>register renaming</em>.</p>
-<ul>
-<li><p>When an instruction <strong>that updates register r</strong> is
-decoded, a tag t is generated giving a unique identifier to the result
-of the operation. An entry <span class="math inline">\((r,t)\)</span> is
-added to a table maintaining the association <strong>between program
-register r and tag t</strong> for an operation that will update this
-register.</p></li>
-<li><p>When a subsequent instruction using register r as an operand is
-decoded, the operation sent to the execution unit will <strong>contain t
-as the source for the operand value</strong>.</p></li>
-<li><p>When some execution unit completes the first operation, it
-generates a result <span class="math inline">\((v,t)\)</span>,
-indicating that the operation with tag t produced value v. Any operation
-waiting for t as a source will then <strong>use v as the source
-value</strong></p></li>
-</ul>
-<p>&#x2003;&#x2003;This form of <strong>data forwarding</strong> enables values to be
-forwarded without being written to and read from the register file, so
-that <strong>the second operation to begin as soon as the first has
-completed</strong>.</p>
-<h3 id="2functional-unit-performance">2.Functional Unit Performance</h3>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-1.png"></p>
-<ul>
-<li><p>The addition and multiplication operations all have issue times
-of 1, meaning that <strong>on each clock cycle, the processor can start
-a new one of these operations</strong>. They are called <em>fully
-pipelined</em>.</p></li>
-<li><p>The divider isn&apos;t pipelined-its issue time equals its latency. It
-means that the divider <strong>must perform a complete division before
-it can begin a new one</strong>.</p></li>
-</ul>
-<hr>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-2.png"></p>
-<ul>
-<li><p>The <em>latency bound</em> gives <strong>a minimum value for the
-CPE for any function</strong> that must perform the combining operation
-in a strict sequence.</p></li>
-<li><p>The <em>throughput bound</em> gives <strong>a minimum bound for
-the CPE</strong> based on the maximum rate at which the functional units
-can produce results.</p></li>
-</ul>
-<h3 id="3an-abstract-model-ofprocessor-operation">3.An Abstract Model of
-Processor Operation</h3>
-<p>&#x2003;&#x2003;We will take <code>combine4</code> as an example. First, let&apos;s see
-the CPE measurements of the program:</p>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-3.png"></p>
-<ul>
-<li>The performance of these functions is dictated by <strong>the
-latency of the sum or product computation being performed</strong>.
-Computing the product or sum of <span class="math inline">\(n\)</span>
-elements <strong>requires around <span class="math inline">\(L \cdot
-n+K\)</span> clock cycles</strong>, where <span class="math inline">\(L\)</span> is the latency of the combining
-operation and <span class="math inline">\(K\)</span> represents the
-overhead of calling the function and initiating and terminating the
-loop. The CPE is therefore <span class="math inline">\(L+{K \over
-n}\)</span>, which is close to <span class="math inline">\(L\)</span>
-when <span class="math inline">\(n\)</span> is large.</li>
-</ul>
-<h4 id="adata-flow-graphs">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Data-flow graphs</h4>
-<p>&#x2003;&#x2003;First take a look at the assembly codes of
-<code>combine4</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The graphical representation of inner-loop code for
-<code>combine4</code> is as below:</p>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-4.png"></p>
-<p>&#x2003;&#x2003;And the data-flow representation of <span class="math inline">\(n\)</span> iterations in the inner loop is as
-below:</p>
-<p><img src="/2024/08/02/5-7-Understanding-Modern-Processors/image-5.png"></p>
-<p>&#x2003;&#x2003;We can see that the program has two chains of data dependencies,
-corresponding to the updating of program values <code>acc</code> and
-<code>data+i</code> with operations <code>mul</code> and
-<code>add</code>, respectively. And since <strong>the left chain is the
-longest</strong>, it will form a <em>critical path</em>, requiring <span class="math inline">\(5n\)</span> cycles to execute.</p>
-<p>&#x2003;&#x2003;The figure shows that when executing the function, <strong>the
-floating-point multiplier becomes the limiting resource</strong>. The
-other operations required during the loop&#x2014;manipulating and testing
-pointer value <code>data+i</code> and reading data from memory&#x2014;proceed
-<strong>in parallel with the multiplication</strong>.</p>
-<h4 id="botherfactors">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Other
-factors</h4>
-<p>&#x2003;&#x2003;The critical paths in a data-flow representation provide
-<strong>only a lower bound on how many cycles a program will
-require</strong>. Other factors can also limit performance, including
-the total number of functional units available and the number of data
-values that can be passed among the functional units on any given
-step.</p>
-<hr>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(CPE analysis)Illustrate
-why the CPE of the former program is 5.00 while the latter is 8.00:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">poly</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[<span class="number">0</span>];</span><br><span class="line">    <span class="type">double</span> xpwr = x; <span class="comment">/* Equals x^i at start of loop */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= degree; i++) {</span><br><span class="line">        result += a[i] * xpwr;</span><br><span class="line">        xpwr = x * xpwr;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Apply Horner&apos;s method */</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">polyh</span><span class="params">(<span class="type">double</span> a[], <span class="type">double</span> x, <span class="type">long</span> degree)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">double</span> result = a[degree];</span><br><span class="line">    <span class="keyword">for</span> (i = degree - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {</span><br><span class="line">        result = a[i] + x * result;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The CPE of the
-<code>poly</code> is decided by the instruction
-<code>result += a[i] * xpwr;</code> and
-<code>xpwr = x * xpwr;</code>.</p>
-<p>&#x2003;&#x2003;For <code>result += a[i] * xpwr</code>, after the first sequential
-operation of 8 cycle, the <code>+</code> and <code>*</code> can be
-executed in pipeline. So the CPE is $ $.</p>
-<p>&#x2003;&#x2003;The analysis for <code>polyh</code> is the same. The
-<code>result = a[i] + x * result</code> cannot be executed in
-pipeline(because both LHS and RHS contain <code>result</code>), so the
-CPE is 5+3=8.</p>
+          <h1 id="58loopunrolling"><span class="math inline">\(5.8.\)</span>Loop
+Unrolling</h1>
+<p>&#x2003;&#x2003;Loop unrolling can improve performance in two ways.</p>
+<ol type="1">
+<li><p>It reduces the number of operations that do not contribute
+directly to the program result, such as loop indexing and conditional
+branching.</p></li>
+<li><p>It exposes ways in which we can further transform the code to
+reduce the number of operations in the critical paths of the overall
+computation.</p></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 2 x 1 loop unrolling */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine5</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">long</span> limit = length - <span class="number">1</span>;</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Combine 2 elements at a time */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>) {</span><br><span class="line">        acc = (acc OP data[i]) OP data[i + <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Finish any remaining elements */</span></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The performance of different unrolling is as below:</p>
+<p><img src="/2024/08/03/5-8-Loop-Unrolling/image.png"></p>
+<p>&#x2003;&#x2003;We see that the CPE improves little when <span class="math inline">\(k \geq 2\)</span>. To understand this, consider
+the case when <span class="math inline">\(k=2\)</span>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine5. data_t = double, OP = *</span><br><span class="line"># i in %rdx, data %rax, limit in %rbx, acc in %xmm0</span><br><span class="line">.L35: loop:</span><br><span class="line">    vmulsd   (%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i]</span><br><span class="line">    vmulsd  8(%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i+1]</span><br><span class="line">    addq     $2, %rdx                       # Increment i by 2</span><br><span class="line">    cmpq     %rdx, %rbp                     # Compare to limit: i</span><br><span class="line">    jg      .L35                            # If &gt;, goto loop</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The <code>vmulsd</code> instructions each get translated into two
+operations: one to load an array element from memory and one to multiply
+this value by the accumulated value. The data-flow representation of the
+program is as below:</p>
+<p><img src="/2024/08/03/5-8-Loop-Unrolling/image-1.png"></p>
+<p>&#x2003;&#x2003;There&apos;s still a critical path of <span class="math inline">\(n\)</span></p>
 
       
     </div>
@@ -481,7 +311,7 @@ CPE is 5+3=8.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&#x2026;</span><a class="page-number" href="/page/146/">146</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -506,14 +336,14 @@ CPE is 5+3=8.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:11</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
   </span>
 </div>
 <div class="busuanzi-count">

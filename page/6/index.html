@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-12-Understanding-Memory-Performance/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-13-Performance-Improvement-Techniques/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/05/5-12-Understanding-Memory-Performance/" class="post-title-link" itemprop="url">5.12.Understanding Memory Performance</a>
+          <a href="/2024/08/05/5-13-Performance-Improvement-Techniques/" class="post-title-link" itemprop="url">5.13.Performance Improvement Techniques</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:34:53" itemprop="dateCreated datePublished" datetime="2024-08-05T09:31:22+08:00">2024-08-05</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 10:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:01:50" itemprop="dateCreated datePublished" datetime="2024-08-05T10:31:22+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>521</span>
+      <span>63</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,75 +266,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="512understanding-memoryperformance"><span class="math inline">\(5.12.\)</span>Understanding Memory
-Performance</h1>
-<h3 id="1store-performance">1.Store Performance</h3>
-<p>&#x2003;&#x2003;A series of store operations cannot create a data dependency. Only
-a load operation is affected by the result of a store operation, since
-<strong>only a load can read back the memory value that has been written
-by the store</strong>.</p>
-<p>&#x2003;&#x2003;The store unit includes a <em>store buffer</em> containing
-<strong>the addresses and data of the store operations</strong> that
-have been issued to the store unit, but <strong>have not yet been
-completed</strong>, where completion involves updating the data
-cache.</p>
-<p>&#x2003;&#x2003;This buffer is provided so that a series of store operations can be
-executed <strong>without having to wait for each one to update the
-cache</strong>.</p>
-<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-2.png"></p>
-<h3 id="2load-and-store-operations">2.Load and Store Operations</h3>
-<h4 id="adifferent-types-of-load-ampstore">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Different types of load &amp;
-store</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Write to dest, read from src */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_read</span><span class="params">(<span class="type">long</span> *src, <span class="type">long</span> *dst, <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> cnt = n;</span><br><span class="line">    <span class="type">long</span> val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (cnt) {</span><br><span class="line">        *dst = val;</span><br><span class="line">        val = (*src) + <span class="number">1</span>;</span><br><span class="line">        cnt--;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-1.png"></p>
+          <h1 id="513performance-improvementtechniques"><span class="math inline">\(5.13.\)</span>Performance Improvement
+Techniques</h1>
 <ul>
-<li><p>In Example A, the result of the read from <code>src</code>
-<strong>is not affected by the write to <code>dest</code></strong>, and
-the iterations gives a CPE of 1.3.</p></li>
-<li><p>In Example B, each load by the pointer reference
-<code>*src</code> will yield the value stored by the previous execution
-of the pointer reference <code>*dest</code>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;This example illustrates a phenomenon we will call a <em>write/read
-dependency</em>&#x2014;<strong>the outcome of a memory read depends on a recent
-memory write</strong>.</p>
-<p>&#x2003;&#x2003;The CPE of Example B is 7.3, The write/read dependency causes a
-slowdown in the process.</p>
-<p>&#x2003;&#x2003;The reason of the slowdown can be illustrated in the following
-data-flow representation:</p>
-<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-3.png"></p>
-<p>&#x2003;&#x2003;For the case of Example A, <strong>with differing source and
-destination addresses</strong>, the load and store operations
-<strong>can proceed independently</strong>, and hence the only critical
-path is formed by the decrementing of variable cnt, resulting in a CPE
-bound of 1.0.</p>
-<h4 id="bload-performance">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Load performance</h4>
-<p>&#x2003;&#x2003; When a load operation occurs, it must <strong>check the entries in
-the store buffer</strong> for matching addresses. If it finds a match,
-it <strong>retrieves the corresponding data entry</strong> as the result
-of the load operation.</p>
-<p>&#x2003;&#x2003;Take the following assembly code as an example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of write_read</span><br><span class="line"># src in %rdi, dst in %rsi, val in %rax</span><br><span class="line">.L3:                    # loop:</span><br><span class="line">    movq %rax, (%rsi)     # Write val to dst</span><br><span class="line">    movq (%rdi), %rax     # t = *src</span><br><span class="line">    addq $1, %rax         # val = t + 1</span><br><span class="line">    subq $1, %rdx         # cnt--</span><br><span class="line">    jne .L3               # If != 0, goto loop</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image.png"></p>
+<li><p><em>Basic coding principles</em>:</p>
 <ul>
-<li><p>The <code>s_addr</code> instruction computes the address for the
-store operation, <strong>creates an entry in the store buffer</strong>,
-and <strong>sets the address field for that entry</strong>.</p></li>
-<li><p>The <code>s_data</code> operation <strong>sets the data field for
-the entry</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The arcs on the right of the operators denote a set of implicit
-dependencies for these operations:</p>
+<li><p>Eliminate excessive function calls. Move computations out of
+loops when possible.</p></li>
+<li><p>Eliminate unnecessary memory references. Introduce temporary
+variables to hold intermediate results.</p></li>
+</ul></li>
+<li><p><em>Low-level optimizations</em>:</p>
 <ul>
-<li><p>For instruction <code>movq (%rdi), %rax</code>, the load
-operation must <strong>check the addresses of any pending store
-operations</strong>, creating a data dependency between it and the
-<code>s_addr</code> operation.</p>
-<ul>
-<li>If the two addresses match, the load operation must <strong>wait
-until the s_data has deposited its result into the store
-buffer</strong>, but if the two addresses differ, the two operations
-<strong>can proceed independently</strong>.</li>
+<li><p>Unroll loops.</p></li>
+<li><p>Find ways to increase instruction-level parallelism by techniques
+such as multiple accumulators and reassociation.</p></li>
+<li><p>Rewrite conditional operations in a functional style to enable
+compilation via conditional data transfers.</p></li>
 </ul></li>
 </ul>
 
@@ -359,7 +307,7 @@ buffer</strong>, but if the two addresses differ, the two operations
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/146/">146</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -384,14 +332,14 @@ buffer</strong>, but if the two addresses differ, the two operations
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:11</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
   </span>
 </div>
 <div class="busuanzi-count">

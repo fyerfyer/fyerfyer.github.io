@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.2%20B-Trees/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.1%20Some%20concepts/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/11.2%20B-Trees/" class="post-title-link" itemprop="url">11.2.B&#x6811;</a>
+          <a href="/2024/05/31/11.1%20Some%20concepts/" class="post-title-link" itemprop="url">11.1.&#x4E00;&#x4E9B;&#x6982;&#x5FF5;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:16:52" itemprop="dateModified" datetime="2024-06-02T18:16:52+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:12:07" itemprop="dateModified" datetime="2024-06-02T18:12:07+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>491</span>
+      <span>228</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,35 +272,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="112b&#x6811;"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>&#x6811;</h1>
-<h3 id="1b&#x6811;&#x7684;&#x5F15;&#x5165;">1.<span class="math inline">\(B\)</span>&#x6811;&#x7684;&#x5F15;&#x5165;</h3>
-<p>&#x2003;&#x2003;&#x5BFC;&#x81F4;<span class="math inline">\(BST\)</span>&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF1A;&#x6BCF;&#x6B21;<code>insert</code>&#x64CD;&#x4F5C;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x9009;&#x62E9;&#x5728;&#x53F6;&#x5B50;&#x4E0A;&#x8FDB;&#x884C;&#xFF0C;&#x8FD9;&#x5BFC;&#x81F4;&#x4E86;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x4E00;&#x4E2A;&#x81EA;&#x7136;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#xFF1A;&#x80FD;&#x5426;&#x5728;&#x4E0D;&#x589E;&#x52A0;&#x6811;&#x7684;&#x9AD8;&#x5EA6;&#x7684;&#x524D;&#x63D0;&#x4E0B;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x8FBE;&#x5230;&#x8FD9;&#x4E2A;&#x76EE;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#x591A;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x4E0D;&#x4F1A;&#x5BFC;&#x81F4;&#x53F6;&#x5B50;&#x9AD8;&#x5EA6;&#x7684;&#x589E;&#x52A0;&#x4E86;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x4F46;&#x5982;&#x679C;&#x65E0;&#x9650;&#x5236;&#x5730;&#x5728;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E2D;&#x63D2;&#x5165;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5C31;&#x4F1A;&#x9000;&#x5316;&#x6210;&#x4E00;&#x4E2A;&#x94FE;&#x8868;&#x4E86;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5BF9;&#x5355;&#x4E2A;&#x53F6;&#x5B50;&#x80FD;&#x591F;&#x88C5;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6570;&#x91CF;&#x8BBE;&#x7F6E;&#x9650;&#x5EA6;(<span class="math inline">\(limit\)</span>)&#xFF0C;&#x4F8B;&#x5982;<span class="math inline">\(4\)</span>&#x3002;&#x5F53;&#x53F6;&#x5B50;&#x4E2D;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x8D85;&#x8FC7;<span class="math inline">\(4\)</span>&#x4E2A;&#x65F6;&#xFF0C;&#x5C31;&#x901A;&#x8FC7;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;&#x8282;&#x70B9;&#xFF0C;&#x628A;&#x8FD9;&#x4E2A;&#x53F6;&#x5B50;&#x5206;&#x5F00;(<span class="math inline">\(split\)</span>)&#x3002;</p>
-<h3 id="22-3&#x641C;&#x7D22;&#x6811;">2.<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;</h3>
-<p>&#x2003;&#x2003;&#x4E00;&#x68F5;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x662F;&#x6EE1;&#x8DB3;&#x5982;&#x4E0B;&#x6761;&#x4EF6;&#x7684;&#x6811;&#xFF1A;</p>
+          <h1 id="111&#x4E00;&#x4E9B;&#x6982;&#x5FF5;"><span class="math inline">\(11.1\)</span>&#x4E00;&#x4E9B;&#x6982;&#x5FF5;</h1>
+<h3 id="1o&#x4E0E;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x533A;&#x522B;">1.<span class="math inline">\(O()\)</span>&#x4E0E;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x533A;&#x522B;</h3>
+<p>&#x2003;&#x2003;&#x5927;<span class="math inline">\(O\)</span>&#x4E0D;&#x7B49;&#x4E8E;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF01;<span class="math inline">\(O\)</span>&#x8868;&#x793A;&#x7684;&#x662F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x4E0A;&#x754C;&#xFF0C;&#x53EA;&#x8981;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x5C0F;&#x4E8E;<span class="math inline">\(O(times)\)</span>&#xFF0C;&#x90A3;&#x4E48;&#x5B83;&#x5C31;&#x7B97;&#x5728;<span class="math inline">\(O\)</span>&#x5185;&#x3002;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x6BD4;<span class="math inline">\(O\)</span>&#x66F4;&#x4E3A;&#x4E25;&#x82DB;&#xFF0C;&#x56E0;&#x4E3A;&#x5BF9;&#x4E8E;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;<span class="math inline">\(worst_time\)</span>&#xFF0C;&#x51FD;&#x6570;&#x5FC5;&#x987B;&#x80FD;&#x53D6;&#x5230;&#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x3001;&#x800C;&#x975E;&#x4EC5;&#x4EC5;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E;&#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x3002;</p>
+<h3 id="2&#x5BF9;bst&#x6027;&#x80FD;&#x7684;&#x8861;&#x91CF;">2.&#x5BF9;<span class="math inline">\(BST\)</span>&#x6027;&#x80FD;&#x7684;&#x8861;&#x91CF;</h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(BST\)</span>&#x6027;&#x80FD;&#x7684;&#x8861;&#x91CF;&#x9700;&#x8981;&#x8003;&#x8651;&#x4EE5;&#x4E0B;&#x6982;&#x5FF5;&#xFF1A;</p>
 <ul>
-<li>&#x7A7A;&#x7684;(<span class="math inline">\(empty\)</span>)&#x3002;</li>
-<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E24;&#x4E2A;&#x94FE;&#x63A5;(<span class="math inline">\(link\)</span>)&#xFF0C;&#x548C;<span class="math inline">\(BST\)</span>&#x7C7B;&#x4F3C;&#x3002;</li>
-<li>&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x5B58;&#x50A8;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x3002;&#x8BBE;&#x4E8C;&#x4E2A;&#x8282;&#x70B9;&#x5206;&#x522B;&#x4E3A;<span class="math inline">\(x,y\)</span>&#xFF0C;&#x5219;&#x4E09;&#x4E2A;&#x94FE;&#x63A5;&#x6240;&#x6307;&#x5411;&#x7684;&#x5176;&#x5B83;&#x53F6;&#x5B50;&#x5206;&#x522B;&#x6EE1;&#x8DB3;<span class="math inline">\(a_i\leq x,x\leq a_i\leq y,a_i\leq
-y\)</span>&#x3002;</li>
+<li>&#x6DF1;&#x5EA6;(<span class="math inline">\(depth\)</span>)&#xFF1A;&#x8282;&#x70B9;&#x5230;&#x6811;&#x6839;&#x95F4;&#x94FE;&#x63A5;&#x7684;&#x6570;&#x91CF;&#x3002;</li>
+<li>&#x9AD8;&#x5EA6;(<span class="math inline">\(height\)</span>)&#xFF1A;&#x6811;&#x7684;&#x6700;&#x5927;&#x6DF1;&#x5EA6;&#x3002;</li>
+<li>&#x5E73;&#x5747;&#x6DF1;&#x5EA6;(<span class="math inline">\(average\)</span>)&#xFF1A;&#x6811;&#x6240;&#x6709;&#x6DF1;&#x5EA6;&#x7684;&#x5E73;&#x5747;&#x503C;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>&#xFF0C;<span class="math inline">\(d_i\)</span>&#x4EE3;&#x8868;&#x6DF1;&#x5EA6;&#xFF0C;<span class="math inline">\(n_i\)</span>&#x4EE3;&#x8868;&#x8282;&#x70B9;&#x7684;&#x6570;&#x5B57;&#x3002;</li>
 </ul>
-<p><img src="/2024/05/31/11.2%20B-Trees/image.png"></p>
-<h3 id="3&#x67E5;&#x627E;&#x6D41;&#x7A0B;">3.&#x67E5;&#x627E;&#x6D41;&#x7A0B;</h3>
-<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x67E5;&#x627E;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-1.png"></p>
-<h3 id="4&#x63D2;&#x5165;&#x6D41;&#x7A0B;">4.&#x63D2;&#x5165;&#x6D41;&#x7A0B;</h3>
-<p>&#x2003;&#x2003;<span class="math inline">\(2-3\)</span>&#x641C;&#x7D22;&#x6811;&#x63D2;&#x5165;&#x8282;&#x70B9;&#x7684;&#x6D41;&#x7A0B;&#x5982;&#x4E0B;&#xFF1A;</p>
-<ol type="1">
-<li>&#x6211;&#x4EEC;&#x4ECD;&#x7136;&#x4E00;&#x76F4;&#x5728;&#x5DE6;&#x53F6;&#x5B50;&#x8FDB;&#x884C;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x3002;</li>
-<li>&#x5C06;&#x8282;&#x70B9;&#x63D2;&#x5165;&#x5BF9;&#x5E94;&#x7684;&#x53F6;&#x5B50;&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x8BE5;&#x53F6;&#x5B50;&#x7684;&#x8282;&#x70B9;&#x4E2A;&#x6570;&#x5927;&#x4E8E;<span class="math inline">\(3\)</span>&#xFF0C;&#x5219;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x9760;&#x5DE6;&#x7684;&#x8282;&#x70B9;(&#x5982;&#x679C;&#x662F;&#x5947;&#x6570;&#x4E2A;&#x8282;&#x70B9;&#x5C31;&#x76F4;&#x63A5;&#x5F39;&#x51FA;&#x4E2D;&#x95F4;&#x7684;)&#xFF0C;&#x7136;&#x540E;&#x76F8;&#x5E94;&#x5730;&#x91CD;&#x65B0;&#x6392;&#x5217;&#x5B50;&#x6811;&#x3002;</li>
-<li>&#x91CD;&#x590D;&#x4E0A;&#x8FF0;&#x6B65;&#x9AA4;&#xFF0C;&#x76F4;&#x5230;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x6709;&#x7A7A;&#x4F4D;&#x7684;&#x7236;&#x8282;&#x70B9;&#x6216;&#x8005;&#x904D;&#x5386;&#x5230;&#x6839;&#x8282;&#x70B9;&#x3002;</li>
-</ol>
-<p>&#x2003;&#x2003;&#x4E00;&#x4E9B;&#x63D2;&#x5165;&#x60C5;&#x51B5;&#x5BF9;&#x5E94;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-2.png"></p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-3.png"></p>
-<p>&#x2003;&#x2003;&#x5206;&#x5F00;&#x53F6;&#x5B50;&#x7684;&#x56FE;&#x793A;&#x5982;&#x4E0B;&#xFF1A;</p>
-<p><img src="/2024/05/31/11.2%20B-Trees/image-4.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(BST\)</span>&#x7684;&#x9AD8;&#x5EA6;&#x4EE3;&#x8868;&#x4E86;&#x5B83;&#x7684;&#x6700;&#x574F;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x800C;&#x5E73;&#x5747;&#x6DF1;&#x5EA6;&#x51B3;&#x5B9A;&#x4E86;&#x5B83;&#x7684;&#x5E73;&#x5747;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;</p>
 
       
     </div>
@@ -323,7 +305,7 @@ y\)</span>&#x3002;</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/146/">146</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -348,14 +330,14 @@ y\)</span>&#x3002;</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:11</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
   </span>
 </div>
 <div class="busuanzi-count">

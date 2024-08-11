@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/16/3-7-Procedures/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-8-Array-Allocation-and-Access/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/16/3-7-Procedures/" class="post-title-link" itemprop="url">3.7.Procedure</a>
+          <a href="/2024/07/17/3-8-Array-Allocation-and-Access/" class="post-title-link" itemprop="url">3.8.Array Allocation and Access</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-16T16:30:22+08:00">2024-07-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:31:59" itemprop="dateModified" datetime="2024-07-17T17:31:59+08:00">2024-07-17</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:32:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:13:52" itemprop="dateCreated datePublished" datetime="2024-07-17T17:32:22+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.4k</span>
+      <span>878</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,146 +266,98 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="37procedure"><span class="math inline">\(3.7.\)</span>Procedure</h1>
-<h3 id="1procedure-in-a-highprospective">1.Procedure in A High
-Prospective</h3>
-<ul>
-<li>Procedures are a key abstraction in software. They provide a way to
-<strong>package code that implements some functionality with a
-designated set of arguments and an optional return value</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;Well-designed software uses procedures as an abstraction mechanism,
-<strong>hiding the detailed implementation of some action</strong> while
-p<strong>roviding a clear and concise interface definition of what
-values will be computed and what effects the procedure will have on the
-program state</strong>.</p>
-<p>&#x2003;&#x2003;To provide machine-level support for procedures, we need to take
-the following aspect into consideration:</p>
-<ol type="1">
-<li><p><em>Passing control</em>.</p></li>
-<li><p><em>Passing data</em>.</p></li>
-<li><p><em>Allocating and deallocating memory</em>.</p></li>
-</ol>
-<h3 id="2the-run-time-stack">2.The Run-time Stack</h3>
-<ul>
-<li><p>A program can manage the storage required by its procedures using
-a stack, where the stack and the program registers <strong>store the
-information required for passing control and data, and for allocating
-memory</strong>. As P calls Q, <strong>control and data information are
-added to the end of the stack</strong>. This information <strong>gets
-deallocated when P returns</strong>.</p></li>
-<li><p>When an x86-64 procedure requires storage beyond what it can hold
-in registers, it <strong>allocates space on the stack</strong>. This
-region is referred to as the procedure&apos;s <strong>stack
-frame</strong>.</p>
-<ul>
-<li>When procedure P calls procedure Q, it will <strong>push the return
-address onto the stack</strong>, indicating where <strong>within P the
-program should resume</strong> execution once Q returns. We consider the
-return address to be <strong>part of P&apos;s stack frame</strong>, since it
-holds state relevant to P.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The stack frames for most procedures are <strong>of fixed
-size</strong>, allocated at the beginning of the procedure. Some
-procedures, however, require variable-size frames.</p>
-<h3 id="3control-transfer">3.Control Transfer</h3>
-<ul>
-<li><p>Passing control from function P to function Q involves simply
-<strong>setting the program counter (PC) to the starting address of the
-code for Q</strong>. This information is recorded in x86-64 machines by
-invoking procedure Q with the instruction <code>call Q</code>.</p>
-<ul>
-<li>This instruction <strong>pushes an address A onto the stack</strong>
-and <strong>sets the PC to the beginning of Q</strong>. The pushed
-address A is referred to as <strong>the return address</strong> and is
-computed as <strong>the address of the instruction immediately following
-the call instruction</strong>.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The general forms of the <code>call</code> and <code>ret</code>
-instructions are as below:</p>
-<p><img src="/2024/07/16/3-7-Procedures/image.png"></p>
-<p><img src="/2024/07/16/3-7-Procedures/image-1.png"></p>
-<h3 id="4data-transfer">4.Data Transfer</h3>
-<p>&#x2003;&#x2003;In x86-64, data passing to and from a procedure takes place via
-registers.</p>
-<p>&#x2003;&#x2003;<strong>Up to six</strong> integral (i.e., integer and pointer)
-arguments can be passed via registers. The registers are used in a
-specified order:</p>
-<p><img src="/2024/07/16/3-7-Procedures/image-2.png"></p>
-<p>&#x2003;&#x2003;Arguments are allocated to these registers according to
-<strong>their ordering in the argument list</strong>, and arguments
-smaller than 64 bits can be accessed using the appropriate
-<strong>subsection of the 64-bit register</strong>.</p>
-<p>&#x2003;&#x2003;When a function has more than six integral arguments, the other
-ones are passed <strong>on the stack</strong>. When passing parameters
-on the stack, all data size <strong>are rounded up to be multiples of
-8</strong>.</p>
-<p>&#x2003;&#x2003;Let&apos;s take the following code as an example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># void proc(a1, a1p, a2, a2p, a3, a3p, a4, a4p)</span><br><span class="line"># Arguments passed as follows:</span><br><span class="line"># a1 in %rdi (64 bits)</span><br><span class="line"># a1p in %rsi (64 bits)</span><br><span class="line"># a2 in %edx (32 bits)</span><br><span class="line"># a2p in %rcx (64 bits)</span><br><span class="line"># a3 in %r8w (16 bits)</span><br><span class="line"># a3p in %r9 (64 bits)</span><br><span class="line"># a4 at %rsp+8 ( 8 bits)</span><br><span class="line"># a4p at %rsp+16 (64 bits)</span><br><span class="line"></span><br><span class="line">proc:</span><br><span class="line">    movq 16(%rsp), %rax # Fetch a4p (64 bits)</span><br><span class="line">    addq %rdi, (%rsi)   # *a1p += a1 (64 bits)</span><br><span class="line">    addl %edx, (%rcx)   # *a2p += a2 (32 bits)</span><br><span class="line">    addw %r8w, (%r9)    # *a3p += a3 (16 bits)</span><br><span class="line">    movl 8(%rsp), %edx  # Fetch a4 (8 bits)</span><br><span class="line">    addb %dl, (%rax)    # *a4p += a4 (8 bits)</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/07/16/3-7-Procedures/image-3.png"></p>
-<h3 id="5local-storage-on-the-stack">5.Local Storage on the Stack</h3>
-<p>&#x2003;&#x2003;In most cases, local data is stored in registers. However, there
-are cases that local data must be stored in memory:</p>
-<ol type="1">
-<li><p>There are not enough registers to hold all of the local
-data.</p></li>
-<li><p>The address operator &apos;&amp;&apos; is applied to a local variable, and
-hence we must be able to <strong>generate an address for it</strong>.
-However, data that is stored in register doesn&apos;t have unique
-address.</p></li>
-<li><p>Some of the local variables are arrays or structures and hence
-must be accessed by array or structure references.</p></li>
-</ol>
-<p>&#x2003;&#x2003;Take the following program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp;</span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># long caller()</span><br><span class="line">caller:</span><br><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br><span class="line">call swap_add        # Call swap_add(&amp;arg1, &amp;arg2)</span><br><span class="line">movq (%rsp), %rdx    # Get arg1</span><br><span class="line">subq 8(%rsp), %rdx   # Compute diff = arg1 - arg2</span><br><span class="line">imulq %rdx, %rax     # Compute sum * diff</span><br><span class="line">addq $16, %rsp       # Deallocate stack frame</span><br><span class="line">ret                  # Return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Because we need to use the address of <code>arg1</code> and
-<code>arg2</code>, we need to store them in memory. We do this by
-leaving enough place in the stack and push the arguments onto the
-stack:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Once we need to use the value, we fetch it from the stacK:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The following program is a more complicated one. It includes the
-details of setting up the stack frame for the local variables and
-function parameters:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">call_proc:</span><br><span class="line"></span><br><span class="line">    # set up arguments to proc</span><br><span class="line">    subq $32, %rsp          # Allocate 32-byte stack frame</span><br><span class="line">    movq $1, 24(%rsp)       # Store 1 in &amp;x1</span><br><span class="line">    movl $2, 20(%rsp)       # Store 2 in &amp;x2</span><br><span class="line">    movw $3, 18(%rsp)       # Store 3 in &amp;x3</span><br><span class="line">    movb $4, 17(%rsp)       # Store 4 in &amp;x4</span><br><span class="line">    leaq 17(%rsp), %rax     # Create &amp;x4</span><br><span class="line">    movq %rax, 8(%rsp)      # Store &amp;x4 as argument 8</span><br><span class="line">    movl $4, (%rsp)         # Store 4 as argument 7</span><br><span class="line">    leaq 18(%rsp), %r9      # Pass &amp;x3 as argument 6</span><br><span class="line">    movl $3, %r8d           # Pass 3 as argument 5</span><br><span class="line">    leaq 20(%rsp), %rcx     # Pass &amp;x2 as argument 4</span><br><span class="line">    movl $2, %edx           # Pass 2 as argument 3</span><br><span class="line">    leaq 24(%rsp), %rsi     # Pass &amp;x1 as argument 2</span><br><span class="line">    movl $1, %edi           # Pass 1 as argument 1</span><br><span class="line"></span><br><span class="line">    # call proc</span><br><span class="line">    call proc               # Call proc</span><br><span class="line"></span><br><span class="line">    # retrieve changes to memory</span><br><span class="line">    movslq 20(%rsp), %rdx   # Get x2 and convert to long</span><br><span class="line">    addq 24(%rsp), %rdx     # Compute x1+x2</span><br><span class="line">    movswl 18(%rsp), %eax   # Get x3 and convert to int</span><br><span class="line">    movsbl 17(%rsp), %ecx   # Get x4 and convert to int</span><br><span class="line">    subl %ecx, %eax         # Compute x3-x4</span><br><span class="line">    cltq                    # Convert to long</span><br><span class="line">    imulq %rdx, %rax        # Compute (x1+x2) * (x3-x4)</span><br><span class="line">    addq $32, %rsp          # Deallocate stack frame</span><br><span class="line">    ret                     # Return</span><br></pre></td></tr></table></figure>
-<h3 id="6local-storage-in-registers">6.Local Storage in Registers</h3>
-<p>&#x2003;&#x2003;When calling another procedure, we must make sure that <strong>the
-callee does not overwrite some register value that the caller planned to
-use later</strong>.</p>
-<ul>
-<li><p>By convention, registers <code>%rbx</code>, <code>%rbp</code>,
-and <code>%r12&#xFFFD;C%r15</code> are classified as <strong>callee saved
-registers</strong>.</p>
-<ul>
-<li>When procedure P calls procedure Q, <strong>Q must preserve the
-values of these registers</strong>, ensuring that they have the same
-values when Q returns to P as they did when Q was called.</li>
-</ul></li>
-<li><p>Procedure Q can preserve a register value by either <strong>not
-changing it at all</strong> or by <strong>pushing the original value on
-the stack, altering it, and then popping the old value from the stack
-before returning</strong>.</p></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushq %rbp  # Save %rbp</span><br><span class="line">pushq %rbx  # Save %rbx</span><br><span class="line">...</span><br><span class="line">popq %rbx   # Restore %rbx</span><br><span class="line">popq %rbp   # Restore %rbp</span><br></pre></td></tr></table></figure>
+          <h1 id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</h1>
+<h3 id="1pointer-arithmetic">1.Pointer Arithmetic</h3>
+<p>&#x2003;&#x2003;Suppose the starting address of integer array <code>E</code> and
+integer index <code>i</code> are stored in registers <code>%rdx</code>
+and <code>%rcx</code>. Below are some assembly-code implementation of
+array expressions, with the result being stored in either
+<code>%eax</code>(for data) or register <code>%rax</code>(for
+pointers):</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image.png"></p>
 <blockquote>
-<p>Note how they are popped is <strong>in the reverse order
-from</strong> how they were pushed, to account for the last-in,
-first-out discipline of a stack.</p>
+<p>The dereference of a pointer is through
+<code>(register_name)</code>.</p>
 </blockquote>
+<blockquote>
+<p>The final example shows that one can compute the difference of two
+pointers within the same data structure, with the result being data
+having type long and value equal to <strong>the difference of the two
+addresses divided by the size of the data type</strong>.</p>
+</blockquote>
+<h3 id="2nested-arrays">2.Nested Arrays</h3>
+<p>&#x2003;&#x2003;The array elements are ordered in memory in row-major order:</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image-1.png"></p>
+<p>&#x2003;&#x2003;Array element <code>M[i][j]</code> can be easily reached through a
+series of arithmetic operations. For example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># A in %rdi, i in %rsi, and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2), %rax  # Compute 3i</span><br><span class="line">leaq (%rdi,%rax,4), %rax  # Compute xA + 12i</span><br><span class="line">movl (%rax,%rdx,4), %eax  # Read from M[xA + 12i + 4]</span><br></pre></td></tr></table></figure>
+<h3 id="3fixed-sized-arrays">3.Fixed-sized Arrays</h3>
+<p>&#x2003;&#x2003;The C compiler is able to make many optimizations for code
+operating on multi-dimensional arrays of fixed size. Take the inner
+product calculation program as an example. The original form is as
+below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimized C code is as below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele_opt</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">int</span> *Aptr = &amp;A[i][<span class="number">0</span>]; <span class="comment">/* Points to elements in row i of A */</span></span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k]; <span class="comment">/* Points to elements in column k of B */</span></span><br><span class="line">    <span class="type">int</span> *Bend = &amp;B[N][k]; <span class="comment">/* Marks stopping point for Bptr */</span></span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> {                         <span class="comment">/* No need for initial test */</span></span><br><span class="line">        result += *Aptr * *Bptr; <span class="comment">/* Add next product to sum */</span></span><br><span class="line">        Aptr ++;                 <span class="comment">/* Move Aptr to next column */</span></span><br><span class="line">        Bptr += N;               <span class="comment">/* Move Bptr to next row */</span></span><br><span class="line">    } <span class="keyword">while</span> (Bptr != Bend);      <span class="comment">/* Test for stopping point */</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimization follows the following steps:</p>
+<ol type="1">
+<li><p>Generating a pointer, which we have named <code>Aptr</code>, that
+points to successive elements in row <code>i</code> of
+<code>A</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bptr</code>, that
+points to successive elements in column <code>k</code> of
+<code>B</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bend</code>, that
+equals the value <code>Bptr</code> will have <strong>when it is time to
+terminate the loop</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;The key points of optimization are as below:</p>
+<ol type="1">
+<li><p>Decide the <strong>starting address and end address of the
+array</strong>.</p></li>
+<li><p>Decide <strong>how to move the address forward</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>The C program below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Set all diagonal elements to val */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">        A[i][i] = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;With the properties:</p>
 <ul>
-<li>All other registers, except for the stack pointer <code>%rsp</code>,
-are classified as <strong>caller saved registers</strong>.</li>
+<li><p>Starting address: <code>&amp;A[0][0]</code>.</p></li>
+<li><p>Ending address: <code>&amp;A[N+1][0]</code>.</p></li>
+<li><p>Moving stride: <code>index += N + 1</code>.</p></li>
 </ul>
-<h3 id="7recursive-procedures">7.Recursive Procedures</h3>
-<p>&#x2003;&#x2003;The stack discipline of allocation and deallocation naturally
-matches the call-return ordering of functions. So the recursive
-procedures is the same as other procedures:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = n * rfact(n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rfact:</span><br><span class="line">    pushq %rbx              # Save %rbx</span><br><span class="line">    movq %rdi, %rbx         # Store n in callee-saved register</span><br><span class="line">    movl $1, %eax           # Set return value = 1</span><br><span class="line">    cmpq $1, %rdi           # Compare n:1</span><br><span class="line">    jle .L35                # If &lt;=, goto done</span><br><span class="line">    leaq -1(%rdi), %rdi     # Compute n-1</span><br><span class="line">    call rfact              # Call rfact(n-1)</span><br><span class="line">    imulq %rbx, %rax        # Multiply result by n</span><br><span class="line">.L35: done:</span><br><span class="line">    popq %rbx               # Restore %rbx</span><br><span class="line">    ret                     # Return</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;And the optimized program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag_opt</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Abase = &amp;A[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> iend = N * (N + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        Abase[i] = val;</span><br><span class="line">        i += (N + <span class="number">1</span>);</span><br><span class="line">    } <span class="keyword">while</span> (i != iend);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="4variable-size-arrays">4.Variable-Size Arrays</h3>
+<p>&#x2003;&#x2003;Programmers requiring variable-size arrays had to allocate storage
+for these arrays using functions such as <code>malloc</code> or
+<code>calloc</code>, and they had to explicitly encode the mapping of
+multidimensional arrays into single-dimension ones via row-major
+indexing.</p>
+<p>&#x2003;&#x2003;If we declare an array <code>int A[exp1][exp2]</code>, the
+dimensions of the array are determined by evaluating the expressions
+<code>expr1</code> and <code>expr2</code> <strong>at the time the
+declaration is encountered</strong>.</p>
+<p>&#x2003;&#x2003;For example, the following C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">long</span> i, <span class="type">long</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> A[i][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var_ele:</span><br><span class="line">    imulq %rdx, %rdi          # Compute n * i</span><br><span class="line">    leaq (%rsi,%rdi,4), %rax  # Compute xA + 4(n * i)</span><br><span class="line">    movl (%rax,%rcx,4), %eax  # Read from M[xA + 4(n * i) + 4 * j]</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<strong>Instead of using <code>leaq</code>, the dynamic version
+must use <code>imul</code> to scale <code>i</code> by
+<code>n</code></strong>. This is because we don&apos;t know the exact size of
+array until encounter the declaration.</p>
+<p>&#x2003;&#x2003;The optimization of variable-size arrays is similar to that of the
+fixed-size:</p>
+<p>&#x2003;&#x2003;For example, the C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be optimized as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of variable matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele_opt</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Arow = A[i];</span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k];</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    {</span><br><span class="line">        result += Arow[j] * *Bptr;</span><br><span class="line">        Bptr += n;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>We can see that <code>GCC</code> is able to recognize patterns that
+arise when a program steps through the elements of a multidimensional
+array, and generate the <strong>pointer-based code</strong> or the
+<strong>array-based code</strong> to <strong>avoid direct multiple
+calculation</strong>.</p>
+</blockquote>
 
       
     </div>
@@ -434,7 +380,7 @@ procedures is the same as other procedures:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/146/">146</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -459,14 +405,14 @@ procedures is the same as other procedures:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">118k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:11</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
   </span>
 </div>
 <div class="busuanzi-count">
