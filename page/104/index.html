@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">10.3.&#x5BF9;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x5904;&#x7406;</a>
+          <a href="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">10.2.&#x5BF9;&#x53D8;&#x91CF;&#x7684;&#x5904;&#x7406;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:39:49" itemprop="dateModified" datetime="2024-06-03T15:39:49+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:36:13" itemprop="dateModified" datetime="2024-06-03T15:36:13+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>397</span>
+      <span>756</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,69 +272,134 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="113handling-expression"><span class="math inline">\(11.3.\)</span>Handling Expression</h1>
-<h3 id="1expressions-definitionreview">1.Expressions definition
-review</h3>
-<p><img src="/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/image-5.png"></p>
-<h3 id="2parse-tree">2.Parse tree</h3>
-<p><img src="/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/image-6.png"></p>
+          <h1 id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</h1>
+<h3 id="1program-compilation">1.Program compilation</h3>
+<p>&#x2003;&#x2003;Remember that the VM language doesn&apos;t have symbolic variables, it
+only has <code>local</code>, <code>this</code> and so on. In order to
+resolve this pseudocode into final executable VM code, we have to
+<strong>map these symbolic variables on what is called <em>virtual
+memory segments</em></strong>. And to do this, we:</p>
 <ul>
-<li><em>infix</em>: that&apos;s sort of ingrained into our brains in
-elementary school.</li>
-<li><em>prefix</em>: that&apos;s what we do when we define functions: we put
-the function name and then a list of operands or parameters or
-arguments.</li>
-<li><em>postfix</em>: that&apos;s closely related to the stack machine. Say
-we want to do an <code>add</code> operation, we <code>push x</code>,
-<code>push y</code> and finally <code>pop</code>, this is exactly
-postfix.</li>
+<li>need the <strong>variable properties</strong>.</li>
+<li>also have to know <strong>the index of the variable of its
+kind</strong>(first, second, etc.).</li>
 </ul>
-<h3 id="3generating-code-forexpressions">3.Generating code for
-expressions</h3>
-<p>&#x2003;&#x2003;In high level language like Java, we declare expressions in infix,
-and the target language, so our compiler has to translate from infix to
-postfix. Here are two ways to do this:</p>
-<p><img src="/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/image-7.png"></p>
+<p>&#x2003;&#x2003;And the properties of variables include:</p>
+<ul>
+<li><p><em>name</em>: It&apos;s an identifier.</p></li>
+<li><p><em>type</em>: <code>int</code>, <code>char</code>,
+<code>boolean</code> and <strong>all class name</strong>.</p></li>
+<li><p><em>kind</em>: There are two kinds of variables, and we view them
+separately:</p>
+<ul>
+<li><em>class level</em>: <code>field</code>, <code>static</code>
+variables.</li>
+<li><em>subroutine level</em>: <code>argument</code> and
+<code>local</code> variables.</li>
+</ul></li>
+<li><p><em>scope</em>, which is the region of the code in which it is
+recognized.</p></li>
+</ul>
+<h3 id="2symbol-table">2.Symbol table</h3>
+<p>&#x2003;&#x2003;We handle the property of variables using a <em>symbol
+table</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<ul>
+<li>A method is always designed to operate on the current object which
+is called <code>this</code>. Therefore, the symbol table of method
+<strong>always begins with <code>this</code> entry</strong>, which
+represents the properties of current object.</li>
+<li><code>this</code> is always treated as <code>argument 0</code></li>
+<li>The type of current object is <strong>the name of the class to which
+this subroutine belongs</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;The class level symbol table can be reset each time we begin to
+compile a new class, for <strong>classes are standalone compilation
+unity</strong>. Something similar happens when we compile
+subroutines.</p>
+<p>&#x2003;&#x2003;The code writer is going to encounter all sorts of variable
+declaration commands, of which in Jack we have three:
+<code>local</code>, <code>field</code> and <code>static</code>.</p>
+<p>&#x2003;&#x2003;Then it&apos;s going to elucidate all important properties of the
+declared variables, and <strong>add the information to the respective
+symbol table</strong>. It generates no code whatsoever beyond updating
+the symbol tables.</p>
+<ul>
+<li>If we are defining a <code>field</code> or a <code>static</code>
+variable, the code writer will add a new row to the end of the class
+level symbol table.</li>
+<li>If we are defining <code>local</code> or <code>argument</code>, the
+code writer will update the symbol table of the subroutine which is
+currently being compiled.</li>
+<li>Arguments are being defined as <strong>part of the parameter list of
+the method&apos;s signature</strong>. When the code writer goes through the
+parameter list, it adds the respective lines to the subroutine&apos;s symbol
+table.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p>&#x2003;&#x2003;What about using variables within the context of expressions or
+statements. Take <code>let dx = x - other.getX();</code> as an
+example:</p>
+<ul>
+<li><p>For each variable in the code, we <strong>look up this variable
+in the subroutine level symbol table</strong>.</p>
+<ul>
+<li>If we find it there, we know which property we have to use.</li>
+<li>If don&apos;t, we revert to <strong>looking it up in the class level
+symbol table</strong>.</li>
+<li>If don&apos;t either, we can conclude that the variable is undefined and
+throw an error message.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;How can the statements be translated into VM code? Take
+<code>let y = y +dy</code> for example:</p>
 <ol type="1">
-<li>We generate a parse tree through the infix expression.</li>
-<li>The parser takes the source code and produces XML code from it.</li>
-<li>We go through every node in the parse tree in a certain order.</li>
+<li>In the process of generating code, the code generator will look up
+the respective table.</li>
+<li>It finds out that <strong><code>y</code> stands for the second
+<code>field</code> of the current object</strong>, so it will be
+translated into <code>this 1</code></li>
+<li><code>dy</code> stands for the second <code>local</code> variable,
+so it will be translated into <code>local 1</code></li>
 </ol>
-<p>&#x2003;&#x2003;To convert the parse tree into the VM code, we use the
-<em>deep-first tree traversal algorithm</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
+<h3 id="3handling-variables-ingeneral">3.Handling variables in
+general</h3>
+<p>&#x2003;&#x2003;High level of programming languages vary in terms of:</p>
 <ul>
-<li>We go all the way down, and when we hit a terminal leaf, we process
-it.</li>
+<li>variable types</li>
+<li>variable kinds</li>
+<li>nested scoping rules</li>
 </ul>
-<p>&#x2003;&#x2003;However, the parse tree we have may be gigantic, so it may be
-better not to have the side effect. We will use the following code
-generation algorithm instead:</p>
-<p><img src="/2024/04/20/10-3-%E5%AF%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%A4%84%E7%90%86/image-8.png"></p>
+<p>&#x2003;&#x2003;And the symbol table generation and usage we discussed right now
+can be easily entended to handle any number of possible variables types
+and kinds.</p>
+<p>&#x2003;&#x2003;Some languages, like Java, feature <em>unlimited scoping</em>. this
+means that whenever you define a block of code with a pair of curly
+brackets, you can define variables within this code which are recognized
+only within that block. <code>x</code> in this scope doesn&apos;t mean the
+same as <code>x</code> in that block.</p>
+<p>&#x2003;&#x2003;To represent the information in our symbol table mechanism, we use
+<strong>a linked list of symbol tables</strong>:</p>
 <ul>
-<li>Whatever is the mapping of <code>x</code> is dictated by the symbol
-table which is always in the background of the co-generation
-algorithms.</li>
+<li>When start compiling the class, we first create an linked list.</li>
+<li>The first symbol table we add to the list is the class level symbol
+table.</li>
+<li>When we start compiling a method, we create the method symbol table
+like before.</li>
+<li>Whenever we have another scoping region, we <strong>add another
+symbol table to the linked list</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The nice thing about this algorithm is that not only does it
-<strong>capture the semantics of the input expression</strong>, it also
-<strong>computes the value of this expression</strong>. That is, in the
-runtime the value of the expression is going to be placed on the
-stack.</p>
-<h3 id="4from-parsing-to-codegeneration">4.From parsing to code
-generation</h3>
-<p>&#x2003;&#x2003;In the previous project, we develop a Jack Analyzer that generate
-static XML code, but in this part, the XML is completely irrelevant now.
-Instead, we generate actual executable VM code. And there are some
-general guidelines on what has to be done:</p>
-<ul>
-<li>We have <strong>operator priority</strong> in some operation, such
-as mathematics operations (however, Jack doesn&apos;t have this). Since the
-compiler will ignore it, we ourselves must take this into
-consideration.</li>
-<li>Once we have parenthesis in Jack, we have to take operator priority
-into consideration. We have to make the code write algorithm work in the
-proper order as dictated by the parenthesis.</li>
-</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p>&#x2003;&#x2003;When you encounter some variable <code>x</code> in the code we:</p>
+<ol type="1">
+<li>Look up <code>x</code> in the current scope, which is also the first
+table.</li>
+<li>If fail, we move to the next symbol table.</li>
+<li>We simply go on downstream until we get to the class level symbol
+table.</li>
+</ol>
 
       
     </div>
@@ -357,7 +422,7 @@ proper order as dictated by the parenthesis.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/103/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/103/">103</a><span class="page-number current">104</span><a class="page-number" href="/page/105/">105</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/105/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -382,14 +447,14 @@ proper order as dictated by the parenthesis.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
   </span>
 </div>
 <div class="busuanzi-count">

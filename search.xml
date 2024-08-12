@@ -20,6 +20,74 @@ ver））</a></p></li>
 ]]></content>
   </entry>
   <entry>
+    <title>6.6.The Impact of Caches on Program Performance</title>
+    <url>/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/</url>
+    <content><![CDATA[<h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
+Performance</h1>
+<h3 id="1rearrangingloops-to-increase-spatial-locality">1.Rearranging
+Loops to Increase Spatial Locality</h3>
+<p>  Consider the problem of multiplying a pair of <span class="math inline">\(2 \times 2\)</span> matrices: <span class="math inline">\(C = AB\)</span>:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+c_{11} &amp; c_{12} \\
+c_{21} &amp; c_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22}
+\end{bmatrix}
+\]</span></p>
+<p>  and we make the following assumptions:</p>
+<ul>
+<li><p>Each array is an <span class="math inline">\(n \times n\)</span>
+array of double, with <code>sizeof(double) = 8</code>.</p></li>
+<li><p>There is a single cache with a 32-byte block size(B =
+32).</p></li>
+<li><p>The array size n is so large that a single matrix row does not
+fit in the L1 cache.</p></li>
+<li><p>The compiler stores local variables in registers, and thus
+references to local variables inside loops do not require any load or
+store instructions.</p></li>
+</ul>
+<p>  We can write three different versions:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">        sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">            sum += A[i][k]*B[k][j];</span><br><span class="line">        C[i][j] += sum;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++) &#123;</span><br><span class="line">        r = B[k][j];</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        C[i][j] += A[i][k]*r;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        r = A[i][k];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">            C[i][j] += r * B[k][j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image.png"></p>
+<p>  The third routine present an interesting trade-off: With two loads
+and a store, they <strong>require one more memory operation than the
+first routines</strong>. On the other hand, since the inner loop scans
+both B and C row-wise with a stride-1 access pattern, the miss rate on
+each array is only 0.25 misses per iteration, for a total of 0.50 misses
+per iteration.</p>
+<p>  The performance result is as below:</p>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image-1.png"></p>
+<p>  We can see that in this case, <strong>miss rate is a better
+predictor of performance</strong> than the total number of memory
+accesses.</p>
+<h3 id="2exploiting-locality">2.Exploiting Locality</h3>
+<ul>
+<li><p>Focus your attention on the inner loops.</p></li>
+<li><p>Try to maximize the spatial locality in your programs by reading
+data objects sequentially, <strong>with stride 1</strong>, <strong>in
+the order they are stored in memory</strong>.</p></li>
+<li><p>Try to maximize the temporal locality in your programs by
+<strong>using a data object as often as possible once it has been read
+from memory</strong>.</p></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 6.The Memory Hierarchy</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.3~6.5.Cache Key Point</title>
     <url>/2024/08/11/6-3-6-5-Cache-Key-Point/</url>
     <content><![CDATA[<h1 id="63-sim65cache-key-point"><span class="math inline">\(6.3 \sim
@@ -5788,6 +5856,26 @@ environment.</p>
       </categories>
   </entry>
   <entry>
+    <title>11.1.一些概念</title>
+    <url>/2024/05/31/11.1%20Some%20concepts/</url>
+    <content><![CDATA[<h1 id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</h1>
+<h3 id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</h3>
+<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
+<h3 id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</h3>
+<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
+<ul>
+<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
+<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
+<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
+</ul>
+<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>10.1.二叉搜索树</title>
     <url>/2024/05/31/10.1.Binary%20Search%20Trees/</url>
     <content><![CDATA[<h1 id="101二叉搜索树"><span class="math inline">\(10.1\)</span>二叉搜索树</h1>
@@ -5847,46 +5935,6 @@ ordering restriction to support efficient search</li>
       </categories>
   </entry>
   <entry>
-    <title>11.1.一些概念</title>
-    <url>/2024/05/31/11.1%20Some%20concepts/</url>
-    <content><![CDATA[<h1 id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</h1>
-<h3 id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</h3>
-<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
-<h3 id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</h3>
-<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
-<ul>
-<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
-<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
-<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
-</ul>
-<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.3.B-树的不变量</title>
-    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
-    <content><![CDATA[<h1 id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</h1>
-<h3 id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</h3>
-<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
-<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
-<ul>
-<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
-<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
-</ul>
-<h3 id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</h3>
-<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
-n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
     <title>11.2.B树</title>
     <url>/2024/05/31/11.2%20B-Trees/</url>
     <content><![CDATA[<h1 id="112b树"><span class="math inline">\(11.2\)</span><span class="math inline">\(B\)</span>树</h1>
@@ -5925,6 +5973,26 @@ y\)</span>。</li>
       </categories>
   </entry>
   <entry>
+    <title>11.3.B-树的不变量</title>
+    <url>/2024/05/31/11.3.%20B-Tree%20invariants/</url>
+    <content><![CDATA[<h1 id="113b-树的不变量"><span class="math inline">\(11.3\)</span><span class="math inline">\(B\)</span>-树的不变量</h1>
+<h3 id="1b-树的性质">1.<span class="math inline">\(B\)</span>-树的性质</h3>
+<p>  由于<span class="math inline">\(B\)</span>-树会在叶子容量过大时将叶子对半分开、然后重构子树，这使得我们可以以任意次序插入元素，而不用担心最坏运行时间的发生。</p>
+<p>  一棵<span class="math inline">\(B\)</span>-树具有如下有用的性质：</p>
+<ul>
+<li>每个叶子到它的源头(<span class="math inline">\(source\)</span>)的距离必须相等。</li>
+<li>一个有<span class="math inline">\(k\)</span>个元素的非叶子节点，它必须有<span class="math inline">\(k+1\)</span>个孩子。</li>
+</ul>
+<h3 id="2b-树运行时间分析">2.<span class="math inline">\(B\)</span>-树运行时间分析</h3>
+<p>  <span class="math inline">\(B\)</span>-树的最坏运行情况是：在树的底部的叶子的最右侧的节点找到某个元素。由于<span class="math inline">\(B\)</span>-树的构造方式，树的深度<span class="math inline">\(O(\log
+n)\)</span>，而由于我们限制了每个叶子结点承载元素的数量，因此从叶子左端到右端的搜索时间为常数。则总的运行时间为<span class="math inline">\(O(\log n)\)</span>。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>11.4.树的旋转</title>
     <url>/2024/05/31/11.4.Rotating%20Trees/</url>
     <content><![CDATA[<h1 id="114树的旋转"><span class="math inline">\(11.4\)</span>树的旋转</h1>
@@ -5945,37 +6013,6 @@ promote its left child in the only natural way.</li>
 <p><img src="/2024/05/31/11.4.Rotating%20Trees/image-6.png"></p>
 <p>  We can implement these operations by following codes:
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.left);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// make a right-leaning link lean to the left</span></span><br><span class="line"><span class="keyword">private</span> Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="comment">// assert (h != null) &amp;&amp; isRed(h.right);</span></span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.5.红黑树</title>
-    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
-    <content><![CDATA[<h1 id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</h1>
-<h3 id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</h3>
-<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
-<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
-<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
-<h3 id="2左斜红黑树的性质">2.左斜红黑树的性质</h3>
-<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
-<ol type="1">
-<li>红色链接左斜。</li>
-<li>没有一个节点与两个红色链接相连。</li>
-<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
-</ol>
-<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
-<h3 id="2红黑树的旋转操作">2.红黑树的旋转操作</h3>
-<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
-<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6035,6 +6072,37 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
+    <title>11.5.红黑树</title>
+    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
+    <content><![CDATA[<h1 id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</h1>
+<h3 id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</h3>
+<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
+<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
+<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
+<h3 id="2左斜红黑树的性质">2.左斜红黑树的性质</h3>
+<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
+<ol type="1">
+<li>红色链接左斜。</li>
+<li>没有一个节点与两个红色链接相连。</li>
+<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
+</ol>
+<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
+<h3 id="2红黑树的旋转操作">2.红黑树的旋转操作</h3>
+<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
+<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>12.3.Hashing的实现方法(2)</title>
     <url>/2024/05/31/12.3.The%20solution%20to%20Hashing%20problems(2)/</url>
     <content><![CDATA[<h1 id="123hashing的实现方法2"><span class="math inline">\(12.3\)</span><span class="math inline">\(Hashing\)</span>的实现方法(2)</h1>
@@ -6066,51 +6134,6 @@ item exists, return true.</li>
 </ul>
 <h3 id="2内存的处理">2.内存的处理</h3>
 <p>  为了避免使用过大的数组，我们可以固定数组的大小，然后采用取模的方法，让所有的<span class="math inline">\(hashCode\)</span>都落入该数组的索引范围内(类似我们在<span class="math inline">\(ArrayList\)</span>中使用的方法)。就算此时发生了哈希冲突，我们也可以用上面的方法处理它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.4.数据结构的最终实现</title>
-    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
-    <content><![CDATA[<h1 id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</h1>
-<h3 id="1运行时间的优化">1.运行时间的优化</h3>
-<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
-<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
-<ol type="1">
-<li>动态地扩大我们的哈希表。</li>
-<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<h4 id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</h4>
-<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
-<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
-<ul>
-<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
-<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
-<ul>
-<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
-</ul></li>
-</ul>
-<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
-M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
-M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
-<h4 id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></h4>
-<ul>
-<li><p>Use a 'base' strategy similar to the one we developed
-earlier.</p></li>
-<li><p>Use a 'base' that's a small prime.</p>
-<ul>
-<li>Base 126 isn't actually very good, because using base 126 means that
-any string that ends in the same last 32 characters has the same
-hashcode.</li>
-<li>This happens because of overflow.</li>
-<li>Using prime numbers helps avoid overflow issues (i.e., collisions
-due to overflow).</li>
-<li>Why a small prime? Because it's easier to compute.</li>
-</ul></li>
-</ul>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6228,6 +6251,51 @@ rightchild=2i+1
       <categories>
         <category>CS61B DataStructure</category>
         <category>13.Heap &amp; Priority Queue</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>12.4.数据结构的最终实现</title>
+    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
+    <content><![CDATA[<h1 id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</h1>
+<h3 id="1运行时间的优化">1.运行时间的优化</h3>
+<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
+<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
+<ol type="1">
+<li>动态地扩大我们的哈希表。</li>
+<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
+</ol>
+<h4 id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</h4>
+<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
+<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
+<ul>
+<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
+<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
+<ul>
+<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
+</ul></li>
+</ul>
+<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
+M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
+M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
+<h4 id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></h4>
+<ul>
+<li><p>Use a 'base' strategy similar to the one we developed
+earlier.</p></li>
+<li><p>Use a 'base' that's a small prime.</p>
+<ul>
+<li>Base 126 isn't actually very good, because using base 126 means that
+any string that ends in the same last 32 characters has the same
+hashcode.</li>
+<li>This happens because of overflow.</li>
+<li>Using prime numbers helps avoid overflow issues (i.e., collisions
+due to overflow).</li>
+<li>Why a small prime? Because it's easier to compute.</li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>12.Hashing</category>
       </categories>
   </entry>
   <entry>
@@ -6364,22 +6432,6 @@ Edward Fredkin suggested it be pronounced as "tree"</li>
       </categories>
   </entry>
   <entry>
-    <title>17.1.图的构建</title>
-    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
-    <content><![CDATA[<h1 id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</h1>
-<h3 id="1图的api">1.图的<span class="math inline">\(API\)</span></h3>
-<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2dfs">2.<span class="math inline">\(dfs\)</span></h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3路径的寻找">3.路径的寻找</h3>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>17.Graphs</category>
-      </categories>
-  </entry>
-  <entry>
     <title>16.2.K-D树</title>
     <url>/2024/05/31/16.2.K-D%20Trees/</url>
     <content><![CDATA[<h1 id="162k-dtrees"><span class="math inline">\(16.2\)</span><span class="math inline">\(K-D\;Trees\)</span></h1>
@@ -6434,38 +6486,19 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
-    <title>18.1.选择排序</title>
-    <url>/2024/05/31/18.1.Selection%20Sort/</url>
-    <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
-<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
-<p>  In selection sort, we basically do these three things:</p>
-<ol type="1">
-<li>Find the smallest item.</li>
-<li>Move it to the front.</li>
-<li>Selection sort the rest(using recursion).</li>
-</ol>
-<p>  For each step, we can design an individual method to implement
-it.</p>
-<h3 id="2step-implementation">2.Step implementation</h3>
-<p>  As the moving step requires the index of the to-moving element, the
-value we return should be index of elements, too.</p>
-<h4 id="afind">  <span class="math inline">\(a.\)</span><code>Find</code></h4>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  Given that we may need to <code>Find</code> the minimun in asked
-range, we may improve our method by passing an extra parameter which
-point to the start index(We'll use it in the following procedure)：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="bswap">  <span class="math inline">\(b.\)</span><code>swap</code></h4>
-<p>  We are going to implement the method by manipulating the index of
-the elements: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="cmainmethod">  <span class="math inline">\(c.\)</span>Main
-method</h4>
-<p>  Since we would like to do the sorting recursively, we may introduce
-a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+    <title>17.1.图的构建</title>
+    <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
+    <content><![CDATA[<h1 id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</h1>
+<h3 id="1图的api">1.图的<span class="math inline">\(API\)</span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) &#123;</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) &#123; <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> &#123;</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2dfs">2.<span class="math inline">\(dfs\)</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> &#123;</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> &#123;</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3路径的寻找">3.路径的寻找</h3>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
-        <category>18.Basic Sorting</category>
+        <category>17.Graphs</category>
       </categories>
   </entry>
   <entry>
@@ -6494,6 +6527,41 @@ back of the array.</li>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>18.1.选择排序</title>
+    <url>/2024/05/31/18.1.Selection%20Sort/</url>
+    <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
+<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
+<p>  In selection sort, we basically do these three things:</p>
+<ol type="1">
+<li>Find the smallest item.</li>
+<li>Move it to the front.</li>
+<li>Selection sort the rest(using recursion).</li>
+</ol>
+<p>  For each step, we can design an individual method to implement
+it.</p>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<p>  As the moving step requires the index of the to-moving element, the
+value we return should be index of elements, too.</p>
+<h4 id="afind">  <span class="math inline">\(a.\)</span><code>Find</code></h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  Given that we may need to <code>Find</code> the minimun in asked
+range, we may improve our method by passing an extra parameter which
+point to the start index(We'll use it in the following procedure)：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="bswap">  <span class="math inline">\(b.\)</span><code>swap</code></h4>
+<p>  We are going to implement the method by manipulating the index of
+the elements: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="cmainmethod">  <span class="math inline">\(c.\)</span>Main
+method</h4>
+<p>  Since we would like to do the sorting recursively, we may introduce
+a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -7712,67 +7780,6 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
-    <title>4.1.接口</title>
-    <url>/2024/05/31/4.1.interface/</url>
-    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
-<h3 id="1上位词-下位词">1.上位词、下位词</h3>
-<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
-<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
-<ul>
-<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
-<li>狗<span class="math inline">\(is-a\)</span>动物</li>
-</ul>
-<p><img src="/2024/05/31/4.1.interface/image.png"></p>
-<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
-<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
-<h3 id="2接口">2.接口</h3>
-<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
-<ul>
-<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
-<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
-</ul>
-<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
-<h3 id="3覆盖">3.覆盖</h3>
-<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="4接口的继承">4.接口的继承</h3>
-<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
-<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
-<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
-<h3 id="5实现的继承">5.实现的继承</h3>
-<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
-<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
-<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
-<h3 id="6动态方法选择">6.动态方法选择</h3>
-<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
-<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
-<blockquote>
-<p>  Aside: the name “dynamic type” is actually quite semantic in its
-origin! Should lst be reassigned to point to an object of another type,
-say a AList object, lst’s dynamic type would now be AList and not
-SLList! It’s dynamic because it changes based on the type of the object
-it’s currently referring to.</p>
-</blockquote>
-<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
-<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
     <title>4.2.扩展</title>
     <url>/2024/05/31/4.2.extends/</url>
     <content><![CDATA[<h1 id="42扩展"><span class="math inline">\(4.2\)</span>扩展</h1>
@@ -7854,6 +7861,67 @@ the static type.</li>
 invoked is based on the dynamic type of the invoking expression</li>
 <li>Can use casting to overrule compiler type checking.</li>
 </ul>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.1.接口</title>
+    <url>/2024/05/31/4.1.interface/</url>
+    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
+<h3 id="1上位词-下位词">1.上位词、下位词</h3>
+<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
+<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
+<ul>
+<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
+<li>狗<span class="math inline">\(is-a\)</span>动物</li>
+</ul>
+<p><img src="/2024/05/31/4.1.interface/image.png"></p>
+<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
+<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
+<h3 id="2接口">2.接口</h3>
+<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
+<ul>
+<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
+<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
+</ul>
+<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
+<h3 id="3覆盖">3.覆盖</h3>
+<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4接口的继承">4.接口的继承</h3>
+<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
+<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
+<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
+<h3 id="5实现的继承">5.实现的继承</h3>
+<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
+<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
+<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
+<h3 id="6动态方法选择">6.动态方法选择</h3>
+<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
+<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
+<blockquote>
+<p>  Aside: the name “dynamic type” is actually quite semantic in its
+origin! Should lst be reassigned to point to an object of another type,
+say a AList object, lst’s dynamic type would now be AList and not
+SLList! It’s dynamic because it changes based on the type of the object
+it’s currently referring to.</p>
+</blockquote>
+<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
+<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -8404,34 +8472,6 @@ k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
       </categories>
   </entry>
   <entry>
-    <title>9.2.快速查找</title>
-    <url>/2024/05/31/9.2.Quick%20Find/</url>
-    <content><![CDATA[<h1 id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</h1>
-<h3 id="1并查集的构造">1.并查集的构造</h3>
-<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
-<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
-<ul>
-<li>数组的下标值代表元素本身。</li>
-<li>数组下标对应的值代表元素所属集合的序号。</li>
-</ul>
-<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
-<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
-<h3 id="2connect操作">2.<code>connect</code>操作</h3>
-<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
-<h3 id="3isconnected操作">3.<code>isConnected</code>操作</h3>
-<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
-<h3 id="4总结与代码实现">4.总结与代码实现</h3>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>9.Disjoint sets</category>
-      </categories>
-  </entry>
-  <entry>
     <title>9.3.快速合并</title>
     <url>/2024/05/31/9.3.Quick%20Union/</url>
     <content><![CDATA[<h1 id="93快速合并"><span class="math inline">\(9.3\)</span>快速合并</h1>
@@ -8456,6 +8496,34 @@ k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
 <p><img src="/2024/05/31/9.3.Quick%20Union/image-6.png"></p>
 <p>  看起来快速合并的运行时间比快速查询长！但是<span class="math inline">\(O(n)\)</span>代表的是快速合并的上界。当我们的树比较平衡时，快速查询的时间复杂度会非常优秀。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickUnionDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickUnionDS</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[num];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; num; i += <span class="number">1</span>) &#123;</span><br><span class="line">            parent[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(parent[p] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            p = parent[p];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> find(q);</span><br><span class="line">        parent[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>9.Disjoint sets</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>9.2.快速查找</title>
+    <url>/2024/05/31/9.2.Quick%20Find/</url>
+    <content><![CDATA[<h1 id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</h1>
+<h3 id="1并查集的构造">1.并查集的构造</h3>
+<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
+<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
+<ul>
+<li>数组的下标值代表元素本身。</li>
+<li>数组下标对应的值代表元素所属集合的序号。</li>
+</ul>
+<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
+<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
+<h3 id="2connect操作">2.<code>connect</code>操作</h3>
+<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
+<h3 id="3isconnected操作">3.<code>isConnected</code>操作</h3>
+<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
+<h3 id="4总结与代码实现">4.总结与代码实现</h3>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>

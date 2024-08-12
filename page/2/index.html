@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/11/6-3-6-5-Cache-Key-Point/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/11/6-3-6-5-Cache-Key-Point/" class="post-title-link" itemprop="url">6.3~6.5.Cache Key Point</a>
+          <a href="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/" class="post-title-link" itemprop="url">6.6.The Impact of Caches on Program Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-11 21:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:12:39" itemprop="dateCreated datePublished" datetime="2024-08-11T21:31:22+08:00">2024-08-11</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-12 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;08:25:31" itemprop="dateCreated datePublished" datetime="2024-08-12T09:31:22+08:00">2024-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>873</span>
+      <span>404</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,268 +266,65 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="63-sim65cache-key-point"><span class="math inline">\(6.3 \sim
-6.5\)</span>.Cache Key Point</h1>
-<h3 id="1cache-read-process">1.Cache Read Process</h3>
-<p>&#x2003;&#x2003; Suppose we have a direct-mapped cache described by <span class="math inline">\((S, E, B, m) = (4, 1, 2, 4)\)</span>, and we only
-read word(1 byte).</p>
+          <h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
+Performance</h1>
+<h3 id="1rearrangingloops-to-increase-spatial-locality">1.Rearranging
+Loops to Increase Spatial Locality</h3>
+<p>&#x2003;&#x2003;Consider the problem of multiplying a pair of <span class="math inline">\(2 \times 2\)</span> matrices: <span class="math inline">\(C = AB\)</span>:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+c_{11} &amp; c_{12} \\
+c_{21} &amp; c_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22}
+\end{bmatrix}
+\]</span></p>
+<p>&#x2003;&#x2003;and we make the following assumptions:</p>
 <ul>
-<li><p>If block <span class="math inline">\(x \mod setNum\)</span>
-equals block <span class="math inline">\(y \mod setNum\)</span>, then
-block x and y belong to the same set.</p></li>
-<li><p>Since a block can contain two words, <strong>when reading the
-address <span class="math inline">\(x\)</span>(suppose x is odd), both
-information in <span class="math inline">\(x\)</span> and <span class="math inline">\(x+1\)</span> will be read into the
-block</strong>.</p></li>
+<li><p>Each array is an <span class="math inline">\(n \times n\)</span>
+array of double, with <code>sizeof(double) = 8</code>.</p></li>
+<li><p>There is a single cache with a 32-byte block size(B =
+32).</p></li>
+<li><p>The array size n is so large that a single matrix row does not
+fit in the L1 cache.</p></li>
+<li><p>The compiler stores local variables in registers, and thus
+references to local variables inside loops do not require any load or
+store instructions.</p></li>
 </ul>
-<p><img src="/2024/08/11/6-3-6-5-Cache-Key-Point/image.png"></p>
-<p>&#x2003;&#x2003;Let us simulate the cache in action as the CPU performs a sequence
-of reads:</p>
-<ol type="1">
-<li>Initially, the cache is empty(i.e., each valid bit is 0):</li>
-</ol>
-<p><img src="/2024/08/11/6-3-6-5-Cache-Key-Point/image-1.png"></p>
-<ol start="2" type="1">
-<li>Read word at address 0: Since the valid bit for set 0 is 0, this is
-a cache miss. The cache <strong>fetches block 0 from memory</strong> and
-stores the block in set 0. Then the cache returns <code>m[0]</code> (the
-contents of memory location 0) from <code>block[0]</code> of the newly
-fetched cache line.</li>
-</ol>
-<p><img src="/2024/08/11/6-3-6-5-Cache-Key-Point/image-2.png"></p>
-<ol start="3" type="1">
-<li>Read word at address 1: This is a cache hit, The cache immediately
-returns <code>m[1]</code> from <code>block[1]</code> of the cache line.
-The state of the cache does not change.</li>
-</ol>
-<hr>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>Consider the following
-transpose routine:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> <span class="built_in">array</span>[<span class="number">2</span>][<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">transpose1</span><span class="params">(<span class="built_in">array</span> dst, <span class="built_in">array</span> src)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> i, j;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">2</span>; j++) {</span><br><span class="line">            dst[j][i] = src[i][j];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Assume this code runs on a machine with the following
-properties:</p>
+<p>&#x2003;&#x2003;We can write three different versions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) {</span><br><span class="line">        sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">            sum += A[i][k]*B[k][j];</span><br><span class="line">        C[i][j] += sum;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++) {</span><br><span class="line">        r = B[k][j];</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        C[i][j] += A[i][k]*r;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        r = A[i][k];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">            C[i][j] += r * B[k][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image.png"></p>
+<p>&#x2003;&#x2003;The third routine present an interesting trade-off: With two loads
+and a store, they <strong>require one more memory operation than the
+first routines</strong>. On the other hand, since the inner loop scans
+both B and C row-wise with a stride-1 access pattern, the miss rate on
+each array is only 0.25 misses per iteration, for a total of 0.50 misses
+per iteration.</p>
+<p>&#x2003;&#x2003;The performance result is as below:</p>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image-1.png"></p>
+<p>&#x2003;&#x2003;We can see that in this case, <strong>miss rate is a better
+predictor of performance</strong> than the total number of memory
+accesses.</p>
+<h3 id="2exploiting-locality">2.Exploiting Locality</h3>
 <ul>
-<li><p><code>sizeof(int) = 4</code>.</p></li>
-<li><p>The <code>src</code> array starts at address 0 and the
-<code>dst</code> array starts at address 16 (decimal).</p></li>
-<li><p>There is a single L1 data cache that is direct-mapped,
-write-through, and write-allocate, <strong>with a block size of 8
-bytes</strong>.</p></li>
-<li><p>The cache has <strong>a total size of 16 data bytes</strong> and
-the cache is initially empty.</p></li>
-<li><p>Accesses to the <code>src</code> and <code>dst</code> arrays are
-the only sources of read and write misses, respectively.</p></li>
+<li><p>Focus your attention on the inner loops.</p></li>
+<li><p>Try to maximize the spatial locality in your programs by reading
+data objects sequentially, <strong>with stride 1</strong>, <strong>in
+the order they are stored in memory</strong>.</p></li>
+<li><p>Try to maximize the temporal locality in your programs by
+<strong>using a data object as often as possible once it has been read
+from memory</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;For each row and column, indicate whether the access to
-<code>src[row][col]</code> and <code>dst[row][col]</code> is a hit(h) or
-a miss(m). For example, reading <code>src[0][0]</code> is a miss and
-writing <code>dst[0][0]</code> is also a miss:</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(dst \; array\)</span> | | Col. 0 | Col.
-1 | |--------|--------|--------| | <strong>Row 0</strong> | m | | |
-<strong>Row 1</strong> | | |</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(src \; array\)</span> | | Col. 0 | Col.
-1 | |--------|--------|--------| | <strong>Row 0</strong> | m | | |
-<strong>Row 1</strong> | | |</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span> Because the cache is
-too small to hold both arrays, <strong>references to one array keep
-evicting useful lines from the other array</strong>:</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(dst \; array\)</span> | | Col. 0 | Col.
-1 | |--------|--------|--------| | <strong>Row 0</strong> | m | m | |
-<strong>Row 1</strong> | m | m |</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(src \; array\)</span> | | Col. 0 | Col.
-1 | |--------|--------|--------| | <strong>Row 0</strong> | m | m | |
-<strong>Row 1</strong> | m | h |</p>
-<h3 id="2conflict-misses-indirect-mapped-caches">2.Conflict Misses in
-Direct-Mapped Caches</h3>
-<p>&#x2003;&#x2003;<strong>Periodically misses</strong> in direct-mapped caches
-typically occur when programs access <strong>arrays whose sizes are a
-power of 2</strong>.</p>
-<p>&#x2003;&#x2003;Take the following code as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> <span class="title function_">dotprod</span><span class="params">(<span class="type">float</span> x[<span class="number">8</span>], <span class="type">float</span> y[<span class="number">8</span>])</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">float</span> sum = <span class="number">0.0</span>;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">        sum += x[i] * y[i];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Suppose that: * floats are 4 bytes.</p>
-<ul>
-<li><p><code>x</code> is loaded into the 32 bytes of contiguous memory
-starting at address 0, and that <code>y</code> starts immediately after
-<code>x</code> at address 32.</p></li>
-<li><p>A block is 16 bytes (big enough to hold four floats)</p></li>
-<li><p>the cache consists of two sets, for a total cache size of 32
-bytes.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Given these assumptions, each <code>x[i]</code> and
-<code>y[i]</code> will map to the identical cache set:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Element</th>
-<th>Address</th>
-<th>Set index</th>
-<th>Element</th>
-<th>Address</th>
-<th>Set index</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>x[0]</td>
-<td>0</td>
-<td>0</td>
-<td>y[0]</td>
-<td>32</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>x[1]</td>
-<td>4</td>
-<td>0</td>
-<td>y[1]</td>
-<td>36</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>x[2]</td>
-<td>8</td>
-<td>0</td>
-<td>y[2]</td>
-<td>40</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>x[3]</td>
-<td>12</td>
-<td>0</td>
-<td>y[3]</td>
-<td>44</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>x[4]</td>
-<td>16</td>
-<td>1</td>
-<td>y[4]</td>
-<td>48</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>x[5]</td>
-<td>20</td>
-<td>1</td>
-<td>y[5]</td>
-<td>52</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>x[6]</td>
-<td>24</td>
-<td>1</td>
-<td>y[6]</td>
-<td>56</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>x[7]</td>
-<td>28</td>
-<td>1</td>
-<td>y[7]</td>
-<td>60</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p>The first iteration of the loop references <code>x[0]</code>, the
-block containing <code>x[0]&#x2013;x[3]</code> is loaded into set 0.</p></li>
-<li><p>The next reference is to <code>y[0]</code>, another miss that
-causes the block containing <code>y[0]&#x2013;y[3]</code> to be copied into set
-0, <strong>overwriting the values of x that were copied in by the
-previous reference</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The term <em>thrashing</em> describes any situation where a cache
-is <strong>repeatedly loading and evicting the same sets of cache
-blocks</strong>.</p>
-<p>&#x2003;&#x2003;One easy solution to this problem is to <strong>put B bytes of
-padding at the end of each array</strong>. For example, instead of
-defining <code>x</code> to be float <code>x[8]</code>, we <strong>define
-it to be float <code>x[12]</code></strong>:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Element</th>
-<th>Address</th>
-<th>Set index</th>
-<th>Element</th>
-<th>Address</th>
-<th>Set index</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>x[0]</td>
-<td>0</td>
-<td>0</td>
-<td>y[0]</td>
-<td>48</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>x[1]</td>
-<td>4</td>
-<td>0</td>
-<td>y[1]</td>
-<td>52</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>x[2]</td>
-<td>8</td>
-<td>0</td>
-<td>y[2]</td>
-<td>56</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>x[3]</td>
-<td>12</td>
-<td>0</td>
-<td>y[3]</td>
-<td>60</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>x[4]</td>
-<td>16</td>
-<td>1</td>
-<td>y[4]</td>
-<td>64</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>x[5]</td>
-<td>20</td>
-<td>1</td>
-<td>y[5]</td>
-<td>68</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>x[6]</td>
-<td>24</td>
-<td>1</td>
-<td>y[6]</td>
-<td>72</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>x[7]</td>
-<td>28</td>
-<td>1</td>
-<td>y[7]</td>
-<td>76</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>&#x2003;&#x2003;<code>x[i]</code> and <code>y[i]</code> now map to different
-sets</p>
 
       
     </div>
@@ -550,7 +347,7 @@ sets</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -575,14 +372,14 @@ sets</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
   </span>
 </div>
 <div class="busuanzi-count">

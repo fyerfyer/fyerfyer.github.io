@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/07/3-5-Pipelined-Datapath-and-Control/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/14/4-1-Caches/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/07/3-5-Pipelined-Datapath-and-Control/" class="post-title-link" itemprop="url">3.5.Pipelined Datapath and Control</a>
+          <a href="/2024/06/14/4-1-Caches/" class="post-title-link" itemprop="url">4.1.Caches</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-07 11:36:22" itemprop="dateCreated datePublished" datetime="2024-06-07T11:36:22+08:00">2024-06-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-14 08:36:22" itemprop="dateCreated datePublished" datetime="2024-06-14T08:36:22+08:00">2024-06-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:08:24" itemprop="dateModified" datetime="2024-06-29T09:08:24+08:00">2024-06-29</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-15 15:07:48" itemprop="dateModified" datetime="2024-06-15T15:07:48+08:00">2024-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-4-Cache/" itemprop="url" rel="index"><span itemprop="name">Module 4.Cache</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.7k</span>
+      <span>2.9k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>6 &#x5206;&#x949F;</span>
+      <span>11 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,279 +272,444 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="35pipelined-datapath-and-control"><span class="math inline">\(3.5.\)</span>Pipelined Datapath and Control</h1>
-<h3 id="1some-point">1.Some point</h3>
-<ul>
-<li><p>All the instructions go from left to right through the datapath
-except the write-back stage and the selection of the next value of PC,
-and they never move backward.</p>
-<ul>
-<li>So the first right-to-left flow of data can lead to data hazards
-while the second leads to control hazards.</li>
-</ul></li>
-<li><p>One way to show what happens in pipelined execution is to pretend
-that each instruction has its own datapath, and then to place these
-datapaths on a timeline to show their relationship:</p></li>
-</ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image.png"></p>
-<p>&#x2003;&#x2003;All instructions advance during each clock cycle from one pipeline
-register to the next.</p>
-<h3 id="2pipeline-registers">2.Pipeline registers</h3>
-<ul>
-<li><p>A separate pipeline register is redundant to the state that is
-updated. For example, a load instruction will place its result in one of
-the 32 registers, and any later instruction that needs that data will
-<strong>simply read the appropriate register</strong>.</p>
-<ul>
-<li>Every instruction updates PC, and the PC can be thought of as a
-pipeline register: one <strong>that feeds the IF stage of the
-pipeline</strong>.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-1.png"></p>
-<p>&#x2003;&#x2003;We use the command <code>ld</code> to illustrate the pipe stage
-that is active in each stage:</p>
-<ol type="1">
-<li><em>Instruction fetch</em>: The PC is saved in the IF/ID pipeline
-register in case it&apos;s needed later for an instruction. This stage occurs
-<strong>before the instruction is identified</strong>.</li>
-</ol>
+          <h1 id="41caches"><span class="math inline">\(4.1.\)</span>Caches</h1>
+<h3 id="1-some-concepts-amp-libraryanalogy">1. Some concepts &amp; Library
+analogy</h3>
 <blockquote>
-<p>The computer cannot know which type of instruction is being fetched,
-so it must <strong>prepare for any instruction, passing potentially
-needed information down the pipeline</strong>.</p>
+<p>Suppose you were a student writing a term paper on important
+historical developments in computer hardware. You are sitting at a desk
+in a library with a collection of books that you have pulled from the
+shelves and are examining. You find that several of the important
+computers that you need to write about are described in the books you
+have, but there is nothing about the EDSAC. Therefore, you go back to
+the shelves and look for an additional book. You find a book on early
+British computers that covers the EDSAC. Once you have a good selection
+of books on the desk in front of you, there is a high probability that
+<strong>many of the topics you need can be found in them, and you may
+spend most of your time just using the books on the desk without
+returning to the shelves</strong>. Having several books on the desk in
+front of you saves time compared to having only one book there and
+constantly having to go back to the shelves to return it and take out
+another.</p>
+<p>The same principle allows us to create the illusion of a large memory
+that we can access as fast as a very small memory. Just as you did not
+need to access all the books in the library at once with equal
+probability, <strong>a program does not access all of its code or data
+at once with equal probability</strong>. Otherwise,it would be
+impossible to make most memory accesses fast and still have large memory
+in computers, just as it would be impossible for you to fit all the
+library books on your desk and still find what you wanted quickly.</p>
 </blockquote>
-<ol start="2" type="1">
-<li><em>Instruction decode and register file read</em>: Both the two
-read value and sign-extended immediate are stored in the ID/EX pipeline
-register, along with PC address.</li>
-</ol>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-2.png"></p>
-<ol start="3" type="1">
-<li><em>Execute/address calculation</em>: It reads the information from
-the ID/EX pipeline register and add then using ALU. The result is placed
-in EX/MEM pipeline register.</li>
-</ol>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-3.png"></p>
-<ol start="4" type="1">
-<li><em>Memory access</em>: It uses the data from EX/MEM register and
-loads the data into MEM/WB pipeline register.</li>
-</ol>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-4.png"></p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-5.png"></p>
-<ol start="5" type="1">
-<li><em>Write back</em>: There&apos;s nothing to do in this stage.</li>
-</ol>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-6.png"></p>
-<p>&#x2003;&#x2003;From the analysis above, we can get some key point:</p>
+<p>&#x2003;&#x2003;The above line illustrates the <em>principel of locality</em>.
+There are two kinds of localities:</p>
 <ul>
-<li><p>The information must be placed in a pipeline register, otherwise,
-<strong>the information is lost when the next instruction enters that
-pipeline stage</strong>.</p></li>
-<li><p>Each logical component of the datapath(ALU, data memory, etc),
-can be used <strong>only within a single pipeline stage</strong>. That
-is, <strong>each pipeline register can only be used by one phase in one
-clock cycle</strong>, which ensures that <strong>no more than one
-instruction can access the same hardware resources simultaneously in one
-clock cycle</strong>, thus avoiding structural dangers.</p></li>
+<li><p>Temporal locality(locality in time): <strong>If an item is
+referenced, it will tend to be referenced again soon.</strong> (If you
+recently brought a book to your desk to look at, you will probably need
+to look at it again soon.)</p></li>
+<li><p>Spatial locality (locality in space): <strong>If an item is
+referenced, items whose addresses are close by will tend to be
+referenced soon.</strong> (For example, when you brought out the book on
+early English computers to learn about the EDSAC, you also noticed that
+there was another book shelved next to it about early mechanical
+computers, so you likewise brought back that book and, later on, found
+something useful in that book.)</p></li>
 </ul>
-<p>&#x2003;&#x2003;We know that the instruction in IF/ID pipeline register supplies
-the writer register number, but the instruction fetch procedure occurs
-after the <code>ld</code> instruction(because it is conducted before an
-instruction is identified, so only when we complete the <code>ld</code>
-instruction will this step be done)! Hence, we need to <strong>preserve
-the distination register number in the <code>ld</code>
-instruction</strong>. The <code>ld</code> must pass the register number
-from ID/EX through EX/MEM to the MEM/WB pipeline register for use in the
-WB stage.</p>
-<h3 id="3data-hazards-amp-forwarding">3.Data hazards &amp; forwarding</h3>
-<h4 id="adatahazards">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Data
-hazards</h4>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-7.png"></p>
-<h4 id="bdetact-hazards">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Detact hazards</h4>
-<p>&#x2003;&#x2003;We first introduce a notation: we use &quot;ID/EX.RegisterRs1&quot; to refer
-to the number of 1 register whose value is found in the pipeline
-register ID/EX.</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-8.png"></p>
-<p>&#x2003;&#x2003;Using this notation, the two pairs of hazard conditions are:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-9.png"></p>
+<p>&#x2003;&#x2003;We take advantage of the principle of locality by implementing the
+memory as a <em>memory hierarchy</em>. It contains multiple levels, but
+<strong>data are copied between only two adjacent levels at a
+time</strong>.</p>
+<p><img src="/2024/06/14/4-1-Caches/image.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-1.png"></p>
+<blockquote>
+<p>The faster memories are <strong>more expensive per bit</strong> than
+the slower and thus are <strong>smaller</strong>.</p>
+</blockquote>
+<p><img src="/2024/06/14/4-1-Caches/image-2.png"></p>
 <ul>
-<li>The <code>sub-and</code> is a type 1a hazard:</li>
+<li>If <strong>the data requested by the processor appear in some block
+in the upper level</strong>, it&apos;s called a <em>hit</em>(like you find a
+book on your desk). Else it&apos;s called a <em>miss</em>.</li>
 </ul>
+<p><img src="/2024/06/14/4-1-Caches/image-28.png"></p>
+<h3 id="2memory-technologies">2.Memory technologies</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-3.png"></p>
+<h3 id="3caches-basics">3.Caches basics</h3>
+<h4 id="adirect-mapped-structure">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Direct-mapped structure</h4>
+<p>&#x2003;&#x2003;For each word, we can assign a location in cache based on the
+<em>address</em> of the word in memory, and this is called
+<strong>direct-mapped</strong>.</p>
+<p>&#x2003;&#x2003;The struction uses this mapping to find a block:</p>
 <p><span class="math display">\[
-MEM/WB.RegisterRd=ID/EX.RegisterRs2=x2
+(blockAddress)\mod (numberOfBlockInCache)
 \]</span></p>
 <ul>
-<li><p>The <code>sub-or</code> is a type 2a hazard.</p></li>
-<li><p>There&apos;s no data hazard between <code>sub</code> and
-<code>sd</code> because <strong><code>sd</code> reads <code>x2</code>
-the clock cycle after <code>sub</code> writes
-<code>x2</code></strong>.</p></li>
+<li>We add a set of <em>tags</em> to the cache to judge if the data in
+the cache corresponds to a requested word. The tag needs to contain
+<strong>the upper portion of the address</strong>:</li>
 </ul>
-<blockquote>
-<p>Pay attention to the clock cycle, not the name!!!</p>
-</blockquote>
-<p>&#x2003;&#x2003;One way to detact the hazards is simple <strong>check if the
-<code>RegWrite</code> signal is active</strong>. This can be done by
-<strong>examing the <code>WB</code> control field of the pipeline
-register during the <code>EX</code> and <code>MEM</code>
-stages</strong>.</p>
-<blockquote>
-<p>Recall that RISC-V requires that <code>x0</code> is taken as an
-oprand value of 0, if an instruction in the pipeline has <code>x0</code>
-as its destination, we want to <strong>avoid forwarding its possibly
-nonzero value</strong>.</p>
-</blockquote>
-<h4 id="csolution">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Solution</h4>
-<p>&#x2003;&#x2003;If we can take the inputs to the ALU <strong>from any pipeline
-register rather than just ID/EX</strong>, then we can forward the
-correct data.</p>
-<p>&#x2003;&#x2003;By <strong>adding multiplexors to the input of the ALU, and with
-the proper controls</strong>, we can run the pipeline at full speed in
-the presence of these data hazards:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-10.png"></p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-11.png"></p>
-<blockquote>
-<p>Before forwarding, the ID/EX register has no need to include space to
-hold the rs1 and rs2 fields, so they are added to ID/EX.</p>
-</blockquote>
-<h4 id="ddetailed-detection-ampresolution">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Detailed detection &amp;
-resolution</h4>
+<p><img src="/2024/06/14/4-1-Caches/image-4.png"></p>
 <ul>
-<li><p>EX hazard:</p>
+<li><p>We add a <em>valid bit</em> to <strong>indicate whether an entry
+contains a valid address</strong>. If the bit isn&apos;s set, there cannot be
+a match for this block.</p></li>
+<li><p>A <em>cache index</em> is used to <strong>select the
+block</strong>.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-5.png"></p>
+<p>&#x2003;&#x2003;The digit capacity of tage field and the total number of bits in
+the struction can be calculated by the following steps:</p>
+<p><img src="/2024/06/14/4-1-Caches/image-6.png"></p>
+<h4 id="bdealing-with-missing-rate">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Dealing with missing rate</h4>
 <ul>
-<li>If there&apos;s a write operation and a load operation at the same time,
-and the loaded object is under writting, then there&apos;s an EX hazard:</li>
+<li><p><strong>Larger blocks exploit spatial locality to lower miss
+rates</strong>. This is because larger blocks <strong>contain more
+adjacent data</strong>, taking advantage of locality of reference,
+making it more likely that programs will hit the cache when they access
+the data.</p></li>
+<li><p>However, the miss rate may go up eventually if <strong>the block
+size becomes a significant fraction of the cache size</strong>, for
+<strong>there will be a great deal of competition for those
+blocks</strong>. As a result, a block will be bumped out of the cache
+before its words are accessed.</p></li>
+<li><p>Also, enlarging the block size makes the <em>miss penalty</em>
+larger.</p>
+<ul>
+<li><p>The miss penalty is determined by <strong>the time required to
+fetch the block from the next lower level of the hierarchy and load it
+into the cache</strong>.</p></li>
+<li><p>The time to fetch the block has two parts: <strong>the latency to
+the first word</strong> and <strong>the transfer time for the rest of
+the block</strong>.</p></li>
 </ul></li>
 </ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-12.png"></p>
-<p>&#x2003;&#x2003;This case forwards the result from the previous instruction to
-either input of the ALU instead of the pipeline register EX/MEM</p>
+<h3 id="4handling-cache-misses">4.Handling cache misses</h3>
+<p>&#x2003;&#x2003;The cache miss handling is done in collaboration with the
+<em>process control unit</em> and with a separate <em>controller</em>
+that initiates the memory access and refills the cache.</p>
 <ul>
-<li><p>MEM hazard</p>
-<ul>
-<li>If the writting part is just loaded.</li>
-</ul></li>
+<li>The control unit in cache must detect a miss and process the miss by
+fetching the requested data from memory. If the cache reports a hit, it
+uses the data as usual.</li>
 </ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-13.png"> <img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-14.png"></p>
-<blockquote>
-<p>What happens when a register is read and written in the same clock
-cycle? We assume that <strong>the write is in the first half of the
-clock cycle and the read is in the second half</strong>, so the read
-delivers what is written. As is the case for many implementations of
-register files, we have no data hazard in this case.</p>
-<p>As mentioned above, there is no hazard in the WB stage, because
-<strong>we assume that the register file supplies the correct
-result</strong> if the instruction in the ID stage reads the same
-register written by the instruction in the WB stage.</p>
-</blockquote>
-<p>&#x2003;&#x2003;One complication occurs when we all read and write to a same
-register:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add x1 x1 x2</span><br><span class="line">add x1 x1 x3</span><br><span class="line">add x1 x1 x4</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;In this case, <strong>the result should be forwarded from the MEM
-stage, because the MEM stage is the more recent result</strong>. Thus,
-the control for the MEM should be:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-15.png"></p>
-<blockquote>
-<p>Why <code>not EX/MEM.RegisterRd = ID/EX.RegisterRs1</code>? Because
-if this is true, then <strong>the instruction of EX/MEM should be
-written back into the register</strong>(because it&apos;s the most current),
-and it will cover the result of MEM/WB. So we take EX/MEM first.</p>
-</blockquote>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-16.png"></p>
-<h4 id="estalls">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Stalls</h4>
-<p>&#x2003;&#x2003;One case where forwarding cannot help is when <strong>an
-instruction tries to read a register following a load instruction that
-writes the same register</strong>:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-17.png"></p>
-<blockquote>
-<p>The RAM is used by <code>add</code> before it&apos;s updated, and it won&apos;t
-be updated until the <code>lw</code> ends. Since it must be used in the
-first step, forwarding cannot help.</p>
-</blockquote>
-<p>&#x2003;&#x2003;Hence, we also need a <em>hazard detection unit</em>. It operates
-during the ID stage so that it can insert the stall between the load and
-the instruction depentent on it:</p>
-<ul>
-<li>If it&apos;s in a load process, and the being-loaded object involves in
-other process.</li>
-</ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-18.png"></p>
-<p>&#x2003;&#x2003;If the instruction in the ID stage is stalled, then the instruction
-in the IF stage must also be stalled, or we will lose the fetch of
-instruction. Therefore, <strong>the instruction in the IF stage will
-continue to be read using the same PC</strong>. The EX stage must also
-be doing something, so we let it <strong>execute instructions that have
-no effect: nops</strong>.</p>
-<p>&#x2003;&#x2003;<strong>Deasserting all seven control signals(setting them to 0) in
-the EX, MEM, WB stages</strong> will create a nop instruction:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-19.png"></p>
-<ul>
-<li><p>The forwarding unit controls the ALU multiplexor s to replace the
-value from a general-purpose register with that in the pipeline
-register.</p></li>
-<li><p>The hazard detection unit controls the writing of the PC and
-IF/ID registers plus the multiplexor that choose between the real
-control values and all 0s.</p></li>
-</ul>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-20.png"></p>
-<h3 id="4control-hazards">4.Control hazards</h3>
-<h4 id="aassume-branch-not-taken">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Assume branch not taken</h4>
-<p>&#x2003;&#x2003;We can assume the branch is not taken. If the condition branch is
-taken instead, <strong>the instructions that are being fetched and
-decoded must be discarded</strong>.</p>
-<p>&#x2003;&#x2003;To discard instructions, we merely change the original control
-values to 0s. Notice that we must also change the three instructions in
-the IF, ID and EX stages when the branch reaches the MEM stage, which is
-called <em>flush</em>.</p>
-<p>&#x2003;&#x2003;To flush instructions in the IF, we <strong>add a control line
-called IF.Flush</strong>, it zeros the instruction field of the IF/ID
-pipeline register.</p>
-<h4 id="breducing-the-delay-of-branches">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Reducing the delay of branches</h4>
-<p>&#x2003;&#x2003;One way to improve conditional branch performance is to reduce the
-cost of taken branch. We have assumed that the next PC for a branch is
-selected in the MEM stage, but <strong>if we move the conditional branch
-execution earlier in the pipeline, then fewer instructions need be
-flushed</strong>.</p>
-<p>&#x2003;&#x2003;Moving the branch decision up requires two actions to occur
-earlier: computing the branch target address and evaluating the branch
-decision.</p>
-<p>&#x2003;&#x2003;Moving up the address calculation is easy, we can <strong>move the
-branch adder from EX stage to ID stage</strong>.</p>
-<p>&#x2003;&#x2003;The harder part is branch decision itself. We must deal with two
-complicate factors:</p>
+<p>&#x2003;&#x2003;To handle the <em>instruction misses</em>, we need to:</p>
 <ol type="1">
-<li><p>The introduction of equlity test unit.</p></li>
-<li><p>Because <strong>the value in a branch comparison is needed during
-ID but may be produced later in time</strong>, it is possible that a
-data hazard can occur and a stall will be needed.</p></li>
+<li><p>Send the original PC value to the memory. It equals to
+<code>PC-4</code>.</p></li>
+<li><p>Instruct main memory to perform a read and wait for the memory to
+complete its access.</p></li>
+<li><p>Write the cache entry, putting the data from memory in the data
+portion of the entry, writing the upper bits of the address(from the
+ALU)into the tag field, and turning the valid bit on.</p></li>
+<li><p><strong>Restart the instruction execution at the first
+step</strong>, which will refetch the instruction, this time
+<strong>finding it in the cache</strong>.</p></li>
 </ol>
-<h3 id="5dynamic-branch-prediction">5.Dynamic branch prediction</h3>
+<h3 id="5handling-writes">5.Handling writes</h3>
+<h4 id="awrite-through">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Write-through</h4>
+<p>&#x2003;&#x2003;One simple way to deal with write hit is <strong>always to write
+the data into both the memory and the cache</strong>. However, the write
+to main memory takes a long time, thus reduce the performance.</p>
+<p>&#x2003;&#x2003;One solution is to use a <em>write buffer</em>. It <strong>stores
+the data while they are waiting to be written to memory</strong>.</p>
 <ul>
-<li>This method looks up the address of the instruction to see
-<strong>if the conditional branch was taken the last time this
-instruction was executed</strong>, and, if so, to <strong>begin fetching
-new instructions from the same place as the last time</strong>.</li>
+<li><p>After writing the data into the cache and the write buffer, the
+processor continues execution.</p></li>
+<li><p>When a write to main memory completes, the entry in the write
+buffer is freed.</p></li>
+<li><p>If the write buffer is full when the processor reaches a write,
+the processor must <strong>stall until there&apos;s an empty position in the
+buffer</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;One implementation of this approach is a <em>branch prediction
-buffer</em> or <em>branch history table</em>. A branch prediction buffer
-is a small memory indexed by the lower portion of the address of the
-branch instruction. The memory contains <strong>a bit that says whether
-the branch was recently taken or not</strong>.</p>
+<h4 id="bwrite-back">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Write-back</h4>
+<p>&#x2003;&#x2003;When a write occurs, the new value is written only to the block in
+the cache. The modified block is written to the lower level of the
+hierarchy when <strong>it&apos;s replaced</strong>. This scheme is called
+<em>write-back</em>. It can improve performance especially if
+<strong>processors can generate writes faster than writes can be handled
+by the main memory</strong>.</p>
 <ul>
-<li>Fetching begins in the predicted direction. If the predition turns
-out to be wrong, the incorrectly predicted instructions are deleted, the
-predition bit is inverted and stored back, and the proper sequence is
-fetched and executed.</li>
+<li><p>In the write-through process, we can simply overwrite the block.
+But in a write-back process, if we overwrite a block <strong>before we
+knew whether the store had hit the cache</strong>, we may destroy the
+contents of the block which isn&apos;t backed up. To avoid this, we take the
+two methods:</p>
+<ul>
+<li><p>We use two cycles, one to <strong>check for hit</strong> and one
+to <strong>perform the write</strong>.</p></li>
+<li><p>Or we can use a <em>store buffer</em> to hold the data. When it&apos;s
+used, the processor does the cache lookup and <strong>places the data in
+the store buffer during the normal cache access cycle</strong>. The new
+data <strong>are written from the store buffer into the cache on the
+next unused cache access cycle</strong>.</p></li>
+</ul></li>
 </ul>
 <blockquote>
-<p>&#x2003;&#x2003;To improve the accuracy, the <em>2-bit prediction schemes</em> are
-often used. In a 2-bit scheme, <strong>a prediction must be wrong twive
-before it is changed</strong>:</p>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-21.png"></p>
+<p>By comparison, we can always use one cycle to do writing in
+write-through process. We read the tag and write the data portion of the
+selected block. If the tag matches the address of the current block, the
+processor continues normally, since the correct block has been updated.
+Otherwise, the processor <strong>generates a write miss to fetch the
+rest of the block corresponding to that address</strong>.</p>
 </blockquote>
+<p>&#x2003;&#x2003;Many write-back caches also include <em>write buffers</em> that are
+used to <strong>reduce the miss penalty when a miss replaces a modified
+block</strong>. In such a case, <strong>the modified block is moved to a
+write-back buffer associated with the cache</strong> while the requested
+block is read from memory. The write-back buffer is later written back
+to memory.</p>
+<blockquote>
+<p>The main idea is not to touch the main memory as much as
+possible.</p>
+</blockquote>
+<p><img src="/2024/06/14/4-1-Caches/image-11.png"></p>
 <hr>
-<p><img src="/2024/06/07/3-5-Pipelined-Datapath-and-Control/image-22.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-20.png"></p>
+<h4 id="cwrite-allocate-amp-nowrite-allocate">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Write-allocate &amp; No
+write-allocate</h4>
+<p>&#x2003;&#x2003;In write-through process, to deal with the write miss, we
+<strong>allocate a block in the cache called write allocate</strong>.
+The block is fetched from memory and then the appropriate portion of the
+block is overwritten.</p>
+<blockquote>
+<p>This reduces the number of accesses to main memory and increases the
+speed of access.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Another strategy is to update the portion of the block <strong>in
+memory but not put it in the cache</strong>. This is because sometimes
+we need to write in the entire blocks of data, and in such situation
+writing in cache is unnecessary.</p>
+<p><img src="/2024/06/14/4-1-Caches/image-21.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-22.png"></p>
+<blockquote>
+<p>Since write-through strategy ensures the consistence between memory
+and cache, if we use write-allocate strategy, the cache will contain
+reduntant data block, which makes cache management more difficult.</p>
+<p>And for write-back, this ensures the data consistence.</p>
+</blockquote>
+<h4 id="danexample">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>An
+example</h4>
+<p><img src="/2024/06/14/4-1-Caches/image-7.png"></p>
+<p>&#x2003;&#x2003;In this design, the steps for reading request are as follows:</p>
+<ol type="1">
+<li><p>Send the address to the appropriate cache.</p></li>
+<li><p>If the cache signal hit, the requested word is available on the
+data lines. A <em>block index</em> field is used to control the
+multiplexor to select the required word from the 16 words in the indexed
+block.</p></li>
+<li><p>If the cache signals miss, <strong>we send the address to the
+main memory. When the memory returns with the data</strong>, we write it
+into the cache and then read it to fulfill the request.</p></li>
+</ol>
+<h3 id="6cache-performanceimprovement">6.Cache performance
+improvement</h3>
+<p>&#x2003;&#x2003;There are two different techniques to improve cache performance.
+One focuses on reducing the miss rate by <strong>reducing the
+probability that two distinct memory blocks will contend for the same
+cache location</strong>. The other reduces the miss penalty by
+<strong>adding an additional level to the hierarchy</strong>. The second
+technique is called <em>multilevel caching</em>.</p>
+<h4 id="amore-flexible-placement-of-blocks">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>More flexible placement of blocks</h4>
+<ul>
+<li><p><em>Fully associative</em>: In this scheme, a block can be placed
+in <strong>any location in the cache</strong>, that is, <strong>the
+block may be associated with any entry in the cache</strong>.</p>
+<ul>
+<li><p>To find a given block in a fully-associative cache, <strong>all
+the entries in the cache must be searched</strong>.</p></li>
+<li><p>This process is done <strong>in parallel with a comparator
+associated with each cache entry</strong>. This comparators
+significantly increase the hardware cost, so the scheme only suits for
+caches with small numbers of blocks.</p></li>
+</ul></li>
+<li><p><em>Set associative</em>: In this scheme, there are a fixed
+number of locations where each block can be placed. An <em>n-way set
+associative</em> cache consists of a number of sets, each of which has
+<span class="math inline">\(n\)</span> blocks.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-8.png"></p>
+<p>&#x2003;&#x2003;The advantage of increasing the degree of associativity is that
+<strong>it usually decrease the miss rate</strong>. However, there&apos;s
+little further improvement in going to rather higher associativity.</p>
+<h4 id="blocating-a-block-in-the-cache">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Locating a block in the cache</h4>
+<p>&#x2003;&#x2003;Let&apos;s first take a block in a set-associative cache for
+example:</p>
+<p><img src="/2024/06/14/4-1-Caches/image-9.png"></p>
+<ul>
+<li><p>The <em>tag</em> is checked to see <strong>if it matches the
+block address from the processor</strong>.</p></li>
+<li><p>The <em>index</em> is used to <strong>select the set containing
+the address of interest</strong>.</p></li>
+<li><p>All the tags in the selected set are searched <strong>in
+parallel</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In a direct-mapped cache, only a single comparator is needed, and
+we access the cache simply by indexing. In a <em>four-way
+set-associative</em> cache, four comparators are needed, together with a
+<strong>4-to-1 multiplexor to choose among the four potential
+sets</strong>. The cache access consists of indexing the appropriate set
+and then searching the tags of the set.</p>
+<p><img src="/2024/06/14/4-1-Caches/image-10.png"></p>
+<p>&#x2003;&#x2003;The choice among these three scheme depends on <strong>the cost of
+a miss</strong> versus <strong>the cost of implementing
+associativity</strong>.</p>
+<h4 id="cchoosing-which-block-to-replace">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Choosing which block to replace</h4>
+<p>&#x2003;&#x2003;There are two primary strategies for replacement in set-associative
+or fully associative caches:</p>
+<ul>
+<li><p><em>Random</em>: Candidate blocks are randomly selected, possibly
+using some hardware assistance.</p></li>
+<li><p><em>Least recently used</em>(LRU): The block replaced is the one
+that has been unused for the longest time.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In practice, LRU is too costly to implement for hierarchies with
+more than a small degree of associativity, since <strong>tracking the
+usage information is expensive</strong>.</p>
+<h5 id="iapproximate-lru">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Approximate LRU</h5>
+<p><img src="/2024/06/14/4-1-Caches/image-23.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-24.png"></p>
+<h4 id="dmultilevel-caches">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Multilevel caches</h4>
+<p>&#x2003;&#x2003;To close the gap between the fast clock rates of processors and the
+long time to access DRAMs, most microprocessors support <strong>an
+addition level of caching</strong>.</p>
+<ul>
+<li><p>The second-level cache is normally on the chip, and is access
+<strong>whenever a miss occurs in the primary cache</strong>.</p></li>
+<li><p>If the second-level cache contains the desired data, the miss
+penalty for the first-level cache will be <strong>the access time of the
+second-level cache</strong>, which is much less time.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The design considerations for a primary and secondary cache are
+different. This two-level structure allows the primary cache to focus on
+<strong>minimizing hit time</strong> to yield a shorter clock cycle or
+fewer pipeline stages, while allowing the second cache to focus on
+<strong>miss rate</strong> to reduce the penalty of long memory access
+times.</p>
+<ul>
+<li><p>The primary cache is <strong>smaller</strong>, and may use
+<strong>a smaller block size</strong> to go with the smaller cache size
+and reduce miss penalty.</p></li>
+<li><p>The second cache will be <strong>much larger than in a
+single-level cache</strong>. It also use higher associativity than the
+primary cache, both for reducing the miss rates.</p></li>
+</ul>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-41.png"></p>
+<h3 id="7three-cs">7.Three Cs</h3>
+<p>&#x2003;&#x2003;In the hierarchy model, all misses are classified into one of three
+categories:</p>
+<ul>
+<li><p>Compulsory misses: These are cache misses caused by <strong>the
+first access to a block that has never been in the cache</strong>. These
+are also called cold-start misses.</p></li>
+<li><p>Capacity misses: These are cache misses caused when <strong>the
+cache cannot contain all the blocks needed during execution of a
+program</strong>. Capacity misses occur <strong>when blocks are replaced
+and then later retrieved</strong>.</p></li>
+<li><p>Conflict misses: These are cache misses that occur in
+set-associative or direct-mapped caches when <strong>multiple blocks
+compete for the same set</strong>. These cache misses are also called
+collision misses.</p></li>
+</ul>
+<hr>
+<ul>
+<li><p>Increasing associativity reduces conflict misses, but
+associativity may <strong>slow access time</strong>, leading to lower
+overall performance.</p></li>
+<li><p>Capacity misses can be reduced by enlarging the cache(so
+second-level caches is large). Meanwhile, when we make the cache larger,
+we must also be careful about <strong>increasing the access
+time</strong>(so the first-level caches is small).</p></li>
+<li><p>Since compulsory misses are generated by the first reference to a
+block, we can simple increase the block size to reduce the block
+number.</p></li>
+</ul>
+<h3 id="8using-fsm-to-control-acache">8.Using FSM to control a
+cache</h3>
+<h4 id="afinite-state-machines">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Finite-State Machines</h4>
+<p>&#x2003;&#x2003;A FSM consists of a set of states and directions on how to change
+states.</p>
+<ul>
+<li><p>The directions are defined by a <em>next-state function</em>,
+which maps the current state and the inputs to a new state.</p></li>
+<li><p>Each state of FSM specifies a set of outputs that are asserted
+when the machine is in this state.</p></li>
+<li><p>A FSM can be implemented with a temporary register that
+<strong>holds the current state</strong> and <strong>a block of
+combinatinoal logic</strong> that determines both the data-path signals
+to be asserted and the next state.</p></li>
+</ul>
+<p><img src="/2024/06/14/4-1-Caches/image-12.png"></p>
+<h4 id="bcontroller">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Controller</h4>
+<p><img src="/2024/06/14/4-1-Caches/image-13.png"></p>
+<ul>
+<li><p><em>Ideal</em>: This state <strong>waits for a valid read or
+write request from the processor</strong>, which <strong>moves the FSM
+to the Compare Tag state</strong>.</p></li>
+<li><p><em>Compare Tag</em>: This state tests to see <strong>if the
+requested read or write is a hit or a miss</strong>. The index portion
+of the address <strong>selects the tag to be compared</strong>. If the
+data in the cache block referred to by the index portion of the address
+are valid, and the tag portion of the address matches the tag, then it
+is a hit. Either the data are read from the selected word if it is a
+load or written to the selected word if it is a store. The Cache Ready
+signal is then set. <strong>If it is a write,the dirty bit is set to
+1</strong>. Note that a write hit also sets the valid bit and the tag
+field; while it seems unnecessary, it is included because the tag is a
+single memory, so <strong>to change the dirty bit we likewise need to
+change the valid and tag fields</strong>. If it is a hit and the block
+is valid, the FSM <strong>returns to the idle state</strong>. A miss
+<strong>first updates the cache tag</strong> and then goes either to the
+Write-Back state, if the block at this location has dirty bit value of
+1, or to the Allocate state if it is 0.</p></li>
+<li><p><em>Write-Back</em>: This state writes the 128-bit block to
+memory using <strong>the address composed from the tag and cache
+index</strong>. We remain in this state waiting for the Ready signal
+from memory. When the memory write is complete, the FSM <strong>goes to
+the Allocate state</strong>.</p></li>
+<li><p><em>Allocate</em>: The new block <strong>is fetched from
+memory</strong>. We <strong>remain in this state waiting for the Ready
+signal from memory</strong>. When the memory read is complete, the FSM
+goes to the Compare Tag state.</p></li>
+</ul>
+<h3 id="9fully-associative-cacheintroduction">9.Fully associative cache
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-14.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-15.png"></p>
+<h3 id="10direct-mapped-cacheintroduction">10.Direct-mapped cache
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-16.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-17.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-29.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-30.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-31.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-32.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-33.png"></p>
+<h3 id="11set-associativeintroduction">11.Set-associative
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-18.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-19.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-34.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-35.png"></p>
+<h3 id="12fully-associativeintroduction">12.Fully-associative
+introduction</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-25.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-26.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-27.png"></p>
+<h3 id="13analyzing-cache-performance">13.Analyzing cache performance</h3>
+<p><img src="/2024/06/14/4-1-Caches/image-36.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-37.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-38.png"></p>
+<hr>
+<p><img src="/2024/06/14/4-1-Caches/image-39.png"></p>
+<p><img src="/2024/06/14/4-1-Caches/image-40.png"></p>
 
       
     </div>
@@ -567,7 +732,7 @@ before it is changed</strong>:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -592,14 +757,14 @@ before it is changed</strong>:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">119k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:14</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
   </span>
 </div>
 <div class="busuanzi-count">
