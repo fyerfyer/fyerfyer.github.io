@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">148</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-5-Synchronization/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-6-Control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-5-Synchronization/" class="post-title-link" itemprop="url">5.5.Synchronization</a>
+          <a href="/2024/07/15/3-6-Control/" class="post-title-link" itemprop="url">3.6.Control</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:55:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;14:56:03" itemprop="dateCreated datePublished" datetime="2024-06-29T11:55:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-15T16:30:22+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:35:46" itemprop="dateModified" datetime="2024-07-16T16:35:46+08:00">2024-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>450</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>5 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,74 +272,190 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="55synchronization">5.5.Synchronization</h1>
-<h3 id="1some-concepts">1.Some concepts</h3>
-<p><img src="/2024/06/29/5-5-Synchronization/image.png"></p>
-<h3 id="2lock-synchronization">2.Lock synchronization</h3>
-<p><img src="/2024/06/29/5-5-Synchronization/image-1.png"></p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-2.png"></p>
-<h3 id="3hardware-synchronization">3.Hardware synchronization</h3>
-<h4 id="apossible-lock-problem">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Possible lock problem</h4>
-<p><img src="/2024/06/29/5-5-Synchronization/image-3.png"></p>
-<p>&#x2003;&#x2003;To solve the problem, the multiprocessor must have the ability ot
-<strong>atomically read and modify a memory location</strong>. That is,
-<strong>nothing else can interpose itself between the read and the write
-of the memory location</strong>.</p>
-<blockquote>
-<p>For example, consider two processors that each try to do
-<code>lw</code> operation. This race is prevented, since exactly one of
-the processors will perform <code>lw</code> first, returning 0, and the
-second processor will return 1 when it does this. This is because
-<strong>the operation is atomic: the exchange is indivisible, and two
-simultaneous exchanges will be ordered by the hardware.</strong></p>
-</blockquote>
-<p><img src="/2024/06/29/5-5-Synchronization/image-4.png"></p>
-<h4 id="binstruction-pair">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>instruction pair</h4>
-<p>&#x2003;&#x2003;To implement atomical property, we can <strong>set a pair of
-instructions</strong> in which the second instruction <strong>returns a
-value showing whether the pair of instructions was executed as if the
-pair was atomic</strong>.</p>
-<p>&#x2003;&#x2003;In RISC-V, this pair of instructions includes a
-<code>(lr, d)</code> and a <code>(sc, d)</code>:</p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-5.png"></p>
+          <h1 id="36-control"><span class="math inline">\(3.6.\)</span> Control</h1>
+<h3 id="1condition-code">1.Condition Code</h3>
+<p>&#x2003;&#x2003;In addition to the integer registers, the CPU maintains <em>a set
+of single-bit condition code registers</em> <strong>describing
+attributes of the most recent arithmetic or logical operation</strong>.
+These registers can then be tested to perform conditional branches</p>
+<p><img src="/2024/07/15/3-6-Control/image.png"></p>
 <ul>
-<li>Thus, <code>sc.d</code> specifies three registers: one to hold the
-address, one to indicate whether the atomic operation failed or
-succeeded, and one to hold the value to be stored in memory if it
-succeeded.</li>
+<li><p>The <code>leaq</code> instruction <strong>doesn&apos;t alter any
+condition codes</strong>, since it is intended to be used in address
+computations.</p></li>
+<li><p>For the logical operations, such as <code>xor</code>, <strong>the
+carry and overflow flags are set to zero</strong>.</p></li>
+<li><p>For the shift operations, <strong>the carry flag is set to the
+last bit shifted out</strong>, while <strong>the overflow flag is set to
+zero</strong>.</p></li>
+<li><p>The <code>inc</code> and <code>dec</code> instructions
+<strong>set the overflow and zero flags</strong>, but they <strong>leave
+the carry flag unchanged</strong>.</p></li>
 </ul>
+<p>&#x2003;&#x2003;There are two instruction classes that set condition codes without
+altering any other registers:</p>
+<p><img src="/2024/07/15/3-6-Control/image-1.png"></p>
+<ul>
+<li>In <code>TEST</code>, typically, <strong>the same operand is
+repeated</strong> (e.g., <code>testq %rax,%rax</code> to see whether
+<code>%rax</code> is negative, zero, or positive), or <strong>one of the
+operands is a mask indicating which bits should be tested</strong>.</li>
+</ul>
+<h3 id="2accessing-condition-codes">2.Accessing Condition Codes</h3>
+<p><img src="/2024/07/15/3-6-Control/image-2.png"></p>
+<ul>
+<li><p>A set instruction has either one of the low-order single-byte
+register elements or a single-byte memory location as its destination,
+<strong>setting this byte to either 0 or 1</strong>.</p></li>
+<li><p>To generate a 32-bit or 64-bit result, we must also <strong>clear
+the high-order bits</strong>. For example:</p></li>
+</ul>
+<p><img src="/2024/07/15/3-6-Control/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>movzbl</code> not only set the high-order 3 bytes of
+<code>%eax</code> to 0, but also set the high-order 4 bytes of
+<code>%rax</code> to 0 due to the 32-bit <code>mov</code>
+convention.</p>
 <blockquote>
-<p>Notice that <code>(lr, d)</code> operation not only load a word into
-pointed memory, but also <strong>record the memory address
-internally</strong>, namely <em>reservation</em>. That&apos;s why we can use
-<code>(sc, d)</code> to check if the operation is atomical.</p>
+<p>It is important to understand that assembly code does not keep track
+of the type of a program value. Instead, <strong>the different
+instructions determine the operand sizes and whether they are signed or
+unsigned</strong>:</p>
+<p><span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-6-Control/image-4.png"></p>
+<p><img src="/2024/07/15/3-6-Control/image-5.png"></p>
 </blockquote>
-<p>&#x2003;&#x2003;We can use this pair to implement atomic swap:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">again: lr.d x10, (x20)</span><br><span class="line">       sc.d x11, x23, (x20)</span><br><span class="line">       bne x11, x0, again   // branch if store fails</span><br><span class="line">       addi x23, x10, 0     // put loaded value in x23</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Any time a processor intervenes and modifies the value in memory
-between the <code>lr.d</code> and <code>sc.d</code> instructions, the
-<code>sc.d</code> writes a nonzero value into <code>x11</code>, causing
-the code sequence to try again.</p>
+<h3 id="3jump-instructions">3.Jump Instructions</h3>
+<p><img src="/2024/07/15/3-6-Control/image-6.png"></p>
+<p>&#x2003;&#x2003;There are two kinds of jump instructions:</p>
+<ul>
+<li><p><em>Direct jump</em>: It jumps to a label. The jump target is
+encoded as part of the instructions.</p></li>
+<li><p><em>Indirect jump</em>: It is written <strong>using
+<code>*</code> followed by an operand specifier</strong>.</p>
+<ul>
+<li><p><code>jmp *%rax</code> uses <strong>the value in
+<code>%rax</code></strong> as the jump target.</p></li>
+<li><p><code>jmp *(%rax)</code> reads the jump target from memory, using
+the value in <code>%rax</code> <strong>as the read
+address</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4jump-instruction-encodings">4.Jump Instruction Encodings</h3>
+<p>&#x2003;&#x2003;There are several kinds of encoding jump targets:</p>
+<ol type="1">
+<li><p><em>PC relative</em>. They encode <strong>the difference between
+the address of the target instruction and the address of the instruction
+immediately following the jump</strong>.</p></li>
+<li><p>A second encoding method is to <strong>give an &#xFFFD;&#xFFFD;absolute&#xFFFD;&#xFFFD;
+address</strong>, using 4 bytes to directly specify the target.</p></li>
+</ol>
+<p>&#x2003;&#x2003;Let&apos;s look at an PC relative example:</p>
+<p><img src="/2024/07/15/3-6-Control/image-7.png"></p>
+<p>&#x2003;&#x2003;In the annotations on the right, the jump targets are indicated as
+<code>0x8</code> for the jump instruction on line 2, which is equal to
+<code>0x5+0x3</code>. This is because the encoding is calculated by
+<strong><span class="math inline">\(the\;address\;of\;next\;instruction+offset\)</span></strong>.</p>
+<p>&#x2003;&#x2003;In this case, the address of next instruction is 3+2=5, and the
+offset is <code>03</code>, as is shown in the assembly code.</p>
+<p>&#x2003;&#x2003;Even though the instructions may be relocated to different
+addresses, the encoding of the target <strong>remain unchanged</strong>.
+This is because the relative position between instructions remains
+unchanged.</p>
+<h3 id="5conditional-move">5.Conditional Move</h3>
+<p>&#x2003;&#x2003;The conventional way to implement conditional operations is through
+a <em>conditional transfer of control</em>, where the program follows
+one execution path when a condition holds and another when it does
+not:</p>
+<p><img src="/2024/07/15/3-6-Control/image-8.png"></p>
+<p>&#x2003;&#x2003;An alternate strategy is through <em>condition transfer of
+data</em>. This approach <strong>computes both outcomes of a conditional
+operation</strong> and then <strong>selects one based on whether or not
+the condition holds</strong>:</p>
+<p><img src="/2024/07/15/3-6-Control/image-9.png"></p>
+<p>&#x2003;&#x2003;This strategy makes sense only in restricted cases, but it can then
+be implemented by a simple conditional move instruction that is better
+matched to the performance characteristics of modern processors due to
+the pipelining.</p>
 <blockquote>
-<p>Since the store-conditional will fail after either another attempted
-store to the load reservation address or any exception, care must be
-taken in choosing which instructions are inserted between the two
-instructions. In particular, only <strong>integer arithmetic, forward
-branches, and backward branches out of the
-load-reserved/store-conditional block</strong> can safely be permitted;
-otherwise, it is possible to create <em>deadlock situations</em> where
-the processor can never complete the sc.d because of repeated page
-faults. In addition, the number of instructions between the
-load-reserved and the store-conditional should be small to minimize the
-probability that <strong>either an unrelated event or a competing
-processor causes the store-conditional to fail frequently</strong>.</p>
+<p>However, due to the preprocess, If <strong>one of those two
+expressions could possibly generate an error condition or a side
+effect</strong>, this could lead to invalid behavior.</p>
 </blockquote>
-<p>&#x2003;&#x2003;Other atomic memory operations can be built using
-<code>lr/sc</code> pairs, some are listed below:</p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-6.png"></p>
-<h4 id="ctest-and-set-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Test-and-Set instruction</h4>
-<p><img src="/2024/06/29/5-5-Synchronization/image-7.png"></p>
-<p><img src="/2024/06/29/5-5-Synchronization/image-8.png"></p>
+<p>&#x2003;&#x2003;The conditional move instructions are as below:</p>
+<p><img src="/2024/07/15/3-6-Control/image-10.png"></p>
+<ul>
+<li><p>The instructions has two operands: <strong>a source register or
+memory location S</strong>, and <strong>a destination register
+R</strong>.</p></li>
+<li><p>The assembler can infer the operand length of a conditional move
+instruction, so it doesn&apos;t need suffix.</p></li>
+</ul>
+<h3 id="6loops">6.Loops</h3>
+<h4 id="ado-while">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>do-while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    body-statement</span><br><span class="line">    <span class="title function_">while</span> <span class="params">(test-expr)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<h4 id="bwhile">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>while</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The second translation method is called <em>guarded do</em>, which
+uses a <code>do-while</code> style loop:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line">if (!t)</span><br><span class="line">    goto done;</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;By this way, we only need to check the condition once before we
+enter the loop. This reduce the possibility of branch prediction
+failure.</p>
+<h4 id="cfor">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>for</code></h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is equal to the following <code>while</code> statements:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr) {</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;And there are also two forms of <code>for</code> translation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;and:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (!t)</span><br><span class="line">        goto done;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;However, the simple translation from <code>for</code> to
+<code>while</code> will be a little tricky. Take the
+<code>continue</code> statement as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;If we simply use <code>continue</code>, this will lead to an
+infinite loop:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/* This will cause an infinite loop */</span></span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">    sum += i;</span><br><span class="line">    i ++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The general solution is to replace the continue statement with a
+goto statement that skips the rest of the loop body and goes directly to
+the update portion:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">if</span> (i &amp; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">goto</span> update;</span><br><span class="line">    sum += i;</span><br><span class="line"></span><br><span class="line">update:</span><br><span class="line">    i++;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="7switch-statements">7.Switch Statements</h3>
+<p>&#x2003;&#x2003;The ordinary <code>switch</code> statements looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    {</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can rewrite this using a <em>jump table</em>. A jump table is an
+array where entry i is the address of a code segment the program should
+take when the switch index equals i.</p>
+<p>&#x2003;&#x2003;With jump table, the previous program will looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n, <span class="type">long</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = {</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D};</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>switch</code> locations are defined by <strong>the
+labels prefixed by <code>&amp;&amp;</code></strong>.
+<code>&amp;&amp;</code>is used to create a pointer for a code
+location.</p></li>
+<li><p>To simplify, the case value is subtracted by 100.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In the assembly code, we use this statement to access the jump
+table:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp *.L4(, %rsi, 8)  #Goto *jg[index]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The base address is <code>L4</code>, which is the base address of
+the jump table array.</p></li>
+<li><p>The <code>(, %rsi, 8)</code> is the index, judging which case to
+switch to.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In the assembly code, the jump table is indicated by the following
+declarations:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.section.rodata</span><br><span class="line">    .align 8  # Align address to multiple of 8</span><br><span class="line">    .L4 :</span><br><span class="line">    .quad.L3  # Case 100 : loc_A</span><br><span class="line">    .quad.L8  # Case 101 : loc_def</span><br><span class="line">    .quad.L5  # Case 102 : loc_B</span><br><span class="line">    .quad.L6  # Case 103 : loc_C</span><br><span class="line">    .quad.L7  # Case 104 : loc_D</span><br><span class="line">    .quad.L8  # Case 105 : loc_def</span><br><span class="line">    .quad.L7  # Case 106 : loc_D</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>rodata</code> refers to <em>read-only
+data</em>.</p></li>
+<li><p><code>L4</code> marks the start of the allocation.</p></li>
+</ul>
+<p>&#x2003;&#x2003;In assembly code, the number of <code>case</code> is judged by
+<strong>the offset of the label in the jump table</strong>.</p>
 
       
     </div>
@@ -356,7 +478,7 @@ processor causes the store-conditional to fail frequently</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -381,14 +503,14 @@ processor causes the store-conditional to fail frequently</strong>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">148</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/13.3.The%20Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/13.3.The%20Implementation/" class="post-title-link" itemprop="url">13.3.&#x4F18;&#x5148;&#x961F;&#x5217;&#x7684;&#x5B9E;&#x73B0;</a>
+          <a href="/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/" class="post-title-link" itemprop="url">12.2.Hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(1)</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:13:13" itemprop="dateModified" datetime="2024-06-02T21:13:13+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:42" itemprop="dateModified" datetime="2024-06-02T18:25:42+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/13-Heap-Priority-Queue/" itemprop="url" rel="index"><span itemprop="name">13.Heap &amp; Priority Queue</span></a>
+          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>315</span>
+      <span>341</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,21 +272,21 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="133&#x4F18;&#x5148;&#x961F;&#x5217;&#x7684;&#x5B9E;&#x73B0;"><span class="math inline">\(13.3\)</span>&#x4F18;&#x5148;&#x961F;&#x5217;&#x7684;&#x5B9E;&#x73B0;</h1>
-<p>(&#x6CE8;&#xFF1A;&#x8FD9;&#x91CC;&#x5B9E;&#x73B0;&#x7684;&#x662F;&#x5927;&#x6839;&#x5806;)</p>
-<h3 id="1&#x4F18;&#x5148;&#x961F;&#x5217;&#x7684;&#x521D;&#x59CB;&#x5316;">1.&#x4F18;&#x5148;&#x961F;&#x5217;&#x7684;&#x521D;&#x59CB;&#x5316;</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MaxPQ</span>&lt;Key <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;Key&gt;&gt; </span><br><span class="line">{</span><br><span class="line">    <span class="keyword">private</span> Key[] pq; <span class="comment">// heap-ordered complete binary tree</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// in pq[1..N] with pq[0] unused</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MaxPQ</span><span class="params">(<span class="type">int</span> maxN)</span> { </span><br><span class="line">        pq = (Key[]) <span class="keyword">new</span> <span class="title class_">Comparable</span>[maxN+<span class="number">1</span>]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> { </span><br><span class="line">        <span class="keyword">return</span> N == <span class="number">0</span>; </span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> { </span><br><span class="line">        <span class="keyword">return</span> N; </span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Key v)</span> { </span><br><span class="line">        pq[++N] = v;</span><br><span class="line">        swim(N);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Key <span class="title function_">delMax</span><span class="params">()</span> { </span><br><span class="line">        <span class="type">Key</span> <span class="variable">max</span> <span class="operator">=</span> pq[<span class="number">1</span>]; <span class="comment">// Retrieve max key from top.</span></span><br><span class="line">        swap(<span class="number">1</span>, N--); <span class="comment">// Exchange with last item.</span></span><br><span class="line">        pq[N+<span class="number">1</span>] = <span class="literal">null</span>; <span class="comment">// Avoid loitering.</span></span><br><span class="line">        sink(<span class="number">1</span>); <span class="comment">// Restore heap property.</span></span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="2&#x8F85;&#x52A9;&#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;">2.&#x8F85;&#x52A9;&#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;</h3>
-<h4 id="aless-swap&#x65B9;&#x6CD5;">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>less</code>&#x3001;<code>swap</code>&#x65B9;&#x6CD5;</h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i].compareTo(pq[j]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Ket</span> <span class="variable">t</span> <span class="operator">=</span> pq[i];</span><br><span class="line">    pq[i] = pq[j];</span><br><span class="line">    pq[j] = t;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bswim&#x65B9;&#x6CD5;">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swim</code>&#x65B9;&#x6CD5;</h4>
-<p>&#x2003;&#x2003;<code>swim</code>&#x65B9;&#x6CD5;&#x7528;&#x4E8E;&#x5C06;&#x5806;&#x5E95;&#x90E8;&#x7684;&#x5143;&#x7D20;&#x5411;&#x4E0A;&#x6D04;&#x6E38;&#xFF0C;&#x4EE5;&#x7EF4;&#x62A4;&#x5806;&#x7684;&#x6027;&#x8D28;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span> {</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span> &amp;&amp; less(k / <span class="number">2</span>, k)) {</span><br><span class="line">        swap(k / <span class="number">2</span>, k);</span><br><span class="line">        k = k / <span class="number">2</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/13.3.The%20Implementation/image-7.png"></p>
-<h4 id="csink&#x65B9;&#x6CD5;">&#x2003;&#x2003;<span class="math inline">\(c.\)</span><code>sink</code>&#x65B9;&#x6CD5;</h4>
-<p>&#x2003;&#x2003;<code>sink</code>&#x65B9;&#x6CD5;&#x7528;&#x4E8E;&#x5C06;&#x5806;&#x9876;&#x90E8;&#x7684;&#x5143;&#x7D20;&#x4E0B;&#x6C89;&#xFF0C;&#x4EE5;&#x7EF4;&#x62A4;&#x5806;&#x7684;&#x6027;&#x8D28;&#xFF1A;
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= N) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;</span><br><span class="line">        <span class="comment">//assure that the parent is the biggest of its children</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; N &amp;&amp; less(j, j + <span class="number">1</span>)) {</span><br><span class="line">            swap (j, j + <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (!less(k, j)) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        swap (k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/13.3.The%20Implementation/image-6.png"></p>
+          <h1 id="122hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(1)</h1>
+<h3 id="1&#x6574;&#x6570;&#x6EA2;&#x51FA;">1.&#x6574;&#x6570;&#x6EA2;&#x51FA;</h3>
+<p>&#x2003;&#x2003;&#x5728;&#x5148;&#x524D;&#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x8F6C;&#x6362;&#x4E3A;&#x6574;&#x6570;&#x7684;&#x64CD;&#x4F5C;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5FFD;&#x7565;&#x4E86;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x8F6C;&#x6362;&#x5F97;&#x5230;&#x7684;&#x6574;&#x6570;&#x8FC7;&#x5927;&#x5BFC;&#x81F4;&#x6EA2;&#x51FA;&#x600E;&#x4E48;&#x529E;&#xFF1F;&#x4F8B;&#x5982;&#xFF0C;&#x6EA2;&#x51FA;&#x540E;&#x7684;<code>melt banana</code>&#x4E0E;<code>subterresetrial anticosmetic</code>&#x7684;<span class="math inline">\(Hash\)</span>&#x503C;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x901A;&#x8FC7;&#x6BD4;&#x8F83;&#x5B83;&#x4EEC;&#x7684;<span class="math inline">\(Hash\)</span>&#x503C;&#x6765;&#x786E;&#x5B9A;&#x5B83;&#x4EEC;&#x662F;&#x5426;&#x76F8;&#x7B49;&#xFF0C;&#x4F1A;&#x5F97;&#x5230;&#x76F8;&#x53CD;&#x7684;&#x7B54;&#x6848;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x6574;&#x6570;&#x7684;&#x6EA2;&#x51FA;&#x662F;&#x65E0;&#x6CD5;&#x907F;&#x514D;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;<span class="math inline">\(Java\)</span>&#x80FD;&#x591F;&#x8868;&#x793A;&#x7684;&#x6700;&#x5927;&#x6574;&#x6570;&#x53EA;&#x6709;<span class="math inline">\(2147483647\)</span>&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x5F15;&#x5165;&#x4E0B;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
+<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(Java\)</span>&#x4E2D;&#xFF0C;&#x6BCF;&#x4E2A;&#x5BF9;&#x8C61;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x9ED8;&#x8BA4;&#x7684;<code>.hashcode()</code>&#x65B9;&#x6CD5;&#x3002;<span class="math inline">\(Java\)</span>&#x901A;&#x8FC7;&#x8BE5;&#x5BF9;&#x8C61;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#x6765;&#x5F97;&#x51FA;&#x5B83;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5BF9;&#x6BCF;&#x4E2A;&#x72EC;&#x7ACB;&#x7684;&#x5BF9;&#x8C61;&#x90FD;&#x4F1A;&#x7ED9;&#x51FA;&#x4E0D;&#x91CD;&#x590D;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x6709;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x4F1A;&#x81EA;&#x5DF1;&#x5B9A;&#x4E49;<code>.hashcode()</code>&#x65B9;&#x6CD5;&#xFF0C;&#x6765;&#x6EE1;&#x8DB3;&#x81EA;&#x5DF1;&#x5B9A;&#x4E49;&#x7684;&#x4E00;&#x4E9B;&#x7C7B;&#x7684;&#x9700;&#x8981;&#x3002;</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(hashCode\)</span>&#x5177;&#x6709;&#x5982;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
+<ol type="1">
+<li>&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x6574;&#x6570;</li>
+<li>&#x5BF9;&#x540C;&#x4E00;&#x5BF9;&#x8C61;&#x591A;&#x6B21;&#x8C03;&#x7528;<code>.hashcode()</code>&#xFF0C;&#x5F97;&#x5230;&#x7684;&#x7ED3;&#x679C;&#x90FD;&#x76F8;&#x540C;&#x3002;</li>
+<li>&#x4E24;&#x4E2A;<code>.equal()</code> &#x7684;&#x5BF9;&#x8C61;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x76F8;&#x540C;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;</li>
+</ol>
+<p>&#x2003;&#x2003;&#x7136;&#x800C;&#xFF0C;&#x5E76;&#x4E0D;&#x662F;&#x6240;&#x6709;<span class="math inline">\(hashCode\)</span>&#x76F8;&#x7B49;&#x7684;&#x5BF9;&#x8C61;&#x90FD;<code>.equal()</code>&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x5E94;&#x5F53;&#x8BA9;&#x5BF9;&#x8C61;&#x7684;<span class="math inline">\(.hashode()\)</span>&#x65B9;&#x6CD5;&#x751F;&#x6210;&#x7684;<span class="math inline">\(hashCode\)</span>&#x5C3D;&#x53EF;&#x80FD;&#x5206;&#x5E03;&#x5747;&#x5300;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5230;&#x6B64;&#x4E3A;&#x6B62;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;<span class="math inline">\(Hashing\)</span>&#x7684;&#x666E;&#x9002;&#x6027;&#x3002;</p>
 
       
     </div>
@@ -309,7 +309,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/55/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/55/">55</a><span class="page-number current">56</span><a class="page-number" href="/page/57/">57</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/57/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/55/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/55/">55</a><span class="page-number current">56</span><a class="page-number" href="/page/57/">57</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/57/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -334,14 +334,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
   </span>
 </div>
 <div class="busuanzi-count">

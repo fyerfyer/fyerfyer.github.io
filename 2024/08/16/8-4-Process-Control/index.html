@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":2,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(8.4.\)Process Control 1.Obtaining Process IDs  Each process has a unique positive process ID(PID). The getpid function returns the PID of the calling process. The getppid function returns the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8.4.Process Control">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(8.4.\)Process Control 1.Obtaining Process IDs  Each process has a unique positive process ID(PID). The getpid function returns the PID of the calling process. The getppid function returns the">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/image-3.png">
+<meta property="article:published_time" content="2024-08-16T12:31:22.000Z">
+<meta property="article:modified_time" content="2024-08-18T02:41:24.452Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/","path":"2024/08/16/8-4-Process-Control/","title":"8.4.Process Control"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>8.4.Process Control | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>&#x641C;&#x7D22;
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80" placeholder="&#x641C;&#x7D22;..." spellcheck="false" type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#84process-control"><span class="nav-text">\(8.4.\)Process Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1obtaining-process-ids"><span class="nav-text">1.Obtaining Process IDs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2terminating-processes"><span class="nav-text">2.Terminating Processes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3creating-processes"><span class="nav-text">3.Creating Processes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4reaping-child-processes"><span class="nav-text">4.Reaping Child Processes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#abasicconcept"><span class="nav-text">&#x2003;&#x2003;\(a.\)Basic
+concept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#breaping-operations"><span class="nav-text">&#x2003;&#x2003;\(b.\)Reaping operations</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ithe-waitpid-function"><span class="nav-text">&#x2003;&#x2003;\(i.\)The waitpid function</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iimodifying-the-default-behavior"><span class="nav-text">&#x2003;&#x2003;\(ii.\)Modifying the default behavior</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iiichecking-the-exit-status-of-a-reapedchild"><span class="nav-text">&#x2003;&#x2003;\(iii.\)Checking the exit status of a reaped
+child</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iverror-conditions"><span class="nav-text">&#x2003;&#x2003;\(iv.\)Error conditions</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#vthe-wait-function"><span class="nav-text">&#x2003;&#x2003;\(v.\)The wait function</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5putting-processes-to-sleep"><span class="nav-text">5.Putting Processes to Sleep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6loading-and-runningprograms"><span class="nav-text">6.Loading and Running
+Programs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#athe-execve-function-ampexecuting-process"><span class="nav-text">&#x2003;&#x2003;\(a.\)The execve function &amp;
+executing process</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bmanipulating-the-environment-array"><span class="nav-text">&#x2003;&#x2003;\(b.\)Manipulating the environment array</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7using-forkand-execve-to-run-programs"><span class="nav-text">7.Using fork
+and execve to Run Programs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#athe-main-routine-of-asimple-shell"><span class="nav-text">&#x2003;&#x2003;\(a.\)The main routine of a
+simple shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bthe-evaluating-routine"><span class="nav-text">&#x2003;&#x2003;\(b.\)The evaluating routine</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="8.4.Process Control | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          8.4.Process Control
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 20:31:22" itemprop="dateCreated datePublished" datetime="2024-08-16T20:31:22+08:00">2024-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-18 10:41:24" itemprop="dateModified" datetime="2024-08-18T10:41:24+08:00">2024-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>8 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="84process-control"><span class="math inline">\(8.4.\)</span>Process Control</h1>
+<h3 id="1obtaining-process-ids">1.Obtaining Process IDs</h3>
+<ul>
+<li><p>Each process has a unique positive <em>process
+ID(PID)</em>.</p></li>
+<li><p>The <code>getpid</code> function returns the PID of the calling
+process.</p></li>
+<li><p>The <code>getppid</code> function returns the PID of its
+parent(i.e., the process that created the calling process).</p></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getppid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of either the caller or the parent */</span></span><br></pre></td></tr></table></figure>
+<h3 id="2terminating-processes">2.Terminating Processes</h3>
+<p>&#x2003;&#x2003;We can think of a process as being in one of three states:</p>
+<ul>
+<li><p><em>Running</em>: The process is either executing on the CPU or
+waiting to be executed and will eventually be scheduled by the
+kernel.</p></li>
+<li><p><em>Stopped</em>: The execution of the process is suspended and
+<strong>will not be scheduled</strong>.</p></li>
+<li><p><em>Terminated</em>: The process is stopped
+<strong>permanently</strong>. This is due to the following reasons:</p>
+<ol type="1">
+<li><p>Receiving a signal whose default action is to terminate the
+process.</p></li>
+<li><p>Returning from the main routine.</p></li>
+<li><p>Calling the <code>exit</code> function.</p></li>
+</ol></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* This function does not return */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>The <code>exit</code> function terminates the process with an
+<em>exit status</em> of status.</li>
+</ul>
+<blockquote>
+<p>The other way to set the exit status is to <strong>return an integer
+value from the main routine</strong>.</p>
+</blockquote>
+<h3 id="3creating-processes">3.Creating Processes</h3>
+<p>&#x2003;&#x2003;A parent process <strong>creates a new running child
+process</strong> by calling the <code>fork</code> function.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 to child, PID of child to parent, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The newly created child process is almost, identical to the
+parent:</p>
+<ul>
+<li><p>The child gets an identical(but <strong>separate</strong>) copy
+of the parent&#x2019;s user-level virtual address space.</p></li>
+<li><p>The child also gets identical copies of any of the parent&#x2019;s open
+file descriptors, which means the child <strong>can read and write any
+files that were open in the parent when it called
+fork</strong>.</p></li>
+<li><p>However, they share different PIDs.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The <code>fork</code> function <strong>is called once but it
+returns twice</strong>.</p>
+<blockquote>
+<p>Since the PID of the child is always nonzero, the return value
+provides an unambiguous way to <strong>tell whether the program is
+executing in the parent or the child</strong>.</p>
+</blockquote>
+<p>&#x2003;&#x2003;Take the following program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    pid = Fork();</span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>) { <span class="comment">/* Child */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child : x=%d\n&quot;</span>, ++x);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parent */</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;parent: x=%d\n&quot;</span>, --x);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When we run the program on the Unix system, we get the following
+result:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./fork</span><br><span class="line">parent: x=0</span><br><span class="line">child : x=2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The parent and the child are separate processes that run
+<strong>concurrently</strong>, and whether we get the
+<code>parent: x=0</code> first or <code>child: x=2</code>first depends
+on <strong>whether the parent process completes faster than the child
+process</strong>.</p></li>
+<li><p>Since the parent and the child are separate processes, they each
+have their own private address spaces, so that any subsequent changes
+that a parent or child makes to <code>x</code> <strong>are private and
+are not reflected in the memory of the other process</strong>.</p></li>
+</ul>
+<hr>
+<p>&#x2003;&#x2003;We can use a <em>process graph</em> to describe the process:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image.png"></p>
+<p>&#x2003;&#x2003;Let&apos;s take a look at a more complicate example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    Fork();</span><br><span class="line">    Fork();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The process graph of the process is as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-1.png"></p>
+<ul>
+<li>For a program running on a single processor, any <strong>topological
+sort of the vertices</strong> in the corresponding process graph
+represents <strong>a feasible total ordering of the statements in the
+program</strong>.</li>
+</ul>
+<h3 id="4reaping-child-processes">4.Reaping Child Processes</h3>
+<h4 id="abasicconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
+concept</h4>
+<p>&#x2003;&#x2003;When a process terminates for any reason, the kernel does not
+remove it from the system immediately. Instead, the process <strong>is
+kept around in a terminated state</strong> until <strong>it is reaped by
+its parent</strong>.</p>
+<p>&#x2003;&#x2003;When the parent reaps the terminated child, the kernel
+<strong>passes the child&apos;s exit status to the parent</strong> and then
+<strong>discards the terminated process</strong>.</p>
+<ul>
+<li><p>A terminated process that has not yet been reaped is called a
+<em>zombie</em>.</p></li>
+<li><p>Even though zombies are not running, they still consume system
+memory resources.</p></li>
+</ul>
+<hr>
+<p>&#x2003;&#x2003;When a parent process terminates, the kernel <strong>arranges for
+the <code>init</code> process to become the adopted parent of any
+orphaned children</strong>. The <code>init</code> process:</p>
+<ul>
+<li><p>has a PID of 1,</p></li>
+<li><p>is created by the kernel <strong>during system
+start-up</strong>,</p></li>
+<li><p>never terminates</p></li>
+<li><p>is <strong>the ancestor of every process</strong>.</p></li>
+</ul>
+<h4 id="breaping-operations">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Reaping operations</h4>
+<h5 id="ithe-waitpid-function">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>The <code>waitpid</code> function</h5>
+<p>&#x2003;&#x2003;A process waits for its children to terminate or stop by calling
+the <code>waitpid</code> function:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">waitpid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *statusp, <span class="type">int</span> options)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK, 0 (if WNOHANG), or &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>By default(when options = 0), <code>waitpid</code>
+<strong>suspends execution of the calling process</strong> until
+<strong>a child process in its wait set terminates</strong>.</p></li>
+<li><p>If a process in the wait set has already terminated at the time
+of the call, then <code>waitpid</code> returns immediately.</p></li>
+<li><p>Else, <code>waitpid</code> returns the PID of the terminated
+child that caused <code>waitpid</code> to return.</p></li>
+</ul>
+<hr>
+<ul>
+<li><p>If <code>pid &gt; 0</code>, then the wait set is <strong>the
+singleton child process</strong> whose process ID is equal to
+<code>pid</code>.</p></li>
+<li><p>If <code>pid = -1</code>, then the wait set consists of
+<strong>all of the parent&apos;s child processes</strong>.</p></li>
+</ul>
+<h5 id="iimodifying-the-default-behavior">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Modifying the default behavior</h5>
+<p>&#x2003;&#x2003;The default behavior can be modified by <strong>setting
+<code>options</code> to</strong> various combinations of the
+<code>WNOHANG</code>, <code>WUNTRACED</code>, and
+<code>WCONTINUED</code> constants:</p>
+<ul>
+<li><p><code>WNOHANG</code>: <strong>Return immediately</strong>(with a
+return value of 0) if <strong>none of the child processes in the wait
+set has terminated yet</strong>.</p>
+<ul>
+<li>The default behavior suspends the calling process until a child
+terminates, this option, however, allows us to <strong>do useful work
+while waiting for a child to terminate</strong>.</li>
+</ul></li>
+<li><p><code>WUNTRACED</code>: Suspend execution of the calling process
+until a process in the wait set becomes either terminated or stopped.
+<strong>Return the PID of the terminated or stopped child</strong> that
+caused the return.</p>
+<ul>
+<li>The default behavior returns only for terminated children; this
+option is useful when you want to <strong>check for both terminated and
+stopped children</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The options can be combined by <code>ORING</code>, for example:</p>
+<ul>
+<li><code>WNOHANG | WUNTRACED</code>: Return immediately, with a return
+value of 0, if none of the children in the wait set has stopped or
+terminated, or with a return value equal to the PID of one of the
+stopped or terminated children.</li>
+</ul>
+<h5 id="iiichecking-the-exit-status-of-a-reapedchild">&#x2003;&#x2003;<span class="math inline">\(iii.\)</span>Checking the exit status of a reaped
+child</h5>
+<p>&#x2003;&#x2003;If the <code>statusp</code> argument is non-NULL, then
+<code>waitpid</code> encodes status information about the child that
+caused the return in <code>status</code>, which is the value
+<strong>pointed to by <code>statusp</code></strong>.</p>
+<p>&#x2003;&#x2003;The <code>wait.h</code> include file defines several macros for
+interpreting the status argument:</p>
+<ul>
+<li><p><code>WIFEXITED(status)</code>: Returns true if the child
+<strong>terminated normally</strong>, via a call to <code>exit</code> or
+a <code>return</code>.</p></li>
+<li><p><code>WEXITSTATUS(status)</code>: Returns <strong>the exit
+status</strong> of a normally terminated child. This status is only
+defined if <code>WIFEXITED()</code> returned true.</p></li>
+<li><p><code>WTERMSIG(status)</code>: Returns <strong>the number of the
+signal</strong> that caused the child process to terminate. This status
+is only defined if <code>WIFSIGNALED()</code> returned true.</p></li>
+<li><p><code>WIFSTOPPED(status)</code>: Returns true if the child that
+caused the return is currently stopped.</p></li>
+<li><p><code>WSTOPSIG(status)</code>: Returns <strong>the number of the
+signal</strong> that caused the child to stop. This status is only
+defined if <code>WIFSTOPPED()</code> returned true.</p></li>
+</ul>
+<h5 id="iverror-conditions">&#x2003;&#x2003;<span class="math inline">\(iv.\)</span>Error conditions</h5>
+<ul>
+<li><p>If the calling process has no children, then <code>waitpid</code>
+returns &#x2212;1 and sets <code>errno</code> to <code>ECHILD</code>.</p></li>
+<li><p>If the <code>waitpid</code> function was interrupted by a signal,
+then it returns &#x2212;1 and sets errno to <code>EINTR</code>.</p></li>
+</ul>
+<h5 id="vthe-wait-function">&#x2003;&#x2003;<span class="math inline">\(v.\)</span>The <code>wait</code> function</h5>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span> *statusp)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK or &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Calling <code>wait(&amp;status)</code> is equivalent to calling
+<code>waitpid(-1, &amp;status, 0)</code>.</p>
+<h3 id="5putting-processes-to-sleep">5.Putting Processes to Sleep</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">sleep</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> secs)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: seconds left to sleep */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Another function that we will find useful is the <code>pause</code>
+function, which <strong>puts the calling function to sleep</strong>
+until <strong>a signal is received by the process</strong>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">pause</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Always returns &#x2212;1 */</span></span><br></pre></td></tr></table></figure>
+<h3 id="6loading-and-runningprograms">6.Loading and Running
+Programs</h3>
+<h4 id="athe-execve-function-ampexecuting-process">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>The <code>execve</code> function &amp;
+executing process</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">execve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename, <span class="type">const</span> <span class="type">char</span> *argv[], <span class="type">const</span> <span class="type">char</span> *envp[])</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Does not return if OK; returns &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The data structure of argument list and the list of environment
+variables are as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-2.png"></p>
+<ul>
+<li>By convention, <code>argv[0]</code> is the name of the executable
+object file.</li>
+</ul>
+<p>&#x2003;&#x2003;After <code>execve</code> loads <code>filename</code>, it
+<strong>calls the start-up code</strong>. The start-up code <strong>sets
+up the stack</strong> and <strong>passes control to the
+<code>main</code> routine</strong> of the new program, which has a
+prototype of the form:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv, <span class="type">char</span> **envp)</span>;</span><br><span class="line"><span class="comment">/* int main(int argc, char *argv[], char *envp[]); */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>argc</code>:It gives <strong>the number of non-null
+pointers</strong> in the <code>argv[]</code> array.</p></li>
+<li><p><code>argv</code>:It <strong>points to the first entry</strong>
+in the <code>argv[]</code> array.</p></li>
+<li><p><code>envp</code>:It <strong>points to the first entry</strong>
+in the <code>envp[]</code> array.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The stack has the organization as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-3.png"></p>
+<h4 id="bmanipulating-the-environment-array">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Manipulating the environment array</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">getenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to name if it exists, NULL if no match */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The getenv function searches the environment array for a string
+<code>name=value</code>. If found, it returns a pointer to value;
+otherwise, it returns <code>NULL</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">setenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, <span class="type">const</span> <span class="type">char</span> *newvalue, <span class="type">int</span> overwrite)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 on success, &#x2212;1 on error */</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unsetenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: nothing */</span></span><br></pre></td></tr></table></figure>
+<h3 id="7using-forkand-execve-to-run-programs">7.Using <code>fork</code>
+and <code>execve</code> to Run Programs</h3>
+<ul>
+<li>A <em>shell</em> is an interactive application-level program that
+<strong>runs other programs on behalf of the user</strong>. <strong>The
+original shell was the <code>sh</code> program</strong>, which was
+followed by variants such as <code>csh</code>, <code>tcsh</code>,
+<code>ksh</code>, and <code>bash</code>.</li>
+</ul>
+<p>&#x2003;&#x2003;A shell performs a sequence of <em>read/evaluate</em> steps and
+then terminates.</p>
+<ul>
+<li><p>The read step reads a command line from the user.</p></li>
+<li><p>The evaluate step <strong>parses the command line</strong> and
+runs programs on behalf of the user.</p></li>
+</ul>
+<h4 id="athe-main-routine-of-asimple-shell">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>The <code>main</code> routine of a
+simple shell</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXARGS 128</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Function prototypes */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> cmdline[MAXLINE]; <span class="comment">/* Command line */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) {</span><br><span class="line">        <span class="comment">/* Read */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&gt; &quot;</span>);</span><br><span class="line">        Fgets(cmdline, MAXLINE, <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="keyword">if</span> (feof(<span class="built_in">stdin</span>))</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Evaluate */</span></span><br><span class="line">        eval(cmdline);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h4 id="bthe-evaluating-routine">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>The evaluating routine</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* eval - Evaluate a command line */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *argv[MAXARGS]; <span class="comment">/* Argument list execve() */</span></span><br><span class="line">    <span class="type">char</span> buf[MAXLINE]; <span class="comment">/* Holds modified command line */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Should the job run in bg or fg? */</span></span><br><span class="line">    <span class="type">pid_t</span> pid; <span class="comment">/* Process id */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    bg = parseline(buf, argv);</span><br><span class="line">    <span class="keyword">if</span> (argv[<span class="number">0</span>] == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">/* Ignore empty lines */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!builtin_command(argv)) {</span><br><span class="line">        <span class="keyword">if</span> ((pid = Fork()) == <span class="number">0</span>) { <span class="comment">/* Child runs user job */</span></span><br><span class="line">            <span class="keyword">if</span> (execve(argv[<span class="number">0</span>], argv, environ) &lt; <span class="number">0</span>) {</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s: Command not found.\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Parent waits for foreground job to terminate */</span></span><br><span class="line">        <span class="keyword">if</span> (!bg) {</span><br><span class="line">            <span class="type">int</span> status;</span><br><span class="line">            <span class="keyword">if</span> (waitpid(pid, &amp;status, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">                unix_error(<span class="string">&quot;waitfg: waitpid error&quot;</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d %s&quot;</span>, pid, cmdline);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* If first arg is a builtin command, run it and return true */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;quit&quot;</span>)) <span class="comment">/* quit command */</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;&amp;&quot;</span>)) <span class="comment">/* Ignore singleton &amp; */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">/* Not a builtin command */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* parseline - Parse the command line and build the argv array */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *delim; <span class="comment">/* Points to first space delimiter */</span></span><br><span class="line">    <span class="type">int</span> argc; <span class="comment">/* Number of args */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Background job? */</span></span><br><span class="line"></span><br><span class="line">    buf[<span class="built_in">strlen</span>(buf)<span class="number">-1</span>] = <span class="string">&apos; &apos;</span>; <span class="comment">/* Replace trailing &apos;\n&apos; with space */</span></span><br><span class="line">    <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&apos; &apos;</span>)) <span class="comment">/* Ignore leading spaces */</span></span><br><span class="line">        buf++;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Build the argv list */</span></span><br><span class="line">    argc = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ((delim = <span class="built_in">strchr</span>(buf, <span class="string">&apos; &apos;</span>))) {</span><br><span class="line">        argv[argc++] = buf;</span><br><span class="line">        *delim = <span class="string">&apos;\0&apos;</span>;</span><br><span class="line">        buf = delim + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&apos; &apos;</span>)) <span class="comment">/* Ignore spaces */</span></span><br><span class="line">            buf++;</span><br><span class="line">    }</span><br><span class="line">    argv[argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">0</span>) <span class="comment">/* Ignore blank line */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Should the job run in the background? */</span></span><br><span class="line">    <span class="keyword">if</span> ((bg = (*argv[argc<span class="number">-1</span>] == <span class="string">&apos;&amp;&apos;</span>)) != <span class="number">0</span>)</span><br><span class="line">        argv[--argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bg;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>phaseline</code> function parses the space-separated
+command-line arguments and builds the <code>argv</code> vector that will
+eventually be passed to <code>execve</code>.</p>
+<ul>
+<li><p>If the last argument is an &apos;&amp;&apos; character, then parseline
+returns 1, indicating that the program should be executed in the
+<em>background</em>(the shell <strong>does not wait for it to
+complete</strong>).</p></li>
+<li><p>Otherwise, it returns 0, indicating that the program should be
+run in the <em>foreground</em>(the shell <strong>waits for it to
+complete</strong>).</p></li>
+</ul></li>
+<li><p>After parsing the command line, the <code>eval</code> function
+calls the <code>builtin_command</code> function, which <strong>checks
+whether the first command-line argument is a built-in shell
+command</strong>. If so, it interprets the command immediately and
+returns 1. Otherwise, it returns 0.</p></li>
+<li><p>If <code>builtin_command</code> returns 0, then the shell
+<strong>creates a child process</strong> and <strong>executes the
+requested program inside the child</strong>.</p>
+<ul>
+<li><p>If the user has asked for the program to run in the background,
+then the shell <strong>returns to the top of the loop and waits for the
+next command line</strong>.</p></li>
+<li><p>Otherwise the shell uses the <code>waitpid</code> function to
+<strong>wait for the job to terminate</strong>. When the job terminates,
+the shell goes on to the next iteration.</p></li>
+</ul></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/16/8-3-System-Call-Error-Handling/" rel="prev" title="8.3.System Call Error Handling">
+                  <i class="fa fa-angle-left"></i> 8.3.System Call Error Handling
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/18/8-5-Signal/" rel="next" title>
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+    <!--  -->
+    
+  </article>
+</div>
+
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fyerfyer","repo":"fyerfyer.github.io","client_id":"Ov23liESIp4eoFZzzDEq","client_secret":"2e451e3f77791ed6a3a4b0d07790e83fd1a3c8d0","admin_user":"fyerfyer","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ab0f6ff638c132870a7928cf89a220fc"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

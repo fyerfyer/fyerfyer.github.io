@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">148</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">6.1.&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x4E0E;&#x7A0B;&#x5E8F;</a>
+          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 09:34:24" itemprop="dateCreated datePublished" datetime="2024-04-07T09:34:24+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:47:54" itemprop="dateModified" datetime="2024-06-03T07:47:54+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>214</span>
+      <span>239</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,48 +272,56 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="61assemble-program-and-assembler"><span class="math inline">\(6.1.\)</span>Assemble Program and Assembler</h1>
-<h3 id="1basic-assembler-logic">1.Basic assembler logic</h3>
+          <h1 id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
+Segments</h1>
+<h3 id="1memory-segments-intro">1.Memory segments intro</h3>
+<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
+as:</p>
 <ul>
-<li><p>Repeat:</p>
-<ul>
-<li>Read the next Assembly language command.</li>
-<li>Break it into the different fields it is composed of.</li>
-<li>Lookup the binary code for each field.</li>
-<li>Combine these codes into a single machine language command.</li>
-<li>Output this machine language command.</li>
-</ul></li>
-<li><p>One thing we need to worry about: <em>Symbols</em>:</p>
-<ul>
-<li><p>Two cases:</p>
-<ul>
-<li><em>Labels</em>: When jumping into a certain part, you give it a
-name instead of hard core the address. <code>JMP loop</code></li>
-<li><em>Variables</em>: You give a variable name rather than always
-refer to its exact address in memory. <code>load R1, weight</code></li>
-</ul></li>
-<li><p>To convert it into concrete address, we use a <em>symbol
-table</em>:</p></li>
-</ul></li>
+<li>Argument variables</li>
+<li>Local variables</li>
+<li>Static variables</li>
 </ul>
-<p><img src="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/image.png"></p>
+<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
+role</strong>, we need some mechanism to <strong>record the different
+roles of different variables</strong>. We can achieve this by the notion
+of <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
+<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
+<em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
+<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
+<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
+these variables.</p>
+<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
+not a big deal, however, for <strong>the VM obstruction doesn&apos;t
+recognize symbolic variable names</strong>, all the variables are
+replaced by references to memory segments.</p>
+<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
+segments:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
+<p>&#x2003;&#x2003;And the syntax of the command is:
+<code>push / pop segment i</code></p>
 <ul>
-<li><p>To maintain such table:</p>
+<li><em>segment</em> is the segment you want to operate on.</li>
+<li><em>i</em> is the index of the command in that segment.</li>
+<li><span class="math inline">\(e.g.\)</span>
+:<code>push constant 17</code></li>
+<li><span class="math inline">\(e.g.\)</span> : translation of
+<code>let static 2 = argument 1</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
+<h3 id="2the-usage-of-segment">2.The usage of segment</h3>
 <ul>
-<li>When we first meet a symbol, we need to <strong>allocate a new
-memory location</strong> to hold it. For the assembler, it will find the
-<strong>next memory location that&apos;s available</strong>.</li>
-<li>When we meet it again, we simply refer to its address in the
-table.</li>
+<li><p>There&apos;s a lot of semantics going on in the high-level
+language:</p>
+<ul>
+<li>static variables, local variables, argument variables, ...</li>
+<li>the <em>object</em> consisting a bundle of variables</li>
 </ul></li>
-<li><p>One special case: <em>Forward references</em>: We can jump into a
-label before where it was defined. There are two ways to handle it:</p>
-<ol type="1">
-<li>Use a little bit to remember that we&apos;ve set the labels but don&apos;t
-know where it is yet. We leave it blank until label appears.(more
-complicated)</li>
-<li>In first pass just figure out all address.</li>
-</ol></li>
+<li><p>We can handle all the semantics using the eight virtual
+segments.</p></li>
 </ul>
 
       
@@ -337,7 +345,7 @@ complicated)</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/127/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/127/">127</a><span class="page-number current">128</span><a class="page-number" href="/page/129/">129</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/129/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/127/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/127/">127</a><span class="page-number current">128</span><a class="page-number" href="/page/129/">129</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/129/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -362,14 +370,14 @@ complicated)</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">120k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:15</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
   </span>
 </div>
 <div class="busuanzi-count">

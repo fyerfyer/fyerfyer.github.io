@@ -20,6 +20,555 @@ ver））</a></p></li>
 ]]></content>
   </entry>
   <entry>
+    <title></title>
+    <url>/2024/08/18/8-5-Signal/</url>
+    <content><![CDATA[
+]]></content>
+  </entry>
+  <entry>
+    <title>8.4.Process Control</title>
+    <url>/2024/08/16/8-4-Process-Control/</url>
+    <content><![CDATA[<h1 id="84process-control"><span class="math inline">\(8.4.\)</span>Process Control</h1>
+<h3 id="1obtaining-process-ids">1.Obtaining Process IDs</h3>
+<ul>
+<li><p>Each process has a unique positive <em>process
+ID(PID)</em>.</p></li>
+<li><p>The <code>getpid</code> function returns the PID of the calling
+process.</p></li>
+<li><p>The <code>getppid</code> function returns the PID of its
+parent(i.e., the process that created the calling process).</p></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getppid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of either the caller or the parent */</span></span><br></pre></td></tr></table></figure>
+<h3 id="2terminating-processes">2.Terminating Processes</h3>
+<p>  We can think of a process as being in one of three states:</p>
+<ul>
+<li><p><em>Running</em>: The process is either executing on the CPU or
+waiting to be executed and will eventually be scheduled by the
+kernel.</p></li>
+<li><p><em>Stopped</em>: The execution of the process is suspended and
+<strong>will not be scheduled</strong>.</p></li>
+<li><p><em>Terminated</em>: The process is stopped
+<strong>permanently</strong>. This is due to the following reasons:</p>
+<ol type="1">
+<li><p>Receiving a signal whose default action is to terminate the
+process.</p></li>
+<li><p>Returning from the main routine.</p></li>
+<li><p>Calling the <code>exit</code> function.</p></li>
+</ol></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* This function does not return */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>The <code>exit</code> function terminates the process with an
+<em>exit status</em> of status.</li>
+</ul>
+<blockquote>
+<p>The other way to set the exit status is to <strong>return an integer
+value from the main routine</strong>.</p>
+</blockquote>
+<h3 id="3creating-processes">3.Creating Processes</h3>
+<p>  A parent process <strong>creates a new running child
+process</strong> by calling the <code>fork</code> function.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 to child, PID of child to parent, −1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>  The newly created child process is almost, identical to the
+parent:</p>
+<ul>
+<li><p>The child gets an identical(but <strong>separate</strong>) copy
+of the parent’s user-level virtual address space.</p></li>
+<li><p>The child also gets identical copies of any of the parent’s open
+file descriptors, which means the child <strong>can read and write any
+files that were open in the parent when it called
+fork</strong>.</p></li>
+<li><p>However, they share different PIDs.</p></li>
+</ul>
+<p>  The <code>fork</code> function <strong>is called once but it
+returns twice</strong>.</p>
+<blockquote>
+<p>Since the PID of the child is always nonzero, the return value
+provides an unambiguous way to <strong>tell whether the program is
+executing in the parent or the child</strong>.</p>
+</blockquote>
+<p>  Take the following program as an example:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    pid = Fork();</span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123; <span class="comment">/* Child */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child : x=%d\n&quot;</span>, ++x);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parent */</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;parent: x=%d\n&quot;</span>, --x);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  When we run the program on the Unix system, we get the following
+result:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">linux&gt; ./fork</span><br><span class="line">parent: x=0</span><br><span class="line">child : x=2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The parent and the child are separate processes that run
+<strong>concurrently</strong>, and whether we get the
+<code>parent: x=0</code> first or <code>child: x=2</code>first depends
+on <strong>whether the parent process completes faster than the child
+process</strong>.</p></li>
+<li><p>Since the parent and the child are separate processes, they each
+have their own private address spaces, so that any subsequent changes
+that a parent or child makes to <code>x</code> <strong>are private and
+are not reflected in the memory of the other process</strong>.</p></li>
+</ul>
+<hr>
+<p>  We can use a <em>process graph</em> to describe the process:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image.png"></p>
+<p>  Let's take a look at a more complicate example:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    Fork();</span><br><span class="line">    Fork();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  The process graph of the process is as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-1.png"></p>
+<ul>
+<li>For a program running on a single processor, any <strong>topological
+sort of the vertices</strong> in the corresponding process graph
+represents <strong>a feasible total ordering of the statements in the
+program</strong>.</li>
+</ul>
+<h3 id="4reaping-child-processes">4.Reaping Child Processes</h3>
+<h4 id="abasicconcept">  <span class="math inline">\(a.\)</span>Basic
+concept</h4>
+<p>  When a process terminates for any reason, the kernel does not
+remove it from the system immediately. Instead, the process <strong>is
+kept around in a terminated state</strong> until <strong>it is reaped by
+its parent</strong>.</p>
+<p>  When the parent reaps the terminated child, the kernel
+<strong>passes the child's exit status to the parent</strong> and then
+<strong>discards the terminated process</strong>.</p>
+<ul>
+<li><p>A terminated process that has not yet been reaped is called a
+<em>zombie</em>.</p></li>
+<li><p>Even though zombies are not running, they still consume system
+memory resources.</p></li>
+</ul>
+<hr>
+<p>  When a parent process terminates, the kernel <strong>arranges for
+the <code>init</code> process to become the adopted parent of any
+orphaned children</strong>. The <code>init</code> process:</p>
+<ul>
+<li><p>has a PID of 1,</p></li>
+<li><p>is created by the kernel <strong>during system
+start-up</strong>,</p></li>
+<li><p>never terminates</p></li>
+<li><p>is <strong>the ancestor of every process</strong>.</p></li>
+</ul>
+<h4 id="breaping-operations">  <span class="math inline">\(b.\)</span>Reaping operations</h4>
+<h5 id="ithe-waitpid-function">  <span class="math inline">\(i.\)</span>The <code>waitpid</code> function</h5>
+<p>  A process waits for its children to terminate or stop by calling
+the <code>waitpid</code> function:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">waitpid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *statusp, <span class="type">int</span> options)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK, 0 (if WNOHANG), or −1 on error */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>By default(when options = 0), <code>waitpid</code>
+<strong>suspends execution of the calling process</strong> until
+<strong>a child process in its wait set terminates</strong>.</p></li>
+<li><p>If a process in the wait set has already terminated at the time
+of the call, then <code>waitpid</code> returns immediately.</p></li>
+<li><p>Else, <code>waitpid</code> returns the PID of the terminated
+child that caused <code>waitpid</code> to return.</p></li>
+</ul>
+<hr>
+<ul>
+<li><p>If <code>pid &gt; 0</code>, then the wait set is <strong>the
+singleton child process</strong> whose process ID is equal to
+<code>pid</code>.</p></li>
+<li><p>If <code>pid = -1</code>, then the wait set consists of
+<strong>all of the parent's child processes</strong>.</p></li>
+</ul>
+<h5 id="iimodifying-the-default-behavior">  <span class="math inline">\(ii.\)</span>Modifying the default behavior</h5>
+<p>  The default behavior can be modified by <strong>setting
+<code>options</code> to</strong> various combinations of the
+<code>WNOHANG</code>, <code>WUNTRACED</code>, and
+<code>WCONTINUED</code> constants:</p>
+<ul>
+<li><p><code>WNOHANG</code>: <strong>Return immediately</strong>(with a
+return value of 0) if <strong>none of the child processes in the wait
+set has terminated yet</strong>.</p>
+<ul>
+<li>The default behavior suspends the calling process until a child
+terminates, this option, however, allows us to <strong>do useful work
+while waiting for a child to terminate</strong>.</li>
+</ul></li>
+<li><p><code>WUNTRACED</code>: Suspend execution of the calling process
+until a process in the wait set becomes either terminated or stopped.
+<strong>Return the PID of the terminated or stopped child</strong> that
+caused the return.</p>
+<ul>
+<li>The default behavior returns only for terminated children; this
+option is useful when you want to <strong>check for both terminated and
+stopped children</strong>.</li>
+</ul></li>
+</ul>
+<p>  The options can be combined by <code>ORING</code>, for example:</p>
+<ul>
+<li><code>WNOHANG | WUNTRACED</code>: Return immediately, with a return
+value of 0, if none of the children in the wait set has stopped or
+terminated, or with a return value equal to the PID of one of the
+stopped or terminated children.</li>
+</ul>
+<h5 id="iiichecking-the-exit-status-of-a-reapedchild">  <span class="math inline">\(iii.\)</span>Checking the exit status of a reaped
+child</h5>
+<p>  If the <code>statusp</code> argument is non-NULL, then
+<code>waitpid</code> encodes status information about the child that
+caused the return in <code>status</code>, which is the value
+<strong>pointed to by <code>statusp</code></strong>.</p>
+<p>  The <code>wait.h</code> include file defines several macros for
+interpreting the status argument:</p>
+<ul>
+<li><p><code>WIFEXITED(status)</code>: Returns true if the child
+<strong>terminated normally</strong>, via a call to <code>exit</code> or
+a <code>return</code>.</p></li>
+<li><p><code>WEXITSTATUS(status)</code>: Returns <strong>the exit
+status</strong> of a normally terminated child. This status is only
+defined if <code>WIFEXITED()</code> returned true.</p></li>
+<li><p><code>WTERMSIG(status)</code>: Returns <strong>the number of the
+signal</strong> that caused the child process to terminate. This status
+is only defined if <code>WIFSIGNALED()</code> returned true.</p></li>
+<li><p><code>WIFSTOPPED(status)</code>: Returns true if the child that
+caused the return is currently stopped.</p></li>
+<li><p><code>WSTOPSIG(status)</code>: Returns <strong>the number of the
+signal</strong> that caused the child to stop. This status is only
+defined if <code>WIFSTOPPED()</code> returned true.</p></li>
+</ul>
+<h5 id="iverror-conditions">  <span class="math inline">\(iv.\)</span>Error conditions</h5>
+<ul>
+<li><p>If the calling process has no children, then <code>waitpid</code>
+returns −1 and sets <code>errno</code> to <code>ECHILD</code>.</p></li>
+<li><p>If the <code>waitpid</code> function was interrupted by a signal,
+then it returns −1 and sets errno to <code>EINTR</code>.</p></li>
+</ul>
+<h5 id="vthe-wait-function">  <span class="math inline">\(v.\)</span>The <code>wait</code> function</h5>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span> *statusp)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK or −1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>  Calling <code>wait(&amp;status)</code> is equivalent to calling
+<code>waitpid(-1, &amp;status, 0)</code>.</p>
+<h3 id="5putting-processes-to-sleep">5.Putting Processes to Sleep</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">sleep</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> secs)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: seconds left to sleep */</span></span><br></pre></td></tr></table></figure>
+<p>  Another function that we will find useful is the <code>pause</code>
+function, which <strong>puts the calling function to sleep</strong>
+until <strong>a signal is received by the process</strong>.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">pause</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Always returns −1 */</span></span><br></pre></td></tr></table></figure>
+<h3 id="6loading-and-runningprograms">6.Loading and Running
+Programs</h3>
+<h4 id="athe-execve-function-ampexecuting-process">  <span class="math inline">\(a.\)</span>The <code>execve</code> function &amp;
+executing process</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">execve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename, <span class="type">const</span> <span class="type">char</span> *argv[], <span class="type">const</span> <span class="type">char</span> *envp[])</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Does not return if OK; returns −1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>  The data structure of argument list and the list of environment
+variables are as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-2.png"></p>
+<ul>
+<li>By convention, <code>argv[0]</code> is the name of the executable
+object file.</li>
+</ul>
+<p>  After <code>execve</code> loads <code>filename</code>, it
+<strong>calls the start-up code</strong>. The start-up code <strong>sets
+up the stack</strong> and <strong>passes control to the
+<code>main</code> routine</strong> of the new program, which has a
+prototype of the form:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv, <span class="type">char</span> **envp)</span>;</span><br><span class="line"><span class="comment">/* int main(int argc, char *argv[], char *envp[]); */</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>argc</code>:It gives <strong>the number of non-null
+pointers</strong> in the <code>argv[]</code> array.</p></li>
+<li><p><code>argv</code>:It <strong>points to the first entry</strong>
+in the <code>argv[]</code> array.</p></li>
+<li><p><code>envp</code>:It <strong>points to the first entry</strong>
+in the <code>envp[]</code> array.</p></li>
+</ul>
+<p>  The stack has the organization as below:</p>
+<p><img src="/2024/08/16/8-4-Process-Control/image-3.png"></p>
+<h4 id="bmanipulating-the-environment-array">  <span class="math inline">\(b.\)</span>Manipulating the environment array</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">getenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to name if it exists, NULL if no match */</span></span><br></pre></td></tr></table></figure>
+<p>  The getenv function searches the environment array for a string
+<code>name=value</code>. If found, it returns a pointer to value;
+otherwise, it returns <code>NULL</code>.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">setenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, <span class="type">const</span> <span class="type">char</span> *newvalue, <span class="type">int</span> overwrite)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 on success, −1 on error */</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unsetenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: nothing */</span></span><br></pre></td></tr></table></figure>
+<h3 id="7using-forkand-execve-to-run-programs">7.Using <code>fork</code>
+and <code>execve</code> to Run Programs</h3>
+<ul>
+<li>A <em>shell</em> is an interactive application-level program that
+<strong>runs other programs on behalf of the user</strong>. <strong>The
+original shell was the <code>sh</code> program</strong>, which was
+followed by variants such as <code>csh</code>, <code>tcsh</code>,
+<code>ksh</code>, and <code>bash</code>.</li>
+</ul>
+<p>  A shell performs a sequence of <em>read/evaluate</em> steps and
+then terminates.</p>
+<ul>
+<li><p>The read step reads a command line from the user.</p></li>
+<li><p>The evaluate step <strong>parses the command line</strong> and
+runs programs on behalf of the user.</p></li>
+</ul>
+<h4 id="athe-main-routine-of-asimple-shell">  <span class="math inline">\(a.\)</span>The <code>main</code> routine of a
+simple shell</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXARGS 128</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Function prototypes */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> cmdline[MAXLINE]; <span class="comment">/* Command line */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">/* Read */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&gt; &quot;</span>);</span><br><span class="line">        Fgets(cmdline, MAXLINE, <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="keyword">if</span> (feof(<span class="built_in">stdin</span>))</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Evaluate */</span></span><br><span class="line">        eval(cmdline);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="bthe-evaluating-routine">  <span class="math inline">\(b.\)</span>The evaluating routine</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* eval - Evaluate a command line */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *argv[MAXARGS]; <span class="comment">/* Argument list execve() */</span></span><br><span class="line">    <span class="type">char</span> buf[MAXLINE]; <span class="comment">/* Holds modified command line */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Should the job run in bg or fg? */</span></span><br><span class="line">    <span class="type">pid_t</span> pid; <span class="comment">/* Process id */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    bg = parseline(buf, argv);</span><br><span class="line">    <span class="keyword">if</span> (argv[<span class="number">0</span>] == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">/* Ignore empty lines */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!builtin_command(argv)) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((pid = Fork()) == <span class="number">0</span>) &#123; <span class="comment">/* Child runs user job */</span></span><br><span class="line">            <span class="keyword">if</span> (execve(argv[<span class="number">0</span>], argv, environ) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s: Command not found.\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Parent waits for foreground job to terminate */</span></span><br><span class="line">        <span class="keyword">if</span> (!bg) &#123;</span><br><span class="line">            <span class="type">int</span> status;</span><br><span class="line">            <span class="keyword">if</span> (waitpid(pid, &amp;status, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">                unix_error(<span class="string">&quot;waitfg: waitpid error&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d %s&quot;</span>, pid, cmdline);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* If first arg is a builtin command, run it and return true */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;quit&quot;</span>)) <span class="comment">/* quit command */</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;&amp;&quot;</span>)) <span class="comment">/* Ignore singleton &amp; */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">/* Not a builtin command */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* parseline - Parse the command line and build the argv array */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *delim; <span class="comment">/* Points to first space delimiter */</span></span><br><span class="line">    <span class="type">int</span> argc; <span class="comment">/* Number of args */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Background job? */</span></span><br><span class="line"></span><br><span class="line">    buf[<span class="built_in">strlen</span>(buf)<span class="number">-1</span>] = <span class="string">&#x27; &#x27;</span>; <span class="comment">/* Replace trailing &#x27;\n&#x27; with space */</span></span><br><span class="line">    <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&#x27; &#x27;</span>)) <span class="comment">/* Ignore leading spaces */</span></span><br><span class="line">        buf++;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Build the argv list */</span></span><br><span class="line">    argc = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ((delim = <span class="built_in">strchr</span>(buf, <span class="string">&#x27; &#x27;</span>))) &#123;</span><br><span class="line">        argv[argc++] = buf;</span><br><span class="line">        *delim = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        buf = delim + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&#x27; &#x27;</span>)) <span class="comment">/* Ignore spaces */</span></span><br><span class="line">            buf++;</span><br><span class="line">    &#125;</span><br><span class="line">    argv[argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">0</span>) <span class="comment">/* Ignore blank line */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Should the job run in the background? */</span></span><br><span class="line">    <span class="keyword">if</span> ((bg = (*argv[argc<span class="number">-1</span>] == <span class="string">&#x27;&amp;&#x27;</span>)) != <span class="number">0</span>)</span><br><span class="line">        argv[--argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>phaseline</code> function parses the space-separated
+command-line arguments and builds the <code>argv</code> vector that will
+eventually be passed to <code>execve</code>.</p>
+<ul>
+<li><p>If the last argument is an '&amp;' character, then parseline
+returns 1, indicating that the program should be executed in the
+<em>background</em>(the shell <strong>does not wait for it to
+complete</strong>).</p></li>
+<li><p>Otherwise, it returns 0, indicating that the program should be
+run in the <em>foreground</em>(the shell <strong>waits for it to
+complete</strong>).</p></li>
+</ul></li>
+<li><p>After parsing the command line, the <code>eval</code> function
+calls the <code>builtin_command</code> function, which <strong>checks
+whether the first command-line argument is a built-in shell
+command</strong>. If so, it interprets the command immediately and
+returns 1. Otherwise, it returns 0.</p></li>
+<li><p>If <code>builtin_command</code> returns 0, then the shell
+<strong>creates a child process</strong> and <strong>executes the
+requested program inside the child</strong>.</p>
+<ul>
+<li><p>If the user has asked for the program to run in the background,
+then the shell <strong>returns to the top of the loop and waits for the
+next command line</strong>.</p></li>
+<li><p>Otherwise the shell uses the <code>waitpid</code> function to
+<strong>wait for the job to terminate</strong>. When the job terminates,
+the shell goes on to the next iteration.</p></li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 8.Exceptional Control Flow</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>8.3.System Call Error Handling</title>
+    <url>/2024/08/16/8-3-System-Call-Error-Handling/</url>
+    <content><![CDATA[<h1 id="83system-call-error-handling"><span class="math inline">\(8.3.\)</span>System Call Error Handling</h1>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;fork error: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  We can simplify this code somewhat by defining the following
+<em>error-reporting</em> function:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">unix_error</span><span class="params">(<span class="type">char</span> *msg)</span> <span class="comment">/* Unix-style error */</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s: %s\n&quot;</span>, msg, strerror(errno));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  We can simplify our code even further by using <em>error-handling
+wrappers</em>. For a given base function <code>foo</code>, we define a
+wrapper function <code>Foo</code> with <strong>identical arguments but
+with the first letter of the name capitalized</strong>. The wrapper
+calls the base function, <strong>checks for errors, and terminates if
+there are any problems</strong>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">pid_t</span> <span class="title function_">Fork</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>)</span><br><span class="line">        unix_error(<span class="string">&quot;Fork error&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> pid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 8.Exceptional Control Flow</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>8.2.Processes</title>
+    <url>/2024/08/16/8-2-Processes/</url>
+    <content><![CDATA[<h1 id="82processes"><span class="math inline">\(8.2.\)</span>Processes</h1>
+<h3 id="1basic-concepts">1.Basic Concepts</h3>
+<ul>
+<li><p>The classic definition of a process is <strong>an instance of a
+program in execution</strong>.</p></li>
+<li><p>Each program in the system runs <strong>in the context
+of</strong> some process. The context consists of <strong>the state that
+the program needs to run correctly</strong>.</p></li>
+</ul>
+<h3 id="2logical-control-flow">2.Logical Control Flow</h3>
+<p>   If we were to use a debugger to single-step the execution of our
+program, we would observe <strong>a series of program counter(PC)
+values</strong> that corresponded exclusively to instructions contained
+in our program's executable object file or in shared objects linked into
+our program dynamically at run time. This sequence of PC values is known
+as a <strong>logical control flow</strong>, or simply <strong>logical
+flow</strong>.</p>
+<p><img src="/2024/08/16/8-2-Processes/image.png"></p>
+<ul>
+<li>Processes <strong>take turns using the processor</strong>. Each
+process executes a portion of its flow and then <strong>is
+<em>preempted</em></strong>(temporarily suspended) while other processes
+take their turns.</li>
+</ul>
+<h3 id="3user-and-kernel-modes">3.User and Kernel Modes</h3>
+<p>  In order for the operating system kernel to provide an airtight
+process abstraction, the processor must provide a mechanism that
+<strong>restricts the instructions that an application can execute, as
+well as the portions of the address space that it can
+access</strong>.</p>
+<p>  Processors typically provide this capability with a <strong>mode
+bit</strong> in some control register that characterizes the privileges
+that the process currently enjoys.</p>
+<ul>
+<li><p>A process running in <em>kernel mode</em> can <strong>execute any
+instruction in the instruction set and access any memory location in the
+system</strong>.</p></li>
+<li><p>A process running in <em>user mode</em> is <strong>not allowed to
+execute privileged instructions</strong> that do things such as halt the
+processor, change the mode bit, or initiate an I/O operation. Nor is it
+allowed to <strong>directly reference code or data in the kernel area of
+the address space</strong>.</p>
+<ul>
+<li><p>Any such attempt results in a <strong>fatal protection
+fault</strong>.</p></li>
+<li><p>To execute these instructions, user programs must instead access
+kernel code and data indirectly <strong>via the system call
+interface</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4context-switches">4.Context Switches</h3>
+<p>  The operating system kernel implements multitasking using a
+higher-level form of exceptional control flow known as a <em>context
+switch</em>.</p>
+<ul>
+<li><p>The kernel maintains a context for each process. The context is
+the <strong>state</strong> that the kernel needs <strong>to restart a
+preempted process</strong>.</p></li>
+<li><p>At certain points during the execution of a process, the kernel
+can decide to <strong>preempt the current process and restart a
+previously preempted process</strong>. And we say that the kernel has
+<em>scheduled</em> that process.</p></li>
+</ul>
+<p>  The context switch contains the following steps:</p>
+<ol type="1">
+<li><p><strong>Saves the context of the current
+process</strong>.</p></li>
+<li><p><strong>Restores the saved context</strong> of some previously
+preempted process.</p></li>
+<li><p><strong>Passes control</strong> to this newly restored
+process.</p></li>
+</ol>
+<p>  If the system call blocks because it is waiting for some event to
+occur, then the kernel can <strong>put the current process to
+sleep</strong> and <strong>switch to another process</strong>.</p>
+<blockquote>
+<p>A context switch can also occur as a result of an interrupt. For
+example, all systems have some mechanism for <strong>generating periodic
+timer interrupts</strong>. Each time a timer interrupt occurs, the
+kernel can decide that the current process has run long enough and
+switch to a new process.</p>
+</blockquote>
+<p><img src="/2024/08/16/8-2-Processes/image-1.png"></p>
+<ul>
+<li><p>The disk will take a relatively long time to fetch the data, so
+instead of waiting and doing nothing, the kernel <strong>performs a
+context switch from process A to B</strong>.</p></li>
+<li><p>Process B then runs for a while in user mode until <strong>the
+disk sends an interrupt</strong> to signal that data have been
+transferred from disk to memory.</p></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 8.Exceptional Control Flow</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>8.1.Exceptions</title>
+    <url>/2024/08/15/8-1-Exceptions/</url>
+    <content><![CDATA[<h1 id="81exceptions"><span class="math inline">\(8.1.\)</span>Exceptions</h1>
+<p>  An exception is <strong>an abrupt change in the control
+flow</strong> in response to <strong>some change in the processor's
+state</strong>：</p>
+<p><img src="/2024/08/15/8-1-Exceptions/image.png"></p>
+<h3 id="1exception-handling">1.Exception Handling</h3>
+<ul>
+<li>Each type of possible exception in a system <strong>is assigned a
+unique nonnegative integer exception number</strong>.</li>
+</ul>
+<ol type="1">
+<li>At <strong>system boot time</strong>(when the computer is reset or
+powered on), the operating system allocates and initializes a jump table
+called an <strong>exception table</strong>, so that entry <span class="math inline">\(k\)</span> <strong>contains the address of the
+handler for exception <span class="math inline">\(k\)</span></strong>.</li>
+</ol>
+<p><img src="/2024/08/15/8-1-Exceptions/image-1.png"></p>
+<ol start="2" type="1">
+<li>At run time(when <strong>the system is executing some
+program</strong>), the processor detects that an exception has occurred
+and determines the corresponding exception number <span class="math inline">\(k\)</span>. The processor then triggers the
+exception by making an indirect procedure call, <strong>through entry
+<span class="math inline">\(k\)</span> of the exception table, to the
+corresponding handler</strong>.</li>
+</ol>
+<p><img src="/2024/08/15/8-1-Exceptions/image-2.png"></p>
+<ul>
+<li>The starting address of the exception table is contained in a
+special CPU register called the <em>exception table base
+register</em>.</li>
+</ul>
+<h3 id="2differencesbetween-exceptions-and-procedure-call">2.Differences
+between Exceptions and Procedure Call</h3>
+<ul>
+<li><p>As with a procedure call, the processor pushes a return address
+on the stack before branching to the handler. However, depending on the
+class of exception, the return address will have multiple
+choices.</p></li>
+<li><p>The processor also <strong>pushes some additional processor state
+onto the stack</strong> that will be necessary to <strong>restart the
+interrupted program when the handler returns</strong>.</p></li>
+</ul>
+<p>  Once the hardware triggers the exception, the rest of the work is
+done in software by the exception handler. After the handler has
+processed the event, it optionally returns to the interrupted program by
+<strong>executing a special "return from interrupt"
+instruction</strong>, which <strong>pops the appropriate state back into
+the processor's control and data registers, restores the state to user
+mode</strong> if the exception interrupted a user program, and then
+returns control to the interrupted program.</p>
+<h3 id="3classes-of-exceptions">3.Classes of Exceptions</h3>
+<p><img src="/2024/08/15/8-1-Exceptions/image-3.png"></p>
+<h4 id="ainterrupts">  <span class="math inline">\(a.\)</span>Interrupts</h4>
+<p>  <em>Interrupts</em> occur asynchronously as a result of
+<strong>signals from I/O devices that are external to the
+processor</strong>.</p>
+<p><img src="/2024/08/15/8-1-Exceptions/image-4.png"></p>
+<ul>
+<li><p>I/O devices interrupts by <strong>signaling a pin on the
+processor chip</strong> and <strong>placing onto the system bus the
+exception number</strong> that <strong>identifies the device that caused
+the interrupt</strong>.</p></li>
+<li><p>After the current instruction finishes executing, the processor
+<strong>notices that the interrupt pin has gone high</strong>,
+<strong>reads the exception number from the system bus</strong>, and
+then <strong>calls the appropriate interrupt handler</strong>.</p></li>
+<li><p>When the handler returns, it <strong>returns control to the next
+instruction</strong>. The program continues executing as though the
+interrupt had never happened.</p></li>
+</ul>
+<hr>
+<p>  The remaining classes of exceptions(traps, faults, and aborts)
+occur synchronously <strong>as a result of executing the current
+instruction</strong>. We refer to this instruction as the <em>faulting
+instruction</em>.</p>
+<h4 id="btraps-and-system-calls">  <span class="math inline">\(b.\)</span>Traps and system calls</h4>
+<p>  The most important use of traps is to <strong>provide a
+procedure-like interface between user programs and the kernel</strong>,
+known as a <em>system call</em>.</p>
+<p>  User program often needs to request services from the kernel.
+processors provide a special <code>syscall n</code> instruction that
+user programs can execute <strong>when they want to request service
+n</strong>.</p>
+<ul>
+<li>Executing the syscall instruction <strong>causes a trap to an
+exception handler</strong> that <strong>decodes the argument and calls
+the appropriate kernel routine</strong>.</li>
+</ul>
+<p><img src="/2024/08/15/8-1-Exceptions/image-5.png"></p>
+<h4 id="cfaults">  <span class="math inline">\(c.\)</span>Faults</h4>
+<p><img src="/2024/08/15/8-1-Exceptions/image-6.png"></p>
+<h4 id="dabort">  <span class="math inline">\(d.\)</span>Abort</h4>
+<p><img src="/2024/08/15/8-1-Exceptions/image-7.png"></p>
+<h3 id="4linuxx86-64-system-calls">4.Linux/x86-64 System Calls</h3>
+<p><img src="/2024/08/15/8-1-Exceptions/image-8.png"></p>
+<ul>
+<li>Each system call has a unique integer number that
+<strong>corresponds to an offset in a jump table</strong> in the
+kernel.(This jump table is not the same as the exception table.)</li>
+</ul>
+<p>  The C standard library provides a set of convenient wrapper
+functions for most system calls. The wrapper functions <strong>package
+up the arguments, trap to the kernel with the appropriate system call
+instruction, and then pass the return status of the system call back to
+the calling program</strong>.</p>
+<ul>
+<li>All arguments to Linux system calls are passed <strong>through
+general-purpose registers</strong> rather than the stack.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>Chapter 8.Exceptional Control Flow</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.6.The Impact of Caches on Program Performance</title>
     <url>/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/</url>
     <content><![CDATA[<h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
@@ -5659,6 +6208,84 @@ environment.</p>
       </categories>
   </entry>
   <entry>
+    <title>1.7.递归函数</title>
+    <url>/2024/05/31/1.7.%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="17递归函数"><span class="math inline">\(1.7\)</span>递归函数</h1>
+<h2 id="一-递归函数的概念与分类">一、递归函数的概念与分类</h2>
+<h3 id="1概念">1.概念</h3>
+<p>  如果<strong>函数体直接或间接调用函数本身</strong>，则函数称为递归函数。也就是说，执行递归函数体的过程可能反过来又需要再次应用该函数。</p>
+<h3 id="2递归的原理">2.递归的原理</h3>
+<p>  一般的递归由以下结构构成：</p>
+<ul>
+<li>基本情况：当递归函数递归到一个或多个基本情况时，函数将直接返回某个值，跳出递归</li>
+<li>递归调用：随着递归调用，问题逐渐得到简化</li>
+</ul>
+<p>  以阶乘的求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> n==<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> n*f(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>   递归函数<span class="math inline">\(fact\)</span>用一个更简单的问题：<span class="math inline">\(fact(n-1)\)</span>表示了<span class="math inline">\(fact(n)\)</span>。该递归的基本情况是<span class="math inline">\(1!=1,0!=1\)</span>。</p>
+<p>  当递归<strong>通过递归函数的连续调用“展开”到越来越简单的问题时，结果最终会从基本情况开始构建</strong>。递归结束时将参数<span class="math inline">\(1\)</span>传递给<span class="math inline">\(fact\)</span>;
+<strong>每个调用的结果取决于下一个调用，直到达到基本情况。</strong></p>
+<p>  在我们利用以上计算模型得出递归的最终结果时，也可<strong>将递归调用看作函数抽象</strong>。在阶乘中，我们不关心<span class="math inline">\(fact(n-1)\)</span>是怎么计算出来的，我们应该简单地相信它计算的是<span class="math inline">\(n-1\)</span>的阶乘。这种对递归函数的看法被称作<span class="math inline">\(recursive\;leap\;of\;faith\)</span>，即<strong>我们相信递归调用简单情况时函数会得出正确结果，在这个认知的基础上去计算复杂情况</strong>。例如计算阶乘时，我们相信<span class="math inline">\(fact(n-1)\)</span>能正确计算出<span class="math inline">\((n-1)!\)</span>，<strong>只需检查<span class="math inline">\(n!\)</span>在这个假设成立下是否能得到正确计算</strong>。通过这种方式，验证递归函数的正确性是一种<strong>数学归纳法</strong>。</p>
+<h3 id="3递归与循环函数的区别">3.递归与循环函数的区别</h3>
+<p>  我们以阶乘函数的循环写法为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact_iter</span>(<span class="params">n</span>):</span><br><span class="line">        total, k = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> k &lt;= n:</span><br><span class="line">            total, k = total * k, k + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure></p>
+<p>  我们从两个角度看待它们的区别：</p>
+<h4 id="a实现方式">  <span class="math inline">\(a.\)</span>实现方式：</h4>
+<p>  阶乘的循环写法是通过逐项相乘实现的，而阶乘的递归写法是通过当前项<span class="math inline">\(fact(n)\)</span>与前一项<span class="math inline">\(fact(n-1)\)</span>的关系实现的。</p>
+<h4 id="b调用参数">  <span class="math inline">\(b.\)</span>调用参数</h4>
+<p>  阶乘的循环写法需要调用两个额外参数<span class="math inline">\(total,k\)</span>，而递归则没有这两个参数。在递归中，<span class="math inline">\(fact(n)\)</span>本身的返回值及相当于循环中的<span class="math inline">\(total\)</span>，而<span class="math inline">\(n\)</span>则用来隐式地跟踪<span class="math inline">\(n!\)</span>计算到哪一步，相当于循环中的<span class="math inline">\(k\)</span>。</p>
+<h2 id="二-相互递归调用">二、相互递归调用</h2>
+<h3 id="1概念">1.概念</h3>
+<p>  当一个递归过程分为<strong>两个相互调用的函数</strong>时，这两个函数被称为相互递归的。</p>
+<p>  对于<strong>多主体</strong>的问题，利用相互递归调用可以得到很完美的解决。</p>
+<h3 id="2实例讲解">2.实例讲解</h3>
+<p>  <span class="math inline">\(e.g.1.\)</span>考虑如下所述对于奇偶的定义：</p>
+<ul>
+<li><span class="math inline">\(0\)</span>为偶数</li>
+<li>若<span class="math inline">\(n-1\)</span>为偶数，则<span class="math inline">\(n\)</span>为奇数</li>
+<li>若<span class="math inline">\(n-1\)</span>为奇数，则<span class="math inline">\(n\)</span>为偶数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> is_odd(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_odd</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> is_even(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>  <span class="math inline">\(p.s.\)</span>通过<strong>打破两个函数之间的抽象边界</strong>，可以将相互递归的函数转换为单个递归函数。如上述函数可如下改写：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (n-<span class="number">1</span>) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> is_even((n-<span class="number">1</span>)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  <span class="math inline">\(e.g.2.\)</span>考虑一个两人博弈，在这个博弈中，一张桌子上有
+<span class="math inline">\(n\)</span>个初始卵石。玩家轮流从桌子上移走一个或两个鹅卵石，移走最后一个鹅卵石的玩家获胜。假设爱丽丝和鲍勃玩这个游戏，每个人都使用一个简单的策略:</p>
+<ul>
+<li>爱丽丝总是拿走一块鹅卵石</li>
+<li>如果桌子上的鹅卵石数量是偶数，那么鲍勃就会移除两个鹅卵石，另一个是偶数</li>
+</ul>
+<p>  给定<span class="math inline">\(n\)</span>个最初的卵石和爱丽丝开始，谁赢得了比赛？</p>
+<p>  <span class="math inline">\(solve\)</span>：这里爱丽丝与鲍勃是不同主体，分设为两个函数即可：
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">alice</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bob wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> bob(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bob</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Alice wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> alice(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="三-树形递归">三、树形递归</h2>
+<h3 id="1树形递归的概念">1.树形递归的概念</h3>
+<p>  树形递归是一种常用的递归，在树形递归中，递归函数被调用不止一次。</p>
+<p>  我们以斐波那契数列的递归求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fib</span>(<span class="params">n</span>):</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">2</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fib(n-<span class="number">2</span>) + fib(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>  可以看到，递归的写法与斐波那契的定义<span class="math inline">\(Fib_n=Fib_{n-1}+Fib_{n-2}\)</span>是完全契合的。</p>
+<h3 id="2实例讲解">2.实例讲解</h3>
+<p>  <span class="math inline">\(e.g.1.\)</span>将<span class="math inline">\(n\)</span>分解为某个单调递增的序列，且序列中数的最大值不超过<span class="math inline">\(m\)</span>。给出<span class="math inline">\(n,m\)</span>，求出满足条件序列的数量。</p>
+<p>  <span class="math inline">\(solve\)</span>：我们考虑下面两件事：</p>
+<ol type="1">
+<li><p>分组方法：为了保证不重不漏，我们从序列中最大值<span class="math inline">\(m\)</span>入手，可分为以下情况：</p>
+<ul>
+<li>选一个<span class="math inline">\(m\)</span>，然后对<span class="math inline">\(n-m\)</span>执行相同操作</li>
+<li>不选<span class="math inline">\(m\)</span>，此时序列中最大值变为<span class="math inline">\(m-1\)</span>，然后继续执行相同操作</li>
+</ul></li>
+<li><p>基本情况：</p>
+<ul>
+<li><code>n==0</code>：<span class="math inline">\(return
+1\)</span></li>
+<li><code>n&lt;0</code>：<span class="math inline">\(return
+0\)</span></li>
+<li><code>m==0</code>：<span class="math inline">\(return
+0\)</span></li>
+</ul></li>
+</ol>
+<p>  于是可写出如下代码： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">div</span>(<span class="params">n,m</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> n&lt;<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> m==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> div(n-m,m)+div(n,m-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+  我们可以把一个树形递归函数看作是在<strong>探索不同的可能性</strong>。在这个例子中，我们探索了使用<span class="math inline">\(m\)</span>的可能性以及不使用的可能性。第一个和第二个递归调用对应于这些可能性。</p>
+]]></content>
+      <categories>
+        <category>SICP in python</category>
+        <category>Chapter 1.Building Abstractions with Functions</category>
+      </categories>
+  </entry>
+  <entry>
     <title>1.6.高阶函数</title>
     <url>/2024/05/31/1.6.%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="16高阶函数"><span class="math inline">\(1.6\)</span>高阶函数</h1>
@@ -5778,104 +6405,6 @@ environment.</p>
       </categories>
   </entry>
   <entry>
-    <title>1.7.递归函数</title>
-    <url>/2024/05/31/1.7.%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="17递归函数"><span class="math inline">\(1.7\)</span>递归函数</h1>
-<h2 id="一-递归函数的概念与分类">一、递归函数的概念与分类</h2>
-<h3 id="1概念">1.概念</h3>
-<p>  如果<strong>函数体直接或间接调用函数本身</strong>，则函数称为递归函数。也就是说，执行递归函数体的过程可能反过来又需要再次应用该函数。</p>
-<h3 id="2递归的原理">2.递归的原理</h3>
-<p>  一般的递归由以下结构构成：</p>
-<ul>
-<li>基本情况：当递归函数递归到一个或多个基本情况时，函数将直接返回某个值，跳出递归</li>
-<li>递归调用：随着递归调用，问题逐渐得到简化</li>
-</ul>
-<p>  以阶乘的求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> n==<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> n*f(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>   递归函数<span class="math inline">\(fact\)</span>用一个更简单的问题：<span class="math inline">\(fact(n-1)\)</span>表示了<span class="math inline">\(fact(n)\)</span>。该递归的基本情况是<span class="math inline">\(1!=1,0!=1\)</span>。</p>
-<p>  当递归<strong>通过递归函数的连续调用“展开”到越来越简单的问题时，结果最终会从基本情况开始构建</strong>。递归结束时将参数<span class="math inline">\(1\)</span>传递给<span class="math inline">\(fact\)</span>;
-<strong>每个调用的结果取决于下一个调用，直到达到基本情况。</strong></p>
-<p>  在我们利用以上计算模型得出递归的最终结果时，也可<strong>将递归调用看作函数抽象</strong>。在阶乘中，我们不关心<span class="math inline">\(fact(n-1)\)</span>是怎么计算出来的，我们应该简单地相信它计算的是<span class="math inline">\(n-1\)</span>的阶乘。这种对递归函数的看法被称作<span class="math inline">\(recursive\;leap\;of\;faith\)</span>，即<strong>我们相信递归调用简单情况时函数会得出正确结果，在这个认知的基础上去计算复杂情况</strong>。例如计算阶乘时，我们相信<span class="math inline">\(fact(n-1)\)</span>能正确计算出<span class="math inline">\((n-1)!\)</span>，<strong>只需检查<span class="math inline">\(n!\)</span>在这个假设成立下是否能得到正确计算</strong>。通过这种方式，验证递归函数的正确性是一种<strong>数学归纳法</strong>。</p>
-<h3 id="3递归与循环函数的区别">3.递归与循环函数的区别</h3>
-<p>  我们以阶乘函数的循环写法为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fact_iter</span>(<span class="params">n</span>):</span><br><span class="line">        total, k = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> k &lt;= n:</span><br><span class="line">            total, k = total * k, k + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure></p>
-<p>  我们从两个角度看待它们的区别：</p>
-<h4 id="a实现方式">  <span class="math inline">\(a.\)</span>实现方式：</h4>
-<p>  阶乘的循环写法是通过逐项相乘实现的，而阶乘的递归写法是通过当前项<span class="math inline">\(fact(n)\)</span>与前一项<span class="math inline">\(fact(n-1)\)</span>的关系实现的。</p>
-<h4 id="b调用参数">  <span class="math inline">\(b.\)</span>调用参数</h4>
-<p>  阶乘的循环写法需要调用两个额外参数<span class="math inline">\(total,k\)</span>，而递归则没有这两个参数。在递归中，<span class="math inline">\(fact(n)\)</span>本身的返回值及相当于循环中的<span class="math inline">\(total\)</span>，而<span class="math inline">\(n\)</span>则用来隐式地跟踪<span class="math inline">\(n!\)</span>计算到哪一步，相当于循环中的<span class="math inline">\(k\)</span>。</p>
-<h2 id="二-相互递归调用">二、相互递归调用</h2>
-<h3 id="1概念">1.概念</h3>
-<p>  当一个递归过程分为<strong>两个相互调用的函数</strong>时，这两个函数被称为相互递归的。</p>
-<p>  对于<strong>多主体</strong>的问题，利用相互递归调用可以得到很完美的解决。</p>
-<h3 id="2实例讲解">2.实例讲解</h3>
-<p>  <span class="math inline">\(e.g.1.\)</span>考虑如下所述对于奇偶的定义：</p>
-<ul>
-<li><span class="math inline">\(0\)</span>为偶数</li>
-<li>若<span class="math inline">\(n-1\)</span>为偶数，则<span class="math inline">\(n\)</span>为奇数</li>
-<li>若<span class="math inline">\(n-1\)</span>为奇数，则<span class="math inline">\(n\)</span>为偶数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> is_odd(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_odd</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> is_even(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>  <span class="math inline">\(p.s.\)</span>通过<strong>打破两个函数之间的抽象边界</strong>，可以将相互递归的函数转换为单个递归函数。如上述函数可如下改写：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_even</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> (n-<span class="number">1</span>) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> is_even((n-<span class="number">1</span>)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  <span class="math inline">\(e.g.2.\)</span>考虑一个两人博弈，在这个博弈中，一张桌子上有
-<span class="math inline">\(n\)</span>个初始卵石。玩家轮流从桌子上移走一个或两个鹅卵石，移走最后一个鹅卵石的玩家获胜。假设爱丽丝和鲍勃玩这个游戏，每个人都使用一个简单的策略:</p>
-<ul>
-<li>爱丽丝总是拿走一块鹅卵石</li>
-<li>如果桌子上的鹅卵石数量是偶数，那么鲍勃就会移除两个鹅卵石，另一个是偶数</li>
-</ul>
-<p>  给定<span class="math inline">\(n\)</span>个最初的卵石和爱丽丝开始，谁赢得了比赛？</p>
-<p>  <span class="math inline">\(solve\)</span>：这里爱丽丝与鲍勃是不同主体，分设为两个函数即可：
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">alice</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bob wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> bob(n-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bob</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Alice wins&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> alice(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<h2 id="三-树形递归">三、树形递归</h2>
-<h3 id="1树形递归的概念">1.树形递归的概念</h3>
-<p>  树形递归是一种常用的递归，在树形递归中，递归函数被调用不止一次。</p>
-<p>  我们以斐波那契数列的递归求解为例： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fib</span>(<span class="params">n</span>):</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">2</span>:</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fib(n-<span class="number">2</span>) + fib(n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>  可以看到，递归的写法与斐波那契的定义<span class="math inline">\(Fib_n=Fib_{n-1}+Fib_{n-2}\)</span>是完全契合的。</p>
-<h3 id="2实例讲解">2.实例讲解</h3>
-<p>  <span class="math inline">\(e.g.1.\)</span>将<span class="math inline">\(n\)</span>分解为某个单调递增的序列，且序列中数的最大值不超过<span class="math inline">\(m\)</span>。给出<span class="math inline">\(n,m\)</span>，求出满足条件序列的数量。</p>
-<p>  <span class="math inline">\(solve\)</span>：我们考虑下面两件事：</p>
-<ol type="1">
-<li><p>分组方法：为了保证不重不漏，我们从序列中最大值<span class="math inline">\(m\)</span>入手，可分为以下情况：</p>
-<ul>
-<li>选一个<span class="math inline">\(m\)</span>，然后对<span class="math inline">\(n-m\)</span>执行相同操作</li>
-<li>不选<span class="math inline">\(m\)</span>，此时序列中最大值变为<span class="math inline">\(m-1\)</span>，然后继续执行相同操作</li>
-</ul></li>
-<li><p>基本情况：</p>
-<ul>
-<li><code>n==0</code>：<span class="math inline">\(return
-1\)</span></li>
-<li><code>n&lt;0</code>：<span class="math inline">\(return
-0\)</span></li>
-<li><code>m==0</code>：<span class="math inline">\(return
-0\)</span></li>
-</ul></li>
-</ol>
-<p>  于是可写出如下代码： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">div</span>(<span class="params">n,m</span>):</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> n&lt;<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> m==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> div(n-m,m)+div(n,m-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-  我们可以把一个树形递归函数看作是在<strong>探索不同的可能性</strong>。在这个例子中，我们探索了使用<span class="math inline">\(m\)</span>的可能性以及不使用的可能性。第一个和第二个递归调用对应于这些可能性。</p>
-]]></content>
-      <categories>
-        <category>SICP in python</category>
-        <category>Chapter 1.Building Abstractions with Functions</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>11.1.一些概念</title>
-    <url>/2024/05/31/11.1%20Some%20concepts/</url>
-    <content><![CDATA[<h1 id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</h1>
-<h3 id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</h3>
-<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
-<h3 id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</h3>
-<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
-<ul>
-<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
-<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
-<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
-</ul>
-<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
-      </categories>
-  </entry>
-  <entry>
     <title>10.1.二叉搜索树</title>
     <url>/2024/05/31/10.1.Binary%20Search%20Trees/</url>
     <content><![CDATA[<h1 id="101二叉搜索树"><span class="math inline">\(10.1\)</span>二叉搜索树</h1>
@@ -5932,6 +6461,26 @@ ordering restriction to support efficient search</li>
       <categories>
         <category>CS61B DataStructure</category>
         <category>10.Trees</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>11.1.一些概念</title>
+    <url>/2024/05/31/11.1%20Some%20concepts/</url>
+    <content><![CDATA[<h1 id="111一些概念"><span class="math inline">\(11.1\)</span>一些概念</h1>
+<h3 id="1o与最坏运行时间的区别">1.<span class="math inline">\(O()\)</span>与最坏运行时间的区别</h3>
+<p>  大<span class="math inline">\(O\)</span>不等于最坏运行时间！<span class="math inline">\(O\)</span>表示的是运行时间的上界，只要一个函数的运行时间小于<span class="math inline">\(O(times)\)</span>，那么它就算在<span class="math inline">\(O\)</span>内。最坏运行时间比<span class="math inline">\(O\)</span>更为严苛，因为对于最坏运行时间<span class="math inline">\(worst_time\)</span>，函数必须能取到这个时间、而非仅仅小于等于这个时间。</p>
+<h3 id="2对bst性能的衡量">2.对<span class="math inline">\(BST\)</span>性能的衡量</h3>
+<p>  <span class="math inline">\(BST\)</span>性能的衡量需要考虑以下概念：</p>
+<ul>
+<li>深度(<span class="math inline">\(depth\)</span>)：节点到树根间链接的数量。</li>
+<li>高度(<span class="math inline">\(height\)</span>)：树的最大深度。</li>
+<li>平均深度(<span class="math inline">\(average\)</span>)：树所有深度的平均值，可以用<span class="math inline">\({\sum_{i=0}^D d_in_i}\over N\)</span>，<span class="math inline">\(d_i\)</span>代表深度，<span class="math inline">\(n_i\)</span>代表节点的数字。</li>
+</ul>
+<p>  <span class="math inline">\(BST\)</span>的高度代表了它的最坏运行时间，而平均深度决定了它的平均运行时间。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
       </categories>
   </entry>
   <entry>
@@ -6020,6 +6569,37 @@ promote its left child in the only natural way.</li>
       </categories>
   </entry>
   <entry>
+    <title>11.5.红黑树</title>
+    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
+    <content><![CDATA[<h1 id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</h1>
+<h3 id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</h3>
+<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
+<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
+<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
+<h3 id="2左斜红黑树的性质">2.左斜红黑树的性质</h3>
+<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
+<ol type="1">
+<li>红色链接左斜。</li>
+<li>没有一个节点与两个红色链接相连。</li>
+<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
+</ol>
+<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
+<h3 id="2红黑树的旋转操作">2.红黑树的旋转操作</h3>
+<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
+<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>11.Balanced Trees</category>
+      </categories>
+  </entry>
+  <entry>
     <title>12.1.Hashing的引入</title>
     <url>/2024/05/31/12.1.The%20introduction%20of%20Hashing/</url>
     <content><![CDATA[<h1 id="121hashing的引入"><span class="math inline">\(12.1\)</span><span class="math inline">\(Hashing\)</span>的引入</h1>
@@ -6072,34 +6652,48 @@ N)\)</span>，但我们希望有更优的运行时间。</li>
       </categories>
   </entry>
   <entry>
-    <title>11.5.红黑树</title>
-    <url>/2024/05/31/11.5.Red-Black%20Trees/</url>
-    <content><![CDATA[<h1 id="115红黑树未完结"><span class="math inline">\(11.5\)</span>红黑树(未完结)</h1>
-<h3 id="1红黑树的引入与相关概念">1.红黑树的引入与相关概念</h3>
-<p>  前面介绍的<span class="math inline">\(B\)</span>-树很符合我们对运行时间的的需要，但是它很难用代码实现。因此，我们设想创造一种树，它利用<span class="math inline">\(BST\)</span>实现，但结构上与<span class="math inline">\(B\)</span>-树等价。</p>
-<p>  在<span class="math inline">\(2-3\)</span>树中，叶子只有一个节点的情况和<span class="math inline">\(BST\)</span>是完全一样的。而对于两个节点的情况，我们考虑将链接分成两种类型：红色(<span class="math inline">\(red\)</span>)的和黑色(<span class="math inline">\(black\)</span>)的。对于一个叶子三个节点的情况，我们可以用如下的形式表示：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
-<p>  这么处理的好处是：我们可以不修改原有的<span class="math inline">\(BST\)</span>来实现<span class="math inline">\(2-3\)</span>树。给定任意一个<span class="math inline">\(2-3\)</span>树，我们都可以立即生成一个对应的<span class="math inline">\(BST\)</span>。例如下面的<span class="math inline">\(2-3\)</span>树到红黑树的转换：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
-<h3 id="2左斜红黑树的性质">2.左斜红黑树的性质</h3>
-<p>  为了模拟<span class="math inline">\(2-3\)</span>树，红黑树必须具有以下性质：</p>
+    <title>12.4.数据结构的最终实现</title>
+    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
+    <content><![CDATA[<h1 id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</h1>
+<h3 id="1运行时间的优化">1.运行时间的优化</h3>
+<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
+<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
 <ol type="1">
-<li>红色链接左斜。</li>
-<li>没有一个节点与两个红色链接相连。</li>
-<li>红黑树具有完美的“黑色平衡”：从根节点到空节点间的每个路径都具有相同数量的褐色链接。</li>
+<li>动态地扩大我们的哈希表。</li>
+<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
 </ol>
-<p>  如果将红色链接画成水平的，那么可以得到下面的图示，这和<span class="math inline">\(2-3\)</span>树几乎一致：</p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
-<h3 id="2红黑树的旋转操作">2.红黑树的旋转操作</h3>
-<p>  红黑树的左旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
-<p>  红黑树的右旋操作如下： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> &#123;</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
-<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
+<h4 id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</h4>
+<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
+<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
+<ul>
+<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
+<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
+<ul>
+<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
+</ul></li>
+</ul>
+<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
+M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
+M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
+<h4 id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></h4>
+<ul>
+<li><p>Use a 'base' strategy similar to the one we developed
+earlier.</p></li>
+<li><p>Use a 'base' that's a small prime.</p>
+<ul>
+<li>Base 126 isn't actually very good, because using base 126 means that
+any string that ends in the same last 32 characters has the same
+hashcode.</li>
+<li>This happens because of overflow.</li>
+<li>Using prime numbers helps avoid overflow issues (i.e., collisions
+due to overflow).</li>
+<li>Why a small prime? Because it's easier to compute.</li>
+</ul></li>
+</ul>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
-        <category>11.Balanced Trees</category>
+        <category>12.Hashing</category>
       </categories>
   </entry>
   <entry>
@@ -6191,6 +6785,30 @@ N)\)</span></li>
       </categories>
   </entry>
   <entry>
+    <title>13.3.优先队列的实现</title>
+    <url>/2024/05/31/13.3.The%20Implementation/</url>
+    <content><![CDATA[<h1 id="133优先队列的实现"><span class="math inline">\(13.3\)</span>优先队列的实现</h1>
+<p>(注：这里实现的是大根堆)</p>
+<h3 id="1优先队列的初始化">1.优先队列的初始化</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MaxPQ</span>&lt;Key <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;Key&gt;&gt; </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Key[] pq; <span class="comment">// heap-ordered complete binary tree</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// in pq[1..N] with pq[0] unused</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MaxPQ</span><span class="params">(<span class="type">int</span> maxN)</span> &#123; </span><br><span class="line">        pq = (Key[]) <span class="keyword">new</span> <span class="title class_">Comparable</span>[maxN+<span class="number">1</span>]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> N == <span class="number">0</span>; </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> N; </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Key v)</span> &#123; </span><br><span class="line">        pq[++N] = v;</span><br><span class="line">        swim(N);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Key <span class="title function_">delMax</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="type">Key</span> <span class="variable">max</span> <span class="operator">=</span> pq[<span class="number">1</span>]; <span class="comment">// Retrieve max key from top.</span></span><br><span class="line">        swap(<span class="number">1</span>, N--); <span class="comment">// Exchange with last item.</span></span><br><span class="line">        pq[N+<span class="number">1</span>] = <span class="literal">null</span>; <span class="comment">// Avoid loitering.</span></span><br><span class="line">        sink(<span class="number">1</span>); <span class="comment">// Restore heap property.</span></span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2辅助方法的实现">2.辅助方法的实现</h3>
+<h4 id="aless-swap方法">  <span class="math inline">\(a.\)</span><code>less</code>、<code>swap</code>方法</h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> pq[i].compareTo(pq[j]) &lt; <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="type">Ket</span> <span class="variable">t</span> <span class="operator">=</span> pq[i];</span><br><span class="line">    pq[i] = pq[j];</span><br><span class="line">    pq[j] = t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="bswim方法">  <span class="math inline">\(b.\)</span><code>swim</code>方法</h4>
+<p>  <code>swim</code>方法用于将堆底部的元素向上洄游，以维护堆的性质：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span> &amp;&amp; less(k / <span class="number">2</span>, k)) &#123;</span><br><span class="line">        swap(k / <span class="number">2</span>, k);</span><br><span class="line">        k = k / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/13.3.The%20Implementation/image-7.png"></p>
+<h4 id="csink方法">  <span class="math inline">\(c.\)</span><code>sink</code>方法</h4>
+<p>  <code>sink</code>方法用于将堆顶部的元素下沉，以维护堆的性质：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= N) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;</span><br><span class="line">        <span class="comment">//assure that the parent is the biggest of its children</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; N &amp;&amp; less(j, j + <span class="number">1</span>)) &#123;</span><br><span class="line">            swap (j, j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!less(k, j)) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        swap (k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/13.3.The%20Implementation/image-6.png"></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>13.Heap &amp; Priority Queue</category>
+      </categories>
+  </entry>
+  <entry>
     <title>13.2.堆结构</title>
     <url>/2024/05/31/13.2.Heap%20Structure/</url>
     <content><![CDATA[<h1 id="132堆结构"><span class="math inline">\(13.2\)</span>堆结构</h1>
@@ -6247,75 +6865,6 @@ rightchild=2i+1
 \end{cases}
 \]</span></p>
 <p>  这样，我们就可以将数组中的元素与树上的元素一一对应了。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>13.Heap &amp; Priority Queue</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>12.4.数据结构的最终实现</title>
-    <url>/2024/05/31/12.4.Final%20Data%20Structure/</url>
-    <content><![CDATA[<h1 id="124数据结构的最终实现"><span class="math inline">\(12.4\)</span>数据结构的最终实现</h1>
-<h3 id="1运行时间的优化">1.运行时间的优化</h3>
-<p>  假设我们存放索引的数组的大小为<span class="math inline">\(5\)</span>，当我们插入<span class="math inline">\(100\)</span>个元素时，最坏的情况是：所有元素的索引都是一致的。这样，我们就得到了一个长度为<span class="math inline">\(100\)</span>的链表。</p>
-<p>  这显然不是我们希望看到的情况。对此，我们有两种处理方法：</p>
-<ol type="1">
-<li>动态地扩大我们的哈希表。</li>
-<li>改进我们的<span class="math inline">\(hashCode\)</span>。</li>
-</ol>
-<h4 id="a动态扩容">  <span class="math inline">\(a.\)</span>动态扩容</h4>
-<p>  假设我们有<span class="math inline">\(M\)</span>个筐和<span class="math inline">\(N\)</span>个元素，我们定义负载系数(<span class="math inline">\(load\;factor\)</span>)为<span class="math inline">\(N\over M\)</span>(这即是我们的最佳运行时间)。</p>
-<p>  为了让我们的负载系数维持在一个较低的范围内，我们可以直接让<span class="math inline">\(M\)</span>变为<span class="math inline">\(2M\)</span>，并进行如下操作：</p>
-<ul>
-<li><p>创建一个新的容量为<span class="math inline">\(2M\)</span>的哈希表。</p></li>
-<li><p>迭代遍历原有的哈希表，然后把原有的元素复制到新的哈希表中。</p>
-<ul>
-<li>我们需要一个一个复制元素，是因为哈希表的容量改变了，因此我们的模数也变了，从而需要用新的模数一个一个将元素复制到新哈希表对应的位置。</li>
-</ul></li>
-</ul>
-<p>  这样，我们得到了一个运行时间<span class="math inline">\(\Theta(N\over
-M)\)</span>的哈希表。由于我们限定<span class="math inline">\(N\over
-M\)</span>必须小于一个常数，因此最优运行时间为<span class="math inline">\(\Theta(N\over M)=\Theta(1)\)</span>。</p>
-<h4 id="b改进hashcode">  <span class="math inline">\(b.\)</span>改进<span class="math inline">\(hashCode\)</span></h4>
-<ul>
-<li><p>Use a 'base' strategy similar to the one we developed
-earlier.</p></li>
-<li><p>Use a 'base' that's a small prime.</p>
-<ul>
-<li>Base 126 isn't actually very good, because using base 126 means that
-any string that ends in the same last 32 characters has the same
-hashcode.</li>
-<li>This happens because of overflow.</li>
-<li>Using prime numbers helps avoid overflow issues (i.e., collisions
-due to overflow).</li>
-<li>Why a small prime? Because it's easier to compute.</li>
-</ul></li>
-</ul>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>12.Hashing</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>13.3.优先队列的实现</title>
-    <url>/2024/05/31/13.3.The%20Implementation/</url>
-    <content><![CDATA[<h1 id="133优先队列的实现"><span class="math inline">\(13.3\)</span>优先队列的实现</h1>
-<p>(注：这里实现的是大根堆)</p>
-<h3 id="1优先队列的初始化">1.优先队列的初始化</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MaxPQ</span>&lt;Key <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;Key&gt;&gt; </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Key[] pq; <span class="comment">// heap-ordered complete binary tree</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">N</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// in pq[1..N] with pq[0] unused</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MaxPQ</span><span class="params">(<span class="type">int</span> maxN)</span> &#123; </span><br><span class="line">        pq = (Key[]) <span class="keyword">new</span> <span class="title class_">Comparable</span>[maxN+<span class="number">1</span>]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> N == <span class="number">0</span>; </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="keyword">return</span> N; </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Key v)</span> &#123; </span><br><span class="line">        pq[++N] = v;</span><br><span class="line">        swim(N);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Key <span class="title function_">delMax</span><span class="params">()</span> &#123; </span><br><span class="line">        <span class="type">Key</span> <span class="variable">max</span> <span class="operator">=</span> pq[<span class="number">1</span>]; <span class="comment">// Retrieve max key from top.</span></span><br><span class="line">        swap(<span class="number">1</span>, N--); <span class="comment">// Exchange with last item.</span></span><br><span class="line">        pq[N+<span class="number">1</span>] = <span class="literal">null</span>; <span class="comment">// Avoid loitering.</span></span><br><span class="line">        sink(<span class="number">1</span>); <span class="comment">// Restore heap property.</span></span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2辅助方法的实现">2.辅助方法的实现</h3>
-<h4 id="aless-swap方法">  <span class="math inline">\(a.\)</span><code>less</code>、<code>swap</code>方法</h4>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> pq[i].compareTo(pq[j]) &lt; <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="type">Ket</span> <span class="variable">t</span> <span class="operator">=</span> pq[i];</span><br><span class="line">    pq[i] = pq[j];</span><br><span class="line">    pq[j] = t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="bswim方法">  <span class="math inline">\(b.\)</span><code>swim</code>方法</h4>
-<p>  <code>swim</code>方法用于将堆底部的元素向上洄游，以维护堆的性质：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">(<span class="type">int</span> k)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span> &amp;&amp; less(k / <span class="number">2</span>, k)) &#123;</span><br><span class="line">        swap(k / <span class="number">2</span>, k);</span><br><span class="line">        k = k / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/13.3.The%20Implementation/image-7.png"></p>
-<h4 id="csink方法">  <span class="math inline">\(c.\)</span><code>sink</code>方法</h4>
-<p>  <code>sink</code>方法用于将堆顶部的元素下沉，以维护堆的性质：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(<span class="type">int</span> k)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= N) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;</span><br><span class="line">        <span class="comment">//assure that the parent is the biggest of its children</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; N &amp;&amp; less(j, j + <span class="number">1</span>)) &#123;</span><br><span class="line">            swap (j, j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!less(k, j)) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        swap (k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2024/05/31/13.3.The%20Implementation/image-6.png"></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -6486,6 +7035,41 @@ closest to the query point.</p></li>
       </categories>
   </entry>
   <entry>
+    <title>18.1.选择排序</title>
+    <url>/2024/05/31/18.1.Selection%20Sort/</url>
+    <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
+<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
+<p>  In selection sort, we basically do these three things:</p>
+<ol type="1">
+<li>Find the smallest item.</li>
+<li>Move it to the front.</li>
+<li>Selection sort the rest(using recursion).</li>
+</ol>
+<p>  For each step, we can design an individual method to implement
+it.</p>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<p>  As the moving step requires the index of the to-moving element, the
+value we return should be index of elements, too.</p>
+<h4 id="afind">  <span class="math inline">\(a.\)</span><code>Find</code></h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  Given that we may need to <code>Find</code> the minimun in asked
+range, we may improve our method by passing an extra parameter which
+point to the start index(We'll use it in the following procedure)：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="bswap">  <span class="math inline">\(b.\)</span><code>swap</code></h4>
+<p>  We are going to implement the method by manipulating the index of
+the elements: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="cmainmethod">  <span class="math inline">\(c.\)</span>Main
+method</h4>
+<p>  Since we would like to do the sorting recursively, we may introduce
+a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>18.Basic Sorting</category>
+      </categories>
+  </entry>
+  <entry>
     <title>17.1.图的构建</title>
     <url>/2024/05/31/17.1.The%20construction%20of%20Graphs/</url>
     <content><![CDATA[<h1 id="171图的构建"><span class="math inline">\(17.1\)</span>图的构建</h1>
@@ -6527,41 +7111,6 @@ back of the array.</li>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
 <p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>18.Basic Sorting</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>18.1.选择排序</title>
-    <url>/2024/05/31/18.1.Selection%20Sort/</url>
-    <content><![CDATA[<h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
-<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
-<p>  In selection sort, we basically do these three things:</p>
-<ol type="1">
-<li>Find the smallest item.</li>
-<li>Move it to the front.</li>
-<li>Selection sort the rest(using recursion).</li>
-</ol>
-<p>  For each step, we can design an individual method to implement
-it.</p>
-<h3 id="2step-implementation">2.Step implementation</h3>
-<p>  As the moving step requires the index of the to-moving element, the
-value we return should be index of elements, too.</p>
-<h4 id="afind">  <span class="math inline">\(a.\)</span><code>Find</code></h4>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  Given that we may need to <code>Find</code> the minimun in asked
-range, we may improve our method by passing an extra parameter which
-point to the start index(We'll use it in the following procedure)：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) &#123;</span><br><span class="line">            i = minIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="bswap">  <span class="math inline">\(b.\)</span><code>swap</code></h4>
-<p>  We are going to implement the method by manipulating the index of
-the elements: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="cmainmethod">  <span class="math inline">\(c.\)</span>Main
-method</h4>
-<p>  Since we would like to do the sorting recursively, we may introduce
-a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -7780,6 +8329,67 @@ c=5\times(f-32)\)</span>可表示为如下网络：</p>
       </categories>
   </entry>
   <entry>
+    <title>4.1.接口</title>
+    <url>/2024/05/31/4.1.interface/</url>
+    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
+<h3 id="1上位词-下位词">1.上位词、下位词</h3>
+<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
+<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
+<ul>
+<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
+<li>狗<span class="math inline">\(is-a\)</span>动物</li>
+</ul>
+<p><img src="/2024/05/31/4.1.interface/image.png"></p>
+<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
+<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
+<h3 id="2接口">2.接口</h3>
+<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
+<ul>
+<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
+<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
+</ul>
+<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
+<h3 id="3覆盖">3.覆盖</h3>
+<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4接口的继承">4.接口的继承</h3>
+<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
+<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
+<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
+<h3 id="5实现的继承">5.实现的继承</h3>
+<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
+<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
+<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
+<h3 id="6动态方法选择">6.动态方法选择</h3>
+<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
+<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
+<blockquote>
+<p>  Aside: the name “dynamic type” is actually quite semantic in its
+origin! Should lst be reassigned to point to an object of another type,
+say a AList object, lst’s dynamic type would now be AList and not
+SLList! It’s dynamic because it changes based on the type of the object
+it’s currently referring to.</p>
+</blockquote>
+<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
+<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>4.inheritance &amp; inplements</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.2.扩展</title>
     <url>/2024/05/31/4.2.extends/</url>
     <content><![CDATA[<h1 id="42扩展"><span class="math inline">\(4.2\)</span>扩展</h1>
@@ -7861,67 +8471,6 @@ the static type.</li>
 invoked is based on the dynamic type of the invoking expression</li>
 <li>Can use casting to overrule compiler type checking.</li>
 </ul>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>4.inheritance &amp; inplements</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>4.1.接口</title>
-    <url>/2024/05/31/4.1.interface/</url>
-    <content><![CDATA[<h1 id="41接口"><span class="math inline">\(4.1\)</span>接口</h1>
-<h3 id="1上位词-下位词">1.上位词、下位词</h3>
-<p>  在日常语言中，词语、对象之间具有逻辑上的层次性，例如：狗(<span class="math inline">\(dog\)</span>)是贵宾犬、哈士奇等的上位词(<span class="math inline">\(hypernym\)</span>)，而贵宾犬、哈士奇等是狗的下位词(<span class="math inline">\(hyponyms\)</span>)。</p>
-<p>  上位词与下位词描述的是一种<span class="math inline">\(is-a\)</span>的层次关系：</p>
-<ul>
-<li>贵宾犬<span class="math inline">\(is-a\)</span>狗</li>
-<li>狗<span class="math inline">\(is-a\)</span>动物</li>
-</ul>
-<p><img src="/2024/05/31/4.1.interface/image.png"></p>
-<p>  同样地，我们前面讲解的<span class="math inline">\(SLList\)</span>与<span class="math inline">\(AList\)</span>也是链表的下位词。在<span class="math inline">\(Java\)</span>中，<span class="math inline">\(SLList\)</span>是<span class="math inline">\(List61B\)</span>的子类(<span class="math inline">\(subclass\)</span>)，<span class="math inline">\(List61B\)</span>是<span class="math inline">\(SLList\)</span>的主类(<span class="math inline">\(superclass\)</span>)。</p>
-<p><img src="/2024/05/31/4.1.interface/image-1.png"></p>
-<h3 id="2接口">2.接口</h3>
-<p>  在<span class="math inline">\(Java\)</span>中，为了表达上述的层次结构，我们会进行以下操作：</p>
-<ul>
-<li>为通用列表(<span class="math inline">\(hypernym\)</span>)定义一个类型——我们将选择名称<span class="math inline">\(List61B\)</span>。</li>
-<li>指定<span class="math inline">\(SLList\)</span>与<span class="math inline">\(ALList\)</span>是<span class="math inline">\(List61B\)</span>的下位词。</li>
-</ul>
-<p>  这里的<span class="math inline">\(List61B\)</span>被称为接口(<span class="math inline">\(interface\)</span>)。它本质上是一个契约(<span class="math inline">\(contract\)</span>)，记录了一个链表必须能够做的方法，但它不提供任何方法的实现。下面是<span class="math inline">\(List61B\)</span>的接口：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add <span class="title function_">Last</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <span class="math inline">\(AList\)</span>等可以如下定义：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这里的<code>implements List61B&lt;Item&gt;</code>实际上是一种承诺(<span class="math inline">\(promise\)</span>)，保证<span class="math inline">\(AList\)</span>实现了接口要求实现的方法。</p>
-<h3 id="3覆盖">3.覆盖</h3>
-<p>  在实现接口所需的方法时，在方法前面涵盖一个<code>@Override</code>的标记是很有用的：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> &#123;</span><br><span class="line">    insert(x, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="4接口的继承">4.接口的继承</h3>
-<p>  接口的继承(<span class="math inline">\(inheritance\)</span>)指代了一种关系，即子类继承了主类的所有的方法与行为。在我们定义的<span class="math inline">\(List61B\)</span>中，接口继承了所有的方法签名(<span class="math inline">\(signature\)</span>)，但不包括实现。</p>
-<h3 id="5groe">5.<span class="math inline">\(GRoE\)</span></h3>
-<p>  在定义了<span class="math inline">\(is-a\)</span>关系后，我们就可以实现以下语句了：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SLList&lt;String&gt; someList = <span class="keyword">new</span> <span class="title class_">List61B</span>&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  这是因为<span class="math inline">\(SLList\)</span><span class="math inline">\(is-a\)</span><span class="math inline">\(List61B\)</span>，这说明<span class="math inline">\(SLList\)</span>可以放进<span class="math inline">\(List61B\)</span>的内存盒子中，因此可以这么写。但反过来则不对。</p>
-<h3 id="5实现的继承">5.实现的继承</h3>
-<p>  之前对接口的讲解中，我们说<span class="math inline">\(List61B\)</span>中只有标识<span class="math inline">\(List61B\)</span>做什么(<span class="math inline">\(what\)</span>)的方法名称(<span class="math inline">\(method\;header\)</span>)。接下来我们在<span class="math inline">\(List61B\)</span>中实现具体的方法。</p>
-<p>  如果我们在<span class="math inline">\(List61B\)</span>中加入如下方法： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size(); i += <span class="number">1</span>) &#123;</span><br><span class="line">        System.out.print(get(i) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  那么，所有对<span class="math inline">\(List61B\)</span>的实现(<span class="math inline">\(implements\)</span>)都可以使用这个方法。</p>
-<p>  但是，该方法中的<span class="math inline">\(get(i)\)</span>函数对<span class="math inline">\(SLList\)</span>来说效率过低，于是我们可以在<span class="math inline">\(SLList\)</span>子类中覆盖这一方法：
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Node</span> <span class="variable">p</span> <span class="operator">=</span> sentinel.next; p != <span class="literal">null</span>; p = p.next) &#123;</span><br><span class="line">        System.out.print(p.item + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  这样，在对<span class="math inline">\(SLList\)</span>调用<span class="math inline">\(print()\)</span>时，<span class="math inline">\(SLList\)</span>就会使用覆盖后的方法了。</p>
-<h3 id="6动态方法选择">6.动态方法选择</h3>
-<p>  我们知道，<span class="math inline">\(Java\)</span>中的每一个变量都有一个类型：
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List61B&lt;String&gt; lst = new SLList&lt;String&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>  在上面实例化的声明中，<span class="math inline">\(lst\)</span>的类型是<span class="math inline">\(List61B\)</span>，这叫作静态类型(<span class="math inline">\(static\;type\)</span>)。</p>
-<p>  然而，对象自己也有类型。<span class="math inline">\(lst\)</span>指向的对象具有<span class="math inline">\(SLList\)</span>类型，同时它也是<span class="math inline">\(List61B\)</span>类型，这是由于两者的<span class="math inline">\(is-a\)</span>关系。我们称它的<span class="math inline">\(List61B\)</span>类型为动态类型(<span class="math inline">\(dynamic\;type\)</span>)。</p>
-<blockquote>
-<p>  Aside: the name “dynamic type” is actually quite semantic in its
-origin! Should lst be reassigned to point to an object of another type,
-say a AList object, lst’s dynamic type would now be AList and not
-SLList! It’s dynamic because it changes based on the type of the object
-it’s currently referring to.</p>
-</blockquote>
-<p>  考虑下面的例子： <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(List61B&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getLast());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">peek</span><span class="params">(SLList&lt;String&gt; list)</span> &#123;</span><br><span class="line">    System.out.println(list.getFirst());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLList&lt;String&gt; SP = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;String&gt;();</span><br><span class="line">List61B&lt;String&gt; LP = SP;</span><br><span class="line">SP.addLast(<span class="string">&quot;elk&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;are&quot;</span>);</span><br><span class="line">SP.addLast(<span class="string">&quot;cool&quot;</span>);</span><br><span class="line">peek(SP);</span><br><span class="line">peek(LP);</span><br></pre></td></tr></table></figure></p>
-<p>  第一个<span class="math inline">\(peek\)</span>调用的是第一个，而第二个<span class="math inline">\(peek\)</span>调用的是第二个。<span class="math inline">\(Java\)</span>在相同名称的方法间选择时，会检查与静态变量类型相同的方法，然后调用它。</p>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -8363,6 +8912,31 @@ a string: <figure class="highlight java"><table><tr><td class="code"><pre><span 
       </categories>
   </entry>
   <entry>
+    <title>8.2.渐进分析介绍</title>
+    <url>/2024/05/31/8.2.Asymptotics%20I/</url>
+    <content><![CDATA[<h1 id="82渐进分析介绍"><span class="math inline">\(8.2\)</span>
+渐进分析介绍</h1>
+<h3 id="1简化的分析流程">1.简化的分析流程</h3>
+<blockquote>
+<p>We can do the following steps to simplify our analysis: * Only
+consider the worst case. * Pick a representative operation (aka: cost
+model) * Ignore lower order terms * Ignore multiplicative constants.</p>
+</blockquote>
+<h3 id="2big-theta">2.<span class="math inline">\(Big-Theta\)</span></h3>
+<p>  当对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>、<span class="math inline">\(k_2\)</span>使得<span class="math inline">\(k_1·f(N)\leq R(N)\leq
+k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
+\Theta(f(N))\)</span>。</p>
+<p>  我们可以用<span class="math inline">\(\Theta\)</span>来衡量程序的增长阶数，通过确定增长函数的上界和下界，我们相当于“确定”了增长函数。</p>
+<h3 id="3big-o">3.<span class="math inline">\(Big-O\)</span></h3>
+<p>  <span class="math inline">\(O\)</span>可以看作是增长函数的“不等关系”，即“大于等于”。例如，我们可以说<span class="math inline">\(R(N)\in O(f(n^2))\)</span>。</p>
+<p>  一般地，如果对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>使得<span class="math inline">\(R(N)\leq k_1·f(N)\)</span>，有：<span class="math inline">\(R(n)\in O(f(n))\)</span>。</p>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>8.Effecient Programming</category>
+      </categories>
+  </entry>
+  <entry>
     <title>8.4.摊还分析</title>
     <url>/2024/05/31/8.4.Omega,Amortized%20Analysis/</url>
     <content><![CDATA[<h1 id="84摊还分析"><span class="math inline">\(8.4\)</span>摊还分析</h1>
@@ -8435,36 +9009,39 @@ and then writes the new element. Total: 9 operations</li>
       </categories>
   </entry>
   <entry>
-    <title>8.2.渐进分析介绍</title>
-    <url>/2024/05/31/8.2.Asymptotics%20I/</url>
-    <content><![CDATA[<h1 id="82渐进分析介绍"><span class="math inline">\(8.2\)</span>
-渐进分析介绍</h1>
-<h3 id="1简化的分析流程">1.简化的分析流程</h3>
-<blockquote>
-<p>We can do the following steps to simplify our analysis: * Only
-consider the worst case. * Pick a representative operation (aka: cost
-model) * Ignore lower order terms * Ignore multiplicative constants.</p>
-</blockquote>
-<h3 id="2big-theta">2.<span class="math inline">\(Big-Theta\)</span></h3>
-<p>  当对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>、<span class="math inline">\(k_2\)</span>使得<span class="math inline">\(k_1·f(N)\leq R(N)\leq
-k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
-\Theta(f(N))\)</span>。</p>
-<p>  我们可以用<span class="math inline">\(\Theta\)</span>来衡量程序的增长阶数，通过确定增长函数的上界和下界，我们相当于“确定”了增长函数。</p>
-<h3 id="3big-o">3.<span class="math inline">\(Big-O\)</span></h3>
-<p>  <span class="math inline">\(O\)</span>可以看作是增长函数的“不等关系”，即“大于等于”。例如，我们可以说<span class="math inline">\(R(N)\in O(f(n^2))\)</span>。</p>
-<p>  一般地，如果对于任一比<span class="math inline">\(N_0\)</span>大的<span class="math inline">\(N\)</span>，存在<span class="math inline">\(k_1\)</span>使得<span class="math inline">\(R(N)\leq k_1·f(N)\)</span>，有：<span class="math inline">\(R(n)\in O(f(n))\)</span>。</p>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>8.Effecient Programming</category>
-      </categories>
-  </entry>
-  <entry>
     <title>9.1.并查集介绍</title>
     <url>/2024/05/31/9.1.Introduction%20to%20Disjoint%20Sets/</url>
     <content><![CDATA[<h1 id="91并查集介绍"><span class="math inline">\(9.1\)</span>并查集介绍</h1>
 <h3 id="1并查集的接口">1.并查集的接口</h3>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="comment">/** connects two items P and Q */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** checks to see if two items are connected */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>CS61B DataStructure</category>
+        <category>9.Disjoint sets</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>9.2.快速查找</title>
+    <url>/2024/05/31/9.2.Quick%20Find/</url>
+    <content><![CDATA[<h1 id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</h1>
+<h3 id="1并查集的构造">1.并查集的构造</h3>
+<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
+<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
+<ul>
+<li>数组的下标值代表元素本身。</li>
+<li>数组下标对应的值代表元素所属集合的序号。</li>
+</ul>
+<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
+<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
+<h3 id="2connect操作">2.<code>connect</code>操作</h3>
+<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
+<h3 id="3isconnected操作">3.<code>isConnected</code>操作</h3>
+<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
+<h3 id="4总结与代码实现">4.总结与代码实现</h3>
+<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
@@ -8496,34 +9073,6 @@ k_2·f(N)\)</span>，那么：<span class="math inline">\(R(N)\in
 <p><img src="/2024/05/31/9.3.Quick%20Union/image-6.png"></p>
 <p>  看起来快速合并的运行时间比快速查询长！但是<span class="math inline">\(O(n)\)</span>代表的是快速合并的上界。当我们的树比较平衡时，快速查询的时间复杂度会非常优秀。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickUnionDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickUnionDS</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[num];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; num; i += <span class="number">1</span>) &#123;</span><br><span class="line">            parent[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(parent[p] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            p = parent[p];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> find(q);</span><br><span class="line">        parent[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>CS61B DataStructure</category>
-        <category>9.Disjoint sets</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>9.2.快速查找</title>
-    <url>/2024/05/31/9.2.Quick%20Find/</url>
-    <content><![CDATA[<h1 id="92快速查找"><span class="math inline">\(9.2\)</span>快速查找</h1>
-<h3 id="1并查集的构造">1.并查集的构造</h3>
-<p>  直观上，我们可以通过<span class="math inline">\(ListOfSet\)</span>来表示并查集，例如<code>[&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;]</code>。但是，这种形式的并查集难以合并。</p>
-<p>  我们考虑只用一个数组来实现并查集的合并操作，该数组按如下方式构造：</p>
-<ul>
-<li>数组的下标值代表元素本身。</li>
-<li>数组下标对应的值代表元素所属集合的序号。</li>
-</ul>
-<p>  例如，我们可以如下表示<code>&#123;0, 1, 2, 4&#125;, &#123;3, 5&#125;, &#123;6&#125;</code>：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image.png"></p>
-<p>  集合的序号并不重要，只需要确保相同的集合的值相同即可。</p>
-<h3 id="2connect操作">2.<code>connect</code>操作</h3>
-<p>  有了上面的构造，我们可以通过更改数组对应下标的值来实现合并。例如，假如我们想将<span class="math inline">\(2\)</span>与<span class="math inline">\(3\)</span>合并：</p>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-1.png"></p>
-<h3 id="3isconnected操作">3.<code>isConnected</code>操作</h3>
-<p>  为了检查<code>isConnected(x, y)</code>，我们只需要检查它们对应集合的序号是否相等即可。这只需要常数时间。</p>
-<h3 id="4总结与代码实现">4.总结与代码实现</h3>
-<p><img src="/2024/05/31/9.2.Quick%20Find/image-2.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// initialize the parent</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i += <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">                id[i] = qid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>CS61B DataStructure</category>
