@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/15/8-1-Exceptions/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-2-Processes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/15/8-1-Exceptions/" class="post-title-link" itemprop="url">8.1.Exceptions</a>
+          <a href="/2024/08/16/8-2-Processes/" class="post-title-link" itemprop="url">8.2.Processes</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-15 20:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:15:24" itemprop="dateCreated datePublished" datetime="2024-08-15T20:31:22+08:00">2024-08-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:09:09" itemprop="dateCreated datePublished" datetime="2024-08-16T08:31:22+08:00">2024-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>626</span>
+      <span>564</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,114 +266,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="81exceptions"><span class="math inline">\(8.1.\)</span>Exceptions</h1>
-<p>&#x2003;&#x2003;An exception is <strong>an abrupt change in the control
-flow</strong> in response to <strong>some change in the processor&apos;s
-state</strong>&#xFF1A;</p>
-<p><img src="/2024/08/15/8-1-Exceptions/image.png"></p>
-<h3 id="1exception-handling">1.Exception Handling</h3>
+          <h1 id="82processes"><span class="math inline">\(8.2.\)</span>Processes</h1>
+<h3 id="1basic-concepts">1.Basic Concepts</h3>
 <ul>
-<li>Each type of possible exception in a system <strong>is assigned a
-unique nonnegative integer exception number</strong>.</li>
+<li><p>The classic definition of a process is <strong>an instance of a
+program in execution</strong>.</p></li>
+<li><p>Each program in the system runs <strong>in the context
+of</strong> some process. The context consists of <strong>the state that
+the program needs to run correctly</strong>.</p></li>
 </ul>
+<h3 id="2logical-control-flow">2.Logical Control Flow</h3>
+<p>&#x2003;&#x2003; If we were to use a debugger to single-step the execution of our
+program, we would observe <strong>a series of program counter(PC)
+values</strong> that corresponded exclusively to instructions contained
+in our program&apos;s executable object file or in shared objects linked into
+our program dynamically at run time. This sequence of PC values is known
+as a <strong>logical control flow</strong>, or simply <strong>logical
+flow</strong>.</p>
+<p><img src="/2024/08/16/8-2-Processes/image.png"></p>
+<ul>
+<li>Processes <strong>take turns using the processor</strong>. Each
+process executes a portion of its flow and then <strong>is
+<em>preempted</em></strong>(temporarily suspended) while other processes
+take their turns.</li>
+</ul>
+<h3 id="3user-and-kernel-modes">3.User and Kernel Modes</h3>
+<p>&#x2003;&#x2003;In order for the operating system kernel to provide an airtight
+process abstraction, the processor must provide a mechanism that
+<strong>restricts the instructions that an application can execute, as
+well as the portions of the address space that it can
+access</strong>.</p>
+<p>&#x2003;&#x2003;Processors typically provide this capability with a <strong>mode
+bit</strong> in some control register that characterizes the privileges
+that the process currently enjoys.</p>
+<ul>
+<li><p>A process running in <em>kernel mode</em> can <strong>execute any
+instruction in the instruction set and access any memory location in the
+system</strong>.</p></li>
+<li><p>A process running in <em>user mode</em> is <strong>not allowed to
+execute privileged instructions</strong> that do things such as halt the
+processor, change the mode bit, or initiate an I/O operation. Nor is it
+allowed to <strong>directly reference code or data in the kernel area of
+the address space</strong>.</p>
+<ul>
+<li><p>Any such attempt results in a <strong>fatal protection
+fault</strong>.</p></li>
+<li><p>To execute these instructions, user programs must instead access
+kernel code and data indirectly <strong>via the system call
+interface</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4context-switches">4.Context Switches</h3>
+<p>&#x2003;&#x2003;The operating system kernel implements multitasking using a
+higher-level form of exceptional control flow known as a <em>context
+switch</em>.</p>
+<ul>
+<li><p>The kernel maintains a context for each process. The context is
+the <strong>state</strong> that the kernel needs <strong>to restart a
+preempted process</strong>.</p></li>
+<li><p>At certain points during the execution of a process, the kernel
+can decide to <strong>preempt the current process and restart a
+previously preempted process</strong>. And we say that the kernel has
+<em>scheduled</em> that process.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The context switch contains the following steps:</p>
 <ol type="1">
-<li>At <strong>system boot time</strong>(when the computer is reset or
-powered on), the operating system allocates and initializes a jump table
-called an <strong>exception table</strong>, so that entry <span class="math inline">\(k\)</span> <strong>contains the address of the
-handler for exception <span class="math inline">\(k\)</span></strong>.</li>
+<li><p><strong>Saves the context of the current
+process</strong>.</p></li>
+<li><p><strong>Restores the saved context</strong> of some previously
+preempted process.</p></li>
+<li><p><strong>Passes control</strong> to this newly restored
+process.</p></li>
 </ol>
-<p><img src="/2024/08/15/8-1-Exceptions/image-1.png"></p>
-<ol start="2" type="1">
-<li>At run time(when <strong>the system is executing some
-program</strong>), the processor detects that an exception has occurred
-and determines the corresponding exception number <span class="math inline">\(k\)</span>. The processor then triggers the
-exception by making an indirect procedure call, <strong>through entry
-<span class="math inline">\(k\)</span> of the exception table, to the
-corresponding handler</strong>.</li>
-</ol>
-<p><img src="/2024/08/15/8-1-Exceptions/image-2.png"></p>
+<p>&#x2003;&#x2003;If the system call blocks because it is waiting for some event to
+occur, then the kernel can <strong>put the current process to
+sleep</strong> and <strong>switch to another process</strong>.</p>
+<blockquote>
+<p>A context switch can also occur as a result of an interrupt. For
+example, all systems have some mechanism for <strong>generating periodic
+timer interrupts</strong>. Each time a timer interrupt occurs, the
+kernel can decide that the current process has run long enough and
+switch to a new process.</p>
+</blockquote>
+<p><img src="/2024/08/16/8-2-Processes/image-1.png"></p>
 <ul>
-<li>The starting address of the exception table is contained in a
-special CPU register called the <em>exception table base
-register</em>.</li>
-</ul>
-<h3 id="2differencesbetween-exceptions-and-procedure-call">2.Differences
-between Exceptions and Procedure Call</h3>
-<ul>
-<li><p>As with a procedure call, the processor pushes a return address
-on the stack before branching to the handler. However, depending on the
-class of exception, the return address will have multiple
-choices.</p></li>
-<li><p>The processor also <strong>pushes some additional processor state
-onto the stack</strong> that will be necessary to <strong>restart the
-interrupted program when the handler returns</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Once the hardware triggers the exception, the rest of the work is
-done in software by the exception handler. After the handler has
-processed the event, it optionally returns to the interrupted program by
-<strong>executing a special &quot;return from interrupt&quot;
-instruction</strong>, which <strong>pops the appropriate state back into
-the processor&apos;s control and data registers, restores the state to user
-mode</strong> if the exception interrupted a user program, and then
-returns control to the interrupted program.</p>
-<h3 id="3classes-of-exceptions">3.Classes of Exceptions</h3>
-<p><img src="/2024/08/15/8-1-Exceptions/image-3.png"></p>
-<h4 id="ainterrupts">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Interrupts</h4>
-<p>&#x2003;&#x2003;<em>Interrupts</em> occur asynchronously as a result of
-<strong>signals from I/O devices that are external to the
-processor</strong>.</p>
-<p><img src="/2024/08/15/8-1-Exceptions/image-4.png"></p>
-<ul>
-<li><p>I/O devices interrupts by <strong>signaling a pin on the
-processor chip</strong> and <strong>placing onto the system bus the
-exception number</strong> that <strong>identifies the device that caused
-the interrupt</strong>.</p></li>
-<li><p>After the current instruction finishes executing, the processor
-<strong>notices that the interrupt pin has gone high</strong>,
-<strong>reads the exception number from the system bus</strong>, and
-then <strong>calls the appropriate interrupt handler</strong>.</p></li>
-<li><p>When the handler returns, it <strong>returns control to the next
-instruction</strong>. The program continues executing as though the
-interrupt had never happened.</p></li>
-</ul>
-<hr>
-<p>&#x2003;&#x2003;The remaining classes of exceptions(traps, faults, and aborts)
-occur synchronously <strong>as a result of executing the current
-instruction</strong>. We refer to this instruction as the <em>faulting
-instruction</em>.</p>
-<h4 id="btraps-and-system-calls">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Traps and system calls</h4>
-<p>&#x2003;&#x2003;The most important use of traps is to <strong>provide a
-procedure-like interface between user programs and the kernel</strong>,
-known as a <em>system call</em>.</p>
-<p>&#x2003;&#x2003;User program often needs to request services from the kernel.
-processors provide a special <code>syscall n</code> instruction that
-user programs can execute <strong>when they want to request service
-n</strong>.</p>
-<ul>
-<li>Executing the syscall instruction <strong>causes a trap to an
-exception handler</strong> that <strong>decodes the argument and calls
-the appropriate kernel routine</strong>.</li>
-</ul>
-<p><img src="/2024/08/15/8-1-Exceptions/image-5.png"></p>
-<h4 id="cfaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Faults</h4>
-<p><img src="/2024/08/15/8-1-Exceptions/image-6.png"></p>
-<h4 id="dabort">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Abort</h4>
-<p><img src="/2024/08/15/8-1-Exceptions/image-7.png"></p>
-<h3 id="4linuxx86-64-system-calls">4.Linux/x86-64 System Calls</h3>
-<p><img src="/2024/08/15/8-1-Exceptions/image-8.png"></p>
-<ul>
-<li>Each system call has a unique integer number that
-<strong>corresponds to an offset in a jump table</strong> in the
-kernel.(This jump table is not the same as the exception table.)</li>
-</ul>
-<p>&#x2003;&#x2003;The C standard library provides a set of convenient wrapper
-functions for most system calls. The wrapper functions <strong>package
-up the arguments, trap to the kernel with the appropriate system call
-instruction, and then pass the return status of the system call back to
-the calling program</strong>.</p>
-<ul>
-<li>All arguments to Linux system calls are passed <strong>through
-general-purpose registers</strong> rather than the stack.</li>
+<li><p>The disk will take a relatively long time to fetch the data, so
+instead of waiting and doing nothing, the kernel <strong>performs a
+context switch from process A to B</strong>.</p></li>
+<li><p>Process B then runs for a while in user mode until <strong>the
+disk sends an interrupt</strong> to signal that data have been
+transferred from disk to memory.</p></li>
 </ul>
 
       
@@ -397,7 +379,7 @@ general-purpose registers</strong> rather than the stack.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -422,14 +404,14 @@ general-purpose registers</strong> rather than the stack.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

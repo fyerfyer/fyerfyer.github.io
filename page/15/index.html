@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/03/5-9-Enhancing-Parallelism/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/04/5-10-Some-Limiting-Factors/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/03/5-9-Enhancing-Parallelism/" class="post-title-link" itemprop="url">5.9.Enhancing Parallelism</a>
+          <a href="/2024/08/04/5-10-Some-Limiting-Factors/" class="post-title-link" itemprop="url">5.10.Some Limiting Factors</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 16:31:22" itemprop="dateCreated datePublished" datetime="2024-08-03T16:31:22+08:00">2024-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-04 20:58:58" itemprop="dateModified" datetime="2024-08-04T20:58:58+08:00">2024-08-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-04 21:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;23:33:25" itemprop="dateCreated datePublished" datetime="2024-08-04T21:31:22+08:00">2024-08-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>464</span>
+      <span>575</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,72 +266,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="59enhancing-parallelism">5.9.Enhancing Parallelism</h1>
-<h3 id="1multiple-accumulator">1.Multiple Accumulator</h3>
-<h4 id="abasicidea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
-idea</h4>
-<p>&#x2003;&#x2003;Assume that <span class="math inline">\(P_n\)</span> represents the
-product of elements <span class="math inline">\(a_0,a_1, \cdots
-,a_{n-1}\)</span>:</p>
-<p><span class="math display">\[
-P_n = \prod ^{n-1} _{i=0} a_i
-\]</span></p>
-<p>&#x2003;&#x2003;We can rewrite this as <span class="math inline">\(P_n=PE_n \times
-PO_n\)</span>:</p>
-<p><span class="math display">\[
-PE_n = \prod ^{ {n \over 2} -1} _{i=0} a_{2i}
-\]</span></p>
-<p><span class="math display">\[
-PO_n = \prod ^{ {n \over 2} -1} _{i=0} a_{2i+1}
-\]</span></p>
-<p>&#x2003;&#x2003;By using this method, we use both two-way loop unrolling and
-two-way parallelism. We refer to this as <em><span class="math inline">\(2\times 2\)</span> loop unrolling</em>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 2 x 2 loop unrolling */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine6</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">long</span> limit = length - <span class="number">1</span>;</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc0 = IDENT;</span><br><span class="line">    <span class="type">data_t</span> acc1 = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Combine 2 elements at a time */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>) {</span><br><span class="line">        acc0 = acc0 OP data[i];</span><br><span class="line">        acc1 = acc1 OP data[i + <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Finish any remaining elements */</span></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) {</span><br><span class="line">        acc0 = acc0 OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc0 OP acc1;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The performance of this program is as below:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image.png"></p>
-<p>&#x2003;&#x2003;We can see that we improve the performance by a factor of around 2.
-Most significantly, we have <strong>broken through the barrier imposed
-by the latency bound</strong>. The processor no longer needs to delay
-the start of one sum or product operation until the previous one has
-completed.</p>
-<p>&#x2003;&#x2003;The data-flow representation of <code>combine6</code> is as
-below:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-1.png"></p>
-<p>&#x2003;&#x2003;There are two critical paths, and each of these contains only <span class="math inline">\(n \over 2\)</span> operations, thus leading to a
-CPE of around 5.00/2 = 2.50.</p>
-<h4 id="bgeneral-analysis">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>General analysis</h4>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-2.png"></p>
-<p>&#x2003;&#x2003;In general, a program can <strong>achieve the throughput
-bound</strong> for an operation only when it can <strong>keep the
-pipelines filled for all of the functional units capable of performing
-that operation</strong>. For an operation with latency <span class="math inline">\(L\)</span> and capacity <span class="math inline">\(C\)</span>, this requires an unrolling factor
-<span class="math inline">\(k \geq C \cdot L\)</span>.</p>
+          <h1 id="510some-limiting-factors"><span class="math inline">\(5.10.\)</span>Some Limiting Factors</h1>
+<h3 id="1register-spilling">1.Register Spilling</h3>
+<p>&#x2003;&#x2003;If a program has a degree of parallelism <span class="math inline">\(P\)</span> that <strong>exceeds the number of
+available registers</strong>, then the compiler will resort to
+<em>spilling</em>, <strong>storing some of the temporary values in
+memory</strong>, typically by <strong>allocating space on the run-time
+stack</strong>:</p>
+<p><img src="/2024/08/04/5-10-Some-Limiting-Factors/image.png"></p>
+<p>&#x2003;&#x2003;Once the number of loop variables exceeds the number of available
+registers, the program must <strong>allocate some on the
+stack</strong>.</p>
+<p>&#x2003;&#x2003;Take the following <span class="math inline">\(10 \times
+10\)</span> unrolling loop for example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Updating of accumulator acc0 in 10 x 10 urolling</span><br><span class="line">vmulsd (%rdx), %xmm0, %xmm0    # acc0 *= data[i]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The comparable part of the code for <span class="math inline">\(20
+\times 20\)</span> unrolling has a much different form:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Updating of accumulator acc0 in 20 x 20 unrolling</span><br><span class="line">vmovsd 40(%rsp), %xmm0</span><br><span class="line">vmulsd (%rdx), %xmm0, %xmm0</span><br><span class="line">vmovsd %xmm0, 40(%rsp)</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The accumulator is kept as a local variable on the stack, at offset
+40 from the stack pointer. The program must <strong>read both its value
+and the value of <code>data[i]</code> from memory</strong>, multiply
+them, and store the result back to memory.</p>
+<h3 id="2branch-prediction">2.Branch Prediction</h3>
+<p>&#x2003;&#x2003;gcc don&apos;t use conditional transfers of control to generate code for
+branch prediction, but rather <strong>compute the values</strong> along
+both branches of a conditional expression or statement and then
+<strong>use conditional moves to select the desired value</strong>.</p>
+<hr>
+<p>&#x2003;&#x2003;To illustrate this, we use the program with branch prediction and
+that without predition as examples:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine4</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Include bounds check in loop */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine4b</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= <span class="number">0</span> &amp;&amp; i &lt; v-&gt;len) {</span><br><span class="line">            acc = acc OP v-&gt;data[i];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/04/5-10-Some-Limiting-Factors/image-1.png"></p>
+<p>&#x2003;&#x2003;The additional computation required to perform bounds checking can
+take place <strong>in parallel with the combining operations</strong>.
+The processor is able to predict the outcomes of these branches, and so
+<strong>none of this evaluation has much effect on the fetching and
+processing of the instructions</strong> that form the critical path in
+the program execution.</p>
+<h3 id="3writecode-suitable-for-implementation-with-conditional-moves">3.Write
+Code Suitable for Implementation with Conditional Moves</h3>
 <ul>
-<li>For example, floating-point multiplication has <span class="math inline">\(C=2\)</span> and <span class="math inline">\(L=5\)</span>, necessitating <strong>an unrolling
-factor of <span class="math inline">\(k \geq 10\)</span></strong>.</li>
+<li>gcc is able to generate conditional moves for code written in a more
+&quot;functional&quot; style, where we use conditional operations to
+<strong>compute values</strong> and then update the program state with
+these values, as opposed to a more &quot;imperative&quot; style, where we use
+conditionals to <strong>selectively update program state</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;In performing the <span class="math inline">\(k \times k\)</span>
-unrolling transformation, we must consider <strong>whether it preserves
-the functionality of the original function</strong>.</p>
-<ul>
-<li><p>Two&apos;s-complement arithmetic is commutative and associative, so
-the unrolling transformation will get identical result.</p></li>
-<li><p>Floating-point multiplication and addition are not associative,
-so we may get different result.</p></li>
-</ul>
-<h3 id="2reassociationtransformation">2.Reassociation
-Transformation</h3>
-<h4 id="abasicidea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
-idea</h4>
-<p>&#x2003;&#x2003;By simply change the code of <span class="math inline">\(k \times
-1\)</span> loop unrolling, we can reach better performance. For example,
-the code:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acc = (acc OP data[i]) OP data[i+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;can be changed into:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acc = acc OP (data[i] OP data[i+<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The performance of the code is nearly the same as <span class="math inline">\(2 \times 2\)</span> loop unrolling:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-3.png"></p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-4.png"></p>
+<p>&#x2003;&#x2003;Take the program that set <code>a[i]</code> to be the maximum of
+<code>a[i], b[i]</code> and <code>b[i]</code> the minimum.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* imperative style */</span></span><br><span class="line"><span class="comment">/* Rearrange two vectors so that for each i, b[i] &gt;= a[i] */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">minmax1</span><span class="params">(<span class="type">long</span> a[], <span class="type">long</span> b[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        <span class="keyword">if</span> (a[i] &gt; b[i]) {</span><br><span class="line">            <span class="type">long</span> t = a[i];</span><br><span class="line">            a[i] = b[i];</span><br><span class="line">            b[i] = t;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* functional style */</span></span><br><span class="line"><span class="comment">/* Rearrange two vectors so that for each i, b[i] &gt;= a[i] */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">minmax2</span><span class="params">(<span class="type">long</span> a[], <span class="type">long</span> b[], <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        <span class="type">long</span> min = a[i] &lt; b[i] ? a[i] : b[i];</span><br><span class="line">        <span class="type">long</span> max = a[i] &lt; b[i] ? b[i] : a[i];</span><br><span class="line">        a[i] = min;</span><br><span class="line">        b[i] = max;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The method is like <em>data transfer</em>, we use less conditional
+expression to reduce misprediction rate.</p>
 
       
     </div>
@@ -360,7 +341,7 @@ the code:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/16/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -385,14 +366,14 @@ the code:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

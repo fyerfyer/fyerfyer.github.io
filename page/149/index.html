@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/" class="post-title-link" itemprop="url">2.4.&#x7B97;&#x672F;&#x903B;&#x8F91;&#x5355;&#x5143;</a>
+          <a href="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">3.1.&#x65F6;&#x5E8F;&#x903B;&#x8F91;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 10:27:29" itemprop="dateCreated datePublished" datetime="2024-04-04T10:27:29+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 15:23:21" itemprop="dateCreated datePublished" datetime="2024-04-04T15:23:21+08:00">2024-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-2-Boolean-Calculation-ALU/" itemprop="url" rel="index"><span itemprop="name">Module 2.Boolean Calculation &amp; ALU</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-3-Memory/" itemprop="url" rel="index"><span itemprop="name">Module 3.Memory</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>157</span>
+      <span>573</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,36 +272,89 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="24arthimetic-logic-unit"><span class="math inline">\(2.4.\)</span>Arthimetic Logic Unit</h1>
-<h3 id="1alu-intro">1.ALU intro</h3>
-<p>&#x2003;&#x2003;The Arithmetic Logic Unit (ALU) is a crucial component in
-computers, responsible for <em>executing various arithmetic and logic
-operations</em>. Typically <em>part of the CPU</em>, it handles
-arithmetic operations such as addition, subtraction, multiplication, and
-division, as well as logic operations including <code>AND</code>,
-<code>OR</code>, <code>NOT</code>, and <code>XOR</code>, based on
-instructions provided.</p>
-<h3 id="2alu-structure">2.ALU structure</h3>
-<p>&#x2003;&#x2003;We can describe the ALU through the diagram below:</p>
-<p><img src="/2024/04/04/2-4-%E7%AE%97%E6%9C%AF%E9%80%BB%E8%BE%91%E5%8D%95%E5%85%83/image.png"></p>
+          <h1 id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</h1>
+<h3 id="1background">1.Background</h3>
+<p>&#x2003;&#x2003;In the previous chapter, we&apos;ve completely ignored the issue of
+time:</p>
 <ul>
-<li><p>The ALU computes a function on the two inputs, and outputs the
-result.</p></li>
-<li><p><strong>f</strong>:one out of a family of pre-defined arithmetic
-and logical functions. It contains:</p>
-<ul>
-<li>Arithmetic operations:integer addition, multiplication, division,
-...</li>
-<li>Logical operations: And, Or, Xor....</li>
-</ul></li>
+<li><p><strong>Everything happened immediately</strong>, there were
+inputs and&#xA0;immediately the outputs were some function of them.</p></li>
+<li><p><strong>The inputs never change</strong>, we didn&apos;t have any
+notion of change.</p></li>
+<li><p>We didn&apos;t have any notion of things <strong>happening one thing
+after another</strong>. Just was some kind of logical mapping from
+inputs to outputs.</p></li>
 </ul>
-<blockquote>
-<p><span class="math inline">\(p.s.\)</span>There is a interesting
-question towards ALU: Which operation should ALU operate? If we choose
-to ignore some operation in ALU, when we want to use it, we have to
-implement it in the software. This is also called a <em>Hardware and
-Software trade off</em>.</p>
-</blockquote>
+<p>&#x2003;&#x2003;So, there are two things that we want to complement:</p>
+<ol type="1">
+<li><p>Be able to&#xA0;use the same hardware to <strong>compute many things
+one time after another</strong>. We need to be able to reuse our
+hardware.</p>
+<ul>
+<li>For example, if we take some kind of loop in a hard,&#xA0;in a, in some
+kind of software program, that the loop calls for doing the same&#xA0;thing
+many times, we want to be able to use a same hardware to do that.</li>
+</ul></li>
+<li><p><strong>Remember things from the past</strong>.When we need to
+remember intermediate results,we need to remember where we are in a
+computation.</p></li>
+</ol>
+<h3 id="2the-clock">2.The clock</h3>
+<p>&#x2003;&#x2003;What we&apos;re going to do is to <strong>convert the continuous
+physical time into discrete time</strong>.</p>
+<p>&#x2003;&#x2003;To do this, we&apos;re going to have a <em>clock</em>:</p>
+<ul>
+<li>It is some kind of <em>oscillator going up and down at a certain
+fixed rate</em>.</li>
+<li>Each cycle of the clock is treated as one <em>digital integer time
+unit</em>.</li>
+</ul>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image.png"></p>
+<ul>
+<li><p>With each time unit, we are going to deal it as a indivisible
+thing. <em>Nothing changes in a time unit</em>.</p></li>
+<li><p>In a time unit, it will compute the output from the input <em>in
+an instantaneous manner</em>.</p></li>
+</ul>
+<h3 id="3delay">3.Delay</h3>
+<p>&#x2003;&#x2003;However, for a physical signal, it doesn&apos;t change instantaneously
+in a number time between time as we suppose. In reality, the little
+course current builds slowly, and the voltage may change slowly. That is
+to say, the actual analog signal takes time to reach its final stage,
+both input and output.</p>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-1.png"></p>
+<p>&#x2003;&#x2003;Therefore, we will give ourselves enough time between consecutive
+time units. For example, we will give the logical operations <em>at the
+end of the grey area</em> to make sure that <em>all the hardware there
+really stabilizes:</em></p>
+<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-2.png"></p>
+<p>&#x2003;&#x2003;And then,we can simply ignore these inconsistencies because
+now,whatever happened before the gray area,we don&apos;t need to worry about
+it because we know it&apos;s gone by the end of the clock cycle.</p>
+<h3 id="4combinatorial-logic">4.Combinatorial logic</h3>
+<ul>
+<li>Combinatorial logic: It&apos;s a stateless logic, where <em>the output
+depends solely on the current input state:</em><span class="math inline">\(out(t)=f(in(t))\)</span>. Our ALU and bool chips
+take this logic.</li>
+<li>Sequential logic: <span class="math inline">\(out(t)=f(in(t-1))\)</span>.</li>
+</ul>
+<h3 id="5state-feedback">5.State feedback</h3>
+<ul>
+<li><p>The sequential logic points out a new way of thinking, which is
+to <strong>consider inputs and outputs as the same bits, capable of
+being transmitted on the same bus and occupying the same hardware
+location</strong>. This design allows us to <strong>feed output values
+back to the input</strong>, creating a <strong>state</strong> rather
+than simply passing data. Thus, we can use a particular bit in the
+circuit to store state information rather than solely transmitting
+data.</p></li>
+<li><p>This new way of thinking alters our understanding of time.
+Instead of viewing time as continuous, we now divide it into discrete
+integer time steps and observe the events happening sequentially at each
+time step. This approach enables us to <strong>change the state
+incrementally</strong>, remembering the result from the previous time
+step at each subsequent step and building upon it.</p></li>
+</ul>
 
       
     </div>
@@ -324,7 +377,7 @@ Software trade off</em>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/148/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><span class="page-number current">149</span><a class="page-number" href="/page/150/">150</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/150/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/148/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/148/">148</a><span class="page-number current">149</span><a class="page-number" href="/page/150/">150</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/150/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -349,14 +402,14 @@ Software trade off</em>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

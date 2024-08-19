@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/11.5.Red-Black%20Trees/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/12.2.The%20solution%20to%20Hashing%20problems(1)/" class="post-title-link" itemprop="url">12.2.Hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(1)</a>
+          <a href="/2024/05/31/11.5.Red-Black%20Trees/" class="post-title-link" itemprop="url">11.5.&#x7EA2;&#x9ED1;&#x6811;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:25:42" itemprop="dateModified" datetime="2024-06-02T18:25:42+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 18:15:04" itemprop="dateModified" datetime="2024-06-02T18:15:04+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/12-Hashing/" itemprop="url" rel="index"><span itemprop="name">12.Hashing</span></a>
+          <a href="/categories/CS61B-DataStructure/11-Balanced-Trees/" itemprop="url" rel="index"><span itemprop="name">11.Balanced Trees</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>341</span>
+      <span>437</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,21 +272,28 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="122hashing&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;1"><span class="math inline">\(12.2\)</span><span class="math inline">\(Hashing\)</span>&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;(1)</h1>
-<h3 id="1&#x6574;&#x6570;&#x6EA2;&#x51FA;">1.&#x6574;&#x6570;&#x6EA2;&#x51FA;</h3>
-<p>&#x2003;&#x2003;&#x5728;&#x5148;&#x524D;&#x5C06;&#x5B57;&#x7B26;&#x4E32;&#x8F6C;&#x6362;&#x4E3A;&#x6574;&#x6570;&#x7684;&#x64CD;&#x4F5C;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5FFD;&#x7565;&#x4E86;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x8F6C;&#x6362;&#x5F97;&#x5230;&#x7684;&#x6574;&#x6570;&#x8FC7;&#x5927;&#x5BFC;&#x81F4;&#x6EA2;&#x51FA;&#x600E;&#x4E48;&#x529E;&#xFF1F;&#x4F8B;&#x5982;&#xFF0C;&#x6EA2;&#x51FA;&#x540E;&#x7684;<code>melt banana</code>&#x4E0E;<code>subterresetrial anticosmetic</code>&#x7684;<span class="math inline">\(Hash\)</span>&#x503C;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x901A;&#x8FC7;&#x6BD4;&#x8F83;&#x5B83;&#x4EEC;&#x7684;<span class="math inline">\(Hash\)</span>&#x503C;&#x6765;&#x786E;&#x5B9A;&#x5B83;&#x4EEC;&#x662F;&#x5426;&#x76F8;&#x7B49;&#xFF0C;&#x4F1A;&#x5F97;&#x5230;&#x76F8;&#x53CD;&#x7684;&#x7B54;&#x6848;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6574;&#x6570;&#x7684;&#x6EA2;&#x51FA;&#x662F;&#x65E0;&#x6CD5;&#x907F;&#x514D;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;<span class="math inline">\(Java\)</span>&#x80FD;&#x591F;&#x8868;&#x793A;&#x7684;&#x6700;&#x5927;&#x6574;&#x6570;&#x53EA;&#x6709;<span class="math inline">\(2147483647\)</span>&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x5F15;&#x5165;&#x4E0B;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;</p>
-<h3 id="2hashcodes">2.<span class="math inline">\(Hash\;Codes\)</span></h3>
-<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(Java\)</span>&#x4E2D;&#xFF0C;&#x6BCF;&#x4E2A;&#x5BF9;&#x8C61;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x9ED8;&#x8BA4;&#x7684;<code>.hashcode()</code>&#x65B9;&#x6CD5;&#x3002;<span class="math inline">\(Java\)</span>&#x901A;&#x8FC7;&#x8BE5;&#x5BF9;&#x8C61;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#x6765;&#x5F97;&#x51FA;&#x5B83;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5BF9;&#x6BCF;&#x4E2A;&#x72EC;&#x7ACB;&#x7684;&#x5BF9;&#x8C61;&#x90FD;&#x4F1A;&#x7ED9;&#x51FA;&#x4E0D;&#x91CD;&#x590D;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;</p>
-<p>&#x2003;&#x2003;&#x6709;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x4F1A;&#x81EA;&#x5DF1;&#x5B9A;&#x4E49;<code>.hashcode()</code>&#x65B9;&#x6CD5;&#xFF0C;&#x6765;&#x6EE1;&#x8DB3;&#x81EA;&#x5DF1;&#x5B9A;&#x4E49;&#x7684;&#x4E00;&#x4E9B;&#x7C7B;&#x7684;&#x9700;&#x8981;&#x3002;</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(hashCode\)</span>&#x5177;&#x6709;&#x5982;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
+          <h1 id="115&#x7EA2;&#x9ED1;&#x6811;&#x672A;&#x5B8C;&#x7ED3;"><span class="math inline">\(11.5\)</span>&#x7EA2;&#x9ED1;&#x6811;(&#x672A;&#x5B8C;&#x7ED3;)</h1>
+<h3 id="1&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;">1.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5F15;&#x5165;&#x4E0E;&#x76F8;&#x5173;&#x6982;&#x5FF5;</h3>
+<p>&#x2003;&#x2003;&#x524D;&#x9762;&#x4ECB;&#x7ECD;&#x7684;<span class="math inline">\(B\)</span>-&#x6811;&#x5F88;&#x7B26;&#x5408;&#x6211;&#x4EEC;&#x5BF9;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x7684;&#x9700;&#x8981;&#xFF0C;&#x4F46;&#x662F;&#x5B83;&#x5F88;&#x96BE;&#x7528;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x8BBE;&#x60F3;&#x521B;&#x9020;&#x4E00;&#x79CD;&#x6811;&#xFF0C;&#x5B83;&#x5229;&#x7528;<span class="math inline">\(BST\)</span>&#x5B9E;&#x73B0;&#xFF0C;&#x4F46;&#x7ED3;&#x6784;&#x4E0A;&#x4E0E;<span class="math inline">\(B\)</span>-&#x6811;&#x7B49;&#x4EF7;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(2-3\)</span>&#x6811;&#x4E2D;&#xFF0C;&#x53F6;&#x5B50;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#x548C;<span class="math inline">\(BST\)</span>&#x662F;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x7684;&#x3002;&#x800C;&#x5BF9;&#x4E8E;&#x4E24;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x5C06;&#x94FE;&#x63A5;&#x5206;&#x6210;&#x4E24;&#x79CD;&#x7C7B;&#x578B;&#xFF1A;&#x7EA2;&#x8272;(<span class="math inline">\(red\)</span>)&#x7684;&#x548C;&#x9ED1;&#x8272;(<span class="math inline">\(black\)</span>)&#x7684;&#x3002;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x53F6;&#x5B50;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x5982;&#x4E0B;&#x7684;&#x5F62;&#x5F0F;&#x8868;&#x793A;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-7.png"></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x4E48;&#x5904;&#x7406;&#x7684;&#x597D;&#x5904;&#x662F;&#xFF1A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E0D;&#x4FEE;&#x6539;&#x539F;&#x6709;&#x7684;<span class="math inline">\(BST\)</span>&#x6765;&#x5B9E;&#x73B0;<span class="math inline">\(2-3\)</span>&#x6811;&#x3002;&#x7ED9;&#x5B9A;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x53EF;&#x4EE5;&#x7ACB;&#x5373;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(BST\)</span>&#x3002;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x7684;<span class="math inline">\(2-3\)</span>&#x6811;&#x5230;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x8F6C;&#x6362;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-9.png"></p>
+<h3 id="2&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;">2.&#x5DE6;&#x659C;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x6027;&#x8D28;</h3>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4E86;&#x6A21;&#x62DF;<span class="math inline">\(2-3\)</span>&#x6811;&#xFF0C;&#x7EA2;&#x9ED1;&#x6811;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x6027;&#x8D28;&#xFF1A;</p>
 <ol type="1">
-<li>&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x6574;&#x6570;</li>
-<li>&#x5BF9;&#x540C;&#x4E00;&#x5BF9;&#x8C61;&#x591A;&#x6B21;&#x8C03;&#x7528;<code>.hashcode()</code>&#xFF0C;&#x5F97;&#x5230;&#x7684;&#x7ED3;&#x679C;&#x90FD;&#x76F8;&#x540C;&#x3002;</li>
-<li>&#x4E24;&#x4E2A;<code>.equal()</code> &#x7684;&#x5BF9;&#x8C61;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x76F8;&#x540C;&#x7684;<span class="math inline">\(hashCode\)</span>&#x3002;</li>
+<li>&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x5DE6;&#x659C;&#x3002;</li>
+<li>&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E0E;&#x4E24;&#x4E2A;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x76F8;&#x8FDE;&#x3002;</li>
+<li>&#x7EA2;&#x9ED1;&#x6811;&#x5177;&#x6709;&#x5B8C;&#x7F8E;&#x7684;&#x201C;&#x9ED1;&#x8272;&#x5E73;&#x8861;&#x201D;&#xFF1A;&#x4ECE;&#x6839;&#x8282;&#x70B9;&#x5230;&#x7A7A;&#x8282;&#x70B9;&#x95F4;&#x7684;&#x6BCF;&#x4E2A;&#x8DEF;&#x5F84;&#x90FD;&#x5177;&#x6709;&#x76F8;&#x540C;&#x6570;&#x91CF;&#x7684;&#x8910;&#x8272;&#x94FE;&#x63A5;&#x3002;</li>
 </ol>
-<p>&#x2003;&#x2003;&#x7136;&#x800C;&#xFF0C;&#x5E76;&#x4E0D;&#x662F;&#x6240;&#x6709;<span class="math inline">\(hashCode\)</span>&#x76F8;&#x7B49;&#x7684;&#x5BF9;&#x8C61;&#x90FD;<code>.equal()</code>&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x5E94;&#x5F53;&#x8BA9;&#x5BF9;&#x8C61;&#x7684;<span class="math inline">\(.hashode()\)</span>&#x65B9;&#x6CD5;&#x751F;&#x6210;&#x7684;<span class="math inline">\(hashCode\)</span>&#x5C3D;&#x53EF;&#x80FD;&#x5206;&#x5E03;&#x5747;&#x5300;&#x3002;</p>
-<p>&#x2003;&#x2003;&#x5230;&#x6B64;&#x4E3A;&#x6B62;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;<span class="math inline">\(Hashing\)</span>&#x7684;&#x666E;&#x9002;&#x6027;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5C06;&#x7EA2;&#x8272;&#x94FE;&#x63A5;&#x753B;&#x6210;&#x6C34;&#x5E73;&#x7684;&#xFF0C;&#x90A3;&#x4E48;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x4E0B;&#x9762;&#x7684;&#x56FE;&#x793A;&#xFF0C;&#x8FD9;&#x548C;<span class="math inline">\(2-3\)</span>&#x6811;&#x51E0;&#x4E4E;&#x4E00;&#x81F4;&#xFF1A;</p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-10.png"></p>
+<h3 id="2&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;">2.&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x65CB;&#x8F6C;&#x64CD;&#x4F5C;</h3>
+<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x5DE6;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateLeft</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.right;</span><br><span class="line">    h.right = x.left;</span><br><span class="line">    x.left = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-11.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-12.png"></p>
+<p>&#x2003;&#x2003;&#x7EA2;&#x9ED1;&#x6811;&#x7684;&#x53F3;&#x65CB;&#x64CD;&#x4F5C;&#x5982;&#x4E0B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Node <span class="title function_">rotateRight</span><span class="params">(Node h)</span> {</span><br><span class="line">    <span class="type">Node</span> <span class="variable">x</span> <span class="operator">=</span> h.left;</span><br><span class="line">    h.left = x.right;</span><br><span class="line">    x.right = h;</span><br><span class="line">    x.color = h.color;</span><br><span class="line">    h.color = RED;</span><br><span class="line">    x.N = h.N;</span><br><span class="line">    h.N = <span class="number">1</span> + size(h.left) + size(h.right);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br></pre></td></tr></table></figure> <img src="/2024/05/31/11.5.Red-Black%20Trees/image-13.png"></p>
+<p><img src="/2024/05/31/11.5.Red-Black%20Trees/image-14.png"></p>
 
       
     </div>
@@ -309,7 +316,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/55/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/55/">55</a><span class="page-number current">56</span><a class="page-number" href="/page/57/">57</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/57/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/55/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/55/">55</a><span class="page-number current">56</span><a class="page-number" href="/page/57/">57</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/57/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -334,14 +341,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

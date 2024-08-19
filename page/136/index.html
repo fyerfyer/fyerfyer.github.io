@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/06/5-3-CPU/" class="post-title-link" itemprop="url">5.3.CPU</a>
+          <a href="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/" class="post-title-link" itemprop="url">5.2.&#x83B7;&#x53D6;-&#x6267;&#x884C;&#x5FAA;&#x73AF;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>726</span>
+      <span>477</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,176 +272,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53central-processing-unit"><span class="math inline">\(5.3.\)</span>Central Processing Unit</h1>
-<h3 id="1abstraction">1.Abstraction</h3>
-<p>&#x2003;&#x2003;We can view CPU as <strong>a 16-bit</strong> processor, designed
-to:</p>
+          <h1 id="52the-fetch-execute-cycle"><span class="math inline">\(5.2.\)</span>The Fetch-Execute Cycle</h1>
 <ul>
-<li><p>Execute the current instruction.</p>
+<li><em>Fetch an instruction from the program memory</em></li>
+<li><em>Execute</em> it</li>
+</ul>
+<h3 id="1fetching">1.Fetching</h3>
 <ul>
-<li>This turns the static code into reality.</li>
+<li><p>The next instruction is located at the <em>program memory</em>,
+the program memory is in the <em>memory</em>, and its address is
+specified by the <em>program counter</em>.</p></li>
+<li><p>We need to basically <strong>put the location of the next
+instruction into the &quot;address&quot; of the program memory</strong>. Then we
+need to read the contents at that location and then will get the basic
+instructions we need to execute.</p></li>
+<li><p>We usually put the address of the next instruction into the
+address input of the program memory by <em>program
+counter</em>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The hardware cycle of executing the fetch operation is as
+below:</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image.png"></p>
+<ul>
+<li>When we need to jump into a new location, we <strong>manipulate the
+program counter</strong> so that it will have the address of the next
+instruction.</li>
+<li>The output of the program counter feeds into the address
+specification of program memory.</li>
+<li>The program memory output comes the actual instruction code that we
+need to execute.</li>
+</ul>
+<h3 id="2execute">2.Execute</h3>
+<ul>
+<li><p>The instruction code specifies &quot;what to do&quot;</p>
+<ul>
+<li>Which arithmetie or logical instruction.</li>
+<li>What memory to access (read/write).</li>
+<li>If/where to jump.</li>
 </ul></li>
-<li><p>Figure out which instruction to execute next.</p></li>
-</ul>
-<h3 id="2hack-cpu-interface">2.Hack CPU interface</h3>
-<p><img src="/2024/04/06/5-3-CPU/image.png"></p>
+<li><p><em>Bit aspect</em>: Execute current instruction means
+<strong>taking the bits from the instruction code that specifies what to
+do</strong>, and do what needs to be done.</p>
 <ul>
-<li>CPU is connected both to the <em>instruction memory</em> and to the
-<em>data memory</em>.</li>
-</ul>
-<p>&#x2003;&#x2003;here is the specific input and output connections of the CPU:</p>
-<p><img src="/2024/04/06/5-3-CPU/image-1.png"></p>
-<ul>
-<li><p>We have three inputs coming from three completely different
-sources.</p>
-<ul>
-<li><p>A 16-bit <em>data value</em>, which is the value of <strong>the
-currently selected data memory register</strong>. This is the value CPU
-is going to operate on.</p></li>
-<li><p>A 16-bit <em>instruction value</em>, which is the value of
-<strong>the selected instruction memory register</strong>.</p>
-<ul>
-<li>Remember that at any given point of time, there is always <strong>a
-selected register in the instruction memory</strong>, and a
-<strong>selected memory register in the data memory</strong>. So always
-something comes into the CPU.</li>
+<li>Often, different subsets of the bits control different aspects of
+the operation</li>
 </ul></li>
-<li><p>A 1-bit <em>input</em>, which we <strong>decide to call the
-reset</strong>.</p></li>
-</ul></li>
-<li><p>On the right hand side we see the outputs of ALU:</p>
-<ul>
-<li><p>The ALU specifies 3 different things to write something to the
-data memory:</p>
-<ol type="1">
-<li><em>outM</em>: What we want to write.</li>
-<li><em>writeM</em>: A <strong>load bit</strong> that enables the data
-memory to write operations.</li>
-<li><em>address</em>: Where do we want to write it.</li>
-<li><em>pc</em>: It holds the <strong>address of the next
-instruction</strong> that has to be fetched and executed in the next
-cycle of this computer.</li>
-</ol></li>
-</ul></li>
+<li><p><em>Hardware aspect</em>:</p></li>
 </ul>
-<h3 id="3cpu-implementation">3.CPU implementation</h3>
-<p>&#x2003;&#x2003;The whole CPU hardware diagram is as below:</p>
-<p><img src="/2024/04/06/5-3-CPU/image-2.png"></p>
-<h4 id="aainstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>A
-instruction</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-3.png"></p>
-<p>&#x2003;&#x2003;This section contains:</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-1.png"></p>
 <ul>
-<li><em>A register</em> called A.</li>
-<li><em>An A-instruction input</em> that connects to this register
-through a <em>multiplexer</em>.</li>
-</ul>
-<p>&#x2003;&#x2003;We see that this instruction seeks to load the value
-<code>3001</code> into a register. In order to carry out this
-instruction, the CPU do:</p>
-<ol type="1">
-<li>Decode the instruction into <strong>op-code + 15-bit
-value</strong>.</li>
-<li>Noticing that it is a A instruction, CPU <strong>stores the 15-bit
-value in the A-register</strong>.</li>
-<li>Take the output of A register and admit it outside.</li>
-</ol>
-<h4 id="b-cinstruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span> C
-instruction</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-4.png"></p>
-<p>&#x2003;&#x2003;This section contains:</p>
+<li><p><em>control bus</em>:</p>
 <ul>
-<li>A register.</li>
-<li>C instruction.</li>
-</ul>
-<p>&#x2003;&#x2003;Others is the same as above.</p>
-<ul>
-<li><p>Say we want to gain an A instruction, we can use the
-<em>Mux16</em>:</p>
-<ul>
-<li>If the instruction input is with an op-code <code>0</code>, we
-choose the instruction input.</li>
-<li>Otherwise, we choose the ALU input.</li>
+<li><p>tells the ALU what instruction to compute,</p></li>
+<li><p>tells where do the data pieces come from,</p></li>
 </ul></li>
 </ul>
-<h4 id="caluoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>ALU
-Operation</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-5.png"></p>
+<h3 id="2the-clash">2.The clash</h3>
+<p>&#x2003;&#x2003;There&apos;s a clash in the cycle above:</p>
 <ul>
-<li><p>The inputs of ALU come from:</p>
-<ol type="1">
-<li><p><em>D register</em></p></li>
-<li><p>Either the value of <em>A register</em> or <em>selected memory
-register</em>.</p></li>
-<li><p><em>Multiplexer</em> takes care of this decision, and the control
-bit of it is <strong>one of the bits in the instruction</strong>.</p>
-<ul>
-<li>The CPU designer has to <strong>choose this bit</strong>, and then
-ALU gets the correct input.</li>
-</ul></li>
-</ol></li>
-<li><p>ALU also has <em>6 control bits taken together</em> to
-<strong>tell or specify the ALU which operation we want to carry
-out</strong>.</p></li>
+<li>For <em>fetch</em>, we need to put into the address of the memory
+<strong>the address of the next instruction</strong> to get the
+instruction output.</li>
+<li>For <em>execute</em>, we need to put into the address of the memory
+<strong>the address of the data pieces</strong> that we want to operate
+on to access data.</li>
+<li>But we only have a single memory, so <strong>should we put into the
+memory the address of data or instructions</strong>?</li>
 </ul>
-<p><img src="/2024/04/06/5-3-CPU/image-6.png"></p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-2.png"></p>
+<p>&#x2003;&#x2003;To solve this problem, we will do <strong>one after
+another</strong>. We will achieve this through a
+<em>Multiplexer</em>:</p>
 <ul>
-<li><p>The output of ALU is <strong>simultaneously</strong> fed
-into:</p>
-<ol type="1">
-<li><p><em>D register</em></p></li>
-<li><p><em>A register</em></p></li>
-<li><p><em>M register</em></p>
-<ul>
-<li>It goes through a <em>Multiplexer</em>.</li>
-</ul></li>
-</ol></li>
+<li>In the first part, the <em>fetch cycle</em>, the multiplexer set the
+memory to point into <strong>the program counter that is the location of
+the next instruction</strong>.</li>
+<li>While in the <em>execute cycle</em>, the multiplexer will set the
+memory to point into <strong>the data address that we need to
+access</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The same ALU is fanned out into 3 different places, so we have the
-same ALU output knocking on three different doors. The programmer has to
-decide which door to be opened. The decision is made by next field of
-bits &#x2014;&#x2014; <em>destination bits</em>:</p>
+<p>&#x2003;&#x2003;So how do we do this together?</p>
+<p><img src="/2024/04/06/5-2-%E8%8E%B7%E5%8F%96-%E6%89%A7%E8%A1%8C%E5%BE%AA%E7%8E%AF/image-3.png"></p>
 <ul>
-<li>We have 3 destination bits, which decide whether or not open the
-<em>D register</em>, <em>A register</em>, <em>M register</em> and the
-<em>data memory</em> to accept the ALU output.</li>
-</ul>
-<h4 id="dcontrol-abstraction">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Control abstraction</h4>
-<p>&#x2003;&#x2003;The computer is loaded with some program, when you push
-<code>reset</code>, <strong>the program starts running</strong>.</p>
-<p>&#x2003;&#x2003;In our previous chapter, we know that the last three bits of the
-instruction is <em>jump bits</em>, which a <code>1</code> represents
-unconditional <code>goto</code>. CPU realizes this functionality by
-<em>program counter</em></p>
-<h5 id="ipcabstraction">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>PC
-abstraction</h5>
-<ul>
-<li><p>Emits <strong>the address of the next instruction</strong>:</p>
-<ul>
-<li>To start / restart the program&apos;s execution: <code>PC = 0</code>(for
-we want to execute the first instruction of the program).</li>
-<li>no jump: <code>PC++</code></li>
-<li>unconditional <code>goto</code>: <code>PC = A</code></li>
-<li>conditional <code>goto</code>: if true <code>PC = A</code> else
-<code>PC++</code></li>
-</ul></li>
-</ul>
-<h5 id="iicontrol-implementation">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Control implementation</h5>
-<p><img src="/2024/04/06/5-3-CPU/image-7.png"></p>
-<p><img src="/2024/04/06/5-3-CPU/image-8.png"></p>
-<ul>
-<li><p>if <code>reset == 1</code>, <code>PC=0</code></p></li>
-<li><p>else</p>
-<ul>
-<li><p>We have to look at the <strong>jump bits</strong> and
-simultaneously look at the <strong>ALU output</strong> to decide if we
-want to carry out the jump.</p></li>
-<li><p><code>load = f(jump bits, ALU control outputs)</code></p>
-<ul>
-<li>if <code>load == 1</code>, <code>PC = A</code></li>
-<li>else <code>PC++</code></li>
-</ul></li>
-</ul></li>
+<li>When we are in a <em>fetch cycle</em>, we get the next instruction,
+and then we need to <strong>remember it inside an instruction
+register</strong>.</li>
+<li><strong>That instruction register is exactly what is remains holding
+the value of the instruction that we are now executing in the execute
+cycle.</strong> Then in the <em>execute cycle</em> we have the
+instruction already stored in this register, so we can work with all the
+information we need for the cycle.</li>
 </ul>
 
       
@@ -465,7 +385,7 @@ want to carry out the jump.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/135/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><span class="page-number current">136</span><a class="page-number" href="/page/137/">137</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/137/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/135/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/135/">135</a><span class="page-number current">136</span><a class="page-number" href="/page/137/">137</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/137/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -490,14 +410,14 @@ want to carry out the jump.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

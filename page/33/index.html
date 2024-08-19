@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
+          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>265</span>
+      <span>628</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,55 +272,130 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</h1>
-<h3 id="1program-execution-process">1.Program execution process</h3>
-<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
-<code>p2.c</code>, we input the command:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
+          <h1 id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</h1>
+<h3 id="1machine-code-properties">1.Machine code properties</h3>
+<ul>
+<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
+isn&apos;t fixed.</p></li>
+<li><p>The instruction format is designed to insure that <strong>there&apos;s
+a unique decoding of the bytes into machine instructions</strong>. For
+example, only <code>pushq %rbx</code> can start with <code>53</code>(can
+be analogied with opcode in RISC-V).</p></li>
+<li><p>The disassembler determines the assembly code based
+<strong>purely on the byte sequences in the machine-code
+file</strong>.</p></li>
+</ul>
+<h3 id="2registers">2.Registers</h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
+<ul>
+<li><p>When we present instructions copying and generating 1-, 2-, 4-,
+8-byte values, we follow the two conventions:</p>
+<ul>
+<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
+remaining bytes unchanged</strong>.</p></li>
+<li><p>Those that generate 4-byte quantities <strong>set the upper 4
+bytes of the register to zero</strong>.</p></li>
+</ul></li>
+<li><p>A function returns a value by <strong>storing it in register
+<code>%rax</code></strong>, or <strong>in one of the low-order portions
+of this register</strong>.</p></li>
+</ul>
+<h3 id="3operand-specifiers">3.Operand specifiers</h3>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
+<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
+<ul>
+<li><p><em>Immediate</em>: It refers to constant value. In ATT format
+assembly code, it is written with a <code>$</code> along with an
+integer.</p></li>
+<li><p><em>Register</em>: It denotes the content of a register. We use
+the notation <span class="math inline">\(r_a\)</span> to denote a
+register <span class="math inline">\(a\)</span> and indicate its value
+with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
+<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
+<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
+<ul>
+<li><span class="math inline">\(Imm\)</span> is the immediate offset,
+<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
+<h3 id="4data-movement-instructions">4.Data Movement Instructions</h3>
+<h4 id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
+<ul>
+<li><p>The source operand designates a value that is <strong>immediate,
+stored in a register, or stored in memory</strong>.</p></li>
+<li><p>The destination operand designates a location that is
+<strong>either a register or a memory address</strong>.</p></li>
+<li><p>The value is first passed <strong>from source to a register, then
+from the register to the destination</strong>.</p></li>
+</ul>
+<blockquote>
+<p>The regular <code>movq</code> instruction can only have immediate
+source operands that can be represented as 32-bit two&#xFFFD;s-complement
+numbers. This value is then sign extended to produce the 64-bit value
+for the destination. The <code>movabsq</code> instruction can have an
+<strong>arbitrary 64-bit immediate value</strong> as its source operand
+and can only have a register as a destination.</p>
+</blockquote>
+<blockquote>
+<p>In x86-64, any instruction that generates a 32-bit value for a
+register also <strong>sets the high-order portion of the register to
+0</strong>.</p>
+</blockquote>
+<h4 id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
+instructions</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
+<ul>
+<li><p>Each instruction name has <strong>size designators</strong> as
+its final two characters&#xFFFD;the first specifying the source size, and the
+second specifying the destination size.</p></li>
+<li><p>The source can be either a register or stored in memory.</p></li>
+<li><p>The destination is a register.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
+points to note:</p>
 <ol type="1">
-<li><p>The C preprocessor expands the source code to <strong>include any
-files specified with <code>#include</code> commands and with
-<code>#define</code> declarations</strong>.</p></li>
-<li><p>Compiler generates assembly code having name <code>p1.s</code>
-and <code>p2.s</code>.</p></li>
-<li><p>Assembler converts the assembly code into <em>binary
-object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
+<li><p>In x86-64, we always <strong>give quad word registers to memory
+reference</strong>, such as <code>%rax</code>.</p></li>
+<li><p>We <strong>first decide which suffix to use by the
+destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
+<li><p>If <strong>the destination is a memory address(such as
+<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
+the source</strong>.</p></li>
 </ol>
 <blockquote>
-<p>The object code contains binary representations of all instructions,
-but doesn&apos;t include the address of the global value.</p>
+<p>Note that if both the source and the destination are from memory,
+<strong>we can use all four suffix</strong>. The x86-64 imposes the
+restriction that <strong>a move instruction cannot have both operands
+refer to memory locations</strong>.</p>
 </blockquote>
-<ol start="4" type="1">
-<li>Linker merges these two object-code files along with <em>code
-implementing library functions</em> (e.g., <code>printf</code>) and
-generates the final executable code file <code>p</code>(specified by
-<code>-o p</code>).</li>
-</ol>
-<h3 id="2machine-code">2.Machine code</h3>
-<h4 id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</h4>
-<p>&#x2003;&#x2003;The program memory contains:</p>
+<h4 id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
 <ul>
-<li><p>the executable machine code for the program</p></li>
-<li><p>some information required by the operating system</p></li>
-<li><p>a run-time stack for managing procedure calls and
-returns</p></li>
-<li><p>blocks of memory allocated by the user (e.g., by using the
-<code>malloc</code> library function).</p></li>
+<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
+stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
+<li><p>Dereferencing a pointer involves <strong>copying that pointer
+into a register</strong>, and then <strong>using this register in a
+memory reference</strong>.</p></li>
 </ul>
-<h4 id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
-command</h4>
-<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
-compiler:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
-<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
-<em>disassembler</em>. The program <code>objdump</code> can serve the
-role:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The result is as below:</p>
-<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
+fact <strong>the extension of bits</strong>. For example, if we want to
+convert <code>char</code> to <code>int</code>, because <code>char</code>
+takes word bits while <code>int</code> takes 32 bits, we use
+<code>movsbl</code> to implement operations
+like<code>int x = (int) char_element</code>:</p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
+<h4 id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</h4>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
+<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
 
       
     </div>
@@ -343,7 +418,7 @@ role:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -368,14 +443,14 @@ role:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

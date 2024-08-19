@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.1.&#x7A0B;&#x5E8F;&#x7F16;&#x8BD1;&#x524D;&#x77BB;</a>
+          <a href="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/" class="post-title-link" itemprop="url">7.3.&#x5185;&#x5B58;&#x6BB5;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 13:24:34" itemprop="dateCreated datePublished" datetime="2024-04-08T13:24:34+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:51:48" itemprop="dateModified" datetime="2024-06-03T07:51:48+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:02:02" itemprop="dateModified" datetime="2024-06-03T08:02:02+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>266</span>
+      <span>239</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,54 +272,57 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</h1>
-<h3 id="1problem-in-compilation">1.Problem in compilation</h3>
-<p>&#x2003;&#x2003;To start with an abstract program and end with something actually
-runs on the computer, we need</p>
+          <h1 id="73memorysegments"><span class="math inline">\(7.3.\)</span>Memory
+Segments</h1>
+<h3 id="1memory-segments-intro">1.Memory segments intro</h3>
+<p>&#x2003;&#x2003;There are different variable kinds in the high-level language, such
+as:</p>
 <ul>
-<li>A computer that can run machine language code.</li>
-<li>Translating the high level language into machine language.</li>
+<li>Argument variables</li>
+<li>Local variables</li>
+<li>Static variables</li>
 </ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
-<p>&#x2003;&#x2003;However, there are so many kinds of computers in the world, and
-many of them <strong>use different processes, which take different
-machine languages</strong>. It seems that we have to develop many
-compilers, one for each processor. This is very annoying.</p>
-<p>&#x2003;&#x2003;Luckily, this &quot;write once fix everywhere&quot; can be replaced by a
-&quot;write once run everywhere&quot; process.</p>
-<h3 id="2-2-tier-compilation">2. 2-Tier compilation</h3>
-<p>&#x2003;&#x2003;Let&apos;s take Java as example:</p>
+<p>&#x2003;&#x2003;Since different kind of variables <strong>play different
+role</strong>, we need some mechanism to <strong>record the different
+roles of different variables</strong>. We can achieve this by the notion
+of <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image.png"></p>
+<p>&#x2003;&#x2003;So the program below can be translated into two ways: without
+<em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-1.png"></p>
+<p>&#x2003;&#x2003;And with <em>memory segments</em>:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-2.png"></p>
+<p>&#x2003;&#x2003;In this way, we will be able to preserve the role semantics of
+these variables.</p>
+<p>&#x2003;&#x2003;But it seems that we lost the variable names in the process. It&apos;s
+not a big deal, however, for <strong>the VM obstruction doesn&apos;t
+recognize symbolic variable names</strong>, all the variables are
+replaced by references to memory segments.</p>
+<p>&#x2003;&#x2003;Through memory segments, we now interact with several different
+segments:</p>
+<p><img src="/2024/04/08/7-3-%E5%86%85%E5%AD%98%E6%AE%B5/image-3.png"></p>
+<p>&#x2003;&#x2003;And the syntax of the command is:
+<code>push / pop segment i</code></p>
 <ul>
-<li><p>The first tier: also called <em>the top tier</em></p>
-<ul>
-<li><p>Java compiler translates the Java program into VM code.</p>
-<ul>
-<li>The VM code is designed to run on an abstract artifact called
-<em>virtual machine</em>.</li>
-<li>It&apos;s not a real computer, so if we want to execute the code, we have
-to translate it further into machine language and realize it on real
-hardware (computer, for example).</li>
-</ul></li>
-</ul></li>
+<li><em>segment</em> is the segment you want to operate on.</li>
+<li><em>i</em> is the index of the command in that segment.</li>
+<li><span class="math inline">\(e.g.\)</span>
+:<code>push constant 17</code></li>
+<li><span class="math inline">\(e.g.\)</span> : translation of
+<code>let static 2 = argument 1</code>:</li>
 </ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push argument 1</span><br><span class="line">pop static 2</span><br></pre></td></tr></table></figure>
+<h3 id="2the-usage-of-segment">2.The usage of segment</h3>
 <ul>
-<li><p>The second tier:</p>
+<li><p>There&apos;s a lot of semantics going on in the high-level
+language:</p>
 <ul>
-<li>We equip the target device with <em>JVM</em>, the Java machine
-implementation.</li>
-<li>The JVM is a program that takes VM code and translates it into the
-target code of the target platform.</li>
-<li>We need such translator <strong>for every platform on which we want
-to execute VM program</strong>.</li>
+<li>static variables, local variables, argument variables, ...</li>
+<li>the <em>object</em> consisting a bundle of variables</li>
 </ul></li>
+<li><p>We can handle all the semantics using the eight virtual
+segments.</p></li>
 </ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
-<p>&#x2003;&#x2003;The gap between high-level language (Java, for example) and
-low-level language is huge. But by <strong>introducing an intermediate
-level</strong>, we <strong>decouple this process into two separate
-standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
-and <em>VM implementation</em>.</p>
 
       
     </div>
@@ -342,7 +345,7 @@ and <em>VM implementation</em>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/128/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/128/">128</a><span class="page-number current">129</span><a class="page-number" href="/page/130/">130</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/130/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/128/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/128/">128</a><span class="page-number current">129</span><a class="page-number" href="/page/130/">130</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/130/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -367,14 +370,14 @@ and <em>VM implementation</em>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

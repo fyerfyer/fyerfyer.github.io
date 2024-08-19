@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/25/4-3-Sequential-Y86-64-Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-4-General-Principles-of-pipelining/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/25/4-3-Sequential-Y86-64-Implementation/" class="post-title-link" itemprop="url">4.3.Sequential Y86-64 Implementation</a>
+          <a href="/2024/07/26/4-4-General-Principles-of-pipelining/" class="post-title-link" itemprop="url">4.4.General Principles of Pipelining</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-25 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-25T14:31:22+08:00">2024-07-25</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T14:31:22+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 19:13:28" itemprop="dateModified" datetime="2024-07-26T19:13:28+08:00">2024-07-26</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-30 08:15:23" itemprop="dateModified" datetime="2024-07-30T08:15:23+08:00">2024-07-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>2.4k</span>
+      <span>296</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>9 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,400 +272,67 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="43sequential-y86-64-implementation"><span class="math inline">\(4.3.\)</span>Sequential Y86-64 Implementation</h1>
-<h3 id="1organizing-processing-intostages">1.Organizing Processing into
-Stages</h3>
-<h4 id="asummary">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Summary</h4>
-<p>&#x2003;&#x2003;The following is an informal description of the stages and the
-operations performed within them:</p>
-<ol type="1">
-<li><p><em>Fetch</em>: The fetch stage <strong>reads the bytes of an
-instruction from memory, using the program counter(PC) as the memory
-address</strong>.</p>
+          <h1 id="44general-principles-of-pipelining"><span class="math inline">\(4.4.\)</span>General Principles of Pipelining</h1>
+<h3 id="1computational-pipelines">1.Computational Pipelines</h3>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image.png"></p>
+<p>&#x2003;&#x2003;The detail at the timing and operation of this process are shown as
+below:</p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-2.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-1.png"></p>
 <ul>
-<li><p>From the instruction it <strong>extracts the two 4-bit portions
-of the instruction specifier byte</strong>, referred to as
-<code>icode</code>(the instruction code) and <code>ifun</code>(the
-instruction function).</p></li>
-<li><p>It computes <code>valP</code> to be <strong>the address of the
-instruction following the current one in sequential order</strong>. That
-is, <code>valP</code> equals <strong>the value of the PC plus the length
-of the fetched instruction</strong>.</p></li>
-</ul></li>
-<li><p><em>Decode</em>: The decode stage <strong>reads up to two
-operands from the register file</strong>, giving values
-<code>valA</code> and/or <code>valB</code>.</p></li>
-<li><p><em>Execute</em>: In the execute stage, the arithmetic/logic
-unit(ALU) either <strong>performs the operation specified by the
-instruction</strong>(according to <strong>the value of
-<code>ifun</code></strong>), <strong>computes the effective address of a
-memory reference</strong>, or <strong>increments or decrements the stack
-pointer</strong>. We refer to the resulting value as
-<code>valE</code>.</p>
-<ul>
-<li>For a conditional move instruction, the stage will evaluate the
-condition codes and move condition (given by <code>ifun</code>) and
-<strong>enable the updating of the destination register only if the
-condition holds</strong>.</li>
-</ul></li>
-<li><p><em>Memory</em>: The memory stage may write data to memory, or it
-may read data from memory. We refer to the value read as
-<code>valM</code>.</p></li>
-<li><p><em>Write Back</em>: The write-back stage writes up to two
-results to the register file.</p></li>
-<li><p><em>PC Update</em>: The PC is set to the address of the next
-instruction.</p></li>
-</ol>
-<p>&#x2003;&#x2003;In our simplified implementation, the processor will stop when any
-exception occurs - that is, when it executes a <code>halt</code> or
-invalid instruction, or it attempts to read or write an invalid
-address.</p>
-<h4 id="barithmetic-operations">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Arithmetic operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image.png"></p>
-<ul>
-<li><p>For the integer-operation instruction:</p>
-<ol type="1">
-<li><p>In the fetch stage, we do not require a constant word, and so
-<code>valP</code> is computed as <code>PC+2</code>.</p></li>
-<li><p>During the decode stage, we read both operands. These are
-supplied to the ALU in the execute stage, along with the function
-specifier <code>ifun</code>.</p></li>
-<li><p><code>valE</code> equals to the instruction result
-<code>valB OP valA</code>. The <code>OP</code> is specified by
-<code>ifun</code>.</p></li>
-</ol></li>
-<li><p>For the <code>rmmovq</code> instruction:</p>
-<ol type="1">
-<li><p>The process is similar to integer-operation operation, but we
-don&apos;t need to fetch the second register operand. Instead, we <strong>set
-the second ALU input to zero and add this to the first</strong>, giving
-<code>valE = valA</code>.</p></li>
-<li><p>In addition, we must increment the program counter by 10 for
-<code>irmovq</code> <strong>due to the long instruction
-format</strong>.</p></li>
-</ol></li>
+<li>Slowing down the clock would not change the pipeline behavior. The
+signals propagate to the pipeline register inputs, but <strong>no change
+in the register states will occur until the clock rises</strong>.</li>
 </ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-1.png"></p>
-<h4 id="coperations-involving-memoryoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Operations involving memory
-operation</h4>
-<p>&#x2003;&#x2003;The following instructions involve memory write and read stage:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-2.png"></p>
+<h3 id="2limitations-of-pipelining">2.Limitations of Pipelining</h3>
+<h4 id="athroughput">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Throughput</h4>
+<p>&#x2003;&#x2003;Suppose the maximum delay of a process is <span class="math inline">\(x\)</span> ps, then we can calculate the
+<em>throughput</em> as:</p>
+<p><span class="math display">\[
+throughput={ {1\;instruction}\over{x\;ps} } \cdot { {1000\;ps} \over
+{1\;ns}}={1000\over x}GIPS
+\]</span></p>
+<p>&#x2003;&#x2003;And the <em>latency</em> is the <strong>overall time the process
+takes</strong>.</p>
+<h4 id="bnonuniform-partition">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Nonuniform partition</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-3.png"></p>
 <ul>
-<li><p>The process <strong>use the ALU to add <code>valC</code> to
-<code>valB</code>, giving the effective address for memory
-operation</strong>.</p></li>
-<li><p>In the memory stage, we either write the register value
-<code>valA</code> to memory or read <code>valM</code> from
-memory.</p></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-3.png"></p>
-<h4 id="dpushq-amppopq-operations">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>pushq</code> &amp;
-<code>popq</code> operations</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-4.png"></p>
-<p>&#x2003;&#x2003;The <code>pushq</code> and <code>popq</code> involve both accessing
-memory and incrementing or decrementing the stack pointer.</p>
+<li><p>The latency of piplining is decided by <strong>the slowest clock
+rate</strong>.</p>
 <ul>
-<li><p>For the <code>pushq</code> instruction:</p>
-<ol type="1">
-<li><p>In decode stage, we use <code>%rsp</code> as the identifier for
-the second register operand, giving the stack pointer as
-<code>valB</code>.</p></li>
-<li><p>In the execute stage, we <strong>use the ALU to decrement the
-stack pointer by 8</strong>. This decremented value is used for the
-memory write address and is also <strong>stored back to
-<code>%rsp</code> in the write-back stage</strong>.</p></li>
-<li><p>We use <code>valE</code> as the address for the write
-operation.</p></li>
-</ol></li>
+<li>For the process above, delays of A and C are 50ps and 100+20 = 120
+ps, while delay of B is 150+20 = 170ps, so we have to <strong>set the
+clock cycle to 170ps</strong>.</li>
+</ul></li>
 </ul>
 <blockquote>
-<p>we adhere to the Y86-64 convention that <code>pushq</code> should
-<strong>decrement the stack pointer before writing</strong>.</p>
+<p>Note that the delay of pipeline register is included in
+<strong>register that fetch data from it</strong>. So in the process
+above, B and C should add the 20ps delay.</p>
 </blockquote>
+<h4 id="cdiminishing-returns-of-deeppipelining">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Diminishing returns of deep
+pipelining</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-4.png"></p>
+<h3 id="3piplining-a-system-withfeedback">3.Piplining a System with
+Feedback</h3>
+<p>&#x2003;&#x2003;For a system that executes machine programs such as Y86-64, there
+are <strong>potential dependencies between successive
+instructions</strong>.</p>
 <ul>
-<li><p>For the <code>popq</code> instruction:</p>
-<ol type="1">
-<li><p>The <code>popq</code> instruction proceeds much like
-<code>pushq</code>, except that we <strong>read two copies of the stack
-pointer</strong> in the decode stage. This is clearly redundant, but we
-will see that having the stack pointer as both <code>valA</code> and
-<code>valB</code> makes the subsequent flow more similar to that of
-other instructions, enhancing the overall uniformity of the
-design.</p></li>
-<li><p>We use <strong>the unincremented value as the address for the
-memory operation</strong>.</p></li>
-<li><p>In the write-back stage, we update both <strong>the stack pointer
-register with the incremented stack pointer</strong> and
-<strong>register <code>rA</code> with the value read from
-memory</strong>.</p></li>
-</ol></li>
+<li>The following codes describe what is called <em>data
+dependency</em>. The <code>irmovq</code> instruction stores its result
+in <code>%rax</code>, which then must be read by the <code>addq</code>
+instruction.</li>
 </ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-5.png"></p>
-<h4 id="econtrol-transfer-instructions">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Control transfer instructions</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-6.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">irmovq $50, %rax</span><br><span class="line">addq %rax, %rbx</span><br><span class="line">mrmovq 100(%rbx), %rdx</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>A jump instruction proceeds through fetch and decode much like
-the previous instructions, except that <strong>it does not require a
-register specifier byte</strong>.</p></li>
-<li><p>In the execute stage, we check the condition codes and the jump
-condition to determine whether or not to take the branch, yielding a
-1-bit signal <code>Cnd</code>.</p></li>
-<li><p>We test this flag and set the PC to <code>valC</code>(the jump
-target) if the flag is 1 and to <code>valP</code>(the address of the
-following instruction) if the flag is 0.</p></li>
+<li>The following codes describe what is called <em>control
+dependency</em>. The outcome of the conditional test determines whether
+the next instruction to execute:</li>
 </ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-7.png"></p>
-<h4 id="fcall-ampret-operations">&#x2003;&#x2003;<span class="math inline">\(f.\)</span><code>call</code> &amp;
-<code>ret</code> operations</h4>
-<ul>
-<li><p>Instructions <code>call</code> and <code>ret</code> is similar to
-<code>pushq</code> and <code>popq</code>, except that we push and pop
-program counter values.</p>
-<ul>
-<li><p>With instruction call, we push <code>valP</code>, <strong>the
-address of the instruction that follows the call instruction</strong>.
-During the PC update stage, we <strong>set the PC to <code>valC</code>,
-the call destination</strong>.</p></li>
-<li><p>With instruction <code>ret</code>, we assign <code>valM</code>,
-<strong>the value popped from the stack</strong>, to the PC in the PC
-update stage.</p></li>
-</ul></li>
-</ul>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-8.png"></p>
-<h3 id="2seq-hardware-structure">2.SEQ Hardware Structure</h3>
-<p>&#x2003;&#x2003;The following figure shows an abstract view of a hardware structure
-that performs the six stages:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-9.png"></p>
-<ul>
-<li><p>Information then flows along wires(shown grouped together as a
-heavy gray line), first upward and then around to the right.</p></li>
-<li><p>The feedback paths coming back down on the right-hand side
-<strong>contain the updated values to write to the register file and the
-updated program counter</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The six stages are executed as below:</p>
-<ol type="1">
-<li><p><em>Fetch</em>: <strong>Using the program counter register as an
-address</strong>, the <em>instruction memory</em> reads the bytes of an
-instruction. The PC incrementer computes <code>valP</code>.</p></li>
-<li><p><em>Decode</em>: The two register values <code>valA</code> and
-<code>valB</code> are read simultaneously from the read ports A and
-B.</p></li>
-<li><p><em>Execute</em>:</p>
-<ul>
-<li><p>The ALU do the operations for different purposes.</p></li>
-<li><p>The condition code register(CC) holds the three condition code
-bits. New values for the condition codes are computed by the ALU. The
-execution of move instruction and the <code>Cnd</code> of the jump
-instruction is computed based on the CC.</p></li>
-</ul></li>
-<li><p><em>Memory</em>: The data memory reads or writes a word of memory
-when executing a memory instruction.</p>
-<ul>
-<li>The instruction and data memories access the same memory locations,
-but for different purposes.</li>
-</ul></li>
-<li><p><em>Write Back</em>: The register file has two write ports. Port
-E is used to write values computed by the ALU, while port M is used to
-write values read from the data memory.</p></li>
-<li><p><em>PC Update</em>: The new value of the program counter is
-selected to be either <code>valP</code>, <strong>the address of the next
-instruction</strong>, <code>valC</code>, <strong>the destination address
-specified by a call or jump instruction</strong>, or <code>valM</code>,
-<strong>the return address read from memory</strong>.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The following figure gives a more detailed view of the hardware
-design:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-10.png"></p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-11.png"></p>
-<h3 id="3seq-timing">3.SEQ Timing</h3>
-<h4 id="asomebasic-idea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-basic idea</h4>
-<ul>
-<li><p>Combinational logic does not require any sequencing or
-control-<strong>values propagate through a network of logic gates
-whenever the inputs change</strong>.</p></li>
-<li><p>We assume that reading from a random access memory operates much
-like combinational logic, with the output word generated based on the
-address input.</p></li>
-<li><p>The program counter is loaded with a new instruction address
-every clock cycle.</p></li>
-<li><p>The condition code register is loaded only <strong>when an
-integer operation instruction is executed</strong>.</p></li>
-<li><p>The data memory is written only when an <code>rmmovq</code>,
-<code>pushq</code>, or <code>call</code> instruction is
-executed.</p></li>
-<li><p>The two write ports of the register file allow two program
-registers to be updated on every cycle, but we can use the special
-register ID 0xF as a port address to indicate that no write should be
-performed for this port.</p></li>
-<li><p><em>Principle</em>: The processor <strong>never needs to read
-back the state updated by an instruction</strong> in order to complete
-the processing of this instruction.</p></li>
-</ul>
-<h4 id="bprogram-example">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Program example</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-12.png"></p>
-<p>&#x2003;&#x2003;Every time the clock transitions from low to high, the processor
-begins executing a new instruction.</p>
-<h3 id="4seq-stage-implementation">4.SEQ Stage Implementation</h3>
-<p>&#x2003;&#x2003;The used constant are shown below:</p>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-13.png"></p>
-<h4 id="afetchstage">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Fetch
-stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-14.png"></p>
-<ul>
-<li><p>The instruction memory hardware unit reads 10 bytes from memory
-at a time, <strong>using the PC as the address of the first byte(byte
-0)</strong>. This byte is interpreted as the instruction byte and is
-<strong>split(by the unit labeled &quot;Split&quot;) into two 4-bit
-quantities</strong>.</p></li>
-<li><p>The control logic blocks labeled &quot;icode&quot; and &quot;ifun&quot; then compute
-the instruction and function codes as equaling either <strong>the values
-read from memory</strong> or the values corresponding to a nop
-instruction(as indicated by the signal
-<code>imem_error</code>).</p></li>
-</ul>
-<p>&#x2003;&#x2003;Based on the value of <code>icode</code>, we can compute three
-1-bit signals:</p>
-<ol type="1">
-<li><p><code>instr_valid</code>: This signal is used to <strong>detect
-an illegal instruction</strong>.</p></li>
-<li><p><code>need_regids</code>: Does this instruction <strong>include a
-register specifier byte</strong>?</p></li>
-<li><p><code>need_valC</code>: Does this instruction <strong>include a
-constant word</strong>?</p></li>
-</ol>
-<p>&#x2003;&#x2003;The signals <code>instr_valid</code> and
-<code>imem_error</code>(generated when the instruction address is out of
-bounds) are used to <strong>generate the status code in the memory
-stage</strong>.</p>
-<p>&#x2003;&#x2003;The HCL description for <code>need_regids</code> and
-<code>need_valC</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bool need_regids =</span><br><span class="line">    icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ,</span><br><span class="line">               IIRMOVQ, IRMMOVQ, IMRMOVQ };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool need_valC =</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The remaining 9 bytes read from the instruction memory encode
-some combination of the register specifier byte and the constant
-word.</p>
-<ul>
-<li>Byte 1 <strong>is split into register specifiers <code>rA</code> and
-<code>rB</code> when the computed signal need_regids is 1</strong>. If
-<code>need_regids</code> is 0, both register specifiers are set to
-0xF(<code>RNONE</code>).</li>
-</ul></li>
-<li><p>The PC incrementer hardware unit generates the signal
-<code>valP</code>, based on the current value of the PC, and the two
-signals <code>need_regids</code> and <code>need_valC</code>. For PC
-value <span class="math inline">\(p\)</span>, <code>need_regids</code>
-value <span class="math inline">\(r\)</span>, and <code>need_valC</code>
-value <span class="math inline">\(i\)</span>, the incrementer generates
-the value <span class="math inline">\(p+1+r+8i\)</span>.</p></li>
-</ul>
-<h4 id="bdecode-and-write-back-stagess">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Decode and write-back stagess</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-15.png"></p>
-<ul>
-<li><p>The register file has four ports. It supports up to two
-simultaneous reads(on ports A and B) and two simultaneous writes(on
-ports E and M).</p>
-<ul>
-<li><p>Each port has <strong>both an address connection and a data
-connection</strong>, where the address connection is a register ID, and
-the data connection is a set of 64 wires serving as either an output
-word (for a read port) or an input word (for a write port) of the
-register file.</p></li>
-<li><p>The two read ports have address inputs <code>srcA</code> and
-<code>srcB</code>, while the two write ports have address inputs
-<code>dstE</code> and <code>dstM</code>. The 0xF(<code>RNONE</code>) on
-an address port indicates that no register should be accessed.</p></li>
-</ul></li>
-<li><p>The four blocks at the bottom generate <strong>the four different
-register IDs</strong> for the register file based on <code>icode</code>,
-<code>rA</code>, <code>rB</code> and <code>Cnd</code>.</p>
-<ul>
-<li><p><code>srcA</code> indicates which register should be read to
-generate <code>valA</code>, so as <code>srcB</code>.</p></li>
-<li><p><code>dstE</code> indicates <strong>the destination register for
-write port E</strong>, where the computed value <code>valE</code> is
-stored, so as <code>dstM</code>.</p></li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The HCL description of <code>srcA</code> and <code>srcB</code> are
-as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcA = [</span><br><span class="line">    icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;</span><br><span class="line">    icode in { IPOPQ, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word srcB = [</span><br><span class="line">    icode in { IOPQ, IRMMOVQ, IMRMOVQ } : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t need register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The HCL description of <code>dstM</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word dstM = [</span><br><span class="line">    icode in { IMRMOVQ, IPOPQ } : rA;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="cexecute-stage">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Execute stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-16.png"></p>
-<ul>
-<li><p>The stage includes ALU, which performs operations based on the
-setting of <code>alufun</code> signal. The ALU output becomes the signal
-<code>valE</code>.</p></li>
-<li><p>The value of <code>aluA</code> can be <code>valA</code>,
-<code>valC</code>, or either ?8 or +8, depending on the instruction
-type, so as <code>aluB</code></p></li>
-</ul>
-<p>&#x2003;&#x2003;They can be described by the following HCL code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word aluA = [</span><br><span class="line">    icode in { IRRMOVQ, IOPQ } : valA;</span><br><span class="line">    icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;</span><br><span class="line">    icode in { ICALL, IPUSHQ } : -8;</span><br><span class="line">    icode in { IRET, IPOPQ } : 8;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word aluB = [</span><br><span class="line">    icode in { IRMMOVQ, IMRMOVQ, IOPQ, ICALL,</span><br><span class="line">    IPUSHQ, IRET, IPOPQ } : valB;</span><br><span class="line">    icode in { IRRMOVQ, IIRMOVQ } : 0;</span><br><span class="line">    # Other instructions don&apos;t need ALU</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The operations in ALU is <strong>mostly an adder</strong>. However,
-we want it to use the operation encoded in the <code>ifun</code> field
-of the instruction. So we describe the ALU control as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word alufun = [</span><br><span class="line">    icode == IOPQ : ifun;</span><br><span class="line">    1 : ALUADD;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>We only want to set the condition codes when an <code>OPq</code>
-instruction is executed. The logic is described in HCL as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool set_cc = icode in { IOPQ };</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The hardware unit labeled &quot;cond&quot; uses <strong>a combination of
-the condition codes and the function code</strong> to <strong>determine
-whether a conditional branch or data transfer should take
-place</strong>.</p>
-<ul>
-<li>It generates the <code>Cnd</code> signal used both for the setting
-of <code>dstE</code> with conditional moves and in the next PC logic for
-conditional branches.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;By using the <code>Cnd</code> signal, we can describe
-<code>dstE</code> as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word dstE = [</span><br><span class="line">    icode in { IRRMOVQ } &amp;&amp; Cnd : rB;</span><br><span class="line">    icode in { IIRMOVQ, IOPQ} : rB;</span><br><span class="line">    icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;</span><br><span class="line">    1 : RNONE; # Don&apos;t write any register</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="dmemorystage">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Memory
-stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-17.png"></p>
-<ul>
-<li><p>Two control blocks generate the values for the memory address and
-the memory input data(for write operations).</p></li>
-<li><p>Two other blocks generate the control signals indicating
-<strong>whether to perform a read or a write
-operation</strong>.</p></li>
-<li><p>When a read operation is performed, <strong>the data memory
-generates the value <code>valM</code></strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The HCL description of <code>mem_addr</code> and
-<code>mem_data</code> are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word mem_addr = [</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;</span><br><span class="line">    icode in { IPOPQ, IRET } : valA;</span><br><span class="line">    # Other instructions don&apos;t need address</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">word mem_data = [</span><br><span class="line">    # Value from register</span><br><span class="line">    icode in { IRMMOVQ, IPUSHQ } : valA;</span><br><span class="line">    # Return PC</span><br><span class="line">    icode == ICALL : valP;</span><br><span class="line">    # Default: Don&apos;t write anything</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>We set the signal <code>mem_read</code> only for instructions that
-read data from memory, so as <code>mem_write</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_read = icode in { IMRMOVQ, IPOPQ, IRET };</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool mem_write = icode in { IRMMOVQ, IPUSHQ, ICALL };</span><br></pre></td></tr></table></figure>
-<ul>
-<li>A final function for the memory stage is to compute the status code
-<code>Stat</code>. It is generated from <code>icode</code>,
-<code>imem_error</code>, <code>instr_valid</code> and
-<code>dmem_error</code>. It&apos;s described in HCL as below:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## Determine instruction status</span><br><span class="line">word Stat = [</span><br><span class="line">    imem_error || dmem_error : SADR;</span><br><span class="line">    !instr_valid: SINS;</span><br><span class="line">    icode == IHALT : SHLT;</span><br><span class="line">    1 : SAOK;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="epcupdate-stage">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>PC
-update stage</h4>
-<p><img src="/2024/07/25/4-3-Sequential-Y86-64-Implementation/image-18.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">word new_pc = [</span><br><span class="line">    # Call. Use instruction constant</span><br><span class="line">    icode == ICALL : valC;</span><br><span class="line">    # Taken branch. Use instruction constant</span><br><span class="line">    icode == IJXX &amp;&amp; Cnd : valC;</span><br><span class="line">    # Completion of RET instruction. Use value from stack</span><br><span class="line">    icode == IRET : valM;</span><br><span class="line">    # Default: Use incremented PC</span><br><span class="line">    1 : valP;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    subq %rdx,%rbx</span><br><span class="line">    jne targ</span><br><span class="line">    irmovq $10,%rdx</span><br><span class="line">    jmp loop</span><br><span class="line">targ:</span><br><span class="line">    halt</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-5.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-6.png"></p>
 
       
     </div>
@@ -688,7 +355,7 @@ update stage</h4>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -713,14 +380,14 @@ update stage</h4>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

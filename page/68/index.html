@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.2.Heap%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/17.1.The%20construction%20of%20Graphs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.2.Heap%20Sort/" class="post-title-link" itemprop="url">18.2.&#x5806;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/17.1.The%20construction%20of%20Graphs/" class="post-title-link" itemprop="url">17.1.&#x56FE;&#x7684;&#x6784;&#x5EFA;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:05:31" itemprop="dateModified" datetime="2024-06-02T22:05:31+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:32:25" itemprop="dateModified" datetime="2024-06-02T21:32:25+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/18-Basic-Sorting/" itemprop="url" rel="index"><span itemprop="name">18.Basic Sorting</span></a>
+          <a href="/categories/CS61B-DataStructure/17-Graphs/" itemprop="url" rel="index"><span itemprop="name">17.Graphs</span></a>
         </span>
     </span>
 
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>276</span>
+      <span>205</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,29 +272,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="182heapsort"><span class="math inline">\(18.2\)</span>Heap
-Sort</h1>
-<h3 id="1the-step-of-heap-sorting">1.The step of Heap Sorting</h3>
-<p>&#x2003;&#x2003;The simplest method to implement sorting via heap is to put the
-whole array into a heap, and pick out top of the heap one by one.</p>
-<p>&#x2003;&#x2003;However, this method will lead to unnecessarily memory waste, for
-we can do heap sorting in place without creating a new heap.</p>
-<h3 id="2step-impletation">2.Step impletation</h3>
-<h4 id="abasic-heap-operation">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic Heap operation</h4>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sink</span><span class="params">(Comparable[] pq, <span class="type">int</span> k, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">2</span> * k &lt;= n) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">2</span> * k;<span class="comment">//left child</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; n &amp;&amp; less(pq, j, j + <span class="number">1</span>)) j += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (!less(pq, k, j)) <span class="keyword">break</span>;</span><br><span class="line">        swap(pq, k, j);</span><br><span class="line">        k = j;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">less</span><span class="params">(Comparable[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> pq[i - <span class="number">1</span>].compareTo(pq[j - <span class="number">1</span>]) &lt; <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(Object[] pq, <span class="type">int</span> i, <span class="type">int</span> j)</span> {</span><br><span class="line">    <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> pq[i - <span class="number">1</span>];</span><br><span class="line">    pq[i - <span class="number">1</span>] = pq[j - <span class="number">1</span>];</span><br><span class="line">    pq[j - <span class="number">1</span>] = o;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bheapsorting">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Heap
-Sorting</h4>
-<p>&#x2003;&#x2003;The in place heap sorting use the following step: 1. Sink the
-element in the array one by one, so that the array forms a heap.</p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-1.png"></p>
-<ol start="2" type="1">
-<li>Pop the front element one by one, and move the popped element to the
-back of the array.</li>
-</ol>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-2.png"></p>
-<p><img src="/2024/05/31/18.2.Heap%20Sort/image-3.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(Comparable[] pq)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> pq.length;</span><br><span class="line">    <span class="comment">//heapify</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n / <span class="number">2</span>; k &gt;= <span class="number">1</span>; k --) sink(pq, k, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sort and swap</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> n;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">//pop the heaptop</span></span><br><span class="line">        swap(pq, <span class="number">1</span>, k--);</span><br><span class="line">        <span class="comment">//why k--?Because the kth element is sorted, so we only need to care about the k-1 th</span></span><br><span class="line">        <span class="comment">//maintain the heap property</span></span><br><span class="line">        sink(pq, <span class="number">1</span>, k);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+          <h1 id="171&#x56FE;&#x7684;&#x6784;&#x5EFA;"><span class="math inline">\(17.1\)</span>&#x56FE;&#x7684;&#x6784;&#x5EFA;</h1>
+<h3 id="1&#x56FE;&#x7684;api">1.&#x56FE;&#x7684;<span class="math inline">\(API\)</span></h3>
+<p><img src="/2024/05/31/17.1.The%20construction%20of%20Graphs/image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Graph</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> V;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> E;</span><br><span class="line">    <span class="keyword">private</span> Bag&lt;Integer&gt;[] adj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(<span class="type">int</span> V)</span> {</span><br><span class="line">        <span class="built_in">this</span>.V = V;</span><br><span class="line">        <span class="built_in">this</span>.E = <span class="number">0</span>;</span><br><span class="line">        adj = (Bag&lt;Integer&gt;[])<span class="keyword">new</span> <span class="title class_">Bag</span>[V];<span class="comment">// Create array of lists.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> <span class="number">0</span>; v &lt; V; v += <span class="number">1</span>) {</span><br><span class="line">            adj[v] = <span class="keyword">new</span> <span class="title class_">Bag</span>&lt;Integer&gt;();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Graph</span><span class="params">(In in)</span> {</span><br><span class="line">        <span class="built_in">this</span>(in.readInt()); <span class="comment">// Read V and construct this graph.</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">E</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read E.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; E; i++) { <span class="comment">// Add an edge.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">v</span> <span class="operator">=</span> in.readInt(); <span class="comment">// Read a vertex,</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">w</span> <span class="operator">=</span> in.readInt(); <span class="comment">// read another vertex,</span></span><br><span class="line">            addEdge(v, w); <span class="comment">// and add edge connecting them.</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">V</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">E</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> E;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(<span class="type">int</span> v, <span class="type">int</span> w)</span> {</span><br><span class="line">        adj[v].add(w);</span><br><span class="line">        adj[w].add(v);</span><br><span class="line">        E += <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Iterable&lt;Integer&gt; <span class="title function_">adj</span><span class="params">(<span class="type">int</span> v)</span> {</span><br><span class="line">        <span class="keyword">return</span> adj[v];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="2dfs">2.<span class="math inline">\(dfs\)</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepthFirstSearch</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] marked;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DepthFirstSearch</span><span class="params">(Graph G, <span class="type">int</span> s)</span> {</span><br><span class="line">        marked = <span class="keyword">new</span> <span class="title class_">boolean</span>[G.V];</span><br><span class="line">        dfs(G, s);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Graph G, <span class="type">int</span> v)</span> {</span><br><span class="line">        marked[v] = <span class="literal">true</span>;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w : G.adj[v]) {</span><br><span class="line">            <span class="keyword">if</span> (!marked[w]) dfs(G, w);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">marked</span><span class="params">(<span class="type">int</span> w)</span> {</span><br><span class="line">        <span class="keyword">return</span> marked[w];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;">3.&#x8DEF;&#x5F84;&#x7684;&#x5BFB;&#x627E;</h3>
 
       
     </div>
@@ -317,7 +301,7 @@ back of the array.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/67/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/67/">67</a><span class="page-number current">68</span><a class="page-number" href="/page/69/">69</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/69/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/67/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/67/">67</a><span class="page-number current">68</span><a class="page-number" href="/page/69/">69</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/69/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -342,14 +326,14 @@ back of the array.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

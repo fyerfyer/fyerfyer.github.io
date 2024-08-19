@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-2-Processes/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-3-System-Call-Error-Handling/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/16/8-2-Processes/" class="post-title-link" itemprop="url">8.2.Processes</a>
+          <a href="/2024/08/16/8-3-System-Call-Error-Handling/" class="post-title-link" itemprop="url">8.3.System Call Error Handling</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:09:09" itemprop="dateCreated datePublished" datetime="2024-08-16T08:31:22+08:00">2024-08-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 10:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:19:35" itemprop="dateCreated datePublished" datetime="2024-08-16T10:31:22+08:00">2024-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>564</span>
+      <span>122</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,97 +266,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="82processes"><span class="math inline">\(8.2.\)</span>Processes</h1>
-<h3 id="1basic-concepts">1.Basic Concepts</h3>
-<ul>
-<li><p>The classic definition of a process is <strong>an instance of a
-program in execution</strong>.</p></li>
-<li><p>Each program in the system runs <strong>in the context
-of</strong> some process. The context consists of <strong>the state that
-the program needs to run correctly</strong>.</p></li>
-</ul>
-<h3 id="2logical-control-flow">2.Logical Control Flow</h3>
-<p>&#x2003;&#x2003; If we were to use a debugger to single-step the execution of our
-program, we would observe <strong>a series of program counter(PC)
-values</strong> that corresponded exclusively to instructions contained
-in our program&apos;s executable object file or in shared objects linked into
-our program dynamically at run time. This sequence of PC values is known
-as a <strong>logical control flow</strong>, or simply <strong>logical
-flow</strong>.</p>
-<p><img src="/2024/08/16/8-2-Processes/image.png"></p>
-<ul>
-<li>Processes <strong>take turns using the processor</strong>. Each
-process executes a portion of its flow and then <strong>is
-<em>preempted</em></strong>(temporarily suspended) while other processes
-take their turns.</li>
-</ul>
-<h3 id="3user-and-kernel-modes">3.User and Kernel Modes</h3>
-<p>&#x2003;&#x2003;In order for the operating system kernel to provide an airtight
-process abstraction, the processor must provide a mechanism that
-<strong>restricts the instructions that an application can execute, as
-well as the portions of the address space that it can
-access</strong>.</p>
-<p>&#x2003;&#x2003;Processors typically provide this capability with a <strong>mode
-bit</strong> in some control register that characterizes the privileges
-that the process currently enjoys.</p>
-<ul>
-<li><p>A process running in <em>kernel mode</em> can <strong>execute any
-instruction in the instruction set and access any memory location in the
-system</strong>.</p></li>
-<li><p>A process running in <em>user mode</em> is <strong>not allowed to
-execute privileged instructions</strong> that do things such as halt the
-processor, change the mode bit, or initiate an I/O operation. Nor is it
-allowed to <strong>directly reference code or data in the kernel area of
-the address space</strong>.</p>
-<ul>
-<li><p>Any such attempt results in a <strong>fatal protection
-fault</strong>.</p></li>
-<li><p>To execute these instructions, user programs must instead access
-kernel code and data indirectly <strong>via the system call
-interface</strong>.</p></li>
-</ul></li>
-</ul>
-<h3 id="4context-switches">4.Context Switches</h3>
-<p>&#x2003;&#x2003;The operating system kernel implements multitasking using a
-higher-level form of exceptional control flow known as a <em>context
-switch</em>.</p>
-<ul>
-<li><p>The kernel maintains a context for each process. The context is
-the <strong>state</strong> that the kernel needs <strong>to restart a
-preempted process</strong>.</p></li>
-<li><p>At certain points during the execution of a process, the kernel
-can decide to <strong>preempt the current process and restart a
-previously preempted process</strong>. And we say that the kernel has
-<em>scheduled</em> that process.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The context switch contains the following steps:</p>
-<ol type="1">
-<li><p><strong>Saves the context of the current
-process</strong>.</p></li>
-<li><p><strong>Restores the saved context</strong> of some previously
-preempted process.</p></li>
-<li><p><strong>Passes control</strong> to this newly restored
-process.</p></li>
-</ol>
-<p>&#x2003;&#x2003;If the system call blocks because it is waiting for some event to
-occur, then the kernel can <strong>put the current process to
-sleep</strong> and <strong>switch to another process</strong>.</p>
-<blockquote>
-<p>A context switch can also occur as a result of an interrupt. For
-example, all systems have some mechanism for <strong>generating periodic
-timer interrupts</strong>. Each time a timer interrupt occurs, the
-kernel can decide that the current process has run long enough and
-switch to a new process.</p>
-</blockquote>
-<p><img src="/2024/08/16/8-2-Processes/image-1.png"></p>
-<ul>
-<li><p>The disk will take a relatively long time to fetch the data, so
-instead of waiting and doing nothing, the kernel <strong>performs a
-context switch from process A to B</strong>.</p></li>
-<li><p>Process B then runs for a while in user mode until <strong>the
-disk sends an interrupt</strong> to signal that data have been
-transferred from disk to memory.</p></li>
-</ul>
+          <h1 id="83system-call-error-handling"><span class="math inline">\(8.3.\)</span>System Call Error Handling</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) {</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;fork error: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can simplify this code somewhat by defining the following
+<em>error-reporting</em> function:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">unix_error</span><span class="params">(<span class="type">char</span> *msg)</span> <span class="comment">/* Unix-style error */</span></span><br><span class="line">{</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s: %s\n&quot;</span>, msg, strerror(errno));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can simplify our code even further by using <em>error-handling
+wrappers</em>. For a given base function <code>foo</code>, we define a
+wrapper function <code>Foo</code> with <strong>identical arguments but
+with the first letter of the name capitalized</strong>. The wrapper
+calls the base function, <strong>checks for errors, and terminates if
+there are any problems</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> <span class="title function_">Fork</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>)</span><br><span class="line">        unix_error(<span class="string">&quot;Fork error&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> pid;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -379,7 +300,7 @@ transferred from disk to memory.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -404,14 +325,14 @@ transferred from disk to memory.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">

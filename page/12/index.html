@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-13-Performance-Improvement-Techniques/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-14-Program-Profiling/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/05/5-13-Performance-Improvement-Techniques/" class="post-title-link" itemprop="url">5.13.Performance Improvement Techniques</a>
+          <a href="/2024/08/05/5-14-Program-Profiling/" class="post-title-link" itemprop="url">5.14.Program Profiling</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 10:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:01:50" itemprop="dateCreated datePublished" datetime="2024-08-05T10:31:22+08:00">2024-08-05</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 15:31:22" itemprop="dateCreated datePublished" datetime="2024-08-05T15:31:22+08:00">2024-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-06 17:31:28" itemprop="dateModified" datetime="2024-08-06T17:31:28+08:00">2024-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>63</span>
+      <span>194</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,25 +272,40 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="513performance-improvementtechniques"><span class="math inline">\(5.13.\)</span>Performance Improvement
-Techniques</h1>
+          <h1 id="514program-profiling"><span class="math inline">\(5.14.\)</span>Program Profiling</h1>
+<p>&#x2003;&#x2003;Unix systems provide the profiling program gprof.</p>
+<ol type="1">
+<li>The program must be compiled and linked for profiling. We use
+optimization flag <code>-0g</code> to guaranteeing that function calls
+will be tracked properly:</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -Og -pg prog.c -o prog</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>The program is then executed as usual:</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./prog file.txt</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>gprof is invoked to analyze the data in <code>gmon.out</code>:</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gprof prog</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The first part of the profile report lists the times spent
+executing the different functions, sorted in descending order:</p>
+<p><img src="/2024/08/05/5-14-Program-Profiling/image.png"></p>
 <ul>
-<li><p><em>Basic coding principles</em>:</p>
-<ul>
-<li><p>Eliminate excessive function calls. Move computations out of
-loops when possible.</p></li>
-<li><p>Eliminate unnecessary memory references. Introduce temporary
-variables to hold intermediate results.</p></li>
-</ul></li>
-<li><p><em>Low-level optimizations</em>:</p>
-<ul>
-<li><p>Unroll loops.</p></li>
-<li><p>Find ways to increase instruction-level parallelism by techniques
-such as multiple accumulators and reassociation.</p></li>
-<li><p>Rewrite conditional operations in a functional style to enable
-compilation via conditional data transfers.</p></li>
-</ul></li>
+<li><p>The first column indicates the percentage of the overall time
+spent on the function.</p></li>
+<li><p>The second shows the cumulative time spent by the functions up to
+and including the one on this row.</p></li>
+<li><p>The third shows the time spent on this particular function, and
+the fourth shows how many times it was called (not counting recursive
+calls).</p></li>
 </ul>
+<p>&#x2003;&#x2003;The second part of the profile report shows the calling history of
+the functions. The following is the history for a recursive function
+<code>find_ele_rec</code>:</p>
+<p><img src="/2024/08/05/5-14-Program-Profiling/image-1.png"></p>
+<p>&#x2003;&#x2003;We can use the gprof to focus our optimization efforts <strong>on
+the parts that consume the most time</strong>.</p>
 
       
     </div>
@@ -307,7 +328,7 @@ compilation via conditional data transfers.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/153/">153</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -332,14 +353,14 @@ compilation via conditional data transfers.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">123k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:28</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:35</span>
   </span>
 </div>
 <div class="busuanzi-count">
