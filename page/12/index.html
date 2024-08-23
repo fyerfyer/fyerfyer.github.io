@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-14-Program-Profiling/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/15/8-1-Exceptions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/05/5-14-Program-Profiling/" class="post-title-link" itemprop="url">5.14.Program Profiling</a>
+          <a href="/2024/08/15/8-1-Exceptions/" class="post-title-link" itemprop="url">8.1.Exceptions</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 15:31:22" itemprop="dateCreated datePublished" datetime="2024-08-05T15:31:22+08:00">2024-08-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-06 17:31:28" itemprop="dateModified" datetime="2024-08-06T17:31:28+08:00">2024-08-06</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-15 20:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:15:24" itemprop="dateCreated datePublished" datetime="2024-08-15T20:31:22+08:00">2024-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-5-Optimizing-Program-Performance/" itemprop="url" rel="index"><span itemprop="name">Chapter 5.Optimizing Program Performance</span></a>
+          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>194</span>
+      <span>626</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,40 +266,115 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="514program-profiling"><span class="math inline">\(5.14.\)</span>Program Profiling</h1>
-<p>&#x2003;&#x2003;Unix systems provide the profiling program gprof.</p>
-<ol type="1">
-<li>The program must be compiled and linked for profiling. We use
-optimization flag <code>-0g</code> to guaranteeing that function calls
-will be tracked properly:</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -Og -pg prog.c -o prog</span><br></pre></td></tr></table></figure>
-<ol start="2" type="1">
-<li>The program is then executed as usual:</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./prog file.txt</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>gprof is invoked to analyze the data in <code>gmon.out</code>:</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gprof prog</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The first part of the profile report lists the times spent
-executing the different functions, sorted in descending order:</p>
-<p><img src="/2024/08/05/5-14-Program-Profiling/image.png"></p>
+          <h1 id="81exceptions"><span class="math inline">\(8.1.\)</span>Exceptions</h1>
+<p>&#x2003;&#x2003;An exception is <strong>an abrupt change in the control
+flow</strong> in response to <strong>some change in the processor&apos;s
+state</strong>&#xFF1A;</p>
+<p><img src="/2024/08/15/8-1-Exceptions/image.png"></p>
+<h3 id="1exception-handling">1.Exception Handling</h3>
 <ul>
-<li><p>The first column indicates the percentage of the overall time
-spent on the function.</p></li>
-<li><p>The second shows the cumulative time spent by the functions up to
-and including the one on this row.</p></li>
-<li><p>The third shows the time spent on this particular function, and
-the fourth shows how many times it was called (not counting recursive
-calls).</p></li>
+<li>Each type of possible exception in a system <strong>is assigned a
+unique nonnegative integer exception number</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The second part of the profile report shows the calling history of
-the functions. The following is the history for a recursive function
-<code>find_ele_rec</code>:</p>
-<p><img src="/2024/08/05/5-14-Program-Profiling/image-1.png"></p>
-<p>&#x2003;&#x2003;We can use the gprof to focus our optimization efforts <strong>on
-the parts that consume the most time</strong>.</p>
+<ol type="1">
+<li>At <strong>system boot time</strong>(when the computer is reset or
+powered on), the operating system allocates and initializes a jump table
+called an <strong>exception table</strong>, so that entry <span class="math inline">\(k\)</span> <strong>contains the address of the
+handler for exception <span class="math inline">\(k\)</span></strong>.</li>
+</ol>
+<p><img src="/2024/08/15/8-1-Exceptions/image-1.png"></p>
+<ol start="2" type="1">
+<li>At run time(when <strong>the system is executing some
+program</strong>), the processor detects that an exception has occurred
+and determines the corresponding exception number <span class="math inline">\(k\)</span>. The processor then triggers the
+exception by making an indirect procedure call, <strong>through entry
+<span class="math inline">\(k\)</span> of the exception table, to the
+corresponding handler</strong>.</li>
+</ol>
+<p><img src="/2024/08/15/8-1-Exceptions/image-2.png"></p>
+<ul>
+<li>The starting address of the exception table is contained in a
+special CPU register called the <em>exception table base
+register</em>.</li>
+</ul>
+<h3 id="2differencesbetween-exceptions-and-procedure-call">2.Differences
+between Exceptions and Procedure Call</h3>
+<ul>
+<li><p>As with a procedure call, the processor pushes a return address
+on the stack before branching to the handler. However, depending on the
+class of exception, the return address will have multiple
+choices.</p></li>
+<li><p>The processor also <strong>pushes some additional processor state
+onto the stack</strong> that will be necessary to <strong>restart the
+interrupted program when the handler returns</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;Once the hardware triggers the exception, the rest of the work is
+done in software by the exception handler. After the handler has
+processed the event, it optionally returns to the interrupted program by
+<strong>executing a special &quot;return from interrupt&quot;
+instruction</strong>, which <strong>pops the appropriate state back into
+the processor&apos;s control and data registers, restores the state to user
+mode</strong> if the exception interrupted a user program, and then
+returns control to the interrupted program.</p>
+<h3 id="3classes-of-exceptions">3.Classes of Exceptions</h3>
+<p><img src="/2024/08/15/8-1-Exceptions/image-3.png"></p>
+<h4 id="ainterrupts">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Interrupts</h4>
+<p>&#x2003;&#x2003;<em>Interrupts</em> occur asynchronously as a result of
+<strong>signals from I/O devices that are external to the
+processor</strong>.</p>
+<p><img src="/2024/08/15/8-1-Exceptions/image-4.png"></p>
+<ul>
+<li><p>I/O devices interrupts by <strong>signaling a pin on the
+processor chip</strong> and <strong>placing onto the system bus the
+exception number</strong> that <strong>identifies the device that caused
+the interrupt</strong>.</p></li>
+<li><p>After the current instruction finishes executing, the processor
+<strong>notices that the interrupt pin has gone high</strong>,
+<strong>reads the exception number from the system bus</strong>, and
+then <strong>calls the appropriate interrupt handler</strong>.</p></li>
+<li><p>When the handler returns, it <strong>returns control to the next
+instruction</strong>. The program continues executing as though the
+interrupt had never happened.</p></li>
+</ul>
+<hr>
+<p>&#x2003;&#x2003;The remaining classes of exceptions(traps, faults, and aborts)
+occur synchronously <strong>as a result of executing the current
+instruction</strong>. We refer to this instruction as the <em>faulting
+instruction</em>.</p>
+<h4 id="btraps-and-system-calls">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Traps and system calls</h4>
+<p>&#x2003;&#x2003;The most important use of traps is to <strong>provide a
+procedure-like interface between user programs and the kernel</strong>,
+known as a <em>system call</em>.</p>
+<p>&#x2003;&#x2003;User program often needs to request services from the kernel.
+processors provide a special <code>syscall n</code> instruction that
+user programs can execute <strong>when they want to request service
+n</strong>.</p>
+<ul>
+<li>Executing the syscall instruction <strong>causes a trap to an
+exception handler</strong> that <strong>decodes the argument and calls
+the appropriate kernel routine</strong>.</li>
+</ul>
+<p><img src="/2024/08/15/8-1-Exceptions/image-5.png"></p>
+<h4 id="cfaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Faults</h4>
+<p><img src="/2024/08/15/8-1-Exceptions/image-6.png"></p>
+<h4 id="dabort">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Abort</h4>
+<p><img src="/2024/08/15/8-1-Exceptions/image-7.png"></p>
+<h3 id="4linuxx86-64-system-calls">4.Linux/x86-64 System Calls</h3>
+<p><img src="/2024/08/15/8-1-Exceptions/image-8.png"></p>
+<ul>
+<li>Each system call has a unique integer number that
+<strong>corresponds to an offset in a jump table</strong> in the
+kernel.(This jump table is not the same as the exception table.)</li>
+</ul>
+<p>&#x2003;&#x2003;The C standard library provides a set of convenient wrapper
+functions for most system calls. The wrapper functions <strong>package
+up the arguments, trap to the kernel with the appropriate system call
+instruction, and then pass the return status of the system call back to
+the calling program</strong>.</p>
+<ul>
+<li>All arguments to Linux system calls are passed <strong>through
+general-purpose registers</strong> rather than the stack.</li>
+</ul>
 
       
     </div>
@@ -328,7 +397,7 @@ the parts that consume the most time</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -353,14 +422,14 @@ the parts that consume the most time</strong>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

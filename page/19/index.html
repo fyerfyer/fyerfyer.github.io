@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/02/5-3-Optimizing-Methods/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-12-Understanding-Memory-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/02/5-3-Optimizing-Methods/" class="post-title-link" itemprop="url">5.3.Optimizing Methods</a>
+          <a href="/2024/08/05/5-12-Understanding-Memory-Performance/" class="post-title-link" itemprop="url">5.12.Understanding Memory Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:58:48" itemprop="dateCreated datePublished" datetime="2024-08-02T08:31:22+08:00">2024-08-02</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:34:53" itemprop="dateCreated datePublished" datetime="2024-08-05T09:31:22+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>518</span>
+      <span>521</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,39 +266,77 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53optimizing-methods">5.3.Optimizing Methods</h1>
-<h3 id="1code-motion">1.Code Motion</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine1</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; vec_length(v); i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Since the length of <code>v</code> is fixed, it&apos;s needless to
-compute its length for each iteration. So we can take this computation
-alone:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine2</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="2reduce-procedure-calls">2.Reduce Procedure Calls</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">data_t</span> *<span class="title function_">get_vec_start</span><span class="params">(vec_ptr v)</span> {</span><br><span class="line">    <span class="keyword">return</span> v-&gt;data;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Direct access to vector data */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        *dest = *dest OP data[i];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="3eliminating-unneededmemory-references">3.Eliminating Unneeded
-Memory References</h3>
-<p>&#x2003;&#x2003;The assembly code for <code>combine3</code> is as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = * </span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We can see that the accumulated values read from and written to
-memory on each iteration. We can eliminate this needless reading and
-writing of memory by rewriting the code in the style of
-<code>combine4</code>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine4</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;With the following assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The key is to <strong>dereference the pointer as fewer as
-possible</strong>.</p>
-<p>&#x2003;&#x2003;However, this program will lead to different result due to
-<em>memory alias</em>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v) + <span class="number">2</span>);</span><br><span class="line">combine4(v, get_vec_start(v) + <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/02/5-3-Optimizing-Methods/image.png"></p>
-<hr>
-<p>&#x2003;&#x2003;As a result, we modify the <code>combine3</code> as below:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Make sure dest updated on each iteration */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3w</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize in event length &lt;= 0 */</span></span><br><span class="line">    *dest = acc;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">        *dest = acc;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;with the following assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = *. Compiled -O1</span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This program dereferences the <code>dest</code> less while avoiding
-the memory alias.</p>
+          <h1 id="512understanding-memoryperformance"><span class="math inline">\(5.12.\)</span>Understanding Memory
+Performance</h1>
+<h3 id="1store-performance">1.Store Performance</h3>
+<p>&#x2003;&#x2003;A series of store operations cannot create a data dependency. Only
+a load operation is affected by the result of a store operation, since
+<strong>only a load can read back the memory value that has been written
+by the store</strong>.</p>
+<p>&#x2003;&#x2003;The store unit includes a <em>store buffer</em> containing
+<strong>the addresses and data of the store operations</strong> that
+have been issued to the store unit, but <strong>have not yet been
+completed</strong>, where completion involves updating the data
+cache.</p>
+<p>&#x2003;&#x2003;This buffer is provided so that a series of store operations can be
+executed <strong>without having to wait for each one to update the
+cache</strong>.</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-2.png"></p>
+<h3 id="2load-and-store-operations">2.Load and Store Operations</h3>
+<h4 id="adifferent-types-of-load-ampstore">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Different types of load &amp;
+store</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Write to dest, read from src */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_read</span><span class="params">(<span class="type">long</span> *src, <span class="type">long</span> *dst, <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> cnt = n;</span><br><span class="line">    <span class="type">long</span> val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (cnt) {</span><br><span class="line">        *dst = val;</span><br><span class="line">        val = (*src) + <span class="number">1</span>;</span><br><span class="line">        cnt--;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-1.png"></p>
+<ul>
+<li><p>In Example A, the result of the read from <code>src</code>
+<strong>is not affected by the write to <code>dest</code></strong>, and
+the iterations gives a CPE of 1.3.</p></li>
+<li><p>In Example B, each load by the pointer reference
+<code>*src</code> will yield the value stored by the previous execution
+of the pointer reference <code>*dest</code>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;This example illustrates a phenomenon we will call a <em>write/read
+dependency</em>&#x2014;<strong>the outcome of a memory read depends on a recent
+memory write</strong>.</p>
+<p>&#x2003;&#x2003;The CPE of Example B is 7.3, The write/read dependency causes a
+slowdown in the process.</p>
+<p>&#x2003;&#x2003;The reason of the slowdown can be illustrated in the following
+data-flow representation:</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-3.png"></p>
+<p>&#x2003;&#x2003;For the case of Example A, <strong>with differing source and
+destination addresses</strong>, the load and store operations
+<strong>can proceed independently</strong>, and hence the only critical
+path is formed by the decrementing of variable cnt, resulting in a CPE
+bound of 1.0.</p>
+<h4 id="bload-performance">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Load performance</h4>
+<p>&#x2003;&#x2003; When a load operation occurs, it must <strong>check the entries in
+the store buffer</strong> for matching addresses. If it finds a match,
+it <strong>retrieves the corresponding data entry</strong> as the result
+of the load operation.</p>
+<p>&#x2003;&#x2003;Take the following assembly code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of write_read</span><br><span class="line"># src in %rdi, dst in %rsi, val in %rax</span><br><span class="line">.L3:                    # loop:</span><br><span class="line">    movq %rax, (%rsi)     # Write val to dst</span><br><span class="line">    movq (%rdi), %rax     # t = *src</span><br><span class="line">    addq $1, %rax         # val = t + 1</span><br><span class="line">    subq $1, %rdx         # cnt--</span><br><span class="line">    jne .L3               # If != 0, goto loop</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image.png"></p>
+<ul>
+<li><p>The <code>s_addr</code> instruction computes the address for the
+store operation, <strong>creates an entry in the store buffer</strong>,
+and <strong>sets the address field for that entry</strong>.</p></li>
+<li><p>The <code>s_data</code> operation <strong>sets the data field for
+the entry</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The arcs on the right of the operators denote a set of implicit
+dependencies for these operations:</p>
+<ul>
+<li><p>For instruction <code>movq (%rdi), %rax</code>, the load
+operation must <strong>check the addresses of any pending store
+operations</strong>, creating a data dependency between it and the
+<code>s_addr</code> operation.</p>
+<ul>
+<li>If the two addresses match, the load operation must <strong>wait
+until the s_data has deposited its result into the store
+buffer</strong>, but if the two addresses differ, the two operations
+<strong>can proceed independently</strong>.</li>
+</ul></li>
+</ul>
 
       
     </div>
@@ -321,7 +359,7 @@ the memory alias.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -346,14 +384,14 @@ the memory alias.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

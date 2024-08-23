@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.5.&#x5185;&#x5B58;&#x6BB5;&#x7684;&#x5B9E;&#x73B0;</a>
+          <a href="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.10.&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x5B9E;&#x73B0;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-09 10:32:16" itemprop="dateCreated datePublished" datetime="2024-04-09T10:32:16+08:00">2024-04-09</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-11 14:35:43" itemprop="dateCreated datePublished" datetime="2024-04-11T14:35:43+08:00">2024-04-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:15:56" itemprop="dateModified" datetime="2024-06-03T08:15:56+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:49:14" itemprop="dateModified" datetime="2024-06-03T14:49:14+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>751</span>
+      <span>758</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,144 +272,129 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="75memory-segment-implementation"><span class="math inline">\(7.5.\)</span>Memory Segment implementation</h1>
-<h3 id="1local-implementation">1.<code>local</code> implementation</h3>
-<p>&#x2003;&#x2003;The <code>local</code> segment can be placed <strong>anywhere we
-want in the host RAM</strong>, for we just need to <strong>remember the
-base address of the block</strong>.</p>
+          <h1 id="710function-call-and-returnimplementation"><span class="math inline">\(7.10.\)</span>Function Call and Return
+Implementation</h1>
+<h3 id="1the-callers-view">1.The caller&apos;s view</h3>
+<p>&#x2003;&#x2003;In the calling function&apos;s view:</p>
 <ul>
-<li>We place the <strong>base address of the <code>local</code>
-segment</strong> in a pointer called <em>LCL</em>.</li>
-<li><em>LCL</em> will refer to <code>RAM 1</code>.</li>
+<li>Before calling another function, I must <strong>push as many
+arguments as the function expects to get</strong>;</li>
+<li>Next, I invoke the function using
+<code>call functionName nArgs</code>;</li>
+<li>After the called function returns, the argument values that I pushed
+before the call have disappeared from the stack, and <strong>a return
+value (that always exists) appears at the top of the
+stack</strong>;</li>
+<li>After the called function returns, <strong>all my memory segments
+are exactly the same as they were before the call</strong> (except that
+temp is undefined and some values of my static segment may have
+changed).</li>
 </ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image.png"></p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
-<p>&#x2003;&#x2003;Then we can <code>push</code> or <code>pop</code> a value easily.
-Say we want to accomplish <code>pop local 2</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
-<p>&#x2003;&#x2003;We can do this by putting the stack-top value into
-<code>RAM[1015]</code>.</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<h3 id="2the-callees-view">2.The callee&apos;s view</h3>
+<p>&#x2003;&#x2003;In the called function&apos;s view:</p>
 <ul>
-<li>How do we know which <code>RAM</code> to add to? We get it by
-<code>base addr + index</code></li>
+<li>Before I start executing, <strong>my<code>argument</code> segment
+has been initialized with the argument values passed by the
+caller</strong>.</li>
+<li>My <strong><code>local</code> variables segment has been allocated
+and initialized to zeros</strong>.</li>
+<li>My <code>static</code> segment has been set to <strong>the
+<code>static</code> segment of the VM file to which I belong</strong>
+(memory segments <code>this</code>, <code>that</code>,
+<code>pointer</code>, and <code>temp</code> are undefined upon
+entry).</li>
+<li>My working stack is empty.</li>
+<li>Before returning, I must <strong>push a value onto the
+stack</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;This process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//get the place to be added</span><br><span class="line">addr = addr + index</span><br><span class="line">//get the value, and put it into correct place</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br><span class="line">// D = *sp, *addr = D</span><br></pre></td></tr></table></figure></p>
-<p>&#x2003;&#x2003;Notice that 5 is still in <code>RAM[257]</code>, it hasn&apos;t been
-removed. It&apos;s common to have these wasted data in the stack, and it&apos;s
-not big deal, for <strong>the pointer indicates exactly which part of
-the stack are in play, not the data</strong>.</p>
-<h3 id="2argumentthisthatimplementation">2.<code>argument,this,that</code>
-implementation</h3>
+<h3 id="3handling-call">3.Handling <code>call</code></h3>
+<p>&#x2003;&#x2003;We can implement the VM code by these steps:</p>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image.png"></p>
+<p>&#x2003;&#x2003;In terms of <code>call</code>, we do these steps:</p>
+<ol type="1">
+<li><p>Push a label onto the stack, and use the same label when we are
+going to return after the called function terminates.
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push returnAddress</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Push some label that we generate to <strong>save the memory
+segment of the caller</strong>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">push LCL</span><br><span class="line">push ARG</span><br><span class="line">push THIS</span><br><span class="line">push THAT</span><br></pre></td></tr></table></figure></p></li>
+<li><p>The <code>argument</code> should <strong>be repositioned for the
+called function</strong>, and we should reposition it at the beginning
+of the <code>ARG</code> segment:</p>
 <ul>
-<li><p>When translating the high-level code of some method into VM
-code:</p>
-<ul>
-<li>Maps the method&apos;s local and argument variables onto the
-<code>local</code> and <code>argument</code> segments</li>
-<li>Maps the object fields and the array entries that the method is
-currently processing onto the <code>this</code> and <code>that</code>
-segments</li>
+<li>We can calculate the address, because we know how many values we
+pushed. Say we push 5 values the we do : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARG = SP - 5</span><br></pre></td></tr></table></figure></li>
 </ul></li>
+<li><p>Push the <code>local</code> segment to insure that the function
+can visit its local variables correctly : <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCL = SP</span><br></pre></td></tr></table></figure></p></li>
+<li><p>We execute the called function by simply writing the command
+<code>goto nameOfFunction</code>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto functionName</span><br></pre></td></tr></table></figure></p></li>
+<li><p>We insert the <code>returnAddress</code> label, so that when the
+function has been executed, we can get back to the place we invoke it :
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(returnAddress) //Declares a label for the return-address</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-1.png"></p>
+<h3 id="4handling-function">4.Handling <code>function</code></h3>
+<p>&#x2003;&#x2003;The big picture of handling <code>function</code> is that:</p>
+<ul>
+<li>The first thing translator does is <strong>it takes the function
+name and generates a label</strong>, and the label will serve as
+<strong>the entry point to the translated assembly code of the
+function</strong>.</li>
+<li>We simply write some assembly code that <strong>handles the setting
+up of the function&apos;s execution</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The process of <code>argument</code>, <code>this</code> and
-<code>that</code> is nearly the same as <code>local</code>:</p>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
-<p>&#x2003;&#x2003;The process can be translated into this VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//push</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">*sp = *addr</span><br><span class="line">sp++</span><br><span class="line"></span><br><span class="line">//pop</span><br><span class="line">addr = segmentPointer + index</span><br><span class="line">sp--</span><br><span class="line">*addr = *sp</span><br></pre></td></tr></table></figure></p>
-<h3 id="3constant">3.<code>Constant</code></h3>
+<ol type="1">
+<li>We take the function name and generate its label:</li>
+<li>Since we know how many local variables we have to create, we do
+<code>push 0</code> <code>nVars</code> times. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(functionName)</span><br><span class="line">	//repeat nVars times</span><br><span class="line">	push 0</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4handling-return">4.Handling <code>return</code></h3>
+<p>&#x2003;&#x2003;After setting up, the function can start doing its thing. We need
+to generate assembly code that <strong>moves the return value to the
+caller, reinstates the caller&apos;s state, and finally <code>goto</code> the
+return address</strong>.</p>
+<ol type="1">
+<li>Create some temporary variable (called <code>endFrame</code>) and
+assign the value of <code>LCL</code> to it: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endFrame = LCL</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>&#x2003;&#x2003;If you look at the stack diagram, you will see that
+<code>endFrame</code> indeed <strong>points at the end of the frame in
+the host RAM</strong>.</p>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-2.png"></p>
+<ol start="2" type="1">
+<li><p>Since we should put the return value at the top of the stack, say
+we have 5 values, the <code>endFrame - 5</code> will be the exact return
+address.</p>
 <ul>
-<li><p>When the compiler translates the high-level code of some method
-into VM,</p>
-<ul>
-<li>it translates high-level operations involving constant into VM
-operations involving the constant segment.</li>
+<li>We need to use <code>*</code> to look inside and get the address.
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retaddr = *(endFrame - 5)</span><br></pre></td></tr></table></figure></li>
 </ul></li>
-<li><p>When we implement <code>constant</code>, we simply <strong>supply
-the specified constant</strong>.</p></li>
-<li><p>Since we won&apos;t store things where a <code>constant</code>
-resides, there&apos;s no <code>pop</code> in <code>constant</code>.</p></li>
-<li><p>The <code>constant</code> segment is a <strong>truly virtual
-segment</strong>. So whenever we see a <code>push constant i</code>
-command, we simply supply the specified constant
-<code>i</code>.</p></li>
+<li><p>Reposition the return value for the caller.</p>
+<ul>
+<li>The value should be copied to <code>argument 0</code>, and we
+already have a pointer <code>ARG</code> located in the position</li>
+<li><code>pop</code> is going to retrieve the return value off the
+stack. We take this value and put it in <code>ARG</code>.
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*ARG = pop()</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>The caller expects to see a return value and continue to do its
+work, so the stack pointer should <strong>be just after
+<code>ARG</code></strong>.<br>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SP = ARG + 1</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Then we can begin to recover the various segments that we saved
+on the stack before. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">THAT = *(endFrame - 1)</span><br><span class="line">THIS = *(endFrame - 2)</span><br><span class="line">ARG = *(endFrame - 3)</span><br><span class="line">LCL = *(endFrame - 4)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Finally we can jump to the return address we copied before:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goto retAddr</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p><img src="/2024/04/11/7-10-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<ul>
+<li>Every thing below <code>SP</code> is recycled. <strong>The next push
+is going to override the memory location where <code>SP</code>
+shows</strong>.</li>
+<li>The caller will see the return value at the top of its working
+stack.</li>
+<li>The stack pointer will point at the next world in the memory.</li>
 </ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-5.png"></p>
-<h3 id="4static">4.<code>Static</code></h3>
-<ul>
-<li><p>When translating the high-level code of some method into VM code,
-the compiler:</p>
-<ul>
-<li>Maps the static variables that the method sees onto the
-<code>static</code> segment.</li>
-</ul></li>
-<li><p>The <code>static</code> variables should <strong>be seen by all
-the methods in a program</strong>. &#x2003;&#x2003;To complement this, we store the
-variables in a <em>&quot;global space&quot;</em>:</p></li>
-<li><p>Have the VM translator translate each VM reference
-<code>static i</code>(in file <code>Foo.vm</code>)into an <em>assembly
-reference</em> <code>Foo.i</code>.</p>
-<ul>
-<li><code>Foo</code> is the name of the file, and <code>i</code> is the
-index of VM command.</li>
-</ul></li>
-<li><p>Following assembly, the Hack assembler will map these references
-onto <code>RAM[16]</code>,<code>RAM[17]</code>,<code>RAM[18]</code>,
-...</p></li>
-</ul>
-<p>&#x2003;&#x2003;For example, the statement <code>pop static 5</code> can be
-translated into: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Foo.5</span><br><span class="line">M = D</span><br><span class="line">//the register stores this data</span><br><span class="line"></span><br><span class="line">@Foo.2</span><br><span class="line">M = D</span><br></pre></td></tr></table></figure> * The entries of <code>static</code>
-segment will end up being mapped onto <code>RAM[16]</code>,
-<code>RAM[17]</code>, ... , in the order <strong>in which they appear in
-the program</strong> (not their names!!!).</p>
-<figure>
-<img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-6.png" alt="Alt text">
-<figcaption aria-hidden="true">Alt text</figcaption>
-</figure>
-<blockquote>
-<p>Static variables are stored <strong>in a section of memory called the
-static data segment</strong>, which is allocated when the program is
-loaded and has fixed memory addresses. When we want to retrieve the
-value of a static variable, we need to read the value stored <strong>at
-the memory location</strong> where the static variable is stored, rather
-than directly accessing the value of the static variable itself. This is
-why we need to use <code>D=M</code> instead of <code>D=A</code> to get a
-<code>static</code> value.</p>
-</blockquote>
-<h3 id="5temp">5.<code>Temp</code></h3>
-<p>&#x2003;&#x2003;When the compiler translates the Jack program into VM code, it
-sometimes has to use temporary variables.</p>
-<ul>
-<li>We let the 8 place segment called <code>temp</code> to contain and
-serve these variables when needed.</li>
-<li><code>temp</code> is going to be a <strong>fixed 8-place memory
-segment</strong>.</li>
-<li>The variables will be mapped on <code>RAM</code> locations 5 to
-12.</li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-7.png"></p>
-<h3 id="6pointer">6.Pointer</h3>
-<ul>
-<li><p>When translating a high-level method code into VM code,the
-compiler:</p>
-<ul>
-<li>Has to remember the base addresses of <code>this</code>, which
-represents <em>the current object</em>, and <code>that</code>, which
-represents <em>the current array of method be processing</em>.</li>
-<li>Generates code that <strong>keeps track of the base addresses of the
-this and that segments</strong> using the pointer segment.</li>
-</ul></li>
-<li><p><code>pointer</code> is a fixed memory segment. It has only two
-entries, <code>0</code> and <code>1</code>.</p>
-<ul>
-<li>So we can only <code>push</code> and <code>pop</code> <code>0</code>
-and <code>1</code></li>
-</ul></li>
-<li><p>Accessing <code>pointer 0</code> should result in
-<strong>accessing <code>THIS</code></strong>.</p></li>
-<li><p>Accessing <code>pointer 1</code> should result in
-<strong>accessing <code>THAT</code></strong>.</p></li>
-</ul>
-<p><img src="/2024/04/09/7-5-%E5%86%85%E5%AD%98%E6%AE%B5%E7%9A%84%E5%AE%9E%E7%8E%B0/image-8.png"></p>
 
       
     </div>
@@ -432,7 +417,7 @@ and <code>1</code></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/125/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/125/">125</a><span class="page-number current">126</span><a class="page-number" href="/page/127/">127</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/127/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/125/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/125/">125</a><span class="page-number current">126</span><a class="page-number" href="/page/127/">127</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/127/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -457,14 +442,14 @@ and <code>1</code></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

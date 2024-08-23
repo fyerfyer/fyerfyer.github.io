@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
+          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>473</span>
+      <span>401</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,96 +266,89 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
-Vector</h1>
-<h3 id="1basic-concepts">1.Basic concepts</h3>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
+          <h1 id="56cache-coherence">5.6.Cache Coherence</h1>
+<h3 id="1cache-model">1.Cache model</h3>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
+<h3 id="2coherence-concept">2.Coherence concept</h3>
+<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
+<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
+example:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
+<p>&#x2003;&#x2003;The two different processors have two different values for the same
+location, this is referred to as <em>cache coherence problem</em>.</p>
+<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
+<strong>any read of a data item returns the most recently written value
+of that data item</strong>. This simple concept contains two different
+aspects of memory system behaviour:</p>
 <ul>
-<li><p>In SIMD, all the parallel execution units are
-<strong>synchronized</strong>, and they all respond to a single
-instruction <strong>that emanates from a single program
-counter</strong>.</p></li>
-<li><p>Each execution unit <strong>has its own address register, and so
-have different data address</strong>.</p></li>
+<li><em>coherence</em>: defines <em>what</em> values can be returned by
+a read.</li>
+<li><em>consistency</em>: determines <em>when</em> a written value will
+be returned by a read.</li>
 </ul>
-<blockquote>
-<p>The original motivation behind SIMD was to <strong>amortize the cost
-of the control unit over execution units</strong>. The SIMD can also
-save instrustion bandwidth and space: SIMD needs <strong>only one copy
-of the code that is being simultaneously executed</strong>.</p>
-</blockquote>
-<blockquote>
-<p>Since the instruction is single, SIMD works best when dealing with
-<strong>identically structured data</strong>, which is called
-<em>data-level parallelism</em>, e.g., for loop.</p>
-</blockquote>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
-<ul>
-<li><p>SPMD: The programmer write a single program that runs on all
-processors of a <em>MIMD computer</em>, relying on conditional
-statements when different processors should execute distinct section of
-code.</p></li>
-<li><p>The SIMD computers operate on <strong>vectors of
-data</strong>.</p></li>
-</ul>
-<h3 id="2vector">2.Vector</h3>
-<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
-<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
-data elements from memory, put them in order into a large set of
-registers</strong>, and operate on them sequentially in registers using
-<em>pipelined execution units</em>.</p>
-<ul>
-<li>A key feature of vector architectures is <strong>a set of vector
-registers</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
-loop):</p>
-<p><span class="math display">\[
-Y = a \times X + Y
-\]</span></p>
-<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
-<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
-<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
-also the pipeline stalls are required only <strong>once per vector
-operation</strong>, rather than once per vector element.</p>
-<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
+<p>&#x2003;&#x2003;A memory system is coherent if:</p>
 <ol type="1">
-<li><p>The compiler indicates that <strong>the computation of each
-result in the vector is independent</strong>. So compiler doesn&apos;t have
-to check for data hazards within an instruction.</p></li>
-<li><p>Since the element in a vector is adjacent, <strong>the cost of
-the latency to main memory is seen only once for the entire
-vector</strong>.</p></li>
-<li><p>Because a complete loop is replaced by a vector instruction whose
-<strong>behaviour is predetermined</strong>, control hazards are
-nonexistent.</p></li>
+<li>A read by a processor P to location X that follows <em>only one
+write</em> by P to X always returns the value written by P.</li>
 </ol>
-<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
-<ul>
-<li>Unlike multimedia extensions, the number of elements in a vector
-operation isn&apos;t in the opcode but in <strong>a separate
-register</strong>.</li>
-</ul>
 <blockquote>
-<p>This means different versions of the vector architecture can simply
-be implemented by changing the contents of the register, thus retain
-binary compatibility.</p>
+<p>This preserves program order.</p>
 </blockquote>
-<ul>
-<li>The parallel semantics of a vector instruction allows using a
-<em>deeply pipelined functional unit</em> to execute vector
-operations:</li>
-</ul>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
-<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
-register to take part in operations with element N from other vector
-registers, and the structure is called <em>vector lanes</em>:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
-<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
-vector unit by <strong>adding more lanes</strong>.</p>
+<ol start="2" type="1">
+<li>A read by a processor to location X that follows <em>only one
+write</em> by another processor to X returns the written value if the
+read and write are sufficiently separated in time.</li>
+</ol>
+<blockquote>
+<p>This defines memory coherence.</p>
+</blockquote>
+<ol start="3" type="1">
+<li>Writes to the same location are <strong>serialized</strong>; that
+is, two writes to the same location by any two processors <strong>are
+seen in the same order by all processors</strong>. For example, if CPU B
+stores 2 into memory at address X after time step 3, processors can
+never read the value at location X as 2 and then later read it as
+1.</li>
+</ol>
+<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
+<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
+<strong>has exclusive access to a data item</strong> before it writes
+that item. This style of protocol is called a <em>write invalidate
+protocol</em> because it <strong>invalidates copies in other caches on a
+write</strong>.</p>
+<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
+CPU A, the CPU B will get a cache miss, and is forced to fetch a new
+copy of data:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
+<blockquote>
+<p>Block size plays an important role in cache coherency. Large blocks
+can cause what&apos;s called <em>false sharing</em>, when two unrelated
+shared variables are located in the same cache block, the whole block is
+exchanged between processors even though the processors are accessing
+different variables.</p>
+</blockquote>
+<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
+protocol:</h3>
+<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
+<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
+concepts</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
+<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
 
       
     </div>
@@ -378,7 +371,7 @@ vector unit by <strong>adding more lanes</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/39/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/41/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/39/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/41/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -403,14 +396,14 @@ vector unit by <strong>adding more lanes</strong>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

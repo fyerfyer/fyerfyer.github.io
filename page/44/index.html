@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-3-Synchronous-Digital-Systems/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-1-Parallelism-via-Instructions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-3-Synchronous-Digital-Systems/" class="post-title-link" itemprop="url">3.3.Synchronous Digital Systems</a>
+          <a href="/2024/06/29/5-1-Parallelism-via-Instructions/" class="post-title-link" itemprop="url">5.1.Parallelism via Instruction</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:29:11" itemprop="dateCreated datePublished" datetime="2024-06-05T08:29:11+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:48:39" itemprop="dateModified" datetime="2024-06-06T17:48:39+08:00">2024-06-06</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;09:11:34" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>419</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>6 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,120 +266,181 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="33synchronous-digital-systems"><span class="math inline">\(3.3.\)</span>Synchronous Digital Systems</h1>
-<h3 id="1clock-concepts">1.Clock concepts</h3>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image.png"></p>
-<h3 id="2d-flip-flops">2.D Flip-flops</h3>
-<h4 id="a-dffconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span> DFF
-concept</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-1.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-2.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-3.png"></p>
-<blockquote>
-<p>The <span class="math inline">\(Q\)</span> is the output of DFF, the
-<span class="math inline">\(D\)</span> is the data input.</p>
-</blockquote>
-<blockquote>
-<p>DFF only responds to the input signal on the rising edge of the clock
-signal, it captures and latches the value of data input. <strong>It will
-hold the value until the next rising edge of the clock
-signal</strong>.</p>
-</blockquote>
+          <h1 id="51parallelism-via-instructions"><span class="math inline">\(5.1.\)</span>Parallelism via Instructions</h1>
+<h3 id="1pipelining">1.Pipelining</h3>
+<p>&#x2003;&#x2003;Exploiting the potential parallelism among instructions is called
+<em>instruction-level parallelism</em>.</p>
 <ul>
-<li><p><em>Clock-to-Q delay</em> is <strong>the amount of time that it
-take for the input to propagate to the output after the clock
-trigger</strong>.</p></li>
-<li><p><em>Setup time</em> is the amount of time that the input needs to
-be stable BEFORE the clock trigger</p></li>
+<li><p>The first is <strong>increasing the depth of the pipeline to
+overlap more instructions</strong>.</p></li>
+<li><p>We also need to <strong>reblance the remaining steps so they are
+the same length</strong>.</p></li>
+<li><p>Another approach is to <strong>replicate the internal components
+so that it can launch multiple instruction in every pipeline
+stage</strong>. The general name of this approach is <em>multiple
+issue</em>.</p></li>
 </ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-4.png"></p>
-<ul>
-<li><em>Hold time</em> is the amount of time that the input needs to be
-stable AFTER the clock trigger</li>
-</ul>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-6.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-5.png"></p>
-<h3 id="3register">3.Register</h3>
-<h4 id="asomeconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some
-concept</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-7.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-8.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-9.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-10.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-11.png"></p>
-<blockquote>
-<p>Why this? Because the max hold time is to <strong>ensure that data
-input D remains stable for a period of time after the rising edge of the
-clock arrives</strong>. And the period of time equals to the delay of
-<span class="math inline">\(A\)</span> plus the combinational delay.</p>
-</blockquote>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-12.png"></p>
-<blockquote>
-<p>Why this? Because the min clock cycle is to <strong>ensure that the
-signal is properly transmitted during the clock cycle and captured by
-the next register</strong>. So we must take the longest time into
-consideration.</p>
-</blockquote>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-13.png"></p>
-<h3 id="4transitor">4.Transitor</h3>
-<h4 id="ametal-oxide-semiconductor-field-effecttransistormosfet">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Metal-Oxide Semiconductor Field Effect
-Transistor(MOSFET)</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-14.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-15.png"></p>
-<p>&#x2003;&#x2003;To know how the result comes from, we can <strong>view the value of
-<span class="math inline">\(S\)</span>, <span class="math inline">\(G\)</span> and <span class="math inline">\(D\)</span> as the voltage</strong>. Take this as
-an example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-16.png"></p>
-<ul>
-<li><p>First we need to know <strong>whether the switch is
-closed</strong>. <strong>If the switch is closed, then the state of
-<span class="math inline">\(D\)</span> is decided by the outside
-circuits</strong>.</p></li>
-<li><p>When the switch is on, we then judge <strong>if the voltage of
-<span class="math inline">\(S\)</span> is higher than that of <span class="math inline">\(G\)</span></strong>. If it&apos;s true, then the FET is
-conducting, and vice versa.</p></li>
-</ul>
-<p>&#x2003;&#x2003;In this example, the voltage of <span class="math inline">\(S\)</span> is lower than <span class="math inline">\(G\)</span>, so the <span class="math inline">\(D\)</span> can&apos;t get the electronic, thus it&apos;s
-0.</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-17.png"></p>
-<h4 id="bvddand-ground">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Vdd
-and Ground</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-18.png"></p>
-<h4 id="cbuilding-an-inverter">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Building an Inverter</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-19.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-20.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-21.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-22.png"></p>
-<h4 id="dbuilding-other-gates">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Building other gates</h4>
-<p>&#x2003;&#x2003;To build a CMOS, we:</p>
+<h3 id="2multiple-issue-processor">2.Multiple issue processor</h3>
+<p>&#x2003;&#x2003;There are two main ways to implement a multiple-issue processor,
+with the major difference being <strong>the division of work between the
+compiler and the hardware</strong>. One is called <em>static multiple
+issue</em> and the other <em>dynamic multiple issue</em>.</p>
+<p>&#x2003;&#x2003;There are two primary distinct responsibilities within a
+multiple-issue pipeline:</p>
 <ol type="1">
-<li><p>Implement the pull-up network and pull-down network separately to
-fit the truth table.</p>
-<ul>
-<li>It&apos;s OK to get the opposite of truth table. <strong>We can simply
-convert it through an invertor</strong>.</li>
-</ul></li>
-<li><p>Connect the pull-up with Vdd, and the pull-down with
-Ground.</p></li>
+<li><p>Packaging instructions into <em>issue slots</em>. It refers to
+<strong>the position from which instructions could issue in a given
+clock cycle</strong>. In dynamic multiple issue, it is normally dealt
+with <strong>at runtime by processor</strong>.</p></li>
+<li><p>Dealing with data and control hazards. The compiler handles it
+statically. In contrast, most dynamic issue processors attempt to
+alleviate them <strong>using hardware techniques operation at execution
+time</strong>.</p></li>
 </ol>
-<p>&#x2003;&#x2003;We take the <code>NAND</code> gate for example:</p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-23.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-24.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-25.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-26.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-27.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-28.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-29.png"></p>
-<h4 id="ethe-use-of-demorgans-law">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>The use of DeMorgan&apos;s Law</h4>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-30.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-31.png"></p>
-<p><img src="/2024/06/05/3-3-Synchronous-Digital-Systems/image-32.png"></p>
+<h3 id="3speculationconceptsextracted-from-textbook">3.Speculation
+concepts(extracted from textbook)</h3>
+<p>&#x2003;&#x2003;Speculation is an approach that <strong>allows the
+compilator/processor to &quot;guess&quot; about the properties of an
+instruction</strong>. Any speculation mechanism must include both a
+method to <strong>check if the guess was right</strong> and a method to
+<strong>unroll or back out the effects of the instructions that were
+executed speculatively</strong>.</p>
+<p>&#x2003;&#x2003;Speculation may be done in the compiler or by the hardware. For
+example,the compiler can use speculation to <strong>reorder
+instructions, moving an instruction across a branch or a load across a
+store</strong>. The processor hardware can perform the same
+transformation at runtime using techniques we discuss later in this
+section.</p>
+<p>&#x2003;&#x2003;The recovery mechanisms used for incorrect speculation are rather
+different. In the case of speculation in software, the compiler usually
+<strong>inserts additional instructions that check the accuracy of the
+speculation and provide a fix-up routine to use when the speculation is
+wrong</strong>. In hardware speculation, the processor usually
+<strong>buffers the speculative results until it knows they are no
+longer speculative</strong>. If the speculation is correct, the
+instructions are completed by <strong>allowing the contents of the
+buffers to be written to the registers or memory</strong>. If the
+speculation is incorrect, the hardware flushes the buffers and
+re-executes the correct instruction sequence. Misspeculation typically
+requires the pipeline to be flushed, or at least stalled, and thus
+further reduces performance.</p>
+<p>&#x2003;&#x2003;Speculation introduces one other possible problem: speculating on
+certain instructions may <strong>introduce exceptions that were formerly
+not present</strong>. For example, suppose a load instruction is moved
+in a speculative manner, but the address it uses is not within bounds
+when the speculation is incorrect. The result would be that an exception
+that should not have occurred would occur. The problem is complicated by
+the fact that if the load instruction were not speculative, then the
+exception must occur! In compiler-based speculation, such problems are
+avoided by <strong>adding special speculation support that allows such
+exceptions to be ignored until it is clear that they really should
+occur</strong>. In hardware-based speculation, <strong>exceptions are
+simply buffered until it is clear that the instruction causing them is
+no longer speculative and is ready to complete;</strong> at that point,
+the exception is raised,and normal exception handling proceeds.</p>
+<h3 id="4static-multiple-issue">4.Static multiple issue</h3>
+<p>&#x2003;&#x2003;Static multiple-issue processors all use the compiler to assist
+with packaging instructions and handling hazards. In a static issue
+processor, we can think of the set of instructions issued in a given
+clock cycle called <em>issue packet</em>. And it&apos;s useful to think of
+the issue packet as a single instuction allowing weveral operations in
+certain predefined fields.</p>
+<p>&#x2003;&#x2003;When it comes to the certain instructions:</p>
+<ul>
+<li><p>We require that the instructions <strong>be paired and aligned on
+a 64-bit boundary</strong>.</p></li>
+<li><p>If on instruction of the pair cannot be used, we require that
+<strong>it be replaced with nop</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;However, the overlapping of instructions <strong>increase the
+relative performance loss from data and control hazards</strong>.</p>
+<blockquote>
+<p>For example, in our simple five-stage pipeline, loads have a use
+latency of one clock cycle, which <strong>prevents one instruction from
+using the result without stalling</strong>. In the two-issue, five-stage
+pipeline the result of a load instruction <strong>cannot be used on the
+next clock cycle</strong>. This means that the next two instructions
+cannot use the load result without stalling.</p>
+</blockquote>
+<p>&#x2003;&#x2003;An important compiler technique to get more performance from loops
+is <em>loop unrolling</em>:</p>
+<ul>
+<li>Say we are going to deal with this program:</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) {</span><br><span class="line">    A[i] = B[i] + C[i];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line">    addi xA, xA, 8      ; Increment A pointer</span><br><span class="line">    addi xB, xB, 8      ; Increment B pointer</span><br><span class="line">    addi xC, xC, 8      ; Increment C pointer</span><br><span class="line">    addi xI, xI, 1      ; Increment loop counter</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can do this iteration part for more times:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i += <span class="number">4</span>) {</span><br><span class="line">    A[i]   = B[i]   + C[i];</span><br><span class="line">    A[i+<span class="number">1</span>] = B[i+<span class="number">1</span>] + C[i+<span class="number">1</span>];</span><br><span class="line">    A[i+<span class="number">2</span>] = B[i+<span class="number">2</span>] + C[i+<span class="number">2</span>];</span><br><span class="line">    A[i+<span class="number">3</span>] = B[i+<span class="number">3</span>] + C[i+<span class="number">3</span>];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Loop:</span><br><span class="line">    ld  x1, 0(xA)       ; Load A[i]</span><br><span class="line">    ld  x2, 0(xB)       ; Load B[i]</span><br><span class="line">    ld  x3, 0(xC)       ; Load C[i]</span><br><span class="line">    add x4, x2, x3      ; A[i] = B[i] + C[i]</span><br><span class="line">    sd  0(xA), x4       ; Store A[i]</span><br><span class="line"></span><br><span class="line">    ld  x5, 8(xA)       ; Load A[i+1]</span><br><span class="line">    ld  x6, 8(xB)       ; Load B[i+1]</span><br><span class="line">    ld  x7, 8(xC)       ; Load C[i+1]</span><br><span class="line">    add x8, x6, x7      ; A[i+1] = B[i+1] + C[i+1]</span><br><span class="line">    sd  8(xA), x8       ; Store A[i+1]</span><br><span class="line"></span><br><span class="line">    ld  x9, 16(xA)      ; Load A[i+2]</span><br><span class="line">    ld  x10, 16(xB)     ; Load B[i+2]</span><br><span class="line">    ld  x11, 16(xC)     ; Load C[i+2]</span><br><span class="line">    add x12, x10, x11   ; A[i+2] = B[i+2] + C[i+2]</span><br><span class="line">    sd  16(xA), x12     ; Store A[i+2]</span><br><span class="line"></span><br><span class="line">    ld  x13, 24(xA)     ; Load A[i+3]</span><br><span class="line">    ld  x14, 24(xB)     ; Load B[i+3]</span><br><span class="line">    ld  x15, 24(xC)     ; Load C[i+3]</span><br><span class="line">    add x16, x14, x15   ; A[i+3] = B[i+3] + C[i+3]</span><br><span class="line">    sd  24(xA), x16     ; Store A[i+3]</span><br><span class="line"></span><br><span class="line">    addi xA, xA, 32     ; Increment A pointer by 4</span><br><span class="line">    addi xB, xB, 32     ; Increment B pointer by 4</span><br><span class="line">    addi xC, xC, 32     ; Increment C pointer by 4</span><br><span class="line">    addi xI, xI, 4      ; Increment loop counter by 4</span><br><span class="line">    blt  xI, 8, Loop    ; Branch if loop counter &lt; 8</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This operation has the following advantages:</p>
+<ol type="1">
+<li><p><strong>Reduce cycle control overhead</strong>: cycle control
+operations are less frequent when the cycle is expanded. In the above
+example, the loop control operation is reduced from one generation per
+generation to one generation per four.</p></li>
+<li><p><strong>Increase instruction level parallelism</strong>: the more
+instructions expanded, the compiler can better schedule these
+instructions, improve parallelism.</p></li>
+<li><p><strong>Reduced branch prediction failure</strong>: the
+probability of branch prediction failure is reduced due to the reduction
+in the number of branch instructions and the frequency of loop control
+operations.</p></li>
+</ol>
+<p>&#x2003;&#x2003;During the unrolling process, the compiler introduce additional
+registers. The goal of the process, called <em>register renaming</em>,
+it to <strong>eliminate dependences that are not true data
+dependences</strong>, but could either lead to potential hazards or
+prevent the compiler from flexibly scheduling the code.</p>
+<h3 id="5dynamic-multiple-issueprocessor">5.Dynamic multiple-issue
+processor</h3>
+<p>&#x2003;&#x2003;Dynamic multiple-issue processors are also known as <em>superscalar
+processors</em>.</p>
+<p>&#x2003;&#x2003;Many superscalars extend the basic framework of dynamic issue
+decisions to include <em>dynamic pipeline scheduling</em>. Dynamic
+pipeline scheduling <strong>chooses which instructions to execute in a
+given clock cycle while trying to avoid hazards and stalls</strong>.</p>
+<ul>
+<li><p><em>Dynamic pipeline scheduling</em> <strong>chooses which
+instructions to execute next, possibly reordering them to avoid
+stalls</strong>. The pipeline is divided into three major units: an
+instruction fetch and issue unit, multiple functional units, and a
+commit unit.</p>
+<ul>
+<li><p>The first unit fetch instructions, decodes them and sends them to
+corresponding function unit for execution.</p></li>
+<li><p>Each function unit has <em>buffers</em> called <em>reservation
+stations</em>, which <strong>hold the operands and the
+operation</strong>. As soon as the buffer contains all its operands and
+the functional unit is ready to execute, the result calculated. The
+result is sent to <strong>any reservation stations waiting for this
+particular result</strong> and <strong>the commit
+unit</strong>.</p></li>
+<li><p>The commit unit <strong>buffers the result until it&apos;s safe to put
+the result into the register file/memory</strong>. The buffer in the
+commit unit, often called the <em>reorder buffer</em>, is also used to
+supply operands.</p></li>
+<li><p>Once a result is committed to the register file, it can be
+fetched directly from there like in a normal pipeline.</p></li>
+</ul></li>
+</ul>
+<p><img src="/2024/06/29/5-1-Parallelism-via-Instructions/image-23.png"></p>
+<blockquote>
+<p>If an operand is not in the register file or reorder buffer, it must
+<strong>be waiting to be produced by a functional unit</strong>.
+<strong>The name of the functional unit that will produce the result is
+tracked</strong>. When that unit eventually produces the result,
+<strong>it is copied directly into the waiting reservation
+statio</strong>n from the functional unit bypassing the registers.</p>
+</blockquote>
+<p>&#x2003;&#x2003;We may think of a dynamically scheduled pipeline as an
+<em>out-of-order execution</em>. To make programs behave as if they were
+running on a simple in-order pipeline, the instruction fetch and decode
+unit is required to <strong>issue instructions in order</strong>, which
+allows dependences to be tracked, and the commit unit is required to
+<strong>write results to registers and memory in program fetch
+order</strong>. This conservative mode is called <em>in-order
+commit</em>. Hence, if an exception occurs, the computer can point to
+the last instruction executed.</p>
 
       
     </div>
@@ -408,7 +463,7 @@ Ground.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -433,14 +488,14 @@ Ground.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

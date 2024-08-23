@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/15/3-5-Arithmetic-and-Logical-Operations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/" class="post-title-link" itemprop="url">5.4.Multicore and Other Shared Memory Multiprocessors</a>
+          <a href="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/" class="post-title-link" itemprop="url">3.5.Arithmetic and Logical Operations</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:22:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:53:17" itemprop="dateCreated datePublished" datetime="2024-06-29T11:22:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 09:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;17:11:58" itemprop="dateCreated datePublished" datetime="2024-07-15T09:30:22+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +233,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>155</span>
+      <span>503</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,29 +266,109 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="54multicoreand-other-shared-memory-multiprocessors">5.4.Multicore
-and Other Shared Memory Multiprocessors</h1>
-<h3 id="1amdarls-law">1.Amdarl&apos;s Law</h3>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-6.png"></p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-7.png"></p>
-<h3 id="2multiprocessor-design">2.Multiprocessor design</h3>
-<p>&#x2003;&#x2003;There are two kinds of multiprocessor designs: one is to
-<strong>provide a single physical address space that all processors can
-share</strong>, another is to <strong>have a separate address space per
-processor that requires that sharing must be explicit</strong>.</p>
-<p>&#x2003;&#x2003;A <em>Shared memory multiprocessor(SMP)</em> is one that offers the
-programmer <strong>a single physical address space across all
-processors</strong>:</p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-8.png"></p>
-<p>&#x2003;&#x2003;In this multiprocessor, Processors communicate through shared
-variables in memory, with all processors capable of accessing any memory
-location via loads and stores.</p>
-<h3 id="3multiprocessor-operations">3.Multiprocessor operations</h3>
-<p>&#x2003;&#x2003;Processors need to coordinate when operating on shared data, which
-is called <em>synchronization</em>. One way is to <strong>use a lock for
-a shared variable</strong>: <strong>Only one processor r at a time can
-acquire the lock, and other processors interested in shared data must
-wait until the original processor unlocks the variable.</strong></p>
+          <h1 id="35arithmetic-and-logicaloperations"><span class="math inline">\(3.5.\)</span>Arithmetic and Logical
+Operations</h1>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image.png"></p>
+<h3 id="1load-effective-address">1.Load Effective Address</h3>
+<ul>
+<li>The <code>leaq</code> instruction <strong>doesn&apos;t reference memory
+at all</strong>. Instead of reading from the designated location, it
+<strong>copies the effective address to the destination</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;The instruction can be used to <strong>generate pointers for later
+memory reference</strong>. For example, if register <code>%rdx</code>
+represents <span class="math inline">\(x\)</span>, then
+<code>leaq 7(%rdx, %rdx, 4), %rdx</code> will set <code>%rdx</code> to
+<span class="math inline">\(5x+7\)</span>.</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-1.png"></p>
+<h3 id="2unary-amp-binary-operations">2.Unary &amp; Binary Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-2.png"></p>
+<p>&#x2003;&#x2003;Operations in the first group are unary operations:</p>
+<ul>
+<li><p>The single operand serves as both source and
+destination.</p></li>
+<li><p>This operand can be either a register or a memory
+location.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The second group consists of binary operations.</p>
+<ul>
+<li>The second operand is used as both a source and a destination, the
+first operand is another operand.</li>
+</ul>
+<blockquote>
+<p>This syntax is reminiscent of the C assignment operators, such as
+<code>x -= y</code>.</p>
+</blockquote>
+<ul>
+<li>The first operand can be either an immediate value, a register, or a
+memory location. The second can be either a register or a memory
+location.</li>
+</ul>
+<blockquote>
+<p>The operation: <code>xor %rcx %rcx</code> is simply to set</p>
+</blockquote>
+<h3 id="3shift-operations">3.Shift operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-3.png"></p>
+<ul>
+<li><p>The shift amount is either <strong>an immediate value</strong> or
+<strong>a single-byte register <code>%cl</code></strong>.</p></li>
+<li><p>In x86-64, if the data values are <span class="math inline">\(w\)</span> bits, then its shift amount will be
+<strong>the low-order <span class="math inline">\(m\)</span> bits of
+<code>%cl</code>, where <span class="math inline">\(2^m=w\)</span></strong>. For example, when
+<code>%cl</code> has value 0xFF, then <code>salb</code> would shift by
+7, while <code>salw</code> would shift by 15.</p></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Convert 64-bits into
+32-bits)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-4.png"></p>
+<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-5.png"></p>
+<ul>
+<li>The <code>movl %esi %ecx</code> is worth noting. Because we only
+need 4 bytes of data, we can use <code>movl</code> operation to set the
+low-order 32 bits of <code>rcx</code> to <code>%esi</code> while
+high-order 32 bits to 0. Since we only need the low-order 4 bytes, doing
+this implies that the high-order 4 bytes is meaningless, which makes
+code safer, more accurate and more readable.</li>
+</ul>
+<h3 id="4special-arithmeticoperations">4.Special Arithmetic
+Operations</h3>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-6.png"></p>
+<h4 id="aone-operand-multiply">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>&quot;One-operand&quot; multiply</h4>
+<p>&#x2003;&#x2003;The <code>mulq</code>(unsigned) and <code>imulq</code>(signed) can
+also act as &quot;one-operand&quot; instructions to <strong>compute the full
+128-bits product of 2 64-bits values</strong>.</p>
+<ul>
+<li><p><strong>One of the multiplicand is value in
+<code>%rax</code></strong>, another is the operand.</p></li>
+<li><p>The product is stored in <code>%rdx</code> (high-order 64 bits)
+and <code>%rax</code> (low-order 64 bits).</p></li>
+</ul>
+<p>&#x2003;&#x2003;We will need to take two steps to store an oct word:</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-7.png"></p>
+<h4 id="bdivision">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Division</h4>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-8.png"></p>
+<ul>
+<li><p>For a division, <code>%rdx</code> stores the remainder and
+<code>%rax</code> stores the quotient.</p></li>
+<li><p>For most applications of 64-bit addition, the dividend is given
+as a 64-bit value. The bits of <code>%rdx</code> should then be set to
+either <strong>all zeros (unsigned arithmetic) or the sign bit of %rax
+(signed arithmetic)</strong>.</p>
+<ul>
+<li><p>The former can be implemented by <code>movl $0 %reg</code>, this
+can set upper 8 bytes of diviend to 0.</p></li>
+<li><p>The latter can be implemented by <code>cqto</code>. It takes no
+operands, implicitly reads the sign bit from %rax and copies it across
+all of %rdx.</p></li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Signed and Unsigned)</p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-9.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-10.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-11.png"></p>
+<p><img src="/2024/07/15/3-5-Arithmetic-and-Logical-Operations/image-12.png"></p>
 
       
     </div>
@@ -311,7 +391,7 @@ wait until the original processor unlocks the variable.</strong></p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span><a class="page-number" href="/page/38/">38</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/38/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span><a class="page-number" href="/page/38/">38</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/38/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -336,14 +416,14 @@ wait until the original processor unlocks the variable.</strong></p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

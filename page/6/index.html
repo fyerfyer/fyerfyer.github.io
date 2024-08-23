@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-2-Processes/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-1-9-3-VM-Address-Space/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/16/8-2-Processes/" class="post-title-link" itemprop="url">8.2.Processes</a>
+          <a href="/2024/08/20/9-1-9-3-VM-Address-Space/" class="post-title-link" itemprop="url">9.1~9.3.VM Address Space</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:09:09" itemprop="dateCreated datePublished" datetime="2024-08-16T08:31:22+08:00">2024-08-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:47:02" itemprop="dateCreated datePublished" datetime="2024-08-20T09:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
+          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
         </span>
     </span>
 
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>564</span>
+      <span>370</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,96 +266,91 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="82processes"><span class="math inline">\(8.2.\)</span>Processes</h1>
-<h3 id="1basic-concepts">1.Basic Concepts</h3>
+          <h1 id="91-sim93vm-address-spaces"><span class="math inline">\(9.1 \sim
+9.3\)</span>VM Address Spaces</h1>
+<h3 id="1terminologies">1.Terminologies</h3>
 <ul>
-<li><p>The classic definition of a process is <strong>an instance of a
-program in execution</strong>.</p></li>
-<li><p>Each program in the system runs <strong>in the context
-of</strong> some process. The context consists of <strong>the state that
-the program needs to run correctly</strong>.</p></li>
+<li><p>Each byte has a unique <em>physical address(PA)</em>.</p></li>
+<li><p><em>VA</em>: Virtual Address.</p></li>
+<li><p>The activity of <strong>transferring a page between disk and
+memory</strong> is known as <em>swapping</em> or
+<em>paging</em>.</p></li>
+<li><p>Pages are <em>swapped in(paged in)</em> from disk to DRAM, and
+<em>swapped out(paged out)</em> from DRAM to disk.</p></li>
+<li><p>The strategy of <strong>waiting until the last moment to swap in
+a page</strong>, when a miss occurs, is known as <em>demand
+paging</em>.</p></li>
 </ul>
-<h3 id="2logical-control-flow">2.Logical Control Flow</h3>
-<p>&#x2003;&#x2003; If we were to use a debugger to single-step the execution of our
-program, we would observe <strong>a series of program counter(PC)
-values</strong> that corresponded exclusively to instructions contained
-in our program&apos;s executable object file or in shared objects linked into
-our program dynamically at run time. This sequence of PC values is known
-as a <strong>logical control flow</strong>, or simply <strong>logical
-flow</strong>.</p>
-<p><img src="/2024/08/16/8-2-Processes/image.png"></p>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image.png"></p>
 <ul>
-<li>Processes <strong>take turns using the processor</strong>. Each
-process executes a portion of its flow and then <strong>is
-<em>preempted</em></strong>(temporarily suspended) while other processes
-take their turns.</li>
-</ul>
-<h3 id="3user-and-kernel-modes">3.User and Kernel Modes</h3>
-<p>&#x2003;&#x2003;In order for the operating system kernel to provide an airtight
-process abstraction, the processor must provide a mechanism that
-<strong>restricts the instructions that an application can execute, as
-well as the portions of the address space that it can
-access</strong>.</p>
-<p>&#x2003;&#x2003;Processors typically provide this capability with a <strong>mode
-bit</strong> in some control register that characterizes the privileges
-that the process currently enjoys.</p>
+<li><p>An <em>address space</em> is an ordered set of nonnegative
+integer addresses:</p>
 <ul>
-<li><p>A process running in <em>kernel mode</em> can <strong>execute any
-instruction in the instruction set and access any memory location in the
-system</strong>.</p></li>
-<li><p>A process running in <em>user mode</em> is <strong>not allowed to
-execute privileged instructions</strong> that do things such as halt the
-processor, change the mode bit, or initiate an I/O operation. Nor is it
-allowed to <strong>directly reference code or data in the kernel area of
-the address space</strong>.</p>
-<ul>
-<li><p>Any such attempt results in a <strong>fatal protection
-fault</strong>.</p></li>
-<li><p>To execute these instructions, user programs must instead access
-kernel code and data indirectly <strong>via the system call
-interface</strong>.</p></li>
+<li>If the integers in the address space are
+<strong>consecutive</strong>, then we say that it is a <em>linear
+address space</em>.</li>
 </ul></li>
 </ul>
-<h3 id="4context-switches">4.Context Switches</h3>
-<p>&#x2003;&#x2003;The operating system kernel implements multitasking using a
-higher-level form of exceptional control flow known as a <em>context
-switch</em>.</p>
+<p><span class="math display">\[
+\lbrace 0,1,2, \cdots \rbrace
+\]</span></p>
 <ul>
-<li><p>The kernel maintains a context for each process. The context is
-the <strong>state</strong> that the kernel needs <strong>to restart a
-preempted process</strong>.</p></li>
-<li><p>At certain points during the execution of a process, the kernel
-can decide to <strong>preempt the current process and restart a
-previously preempted process</strong>. And we say that the kernel has
-<em>scheduled</em> that process.</p></li>
+<li><p>A virtual address space with <span class="math inline">\(N =
+2^n\)</span> addresses is called an <strong>n-bit address
+space</strong>.</p></li>
+<li><p>At any point in time, the set of virtual pages is partitioned
+into three disjoint subsets:</p>
+<ul>
+<li><p><em>Unallocated</em></p></li>
+<li><p><em>Cached</em></p></li>
+<li><p><em>Uncached</em></p></li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;The context switch contains the following steps:</p>
-<ol type="1">
-<li><p><strong>Saves the context of the current
-process</strong>.</p></li>
-<li><p><strong>Restores the saved context</strong> of some previously
-preempted process.</p></li>
-<li><p><strong>Passes control</strong> to this newly restored
-process.</p></li>
-</ol>
-<p>&#x2003;&#x2003;If the system call blocks because it is waiting for some event to
-occur, then the kernel can <strong>put the current process to
-sleep</strong> and <strong>switch to another process</strong>.</p>
-<blockquote>
-<p>A context switch can also occur as a result of an interrupt. For
-example, all systems have some mechanism for <strong>generating periodic
-timer interrupts</strong>. Each time a timer interrupt occurs, the
-kernel can decide that the current process has run long enough and
-switch to a new process.</p>
-</blockquote>
-<p><img src="/2024/08/16/8-2-Processes/image-1.png"></p>
+<h3 id="2dram-cache-organization">2.DRAM Cache Organization</h3>
+<h4 id="apagetables">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Page
+tables</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-1.png"></p>
 <ul>
-<li><p>The disk will take a relatively long time to fetch the data, so
-instead of waiting and doing nothing, the kernel <strong>performs a
-context switch from process A to B</strong>.</p></li>
-<li><p>Process B then runs for a while in user mode until <strong>the
-disk sends an interrupt</strong> to signal that data have been
-transferred from disk to memory.</p></li>
+<li><p>A page table is an array of <em>page table entries(PTEs)</em>.
+Each page in the virtual address space has a PTE at a fixed offset in
+the page table.</p></li>
+<li><p>The valid bit indicates <strong>whether the virtual page is
+currently cached in DRAM</strong>.</p>
+<ul>
+<li>If the valid bit is set, the address field indicates the start of
+the corresponding physical page in DRAM where the virtual page is
+cached.</li>
+</ul></li>
+</ul>
+<h4 id="bpagehits">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Page
+hits</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-2.png"></p>
+<ul>
+<li>The address translation hardware <strong>uses the virtual address as
+an index</strong> to locate PTE 2.</li>
+</ul>
+<h4 id="cpagefaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Page
+faults</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-3.png"></p>
+<ul>
+<li><p>The page fault exception invokes a page fault exception handler
+in the kernel, and it <strong>selects a victim page</strong>. In this
+case, it&apos;s VP4 in PP3.</p></li>
+<li><p>If VP 4 has been modified, then the kernel copies it back to
+disk.</p></li>
+<li><p>The kernel <strong>modifies the page table entry for VP
+4</strong> to reflect the fact that VP 4 is no longer cached in main
+memory.</p></li>
+<li><p>Next, the kernel copies VP 3 from disk to PP 3 in memory, updates
+PTE 3, and then returns.</p></li>
+</ul>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-4.png"></p>
+<ul>
+<li>When the handler returns, it <strong>restarts the faulting
+instruction</strong>, which resends the faulting virtual address to the
+address translation hardware. But now, VP 3 is cached in main memory,
+and <strong>the page hit is handled normally</strong> by the address
+translation hardware.</li>
 </ul>
 
       
@@ -379,7 +374,7 @@ transferred from disk to memory.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -404,14 +399,14 @@ transferred from disk to memory.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

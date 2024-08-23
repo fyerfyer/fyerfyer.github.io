@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-8-Array-Allocation-and-Access/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
+          <a href="/2024/07/17/3-8-Array-Allocation-and-Access/" class="post-title-link" itemprop="url">3.8.Array Allocation and Access</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:32:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:13:52" itemprop="dateCreated datePublished" datetime="2024-07-17T17:32:22+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>265</span>
+      <span>878</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,55 +266,98 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</h1>
-<h3 id="1program-execution-process">1.Program execution process</h3>
-<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
-<code>p2.c</code>, we input the command:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li><p>The C preprocessor expands the source code to <strong>include any
-files specified with <code>#include</code> commands and with
-<code>#define</code> declarations</strong>.</p></li>
-<li><p>Compiler generates assembly code having name <code>p1.s</code>
-and <code>p2.s</code>.</p></li>
-<li><p>Assembler converts the assembly code into <em>binary
-object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
-</ol>
+          <h1 id="38array-allocation-and-access"><span class="math inline">\(3.8.\)</span>Array Allocation and Access</h1>
+<h3 id="1pointer-arithmetic">1.Pointer Arithmetic</h3>
+<p>&#x2003;&#x2003;Suppose the starting address of integer array <code>E</code> and
+integer index <code>i</code> are stored in registers <code>%rdx</code>
+and <code>%rcx</code>. Below are some assembly-code implementation of
+array expressions, with the result being stored in either
+<code>%eax</code>(for data) or register <code>%rax</code>(for
+pointers):</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image.png"></p>
 <blockquote>
-<p>The object code contains binary representations of all instructions,
-but doesn&apos;t include the address of the global value.</p>
+<p>The dereference of a pointer is through
+<code>(register_name)</code>.</p>
 </blockquote>
-<ol start="4" type="1">
-<li>Linker merges these two object-code files along with <em>code
-implementing library functions</em> (e.g., <code>printf</code>) and
-generates the final executable code file <code>p</code>(specified by
-<code>-o p</code>).</li>
+<blockquote>
+<p>The final example shows that one can compute the difference of two
+pointers within the same data structure, with the result being data
+having type long and value equal to <strong>the difference of the two
+addresses divided by the size of the data type</strong>.</p>
+</blockquote>
+<h3 id="2nested-arrays">2.Nested Arrays</h3>
+<p>&#x2003;&#x2003;The array elements are ordered in memory in row-major order:</p>
+<p><img src="/2024/07/17/3-8-Array-Allocation-and-Access/image-1.png"></p>
+<p>&#x2003;&#x2003;Array element <code>M[i][j]</code> can be easily reached through a
+series of arithmetic operations. For example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># A in %rdi, i in %rsi, and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2), %rax  # Compute 3i</span><br><span class="line">leaq (%rdi,%rax,4), %rax  # Compute xA + 12i</span><br><span class="line">movl (%rax,%rdx,4), %eax  # Read from M[xA + 12i + 4]</span><br></pre></td></tr></table></figure>
+<h3 id="3fixed-sized-arrays">3.Fixed-sized Arrays</h3>
+<p>&#x2003;&#x2003;The C compiler is able to make many optimizations for code
+operating on multi-dimensional arrays of fixed size. Take the inner
+product calculation program as an example. The original form is as
+below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimized C code is as below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of fixed matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fix_prod_ele_opt</span><span class="params">(fix_matrix A, fix_matrix B, <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">int</span> *Aptr = &amp;A[i][<span class="number">0</span>]; <span class="comment">/* Points to elements in row i of A */</span></span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k]; <span class="comment">/* Points to elements in column k of B */</span></span><br><span class="line">    <span class="type">int</span> *Bend = &amp;B[N][k]; <span class="comment">/* Marks stopping point for Bptr */</span></span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> {                         <span class="comment">/* No need for initial test */</span></span><br><span class="line">        result += *Aptr * *Bptr; <span class="comment">/* Add next product to sum */</span></span><br><span class="line">        Aptr ++;                 <span class="comment">/* Move Aptr to next column */</span></span><br><span class="line">        Bptr += N;               <span class="comment">/* Move Bptr to next row */</span></span><br><span class="line">    } <span class="keyword">while</span> (Bptr != Bend);      <span class="comment">/* Test for stopping point */</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The optimization follows the following steps:</p>
+<ol type="1">
+<li><p>Generating a pointer, which we have named <code>Aptr</code>, that
+points to successive elements in row <code>i</code> of
+<code>A</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bptr</code>, that
+points to successive elements in column <code>k</code> of
+<code>B</code>.</p></li>
+<li><p>Generating a pointer, which we have named <code>Bend</code>, that
+equals the value <code>Bptr</code> will have <strong>when it is time to
+terminate the loop</strong>.</p></li>
 </ol>
-<h3 id="2machine-code">2.Machine code</h3>
-<h4 id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</h4>
-<p>&#x2003;&#x2003;The program memory contains:</p>
+<p>&#x2003;&#x2003;The key points of optimization are as below:</p>
+<ol type="1">
+<li><p>Decide the <strong>starting address and end address of the
+array</strong>.</p></li>
+<li><p>Decide <strong>how to move the address forward</strong>.</p></li>
+</ol>
+<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>The C program below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Set all diagonal elements to val */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">        A[i][i] = val;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;With the properties:</p>
 <ul>
-<li><p>the executable machine code for the program</p></li>
-<li><p>some information required by the operating system</p></li>
-<li><p>a run-time stack for managing procedure calls and
-returns</p></li>
-<li><p>blocks of memory allocated by the user (e.g., by using the
-<code>malloc</code> library function).</p></li>
+<li><p>Starting address: <code>&amp;A[0][0]</code>.</p></li>
+<li><p>Ending address: <code>&amp;A[N+1][0]</code>.</p></li>
+<li><p>Moving stride: <code>index += N + 1</code>.</p></li>
 </ul>
-<h4 id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
-command</h4>
-<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
-compiler:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
-<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
-<em>disassembler</em>. The program <code>objdump</code> can serve the
-role:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The result is as below:</p>
-<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
+<p>&#x2003;&#x2003;And the optimized program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">fix_set_diag_opt</span><span class="params">(fix_matrix A, <span class="type">int</span> val)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Abase = &amp;A[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> iend = N * (N + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        Abase[i] = val;</span><br><span class="line">        i += (N + <span class="number">1</span>);</span><br><span class="line">    } <span class="keyword">while</span> (i != iend);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="4variable-size-arrays">4.Variable-Size Arrays</h3>
+<p>&#x2003;&#x2003;Programmers requiring variable-size arrays had to allocate storage
+for these arrays using functions such as <code>malloc</code> or
+<code>calloc</code>, and they had to explicitly encode the mapping of
+multidimensional arrays into single-dimension ones via row-major
+indexing.</p>
+<p>&#x2003;&#x2003;If we declare an array <code>int A[exp1][exp2]</code>, the
+dimensions of the array are determined by evaluating the expressions
+<code>expr1</code> and <code>expr2</code> <strong>at the time the
+declaration is encountered</strong>.</p>
+<p>&#x2003;&#x2003;For example, the following C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">long</span> i, <span class="type">long</span> j)</span> {</span><br><span class="line">    <span class="keyword">return</span> A[i][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var_ele:</span><br><span class="line">    imulq %rdx, %rdi          # Compute n * i</span><br><span class="line">    leaq (%rsi,%rdi,4), %rax  # Compute xA + 4(n * i)</span><br><span class="line">    movl (%rax,%rcx,4), %eax  # Read from M[xA + 4(n * i) + 4 * j]</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<strong>Instead of using <code>leaq</code>, the dynamic version
+must use <code>imul</code> to scale <code>i</code> by
+<code>n</code></strong>. This is because we don&apos;t know the exact size of
+array until encounter the declaration.</p>
+<p>&#x2003;&#x2003;The optimization of variable-size arrays is similar to that of the
+fixed-size:</p>
+<p>&#x2003;&#x2003;For example, the C program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span> {</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">        result += A[i][j] * B[j][k];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be optimized as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Compute i,k of variable matrix product */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">var_prod_ele_opt</span><span class="params">(<span class="type">long</span> n, <span class="type">int</span> A[n][n], <span class="type">int</span> B[n][n], <span class="type">long</span> i, <span class="type">long</span> k)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> *Arow = A[i];</span><br><span class="line">    <span class="type">int</span> *Bptr = &amp;B[<span class="number">0</span>][k];</span><br><span class="line">    <span class="type">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    {</span><br><span class="line">        result += Arow[j] * *Bptr;</span><br><span class="line">        Bptr += n;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>We can see that <code>GCC</code> is able to recognize patterns that
+arise when a program steps through the elements of a multidimensional
+array, and generate the <strong>pointer-based code</strong> or the
+<strong>array-based code</strong> to <strong>avoid direct multiple
+calculation</strong>.</p>
+</blockquote>
 
       
     </div>
@@ -343,7 +380,7 @@ role:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -368,14 +405,14 @@ role:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

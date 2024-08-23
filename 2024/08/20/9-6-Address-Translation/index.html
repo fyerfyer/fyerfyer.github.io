@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fyerfyer.github.io.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":2,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+
+    <meta name="description" content="\(9.6.\)Address Translation 1.Summary of Translation Symbols  2.Basic Struction &#x2003;&#x2003;TThe following figure shows how the MMU uses the page table to perform the mapping \(MAP:VAS \rightarrow PAS \c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9.6.Address Translation">
+<meta property="og:url" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/index.html">
+<meta property="og:site_name" content="fyerfyer">
+<meta property="og:description" content="\(9.6.\)Address Translation 1.Summary of Translation Symbols  2.Basic Struction &#x2003;&#x2003;TThe following figure shows how the MMU uses the page table to perform the mapping \(MAP:VAS \rightarrow PAS \c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-1.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-2.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-3.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-4.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-5.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-6.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-7.png">
+<meta property="og:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image-8.png">
+<meta property="article:published_time" content="2024-08-20T12:31:22.000Z">
+<meta property="article:modified_time" content="2024-08-20T14:07:40.878Z">
+<meta property="article:author" content="fyerfyer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/image.png">
+
+
+<link rel="canonical" href="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/","path":"2024/08/20/9-6-Address-Translation/","title":"9.6.Address Translation"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>9.6.Address Translation | fyerfyer</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="&#x5207;&#x6362;&#x5BFC;&#x822A;&#x680F;" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fyerfyer</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello! Nice to meet you!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="&#x641C;&#x7D22;" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>&#x9996;&#x9875;</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>&#x5173;&#x4E8E;</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>&#x5206;&#x7C7B;</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>&#x5F52;&#x6863;</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>&#x641C;&#x7D22;
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80" placeholder="&#x641C;&#x7D22;..." spellcheck="false" type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          &#x6587;&#x7AE0;&#x76EE;&#x5F55;
+        </li>
+        <li class="sidebar-nav-overview">
+          &#x7AD9;&#x70B9;&#x6982;&#x89C8;
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#96address-translation"><span class="nav-text">\(9.6.\)Address Translation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1summary-of-translationsymbols"><span class="nav-text">1.Summary of Translation
+Symbols</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2basic-struction"><span class="nav-text">2.Basic Struction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3cpu-hardwareperformance-for-page-hit-amp-page-fault"><span class="nav-text">3.CPU Hardware
+Performance for Page Hit &amp; Page Fault</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-integrating-caches-and-vm"><span class="nav-text">4. Integrating Caches and VM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5translation-lookasidebuffer"><span class="nav-text">5.Translation Lookaside
+Buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6multi-level-page-tables"><span class="nav-text">6.Multi-Level Page Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aanexample"><span class="nav-text">&#x2003;&#x2003;\(a.\)An
+example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#baddress-translation-for-k-level-pagetable-hierarchy"><span class="nav-text">&#x2003;&#x2003;\(b.\)Address translation for k-level page
+table hierarchy</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fyerfyer" src="/images/head.png">
+  <p class="site-author-name" itemprop="name">fyerfyer</p>
+  <div class="site-description" itemprop="description">fyerfyer&apos;s blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fyerfyer" title="GitHub &#x2192; https://github.com/fyerfyer" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fuy60703@gmail.com" title="E-Mail &#x2192; fuy60703@gmail.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="&#x8FD4;&#x56DE;&#x9876;&#x90E8;">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="fyerfyer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fyerfyer">
+      <meta itemprop="description" content="fyerfyer&apos;s blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="9.6.Address Translation | fyerfyer">
+      <meta itemprop="description" content>
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9.6.Address Translation
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
+
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 20:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:07:40" itemprop="dateCreated datePublished" datetime="2024-08-20T20:31:22+08:00">2024-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+          &#xFF0C;
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x6B21;&#x6570;" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x6B21;&#x6570;&#xFF1A;</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="&#x672C;&#x6587;&#x5B57;&#x6570;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
+      <span>761</span>
+    </span>
+    <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+      <span>3 &#x5206;&#x949F;</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="96address-translation"><span class="math inline">\(9.6.\)</span>Address Translation</h1>
+<h3 id="1summary-of-translationsymbols">1.Summary of Translation
+Symbols</h3>
+<p><img src="/2024/08/20/9-6-Address-Translation/image.png"></p>
+<h3 id="2basic-struction">2.Basic Struction</h3>
+<p>&#x2003;&#x2003;TThe following figure shows how the MMU uses the page table to
+perform the mapping <span class="math inline">\(MAP:VAS \rightarrow PAS
+\cup \emptyset\)</span>:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-1.png"></p>
+<ul>
+<li><p>The page table base register(PTBR) points to the current page
+table.</p></li>
+<li><p>The n-bit virtual address has two components: a <span class="math inline">\(p\)</span>-bit virtual page offset(VPO) and an
+<span class="math inline">\((n&#x2212;p)\)</span>-bit virtual page
+number(VPN).</p>
+<ul>
+<li><p>The MMU uses the VPN to <strong>select the appropriate
+PTE</strong>. For example, VPN 0 selects PTE 0, VPN 1 selects PTE
+1.</p></li>
+<li><p>The corresponding physical address is the concatenation of the
+<strong>physical page number(PPN) from the page table entry</strong> and
+the <strong>VPO from the virtual address</strong>.</p></li>
+</ul></li>
+<li><p>Since the physical and virtual pages are both <span class="math inline">\(P\)</span> bytes, the physical page offset(PPO) is
+identical to the VPO.</p></li>
+</ul>
+<h3 id="3cpu-hardwareperformance-for-page-hit-amp-page-fault">3.CPU Hardware
+Performance for Page Hit &amp; Page Fault</h3>
+<p>&#x2003;&#x2003;The CPU performs the following steps when there&apos;s a page hit:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-2.png"></p>
+<ol type="1">
+<li><p>The processor <strong>generates a virtual address</strong> and
+sends it to the MMU.</p></li>
+<li><p>The MMU <strong>generates the PTE address</strong> and requests
+it <strong>from the cache/ main memory</strong>.</p></li>
+<li><p>The cache/main memory <strong>returns the PTE to the
+MMU</strong>.</p></li>
+<li><p>The MMU <strong>constructs the physical address</strong> and
+sends it to the cache/main memory.</p></li>
+<li><p>The cache/main memory returns the requested data word to the
+processor.</p></li>
+</ol>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-3.png"></p>
+<p>&#x2003;&#x2003;When there&apos;s a page fault, step 1~3 are the same:</p>
+<ol start="4" type="1">
+<li><p>The valid bit in the PTE is zero, so the MMU <strong>triggers an
+exception</strong>, which <strong>transfers control in the CPU to a page
+fault exception handler</strong> in the operating system
+kernel.</p></li>
+<li><p>The fault handler <strong>identifies a victim page in physical
+memory</strong>, and if that page has been modified, pages it out to
+disk.</p></li>
+<li><p>The fault handler pages in the new page and updates the PTE in
+memory.</p></li>
+<li><p>The fault handler <strong>returns to the original process,
+causing the faulting instruction to be restarted</strong>. The CPU
+resends the offending virtual address to the MMU. Because the virtual
+page is now cached in physical memory, there is a hit.</p></li>
+</ol>
+<h3 id="4-integrating-caches-and-vm">4. Integrating Caches and VM</h3>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-4.png"></p>
+<ul>
+<li>The main idea is that the address translation occurs <strong>before
+the cache lookup</strong>.</li>
+</ul>
+<h3 id="5translation-lookasidebuffer">5.Translation Lookaside
+Buffer</h3>
+<p>&#x2003;&#x2003;When we meet a page fault, we will need to do an additional fetch
+from memory. Many systems try to eliminate this cost by including
+<strong>a small cache of PTEs in the MMU</strong> called a
+<em>translation lookaside buffer(TLB)</em>.</p>
+<ul>
+<li>A TLB is a small, virtually addressed cache where <strong>each line
+holds a block consisting of a single PTE</strong>:</li>
+</ul>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-5.png"></p>
+<ul>
+<li><p>The index and tag fields that are used for set selection and line
+matching <strong>are extracted from the virtual page number</strong> in
+the virtual address.</p>
+<ul>
+<li>If the TLB has <span class="math inline">\(T = 2^t\)</span> sets,
+then the TLB index(TLBI) consists of <strong>the <span class="math inline">\(t\)</span> least significant bits of the
+VPN</strong>, and the TLB tag(TLBT) consists of <strong>the remaining
+bits in the VPN</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;For a TLB hit, the mMU fetches the appropriate PTE from the
+TLB:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-6.png"></p>
+<h3 id="6multi-level-page-tables">6.Multi-Level Page Tables</h3>
+<h4 id="aanexample">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>An
+example</h4>
+<p>&#x2003;&#x2003;The common approach for compacting the page table is to use a
+hierarchy of page tables. The following is an example of a page table,
+which has a 32-bit address space, 4 KB pages, and a 4-byte PTE:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-7.png"></p>
+<p>&#x2003;&#x2003;For the page table:</p>
+<ul>
+<li><p>Each PTE in the level 1 table is responsible for mapping a 4 MB
+chunk of the virtual address space.</p></li>
+<li><p>Each chunk consists of 1,024 contiguous pages.</p></li>
+</ul>
+<p>&#x2003;&#x2003;This scheme reduces memory requirements in two ways:</p>
+<ol type="1">
+<li><p>If a PTE in the level 1 table is null, then <strong>the
+corresponding level 2 page table does not even have to
+exist</strong>.</p></li>
+<li><p>Only the level 1 table needs to be in main memory at all times.
+The level 2 page tables can be created and paged in and out <strong>by
+the VM system as they are needed</strong>.</p></li>
+</ol>
+<h4 id="baddress-translation-for-k-level-pagetable-hierarchy">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Address translation for k-level page
+table hierarchy</h4>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-8.png"></p>
+<ul>
+<li><p>The virtual address is partitioned into <span class="math inline">\(k\)</span> VPNs and a VPO.</p></li>
+<li><p>Each VPN <span class="math inline">\(i\)</span>(<span class="math inline">\(1 \leq i \leq k\)</span>) is an index into a page
+table at level <span class="math inline">\(i\)</span>.</p></li>
+<li><p>Each PTE in a level <span class="math inline">\(j\)</span>
+table(<span class="math inline">\(1 \leq j \leq k - 1\)</span>)
+<strong>points to the base of some page table at level <span class="math inline">\(j + 1\)</span></strong>.</p></li>
+<li><p>Each PTE in a level <span class="math inline">\(k\)</span> table
+contains <strong>either the PPN of some physical page or the address of
+a disk block</strong>.</p></li>
+<li><p>As with a single-level hierarchy, the PPO is identical to the
+VPO.</p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/20/9-5-Memory-Protection/" rel="prev" title="9.5.Memory Protection">
+                  <i class="fa fa-angle-left"></i> 9.5.Memory Protection
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/21/9-8-Memory-Mapping/" rel="next" title="9.8.Memory Mapping">
+                  9.8.Memory Mapping <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+    <!--  -->
+    
+  </article>
+</div>
+
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+
+  <div class="copyright">
+    &#xA9; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fyerfyer</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="&#x603B;&#x8BBF;&#x5BA2;&#x91CF;">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="&#x603B;&#x8BBF;&#x95EE;&#x91CF;">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fyerfyer","repo":"fyerfyer.github.io","client_id":"Ov23liESIp4eoFZzzDEq","client_secret":"2e451e3f77791ed6a3a4b0d07790e83fd1a3c8d0","admin_user":"fyerfyer","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"97aac972d37858ff1190077c18af6437"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

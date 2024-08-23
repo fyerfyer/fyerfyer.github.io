@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">154</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-9-Heterogeneous-Data-Structures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
+          <a href="/2024/07/17/3-9-Heterogeneous-Data-Structures/" class="post-title-link" itemprop="url">3.9.Heterogeneous Data Structures</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 22:31:22" itemprop="dateCreated datePublished" datetime="2024-07-17T22:31:22+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-18 18:01:14" itemprop="dateModified" datetime="2024-07-18T18:01:14+08:00">2024-07-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>628</span>
+      <span>860</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,130 +272,115 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</h1>
-<h3 id="1machine-code-properties">1.Machine code properties</h3>
+          <h1 id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</h1>
+<h3 id="1structures">1.Structures</h3>
+<p>&#x2003;&#x2003;The implementation of structures is similar to that of arrays: all
+of the components of a structure are stored <strong>in a contiguous
+region of memory</strong> and <strong>a pointer to a structure is the
+address of its first byte</strong>.</p>
+<p>&#x2003;&#x2003;The compiler maintains information about each structure type
+indicating <strong>the byte offset of each field</strong>.</p>
 <ul>
-<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
-isn&apos;t fixed.</p></li>
-<li><p>The instruction format is designed to insure that <strong>there&apos;s
-a unique decoding of the bytes into machine instructions</strong>. For
-example, only <code>pushq %rbx</code> can start with <code>53</code>(can
-be analogied with opcode in RISC-V).</p></li>
-<li><p>The disassembler determines the assembly code based
-<strong>purely on the byte sequences in the machine-code
-file</strong>.</p></li>
+<li>It generates references to structure elements <strong>using these
+offsets as displacements</strong> in memory referencing
+instructions.</li>
 </ul>
-<h3 id="2registers">2.Registers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
+<p>&#x2003;&#x2003;For example, the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rec</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">    <span class="type">int</span> a[<span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span> *p;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is represented in memory like this:</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image.png"></p>
+<p>&#x2003;&#x2003;and the compiler access the code by <strong>adding the appropriate
+offset to the address of the structure</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi</span><br><span class="line">movl (%rdi), %eax   # Get r-&gt;i</span><br><span class="line">movl %eax, 4(%rdi)  # Store in r-&gt;j</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>When we present instructions copying and generating 1-, 2-, 4-,
-8-byte values, we follow the two conventions:</p>
-<ul>
-<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
-remaining bytes unchanged</strong>.</p></li>
-<li><p>Those that generate 4-byte quantities <strong>set the upper 4
-bytes of the register to zero</strong>.</p></li>
-</ul></li>
-<li><p>A function returns a value by <strong>storing it in register
-<code>%rax</code></strong>, or <strong>in one of the low-order portions
-of this register</strong>.</p></li>
+<li>To generate a pointer to an object within a structure, we simply add
+the field&apos;s offset to the structure address:</li>
 </ul>
-<h3 id="3operand-specifiers">3.Operand specifiers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
-<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi, i %rsi</span><br><span class="line">leaq 8(%rdi,%rsi,4), %rax    # Set %rax to &amp;r-&gt;a[i]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The selection of the different fields of a structure is handled
+completely <strong>at compile time</strong>. The machine code contains
+no information about the field declarations or the names of the
+fields.</p>
+<h3 id="2unions">2.Unions</h3>
+<p>&#x2003;&#x2003;Unions allow a single object to be referenced according to multiple
+types. Rather than having the different fields reference different
+blocks of memory, they all <strong>reference the same
+block</strong>.</p>
 <ul>
-<li><p><em>Immediate</em>: It refers to constant value. In ATT format
-assembly code, it is written with a <code>$</code> along with an
-integer.</p></li>
-<li><p><em>Register</em>: It denotes the content of a register. We use
-the notation <span class="math inline">\(r_a\)</span> to denote a
-register <span class="math inline">\(a\)</span> and indicate its value
-with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
-<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
-<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
-<ul>
-<li><span class="math inline">\(Imm\)</span> is the immediate offset,
-<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
-</ul></li>
+<li>The overall size of a union equals <strong>the maximum size of any
+of its fields</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
-<h3 id="4data-movement-instructions">4.Data Movement Instructions</h3>
-<h4 id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
-<ul>
-<li><p>The source operand designates a value that is <strong>immediate,
-stored in a register, or stored in memory</strong>.</p></li>
-<li><p>The destination operand designates a location that is
-<strong>either a register or a memory address</strong>.</p></li>
-<li><p>The value is first passed <strong>from source to a register, then
-from the register to the destination</strong>.</p></li>
-</ul>
-<blockquote>
-<p>The regular <code>movq</code> instruction can only have immediate
-source operands that can be represented as 32-bit two&#xFFFD;s-complement
-numbers. This value is then sign extended to produce the 64-bit value
-for the destination. The <code>movabsq</code> instruction can have an
-<strong>arbitrary 64-bit immediate value</strong> as its source operand
-and can only have a register as a destination.</p>
-</blockquote>
-<blockquote>
-<p>In x86-64, any instruction that generates a 32-bit value for a
-register also <strong>sets the high-order portion of the register to
-0</strong>.</p>
-</blockquote>
-<h4 id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
-instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
-<ul>
-<li><p>Each instruction name has <strong>size designators</strong> as
-its final two characters&#xFFFD;the first specifying the source size, and the
-second specifying the destination size.</p></li>
-<li><p>The source can be either a register or stored in memory.</p></li>
-<li><p>The destination is a register.</p></li>
-</ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
-points to note:</p>
+<p>&#x2003;&#x2003;Unions are used in several cases:</p>
 <ol type="1">
-<li><p>In x86-64, we always <strong>give quad word registers to memory
-reference</strong>, such as <code>%rax</code>.</p></li>
-<li><p>We <strong>first decide which suffix to use by the
-destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
-<li><p>If <strong>the destination is a memory address(such as
-<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
-the source</strong>.</p></li>
+<li>We know in advance that the use of two different fields in a data
+structure will be <strong>mutually exclusive</strong>.</li>
 </ol>
-<blockquote>
-<p>Note that if both the source and the destination are from memory,
-<strong>we can use all four suffix</strong>. The x86-64 imposes the
-restriction that <strong>a move instruction cannot have both operands
-refer to memory locations</strong>.</p>
-</blockquote>
-<h4 id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
+<p>&#x2003;&#x2003;For example, we can represent a binary tree using structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> {</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">right</span>;</span></span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;which use 32 bytes. But if we use union:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">node_u</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">left</span>;</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">right</span>;</span></span><br><span class="line">    } internal;</span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;it will only take up 16 bytes.</p>
+<p>&#x2003;&#x2003;Moreover, to identify <code>leaf</code> with <code>internal</code>
+node, we can use <strong>an enumerated type defining the different
+possible choices for the union</strong>, and then create a structure
+<strong>containing a tag field and the union</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span> N_LEAF, N_INTERNAL } <span class="type">nodetype_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> {</span></span><br><span class="line">    <span class="type">nodetype_t</span> type;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">left</span>;</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">right</span>;</span></span><br><span class="line">        } internal;</span><br><span class="line">        <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">    } info;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// example</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// leaves</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">leaf</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    leaf-&gt;type = N_LEAF;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">0</span>] = <span class="number">1.23</span>;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">1</span>] = <span class="number">4.56</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// internal</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">internal</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    internal-&gt;type = N_INTERNAL;</span><br><span class="line">    internal-&gt;info.internal.left = leaf;</span><br><span class="line">    internal-&gt;info.internal.right = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>The union <strong>won&apos;t change the bit it stored according to
+different types</strong>, even if the value is stored in one type but
+access in another.</li>
+</ol>
+<p>&#x2003;&#x2003;Say we convert a <code>double d</code> to an
+<code>unsigned long</code> variable:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> u = (<span class="type">unsigned</span> <span class="type">long</span>) d;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Value <code>u</code> will be an integer representation of
+<code>d</code>. Except for the case where <code>d</code> is
+<code>0.0</code>, the bit representation of <code>u</code> will
+<strong>be very different from that of <code>d</code></strong>.</p>
+<p>&#x2003;&#x2003;However, if we use unions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> <span class="title function_">double2bits</span><span class="params">(<span class="type">double</span> d)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">long</span> u;</span><br><span class="line">    } temp;</span><br><span class="line">    temp.d = d;</span><br><span class="line">    <span class="keyword">return</span> temp.u;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result will be that <strong><code>u</code> will have the same
+bit representation as <code>d</code></strong>, including fields for the
+sign bit, the exponent, and the significand.</p>
+<p>&#x2003;&#x2003;And with this characteristic, we can design the following program
+that gets the words of a double number:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">uu2double</span><span class="params">(<span class="type">unsigned</span> word0, <span class="type">unsigned</span> word1)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> u[<span class="number">2</span>];</span><br><span class="line">    } temp;</span><br><span class="line">    temp.u[<span class="number">0</span>] = word0; <span class="comment">// low-order 4 bytes</span></span><br><span class="line">    temp.u[<span class="number">1</span>] = word1; <span class="comment">// high-order 4 bytes</span></span><br><span class="line">    <span class="keyword">return</span> temp.d;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3data-alignment">3.Data Alignment</h3>
+<p>&#x2003;&#x2003;<em>Data alignment</em> is operation that <strong>enforce the
+address of some objects must be a multiple of some valueK (typically 2,
+4, or 8)</strong>.</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-1.png"></p>
 <ul>
-<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
-stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
-<li><p>Dereferencing a pointer involves <strong>copying that pointer
-into a register</strong>, and then <strong>using this register in a
-memory reference</strong>.</p></li>
+<li>The align operation can be declared by the following statement:</li>
 </ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
-fact <strong>the extension of bits</strong>. For example, if we want to
-convert <code>char</code> to <code>int</code>, because <code>char</code>
-takes word bits while <code>int</code> takes 32 bits, we use
-<code>movsbl</code> to implement operations
-like<code>int x = (int) char_element</code>:</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
-<h4 id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.align 8</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This ensures that <strong>the data following it will start with an
+address that is a multiple of 8</strong>.</p>
+<p>&#x2003;&#x2003;To do data alignment, the compiler uses these two techniques. Take
+the following C struction as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S1</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><em>Byte gap</em>:</li>
+</ol>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-2.png"></p>
+<ol start="2" type="1">
+<li><em>End padding</em>: This is to ensure that the latter data will
+also be aligned:</li>
+</ol>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-3.png"></p>
+<blockquote>
+<p><span class="math inline">\(p.s.\)</span>Each type of data has its
+own alignment requirement, so we can minimize the wasted place by
+<strong>rearrange the fields of structure</strong>. Note that <strong>we
+don&apos;t have to make all variables applied to an only alignment
+rule</strong>!</p>
+</blockquote>
+<p><span class="math inline">\(e.g.\)</span> The structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">int</span> *a;</span><br><span class="line">    <span class="type">float</span> b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">short</span> d;</span><br><span class="line">    <span class="type">long</span> e;</span><br><span class="line">    <span class="type">double</span> f;</span><br><span class="line">    <span class="type">int</span> g;</span><br><span class="line">    <span class="type">char</span> *h;</span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is rearranged to the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">double</span> f;   <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">long</span> e;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> *a;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">char</span> *h;    <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> g;      <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">float</span> b;    <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">short</span> d;    <span class="comment">// 2 bytes</span></span><br><span class="line">    <span class="type">char</span> c;     <span class="comment">// 1 byte</span></span><br><span class="line">    <span class="comment">// 3 bytes padding to make the total size a multiple of 8</span></span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Following the strategy of <strong>putting the fields required for
+larger alignment first</strong>.</p>
 
       
     </div>
@@ -418,7 +403,7 @@ like<code>int x = (int) char_element</code>:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/154/">154</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/32/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span><a class="page-number" href="/page/34/">34</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -443,14 +428,14 @@ like<code>int x = (int) char_element</code>:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">125k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:36</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
   </span>
 </div>
 <div class="busuanzi-count">
