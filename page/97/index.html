@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/5.3.Creating%20Another%20Generic%20Class/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/4.3.subtype%20polymorphism/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/5.3.Creating%20Another%20Generic%20Class/" class="post-title-link" itemprop="url">5.3.&#x6CDB;&#x7C7B;&#x7684;&#x521B;&#x5EFA;</a>
+          <a href="/2024/05/31/4.3.subtype%20polymorphism/" class="post-title-link" itemprop="url">4.3.&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 17:27:49" itemprop="dateModified" datetime="2024-06-02T17:27:49+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 17:19:36" itemprop="dateModified" datetime="2024-06-02T17:19:36+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61B-DataStructure/5-Generics-and-Autoboxing/" itemprop="url" rel="index"><span itemprop="name">5.Generics and Autoboxing</span></a>
+          <a href="/categories/CS61B-DataStructure/4-inheritance-inplements/" itemprop="url" rel="index"><span itemprop="name">4.inheritance &amp; inplements</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>127</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>4 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,12 +272,46 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53&#x6CDB;&#x7C7B;&#x7684;&#x521B;&#x5EFA;"><span class="math inline">\(5.3\)</span>&#x6CDB;&#x7C7B;&#x7684;&#x521B;&#x5EFA;</h1>
-<h3 id="1&#x6CDB;&#x578B;&#x65B9;&#x6CD5;&#x7684;&#x521B;&#x5EFA;">1.&#x6CDB;&#x578B;&#x65B9;&#x6CD5;&#x7684;&#x521B;&#x5EFA;</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; V <span class="title function_">get</span><span class="params">(Map61B&lt;K,V&gt; map, K key)</span> {</span><br><span class="line">    <span class="keyword">if</span> map.containsKey(key) {</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">}</span><br><span class="line"><span class="comment">//why &lt;K,V&gt;?because the parameters takes two different</span></span><br><span class="line"><span class="comment">//genetic types,so we alse use two. </span></span><br></pre></td></tr></table></figure>
-<h3 id="2gt&#x8FD0;&#x7B97;&#x7B26;&#x7684;&#x6CDB;&#x578B;&#x5316;">2.<code>&gt;</code>&#x8FD0;&#x7B97;&#x7B26;&#x7684;&#x6CDB;&#x578B;&#x5316;</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt; K <span class="title function_">maxKey</span><span class="params">(Map61B&lt;K, V&gt; map)</span> {...}</span><br><span class="line"><span class="comment">// the &quot;extends&quot; assure that the object has a &quot;compareTo&quot; method.</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;&#x6B64;&#x5904;&#x7684;<span class="math inline">\(extends\)</span>&#x5173;&#x952E;&#x8BCD;&#xFF0C;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A;&#x201C;<span class="math inline">\(K\)</span>&#x5FC5;&#x987B;&#x662F;&#x53EF;&#x6BD4;&#x7684;&#x201D;&#x7684;&#x58F0;&#x660E;&#x3002;<span class="math inline">\(extends\)</span>&#x4F1A;&#x5BF9;&#x5BF9;&#x8C61;&#x65BD;&#x52A0;&#x4E00;&#x4E2A;&#x7EA6;&#x675F;&#x3001;&#x800C;&#x975E;&#x8D4B;&#x4E88;&#x5B83;&#x65B0;&#x7684;&#x80FD;&#x529B;&#x3002;</p>
+          <h1 id="43&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;"><span class="math inline">\(4.3\)</span>&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;</h1>
+<h3 id="1&#x591A;&#x6001;&#x6027;&#x7684;&#x6982;&#x5FF5;">1.&#x591A;&#x6001;&#x6027;&#x7684;&#x6982;&#x5FF5;</h3>
+<p>&#x2003;&#x2003;&#x5728;&#x524D;&#x9762;&#xFF0C;&#x6211;&#x4EEC;&#x5B66;&#x4E60;&#x4E86;&#x5982;&#x4F55;&#x8FD0;&#x7528;&#x7EE7;&#x627F;&#x6765;&#x91CD;&#x590D;&#x5229;&#x7528;&#x5DF2;&#x6709;&#x7684;&#x4EE3;&#x7801;&#x3002;&#x7EE7;&#x627F;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x8BBE;&#x8BA1;&#x5177;&#x6709;&#x591A;&#x6001;&#x6027;&#x7684;&#x901A;&#x7528;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E0E;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5728;<span class="math inline">\(Java\)</span>&#x4E2D;&#xFF0C;&#x591A;&#x6001;&#x6027;(<span class="math inline">\(polymorphism\)</span>)&#x4EE3;&#x6307;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x4E0D;&#x540C;&#x5F62;&#x5F0F;&#x7684;&#x7C7B;&#x578B;(<span class="math inline">\(types\)</span>)&#x7684;&#x6027;&#x8D28;&#xFF1B;&#x5728;&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;&#x4E2D;&#xFF0C;&#x591A;&#x6001;&#x6027;&#x4EE3;&#x6307;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x7684;&#x4E0D;&#x540C;&#x8EAB;&#x4EFD;&#xFF1A;&#x81EA;&#x5DF1;&#x7C7B;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x3001;&#x4E3B;&#x7C7B;&#x7684;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;...</p>
+<p>&#x2003;&#x2003;&#x8003;&#x8651;&#x4E0B;&#x9762;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x6211;&#x4EEC;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x51FD;&#x6570;&#xFF0C;&#x7528;&#x4E8E;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x5927;&#x5C0F;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x9AD8;&#x9636;&#x51FD;&#x6570;&#x5B9E;&#x73B0;&#xFF1A;
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y, compare, stringify</span>):</span><br><span class="line">    <span class="keyword">if</span> compare(x, y):</span><br><span class="line">        <span class="keyword">return</span> stringify(x)</span><br><span class="line">    <span class="keyword">return</span> stringify(y)</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD8;&#x53EF;&#x4EE5;&#x7528;&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;&#x5B9E;&#x73B0;&#xFF1A; <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_larger</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">if</span> x.largerThan(y):</span><br><span class="line">        <span class="keyword">return</span> x.<span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">return</span> y.<span class="built_in">str</span>()</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x9AD8;&#x9636;&#x51FD;&#x6570;&#x7ED9;&#x51FA;&#x7684;&#x662F;&#x666E;&#x9002;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5BF9;&#x4EFB;&#x4F55;&#x5BF9;&#x8C61;&#x90FD;&#x9002;&#x7528;&#x3002;&#x800C;&#x5728;&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;&#x7684;&#x65B9;&#x6CD5;&#x4E2D;&#xFF0C;&#x9700;&#x8981;&#x5BF9;&#x8C61;&#x81EA;&#x5DF1;&#x505A;&#x51FA;&#x51B3;&#x5B9A;&#xFF0C;&#x6267;&#x884C;&#x76F8;&#x5E94;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;<code>x.largerThan</code>&#x65B9;&#x6CD5;&#x662F;&#x7531;<span class="math inline">\(x\)</span>&#x4E0E;<span class="math inline">\(y\)</span>&#x6765;&#x51B3;&#x5B9A;&#x7684;&#x3002;</p>
+<h3 id="2&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;&#x7684;&#x5E94;&#x7528;">2.&#x5B50;&#x7C7B;&#x591A;&#x6001;&#x6027;&#x7684;&#x5E94;&#x7528;</h3>
+<p>&#x2003;&#x2003;&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x666E;&#x9002;&#x7684;<code>max</code>&#x51FD;&#x6570;&#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x63A5;&#x53D7;&#x4EFB;&#x610F;&#x7C7B;&#x578B;&#x7684;&#x6570;&#x7EC4;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6700;&#x5927;&#x5143;&#x7D20;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#x7528;<code>&gt;</code>&#x6BD4;&#x8F83;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">max</span><span class="params">(Object[] items)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (items[i] &gt; items[maxDex]) {</span><br><span class="line">            maxDex = i;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x6211;&#x4EEC;&#x9ED8;&#x8BA4;<code>&gt;</code>&#x53EF;&#x4EE5;&#x6BD4;&#x8F83;&#x4EFB;&#x610F;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x4F46;&#x662F;&#x5B9E;&#x9645;&#x4E0A;&#x4E0D;&#x884C;&#x3002;&#x56E0;&#x4E3A;<code>&gt;</code>&#x53EA;&#x80FD;&#x7528;&#x4E8E;&#x786E;&#x5B9A;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x4E8E;&#x662F;&#x95EE;&#x9898;&#x8F6C;&#x4E3A;&#x5B9E;&#x73B0;&#x80FD;&#x6BD4;&#x8F83;&#x4EFB;&#x610F;&#x7C7B;&#x578B;&#x5BF9;&#x8C61;&#x7684;<code>&gt;</code>&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E3A;&#x6B64;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x63A5;&#x53E3;<code>compareTo</code>&#xFF0C;&#x6765;&#x786E;&#x4FDD;&#x6BCF;&#x4E2A;&#x5BF9;&#x8C61;&#x90FD;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x8BE5;&#x65B9;&#x6CD5;&#x6765;&#x6BD4;&#x8F83;&#x5927;&#x5C0F;:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OurComparable</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x5BF9;&#x6BCF;&#x4E2A;&#x5B50;&#x7C7B;&#x9010;&#x4E00;&#x5B9E;&#x73B0;&#x5BF9;&#x5E94;&#x7684;<span class="math inline">\(implements\)</span>&#x5373;&#x53EF;&#x3002;&#x4EE5;<span class="math inline">\(Dog\)</span>&#x7C7B;&#x4E3A;&#x4F8B;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">OurComparable</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Object o)</span> {</span><br><span class="line">        <span class="type">Dog</span> <span class="variable">d</span> <span class="operator">=</span> (Dog) o;</span><br><span class="line">        <span class="comment">// notice that compartTo takes in any object,we need to cast o.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x5B9E;&#x73B0;<code>compareTo</code>&#x540E;&#xFF0C;&#x4FBF;&#x53EF;&#x81EA;&#x7136;&#x5730;&#x5B9E;&#x73B0;<code>max</code>&#x4E86;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> OurComparable <span class="title function_">max</span><span class="params">(OurComparable[] items)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxDex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; items.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> items[i].compareTo(items[maxDex]);</span><br><span class="line">        <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) {</span><br><span class="line">            maxDex = i;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> items[maxDex];</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x5229;&#x7528;&#x7EE7;&#x627F;&#xFF0C;&#x6211;&#x4EEC;&#x4F18;&#x96C5;&#x5730;&#x5B9E;&#x73B0;&#x4E86;&#x901A;&#x7528;&#x7684;<code>max</code>&#x51FD;&#x6570;&#x3002;</p>
+<h3 id="3comparable&#x63A5;&#x53E3;">3.<code>comparable</code>&#x63A5;&#x53E3;</h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(Java\)</span>&#x4E2D;&#x5DF2;&#x6709;&#x7684;<code>comparable</code>&#x63A5;&#x53E3;&#x53EF;&#x4EE5;&#x66F4;&#x597D;&#x5730;&#x5B9E;&#x73B0;<code>max</code>&#xFF0C;&#x5B83;&#x7684;&#x5F62;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;T&gt; {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(T obj)</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x4E0E;<span class="math inline">\(OurComparable\)</span>&#x76F8;&#x6BD4;&#xFF0C;&#x8BE5;&#x63A5;&#x53E3;&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x901A;&#x7528;&#x7C7B;&#x578B;&#xFF0C;&#x8FD9;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x7C7B;&#x578B;&#x94F8;&#x9020;&#xFF0C;&#x540C;&#x65F6;&#x5373;&#x4F7F;&#x4E00;&#x4E2A;&#x7C7B;&#x6CA1;&#x6709;&#x7EE7;&#x627F;&#x63A5;&#x53E3;&#xFF0C;&#x5B83;&#x4E5F;&#x53EF;&#x4EE5;&#x8C03;&#x7528;<code>max</code>&#x3002;&#x8FD9;&#x6837;&#xFF0C;&#x6211;&#x4EEC;&#x7684;<span class="math inline">\(Dog\)</span>&#x7C7B;&#x53EF;&#x4EE5;&#x5982;&#x6B64;&#x5B9E;&#x73B0;&#xFF1A; <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; {</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog d)</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - d.size;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x901A;&#x8FC7;&#x5185;&#x7F6E;(<span class="math inline">\(built-in\)</span>)&#x7684;&#x63A5;&#x53E3;&#xFF0C;&#x6211;&#x4EEC;&#x5F97;&#x4EE5;&#x5229;&#x7528;&#x5DF2;&#x6709;&#x7684;&#x5E93;(<span class="math inline">\(libraries\)</span>)&#x548C;<span class="math inline">\(Comparable\)</span>&#x63A5;&#x53E3;&#x3002;</p>
+<h3 id="4comparator&#x63A5;&#x53E3;">4.<code>comparator</code>&#x63A5;&#x53E3;</h3>
+<p>&#x2003;&#x2003;&#x8003;&#x8651;&#x4E0B;&#x9762;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x5047;&#x5982;&#x6211;&#x4EEC;&#x4E0D;&#x60F3;&#x8BA9;<span class="math inline">\(Dog\)</span>&#x4EE5;<span class="math inline">\(size\)</span>&#x6392;&#x5217;&#xFF0C;&#x8BE5;&#x600E;&#x4E48;&#x5199;<code>max</code>&#x5462;&#xFF1F;</p>
+<p>&#x2003;&#x2003;<span class="math inline">\(Java\)</span>&#x7684;&#x5185;&#x7F6E;&#x63A5;&#x53E3;<code>comparator</code>&#x5185;&#x90E8;&#x5982;&#x4E0B;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; {</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x8BF4;&#x660E;<code>comparator</code>&#x9700;&#x8981;&#x5B50;&#x7C7B;&#x5B9E;&#x73B0;<code>compare</code>&#x65B9;&#x6CD5;&#xFF0C;&#x5B83;&#x548C;<code>compareTo</code>&#x7684;&#x89C4;&#x5219;&#x76F8;&#x4F3C;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5982;&#x4E0B;&#x5B9E;&#x73B0;<span class="math inline">\(Dog\)</span>&#x7684;<code>compare</code>&#x65B9;&#x6CD5;&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dog</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Dog&gt; {</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Dog uddaDog)</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size - uddaDog.size;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">NameComparator</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;Dog&gt; {</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Dog a, Dog b)</span> {</span><br><span class="line">            <span class="keyword">return</span> a.name.compareTo(b.name);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//declared it as static,for it doesn&apos;t use any other methods  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Dog&gt; <span class="title function_">getNameComparator</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">NameComparator</span>();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;&#x8FD9;&#x91CC;&#x7684;<span class="math inline">\(Dog\)</span>&#x7C7B;&#x901A;&#x8FC7;<code>Comparator</code>&#x7684;&#x5185;&#x90E8;&#x63A5;&#x53E3;&#x5B9E;&#x73B0;&#x4E86;&#x7EE7;&#x627F;&#x7684;&#x5C42;&#x6B21;&#x6027;&#xFF1A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;<span class="math inline">\(Dog\)</span>&#x5185;&#x90E8;&#x5B9A;&#x4E49;&#x81EA;&#x5DF1;&#x9700;&#x8981;&#x7684;&#x6BD4;&#x8F83;&#x65B9;&#x6CD5;&#xFF1A;<code>NameComparator</code>&#x3001;<code>SizeComparator</code>...</p>
+<h3 id="5&#x63A5;&#x53E3;&#x7684;&#x529F;&#x80FD;">5.&#x63A5;&#x53E3;&#x7684;&#x529F;&#x80FD;</h3>
+<p>&#x2003;&#x2003;<span class="math inline">\(Java\)</span>&#x4E2D;&#x7684;&#x63A5;&#x53E3;&#x4E3A;&#x6211;&#x4EEC;&#x63D0;&#x4F9B;&#x4E86;&#x51FD;&#x6570;&#x56DE;&#x8C03;(<span class="math inline">\(callback\)</span>)&#x7684;&#x80FD;&#x529B;&#x3002;&#x6709;&#x65F6;&#xFF0C;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x9700;&#x8981;&#x5176;&#x4ED6;&#x8FD8;&#x672A;&#x5B9E;&#x73B0;&#x7684;&#x51FD;&#x6570;&#x7684;&#x5E2E;&#x52A9;&#xFF0C;&#x5982;<code>max</code>&#x9700;&#x8981;<code>compareTo</code>&#x3002;&#x800C;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x5C31;&#x662F;&#x8F85;&#x52A9;&#x51FD;&#x6570;(<span class="math inline">\(helper\;function\)</span>)&#xFF0C;&#x5982;<code>compareTo</code>&#x3002;&#x5728;<span class="math inline">\(Java\)</span>&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x628A;&#x9700;&#x8981;&#x7684;&#x51FD;&#x6570;&#x5C01;&#x88C5;&#x5728;&#x63A5;&#x53E3;&#x5185;&#x3002;</p>
+<blockquote>
+<p>&#x2003;&#x2003;A Comparable says, &quot;I want to compare myself to another object&quot;. It
+is imbedded within the object itself, and it defines the natural
+ordering of a type. A Comparator, on the other hand, is more like a
+third party machine that compares two objects to each other. Since
+there&apos;s only room for one compareTo method, if we want multiple ways to
+compare, we must turn to Comparator.</p>
+</blockquote>
 
       
     </div>
@@ -300,7 +334,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/96/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/96/">96</a><span class="page-number current">97</span><a class="page-number" href="/page/98/">98</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/98/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/96/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/96/">96</a><span class="page-number current">97</span><a class="page-number" href="/page/98/">98</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/98/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -325,14 +359,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

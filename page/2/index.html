@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/21/9-8-Memory-Mapping/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/23/9-10-Simple-Allocator-Implementation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/21/9-8-Memory-Mapping/" class="post-title-link" itemprop="url">9.8.Memory Mapping</a>
+          <a href="/2024/08/23/9-10-Simple-Allocator-Implementation/" class="post-title-link" itemprop="url">9.10.Simple Allocator Implementation</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-21 16:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;19:21:55" itemprop="dateCreated datePublished" datetime="2024-08-21T16:31:22+08:00">2024-08-21</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-23 18:31:22" itemprop="dateCreated datePublished" datetime="2024-08-23T18:31:22+08:00">2024-08-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-24 23:00:48" itemprop="dateModified" datetime="2024-08-24T23:00:48+08:00">2024-08-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>666</span>
+      <span>1k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>4 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,106 +272,81 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="98memorymapping"><span class="math inline">\(9.8.\)</span>Memory
-Mapping</h1>
-<p>&#x2003;&#x2003;Linux initializes the contents of a virtual memory area by
-<strong>associating it with an object on disk</strong>. Areas can be
-mapped to one of two types of objects:</p>
+          <h1 id="910simple-allocator-implementation"><span class="math inline">\(9.10.\)</span>Simple Allocator Implementation</h1>
+<h3 id="1general-allocator-design">1.General Allocator Design</h3>
+<p>&#x2003;&#x2003;The allocator exports three functions to application programs:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> *<span class="title function_">mm_malloc</span> <span class="params">(<span class="type">size_t</span> size)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">mm_free</span> <span class="params">(<span class="type">void</span> *ptr)</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The allocator uses the block format as below:</p>
+<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image.png"></p>
+<p>&#x2003;&#x2003;The minimum block size is 16 bytes. The free list is organized as
+an implicit free list, with the invariant form shown as below:</p>
+<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image-1.png"></p>
+<ul>
+<li><p>The first word is an unused padding word aligned to a double-word
+boundary.</p></li>
+<li><p>The padding is followed by a special prologue block, which is an
+8-byte allocated block <strong>consisting of only a header and a
+footer</strong>. The prologue block <strong>is created during
+initialization and is never freed</strong>.</p></li>
+<li><p>The heap always ends with a special epilogue block, which is a
+zero-size allocated block that <strong>consists of only a
+header</strong>.</p></li>
+<li><p>The allocator uses a single private(<code>static</code>) global
+variable(<code>heap_listp</code>) that <strong>always points to the
+prologue block</strong>.</p></li>
+</ul>
+<h3 id="2basicconstants-and-macros-for-manipulating-the-free-list">2.Basic
+Constants and Macros for Manipulating the Free List</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> WSIZE 4 <span class="comment">/* Word and header/footer size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DSIZE 8 <span class="comment">/* Double word size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CHUNKSIZE (1&lt;&lt;12) <span class="comment">/* Extend heap by this amount (bytes) */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(x, y) ((x) &gt; (y)? (x) : (y))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Pack a size and allocated bit into a word */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PACK(size, alloc) ((size) | (alloc))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read and write a word at address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET(p) (*(unsigned int *)(p)) <span class="comment">// The pointer points to p is dereferenced</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PUT(p, val) (*(unsigned int *)(p) = (val))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read the size and allocated fields from address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_SIZE(p) (GET(p) &amp; ~0x7)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_ALLOC(p) (GET(p) &amp; 0x1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of its header and footer */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HDRP(bp) ((char *)(bp) - WSIZE)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE) <span class="comment">// Why DSIZE? Because both header and footer need to decline WSIZE, and 2*WSIZE=DSIZE</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of next and previous blocks */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))</span></span><br></pre></td></tr></table></figure>
+<h3 id="3creating-the-initial-freelist">3.Creating the Initial Free
+List</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Create the initial empty heap */</span></span><br><span class="line">    <span class="keyword">if</span> ((heap_listp = mem_sbrk(<span class="number">4</span> * WSIZE)) == (<span class="type">void</span> *)<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    PUT(heap_listp, <span class="number">0</span>); <span class="comment">/* Alignment padding */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">1</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue header */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">2</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue footer */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">3</span> * WSIZE), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* Epilogue header */</span></span><br><span class="line">    heap_listp += (<span class="number">2</span> * WSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Extend the empty heap with a free block of CHUNKSIZE bytes */</span></span><br><span class="line">    <span class="keyword">if</span> (extend_heap(CHUNKSIZE / WSIZE) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The extend_heap function is invoked in two different
+circumstances:</p>
 <ol type="1">
-<li><p>Regular file in the Linux file system: The file section
-<strong>is divided into page-size pieces</strong>, with each piece
-containing the initial contents of a virtual page.</p></li>
-<li><p>Anonymous file: The first time the CPU touches a virtual page in
-such an area, the kernel&#xFF1A;</p>
-<ul>
-<li><p>finds an appropriate victim page in physical memory&#xFF0C;</p></li>
-<li><p>swaps out the victim page if it is dirty, overwrites the victim
-page with binary zeros,</p></li>
-<li><p>updates the page table to mark the page as resident.</p></li>
-</ul></li>
+<li><p>When the heap is initialized and</p></li>
+<li><p>When <code>mm_malloc</code> is unable to find a suitable
+fit.</p></li>
 </ol>
-<ul>
-<li>Once a virtual page is initialized, it is swapped back and forth
-between <strong>a special swap file</strong> maintained by the kernel.
-It&apos;s known as the <em>swap space</em>.</li>
-</ul>
-<h3 id="1sharred-objects-revisited">1.Sharred Objects Revisited</h3>
-<ul>
-<li><p>An object can be mapped into an area of virtual memory as either
-a <em>shared object</em> or a <em>private object</em>.</p></li>
-<li><p>If a process maps a shared object into an area of its virtual
-address space, then any writes that the process makes to that area
-<strong>are visible to any other processes</strong> that <strong>have
-also mapped the shared object into their virtual memory</strong>.
-Further, the changes <strong>are also reflected in the original object
-on disk</strong>.</p></li>
-<li><p>Changes made to an area mapped to a <em>private object</em> are
-not visible to other processes, and any writes that the process makes to
-the area <strong>are not reflected back to the object on
-disk</strong>.</p></li>
-</ul>
-<p><img src="/2024/08/21/9-8-Memory-Mapping/image.png"></p>
-<ul>
-<li><p>The kernel can quickly determine that process 1 has already
-mapped this object and can <strong>point the page table entries in
-process 2 to the appropriate physical pages</strong>.</p></li>
-<li><p>The key point is that <strong>only a single copy of the shared
-object</strong> needs to be stored in physical memory.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Private objects are mapped into virtual memory using a technique
-known as <em>copy-on-write</em>:</p>
-<p><img src="/2024/08/21/9-8-Memory-Mapping/image-1.png"></p>
-<ul>
-<li><p>Two processes have mapped a private object into different areas
-of their virtual memories but <strong>share the same physical copy of
-the object</strong>.</p></li>
-<li><p>For each process that maps the private object, the page table
-entries for the corresponding private area <strong>are flagged as
-read-only</strong>, and the area struct is flagged as <strong>private
-copy-on-write</strong>.</p></li>
-<li><p>As soon as a process attempts to write to some page in the
-private area, the write <strong>triggers a protection
-fault</strong>:</p>
-<ul>
-<li><p>The fault handler <strong>creates a new copy of the page in
-physical memory</strong>, <strong>updates the page table entry to point
-to the new copy</strong>, and then <strong>restores write permissions to
-the page</strong>.</p></li>
-<li><p>When the fault handler returns, the CPU re-executes the write,
-which now proceeds normally on the newly created page.</p></li>
-</ul></li>
-</ul>
-<h3 id="2the-execvefunction-revisited">2.The <code>execve</code>
-Function Revisited</h3>
-<p>&#x2003;&#x2003;Suppose that we make the following call:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execve(<span class="string">&quot;a.out&quot;</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">extend_heap</span><span class="params">(<span class="type">size_t</span> words)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Allocate an even number of words to maintain alignment */</span></span><br><span class="line">    size = (words % <span class="number">2</span>) ? (words + <span class="number">1</span>) * WSIZE : words * WSIZE;</span><br><span class="line">    <span class="keyword">if</span> ((<span class="type">long</span>)(bp = mem_sbrk(size)) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize free block header/footer and the epilogue header */</span></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block header */</span></span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block footer */</span></span><br><span class="line">    PUT(HDRP(NEXT_BLKP(bp)), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* New epilogue header */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Coalesce if the previous block was free */</span></span><br><span class="line">    <span class="keyword">return</span> coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ol type="1">
-<li><p>Delete existing user areas</p></li>
-<li><p>Map private areas: Create new area structs for the code, data,
-bss, and stack areas of the new program:</p></li>
+<li><p>Place enough space by invoking <code>mem_sbrk</code>.</p></li>
+<li><p>Set the new space free by setting the allocate bit
+<code>0</code>.</p></li>
+<li><p>Set the block next to <code>bp</code> as the new epilogue
+header.</p></li>
+<li><p>Finally, in the likely case that <strong>the previous heap was
+terminated by a free block</strong>, we call the <code>coalesce</code>
+function to <strong>merge the two free blocks and return the block
+pointer of the merged blocks</strong>.</p></li>
 </ol>
-<p><img src="/2024/08/21/9-8-Memory-Mapping/image-2.png"></p>
-<ol start="3" type="1">
-<li><p>Map shared areas: If the <code>a.out</code> program was linked
-with shared objects, then these objects <strong>are dynamically linked
-into the program</strong>, and then mapped into the shared region of the
-user&#x2019;s virtual address space.</p></li>
-<li><p>Set the PC. The last thing is to set the program counter in the
-current process&apos;s context to <strong>point to the entry point in the
-code area</strong>.</p></li>
-</ol>
-<h3 id="3user-levelmemory-mapping-with-the-mmap-function">3.User-Level
-Memory Mapping with the <code>mmap</code> Function</h3>
-<p>&#x2003;&#x2003;<code>mmap</code> function is used to create new areas of virtual
-memory and to map objects into these areas:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *start, <span class="type">size_t</span> length, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fd, <span class="type">off_t</span> offset)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to mapped area if OK, MAP_FAILED (&#x2212;1) on error */</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/21/9-8-Memory-Mapping/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>munmap</code> function is used to delete regions of
-virtual memory:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *start, <span class="type">size_t</span> length)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 if OK, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The munmap function deletes the area starting at virtual address
-<code>start</code> and consisting of the next <code>length</code>
-bytes.</p>
+<ul>
+<li>To maintain alignment, extend_heap <strong>rounds up the requested
+size to the nearest multiple of 2 words</strong>(8 bytes).</li>
+</ul>
+<h3 id="4freeing-and-coalescingblocks">4.Freeing and Coalescing
+Blocks</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">mm_free</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>The <code>mm_free</code> set the allocate bit of the current block
+to <code>0</code>.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">coalesce</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> prev_alloc = GET_ALLOC(FTRP(PREV_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 1 */</span></span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (prev_alloc &amp;&amp; !next_alloc) { <span class="comment">/* Case 2 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 3 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp)));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> { <span class="comment">/* Case 4 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp))) + </span><br><span class="line">        GET_SIZE(FTRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="5allocating-blocks">5.Allocating Blocks</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">mm_malloc</span><span class="params">(<span class="type">size_t</span> size)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> asize; <span class="comment">/* Adjusted block size */</span></span><br><span class="line">    <span class="type">size_t</span> extendsize; <span class="comment">/* Amount to extend heap if no fit */</span></span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Ignore spurious requests */</span></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Adjust block size to include overhead and alignment reqs. */</span></span><br><span class="line">    <span class="keyword">if</span> (size &lt;= DSIZE)</span><br><span class="line">        asize = <span class="number">2</span>*DSIZE;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        asize = DSIZE * ((size + (DSIZE) + (DSIZE<span class="number">-1</span>)) / DSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Search the free list for a fit */</span></span><br><span class="line">    <span class="keyword">if</span> ((bp = find_fit(asize)) != <span class="literal">NULL</span>) {</span><br><span class="line">        place(bp, asize);</span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* No fit found. Get more memory and place the block */</span></span><br><span class="line">    extendsize = MAX(asize, CHUNKSIZE);</span><br><span class="line">    <span class="keyword">if</span> ((bp = extend_heap(extendsize/WSIZE)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    place(bp, asize);</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>The <code>DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);</code>
+assures that the result is rounded <strong>up to the nearest multiple of
+<code>DSIZE</code></strong>.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">find_fit</span><span class="params">(<span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* First-fit search */</span></span><br><span class="line">    <span class="type">void</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (bp = heap_listp; GET_SIZE(HDRP(bp)) &gt; <span class="number">0</span>; bp = NEXT_BLKP(bp)) {</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; (asize &lt;= GET_SIZE(HDRP(bp)))) {</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">/* No fit */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">place</span><span class="params">(<span class="type">void</span> *bp, <span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> csize = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((csize - asize) &gt;= (<span class="number">2</span>*DSIZE)) {</span><br><span class="line">        PUT(HDRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        bp = NEXT_BLKP(bp);</span><br><span class="line">        PUT(HDRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        PUT(HDRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Since the allocated space may not take up the whole block, we may
+need to <strong>split the block</strong> by <strong>setting the
+allocated space to <code>1</code> and the other
+<code>0</code></strong>.</li>
+</ul>
 
       
     </div>
@@ -388,7 +369,7 @@ bytes.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -413,14 +394,14 @@ bytes.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-1-9-3-VM-Address-Space/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-5-Memory-Protection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/20/9-1-9-3-VM-Address-Space/" class="post-title-link" itemprop="url">9.1~9.3.VM Address Space</a>
+          <a href="/2024/08/20/9-5-Memory-Protection/" class="post-title-link" itemprop="url">9.5.Memory Protection</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:47:02" itemprop="dateCreated datePublished" datetime="2024-08-20T09:31:22+08:00">2024-08-20</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 19:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;20:34:26" itemprop="dateCreated datePublished" datetime="2024-08-20T19:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>370</span>
+      <span>129</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,91 +266,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="91-sim93vm-address-spaces"><span class="math inline">\(9.1 \sim
-9.3\)</span>VM Address Spaces</h1>
-<h3 id="1terminologies">1.Terminologies</h3>
+          <h1 id="95memory-protection"><span class="math inline">\(9.5.\)</span>Memory Protection</h1>
 <ul>
-<li><p>Each byte has a unique <em>physical address(PA)</em>.</p></li>
-<li><p><em>VA</em>: Virtual Address.</p></li>
-<li><p>The activity of <strong>transferring a page between disk and
-memory</strong> is known as <em>swapping</em> or
-<em>paging</em>.</p></li>
-<li><p>Pages are <em>swapped in(paged in)</em> from disk to DRAM, and
-<em>swapped out(paged out)</em> from DRAM to disk.</p></li>
-<li><p>The strategy of <strong>waiting until the last moment to swap in
-a page</strong>, when a miss occurs, is known as <em>demand
-paging</em>.</p></li>
+<li><p>A user process shouldn&apos;t be allowed to modify any virtual pages
+that are shared with other processes, <strong>unless all parties
+explicitly allow it</strong>(via <strong>calls to explicit interprocess
+communication system calls</strong>).</p></li>
+<li><p>It is straightforward to control access to the contents of a
+virtual page by <strong>adding some additional permission bits to the
+PTE</strong>.</p></li>
 </ul>
-<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image.png"></p>
+<p><img src="/2024/08/20/9-5-Memory-Protection/image.png"></p>
 <ul>
-<li><p>An <em>address space</em> is an ordered set of nonnegative
-integer addresses:</p>
-<ul>
-<li>If the integers in the address space are
-<strong>consecutive</strong>, then we say that it is a <em>linear
-address space</em>.</li>
-</ul></li>
-</ul>
-<p><span class="math display">\[
-\lbrace 0,1,2, \cdots \rbrace
-\]</span></p>
-<ul>
-<li><p>A virtual address space with <span class="math inline">\(N =
-2^n\)</span> addresses is called an <strong>n-bit address
-space</strong>.</p></li>
-<li><p>At any point in time, the set of virtual pages is partitioned
-into three disjoint subsets:</p>
-<ul>
-<li><p><em>Unallocated</em></p></li>
-<li><p><em>Cached</em></p></li>
-<li><p><em>Uncached</em></p></li>
-</ul></li>
-</ul>
-<h3 id="2dram-cache-organization">2.DRAM Cache Organization</h3>
-<h4 id="apagetables">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Page
-tables</h4>
-<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-1.png"></p>
-<ul>
-<li><p>A page table is an array of <em>page table entries(PTEs)</em>.
-Each page in the virtual address space has a PTE at a fixed offset in
-the page table.</p></li>
-<li><p>The valid bit indicates <strong>whether the virtual page is
-currently cached in DRAM</strong>.</p>
-<ul>
-<li>If the valid bit is set, the address field indicates the start of
-the corresponding physical page in DRAM where the virtual page is
-cached.</li>
-</ul></li>
-</ul>
-<h4 id="bpagehits">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Page
-hits</h4>
-<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-2.png"></p>
-<ul>
-<li>The address translation hardware <strong>uses the virtual address as
-an index</strong> to locate PTE 2.</li>
-</ul>
-<h4 id="cpagefaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Page
-faults</h4>
-<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-3.png"></p>
-<ul>
-<li><p>The page fault exception invokes a page fault exception handler
-in the kernel, and it <strong>selects a victim page</strong>. In this
-case, it&apos;s VP4 in PP3.</p></li>
-<li><p>If VP 4 has been modified, then the kernel copies it back to
-disk.</p></li>
-<li><p>The kernel <strong>modifies the page table entry for VP
-4</strong> to reflect the fact that VP 4 is no longer cached in main
-memory.</p></li>
-<li><p>Next, the kernel copies VP 3 from disk to PP 3 in memory, updates
-PTE 3, and then returns.</p></li>
-</ul>
-<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-4.png"></p>
-<ul>
-<li>When the handler returns, it <strong>restarts the faulting
-instruction</strong>, which resends the faulting virtual address to the
-address translation hardware. But now, VP 3 is cached in main memory,
-and <strong>the page hit is handled normally</strong> by the address
-translation hardware.</li>
+<li><p>The <code>SUP</code> bit indicates <strong>whether processes must
+be running in kernel(supervisor) mode</strong> to access the
+page.</p></li>
+<li><p>The <code>READ</code> and <code>WRITE</code> bits control read
+and write access to the page.</p></li>
+<li><p>If an instruction violates these permissions, then the CPU
+<strong>triggers a general protection fault</strong> that transfers
+control to an exception handler in the kernel, which sends a
+<code>SIGSEGV</code> signal to the offending process. Linux shells
+typically report this exception as a <strong>&quot;segmentation
+fault&quot;</strong>.</p></li>
 </ul>
 
       
@@ -374,7 +312,7 @@ translation hardware.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -399,14 +337,14 @@ translation hardware.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

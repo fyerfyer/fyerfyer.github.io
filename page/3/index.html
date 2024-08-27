@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/23/9-9-Dynamic-Memory-Allocation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/20/9-6-Address-Translation/" class="post-title-link" itemprop="url">9.6.Address Translation</a>
+          <a href="/2024/08/23/9-9-Dynamic-Memory-Allocation/" class="post-title-link" itemprop="url">9.9.Dynamic Memory Allocation</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 20:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:07:40" itemprop="dateCreated datePublished" datetime="2024-08-20T20:31:22+08:00">2024-08-20</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-23 16:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;18:38:40" itemprop="dateCreated datePublished" datetime="2024-08-23T16:31:22+08:00">2024-08-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>761</span>
+      <span>588</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>3 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,134 +266,105 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="96address-translation"><span class="math inline">\(9.6.\)</span>Address Translation</h1>
-<h3 id="1summary-of-translationsymbols">1.Summary of Translation
-Symbols</h3>
-<p><img src="/2024/08/20/9-6-Address-Translation/image.png"></p>
-<h3 id="2basic-struction">2.Basic Struction</h3>
-<p>&#x2003;&#x2003;TThe following figure shows how the MMU uses the page table to
-perform the mapping <span class="math inline">\(MAP:VAS \rightarrow PAS
-\cup \emptyset\)</span>:</p>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-1.png"></p>
+          <h1 id="99dynamic-memory-allocation"><span class="math inline">\(9.9.\)</span>Dynamic Memory Allocation</h1>
+<h3 id="1heap-struction">1.Heap Struction</h3>
+<p><img src="/2024/08/23/9-9-Dynamic-Memory-Allocation/image.png"></p>
+<h3 id="2the-malloc-andfree-functions">2.The <code>malloc</code> and
+<code>free</code> Functions</h3>
+<p>&#x2003;&#x2003;Programs allocate blocks from the heap by calling the malloc
+function:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">malloc</span><span class="params">(<span class="type">size_t</span> size)</span>;</span><br><span class="line"><span class="comment">/* Returns: pointer to allocated block if OK, NULL on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The <code>malloc</code> function returns a pointer to a block of
+memory of at least size bytes.</p>
 <ul>
-<li><p>The page table base register(PTBR) points to the current page
-table.</p></li>
-<li><p>The n-bit virtual address has two components: a <span class="math inline">\(p\)</span>-bit virtual page offset(VPO) and an
-<span class="math inline">\((n&#x2212;p)\)</span>-bit virtual page
-number(VPN).</p>
-<ul>
-<li><p>The MMU uses the VPN to <strong>select the appropriate
-PTE</strong>. For example, VPN 0 selects PTE 0, VPN 1 selects PTE
-1.</p></li>
-<li><p>The corresponding physical address is the concatenation of the
-<strong>physical page number(PPN) from the page table entry</strong> and
-the <strong>VPO from the virtual address</strong>.</p></li>
-</ul></li>
-<li><p>Since the physical and virtual pages are both <span class="math inline">\(P\)</span> bytes, the physical page offset(PPO) is
-identical to the VPO.</p></li>
+<li>If <code>malloc</code> encounters a problem (e.g., the program
+requests a block of memory that is larger than the available virtual
+memory), then it returns <code>NULL</code> and <strong>sets
+<code>errno</code></strong>.</li>
 </ul>
-<h3 id="3cpu-hardwareperformance-for-page-hit-amp-page-fault">3.CPU Hardware
-Performance for Page Hit &amp; Page Fault</h3>
-<p>&#x2003;&#x2003;The CPU performs the following steps when there&apos;s a page hit:</p>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-2.png"></p>
-<ol type="1">
-<li><p>The processor <strong>generates a virtual address</strong> and
-sends it to the MMU.</p></li>
-<li><p>The MMU <strong>generates the PTE address</strong> and requests
-it <strong>from the cache/ main memory</strong>.</p></li>
-<li><p>The cache/main memory <strong>returns the PTE to the
-MMU</strong>.</p></li>
-<li><p>The MMU <strong>constructs the physical address</strong> and
-sends it to the cache/main memory.</p></li>
-<li><p>The cache/main memory returns the requested data word to the
-processor.</p></li>
-</ol>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-3.png"></p>
-<p>&#x2003;&#x2003;When there&apos;s a page fault, step 1~3 are the same:</p>
-<ol start="4" type="1">
-<li><p>The valid bit in the PTE is zero, so the MMU <strong>triggers an
-exception</strong>, which <strong>transfers control in the CPU to a page
-fault exception handler</strong> in the operating system
-kernel.</p></li>
-<li><p>The fault handler <strong>identifies a victim page in physical
-memory</strong>, and if that page has been modified, pages it out to
-disk.</p></li>
-<li><p>The fault handler pages in the new page and updates the PTE in
-memory.</p></li>
-<li><p>The fault handler <strong>returns to the original process,
-causing the faulting instruction to be restarted</strong>. The CPU
-resends the offending virtual address to the MMU. Because the virtual
-page is now cached in physical memory, there is a hit.</p></li>
-</ol>
-<h3 id="4-integrating-caches-and-vm">4. Integrating Caches and VM</h3>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-4.png"></p>
+<p>&#x2003;&#x2003;We can use <code>sbrk</code> function to manage the heap size:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">sbrk</span><span class="params">(<span class="type">intptr_t</span> incr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: old brk pointer on success, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The <code>sbrk</code> function grows or shrinks the heap by
+<strong>adding incr to the kernel&apos;s <code>brk</code> pointer</strong>.
+If successful, it <strong>returns the old value of
+<code>brk</code></strong>, otherwise it returns &#x2212;1 and sets
+<code>errno</code> to <code>ENOMEM</code>.</p>
+<p>&#x2003;&#x2003;We can use the <code>free</code> function to free allocated heap
+blocks:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">free</span><span class="params">(<span class="type">void</span> *ptr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: nothing */</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>The main idea is that the address translation occurs <strong>before
-the cache lookup</strong>.</li>
+<li>The <code>ptr</code> argument must point to <strong>the beginning of
+an allocated block</strong> that was obtained from <code>malloc</code>,
+<code>calloc</code>, or <code>realloc</code>.</li>
 </ul>
-<h3 id="5translation-lookasidebuffer">5.Translation Lookaside
-Buffer</h3>
-<p>&#x2003;&#x2003;When we meet a page fault, we will need to do an additional fetch
-from memory. Many systems try to eliminate this cost by including
-<strong>a small cache of PTEs in the MMU</strong> called a
-<em>translation lookaside buffer(TLB)</em>.</p>
+<h3 id="3fragementation">3.Fragementation</h3>
 <ul>
-<li>A TLB is a small, virtually addressed cache where <strong>each line
-holds a block consisting of a single PTE</strong>:</li>
+<li><p><em>Internal fragmentation</em>: It occurs when an allocated
+block is larger than the payload.</p></li>
+<li><p><em>External fragmentation</em>: It occurs when there is enough
+aggregate free memory to satisfy an allocate request, but no single free
+block is large enough to handle the request.</p></li>
 </ul>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-5.png"></p>
+<h3 id="4basic-implementation-model">4.Basic Implementation Model</h3>
+<p>&#x2003;&#x2003;The simplest imaginable allocator would organize the heap as
+<strong>a large array of bytes</strong> and a pointer <code>p</code>
+that <strong>initially points to the first byte of the
+array</strong>.</p>
 <ul>
-<li><p>The index and tag fields that are used for set selection and line
-matching <strong>are extracted from the virtual page number</strong> in
-the virtual address.</p>
-<ul>
-<li>If the TLB has <span class="math inline">\(T = 2^t\)</span> sets,
-then the TLB index(TLBI) consists of <strong>the <span class="math inline">\(t\)</span> least significant bits of the
-VPN</strong>, and the TLB tag(TLBT) consists of <strong>the remaining
-bits in the VPN</strong>.</li>
-</ul></li>
+<li>To allocate <code>size</code> bytes, <code>malloc</code> would
+<strong>save the current value of <code>p</code> on the stack</strong>,
+<strong>increment <code>p</code> by <code>size</code></strong>, and
+return the old value of <code>p</code> to the caller.</li>
 </ul>
-<p>&#x2003;&#x2003;For a TLB hit, the mMU fetches the appropriate PTE from the
-TLB:</p>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-6.png"></p>
-<h3 id="6multi-level-page-tables">6.Multi-Level Page Tables</h3>
-<h4 id="aanexample">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>An
-example</h4>
-<p>&#x2003;&#x2003;The common approach for compacting the page table is to use a
-hierarchy of page tables. The following is an example of a page table,
-which has a 32-bit address space, 4 KB pages, and a 4-byte PTE:</p>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-7.png"></p>
-<p>&#x2003;&#x2003;For the page table:</p>
+<h3 id="5implicit-free-lists">5.Implicit Free Lists</h3>
+<p>&#x2003;&#x2003;Any practical allocator needs some data structure that allows it to
+<strong>distinguish block boundaries</strong> and to <strong>distinguish
+between allocated and free blocks</strong>:</p>
+<p><img src="/2024/08/23/9-9-Dynamic-Memory-Allocation/image-1.png"></p>
 <ul>
-<li><p>Each PTE in the level 1 table is responsible for mapping a 4 MB
-chunk of the virtual address space.</p></li>
-<li><p>Each chunk consists of 1,024 contiguous pages.</p></li>
+<li><p>A block consists of a one-word header, the payload, and possibly
+some additional padding.</p></li>
+<li><p>The header encodes the block size(including the header and any
+padding) as well as whether the block is allocated or free.</p></li>
+<li><p>When <code>malloc</code> is called, the application request the
+payload. The payload is followed by a chunk of unused padding that can
+be any size.</p></li>
+<li><p>The <strong>free blocks</strong> are linked implicitly by the
+size fields in the headers. The allocator can indirectly traverse the
+entire set of free blocks by <strong>traversing all of the blocks in the
+heap</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;This scheme reduces memory requirements in two ways:</p>
-<ol type="1">
-<li><p>If a PTE in the level 1 table is null, then <strong>the
-corresponding level 2 page table does not even have to
-exist</strong>.</p></li>
-<li><p>Only the level 1 table needs to be in main memory at all times.
-The level 2 page tables can be created and paged in and out <strong>by
-the VM system as they are needed</strong>.</p></li>
-</ol>
-<h4 id="baddress-translation-for-k-level-pagetable-hierarchy">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Address translation for k-level page
-table hierarchy</h4>
-<p><img src="/2024/08/20/9-6-Address-Translation/image-8.png"></p>
+<hr>
 <ul>
-<li><p>The virtual address is partitioned into <span class="math inline">\(k\)</span> VPNs and a VPO.</p></li>
-<li><p>Each VPN <span class="math inline">\(i\)</span>(<span class="math inline">\(1 \leq i \leq k\)</span>) is an index into a page
-table at level <span class="math inline">\(i\)</span>.</p></li>
-<li><p>Each PTE in a level <span class="math inline">\(j\)</span>
-table(<span class="math inline">\(1 \leq j \leq k - 1\)</span>)
-<strong>points to the base of some page table at level <span class="math inline">\(j + 1\)</span></strong>.</p></li>
-<li><p>Each PTE in a level <span class="math inline">\(k\)</span> table
-contains <strong>either the PPN of some physical page or the address of
-a disk block</strong>.</p></li>
-<li><p>As with a single-level hierarchy, the PPO is identical to the
-VPO.</p></li>
+<li>The system&apos;s alignment requirement imposes <strong>a minimum block
+size</strong> on the allocator. For example, if we assume a double-word
+alignment requirement, then <strong>the size of each block must be a
+multiple of two words(8 bytes)</strong>.</li>
 </ul>
+<h3 id="6placing-allocated-blocks">6.Placing Allocated Blocks</h3>
+<ul>
+<li><p><em>Next fit</em> starts each search <strong>where the previous
+search left off</strong> for a suitable free list.</p></li>
+<li><p>It&apos;s motivated by the idea that <strong>if we found a fit in some
+free block the last time, there is a good chance that we will find a fit
+the next time in the remainder of the block</strong>.</p></li>
+</ul>
+<h3 id="7-getting-additional-heapmemory">7. Getting Additional Heap
+Memory</h3>
+<ul>
+<li>The allocator asks the kernel for additional heap memory by calling
+the <code>sbrk</code> function</li>
+</ul>
+<h3 id="7coalescing-with-boundarytags">7.Coalescing with Boundary
+Tags</h3>
+<ul>
+<li><p>The header of the current block points to the header of the next
+block, which can be checked to determine if the next block is
+free.</p></li>
+<li><p>Similarly, we can add a <em>footer (the boundary tag)</em> at the
+end of each block to check the previous block:</p></li>
+</ul>
+<p><img src="/2024/08/23/9-9-Dynamic-Memory-Allocation/image-2.png"></p>
 
       
     </div>
@@ -416,7 +387,7 @@ VPO.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -441,14 +412,14 @@ VPO.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/16/3-7-Procedures/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/17/3-9-Heterogeneous-Data-Structures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/16/3-7-Procedures/" class="post-title-link" itemprop="url">3.7.Procedure</a>
+          <a href="/2024/07/17/3-9-Heterogeneous-Data-Structures/" class="post-title-link" itemprop="url">3.9.Heterogeneous Data Structures</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-16T16:30:22+08:00">2024-07-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 22:31:22" itemprop="dateCreated datePublished" datetime="2024-07-17T22:31:22+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:31:59" itemprop="dateModified" datetime="2024-07-17T17:31:59+08:00">2024-07-17</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-18 18:01:14" itemprop="dateModified" datetime="2024-07-18T18:01:14+08:00">2024-07-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.4k</span>
+      <span>860</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>5 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,146 +272,115 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="37procedure"><span class="math inline">\(3.7.\)</span>Procedure</h1>
-<h3 id="1procedure-in-a-highprospective">1.Procedure in A High
-Prospective</h3>
+          <h1 id="39heterogeneous-data-structures"><span class="math inline">\(3.9.\)</span>Heterogeneous Data Structures</h1>
+<h3 id="1structures">1.Structures</h3>
+<p>&#x2003;&#x2003;The implementation of structures is similar to that of arrays: all
+of the components of a structure are stored <strong>in a contiguous
+region of memory</strong> and <strong>a pointer to a structure is the
+address of its first byte</strong>.</p>
+<p>&#x2003;&#x2003;The compiler maintains information about each structure type
+indicating <strong>the byte offset of each field</strong>.</p>
 <ul>
-<li>Procedures are a key abstraction in software. They provide a way to
-<strong>package code that implements some functionality with a
-designated set of arguments and an optional return value</strong>.</li>
+<li>It generates references to structure elements <strong>using these
+offsets as displacements</strong> in memory referencing
+instructions.</li>
 </ul>
-<p>&#x2003;&#x2003;Well-designed software uses procedures as an abstraction mechanism,
-<strong>hiding the detailed implementation of some action</strong> while
-p<strong>roviding a clear and concise interface definition of what
-values will be computed and what effects the procedure will have on the
-program state</strong>.</p>
-<p>&#x2003;&#x2003;To provide machine-level support for procedures, we need to take
-the following aspect into consideration:</p>
+<p>&#x2003;&#x2003;For example, the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rec</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">    <span class="type">int</span> a[<span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span> *p;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is represented in memory like this:</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image.png"></p>
+<p>&#x2003;&#x2003;and the compiler access the code by <strong>adding the appropriate
+offset to the address of the structure</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi</span><br><span class="line">movl (%rdi), %eax   # Get r-&gt;i</span><br><span class="line">movl %eax, 4(%rdi)  # Store in r-&gt;j</span><br></pre></td></tr></table></figure>
+<ul>
+<li>To generate a pointer to an object within a structure, we simply add
+the field&apos;s offset to the structure address:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Registers: r in %rdi, i %rsi</span><br><span class="line">leaq 8(%rdi,%rsi,4), %rax    # Set %rax to &amp;r-&gt;a[i]</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The selection of the different fields of a structure is handled
+completely <strong>at compile time</strong>. The machine code contains
+no information about the field declarations or the names of the
+fields.</p>
+<h3 id="2unions">2.Unions</h3>
+<p>&#x2003;&#x2003;Unions allow a single object to be referenced according to multiple
+types. Rather than having the different fields reference different
+blocks of memory, they all <strong>reference the same
+block</strong>.</p>
+<ul>
+<li>The overall size of a union equals <strong>the maximum size of any
+of its fields</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;Unions are used in several cases:</p>
 <ol type="1">
-<li><p><em>Passing control</em>.</p></li>
-<li><p><em>Passing data</em>.</p></li>
-<li><p><em>Allocating and deallocating memory</em>.</p></li>
+<li>We know in advance that the use of two different fields in a data
+structure will be <strong>mutually exclusive</strong>.</li>
 </ol>
-<h3 id="2the-run-time-stack">2.The Run-time Stack</h3>
+<p>&#x2003;&#x2003;For example, we can represent a binary tree using structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> {</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_s</span> *<span class="title">right</span>;</span></span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;which use 32 bytes. But if we use union:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">node_u</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">left</span>;</span></span><br><span class="line">        <span class="class"><span class="keyword">union</span> <span class="title">node_u</span> *<span class="title">right</span>;</span></span><br><span class="line">    } internal;</span><br><span class="line">    <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;it will only take up 16 bytes.</p>
+<p>&#x2003;&#x2003;Moreover, to identify <code>leaf</code> with <code>internal</code>
+node, we can use <strong>an enumerated type defining the different
+possible choices for the union</strong>, and then create a structure
+<strong>containing a tag field and the union</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> {</span> N_LEAF, N_INTERNAL } <span class="type">nodetype_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> {</span></span><br><span class="line">    <span class="type">nodetype_t</span> type;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">left</span>;</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">right</span>;</span></span><br><span class="line">        } internal;</span><br><span class="line">        <span class="type">double</span> data[<span class="number">2</span>];</span><br><span class="line">    } info;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// example</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// leaves</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">leaf</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    leaf-&gt;type = N_LEAF;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">0</span>] = <span class="number">1.23</span>;</span><br><span class="line">    leaf-&gt;info.data[<span class="number">1</span>] = <span class="number">4.56</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// internal</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">internal</span> =</span> <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <span class="type">node_t</span>));</span><br><span class="line">    internal-&gt;type = N_INTERNAL;</span><br><span class="line">    internal-&gt;info.internal.left = leaf;</span><br><span class="line">    internal-&gt;info.internal.right = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>The union <strong>won&apos;t change the bit it stored according to
+different types</strong>, even if the value is stored in one type but
+access in another.</li>
+</ol>
+<p>&#x2003;&#x2003;Say we convert a <code>double d</code> to an
+<code>unsigned long</code> variable:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> u = (<span class="type">unsigned</span> <span class="type">long</span>) d;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Value <code>u</code> will be an integer representation of
+<code>d</code>. Except for the case where <code>d</code> is
+<code>0.0</code>, the bit representation of <code>u</code> will
+<strong>be very different from that of <code>d</code></strong>.</p>
+<p>&#x2003;&#x2003;However, if we use unions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> <span class="title function_">double2bits</span><span class="params">(<span class="type">double</span> d)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">long</span> u;</span><br><span class="line">    } temp;</span><br><span class="line">    temp.d = d;</span><br><span class="line">    <span class="keyword">return</span> temp.u;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result will be that <strong><code>u</code> will have the same
+bit representation as <code>d</code></strong>, including fields for the
+sign bit, the exponent, and the significand.</p>
+<p>&#x2003;&#x2003;And with this characteristic, we can design the following program
+that gets the words of a double number:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">uu2double</span><span class="params">(<span class="type">unsigned</span> word0, <span class="type">unsigned</span> word1)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">union</span> {</span></span><br><span class="line">        <span class="type">double</span> d;</span><br><span class="line">        <span class="type">unsigned</span> u[<span class="number">2</span>];</span><br><span class="line">    } temp;</span><br><span class="line">    temp.u[<span class="number">0</span>] = word0; <span class="comment">// low-order 4 bytes</span></span><br><span class="line">    temp.u[<span class="number">1</span>] = word1; <span class="comment">// high-order 4 bytes</span></span><br><span class="line">    <span class="keyword">return</span> temp.d;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3data-alignment">3.Data Alignment</h3>
+<p>&#x2003;&#x2003;<em>Data alignment</em> is operation that <strong>enforce the
+address of some objects must be a multiple of some valueK (typically 2,
+4, or 8)</strong>.</p>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-1.png"></p>
 <ul>
-<li><p>A program can manage the storage required by its procedures using
-a stack, where the stack and the program registers <strong>store the
-information required for passing control and data, and for allocating
-memory</strong>. As P calls Q, <strong>control and data information are
-added to the end of the stack</strong>. This information <strong>gets
-deallocated when P returns</strong>.</p></li>
-<li><p>When an x86-64 procedure requires storage beyond what it can hold
-in registers, it <strong>allocates space on the stack</strong>. This
-region is referred to as the procedure&apos;s <strong>stack
-frame</strong>.</p>
-<ul>
-<li>When procedure P calls procedure Q, it will <strong>push the return
-address onto the stack</strong>, indicating where <strong>within P the
-program should resume</strong> execution once Q returns. We consider the
-return address to be <strong>part of P&apos;s stack frame</strong>, since it
-holds state relevant to P.</li>
-</ul></li>
+<li>The align operation can be declared by the following statement:</li>
 </ul>
-<p>&#x2003;&#x2003;The stack frames for most procedures are <strong>of fixed
-size</strong>, allocated at the beginning of the procedure. Some
-procedures, however, require variable-size frames.</p>
-<h3 id="3control-transfer">3.Control Transfer</h3>
-<ul>
-<li><p>Passing control from function P to function Q involves simply
-<strong>setting the program counter (PC) to the starting address of the
-code for Q</strong>. This information is recorded in x86-64 machines by
-invoking procedure Q with the instruction <code>call Q</code>.</p>
-<ul>
-<li>This instruction <strong>pushes an address A onto the stack</strong>
-and <strong>sets the PC to the beginning of Q</strong>. The pushed
-address A is referred to as <strong>the return address</strong> and is
-computed as <strong>the address of the instruction immediately following
-the call instruction</strong>.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;The general forms of the <code>call</code> and <code>ret</code>
-instructions are as below:</p>
-<p><img src="/2024/07/16/3-7-Procedures/image.png"></p>
-<p><img src="/2024/07/16/3-7-Procedures/image-1.png"></p>
-<h3 id="4data-transfer">4.Data Transfer</h3>
-<p>&#x2003;&#x2003;In x86-64, data passing to and from a procedure takes place via
-registers.</p>
-<p>&#x2003;&#x2003;<strong>Up to six</strong> integral (i.e., integer and pointer)
-arguments can be passed via registers. The registers are used in a
-specified order:</p>
-<p><img src="/2024/07/16/3-7-Procedures/image-2.png"></p>
-<p>&#x2003;&#x2003;Arguments are allocated to these registers according to
-<strong>their ordering in the argument list</strong>, and arguments
-smaller than 64 bits can be accessed using the appropriate
-<strong>subsection of the 64-bit register</strong>.</p>
-<p>&#x2003;&#x2003;When a function has more than six integral arguments, the other
-ones are passed <strong>on the stack</strong>. When passing parameters
-on the stack, all data size <strong>are rounded up to be multiples of
-8</strong>.</p>
-<p>&#x2003;&#x2003;Let&apos;s take the following code as an example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># void proc(a1, a1p, a2, a2p, a3, a3p, a4, a4p)</span><br><span class="line"># Arguments passed as follows:</span><br><span class="line"># a1 in %rdi (64 bits)</span><br><span class="line"># a1p in %rsi (64 bits)</span><br><span class="line"># a2 in %edx (32 bits)</span><br><span class="line"># a2p in %rcx (64 bits)</span><br><span class="line"># a3 in %r8w (16 bits)</span><br><span class="line"># a3p in %r9 (64 bits)</span><br><span class="line"># a4 at %rsp+8 ( 8 bits)</span><br><span class="line"># a4p at %rsp+16 (64 bits)</span><br><span class="line"></span><br><span class="line">proc:</span><br><span class="line">    movq 16(%rsp), %rax # Fetch a4p (64 bits)</span><br><span class="line">    addq %rdi, (%rsi)   # *a1p += a1 (64 bits)</span><br><span class="line">    addl %edx, (%rcx)   # *a2p += a2 (32 bits)</span><br><span class="line">    addw %r8w, (%r9)    # *a3p += a3 (16 bits)</span><br><span class="line">    movl 8(%rsp), %edx  # Fetch a4 (8 bits)</span><br><span class="line">    addb %dl, (%rax)    # *a4p += a4 (8 bits)</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/07/16/3-7-Procedures/image-3.png"></p>
-<h3 id="5local-storage-on-the-stack">5.Local Storage on the Stack</h3>
-<p>&#x2003;&#x2003;In most cases, local data is stored in registers. However, there
-are cases that local data must be stored in memory:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.align 8</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This ensures that <strong>the data following it will start with an
+address that is a multiple of 8</strong>.</p>
+<p>&#x2003;&#x2003;To do data alignment, the compiler uses these two techniques. Take
+the following C struction as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S1</span> {</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">int</span> j;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
 <ol type="1">
-<li><p>There are not enough registers to hold all of the local
-data.</p></li>
-<li><p>The address operator &apos;&amp;&apos; is applied to a local variable, and
-hence we must be able to <strong>generate an address for it</strong>.
-However, data that is stored in register doesn&apos;t have unique
-address.</p></li>
-<li><p>Some of the local variables are arrays or structures and hence
-must be accessed by array or structure references.</p></li>
+<li><em>Byte gap</em>:</li>
 </ol>
-<p>&#x2003;&#x2003;Take the following program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp;</span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># long caller()</span><br><span class="line">caller:</span><br><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br><span class="line">call swap_add        # Call swap_add(&amp;arg1, &amp;arg2)</span><br><span class="line">movq (%rsp), %rdx    # Get arg1</span><br><span class="line">subq 8(%rsp), %rdx   # Compute diff = arg1 - arg2</span><br><span class="line">imulq %rdx, %rax     # Compute sum * diff</span><br><span class="line">addq $16, %rsp       # Deallocate stack frame</span><br><span class="line">ret                  # Return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Because we need to use the address of <code>arg1</code> and
-<code>arg2</code>, we need to store them in memory. We do this by
-leaving enough place in the stack and push the arguments onto the
-stack:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Once we need to use the value, we fetch it from the stacK:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The following program is a more complicated one. It includes the
-details of setting up the stack frame for the local variables and
-function parameters:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">call_proc:</span><br><span class="line"></span><br><span class="line">    # set up arguments to proc</span><br><span class="line">    subq $32, %rsp          # Allocate 32-byte stack frame</span><br><span class="line">    movq $1, 24(%rsp)       # Store 1 in &amp;x1</span><br><span class="line">    movl $2, 20(%rsp)       # Store 2 in &amp;x2</span><br><span class="line">    movw $3, 18(%rsp)       # Store 3 in &amp;x3</span><br><span class="line">    movb $4, 17(%rsp)       # Store 4 in &amp;x4</span><br><span class="line">    leaq 17(%rsp), %rax     # Create &amp;x4</span><br><span class="line">    movq %rax, 8(%rsp)      # Store &amp;x4 as argument 8</span><br><span class="line">    movl $4, (%rsp)         # Store 4 as argument 7</span><br><span class="line">    leaq 18(%rsp), %r9      # Pass &amp;x3 as argument 6</span><br><span class="line">    movl $3, %r8d           # Pass 3 as argument 5</span><br><span class="line">    leaq 20(%rsp), %rcx     # Pass &amp;x2 as argument 4</span><br><span class="line">    movl $2, %edx           # Pass 2 as argument 3</span><br><span class="line">    leaq 24(%rsp), %rsi     # Pass &amp;x1 as argument 2</span><br><span class="line">    movl $1, %edi           # Pass 1 as argument 1</span><br><span class="line"></span><br><span class="line">    # call proc</span><br><span class="line">    call proc               # Call proc</span><br><span class="line"></span><br><span class="line">    # retrieve changes to memory</span><br><span class="line">    movslq 20(%rsp), %rdx   # Get x2 and convert to long</span><br><span class="line">    addq 24(%rsp), %rdx     # Compute x1+x2</span><br><span class="line">    movswl 18(%rsp), %eax   # Get x3 and convert to int</span><br><span class="line">    movsbl 17(%rsp), %ecx   # Get x4 and convert to int</span><br><span class="line">    subl %ecx, %eax         # Compute x3-x4</span><br><span class="line">    cltq                    # Convert to long</span><br><span class="line">    imulq %rdx, %rax        # Compute (x1+x2) * (x3-x4)</span><br><span class="line">    addq $32, %rsp          # Deallocate stack frame</span><br><span class="line">    ret                     # Return</span><br></pre></td></tr></table></figure>
-<h3 id="6local-storage-in-registers">6.Local Storage in Registers</h3>
-<p>&#x2003;&#x2003;When calling another procedure, we must make sure that <strong>the
-callee does not overwrite some register value that the caller planned to
-use later</strong>.</p>
-<ul>
-<li><p>By convention, registers <code>%rbx</code>, <code>%rbp</code>,
-and <code>%r12&#xFFFD;C%r15</code> are classified as <strong>callee saved
-registers</strong>.</p>
-<ul>
-<li>When procedure P calls procedure Q, <strong>Q must preserve the
-values of these registers</strong>, ensuring that they have the same
-values when Q returns to P as they did when Q was called.</li>
-</ul></li>
-<li><p>Procedure Q can preserve a register value by either <strong>not
-changing it at all</strong> or by <strong>pushing the original value on
-the stack, altering it, and then popping the old value from the stack
-before returning</strong>.</p></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushq %rbp  # Save %rbp</span><br><span class="line">pushq %rbx  # Save %rbx</span><br><span class="line">...</span><br><span class="line">popq %rbx   # Restore %rbx</span><br><span class="line">popq %rbp   # Restore %rbp</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-2.png"></p>
+<ol start="2" type="1">
+<li><em>End padding</em>: This is to ensure that the latter data will
+also be aligned:</li>
+</ol>
+<p><img src="/2024/07/17/3-9-Heterogeneous-Data-Structures/image-3.png"></p>
 <blockquote>
-<p>Note how they are popped is <strong>in the reverse order
-from</strong> how they were pushed, to account for the last-in,
-first-out discipline of a stack.</p>
+<p><span class="math inline">\(p.s.\)</span>Each type of data has its
+own alignment requirement, so we can minimize the wasted place by
+<strong>rearrange the fields of structure</strong>. Note that <strong>we
+don&apos;t have to make all variables applied to an only alignment
+rule</strong>!</p>
 </blockquote>
-<ul>
-<li>All other registers, except for the stack pointer <code>%rsp</code>,
-are classified as <strong>caller saved registers</strong>.</li>
-</ul>
-<h3 id="7recursive-procedures">7.Recursive Procedures</h3>
-<p>&#x2003;&#x2003;The stack discipline of allocation and deallocation naturally
-matches the call-return ordering of functions. So the recursive
-procedures is the same as other procedures:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = n * rfact(n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rfact:</span><br><span class="line">    pushq %rbx              # Save %rbx</span><br><span class="line">    movq %rdi, %rbx         # Store n in callee-saved register</span><br><span class="line">    movl $1, %eax           # Set return value = 1</span><br><span class="line">    cmpq $1, %rdi           # Compare n:1</span><br><span class="line">    jle .L35                # If &lt;=, goto done</span><br><span class="line">    leaq -1(%rdi), %rdi     # Compute n-1</span><br><span class="line">    call rfact              # Call rfact(n-1)</span><br><span class="line">    imulq %rbx, %rax        # Multiply result by n</span><br><span class="line">.L35: done:</span><br><span class="line">    popq %rbx               # Restore %rbx</span><br><span class="line">    ret                     # Return</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(e.g.\)</span> The structure:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">int</span> *a;</span><br><span class="line">    <span class="type">float</span> b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="type">short</span> d;</span><br><span class="line">    <span class="type">long</span> e;</span><br><span class="line">    <span class="type">double</span> f;</span><br><span class="line">    <span class="type">int</span> g;</span><br><span class="line">    <span class="type">char</span> *h;</span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;is rearranged to the structure below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">double</span> f;   <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">long</span> e;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> *a;     <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">char</span> *h;    <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="type">int</span> g;      <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">float</span> b;    <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="type">short</span> d;    <span class="comment">// 2 bytes</span></span><br><span class="line">    <span class="type">char</span> c;     <span class="comment">// 1 byte</span></span><br><span class="line">    <span class="comment">// 3 bytes padding to make the total size a multiple of 8</span></span><br><span class="line">} rec;</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Following the strategy of <strong>putting the fields required for
+larger alignment first</strong>.</p>
 
       
     </div>
@@ -434,7 +403,7 @@ procedures is the same as other procedures:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/36/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -459,14 +428,14 @@ procedures is the same as other procedures:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

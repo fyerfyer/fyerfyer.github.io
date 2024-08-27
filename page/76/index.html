@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.5.Radix%20Sort/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/05/31/18.1.Selection%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/31/18.5.Radix%20Sort/" class="post-title-link" itemprop="url">18.6.&#x57FA;&#x6570;&#x6392;&#x5E8F;</a>
+          <a href="/2024/05/31/18.1.Selection%20Sort/" class="post-title-link" itemprop="url">18.1.&#x9009;&#x62E9;&#x6392;&#x5E8F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -231,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 22:04:02" itemprop="dateModified" datetime="2024-06-02T22:04:02+08:00">2024-06-02</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-02 21:38:27" itemprop="dateModified" datetime="2024-06-02T21:38:27+08:00">2024-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>342</span>
+      <span>302</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,49 +272,32 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="186radixsort"><span class="math inline">\(18.6.\)</span>Radix
-Sort</h1>
-<h3 id="1counting-sort">1.Counting Sort</h3>
-<p>&#x2003;&#x2003; In the previous text, we have proved that sorting using comparison
-has a worst case running time of <span class="math inline">\(\Theta(n\log n)\)</span>.However, what if we don&apos;t
-compare at all?</p>
-<p>&#x2003;&#x2003;Suppose we have a couple of characters, saying <span class="math inline">\(acdsjlfkm\)</span>, we can sort them in alphabet
-order through the following steps:</p>
+          <h1 id="181selection-sort"><span class="math inline">\(18.1\)</span>Selection Sort</h1>
+<h3 id="1the-step-of-selection-sort">1.The step of Selection sort</h3>
+<p>&#x2003;&#x2003;In selection sort, we basically do these three things:</p>
 <ol type="1">
-<li>Creat an array with the same size of an alphabet(<span class="math inline">\(26\)</span>).</li>
-<li>For each character, put it in the <span class="math inline">\(ch-&apos;a&apos;\)</span> index.</li>
-<li>Scan the whole array, and the former character are always less than
-the latter. Insert the character into a new array in order, then we get
-a sorted array.</li>
+<li>Find the smallest item.</li>
+<li>Move it to the front.</li>
+<li>Selection sort the rest(using recursion).</li>
 </ol>
-<p>&#x2003;&#x2003;This kind of sorting method is called counting sort. If the length
-of data is <span class="math inline">\(N\)</span>, and the size of
-alphabet is <span class="math inline">\(R\)</span>, then the runtime of
-counting sort is <span class="math inline">\(\Theta(N+R)\)</span>. It&apos;s
-liner runtime!</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-9.png"></p>
-<p>&#x2003;&#x2003;However, the algorithm falls to sort hard-to-count items like
-String, so we need improvement.</p>
-<h3 id="2lsd-radix-sort">2.LSD Radix Sort</h3>
-<p>&#x2003;&#x2003;The LSD(Least Significant Digit) radix sort sort each digit of the
-item independently form rightmost digit towards left, take the below
-table as example:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-10.png"></p>
-<p>&#x2003;&#x2003;The runtime of LSD radix sort is <span class="math inline">\(\Theta(WN+WR)\)</span>,where N is Number of items,
-R is size of alphabet, and W is the maximun length of these items.</p>
-<p>&#x2003;&#x2003;What if the length of each item isn&apos;t same? We can treat empty
-spaces as less than all other characters:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-11.png"></p>
-<h3 id="3msd-radix-sort">3.MSD Radix Sort</h3>
-<p>&#x2003;&#x2003;The MSD(Most Significant Digit) radix sort is similiar to LSD radix
-sort. However, it sorts from the left digit to the right.</p>
-<p>&#x2003;&#x2003;After first sorting process, we may get items as below:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-12.png"></p>
-<p>&#x2003;&#x2003;The items are not in correct order yet! To solve this, we can treat
-items with same left digit as a group, and compare the next left
-character within groups:</p>
-<p><img src="/2024/05/31/18.5.Radix%20Sort/image-13.png"></p>
-<p>&#x2003;&#x2003;The runtime of MSD radix sort is the same as LSD radix sort.</p>
+<p>&#x2003;&#x2003;For each step, we can design an individual method to implement
+it.</p>
+<h3 id="2step-implementation">2.Step implementation</h3>
+<p>&#x2003;&#x2003;As the moving step requires the index of the to-moving element, the
+value we return should be index of elements, too.</p>
+<h4 id="afind">&#x2003;&#x2003;<span class="math inline">\(a.\)</span><code>Find</code></h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Given that we may need to <code>Find</code> the minimun in asked
+range, we may improve our method by passing an extra parameter which
+point to the start index(We&apos;ll use it in the following procedure)&#xFF1A;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">Find</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> st)</span> {</span><br><span class="line">    <span class="keyword">if</span> (st &gt;= arr.length) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>();</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i += <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[minIndex]) {</span><br><span class="line">            i = minIndex;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minIndex;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4 id="bswap">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>swap</code></h4>
+<p>&#x2003;&#x2003;We are going to implement the method by manipulating the index of
+the elements: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> arr[x];</span><br><span class="line">    arr[x] = arr[y];</span><br><span class="line">    arr[y] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h4 id="cmainmethod">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Main
+method</h4>
+<p>&#x2003;&#x2003;Since we would like to do the sorting recursively, we may introduce
+a helper method and invoke it recursively: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sort</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr)</span> {</span><br><span class="line">        sortHelper(arr, index);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">sortHelper</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> index)</span> {</span><br><span class="line">        <span class="comment">//basic situation</span></span><br><span class="line">        <span class="keyword">if</span> (index == arr.length()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//find the smallest item</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> find(arr, index);</span><br><span class="line">        <span class="comment">//Move it to the front</span></span><br><span class="line">        swap(arr, index, minIndex);</span><br><span class="line">        <span class="comment">//Recursively call the method</span></span><br><span class="line">        sortHelper(arr, index + <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -337,7 +320,7 @@ character within groups:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/75/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/75/">75</a><span class="page-number current">76</span><a class="page-number" href="/page/77/">77</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/77/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/75/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/75/">75</a><span class="page-number current">76</span><a class="page-number" href="/page/77/">77</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/77/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -362,14 +345,14 @@ character within groups:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

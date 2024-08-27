@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-2-Processes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/" class="post-title-link" itemprop="url">6.6.The Impact of Caches on Program Performance</a>
+          <a href="/2024/08/16/8-2-Processes/" class="post-title-link" itemprop="url">8.2.Processes</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-12 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;08:25:31" itemprop="dateCreated datePublished" datetime="2024-08-12T09:31:22+08:00">2024-08-12</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:09:09" itemprop="dateCreated datePublished" datetime="2024-08-16T08:31:22+08:00">2024-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-6-The-Memory-Hierarchy/" itemprop="url" rel="index"><span itemprop="name">Chapter 6.The Memory Hierarchy</span></a>
+          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
         </span>
     </span>
 
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>404</span>
+      <span>564</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,64 +266,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
-Performance</h1>
-<h3 id="1rearrangingloops-to-increase-spatial-locality">1.Rearranging
-Loops to Increase Spatial Locality</h3>
-<p>&#x2003;&#x2003;Consider the problem of multiplying a pair of <span class="math inline">\(2 \times 2\)</span> matrices: <span class="math inline">\(C = AB\)</span>:</p>
-<p><span class="math display">\[
-\begin{bmatrix}
-c_{11} &amp; c_{12} \\
-c_{21} &amp; c_{22}
-\end{bmatrix}
-=
-\begin{bmatrix}
-a_{11} &amp; a_{12} \\
-a_{21} &amp; a_{22}
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-b_{11} &amp; b_{12} \\
-b_{21} &amp; b_{22}
-\end{bmatrix}
-\]</span></p>
-<p>&#x2003;&#x2003;and we make the following assumptions:</p>
+          <h1 id="82processes"><span class="math inline">\(8.2.\)</span>Processes</h1>
+<h3 id="1basic-concepts">1.Basic Concepts</h3>
 <ul>
-<li><p>Each array is an <span class="math inline">\(n \times n\)</span>
-array of double, with <code>sizeof(double) = 8</code>.</p></li>
-<li><p>There is a single cache with a 32-byte block size(B =
-32).</p></li>
-<li><p>The array size n is so large that a single matrix row does not
-fit in the L1 cache.</p></li>
-<li><p>The compiler stores local variables in registers, and thus
-references to local variables inside loops do not require any load or
-store instructions.</p></li>
+<li><p>The classic definition of a process is <strong>an instance of a
+program in execution</strong>.</p></li>
+<li><p>Each program in the system runs <strong>in the context
+of</strong> some process. The context consists of <strong>the state that
+the program needs to run correctly</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;We can write three different versions:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) {</span><br><span class="line">        sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">            sum += A[i][k]*B[k][j];</span><br><span class="line">        C[i][j] += sum;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++) {</span><br><span class="line">        r = B[k][j];</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        C[i][j] += A[i][k]*r;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        r = A[i][k];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">            C[i][j] += r * B[k][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image.png"></p>
-<p>&#x2003;&#x2003;The third routine present an interesting trade-off: With two loads
-and a store, they <strong>require one more memory operation than the
-first routines</strong>. On the other hand, since the inner loop scans
-both B and C row-wise with a stride-1 access pattern, the miss rate on
-each array is only 0.25 misses per iteration, for a total of 0.50 misses
-per iteration.</p>
-<p>&#x2003;&#x2003;The performance result is as below:</p>
-<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image-1.png"></p>
-<p>&#x2003;&#x2003;We can see that in this case, <strong>miss rate is a better
-predictor of performance</strong> than the total number of memory
-accesses.</p>
-<h3 id="2exploiting-locality">2.Exploiting Locality</h3>
+<h3 id="2logical-control-flow">2.Logical Control Flow</h3>
+<p>&#x2003;&#x2003; If we were to use a debugger to single-step the execution of our
+program, we would observe <strong>a series of program counter(PC)
+values</strong> that corresponded exclusively to instructions contained
+in our program&apos;s executable object file or in shared objects linked into
+our program dynamically at run time. This sequence of PC values is known
+as a <strong>logical control flow</strong>, or simply <strong>logical
+flow</strong>.</p>
+<p><img src="/2024/08/16/8-2-Processes/image.png"></p>
 <ul>
-<li><p>Focus your attention on the inner loops.</p></li>
-<li><p>Try to maximize the spatial locality in your programs by reading
-data objects sequentially, <strong>with stride 1</strong>, <strong>in
-the order they are stored in memory</strong>.</p></li>
-<li><p>Try to maximize the temporal locality in your programs by
-<strong>using a data object as often as possible once it has been read
-from memory</strong>.</p></li>
+<li>Processes <strong>take turns using the processor</strong>. Each
+process executes a portion of its flow and then <strong>is
+<em>preempted</em></strong>(temporarily suspended) while other processes
+take their turns.</li>
+</ul>
+<h3 id="3user-and-kernel-modes">3.User and Kernel Modes</h3>
+<p>&#x2003;&#x2003;In order for the operating system kernel to provide an airtight
+process abstraction, the processor must provide a mechanism that
+<strong>restricts the instructions that an application can execute, as
+well as the portions of the address space that it can
+access</strong>.</p>
+<p>&#x2003;&#x2003;Processors typically provide this capability with a <strong>mode
+bit</strong> in some control register that characterizes the privileges
+that the process currently enjoys.</p>
+<ul>
+<li><p>A process running in <em>kernel mode</em> can <strong>execute any
+instruction in the instruction set and access any memory location in the
+system</strong>.</p></li>
+<li><p>A process running in <em>user mode</em> is <strong>not allowed to
+execute privileged instructions</strong> that do things such as halt the
+processor, change the mode bit, or initiate an I/O operation. Nor is it
+allowed to <strong>directly reference code or data in the kernel area of
+the address space</strong>.</p>
+<ul>
+<li><p>Any such attempt results in a <strong>fatal protection
+fault</strong>.</p></li>
+<li><p>To execute these instructions, user programs must instead access
+kernel code and data indirectly <strong>via the system call
+interface</strong>.</p></li>
+</ul></li>
+</ul>
+<h3 id="4context-switches">4.Context Switches</h3>
+<p>&#x2003;&#x2003;The operating system kernel implements multitasking using a
+higher-level form of exceptional control flow known as a <em>context
+switch</em>.</p>
+<ul>
+<li><p>The kernel maintains a context for each process. The context is
+the <strong>state</strong> that the kernel needs <strong>to restart a
+preempted process</strong>.</p></li>
+<li><p>At certain points during the execution of a process, the kernel
+can decide to <strong>preempt the current process and restart a
+previously preempted process</strong>. And we say that the kernel has
+<em>scheduled</em> that process.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The context switch contains the following steps:</p>
+<ol type="1">
+<li><p><strong>Saves the context of the current
+process</strong>.</p></li>
+<li><p><strong>Restores the saved context</strong> of some previously
+preempted process.</p></li>
+<li><p><strong>Passes control</strong> to this newly restored
+process.</p></li>
+</ol>
+<p>&#x2003;&#x2003;If the system call blocks because it is waiting for some event to
+occur, then the kernel can <strong>put the current process to
+sleep</strong> and <strong>switch to another process</strong>.</p>
+<blockquote>
+<p>A context switch can also occur as a result of an interrupt. For
+example, all systems have some mechanism for <strong>generating periodic
+timer interrupts</strong>. Each time a timer interrupt occurs, the
+kernel can decide that the current process has run long enough and
+switch to a new process.</p>
+</blockquote>
+<p><img src="/2024/08/16/8-2-Processes/image-1.png"></p>
+<ul>
+<li><p>The disk will take a relatively long time to fetch the data, so
+instead of waiting and doing nothing, the kernel <strong>performs a
+context switch from process A to B</strong>.</p></li>
+<li><p>Process B then runs for a while in user mode until <strong>the
+disk sends an interrupt</strong> to signal that data have been
+transferred from disk to memory.</p></li>
 </ul>
 
       
@@ -347,7 +379,7 @@ from memory</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -372,14 +404,14 @@ from memory</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

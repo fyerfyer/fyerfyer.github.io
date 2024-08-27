@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/19/8-6-Nonlocal-Jumps/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-4-Memory-Management/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/19/8-6-Nonlocal-Jumps/" class="post-title-link" itemprop="url">8.6.Nonlocal Jumps</a>
+          <a href="/2024/08/20/9-4-Memory-Management/" class="post-title-link" itemprop="url">9.4.Memory Management</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-19 18:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;21:03:31" itemprop="dateCreated datePublished" datetime="2024-08-19T18:31:22+08:00">2024-08-19</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 11:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;13:48:02" itemprop="dateCreated datePublished" datetime="2024-08-20T11:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
+          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
         </span>
     </span>
 
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>337</span>
+      <span>245</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,56 +266,49 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="86nonlocal-jumps"><span class="math inline">\(8.6.\)</span>Nonlocal Jumps</h1>
-<h3 id="1basic-concepts">1.Basic Concepts</h3>
+          <h1 id="94memory-management"><span class="math inline">\(9.4.\)</span>Memory Management</h1>
+<p><img src="/2024/08/20/9-4-Memory-Management/image.png"></p>
 <ul>
-<li><em>Nonlocal jumps</em> <strong>transfers control directly from one
-function to another currently executing function</strong> without having
-to go through the normal call-and-return sequence.</li>
+<li><p>Operating systems provide <strong>a separate page table</strong>,
+and thus <strong>a separate virtual address space</strong>, for each
+process.</p></li>
+<li><p><strong>Multiple virtual pages can be mapped to the same shared
+physical page</strong>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;Nonlocal jumps are provided by the following functions:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">setjmp</span><span class="params">(jmp_buf env)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">sigsetjmp</span><span class="params">(sigjmp_buf env, <span class="type">int</span> savesigs)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 from setjmp, nonzero from longjmps */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003; In particular, VM simplifies memory management in the following
+aspects:</p>
 <ul>
-<li><p>The <code>setjmp</code> function <strong>saves the current
-calling environment</strong> in the <code>env</code> buffer for later
-use by <code>longjmp</code>.</p>
-<ul>
-<li>The calling environment includes the program counter, stack pointer,
-and general-purpose registers.</li>
-</ul></li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">longjmp</span><span class="params">(jmp_buf env, <span class="type">int</span> retval)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">siglongjmp</span><span class="params">(sigjmp_buf env, <span class="type">int</span> retval)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Never returns */</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The <code>longjmp</code> function <strong>restores the calling
-environment from the <code>env</code> buffer</strong> and then
-<strong>triggers a return from the most recent <code>setjmp</code>
-call</strong> that initialized <code>env</code>.</p></li>
-<li><p>The <code>setjmp</code> then returns with the nonzero return
-value <code>retval</code>.</p>
-<ul>
-<li>The <code>setjmp</code> function is <strong>called once but returns
-multiple times</strong>: once when the setjmp is first called and the
-calling environment is stored in the env buffer, and once for each
-corresponding longjmp call.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;An important application of nonlocal jumps is to <strong>branch out
-of a signal handler to a specific code location</strong>, rather than
-returning to the instruction that was interrupted by the signal:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;csapp.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sigjmp_buf buf;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">handler</span><span class="params">(<span class="type">int</span> sig)</span></span><br><span class="line">{</span><br><span class="line">    siglongjmp(buf, <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">if</span> (!sigsetjmp(buf, <span class="number">1</span>)) {</span><br><span class="line">        Signal(SIGINT, handler);</span><br><span class="line">        Sio_puts(<span class="string">&quot;starting\n&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Sio_puts(<span class="string">&quot;restarting\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) {</span><br><span class="line">        Sleep(<span class="number">1</span>);</span><br><span class="line">        Sio_puts(<span class="string">&quot;processing...\n&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>); <span class="comment">/* Control never reaches here */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<li><p>Simplifying linking: A separate address space allows each process
+to <strong>use the same basic format for its memory image</strong>,
+regardless of where the code and data actually reside in physical
+memory.</p></li>
+<li><p>Simplifying loading: When loading the object file into a newly
+created process, the Linux loader:</p>
 <ol type="1">
-<li><p>The initial call to the <code>sigsetjmp</code> function
-<strong>saves the calling environment and signal
-context</strong>.</p></li>
-<li><p>When the user types Ctrl+C, the kernel sends a
-<code>SIGINT</code> signal to the process.</p></li>
-<li><p>Instead of returning from the signal handler, which would pass
-control back to the interrupted processing loop, the handler performs a
-nonlocal jump <strong>back to the beginning of the main
-program</strong>.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The output of the program is as below:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./restart</span><br><span class="line">starting</span><br><span class="line">processing...</span><br><span class="line">processing...</span><br><span class="line">Ctrl+C</span><br><span class="line">restarting</span><br><span class="line">processing...</span><br><span class="line">Ctrl+C</span><br><span class="line">restarting</span><br><span class="line">processing...</span><br></pre></td></tr></table></figure>
+<li><p>allocates virtual pages for the code and data segments</p></li>
+<li><p><strong>marks them as invalid</strong>(i.e., not cached)</p></li>
+<li><p><strong>points their page table entries to the appropriate
+locations in the object file</strong>.</p></li>
+</ol></li>
+</ul>
+<blockquote>
+<p>The loader never actually copies any data from disk into memory.</p>
+</blockquote>
+<p>&#x2003;&#x2003;This notion of mapping a set of contiguous virtual pages to an
+arbitrary location in an arbitrary file is known as <em>memory
+mapping</em>.</p>
+<ul>
+<li><p>Simplifying sharing: Rather than including separate copies of the
+kernel and standard C library in each process, the operating system can
+arrange for multiple processes to share a single copy of this code by
+<strong>mapping the appropriate virtual pages in different processes to
+the same physical pages</strong>.</p></li>
+<li><p>Simplifying memory allocation: When a program running in a user
+process requests additional heap space(e.g., <code>malloc</code>), the
+operating system <strong>allocates <span class="math inline">\(k\)</span> of contiguous virtual memory
+pages</strong>, and <strong>maps them to <span class="math inline">\(k\)</span> arbitrary physical pages located
+anywhere in physical memory</strong>.</p></li>
+</ul>
 
       
     </div>
@@ -338,7 +331,7 @@ program</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -363,14 +356,14 @@ program</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

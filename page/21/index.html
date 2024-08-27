@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/03/5-9-Enhancing-Parallelism/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-12-Understanding-Memory-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/03/5-9-Enhancing-Parallelism/" class="post-title-link" itemprop="url">5.9.Enhancing Parallelism</a>
+          <a href="/2024/08/05/5-12-Understanding-Memory-Performance/" class="post-title-link" itemprop="url">5.12.Understanding Memory Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 16:31:22" itemprop="dateCreated datePublished" datetime="2024-08-03T16:31:22+08:00">2024-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-04 20:58:58" itemprop="dateModified" datetime="2024-08-04T20:58:58+08:00">2024-08-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:34:53" itemprop="dateCreated datePublished" datetime="2024-08-05T09:31:22+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>464</span>
+      <span>521</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,72 +266,77 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="59enhancing-parallelism">5.9.Enhancing Parallelism</h1>
-<h3 id="1multiple-accumulator">1.Multiple Accumulator</h3>
-<h4 id="abasicidea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
-idea</h4>
-<p>&#x2003;&#x2003;Assume that <span class="math inline">\(P_n\)</span> represents the
-product of elements <span class="math inline">\(a_0,a_1, \cdots
-,a_{n-1}\)</span>:</p>
-<p><span class="math display">\[
-P_n = \prod ^{n-1} _{i=0} a_i
-\]</span></p>
-<p>&#x2003;&#x2003;We can rewrite this as <span class="math inline">\(P_n=PE_n \times
-PO_n\)</span>:</p>
-<p><span class="math display">\[
-PE_n = \prod ^{ {n \over 2} -1} _{i=0} a_{2i}
-\]</span></p>
-<p><span class="math display">\[
-PO_n = \prod ^{ {n \over 2} -1} _{i=0} a_{2i+1}
-\]</span></p>
-<p>&#x2003;&#x2003;By using this method, we use both two-way loop unrolling and
-two-way parallelism. We refer to this as <em><span class="math inline">\(2\times 2\)</span> loop unrolling</em>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 2 x 2 loop unrolling */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine6</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">long</span> limit = length - <span class="number">1</span>;</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc0 = IDENT;</span><br><span class="line">    <span class="type">data_t</span> acc1 = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Combine 2 elements at a time */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>) {</span><br><span class="line">        acc0 = acc0 OP data[i];</span><br><span class="line">        acc1 = acc1 OP data[i + <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Finish any remaining elements */</span></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) {</span><br><span class="line">        acc0 = acc0 OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc0 OP acc1;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The performance of this program is as below:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image.png"></p>
-<p>&#x2003;&#x2003;We can see that we improve the performance by a factor of around 2.
-Most significantly, we have <strong>broken through the barrier imposed
-by the latency bound</strong>. The processor no longer needs to delay
-the start of one sum or product operation until the previous one has
-completed.</p>
-<p>&#x2003;&#x2003;The data-flow representation of <code>combine6</code> is as
-below:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-1.png"></p>
-<p>&#x2003;&#x2003;There are two critical paths, and each of these contains only <span class="math inline">\(n \over 2\)</span> operations, thus leading to a
-CPE of around 5.00/2 = 2.50.</p>
-<h4 id="bgeneral-analysis">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>General analysis</h4>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-2.png"></p>
-<p>&#x2003;&#x2003;In general, a program can <strong>achieve the throughput
-bound</strong> for an operation only when it can <strong>keep the
-pipelines filled for all of the functional units capable of performing
-that operation</strong>. For an operation with latency <span class="math inline">\(L\)</span> and capacity <span class="math inline">\(C\)</span>, this requires an unrolling factor
-<span class="math inline">\(k \geq C \cdot L\)</span>.</p>
+          <h1 id="512understanding-memoryperformance"><span class="math inline">\(5.12.\)</span>Understanding Memory
+Performance</h1>
+<h3 id="1store-performance">1.Store Performance</h3>
+<p>&#x2003;&#x2003;A series of store operations cannot create a data dependency. Only
+a load operation is affected by the result of a store operation, since
+<strong>only a load can read back the memory value that has been written
+by the store</strong>.</p>
+<p>&#x2003;&#x2003;The store unit includes a <em>store buffer</em> containing
+<strong>the addresses and data of the store operations</strong> that
+have been issued to the store unit, but <strong>have not yet been
+completed</strong>, where completion involves updating the data
+cache.</p>
+<p>&#x2003;&#x2003;This buffer is provided so that a series of store operations can be
+executed <strong>without having to wait for each one to update the
+cache</strong>.</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-2.png"></p>
+<h3 id="2load-and-store-operations">2.Load and Store Operations</h3>
+<h4 id="adifferent-types-of-load-ampstore">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Different types of load &amp;
+store</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Write to dest, read from src */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_read</span><span class="params">(<span class="type">long</span> *src, <span class="type">long</span> *dst, <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> cnt = n;</span><br><span class="line">    <span class="type">long</span> val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (cnt) {</span><br><span class="line">        *dst = val;</span><br><span class="line">        val = (*src) + <span class="number">1</span>;</span><br><span class="line">        cnt--;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-1.png"></p>
 <ul>
-<li>For example, floating-point multiplication has <span class="math inline">\(C=2\)</span> and <span class="math inline">\(L=5\)</span>, necessitating <strong>an unrolling
-factor of <span class="math inline">\(k \geq 10\)</span></strong>.</li>
+<li><p>In Example A, the result of the read from <code>src</code>
+<strong>is not affected by the write to <code>dest</code></strong>, and
+the iterations gives a CPE of 1.3.</p></li>
+<li><p>In Example B, each load by the pointer reference
+<code>*src</code> will yield the value stored by the previous execution
+of the pointer reference <code>*dest</code>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;In performing the <span class="math inline">\(k \times k\)</span>
-unrolling transformation, we must consider <strong>whether it preserves
-the functionality of the original function</strong>.</p>
+<p>&#x2003;&#x2003;This example illustrates a phenomenon we will call a <em>write/read
+dependency</em>&#x2014;<strong>the outcome of a memory read depends on a recent
+memory write</strong>.</p>
+<p>&#x2003;&#x2003;The CPE of Example B is 7.3, The write/read dependency causes a
+slowdown in the process.</p>
+<p>&#x2003;&#x2003;The reason of the slowdown can be illustrated in the following
+data-flow representation:</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-3.png"></p>
+<p>&#x2003;&#x2003;For the case of Example A, <strong>with differing source and
+destination addresses</strong>, the load and store operations
+<strong>can proceed independently</strong>, and hence the only critical
+path is formed by the decrementing of variable cnt, resulting in a CPE
+bound of 1.0.</p>
+<h4 id="bload-performance">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Load performance</h4>
+<p>&#x2003;&#x2003; When a load operation occurs, it must <strong>check the entries in
+the store buffer</strong> for matching addresses. If it finds a match,
+it <strong>retrieves the corresponding data entry</strong> as the result
+of the load operation.</p>
+<p>&#x2003;&#x2003;Take the following assembly code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of write_read</span><br><span class="line"># src in %rdi, dst in %rsi, val in %rax</span><br><span class="line">.L3:                    # loop:</span><br><span class="line">    movq %rax, (%rsi)     # Write val to dst</span><br><span class="line">    movq (%rdi), %rax     # t = *src</span><br><span class="line">    addq $1, %rax         # val = t + 1</span><br><span class="line">    subq $1, %rdx         # cnt--</span><br><span class="line">    jne .L3               # If != 0, goto loop</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image.png"></p>
 <ul>
-<li><p>Two&apos;s-complement arithmetic is commutative and associative, so
-the unrolling transformation will get identical result.</p></li>
-<li><p>Floating-point multiplication and addition are not associative,
-so we may get different result.</p></li>
+<li><p>The <code>s_addr</code> instruction computes the address for the
+store operation, <strong>creates an entry in the store buffer</strong>,
+and <strong>sets the address field for that entry</strong>.</p></li>
+<li><p>The <code>s_data</code> operation <strong>sets the data field for
+the entry</strong>.</p></li>
 </ul>
-<h3 id="2reassociationtransformation">2.Reassociation
-Transformation</h3>
-<h4 id="abasicidea">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
-idea</h4>
-<p>&#x2003;&#x2003;By simply change the code of <span class="math inline">\(k \times
-1\)</span> loop unrolling, we can reach better performance. For example,
-the code:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acc = (acc OP data[i]) OP data[i+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;can be changed into:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acc = acc OP (data[i] OP data[i+<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The performance of the code is nearly the same as <span class="math inline">\(2 \times 2\)</span> loop unrolling:</p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-3.png"></p>
-<p><img src="/2024/08/03/5-9-Enhancing-Parallelism/image-4.png"></p>
+<p>&#x2003;&#x2003;The arcs on the right of the operators denote a set of implicit
+dependencies for these operations:</p>
+<ul>
+<li><p>For instruction <code>movq (%rdi), %rax</code>, the load
+operation must <strong>check the addresses of any pending store
+operations</strong>, creating a data dependency between it and the
+<code>s_addr</code> operation.</p>
+<ul>
+<li>If the two addresses match, the load operation must <strong>wait
+until the s_data has deposited its result into the store
+buffer</strong>, but if the two addresses differ, the two operations
+<strong>can proceed independently</strong>.</li>
+</ul></li>
+</ul>
 
       
     </div>
@@ -360,7 +359,7 @@ the code:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/22/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/22/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -385,14 +384,14 @@ the code:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

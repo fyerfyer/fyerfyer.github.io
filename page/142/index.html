@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-3-CPU/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/06/5-3-CPU/" class="post-title-link" itemprop="url">5.3.CPU</a>
+          <a href="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-title-link" itemprop="url">5.4.Hack&#x8BA1;&#x7B97;&#x673A;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-06 09:44:54" itemprop="dateCreated datePublished" datetime="2024-04-06T09:44:54+08:00">2024-04-06</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-06 11:34:24" itemprop="dateCreated datePublished" datetime="2024-04-06T11:34:24+08:00">2024-04-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 16:18:12" itemprop="dateModified" datetime="2024-06-03T16:18:12+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 16:17:37" itemprop="dateModified" datetime="2024-06-03T16:17:37+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>726</span>
+      <span>747</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,176 +272,165 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53central-processing-unit"><span class="math inline">\(5.3.\)</span>Central Processing Unit</h1>
-<h3 id="1abstraction">1.Abstraction</h3>
-<p>&#x2003;&#x2003;We can view CPU as <strong>a 16-bit</strong> processor, designed
-to:</p>
+          <h1 id="54hackcomputer"><span class="math inline">\(5.4.\)</span>Hack
+Computer</h1>
+<h3 id="1hack-computer-abstraction">1.Hack computer abstraction</h3>
 <ul>
-<li><p>Execute the current instruction.</p>
-<ul>
-<li>This turns the static code into reality.</li>
-</ul></li>
-<li><p>Figure out which instruction to execute next.</p></li>
+<li>A computer capable of running programs written in the Hack machine
+language.</li>
 </ul>
-<h3 id="2hack-cpu-interface">2.Hack CPU interface</h3>
-<p><img src="/2024/04/06/5-3-CPU/image.png"></p>
+<h3 id="2cpu-operations">2.CPU operations</h3>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image.png"></p>
+<figure>
+<img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-1.png" alt="Alt text">
+<figcaption aria-hidden="true">Alt text</figcaption>
+</figure>
 <ul>
-<li>CPU is connected both to the <em>instruction memory</em> and to the
-<em>data memory</em>.</li>
-</ul>
-<p>&#x2003;&#x2003;here is the specific input and output connections of the CPU:</p>
-<p><img src="/2024/04/06/5-3-CPU/image-1.png"></p>
+<li><p>If the instruction includes <code>D And A</code>, CPU is going to
+<strong>manipulate the respective D and A registers</strong>.</p></li>
+<li><p>If the instruction ia an A instruction like <code>@17</code>, CPU
+is going to <strong>take the 15-bit data value and store them inside the
+A register</strong>. This value is <strong>emitted by
+<code>addressM</code></strong>.</p></li>
+<li><p>If the instruction&apos;s <em>right hand side</em> includes
+<code>M</code> like <code>M = M + 1</code>, this value is <strong>read
+from <code>inM</code> interface</strong>.</p></li>
+<li><p>If the instruction&apos;s <em>left hand side</em> includes
+<code>M</code>, then the value output should be stored in the data
+memory of the selected memory register.</p>
 <ul>
-<li><p>We have three inputs coming from three completely different
-sources.</p>
-<ul>
-<li><p>A 16-bit <em>data value</em>, which is the value of <strong>the
-currently selected data memory register</strong>. This is the value CPU
-is going to operate on.</p></li>
-<li><p>A 16-bit <em>instruction value</em>, which is the value of
-<strong>the selected instruction memory register</strong>.</p>
-<ul>
-<li>Remember that at any given point of time, there is always <strong>a
-selected register in the instruction memory</strong>, and a
-<strong>selected memory register in the data memory</strong>. So always
-something comes into the CPU.</li>
+<li>As we discuss in the CPU, we have to provide <strong>what things we
+want to write, where to write and the control bits</strong> to write
+something to the data memory. As a result, <strong>the ALU output is
+emitted by <code>outM</code>, and the <code>writeM</code> is
+asserted</strong>.</li>
 </ul></li>
-<li><p>A 1-bit <em>input</em>, which we <strong>decide to call the
-reset</strong>.</p></li>
-</ul></li>
-<li><p>On the right hand side we see the outputs of ALU:</p>
+<li><p>If we have a jump situation <code>@100, D = D - 1; JEQ</code>. ,
+we want to jump to the address that was specified before(100, in this
+case):</p>
 <ul>
-<li><p>The ALU specifies 3 different things to write something to the
-data memory:</p>
-<ol type="1">
-<li><em>outM</em>: What we want to write.</li>
-<li><em>writeM</em>: A <strong>load bit</strong> that enables the data
-memory to write operations.</li>
-<li><em>address</em>: Where do we want to write it.</li>
-<li><em>pc</em>: It holds the <strong>address of the next
-instruction</strong> that has to be fetched and executed in the next
-cycle of this computer.</li>
-</ol></li>
+<li>If <code>reset == 0</code>, CPU logic uses <strong>the jump bits and
+the ALU output</strong> to decide whether or not there should be a
+jump.</li>
+<li>If there is a jump, <code>PC = A</code></li>
+<li>Else, <code>PC++</code></li>
+<li>The updated <code>PC</code> value <strong>is emitted by
+<em>pc</em></strong>.</li>
+<li>If <code>reset == 1</code>, <em>pc</em> emits <code>0</code>,
+causing a program restart</li>
 </ul></li>
 </ul>
-<h3 id="3cpu-implementation">3.CPU implementation</h3>
-<p>&#x2003;&#x2003;The whole CPU hardware diagram is as below:</p>
-<p><img src="/2024/04/06/5-3-CPU/image-2.png"></p>
-<h4 id="aainstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>A
-instruction</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-3.png"></p>
-<p>&#x2003;&#x2003;This section contains:</p>
+<h3 id="3memory-abstraction">3.Memory abstraction</h3>
+<figure>
+<img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-2.png" alt="Alt text">
+<figcaption aria-hidden="true">Alt text</figcaption>
+</figure>
 <ul>
-<li><em>A register</em> called A.</li>
-<li><em>An A-instruction input</em> that connects to this register
-through a <em>multiplexer</em>.</li>
-</ul>
-<p>&#x2003;&#x2003;We see that this instruction seeks to load the value
-<code>3001</code> into a register. In order to carry out this
-instruction, the CPU do:</p>
-<ol type="1">
-<li>Decode the instruction into <strong>op-code + 15-bit
-value</strong>.</li>
-<li>Noticing that it is a A instruction, CPU <strong>stores the 15-bit
-value in the A-register</strong>.</li>
-<li>Take the output of A register and admit it outside.</li>
-</ol>
-<h4 id="b-cinstruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span> C
-instruction</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-4.png"></p>
-<p>&#x2003;&#x2003;This section contains:</p>
+<li><p>Three different segments:</p>
 <ul>
-<li>A register.</li>
-<li>C instruction.</li>
-</ul>
-<p>&#x2003;&#x2003;Others is the same as above.</p>
-<ul>
-<li><p>Say we want to gain an A instruction, we can use the
-<em>Mux16</em>:</p>
-<ul>
-<li>If the instruction input is with an op-code <code>0</code>, we
-choose the instruction input.</li>
-<li>Otherwise, we choose the ALU input.</li>
+<li>Address 0 to 16383(16k): <em>data memory</em></li>
+<li>Address 16384 to 24575(next 8k): <em>screen memory map</em></li>
+<li>Address 24576: <em>keyboard memory map</em></li>
 </ul></li>
 </ul>
-<h4 id="caluoperation">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>ALU
-Operation</h4>
-<p><img src="/2024/04/06/5-3-CPU/image-5.png"></p>
+<h3 id="4memory-implementation">4.Memory implementation</h3>
+<p>&#x2003;&#x2003;We bulid our memory from three different sub-chips:</p>
 <ul>
-<li><p>The inputs of ALU come from:</p>
-<ol type="1">
-<li><p><em>D register</em></p></li>
-<li><p>Either the value of <em>A register</em> or <em>selected memory
-register</em>.</p></li>
-<li><p><em>Multiplexer</em> takes care of this decision, and the control
-bit of it is <strong>one of the bits in the instruction</strong>.</p>
-<ul>
-<li>The CPU designer has to <strong>choose this bit</strong>, and then
-ALU gets the correct input.</li>
-</ul></li>
-</ol></li>
-<li><p>ALU also has <em>6 control bits taken together</em> to
-<strong>tell or specify the ALU which operation we want to carry
-out</strong>.</p></li>
+<li><em>RAM:</em> 16-bit 16K RAM chip</li>
+<li><em>Screen</em>: 16-bit/8K memory chip with a raster display
+side-effect.</li>
+<li><em>Keyboard</em>: 16-bit register with a keyboard side-effect.</li>
 </ul>
-<p><img src="/2024/04/06/5-3-CPU/image-6.png"></p>
+<h4 id="aram">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>RAM</h4>
+<p>![[Pasted image 20240406103441.png]]</p>
 <ul>
-<li><p>The output of ALU is <strong>simultaneously</strong> fed
-into:</p>
-<ol type="1">
-<li><p><em>D register</em></p></li>
-<li><p><em>A register</em></p></li>
-<li><p><em>M register</em></p>
-<ul>
-<li>It goes through a <em>Multiplexer</em>.</li>
-</ul></li>
-</ol></li>
+<li>The inputs and outputs of RAM16 are identical to the inputs and
+outputs of the overall memory chip.</li>
+<li>So whoever builds the chip has to make sure to take the outside
+inputs and outputs and <strong>make connections that will funnel these
+value into the inner chip box, such as RAM 16K</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;The same ALU is fanned out into 3 different places, so we have the
-same ALU output knocking on three different doors. The programmer has to
-decide which door to be opened. The decision is made by next field of
-bits &#x2014;&#x2014; <em>destination bits</em>:</p>
+<h4 id="bscreen">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Screen</h4>
+<p>![[Pasted image 20240406104348.png]]</p>
 <ul>
-<li>We have 3 destination bits, which decide whether or not open the
-<em>D register</em>, <em>A register</em>, <em>M register</em> and the
-<em>data memory</em> to accept the ALU output.</li>
-</ul>
-<h4 id="dcontrol-abstraction">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Control abstraction</h4>
-<p>&#x2003;&#x2003;The computer is loaded with some program, when you push
-<code>reset</code>, <strong>the program starts running</strong>.</p>
-<p>&#x2003;&#x2003;In our previous chapter, we know that the last three bits of the
-instruction is <em>jump bits</em>, which a <code>1</code> represents
-unconditional <code>goto</code>. CPU realizes this functionality by
-<em>program counter</em></p>
-<h5 id="ipcabstraction">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>PC
-abstraction</h5>
+<li>We use a special built-in <em>8K screen chip</em> that knows how to
+automatically refresh a connected display unit.
 <ul>
-<li><p>Emits <strong>the address of the next instruction</strong>:</p>
-<ul>
-<li>To start / restart the program&apos;s execution: <code>PC = 0</code>(for
-we want to execute the first instruction of the program).</li>
-<li>no jump: <code>PC++</code></li>
-<li>unconditional <code>goto</code>: <code>PC = A</code></li>
-<li>conditional <code>goto</code>: if true <code>PC = A</code> else
-<code>PC++</code></li>
+<li>It&apos;s a RAM chip, which has a nice side effect of refreshing a
+connected display unit.</li>
 </ul></li>
 </ul>
-<h5 id="iicontrol-implementation">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Control implementation</h5>
-<p><img src="/2024/04/06/5-3-CPU/image-7.png"></p>
-<p><img src="/2024/04/06/5-3-CPU/image-8.png"></p>
+<h4 id="ckeyboard">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Keyboard</h4>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-3.png"></p>
 <ul>
-<li><p>if <code>reset == 1</code>, <code>PC=0</code></p></li>
-<li><p>else</p>
+<li>We use a built-in Keyboard chip featuring a keyboard capture
+side-effect, which is that it always reflects what the user is pressing
+on the keyboard.</li>
+</ul>
+<h3 id="5instruction-memory">5.Instruction memory</h3>
+<h4 id="aintro">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Intro</h4>
 <ul>
-<li><p>We have to look at the <strong>jump bits</strong> and
-simultaneously look at the <strong>ALU output</strong> to decide if we
-want to carry out the jump.</p></li>
-<li><p><code>load = f(jump bits, ALU control outputs)</code></p>
+<li>We implement this instruction memory using a chip called <em>ROM
+32K</em>.</li>
+</ul>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-4.png"></p>
 <ul>
-<li>if <code>load == 1</code>, <code>PC = A</code></li>
-<li>else <code>PC++</code></li>
+<li><p>We can <strong>loading a program</strong> in this way:</p>
+<ul>
+<li><p>Hardware inplementation: <em>plug-and-play ROM chips</em>: We put
+our machine instruction code into a ROM chip. We take this RAM chip,
+plug it into the computer. We press the <code>reset</code> button, and
+the computer will start executing this particular program.</p>
+<ul>
+<li>If we want to run another program, we take the chip out and plug in
+another chip.</li>
 </ul></li>
 </ul></li>
+</ul>
+<h4 id="brominterface">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>ROM
+interface</h4>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-5.png"></p>
+<ul>
+<li>It&apos;s a <strong>read-only</strong> device.</li>
+<li>Contains a sequence of Hack instructions (program).</li>
+<li>The <em>output</em> of of the ROM is always <strong>the contents of
+the register that is selected by the address input</strong>.</li>
+<li>Since the <em>pc</em> always emits the address of next instruction,
+if we feed this address into ROM, we are guaranteed that ROM will always
+admit a 16-bit value that we can treat as the current instruction.</li>
+</ul>
+<h3 id="6hack-computerimplementation">6.Hack computer
+implementation</h3>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-6.png"></p>
+<ul>
+<li>We first connect to the CPU <strong>the instruction memory which we
+call ROM</strong>. The instruction input of the CPU is taken from the
+output of instruction memory.</li>
+<li>In the process of executing this instuction, we are going to compute
+the address of the next instruction. This address is emitted by
+<em>pc</em>.</li>
+<li>The address goes all the way into the address of the instruction
+unit, and the unit will emit the next instruction that has to be
+executed in the next cycle.</li>
+</ul>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-7.png"></p>
+<ul>
+<li>To do something useful with the outputs, we connect outputs to
+<em>memory unit</em>.</li>
+<li>We take the output of the memory, and connect it back into the
+CPU</li>
+</ul>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-8.png"></p>
+<ul>
+<li>The input and output units are the only two things the computer
+users sees when he works.</li>
+<li>With this computer is a display unit, a keyboard and the reset
+button.</li>
+</ul>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-9.png"></p>
+<p><img src="/2024/04/06/5-4-Hack%E8%AE%A1%E7%AE%97%E6%9C%BA/image-10.png"></p>
+<ul>
+<li>This is the overall computer architect!!!</li>
 </ul>
 
       
@@ -465,7 +454,7 @@ want to carry out the jump.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/141/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/141/">141</a><span class="page-number current">142</span><a class="page-number" href="/page/143/">143</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/143/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/141/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/141/">141</a><span class="page-number current">142</span><a class="page-number" href="/page/143/">143</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/143/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -490,14 +479,14 @@ want to carry out the jump.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-4-Memory-Management/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-6-Address-Translation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/20/9-4-Memory-Management/" class="post-title-link" itemprop="url">9.4.Memory Management</a>
+          <a href="/2024/08/20/9-6-Address-Translation/" class="post-title-link" itemprop="url">9.6.Address Translation</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 11:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;13:48:02" itemprop="dateCreated datePublished" datetime="2024-08-20T11:31:22+08:00">2024-08-20</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 20:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:07:40" itemprop="dateCreated datePublished" datetime="2024-08-20T20:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>245</span>
+      <span>761</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,48 +266,133 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="94memory-management"><span class="math inline">\(9.4.\)</span>Memory Management</h1>
-<p><img src="/2024/08/20/9-4-Memory-Management/image.png"></p>
+          <h1 id="96address-translation"><span class="math inline">\(9.6.\)</span>Address Translation</h1>
+<h3 id="1summary-of-translationsymbols">1.Summary of Translation
+Symbols</h3>
+<p><img src="/2024/08/20/9-6-Address-Translation/image.png"></p>
+<h3 id="2basic-struction">2.Basic Struction</h3>
+<p>&#x2003;&#x2003;TThe following figure shows how the MMU uses the page table to
+perform the mapping <span class="math inline">\(MAP:VAS \rightarrow PAS
+\cup \emptyset\)</span>:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-1.png"></p>
 <ul>
-<li><p>Operating systems provide <strong>a separate page table</strong>,
-and thus <strong>a separate virtual address space</strong>, for each
-process.</p></li>
-<li><p><strong>Multiple virtual pages can be mapped to the same shared
-physical page</strong>.</p></li>
+<li><p>The page table base register(PTBR) points to the current page
+table.</p></li>
+<li><p>The n-bit virtual address has two components: a <span class="math inline">\(p\)</span>-bit virtual page offset(VPO) and an
+<span class="math inline">\((n&#x2212;p)\)</span>-bit virtual page
+number(VPN).</p>
+<ul>
+<li><p>The MMU uses the VPN to <strong>select the appropriate
+PTE</strong>. For example, VPN 0 selects PTE 0, VPN 1 selects PTE
+1.</p></li>
+<li><p>The corresponding physical address is the concatenation of the
+<strong>physical page number(PPN) from the page table entry</strong> and
+the <strong>VPO from the virtual address</strong>.</p></li>
+</ul></li>
+<li><p>Since the physical and virtual pages are both <span class="math inline">\(P\)</span> bytes, the physical page offset(PPO) is
+identical to the VPO.</p></li>
 </ul>
-<p>&#x2003;&#x2003; In particular, VM simplifies memory management in the following
-aspects:</p>
-<ul>
-<li><p>Simplifying linking: A separate address space allows each process
-to <strong>use the same basic format for its memory image</strong>,
-regardless of where the code and data actually reside in physical
-memory.</p></li>
-<li><p>Simplifying loading: When loading the object file into a newly
-created process, the Linux loader:</p>
+<h3 id="3cpu-hardwareperformance-for-page-hit-amp-page-fault">3.CPU Hardware
+Performance for Page Hit &amp; Page Fault</h3>
+<p>&#x2003;&#x2003;The CPU performs the following steps when there&apos;s a page hit:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-2.png"></p>
 <ol type="1">
-<li><p>allocates virtual pages for the code and data segments</p></li>
-<li><p><strong>marks them as invalid</strong>(i.e., not cached)</p></li>
-<li><p><strong>points their page table entries to the appropriate
-locations in the object file</strong>.</p></li>
-</ol></li>
-</ul>
-<blockquote>
-<p>The loader never actually copies any data from disk into memory.</p>
-</blockquote>
-<p>&#x2003;&#x2003;This notion of mapping a set of contiguous virtual pages to an
-arbitrary location in an arbitrary file is known as <em>memory
-mapping</em>.</p>
+<li><p>The processor <strong>generates a virtual address</strong> and
+sends it to the MMU.</p></li>
+<li><p>The MMU <strong>generates the PTE address</strong> and requests
+it <strong>from the cache/ main memory</strong>.</p></li>
+<li><p>The cache/main memory <strong>returns the PTE to the
+MMU</strong>.</p></li>
+<li><p>The MMU <strong>constructs the physical address</strong> and
+sends it to the cache/main memory.</p></li>
+<li><p>The cache/main memory returns the requested data word to the
+processor.</p></li>
+</ol>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-3.png"></p>
+<p>&#x2003;&#x2003;When there&apos;s a page fault, step 1~3 are the same:</p>
+<ol start="4" type="1">
+<li><p>The valid bit in the PTE is zero, so the MMU <strong>triggers an
+exception</strong>, which <strong>transfers control in the CPU to a page
+fault exception handler</strong> in the operating system
+kernel.</p></li>
+<li><p>The fault handler <strong>identifies a victim page in physical
+memory</strong>, and if that page has been modified, pages it out to
+disk.</p></li>
+<li><p>The fault handler pages in the new page and updates the PTE in
+memory.</p></li>
+<li><p>The fault handler <strong>returns to the original process,
+causing the faulting instruction to be restarted</strong>. The CPU
+resends the offending virtual address to the MMU. Because the virtual
+page is now cached in physical memory, there is a hit.</p></li>
+</ol>
+<h3 id="4-integrating-caches-and-vm">4. Integrating Caches and VM</h3>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-4.png"></p>
 <ul>
-<li><p>Simplifying sharing: Rather than including separate copies of the
-kernel and standard C library in each process, the operating system can
-arrange for multiple processes to share a single copy of this code by
-<strong>mapping the appropriate virtual pages in different processes to
-the same physical pages</strong>.</p></li>
-<li><p>Simplifying memory allocation: When a program running in a user
-process requests additional heap space(e.g., <code>malloc</code>), the
-operating system <strong>allocates <span class="math inline">\(k\)</span> of contiguous virtual memory
-pages</strong>, and <strong>maps them to <span class="math inline">\(k\)</span> arbitrary physical pages located
-anywhere in physical memory</strong>.</p></li>
+<li>The main idea is that the address translation occurs <strong>before
+the cache lookup</strong>.</li>
+</ul>
+<h3 id="5translation-lookasidebuffer">5.Translation Lookaside
+Buffer</h3>
+<p>&#x2003;&#x2003;When we meet a page fault, we will need to do an additional fetch
+from memory. Many systems try to eliminate this cost by including
+<strong>a small cache of PTEs in the MMU</strong> called a
+<em>translation lookaside buffer(TLB)</em>.</p>
+<ul>
+<li>A TLB is a small, virtually addressed cache where <strong>each line
+holds a block consisting of a single PTE</strong>:</li>
+</ul>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-5.png"></p>
+<ul>
+<li><p>The index and tag fields that are used for set selection and line
+matching <strong>are extracted from the virtual page number</strong> in
+the virtual address.</p>
+<ul>
+<li>If the TLB has <span class="math inline">\(T = 2^t\)</span> sets,
+then the TLB index(TLBI) consists of <strong>the <span class="math inline">\(t\)</span> least significant bits of the
+VPN</strong>, and the TLB tag(TLBT) consists of <strong>the remaining
+bits in the VPN</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;For a TLB hit, the mMU fetches the appropriate PTE from the
+TLB:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-6.png"></p>
+<h3 id="6multi-level-page-tables">6.Multi-Level Page Tables</h3>
+<h4 id="aanexample">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>An
+example</h4>
+<p>&#x2003;&#x2003;The common approach for compacting the page table is to use a
+hierarchy of page tables. The following is an example of a page table,
+which has a 32-bit address space, 4 KB pages, and a 4-byte PTE:</p>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-7.png"></p>
+<p>&#x2003;&#x2003;For the page table:</p>
+<ul>
+<li><p>Each PTE in the level 1 table is responsible for mapping a 4 MB
+chunk of the virtual address space.</p></li>
+<li><p>Each chunk consists of 1,024 contiguous pages.</p></li>
+</ul>
+<p>&#x2003;&#x2003;This scheme reduces memory requirements in two ways:</p>
+<ol type="1">
+<li><p>If a PTE in the level 1 table is null, then <strong>the
+corresponding level 2 page table does not even have to
+exist</strong>.</p></li>
+<li><p>Only the level 1 table needs to be in main memory at all times.
+The level 2 page tables can be created and paged in and out <strong>by
+the VM system as they are needed</strong>.</p></li>
+</ol>
+<h4 id="baddress-translation-for-k-level-pagetable-hierarchy">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Address translation for k-level page
+table hierarchy</h4>
+<p><img src="/2024/08/20/9-6-Address-Translation/image-8.png"></p>
+<ul>
+<li><p>The virtual address is partitioned into <span class="math inline">\(k\)</span> VPNs and a VPO.</p></li>
+<li><p>Each VPN <span class="math inline">\(i\)</span>(<span class="math inline">\(1 \leq i \leq k\)</span>) is an index into a page
+table at level <span class="math inline">\(i\)</span>.</p></li>
+<li><p>Each PTE in a level <span class="math inline">\(j\)</span>
+table(<span class="math inline">\(1 \leq j \leq k - 1\)</span>)
+<strong>points to the base of some page table at level <span class="math inline">\(j + 1\)</span></strong>.</p></li>
+<li><p>Each PTE in a level <span class="math inline">\(k\)</span> table
+contains <strong>either the PPN of some physical page or the address of
+a disk block</strong>.</p></li>
+<li><p>As with a single-level hierarchy, the PPO is identical to the
+VPO.</p></li>
 </ul>
 
       
@@ -331,7 +416,7 @@ anywhere in physical memory</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -356,14 +441,14 @@ anywhere in physical memory</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">

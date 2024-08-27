@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-5-Pipelined-Y86-64-Implementations/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/02/5-3-Optimizing-Methods/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/" class="post-title-link" itemprop="url">4.5.Pipelined Y86-64 Implementations</a>
+          <a href="/2024/08/02/5-3-Optimizing-Methods/" class="post-title-link" itemprop="url">5.3.Optimizing Methods</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 19:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T19:31:22+08:00">2024-07-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-31 20:33:52" itemprop="dateModified" datetime="2024-07-31T20:33:52+08:00">2024-07-31</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-02 08:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:58:48" itemprop="dateCreated datePublished" datetime="2024-08-02T08:31:22+08:00">2024-08-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-4-Processor-Architecture/" itemprop="url" rel="index"><span itemprop="name">Chapter 4.Processor Architecture</span></a>
+          <a href="/categories/CSAPP/Chapter-5-Optimizing-Program-Performance/" itemprop="url" rel="index"><span itemprop="name">Chapter 5.Optimizing Program Performance</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>3.6k</span>
+      <span>518</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>13 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,532 +266,39 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="45pipelined-y86-64-implementations"><span class="math inline">\(4.5.\)</span>Pipelined Y86-64 Implementations</h1>
-<h3 id="1seq-rearranging-thecomputation-stages">1.SEQ+ Rearranging the
-Computation Stages</h3>
-<p>&#x2003;&#x2003;We slightly rearrange the order of the five stages in SEQ so that
-<strong>the PC update stage comes at the beginning of the clock
-cycle</strong>, rather than at the end. We refer to this modified design
-as SEQ+.</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image.png"></p>
-<ul>
-<li><p>The old SEQ computes the PC register based on the values of
-signals computed during the current clock cycle.</p></li>
-<li><p>While with SEQ+, we <strong>create state registers to hold the
-signals computed during an instruction</strong>. Then as the new clock
-cycle begins, <strong>the values propagate through the exact same logic
-to compute the PC for the now-current instruction</strong>.</p></li>
-</ul>
-<blockquote>
-<p>In SEQ+, there is no hardware register storing the program counter.
-Instead, the PC <strong>is computed dynamically based on some state
-information stored from the previous instruction</strong>.</p>
-</blockquote>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-1.png"></p>
-<h3 id="2inserting-pipelineregisters">2.Inserting Pipeline
-Registers</h3>
-<p>&#x2003;&#x2003;We first try to insert pipeline registers between the stages of
-SEQ+. This kind of processor is called <em>PIPE-</em>, where the &apos;-&apos;
-represents the decrement in performance. It uses the same hardware as
-before, but with the pipeline registers separating the stages:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-2.png"></p>
-<ul>
-<li><p><em>F</em> holds a predicted value of the program
-counter.</p></li>
-<li><p><em>D</em> holds <strong>information about the most recently
-fetched instruction</strong> for processing <strong>by the decode
-stage</strong>.</p></li>
-<li><p><em>E</em> holds information about <strong>the most recently
-decoded instruction</strong> and <strong>the values read from the
-register file</strong> for processing by the execute stage.</p></li>
-<li><p><em>M</em> holds <strong>the results of the most recently
-executed instruction</strong> for processing by the memory stage. It
-also holds <strong>information about branch conditions and branch
-targets</strong> for processing conditional jumps.</p></li>
-<li><p><em>W</em> supply <strong>the computed results to the register
-file</strong> for writing and <strong>the return address to the PC
-selection logic</strong> when completing a <code>ret</code>
-instruction.</p></li>
-</ul>
-<blockquote>
-<p>Since normal program flow goes from top to bottom of a listing, we
-preserve this ordering by having the pipeline flow go from bottom to
-top.</p>
-</blockquote>
-<h3 id="3rearranging-and-relabelingsignals">3.Rearranging and Relabeling
-Signals</h3>
-<h4 id="asome-name-reference">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Some name reference</h4>
-<ul>
-<li><p>We use uppercase suffix to specified where data is stored. For
-example, <code>D_stat</code>.</p></li>
-<li><p>We use lowercase suffix to specified which stage data has been
-computed. For example, <code>f_stat</code>.</p></li>
-</ul>
-<blockquote>
-<p>The uppercase letters refer to pipeline registers, while the
-lowercase letters refer to pipeline stages.</p>
-</blockquote>
-<h4 id="bdetails">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Details</h4>
-<p>&#x2003;&#x2003;The decode stages generate <code>dstE</code> and
-<code>dstM</code>:</p>
-<ul>
-<li><p>In SEQ+, we <strong>connect these signals directly to the address
-inputs of the register file write ports</strong>.</p></li>
-<li><p>With PIPE&#x2212;, these signals are directed to the register file
-<strong>only once they reach</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;These are to make sure <strong>the write port address and data
-inputs hold values from the same instruction</strong>.</p>
-<ul>
-<li><p>The &quot;Select A&quot; block generates the value <code>valA</code> for
-the pipeline register E by <strong>choosing either <code>valP</code>
-from pipeline register D or the value read from the A port of the
-register file</strong>. This block is included to <strong>reduce the
-amount of state that must be carried forward to pipeline registers E and
-M</strong>.</p>
-<ul>
-<li>This is because only <code>call</code> instruction requires
-<code>valP</code> in the memory stage, only <code>jump</code>
-instruction requires <code>valP</code> in the execute stage(when the
-jump isn&apos;t taken). None of these instructions requires a value read from
-the register file.</li>
-</ul></li>
-</ul>
-<h3 id="4next-pc-prediction">4.Next PC Prediction</h3>
-<h4 id="abranch-prediction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Branch prediction</h4>
-<p>&#x2003;&#x2003;When we fetch a conditional branch instruction, to decide which
-branch to take, we try to predict the next value of the PC.</p>
-<ul>
-<li><p>For conditional jumps, if we predict that a jump will be taken,
-the PC will be <code>valC</code>(computed by the PC
-incrementer).</p></li>
-<li><p>If we predict that it won&apos;t be taken, the PC will be
-<code>valP</code>(from the fetch instruction).</p></li>
-</ul>
-<p>&#x2003;&#x2003;There are several prediction strategies:</p>
-<ol type="1">
-<li><p><em>Always Taken</em>.</p></li>
-<li><p><em>Never Taken</em>.</p></li>
-<li><p><em>Backward Taken, Forward Not Taken</em>. That is, branches to
-lower addresses than the next instruction will be taken, while those to
-higher addresses will not be taken. This strategy stems from the fact
-that <strong>loops are closed by backward branches and loops are
-generally executed multiple times</strong>.</p></li>
-</ol>
-<p>&#x2003;&#x2003;We simply use &quot;Always Taken&quot; for branch prediction.</p>
-<p>&#x2003;&#x2003;the block labeled &quot;Predict PC&quot; chooses either <code>valP</code> or
-<code>valC</code>. This value <strong>is stored in pipeline register
-F</strong> as the predicted value of the program counter.</p>
-<h4 id="bret">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>ret</code></h4>
-<p>&#x2003;&#x2003;For <code>ret</code> instruction, we don&apos;t use any prediction.
-Instead, we will simply <strong>hold off processing any more
-instructions until the <code>ret</code> instruction passes through the
-write-back stage</strong>.</p>
-<h3 id="5pipeline-hazards">5.Pipeline Hazards</h3>
-<p>&#x2003;&#x2003;When the dependencies referred before have the potential to cause
-an erroneous computation by the pipeline, they are called
-<em>hazards</em>. Hazards can be classified as either <em>data
-hazards</em> or <em>control hazards</em>.</p>
-<h4 id="astalling">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Stalling</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-3.png"></p>
-<p>&#x2003;&#x2003;One very general technique for avoiding hazards involves stalling,
-where the processor holds back one or more instructions in the pipeline
-until the hazard condition no longer holds.</p>
-<ul>
-<li>Our processor can avoid data hazards by <strong>holding back an
-instruction in the decode stage</strong> until <strong>the instructions
-generating its source operands have passed through the write-back
-stage</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;In holding back the <code>addq</code> instruction in the decode
-stage, we must also <strong>hold back the <code>halt</code> instruction
-following it in the fetch stage</strong>. We can do this by
-<strong>keeping the program counter at a fixed value</strong>, so that
-the halt instruction will be fetched repeatedly until the stall has
-completed.</p>
-<p>&#x2003;&#x2003;During the processing of <code>addq</code>, to perform the
-stalling, we <strong>inject a <em>bubble</em></strong>, which is a
-dynamically generated <code>nop</code> instruction, <strong>into the
-execute stage</strong>.</p>
-<h4 id="bforwarding">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Forwarding</h4>
-<h5 id="iforwarding-process">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Forwarding process</h5>
-<p>&#x2003;&#x2003;Rather than stalling until the write has completed, it can simply
-<strong>pass the value</strong> that is about to be written to pipeline
-register E <strong>as the source operand</strong>. This technique of
-<strong>passing a result value directly from one pipeline stage to an
-earlier one</strong> is commonly known as <em>data forwarding</em>:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-4.png"></p>
-<p>&#x2003;&#x2003;For forwarding, we can <strong>pass the newly computed values from
-the execute stage to the decode stage</strong>.</p>
-<ul>
-<li><p>The decode-stage logic <strong>detects a pending write to
-register <code>%rdx</code> in the memory stage</strong>, and also that
-<strong>the value being computed by the ALU in the execute stage will
-later be written to register <code>%rax</code></strong>.</p></li>
-<li><p>It can use the value in the memory stage(signal
-<code>M_valE</code>) for operand <code>valA</code>. It can also use the
-ALU output(signal <code>e_valE</code>) for operand
-<code>valB</code>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Forwarding can also be used with values read from the memory and
-destined for write port M:</p>
-<ul>
-<li><p>From the memory stage, we can forward <strong>the value that has
-just been read from the data memory</strong>(signal
-<code>m_valM</code>).</p></li>
-<li><p>From the write-back stage, we can forward <strong>the pending
-write to port M(signal <code>W_valM</code>)</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;This gives a total of five different forwarding
-sources(<code>e_valE</code>, <code>m_valM</code>, <code>M_valE</code>,
-<code>W_valM</code>, and <code>W_valE</code>) and two different
-forwarding destinations (<code>valA</code> and <code>valB</code>).</p>
-<p>&#x2003;&#x2003;The following figure shows the structure of PIPE that can handle
-data hazards by forwarding. We can see that the values from the five
-forwarding sources are fed back to the <strong>two blocks labeled
-&apos;Sel+Fwd A&quot; and &quot;Fwd B&quot; in the decode stage</strong>.</p>
-<ul>
-<li>The block labeled &quot;Sel+Fwd A&quot; combines the role of the block labeled
-&quot;Select A&quot; in PIPE with the forwarding logic.</li>
-</ul>
-<h5 id="iiforwarding-judgement">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Forwarding judgement</h5>
-<p>&#x2003;&#x2003;Associated with every value that will be written back to the
-register file is the destination register ID. The logic can compare
-these IDs with the source register IDs srcA and srcB to detect a case
-for forwarding.</p>
-<h4 id="cloaduse-hazards">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Load/Use hazards</h4>
-<p>&#x2003;&#x2003;One class of data hazards cannot be handled purely by forwarding is
-called <em>load/use hazards</em>:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-5.png"></p>
-<p>&#x2003;&#x2003;The <code>addq</code> instruction requires the value of the
-register in cycle 7, but <strong>it is not generated by the
-<code>mrmovq</code> instruction until cycle 8. In order to &quot;forward&quot;
-from the <code>mrmovq</code> to the <code>addq</code></strong>, the
-forwarding logic would have to make the value go backward in time(or no
-register will store our desired value)!</p>
-<p>&#x2003;&#x2003;We can avoid a load/use data hazard <strong>with a combination of
-stalling and forwarding</strong>:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-6.png"></p>
-<p>&#x2003;&#x2003;This technique is called <em>load interlock</em>. Since only load
-interlocks reduce the pipeline throughput, we can nearly achieve our
-throughput goal of issuing one new instruction on every clock cycle.</p>
-<h4 id="davoiding-control-hazards">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Avoiding control hazards</h4>
-<p>&#x2003;&#x2003;Control hazards arise when the processor <strong>cannot reliably
-determine the address of the next instruction</strong> based on the
-current instruction in the fetch stage.</p>
-<h5 id="iret">&#x2003;&#x2003;<span class="math inline">\(i.\)</span><code>ret</code></h5>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-7.png"></p>
-<ul>
-<li><p>While the <code>ret</code> instruction passes through the decode,
-execute, and memory stages, the pipeline cannot do any useful
-activity.</p></li>
-<li><p>Once the <code>ret</code> instruction reaches the write-back
-stage, the PC selection logic will <strong>set the program counter to
-the return address</strong>, and therefore the fetch stage will fetch
-the <code>irmovq</code> instruction at the return point(address
-0x013).</p></li>
-</ul>
-<h5 id="iijump-instruction">&#x2003;&#x2003;<span class="math inline">\(ii\)</span>Jump instruction</h5>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-8.png"></p>
-<ul>
-<li><p>By the time the branch logic detects that the jump should not be
-taken during cycle 4, two instructions have been fetched that should not
-continue being executed.</p></li>
-<li><p>Neither of these instructions has caused a change in the
-programmer-visible state. So the pipeline can simply cancel (sometimes
-called <em>instruction squashing</em>) the two misfetched instructions
-by <strong>injecting bubbles into the decode and execute stages</strong>
-on the following cycle while also fetching the instruction following the
-jump instruction.</p></li>
-</ul>
-<h3 id="6exception-handling">6.Exception Handling</h3>
-<h4 id="aseveral-exception-subleties">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Several exception subleties</h4>
-<ol type="1">
-<li><p>It is possible to have exceptions <strong>triggered by multiple
-instructions simultaneously</strong>.</p>
-<ul>
-<li>For example, we could have a <code>halt</code> instruction in the
-fetch stage, and the data memory could report an out-of-bounds data
-address for the instruction in the memory stage.</li>
-</ul></li>
-<li><p>When an instruction is first fetched and begins execution, causes
-an exception, and later is canceled due to a mispredicted branch. But we
-want to avoid rasing the exception.</p></li>
-<li><p>It&apos;s possible for an instruction following one causing an
-exception to <strong>alter some part of the state before the excepting
-instruction completes</strong>.</p>
-<ul>
-<li>Take the assembly program below as an example, The exception of
-<code>pushq %rax</code> is detected in memory stage, while the
-<code>addq %rax, %rax</code> has reached execute stage, and has already
-cause the condition codes to be set to new values(and other
-<code>stat</code>):</li>
-</ul></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">irmovq $1,%rax           </span><br><span class="line">xorq %rsp,%rsp   # Set stack pointer to 0 and CC to 100</span><br><span class="line">pushq %rax       # Attempt to write to 0xfffffffffffffff8</span><br><span class="line">addq %rax,%rax   # (Should not be executed) Would set CC to 000</span><br></pre></td></tr></table></figure>
-<h4 id="bhandling-exception">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Handling exception</h4>
-<p>&#x2003;&#x2003;When an exception occurs in one or more stages of a pipeline,
-<strong>the information is simply stored in the status fields of the
-pipeline registers</strong>. The event has no effect on the flow of
-instructions in the pipeline <strong>until an excepting instruction
-reaches the final pipeline stage</strong>, except to <strong>disable any
-updating of the programmer-visible state</strong>.</p>
-<ul>
-<li><p>For the first problem, we are guaranteed that the first
-instruction encountering an exception will <strong>arrive first in the
-write-back stage</strong>, at which point <strong>program execution can
-stop</strong> and <strong>the status code in pipeline register W can be
-recorded as the program status</strong>.</p></li>
-<li><p>For the second problem, if some instruction is fetched but later
-canceled, <strong>any exception status information about the instruction
-gets canceled as well</strong>.</p></li>
-<li><p>For the third problem, no instruction following one that causes
-an exception can alter the programmer-visible state.</p></li>
-</ul>
-<h3 id="7pipe-stage-implementation">7.PIPE Stage Implementation</h3>
-<h4 id="apc-selection-and-fetch-stage">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>PC selection and Fetch stage</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-9.png"></p>
-<ul>
-<li><p>The hardware units for reading the instruction from memory and
-for extracting the different instruction fields are the same as those we
-considered for SEQ.</p></li>
-<li><p>The PC selection logic chooses between three program counter
-sources:</p>
-<ul>
-<li><p>For <em>mispredicted branches</em>, The value of
-<code>valP</code>(indicating the address of the following instruction)
-is read from pipeline register M(signal <code>M_valA</code>).</p></li>
-<li><p>For <em><code>ret</code> instruction</em>, the return address is
-read from pipeline register W(signal <code>W_valM</code>).</p></li>
-<li><p>All other cases use <em>the predicted value of the PC</em>,
-stored in pipeline register F (signal <code>F_predPC</code>)</p></li>
-</ul></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">word f_pc = [</span><br><span class="line">    # Mispredicted branch. Fetch at incremented PC</span><br><span class="line">    M_icode == IJXX &amp;&amp; !M_Cnd : M_valA;</span><br><span class="line">    # Completion of RET instruction</span><br><span class="line">    W_icode == IRET : W_valM;</span><br><span class="line">    # Default: Use predicted value of PC</span><br><span class="line">    1 : F_predPC;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The PC prediction logic chooses <code>valC</code> for the fetched
-instruction when <strong>it is either a call or a jump</strong>, and
-<code>valP</code> otherwise:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word f_predPC = [</span><br><span class="line">    f_icode in { IJXX, ICALL } : f_valC;</span><br><span class="line">    1 : f_valP;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Unlike in SEQ, we must <strong>split the computation of the
-instruction status into two parts</strong>:</p>
-<ul>
-<li><p>In the fetch stage, we can test for a memory error <strong>due to
-an out-of-range instruction address</strong>, and we can <strong>detect
-an illegal instruction or a <code>halt</code>
-instruction</strong>.</p></li>
-<li><p>Detecting an invalid data address must <strong>be deferred to the
-memory stage</strong>.</p></li>
-</ul>
-<h4 id="bdecode-and-write-back-stages">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Decode and Write-back stages</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-10.png"></p>
-<ul>
-<li><p>The register IDs supplied to the write ports come from the
-write-back stage(signals <code>W_dstE</code> and <code>W_dstM</code>),
-rather than from the decode stage. This is to ensure that the final
-result is written back to the specified register <strong>only after the
-instruction has actually completed all operations</strong>, including
-memory access and execution.</p></li>
-<li><p>The block labeled &quot;Sel+Fwd A&quot; serves two roles: It <strong>merges
-the <code>valP</code> signal into the <code>valA</code> signal</strong>
-for later stages in order to reduce the amount of state in the pipeline
-register. It also <strong>implements the forwarding logic for source
-operand <code>valA</code></strong>.</p></li>
-<li><p><strong>Only the <code>call</code> and jump instructions need the
-value of <code>valP</code> in later stages</strong>, and these
-instructions do not need the value read from the A port of the register
-file.</p>
-<ul>
-<li>This selection is controlled by the <code>icode</code> signal for
-this stage. When <strong>signal <code>D_icode</code> matches the
-instruction code for either <code>call</code> or
-<code>jXX</code></strong>, this block should <strong>select
-<code>D_valP</code> as it output</strong>.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;there are five different forwarding sources, each with a data word
-and a destination register ID:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-11.png"></p>
-<p>&#x2003;&#x2003;If <strong>none of the forwarding conditions hold</strong>, the
-block should select <code>d_rvalA</code>, the value read from register
-port A, as its output.</p>
-<p>&#x2003;&#x2003;The overall HCL description for the <code>d_valA</code> is as
-below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">word d_valA = [</span><br><span class="line">    D_icode in { ICALL, IJXX } : D_valP; # Use incremented PC</span><br><span class="line">    d_srcA == e_dstE : e_valE; # Forward valE from execute</span><br><span class="line">    d_srcA == M_dstM : m_valM; # Forward valM from memory</span><br><span class="line">    d_srcA == M_dstE : M_valE; # Forward valE from memory</span><br><span class="line">    d_srcA == W_dstM : W_valM; # Forward valM from write back</span><br><span class="line">    d_srcA == W_dstE : W_valE; # Forward valE from write back</span><br><span class="line">    1 : d_rvalA; # Use value read from register file</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The priority given to the five forwarding sources in the above HCL
-code is very important. This priority is determined in the HCL code
-<strong>by the order in which the five destination register IDs are
-tested</strong>.</p>
-<blockquote>
-<p>To imitate this behavior, our pipelined implementation should always
-give priority to the forwarding source <strong>in the earliest pipeline
-stage</strong>, since it holds the latest instruction in the program
-sequence setting the register.</p>
-</blockquote>
-<p>&#x2003;&#x2003;In previous part, we know that the overall processor status
-<code>Stat</code> is computed by a block based on the status value:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-12.png"></p>
-<p>&#x2003;&#x2003;Since pipeline register W holds the state of the most recently
-completed instruction, it is natural to <strong>use this value as an
-indication of the overall processor status</strong>. The only special
-case to consider is when <strong>there is a bubble in the write-back
-stage</strong>. This is part of normal operation, and so we want
-<strong>the status code to be AOK for this case as well</strong>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word Stat = [</span><br><span class="line">    W_stat == SBUB : SAOK;</span><br><span class="line">    1 : W_stat;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h4 id="cexecute-stage">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Execute stage</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-13.png"></p>
-<p>&#x2003;&#x2003;The logic labeled &quot;Set CC&quot;, which <strong>determines whether or not
-to update the condition codes</strong>, has signals <code>m_stat</code>
-and <code>W_stat</code> as inputs. These signals are used to detect
-cases where an instruction causing an exception is passing through later
-pipeline stages, and therefore <strong>any updating of the condition
-codes should be suppressed</strong>.</p>
-<blockquote>
-<p>We need to ensure that <strong>the impact of the exception
-instruction is dealt with first</strong> to avoid incorrect barcode
-updates, so we suppress the condition codes.</p>
-</blockquote>
-<h4 id="dmemorystage">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Memory
-stage</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-14.png"></p>
-<h3 id="8pipeline-control-logic">8.Pipeline Control Logic</h3>
-<h4 id="adesired-handling-of-special-controlcases">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Desired handling of special control
-cases</h4>
-<p>&#x2003;&#x2003;Implement the pipeline flow requires d<strong>etecting the hazard
-condition</strong>, <strong>keeping pipeline registers F and D
-fixed</strong>, and <strong>injecting a bubble into the execute
-stage</strong>.</p>
-<ul>
-<li>The pipeline holds back an instruction in the decode stage by
-<strong>keeping pipeline register D in a fixed state</strong>. It should
-also keep pipeline register F in a fixed state, <strong>so that the next
-instruction will be fetched a second time</strong>.</li>
-</ul>
-<h5 id="iret">&#x2003;&#x2003;<span class="math inline">\(i.\)</span><code>ret</code></h5>
-<p>&#x2003;&#x2003;The figure below provides a detailed view of the processing of the
-<code>ret</code> instruction for the example program:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-15.png"></p>
-<ul>
-<li>The fetch stage stalls, causing the <code>rrmovq</code> instruction
-to be fetched but then replaced by a bubble in the decode stage.</li>
-</ul>
-<h5 id="iimispredicted-branch">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Mispredicted branch</h5>
-<p>&#x2003;&#x2003;When a mispredicted branch occurs, the control logic
-<strong>injects bubbles into the decode and execute stages on the next
-cycle</strong>, causing the two incorrectly fetched instructions to be
-canceled. On the same cycle, <strong>the pipeline reads the correct
-instruction into the fetch stage</strong>.</p>
-<p>&#x2003;&#x2003;For an instruction that causes an exception, to make the pipeline
-implementation matches the desired ISA behaviour:</p>
-<ul>
-<li><p>We record the status of each instruction by the status code
-<code>stat</code>, and continue fetching, decoding, and executing
-instructions as if nothing were amiss.</p></li>
-<li><p>As the excepting instruction reaches the memory stage, we take
-steps to prevent later instructions from modifying the
-programmer-visible state by:</p>
-<ol type="1">
-<li><p>disabling the setting of condition codes by instructions in the
-execute stage,</p></li>
-<li><p>injecting bubbles into the memory stage to disable any writing to
-the data memory,</p></li>
-<li><p><strong>stalling the write-back stage when it has an excepting
-instruction</strong>, thus bringing the pipeline to a halt.</p></li>
-</ol></li>
-</ul>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-16.png"></p>
-<ul>
-<li>We disable the setting of condition codes when an excepting
-instruction is in the memory or write-back stage(by examining the
-signals <code>m_stat</code> and <code>W_stat</code> and then setting the
-signal <code>set_cc</code> to zero)</li>
-</ul>
-<h4 id="bdetecting-special-controlconditions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Detecting special control
-conditions</h4>
-<p>&#x2003;&#x2003;The following figure give expressions describing the conditions
-under which the three special cases arise:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-17.png"></p>
-<ul>
-<li><p>Detecting a <code>ret</code> instruction involves
-<strong>checking the instruction codes of the instructions in the
-decode, execute, and memory stages</strong>.</p></li>
-<li><p>Detecting a load/use hazard involves <strong>checking the
-instruction type(<code>mrmovq</code> or <code>popq</code>) of the
-instruction in the execute stage</strong> and <strong>comparing its
-destination register with the source registers of the instruction in the
-decode stage</strong>.</p></li>
-<li><p>The pipeline control logic should detect a mispredicted branch
-while <strong>the jump instruction is in the execute stage</strong>, so
-that it can <strong>set up the conditions required to recover from the
-misprediction</strong> as the instruction enters the memory
-stage.</p></li>
-</ul>
-<h4 id="cpipeline-control-mechanisms">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Pipeline control mechanisms</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-18.png"></p>
-<ul>
-<li>When the bubble signal is set to 1, the state of the register
-<strong>will be set to some fixed reset configuration</strong>, giving
-<strong>a state equivalent to that of a nop instruction</strong>.</li>
-</ul>
-<h4 id="dcontrol-logic-implementation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Control logic implementation</h4>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-19.png"></p>
-<ul>
-<li>Pipeline register F must be stalled for either a load/use hazard or
-a <code>ret</code> instruction:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool F_stall =</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB } ||</span><br><span class="line">    # Stalling at fetch while ret passes through pipeline</span><br><span class="line">    IRET in { D_icode, E_icode, M_icode };</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Pipeline register E must be set to bubble for a load/use hazard or
-for a mispredicted branch:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool E_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB};</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Pipeline register D must be stalled for a load/use hazard:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bool D_stall =</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB };</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Pipeline register D must be set to bubble for a mispredicted branch
-or a <code>ret</code> instruction. However, it should not inject a
-bubble when there is a load/use hazard in combination with a
-<code>ret</code> instruction:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bool D_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Stalling at fetch while ret passes through pipeline</span><br><span class="line">    # but not condition for a load/use hazard</span><br><span class="line">    !(E_icode in { IMRMOVQ, IPOPQ } &amp;&amp; E_dstM in { d_srcA, d_srcB }) &amp;&amp;</span><br><span class="line">    IRET in { D_icode, E_icode, M_icode };</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Pipeline register E must be set to bubble for a load/use hazard or
-for a mispredicted branch:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bool E_bubble =</span><br><span class="line">    # Mispredicted branch</span><br><span class="line">    (E_icode == IJXX &amp;&amp; !e_Cnd) ||</span><br><span class="line">    # Conditions for a load/use hazard</span><br><span class="line">    E_icode in { IMRMOVQ, IPOPQ } &amp;&amp;</span><br><span class="line">    E_dstM in { d_srcA, d_srcB};</span><br></pre></td></tr></table></figure>
-<h3 id="9performance-analysis">9.Performance Analysis</h3>
-<p>&#x2003;&#x2003;We measure the overall performance by computing an estimate of
-<strong>the average number of clock cycles PIPE would require per
-instruction it executes</strong>, a measure known as the CPI (for
-&quot;cycles per instruction&quot;).</p>
-<ul>
-<li>If the stage processes a total of <span class="math inline">\(C_i\)</span> instructions and <span class="math inline">\(C_b\)</span> bubbles, then the processor has
-required around <span class="math inline">\(C_i+C_b\)</span> total clock
-cycles to execute <span class="math inline">\(C_i\)</span> instructions,
-and we can calculate the CPI as follows:</li>
-</ul>
-<p><span class="math display">\[
-CPI={ {C_i+C_b} \over C_i}=1.0+ {C_b \over C_i}
-\]</span></p>
-<p>&#x2003;&#x2003;We can analyze the total penalty like below:</p>
-<p><img src="/2024/07/26/4-5-Pipelined-Y86-64-Implementations/image-20.png"></p>
-<h3 id="9multicycle-instructions">9.Multicycle Instructions</h3>
-<p>&#x2003;&#x2003;In a more complete instruction set, we would also need to implement
-instructions requiring more complex operations such as integer
-multiplication and division and floating-point operations. However,
-these operations require more than 1 cycle, so they need to be computed
-specially.</p>
-<p>&#x2003;&#x2003;We can design a functional unit for performing integer
-multiplication and division, and another for performing floating-point
-operations.</p>
-<ul>
-<li><p>As an instruction enters the decode stage, it can be issued to
-the special unit. <strong>While the unit performs the operation, the
-pipeline continues processing other instructions</strong>.</p></li>
-<li><p>Typically, <strong>the floating-point unit is itself
-pipelined</strong>, and thus multiple operations can execute
-concurrently in the main pipeline and in the different units</p></li>
-</ul>
-<p>&#x2003;&#x2003;The operations of the different units must be synchronized to avoid
-incorrect behavior. Often, <strong>different forms of
-forwarding</strong> are used to convey results from one part of the
-system to other parts, just as we saw between the different stages of
-PIPE.</p>
+          <h1 id="53optimizing-methods">5.3.Optimizing Methods</h1>
+<h3 id="1code-motion">1.Code Motion</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine1</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; vec_length(v); i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Since the length of <code>v</code> is fixed, it&apos;s needless to
+compute its length for each iteration. So we can take this computation
+alone:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine2</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        <span class="type">data_t</span> val;</span><br><span class="line">        get_vec_element(v, i, &amp;val);</span><br><span class="line">        *dest = *dest OP val;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="2reduce-procedure-calls">2.Reduce Procedure Calls</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">data_t</span> *<span class="title function_">get_vec_start</span><span class="params">(vec_ptr v)</span> {</span><br><span class="line">    <span class="keyword">return</span> v-&gt;data;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Direct access to vector data */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line"></span><br><span class="line">    *dest = IDENT;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        *dest = *dest OP data[i];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3eliminating-unneededmemory-references">3.Eliminating Unneeded
+Memory References</h3>
+<p>&#x2003;&#x2003;The assembly code for <code>combine3</code> is as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = * </span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line"></span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We can see that the accumulated values read from and written to
+memory on each iteration. We can eliminate this needless reading and
+writing of memory by rewriting the code in the style of
+<code>combine4</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine4</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;With the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine4. data_t = double, OP = *</span><br><span class="line"># acc in %xmm0, data+i in %rdx, data+length in %rax</span><br><span class="line">.L25: loop:</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply acc by data[i]</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L25                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The key is to <strong>dereference the pointer as fewer as
+possible</strong>.</p>
+<p>&#x2003;&#x2003;However, this program will lead to different result due to
+<em>memory alias</em>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combine3(v, get_vec_start(v) + <span class="number">2</span>);</span><br><span class="line">combine4(v, get_vec_start(v) + <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/02/5-3-Optimizing-Methods/image.png"></p>
+<hr>
+<p>&#x2003;&#x2003;As a result, we modify the <code>combine3</code> as below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Make sure dest updated on each iteration */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine3w</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span> {</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize in event length &lt;= 0 */</span></span><br><span class="line">    *dest = acc;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">        *dest = acc;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;with the following assembly code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine3. data_t = double, OP = *. Compiled -O1</span><br><span class="line"># dest in %rbx, data+i in %rdx, data+length in %rax</span><br><span class="line">.L17: loop:</span><br><span class="line">    vmovsd (%rbx), %xmm0          # Read product from dest</span><br><span class="line">    vmulsd (%rdx), %xmm0, %xmm0   # Multiply product by data[i]</span><br><span class="line">    vmovsd %xmm0, (%rbx)          # Store product at dest</span><br><span class="line">    addq $8, %rdx                 # Increment data+i</span><br><span class="line">    cmpq %rax, %rdx               # Compare to data+length</span><br><span class="line">    jne .L17                      # If !=, goto loop</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This program dereferences the <code>dest</code> less while avoiding
+the memory alias.</p>
 
       
     </div>
@@ -820,7 +321,7 @@ PIPE.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/159/">159</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/27/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -845,14 +346,14 @@ PIPE.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">128k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:44</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
   </span>
 </div>
 <div class="busuanzi-count">
