@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/10/7-7-%E5%88%86%E6%94%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
+          <a href="/2024/04/10/7-7-%E5%88%86%E6%94%AF/" class="post-title-link" itemprop="url">7.6.&#x5206;&#x652F;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-10 16:44:10" itemprop="dateCreated datePublished" datetime="2024-04-10T16:44:10+08:00">2024-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 14:28:40" itemprop="dateModified" datetime="2024-06-03T14:28:40+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>250</span>
+      <span>146</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,59 +272,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
-<h3 id="1-the-stack-machine">1. The stack machine</h3>
+          <h1 id="76branching"><span class="math inline">\(7.6.\)</span>Branching</h1>
+<h3 id="1branching-implementation">1.Branching implementation</h3>
+<p>&#x2003;&#x2003;Take the following program as example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//return x * y</span><br><span class="line">int mult (int x, int y) {</span><br><span class="line">	int sum = 0;</span><br><span class="line">	int n = 1;</span><br><span class="line"></span><br><span class="line">	while !(n&gt;y) {</span><br><span class="line">		sum += x;</span><br><span class="line">		n++;</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	return sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This program can be translated into pseudo VM code as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function mult(x,y)</span><br><span class="line">	push 0</span><br><span class="line">	pop sum</span><br><span class="line">	push 1</span><br><span class="line">	pop n</span><br><span class="line">label LOOP</span><br><span class="line">	push n</span><br><span class="line">	push y</span><br><span class="line">	gt</span><br><span class="line">	if-goto ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	push x</span><br><span class="line">	add</span><br><span class="line">	pop sum</span><br><span class="line">	push n</span><br><span class="line">	push 1</span><br><span class="line">	add</span><br><span class="line">	pop n</span><br><span class="line">	goto LOOP</span><br><span class="line">label ENDLOOP</span><br><span class="line">	push sum</span><br><span class="line">	return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Notice that we have three new symbols: <code>label</code>,
+<code>if-goto</code>, <code>goto</code>:</p>
 <ul>
-<li>The stack machine is an <em>abstraction</em> that consists of
-<strong>an architecture, a stack and a set of operation which we can
-apply to the architecture</strong>.</li>
+<li><code>label LABEL</code> declare the label.</li>
+<li><code>if-goto LABEL</code>: if the statement is true, then jump to
+<code>LABEL</code>.</li>
+<li><code>goto LABEL</code>: jump to <code>LABEL</code> with no
+condition.</li>
 </ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
-<ul>
-<li>It can be considered an <em>array</em> which offers direct access to
-every element in the memory, as oppose to the traditional stack which
-only offers a stack pointer.</li>
-<li>When we do <code>push x</code>, <strong>the address of
-<code>x</code></strong> will be push into the stack:</li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
-<ul>
-<li><p>When we do <code>pop y</code>:</p>
-<ul>
-<li>the <strong>current top value in the stack</strong> will be
-removed,</li>
-<li>the <strong>popped value</strong> will override <code>y</code> (in
-this example, when 7 is popped, 3 becomes the new top value).</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
-<h3 id="2stack-arithmetic">2.Stack arithmetic</h3>
-<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
-three different things:</p>
-<ol type="1">
-<li>Pop as many required operands in the stack as possible.</li>
-<li>Apply the function to these operands in a separate process and get
-the result.</li>
-<li>Push the result back into the stack.</li>
-</ol>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
-<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
-have to do it to call <code>add</code> or <code>neg</code>, and these
-things will take place.</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
-<h3 id="3vm-commands">3.VM commands</h3>
-<ul>
-<li>Arithmetic commands:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
-<ul>
-<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
-<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
-high-level language:</p>
-<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
+<p>&#x2003;&#x2003;With these three statement, we can translate the branching
+expression into VM code.</p>
 
       
     </div>
@@ -347,7 +311,7 @@ high-level language:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/134/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><span class="page-number current">135</span><a class="page-number" href="/page/136/">136</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/134/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/134/">134</a><span class="page-number current">135</span><a class="page-number" href="/page/136/">136</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -372,14 +336,14 @@ high-level language:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

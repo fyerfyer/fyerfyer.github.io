@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
+          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-3-Program-Process/" itemprop="url" rel="index"><span itemprop="name">Module 3.Program Process</span></a>
+          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
         </span>
     </span>
 
@@ -254,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>527</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,120 +266,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
-<h3 id="1basic-devices">1.Basic devices</h3>
+          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
+Vector</h1>
+<h3 id="1basic-concepts">1.Basic concepts</h3>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
 <ul>
-<li><p><em>Registers</em>: It contains:</p>
-<ul>
-<li><p>Two data words from the register file, and <strong>write one data
-word into the register file</strong> for each instruction.</p></li>
-<li><p>An input. It <strong>specifies the register number to be
-read</strong>.</p></li>
-<li><p>An output. It <strong>carries the value that has been read from
-the register</strong>.</p></li>
-<li><p>To write a data word, we need two more inputs: one to
-<strong>specify the register number to be written</strong> and one to
-<strong>supply the data to be written into the
-register</strong>.</p></li>
-</ul></li>
+<li><p>In SIMD, all the parallel execution units are
+<strong>synchronized</strong>, and they all respond to a single
+instruction <strong>that emanates from a single program
+counter</strong>.</p></li>
+<li><p>Each execution unit <strong>has its own address register, and so
+have different data address</strong>.</p></li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
+<blockquote>
+<p>The original motivation behind SIMD was to <strong>amortize the cost
+of the control unit over execution units</strong>. The SIMD can also
+save instrustion bandwidth and space: SIMD needs <strong>only one copy
+of the code that is being simultaneously executed</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Since the instruction is single, SIMD works best when dealing with
+<strong>identically structured data</strong>, which is called
+<em>data-level parallelism</em>, e.g., for loop.</p>
+</blockquote>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
 <ul>
-<li><em>ALU</em></li>
+<li><p>SPMD: The programmer write a single program that runs on all
+processors of a <em>MIMD computer</em>, relying on conditional
+statements when different processors should execute distinct section of
+code.</p></li>
+<li><p>The SIMD computers operate on <strong>vectors of
+data</strong>.</p></li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<h3 id="2vector">2.Vector</h3>
+<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
+<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
+data elements from memory, put them in order into a large set of
+registers</strong>, and operate on them sequentially in registers using
+<em>pipelined execution units</em>.</p>
 <ul>
-<li><em>Immediate generation unit</em>: In operations like
-<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
-written in 12-bit offset in the instruction. So we need to
-<strong>sign-extend the number to a 64-bit signed value</strong>. The
-Imm-Gen does the job:</li>
+<li>A key feature of vector architectures is <strong>a set of vector
+registers</strong>.</li>
 </ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
-<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
-instruction execution</h3>
-<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
-parts:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
-<hr>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
-<h3 id="3implementation-ofdifferent-statement">3.Implementation of
-different statement</h3>
-<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
-instruction</h4>
-<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
-<code>DataA</code> and <code>DataB</code>, and calculate the result by
-ALU.</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
-<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
-rather than <code>DataB</code>. The source of Imm-Gen is from
-<code>IMEM</code>, from which we can get the instruction, and
-<code>inst[31:20]</code> is the immediate we want:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
-<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
-<code>save</code> instruction</h4>
-<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
-read or write data.</p>
-<ul>
-<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
-<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
-address. Else, it writes the information into the address:</li>
-</ul>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
-<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
-<p>&#x2003;&#x2003;The basic form of branch instruction is
-<code>beq x1 x2 offset</code>. To implement this instruction, we must
-compute the branch target address by <strong>adding the sign- extended
-offset field of the instruction to the PC</strong>. There are two
-details in the definition of branch instructions to which we must pay
-attention:</p>
-<ul>
-<li><p>The instruction set architecture specifies that <strong>the base
-for the branch address calculation is the address of the branch
-instruction</strong>.</p></li>
-<li><p>The architecture also states that <strong>the offset field is
-shifted left 1 bit so that it is a half word offset</strong>; this shift
-<strong>increases the effective range of the offset field by a factor of
-2</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
-the new PC, and we say the branch is <strong>taken</strong>. Else, we
-say the branch is <strong>not taken</strong>.</p>
-<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
-this struction:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
-<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
-signal</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
-<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
-<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
-<code>jalr</code> instructions</h4>
-<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
+<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
+loop):</p>
+<p><span class="math display">\[
+Y = a \times X + Y
+\]</span></p>
+<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
+<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
+<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
+also the pipeline stalls are required only <strong>once per vector
+operation</strong>, rather than once per vector element.</p>
+<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
 <ol type="1">
-<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
-<ul>
-<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
-2 bytes!</strong></li>
-</ul></li>
-<li><p>Set <code>PC=PC+offset</code></p>
-<ul>
-<li>Since the offset is calculated by ALU, we <strong>connect the output
-of ALU with input of PC</strong>.</li>
-</ul></li>
+<li><p>The compiler indicates that <strong>the computation of each
+result in the vector is independent</strong>. So compiler doesn&apos;t have
+to check for data hazards within an instruction.</p></li>
+<li><p>Since the element in a vector is adjacent, <strong>the cost of
+the latency to main memory is seen only once for the entire
+vector</strong>.</p></li>
+<li><p>Because a complete loop is replaced by a vector instruction whose
+<strong>behaviour is predetermined</strong>, control hazards are
+nonexistent.</p></li>
 </ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
-<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
-<ol type="1">
-<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
-<code>DataD</code>)</li>
-<li>Set <code>PC=PC+offset</code></li>
-</ol>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
-<h3 id="4datapath-control">4.Datapath control</h3>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
-<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
+<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
+<ul>
+<li>Unlike multimedia extensions, the number of elements in a vector
+operation isn&apos;t in the opcode but in <strong>a separate
+register</strong>.</li>
+</ul>
+<blockquote>
+<p>This means different versions of the vector architecture can simply
+be implemented by changing the contents of the register, thus retain
+binary compatibility.</p>
+</blockquote>
+<ul>
+<li>The parallel semantics of a vector instruction allows using a
+<em>deeply pipelined functional unit</em> to execute vector
+operations:</li>
+</ul>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
+<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
+register to take part in operations with element N from other vector
+registers, and the structure is called <em>vector lanes</em>:</p>
+<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
+<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
+vector unit by <strong>adding more lanes</strong>.</p>
 
       
     </div>
@@ -408,7 +378,7 @@ of ALU with input of PC</strong>.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/49/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/51/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/49/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/51/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -433,14 +403,14 @@ of ALU with input of PC</strong>.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

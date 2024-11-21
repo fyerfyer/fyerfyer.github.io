@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">4.6.&#x5BC4;&#x5B58;&#x5668;&#x4E0E;&#x5185;&#x5B58;</a>
+          <a href="/2024/04/05/4-8-%E6%8C%87%E9%92%88%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">4.8.&#x6307;&#x9488;&#xFF0C;&#x8F93;&#x5165;&#x4E0E;&#x8F93;&#x51FA;&#x63A7;&#x5236;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 12:34:04" itemprop="dateCreated datePublished" datetime="2024-04-05T12:34:04+08:00">2024-04-05</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-05 20:23:44" itemprop="dateCreated datePublished" datetime="2024-04-05T20:23:44+08:00">2024-04-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>110</span>
+      <span>268</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,22 +272,26 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="46working-with-register-and-memory"><span class="math inline">\(4.6.\)</span>Working with register and memory</h1>
-<h3 id="1operations-towards-d">1.Operations towards D</h3>
+          <h1 id="48pointer-and-input-outputcontrol"><span class="math inline">\(4.8.\)</span>Pointer and Input, Output
+Control</h1>
+<h3 id="1pointer">1.Pointer</h3>
+<p>&#x2003;&#x2003;We use <strong>A-instruction</strong> to point to a certain
+address. For example: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">//   for(i = 0; i &lt; n; i ++) {</span><br><span class="line">//      arr[i] = -1</span><br><span class="line">//   }</span><br><span class="line"></span><br><span class="line">//   suppose arr = 100 and n = 10</span><br><span class="line"></span><br><span class="line">//initialize</span><br><span class="line">	@100</span><br><span class="line">	D = A</span><br><span class="line">	@arr</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@10</span><br><span class="line">	D = A</span><br><span class="line">	@n</span><br><span class="line">	M = D</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = 0</span><br><span class="line"></span><br><span class="line">//iteration</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n </span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D;JEQ</span><br><span class="line"></span><br><span class="line">	//RAM[arr + i] = -1</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@arr</span><br><span class="line">	A = D + M</span><br><span class="line">	M = -1</span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	</span><br><span class="line">	@LOOP</span><br><span class="line">	0;JMP</span><br><span class="line"></span><br><span class="line">	(END)</span><br><span class="line">	@END</span><br><span class="line">	0;JMP</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The key step in the program is <code>A = D + M, M = -1</code>:</p>
 <ul>
-<li><p>Storing value: It turns out that there&apos;s no direct way to do it,
-we have to do it indirectly. For example, if we want to store 10 in
-register D: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@10</span><br><span class="line">D = A</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Incresing value: We can use C instructions directly:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = D + 1</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Setting D to RAM value: It&apos;s similar to storing value:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@10</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure></p></li>
+<li><p>The <code>A = D + M</code> point the address of <code>arr</code>
+to the <strong>base address</strong> of <code>arr</code>(the initial
+address, 100) plus i, which match the expression
+<code>arr + i</code>.</p></li>
+<li><p>By the time we say M equals -1, the register that will be
+affected is the register in A address.</p></li>
+<li><p>Variables that store memory addresses like <code>arr + i</code>
+are called <em>pointers</em>.</p></li>
+<li><p>Typical pointer semantics:&quot;set the address register to the
+contents of some <strong>memory register</strong>&quot;</p></li>
 </ul>
-<h3 id="2usage-of-d-register">2.Usage of D register</h3>
-<p>&#x2003;&#x2003;D register is of great importance in assignment operations:
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//set RAM[10] to 5</span><br><span class="line">@5</span><br><span class="line">D = A</span><br><span class="line">@10</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">//set RAM[10] to RAM[5]</span><br><span class="line">@ 5</span><br><span class="line">D = M</span><br><span class="line">@10</span><br><span class="line">M = D</span><br></pre></td></tr></table></figure></p>
-<h3 id="3built-in-symbol">3.Built-in symbol</h3>
-<p><img src="/2024/04/05/4-6-%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98/image.png"></p>
+<h3 id="2screen-input">2.Screen input</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">//for (i = 0; i &lt; n; i ++)</span><br><span class="line">//    draw 16 black pixels at the </span><br><span class="line">//    beginning of row i</span><br><span class="line"></span><br><span class="line">//    addr = SCREEN</span><br><span class="line">//    n = RAM[0]</span><br><span class="line">//    i = 0</span><br><span class="line">//    LOOP:</span><br><span class="line">//    if i &gt; n goto END</span><br><span class="line">//    RAM[addr] = -1 1111111111111111</span><br><span class="line">//    addr = addr + 32</span><br><span class="line">//    i = i + 1</span><br><span class="line">//    goto LOOP</span><br><span class="line"></span><br><span class="line">@SCREEN</span><br><span class="line">D = A</span><br><span class="line">@addr</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@R0</span><br><span class="line">D = M</span><br><span class="line">@n</span><br><span class="line">M = D</span><br><span class="line"></span><br><span class="line">@i</span><br><span class="line">M = 0</span><br><span class="line"></span><br><span class="line">(LOOP)</span><br><span class="line">	@i</span><br><span class="line">	D = M</span><br><span class="line">	@n</span><br><span class="line">	D = D - M</span><br><span class="line">	@END</span><br><span class="line">	D; JGT</span><br><span class="line"></span><br><span class="line">	@addr</span><br><span class="line">	A = M</span><br><span class="line">	M = -1</span><br><span class="line"></span><br><span class="line">	@i</span><br><span class="line">	M = M + 1</span><br><span class="line">	@32</span><br><span class="line">	D = A</span><br><span class="line">	@addr</span><br><span class="line">	M = M + D</span><br><span class="line">	(LOOP)</span><br><span class="line">	0; JMP</span><br><span class="line">	</span><br><span class="line">(END)</span><br><span class="line">	@END</span><br><span class="line">	0; JMP</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -310,7 +314,7 @@ register D: <figure class="highlight plaintext"><table><tr><td class="gutter"><p
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/147/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><span class="page-number current">148</span><a class="page-number" href="/page/149/">149</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/149/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/147/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/147/">147</a><span class="page-number current">148</span><a class="page-number" href="/page/149/">149</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/149/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -335,14 +339,14 @@ register D: <figure class="highlight plaintext"><table><tr><td class="gutter"><p
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

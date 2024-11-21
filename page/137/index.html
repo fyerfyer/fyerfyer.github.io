@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/" class="post-title-link" itemprop="url">7.1.&#x7A0B;&#x5E8F;&#x7F16;&#x8BD1;&#x524D;&#x77BB;</a>
+          <a href="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">7.4.&#x5806;&#x6808;&#x7ED3;&#x6784;&#x5B9E;&#x73B0;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 13:24:34" itemprop="dateCreated datePublished" datetime="2024-04-08T13:24:34+08:00">2024-04-08</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 18:24:16" itemprop="dateCreated datePublished" datetime="2024-04-08T18:24:16+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:51:48" itemprop="dateModified" datetime="2024-06-03T07:51:48+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 08:06:14" itemprop="dateModified" datetime="2024-06-03T08:06:14+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>266</span>
+      <span>311</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,54 +272,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="71program-compilation-preview"><span class="math inline">\(7.1.\)</span>Program Compilation Preview</h1>
-<h3 id="1problem-in-compilation">1.Problem in compilation</h3>
-<p>&#x2003;&#x2003;To start with an abstract program and end with something actually
-runs on the computer, we need</p>
+          <h1 id="74implementation-of-stack"><span class="math inline">\(7.4.\)</span>Implementation of Stack</h1>
+<h3 id="1pointer-manipulation">1.Pointer manipulation</h3>
+<p>&#x2003;&#x2003;We first introduce <em>pointer notation</em>: <code>*p</code>
+represents <strong>the value stores in the address that <code>p</code>
+points to</strong>.</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image.png"></p>
+<p>&#x2003;&#x2003;In <em>Hack</em>, the pointer statement:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D = *p // D becomes 23</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;can be translated into:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@p</span><br><span class="line">A = M</span><br><span class="line">D = M</span><br></pre></td></tr></table></figure>
 <ul>
-<li>A computer that can run machine language code.</li>
-<li>Translating the high level language into machine language.</li>
+<li><code>A = M</code> points the pointer to the address of register
+M.</li>
+<li><code>D = M</code> gets the value of the RAM.</li>
 </ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image.png"></p>
-<p>&#x2003;&#x2003;However, there are so many kinds of computers in the world, and
-many of them <strong>use different processes, which take different
-machine languages</strong>. It seems that we have to develop many
-compilers, one for each processor. This is very annoying.</p>
-<p>&#x2003;&#x2003;Luckily, this &quot;write once fix everywhere&quot; can be replaced by a
-&quot;write once run everywhere&quot; process.</p>
-<h3 id="2-2-tier-compilation">2. 2-Tier compilation</h3>
-<p>&#x2003;&#x2003;Let&apos;s take Java as example:</p>
+<p>&#x2003;&#x2003;The calculation of pointer, such as:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p--</span><br><span class="line">D = *p</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When <code>p--</code>, <code>*p</code> refers to
+<code>RAM[256]</code>. After than when we invoke <code>D = *p</code>, it
+will get the value stored in <code>RAM[256]</code>, namely 19.</p>
+<p>&#x2003;&#x2003;When we assign a number to pointer, such as: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*q = 9</span><br><span class="line">q++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;The <code>*q</code> refers to <code>RAM[1024]</code>, which stores
+value 5. After the assignment, <code>RAM[1024]</code>stores 9
+instead.</p>
+<h3 id="2stack-machine-operation">2.Stack machine operation</h3>
+<p>&#x2003;&#x2003;Before implementation, we make two assumption:</p>
+<ol type="1">
+<li>The stack pointer will be stored in <code>RAM[0]</code>.</li>
+<li>Stack base address will be <code>addr = 256</code>.</li>
+</ol>
+<p>&#x2003;&#x2003;Let&apos;s <code>push</code> two value first:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-1.png"></p>
+<p>&#x2003;&#x2003;After the <code>push</code>, the stack pointer will point to 258,
+and our RAM looks like this:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-2.png"></p>
+<p>&#x2003;&#x2003;And we push <code>12 + 5</code> into the stack, then 17 will be in
+the previous available space, and stack pointer moves forward:</p>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-3.png"></p>
+<p>&#x2003;&#x2003;So we can write the VM code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">*sp = x</span><br><span class="line">sp++</span><br></pre></td></tr></table></figure></p>
+<p>&#x2003;&#x2003;This can be translated into this Hack assembly: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//push x</span><br><span class="line">@x</span><br><span class="line">D = A // D = x</span><br><span class="line">@SP</span><br><span class="line">A = M // *sp = D</span><br><span class="line">M = D</span><br><span class="line">@SP //increase the location</span><br><span class="line">M = M + 1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>&#x2003;&#x2003;In this program, the A register plays two roles: &#x2003;&#x2003;<em>Data
+register</em> which stores x &#x2003;&#x2003;<em>Address register</em> as usual</p>
+</blockquote>
+<h3 id="3vm-translator-perspective">3.VM translator perspective</h3>
+<p><img src="/2024/04/08/7-4-%E5%A0%86%E6%A0%88%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/image-4.png"></p>
 <ul>
-<li><p>The first tier: also called <em>the top tier</em></p>
+<li><p>VM translator is:</p>
 <ul>
-<li><p>Java compiler translates the Java program into VM code.</p>
-<ul>
-<li>The VM code is designed to run on an abstract artifact called
-<em>virtual machine</em>.</li>
-<li>It&apos;s not a real computer, so if we want to execute the code, we have
-to translate it further into machine language and realize it on real
-hardware (computer, for example).</li>
-</ul></li>
+<li>A program that translates VM code into machine language.</li>
+<li>Each VM command generates several assembly commands.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-1.png"></p>
-<ul>
-<li><p>The second tier:</p>
-<ul>
-<li>We equip the target device with <em>JVM</em>, the Java machine
-implementation.</li>
-<li>The JVM is a program that takes VM code and translates it into the
-target code of the target platform.</li>
-<li>We need such translator <strong>for every platform on which we want
-to execute VM program</strong>.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/04/08/7-1-%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E5%89%8D%E7%9E%BB/image-2.png"></p>
-<p>&#x2003;&#x2003;The gap between high-level language (Java, for example) and
-low-level language is huge. But by <strong>introducing an intermediate
-level</strong>, we <strong>decouple this process into two separate
-standalone sub-processes</strong>: the compiler of <em>VM compiler</em>
-and <em>VM implementation</em>.</p>
 
       
     </div>
@@ -342,7 +347,7 @@ and <em>VM implementation</em>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/136/">136</a><span class="page-number current">137</span><a class="page-number" href="/page/138/">138</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/138/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/136/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/136/">136</a><span class="page-number current">137</span><a class="page-number" href="/page/138/">138</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/138/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -367,14 +372,14 @@ and <em>VM implementation</em>.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

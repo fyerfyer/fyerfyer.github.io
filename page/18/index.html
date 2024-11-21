@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/07/6-1-Storage-Technologies/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/07/6-1-Storage-Technologies/" class="post-title-link" itemprop="url">6.1.Storage Technologies</a>
+          <a href="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/" class="post-title-link" itemprop="url">6.6.The Impact of Caches on Program Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-07 21:31:22" itemprop="dateCreated datePublished" datetime="2024-08-07T21:31:22+08:00">2024-08-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-09 08:23:20" itemprop="dateModified" datetime="2024-08-09T08:23:20+08:00">2024-08-09</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-12 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;08:25:31" itemprop="dateCreated datePublished" datetime="2024-08-12T09:31:22+08:00">2024-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.7k</span>
+      <span>404</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>6 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,296 +266,64 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="61storage-technologies"><span class="math inline">\(6.1.\)</span>Storage Technologies</h1>
-<h3 id="1random-access-memory">1.Random Access Memory</h3>
-<h4 id="astaticram">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Static
-RAM</h4>
-<p>&#x2003;&#x2003;SRAM stores each bit in a bistable memory cell. Each cell is
-implemented with a six-transistor circuit. This circuit has the property
-that it can stay indefinitely in <strong>either of two different voltage
-configurations</strong>, or <em>states</em>:</p>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image.png"></p>
-<h4 id="bdynamicram">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Dynamic
-RAM</h4>
-<p>&#x2003;&#x2003;DRAM stores each bit as charge on a capacitor. A DRAM memory cell
-is very sensitive to any disturbance. <strong>When the capacitor voltage
-is disturbed, it will never recover</strong>.</p>
-<h4 id="cconventional-drams">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Conventional DRAMs</h4>
-<p>&#x2003;&#x2003;The cells(bits) in a DRAM chip <strong>are partitioned into <span class="math inline">\(d\)</span> supercells</strong>, each consisting of
-<span class="math inline">\(w\)</span> DRAM cells. A <span class="math inline">\(d \times w\)</span> DRAM stores a total of <span class="math inline">\(dw\)</span> bits of information. The supercells
-are organized as <strong>a rectangular array with <span class="math inline">\(r\)</span> rows and <span class="math inline">\(c\)</span> columns</strong>, where <strong><span class="math inline">\(rc = d\)</span></strong>. Each supercell has an
-address of the form <span class="math inline">\((i, j)\)</span>, where
-<span class="math inline">\(i\)</span> denotes the row and <span class="math inline">\(j\)</span> denotes the column:</p>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-1.png"></p>
-<ul>
-<li><p>Information flows in and out of the chip via external connectors
-called <em>pins</em>. Each pin carries a 1-bit signal:</p>
-<ul>
-<li><p>Eight data pins that can <strong>transfer 1 byte in or out of the
-chip</strong>.</p></li>
-<li><p>Two addr pins that carry <strong>two-bit row and column supercell
-addresses</strong>.</p></li>
-</ul></li>
-<li><p>Each DRAM chip is connected to <em>memory
-controller</em>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;To read the contents of supercell <span class="math inline">\((i,
-j)\)</span>, the memory controller sends the row address <span class="math inline">\(i\)</span> to the DRAM first, and then send the
-column address <span class="math inline">\(j\)</span>. The DRAM responds
-by sending the contents of supercell <span class="math inline">\((i,
-j)\)</span> back to the controller:</p>
-<blockquote>
-<p>The row address <span class="math inline">\(i\)</span> is called a
-<em>RAS</em>(row access strobe) request. The column address <span class="math inline">\(j\)</span> is called a <em>CAS</em>(column access
-strobe) request.</p>
-</blockquote>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-2.png"></p>
-<blockquote>
-<p>One reason circuit designers organize DRAMs as two-dimensional arrays
-instead of linear arrays is to <strong>reduce the number of address pins
-on the chip</strong>. However, the address must be sent in two distinct
-steps, which <strong>increases the access time</strong>.</p>
-</blockquote>
-<h4 id="dmemory-modules">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Memory modules</h4>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-3.png"></p>
-<ul>
-<li><p>Each supercell stores 1 byte of main memory.</p></li>
-<li><p>Each 64-bit word at byte address A in main memory is represented
-by the eight supercells.</p></li>
-</ul>
-<p>&#x2003;&#x2003;To retrieve the word at memory address A, the memory controller
-converts A to a supercell address <span class="math inline">\((i,
-j)\)</span> and sends it to the memory module, which then broadcasts
-<span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> to each DRAM.</p>
-<p>&#x2003;&#x2003;Main memory can be aggregated by connecting multiple memory modules
-to the memory controller.</p>
-<h4 id="eenhanced-drams">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Enhanced DRAMs</h4>
-<ul>
-<li><p>A conventional DRAM <strong>copies an entire row of supercells
-into its internal row buffer</strong>, uses one, and then
-<strong>discards the rest</strong>.</p></li>
-<li><p>FPM DRAM(Fast Page mode) improves on this by <strong>allowing
-consecutive accesses to the same row</strong> to be served directly from
-the row buffer.</p>
-<ul>
-<li>The initial RAS/CAS request copies row <span class="math inline">\(i\)</span> into the row buffer and returns the
-supercell addressed by the CAS. The next three requests then search
-<strong>directly from the row buffer</strong>.</li>
-</ul></li>
-</ul>
-<h4 id="eaccessing-main-memory">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Accessing main memory</h4>
-<h5 id="ibasic-structure">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>Basic structure</h5>
-<ul>
-<li><p>Data flows back and forth between the processor and the DRAM main
-memory over shared electrical conduits called <em>buses</em>.</p></li>
-<li><p>Each transfer is accomplished with a series of steps called a
-<em>bus transaction</em>.</p></li>
-<li><p>The control wires of the bus carry signals that
-<strong>synchronize the transaction</strong> and <strong>identify what
-kind of transaction is currently being performed</strong>. For example,
-the operand of the transaction, and the type of the
-transaction.</p></li>
-</ul>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-4.png"></p>
-<h5 id="iiaccessing-procedure">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Accessing procedure</h5>
-<p>&#x2003;&#x2003;Take the following instruction as an example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">movq A, %rax</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-5.png"></p>
-<ol type="1">
-<li><p>The <em>bus interface</em> <strong>initiates a read
-transaction</strong> on the bus.</p></li>
-<li><p>The CPU <strong>places the address A on the system bus</strong>.
-The I/O bridge passes the signal along to the memory bus.</p></li>
-<li><p>The main memory <strong>senses the address signal on the memory
-bus</strong> and fetch the data from DRAM. It <strong>writes the data to
-the memory bus</strong>. The I/O bridge <strong>translates the memory
-bus signal into a system bus signal</strong> and passes it along to the
-system bus</p></li>
-<li><p>The CPU <strong>senses the data on the system bus</strong>, reads
-the data from the bus, and <strong>copies the data to register
-<code>%rax</code></strong>.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The converse instruction <code>movq %rax,A</code> is similar:</p>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-6.png"></p>
-<h3 id="2disk-storage">2.Disk Storage</h3>
-<h4 id="adiskgeometry">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Disk
-geometry</h4>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-7.png"></p>
-<ul>
-<li><p>Each surface consists of a collection of concentric rings called
-<em>tracks</em>.</p></li>
-<li><p>Each track is partitioned into a collection of
-<em>sectors</em>.</p></li>
-<li><p>Sectors are separated by <em>gaps</em>, gaps store formatting
-bits that identify sectors.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Disk manufacturers describe the geometry of multiple-platter drives
-in terms of <em>cylinders</em>, where a cylinder is <strong>the
-collection of tracks</strong> on all the surfaces that <strong>are
-equidistant from the center of the spindle</strong>. For example, if a
-drive has three platters and six surfaces, and the tracks on each
-surface are numbered consistently, then cylinder <span class="math inline">\(k\)</span> is <strong>the collection of the six
-instances of track <span class="math inline">\(k\)</span></strong>.</p>
-<h4 id="bdiskcapacity">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Disk
-capacity</h4>
-<p>&#x2003;&#x2003;Disk capacity is determined by the following technology
-factors:</p>
-<ul>
-<li><p><em>Recording density</em>: The number of bits on a
-track.</p></li>
-<li><p><em>Track density</em>: The number of tracks on the radius
-extending from the center of the platter.</p></li>
-<li><p><em>Areal density</em>: The product of the recording density and
-the track density.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Modern high-capacity disks use a technique known as <em>multiple
-zone recording</em>, where the set of cylinders <strong>is partitioned
-into disjoint subsets</strong> known as <em>recording zones</em>. Each
-zone consists of a contiguous collection of cylinders. <strong>Each
-track in each cylinder in a zone has the same number of
-sectors</strong>.</p>
-<p>&#x2003;&#x2003;The capacity of a disk is given by the following formula:</p>
+          <h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
+Performance</h1>
+<h3 id="1rearrangingloops-to-increase-spatial-locality">1.Rearranging
+Loops to Increase Spatial Locality</h3>
+<p>&#x2003;&#x2003;Consider the problem of multiplying a pair of <span class="math inline">\(2 \times 2\)</span> matrices: <span class="math inline">\(C = AB\)</span>:</p>
 <p><span class="math display">\[
-{Capacity} = \frac{\# {bytes} } {sector} \times \frac{ {average} \#
-{sectors} } {track} \times \frac{\# {tracks} } {surface} \times
-\frac{\#  {surfaces} } {platter} \times \frac{\# {platters} } {disk}
+\begin{bmatrix}
+c_{11} &amp; c_{12} \\
+c_{21} &amp; c_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22}
+\end{bmatrix}
 \]</span></p>
-<p>&#x2003;&#x2003;The number of cylinders is identical to <span class="math inline">\({track} \over {surface}\)</span>.</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>What is the capacity of a
-disk with 3 platters, 15,000 cylinders, an average of 500 sectors per
-track, and 1,024 bytes per sector?</p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution\)</span>:</p>
-<p><span class="math display">\[
-Disk\; Capacity = \frac{1,024 \, bytes}{sector} \times \frac{500 \,
-sectors}{track} \times \frac{15,000 \, tracks}{surface} \times \frac{2
-\, surfaces}{platter} \times \frac{3 \, platters}{disk}
-\]</span></p>
-<h4 id="cdiskoperations">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Disk
-operations</h4>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-8.png"></p>
+<p>&#x2003;&#x2003;and we make the following assumptions:</p>
 <ul>
-<li><p>Disks read and write bits stored on the magnetic surface using a
-<em>read/write head</em> connected to the end of an <em>actuator
-arm</em>.</p>
-<ul>
-<li>The head can either sense the value of the bit(read the bit) or
-alter the value of the bit(write the bit).</li>
-</ul></li>
+<li><p>Each array is an <span class="math inline">\(n \times n\)</span>
+array of double, with <code>sizeof(double) = 8</code>.</p></li>
+<li><p>There is a single cache with a 32-byte block size(B =
+32).</p></li>
+<li><p>The array size n is so large that a single matrix row does not
+fit in the L1 cache.</p></li>
+<li><p>The compiler stores local variables in registers, and thus
+references to local variables inside loops do not require any load or
+store instructions.</p></li>
 </ul>
-<p>&#x2003;&#x2003;The disk <em>access time</em> for a sector has three main
-<em>components: </em>seek time<em>, </em>rotational latency<em>, and
-</em>transfer time*:</p>
+<p>&#x2003;&#x2003;We can write three different versions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) {</span><br><span class="line">        sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">            sum += A[i][k]*B[k][j];</span><br><span class="line">        C[i][j] += sum;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++) {</span><br><span class="line">        r = B[k][j];</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        C[i][j] += A[i][k]*r;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        r = A[i][k];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">            C[i][j] += r * B[k][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image.png"></p>
+<p>&#x2003;&#x2003;The third routine present an interesting trade-off: With two loads
+and a store, they <strong>require one more memory operation than the
+first routines</strong>. On the other hand, since the inner loop scans
+both B and C row-wise with a stride-1 access pattern, the miss rate on
+each array is only 0.25 misses per iteration, for a total of 0.50 misses
+per iteration.</p>
+<p>&#x2003;&#x2003;The performance result is as below:</p>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image-1.png"></p>
+<p>&#x2003;&#x2003;We can see that in this case, <strong>miss rate is a better
+predictor of performance</strong> than the total number of memory
+accesses.</p>
+<h3 id="2exploiting-locality">2.Exploiting Locality</h3>
 <ul>
-<li><p>Seek time: It depends on the previous position of the head and
-the speed that the arm moves across the surface.</p></li>
-<li><p>Rotational latency:</p></li>
-</ul>
-<p><span class="math display">\[
-T_{max \; rotation}={1 \over RPM} \times { {60 \; secs} \over {1 \; min}
-}
-\]</span></p>
-<ul>
-<li>Transfer time:</li>
-</ul>
-<p><span class="math display">\[
-T_{avg \; transfer} = {1 \over RPM} \times {1 \over {average \; \# \;
-sector/track} \times { {60 \; secs} \over {1 \; min} }}
-\]</span></p>
-<blockquote>
-<p>The <span class="math inline">\(1 \over {average \; \# \;
-sector/track}\)</span> is to compute the time cost per sector.</p>
-</blockquote>
-<h4 id="dlogical-disk-blocks">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Logical disk blocks</h4>
-<p>&#x2003;&#x2003;Modern disks present a simple view of their geometry as <strong>a
-sequence of B sector-size logical blocks</strong>, numbered 0, 1, ...,
-B&#x2212;1.</p>
-<ul>
-<li>The disk controller maintains <strong>the mapping between</strong>
-logical block numbers and actual(physical) disk sectors.</li>
-</ul>
-<p>&#x2003;&#x2003;When the operating system wants to perform an I/O operation such as
-reading a disk sector into main memory:</p>
-<ul>
-<li><p>The OS <strong>sends a command to the disk controller</strong>
-asking it to read a particular logical block number.</p></li>
-<li><p><em>Firmware</em> on the controller <strong>performs a fast table
-lookup</strong> that <strong>translates the logical block number into a
-(surface, track, sector) triple</strong> that uniquely identifies the
-corresponding physical sector.</p></li>
-<li><p><em>Hardware</em> on the controller <strong>interprets this
-triple</strong> to move the heads to the appropriate cylinder.</p></li>
-</ul>
-<h4 id="eaccessing-disks">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Accessing disks</h4>
-<ul>
-<li><p>Disks are connected to the CPU and main memory using <em>an I/O
-bus</em>. They are designed to be independent of the underlying
-CPU.</p></li>
-<li><p>The CPU issues commands to I/O devices using a technique called
-<em>memory-mapped I/O</em>.</p>
-<ul>
-<li>In this system, <strong>a block of addresses</strong> in the address
-space is reserved for communicating with I/O devices, each of these
-address is known as an <em>I/O port</em>.</li>
-</ul></li>
-</ul>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-9.png"></p>
-<p>&#x2003;&#x2003;The CPU initiates a disk read by executing three store
-instructions:</p>
-<ol type="1">
-<li><p>The first of these instructions sends a command word that
-<strong>tells the disk to initiate a read</strong>, along with
-<strong>other parameters</strong> such as whether to interrupt the CPU
-when the read is finished.</p></li>
-<li><p>The second instruction <strong>indicates the logical block
-number</strong> that should be read.</p></li>
-<li><p>The third instruction <strong>indicates the main memory
-address</strong> where the contents of the disk sector should be
-stored.</p></li>
-</ol>
-<p>&#x2003;&#x2003;After it issues the request, the CPU will <strong>typically do
-other work</strong> while the disk is performing the read.</p>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-10.png"></p>
-<p>&#x2003;&#x2003;When the disk controller receives the read command from the CPU,
-it:</p>
-<ol type="1">
-<li><strong>Translates the logical block number to a sector
-address</strong>, reads the contents of the sector, and transfers the
-contents directly to main memory.</li>
-</ol>
-<p>&#x2003;&#x2003;The process is <strong>without any involvement of the CPU</strong>,
-and is known as <em>direct memory access</em>(DMA). The transfer of data
-is known as a <em>DMA transfer</em>.</p>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-11.png"></p>
-<p>&#x2003;&#x2003;After the DMA transfer is complete and the contents of the disk
-sector are safely stored in main memory, the disk controller notifies
-the CPU by <strong>sending an interrupt signal to the CPU</strong>.</p>
-<ul>
-<li>The basic idea is that an interrupt signals an external pin on the
-CPU chip. This <strong>causes the CPU to stop</strong> what it is
-currently working on and jump to an operating system routine.</li>
-</ul>
-<h3 id="3solid-state-disks">3.Solid State Disks</h3>
-<p><img src="/2024/08/07/6-1-Storage-Technologies/image-12.png"></p>
-<ul>
-<li><p>An SSD package plugs into a standard disk slot on the I/O bus and
-behave like any other disk.</p></li>
-<li><p>SSD package consists of one or more <em>flash memory chips</em>,
-which <strong>replace the mechanical drive in a conventional rotating
-disk</strong>&#x3002;</p></li>
-<li><p>It contains a <em>flash translation layer</em>, which is a
-hardware/firmware device that <strong>plays the same role as a disk
-controller</strong>.</p></li>
-</ul>
-<hr>
-<ul>
-<li><p>Data are read and written <strong>in units of pages</strong>. A
-page can be written <strong>only after the entire block to which it
-belongs has been erased</strong>.</p></li>
-<li><p>Once a block is erased, <strong>each page in the block can be
-written once with no further erasing</strong>.</p></li>
-<li><p>When erasing a block, any pages in the same block with useful
-data must <strong>be copied to a new(erased) block before the write to
-page p can occur</strong>.</p></li>
+<li><p>Focus your attention on the inner loops.</p></li>
+<li><p>Try to maximize the spatial locality in your programs by reading
+data objects sequentially, <strong>with stride 1</strong>, <strong>in
+the order they are stored in memory</strong>.</p></li>
+<li><p>Try to maximize the temporal locality in your programs by
+<strong>using a data object as often as possible once it has been read
+from memory</strong>.</p></li>
 </ul>
 
       
@@ -585,7 +347,7 @@ page p can occur</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/19/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/17/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/19/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -610,14 +372,14 @@ page p can occur</strong>.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

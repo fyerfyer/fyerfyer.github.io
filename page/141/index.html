@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">6.1.&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x4E0E;&#x7A0B;&#x5E8F;</a>
+          <a href="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 09:34:24" itemprop="dateCreated datePublished" datetime="2024-04-07T09:34:24+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 18:24:54" itemprop="dateCreated datePublished" datetime="2024-04-07T18:24:54+08:00">2024-04-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:47:54" itemprop="dateModified" datetime="2024-06-03T07:47:54+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:05:51" itemprop="dateModified" datetime="2024-06-03T00:05:51+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>214</span>
+      <span>417</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,49 +272,90 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="61assemble-program-and-assembler"><span class="math inline">\(6.1.\)</span>Assemble Program and Assembler</h1>
-<h3 id="1basic-assembler-logic">1.Basic assembler logic</h3>
+          <h1 id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</h1>
+<h3 id="1start-reding-a-file">1.Start reding a file</h3>
+<p>&#x2003;&#x2003;In general, this part:</p>
 <ul>
-<li><p>Repeat:</p>
-<ul>
-<li>Read the next Assembly language command.</li>
-<li>Break it into the different fields it is composed of.</li>
-<li>Lookup the binary code for each field.</li>
-<li>Combine these codes into a single machine language command.</li>
-<li>Output this machine language command.</li>
-</ul></li>
-<li><p>One thing we need to worry about: <em>Symbols</em>:</p>
-<ul>
-<li><p>Two cases:</p>
-<ul>
-<li><em>Labels</em>: When jumping into a certain part, you give it a
-name instead of hard core the address. <code>JMP loop</code></li>
-<li><em>Variables</em>: You give a variable name rather than always
-refer to its exact address in memory. <code>load R1, weight</code></li>
-</ul></li>
-<li><p>To convert it into concrete address, we use a <em>symbol
-table</em>:</p></li>
-</ul></li>
+<li>Need to be able to read the input and break it into parts.</li>
+<li>Doesn&apos;t need to understand what the command means or how it will be
+translated into machine language.</li>
+<li>Need to understand the format of the input language and how it
+breaks into different components.</li>
 </ul>
-<p><img src="/2024/04/07/6-1-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%A8%8B%E5%BA%8F/image.png"></p>
-<ul>
-<li><p>To maintain such table:</p>
-<ul>
-<li>When we first meet a symbol, we need to <strong>allocate a new
-memory location</strong> to hold it. For the assembler, it will find the
-<strong>next memory location that&apos;s available</strong>.</li>
-<li>When we meet it again, we simply refer to its address in the
-table.</li>
-</ul></li>
-<li><p>One special case: <em>Forward references</em>: We can jump into a
-label before where it was defined. There are two ways to handle it:</p>
+<p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
 <ol type="1">
-<li>Use a little bit to remember that we&apos;ve set the labels but don&apos;t
-know where it is yet. We leave it blank until label appears.(more
-complicated)</li>
-<li>In first pass just figure out all address.</li>
+<li><p>Read a file with a given name.</p>
+<ul>
+<li>You may want a constructor to be able to accept the file name and
+then open the file for reading.</li>
+</ul></li>
+<li><p>Move to next command in the file:</p>
+<ol type="1">
+<li>Are we finished? <code>boolean hasMoreCommands()</code></li>
+<li>Get the next command: <code>void advance()</code></li>
+<li>Read into one line into some kind of string.</li>
+<li>Skip white space including comments.</li>
 </ol></li>
+<li><p>Get the fields of the current command</p>
+<ul>
+<li>Type of command (A, C, or label)</li>
+</ul></li>
+</ol>
+<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
+<h3 id="2translating-mnemonic-tocode">2.Translating mnemonic to
+code</h3>
+<p>&#x2003;&#x2003;In general, this part:</p>
+<ul>
+<li><p>Don&apos;t need to worry about how the mnemonic fields were
+obtained.</p>
+<ul>
+<li>No need to know what part of input line it is, etc.</li>
+</ul></li>
 </ul>
+<p>&#x2003;&#x2003;In detail, we:</p>
+<ol type="1">
+<li>Ask the parser to give us the string that corresponds to each part
+of the field.</li>
+<li>Once we get the three string, we go to the code object to translate
+each one of them separately according to the known table.</li>
+<li>Concatenate the output together.</li>
+</ol>
+<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
+<h3 id="3the-symbol-table">3.The symbol table</h3>
+<p>&#x2003;&#x2003;In general, this part:</p>
+<ul>
+<li>Don&apos;t need to know what the symbols mean.</li>
+<li>Need to maintain the association between a symbol and a memory
+address.</li>
+</ul>
+<p>&#x2003;&#x2003;In detail, we need to be able to:</p>
+<ol type="1">
+<li>Create an new empty table</li>
+<li>Add a (symbol, address) pair to the table</li>
+<li>Does the table contain a given symbol?</li>
+<li>What is the address associated with a given symbol?</li>
+</ol>
+<p>&#x2003;&#x2003;And do the following things:</p>
+<ol type="1">
+<li><p>Create a new empty table</p></li>
+<li><p>Add all the pre-defined symbols to the table</p></li>
+<li><p>While reading the input, add labels and new variables to the
+table</p>
+<ul>
+<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
+<code>&quot;xxx&quot;</code> and the address of the next machine language
+command</p>
+<ul>
+<li>Comment 1: this requires maintaining this running address (line
+number).</li>
+<li>Comment 2: this may need to be done in a first pass</li>
+</ul></li>
+<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
+<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
+<code>&quot;xxx&quot;</code> and the next free address for variable
+allocation</p></li>
+</ul></li>
+</ol>
 
       
     </div>
@@ -337,7 +378,7 @@ complicated)</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/140/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><span class="page-number current">141</span><a class="page-number" href="/page/142/">142</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/142/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/140/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/140/">140</a><span class="page-number current">141</span><a class="page-number" href="/page/142/">142</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/142/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -362,14 +403,14 @@ complicated)</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

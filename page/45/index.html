@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-3-Hardware-Multithreading/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-6-Cache-coherence/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-3-Hardware-Multithreading/" class="post-title-link" itemprop="url">5.3.Hardware Multithreading</a>
+          <a href="/2024/06/29/5-6-Cache-coherence/" class="post-title-link" itemprop="url">5.6.Cache Coherence</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 10:38:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;15:30:21" itemprop="dateCreated datePublished" datetime="2024-06-29T10:38:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 15:30:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:22:57" itemprop="dateCreated datePublished" datetime="2024-06-29T15:30:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>259</span>
+      <span>401</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,59 +266,89 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="53hardware-multithreading">5.3.Hardware Multithreading</h1>
-<h3 id="1basic-concepts-of-threads">1.Basic concepts of threads</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image.png"></p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-1.png"></p>
-<h3 id="2multithreading-intro">2.Multithreading intro</h3>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-2.png"></p>
-<p>&#x2003;&#x2003;Hardware multithreading allows multiple threads to <strong>share
-the functional units of a single processor in an overlapping
-fashion</strong> to try to utilize the hardware resources
-efficiently.</p>
-<p>&#x2003;&#x2003;To permit this sharing, the processor must <strong>duplicate the
-independent state of each thread</strong>.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-3.png"></p>
-<hr>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-4.png"></p>
-<h3 id="3types-of-hardwaremultithreading">3.Types of hardware
-multithreading</h3>
-<p>&#x2003;&#x2003;There are 3 types of hardware multithreading approaches:</p>
+          <h1 id="56cache-coherence">5.6.Cache Coherence</h1>
+<h3 id="1cache-model">1.Cache model</h3>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-1.png"></p>
+<h3 id="2coherence-concept">2.Coherence concept</h3>
+<h4 id="acoherence-in-detail">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Coherence in detail</h4>
+<p>&#x2003;&#x2003;Caching shared data introduces a new problem. The following is an
+example:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-2.png"></p>
+<p>&#x2003;&#x2003;The two different processors have two different values for the same
+location, this is referred to as <em>cache coherence problem</em>.</p>
+<p>&#x2003;&#x2003;Informally, we could say that a memory system is coherent if
+<strong>any read of a data item returns the most recently written value
+of that data item</strong>. This simple concept contains two different
+aspects of memory system behaviour:</p>
 <ul>
-<li><p><em>Fine-grained multithreading</em>: It <strong>switches between
-threads on each instruction</strong>, resulting in interleaved execution
-of multiple threads.</p>
-<ul>
-<li><p>It&apos;s advantage is that it can hide the throughput losses that
-arise from both short and long stalls, since instructions from other
-threads can be executed when one thread stalls. Also, since it switches
-threads frequently, it doesn&apos;t need to clear the pipeline
-everytime.</p></li>
-<li><p>However, it slows down the execution of the individual
-threads.</p></li>
-</ul></li>
-<li><p><em>Coarse-grained multithreading</em>: It switch threads
-<strong>only on expensive stalls</strong>, such as last-level cache
-misses.</p>
-<ul>
-<li><p>It&apos;s much less likely to slow down individual execution.</p></li>
-<li><p>However, it is limited from overcoming throughput losses for
-pipeline start-up time.</p></li>
-</ul></li>
-<li><p><em>Simultaneous multithreading</em>: It uses a multiple-issue,
-dynamically scheduled <em>pipelined processor</em> to <strong>exploit
-thread-level parallelism while exploiting ILP</strong>.</p></li>
+<li><em>coherence</em>: defines <em>what</em> values can be returned by
+a read.</li>
+<li><em>consistency</em>: determines <em>when</em> a written value will
+be returned by a read.</li>
 </ul>
+<p>&#x2003;&#x2003;A memory system is coherent if:</p>
+<ol type="1">
+<li>A read by a processor P to location X that follows <em>only one
+write</em> by P to X always returns the value written by P.</li>
+</ol>
 <blockquote>
-<p>With register renaming and dynamic scheduling, multiple instructions
-from independent threads can be issued without regard to the dependences
-among them; <strong>the resolution of the dependences can be handled by
-the dynamic scheduling capability</strong>.</p>
+<p>This preserves program order.</p>
 </blockquote>
-<p>&#x2003;&#x2003;SMT is always executing instructions from multiple threads, leaving
-it up to the hardware to associate instruction slots and renamed
-registers with their proper threads.</p>
-<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-5.png"></p>
+<ol start="2" type="1">
+<li>A read by a processor to location X that follows <em>only one
+write</em> by another processor to X returns the written value if the
+read and write are sufficiently separated in time.</li>
+</ol>
+<blockquote>
+<p>This defines memory coherence.</p>
+</blockquote>
+<ol start="3" type="1">
+<li>Writes to the same location are <strong>serialized</strong>; that
+is, two writes to the same location by any two processors <strong>are
+seen in the same order by all processors</strong>. For example, if CPU B
+stores 2 into memory at address X after time step 3, processors can
+never read the value at location X as 2 and then later read it as
+1.</li>
+</ol>
+<h4 id="bsnooping-based-cache-coherence">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Snooping-based cache coherence</h4>
+<p>&#x2003;&#x2003;One method of enforcing coherence is to ensure that a processor
+<strong>has exclusive access to a data item</strong> before it writes
+that item. This style of protocol is called a <em>write invalidate
+protocol</em> because it <strong>invalidates copies in other caches on a
+write</strong>.</p>
+<p>&#x2003;&#x2003;Take the same example before, when we write 1 into location X by
+CPU A, the CPU B will get a cache miss, and is forced to fetch a new
+copy of data:</p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-3.png"></p>
+<blockquote>
+<p>Block size plays an important role in cache coherency. Large blocks
+can cause what&apos;s called <em>false sharing</em>, when two unrelated
+shared variables are located in the same cache block, the whole block is
+exchanged between processors even though the processors are accessing
+different variables.</p>
+</blockquote>
+<h3 id="3mosel-cache-coherencyprotocol">3.MOSEL cache coherency
+protocol:</h3>
+<h4 id="aprotocol-design">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Protocol design</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-7.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-8.png"></p>
+<h4 id="bbasicconcepts">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Basic
+concepts</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-5.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-6.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-4.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-9.png"></p>
+<h4 id="cexample">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Example</h4>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-10.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-11.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-12.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-13.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-14.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-15.png"></p>
+<p><img src="/2024/06/29/5-6-Cache-coherence/image-16.png"></p>
 
       
     </div>
@@ -341,7 +371,7 @@ registers with their proper threads.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/44/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/44/">44</a><span class="page-number current">45</span><a class="page-number" href="/page/46/">46</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/46/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/44/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/44/">44</a><span class="page-number current">45</span><a class="page-number" href="/page/46/">46</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/46/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -366,14 +396,14 @@ registers with their proper threads.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

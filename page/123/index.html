@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">9.2.&#x8BCD;&#x6CD5;&#x5206;&#x6790;</a>
+          <a href="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">9.5.&#x89E3;&#x6790;&#x5668;&#x903B;&#x8F91;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-15 20:17:43" itemprop="dateCreated datePublished" datetime="2024-04-15T20:17:43+08:00">2024-04-15</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 17:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T17:17:43+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:16:17" itemprop="dateModified" datetime="2024-06-03T15:16:17+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:27:03" itemprop="dateModified" datetime="2024-06-03T15:27:03+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>442</span>
+      <span>482</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,80 +272,88 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="92lexical-analysis"><span class="math inline">\(9.2.\)</span>Lexical Analysis</h1>
-<h3 id="1-tokenizing">1. Tokenizing</h3>
-<p>&#x2003;&#x2003;In the previous unit, we observed that the syntax analyzer consist
-of two modules: a <em>tokenizer</em> and a <em>parser</em>:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image.png"></p>
-<p>&#x2003;&#x2003;And the tokenizer is an application of a more general area of
-theory known as <em>lexical analysis</em>. Here&apos;s an example of
-tokenizing in action:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-1.png"></p>
+          <h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
+Logic</h1>
+<h3 id="1parsing-logic">1.Parsing logic</h3>
+<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
+<code>CompilationEngine</code> class which consist of <strong>a set of
+methods, one method for every non-terminal rule</strong>.</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
 <ul>
-<li><p>As far as <em>lexical analysis</em> is concerned, the input is
-nothing more than <strong>a stream of characters</strong>.</p></li>
-<li><p><em>Tokenizing</em> refers to <strong>grouping the primitive
-stream of characters into a stream of meaningful tokens</strong>. It
-provides a very simple yet important preliminary processing of the
-file.</p></li>
-<li><p>A <em>token</em> is <strong>a string of characters that has a
-meaning</strong>.</p>
+<li>The code of each <code>compilexxx</code> method follows the
+right-hand side of the rule xxx</li>
+<li>Each <code>compilexxx</code> method is responsible for
+<strong>advancing</strong> and <strong>handling its own part of the
+input</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
+<code>compileWhileStatement</code>:</p>
+<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
+<ol type="1">
+<li><p>We <strong>follow the right-hand side of the rule</strong>, and
+parse the input it dictates.</p>
 <ul>
-<li>Different programming languages have different definitions of token.
-For example, <code>x++</code> in C makes a lot of sense, but not in
-Jack, for it doesn&apos;t have an <code>++</code> operation.</li>
+<li>In <code>whileStatement</code>, it says we should expect to see the
+token <code>while</code>. If we find it in the input, we record the
+fact. Then the left parenthesis, and so on and so forth,</li>
+<li>At some point we will get a non-terminal rule like
+<code>expression</code>, then we go to next step:</li>
+</ul></li>
+<li><p>If the right-hand side specifies a non-terminal rule
+<code>xxx</code>, we call the corresponding method
+<code>compilexxx</code></p></li>
+<li><p>We do this recursively untile we exhaust the input.</p></li>
+</ol>
+<p>&#x2003;&#x2003;And to initialize this process, we:</p>
+<ol type="1">
+<li>Advance the tokenizer.</li>
+<li>Call <code>compileWhileStatement</code>.</li>
+</ol>
+<h3 id="2parser-design">2.Parser design</h3>
+<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
+example:</p>
+<ol type="1">
+<li>If we look at the grammar, we first see that you should see a
+<code>while</code> , so we <strong>call a method
+<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
+eat the <code>while</code> token.</li>
+<li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
+<li>We meet a non-terminal rule <code>expression</code>, so we call
+<code>compileExpression();</code></li>
+<li>And so on and so forth...</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
+<ul>
+<li>It&apos;s a private method.</li>
+<li>It says <strong>you should expect to see the given string</strong>,
+if not, you should <strong>throw an error</strong>.</li>
+<li>Otherwise, simply <strong>advance the input</strong>.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
+about grammars and parsing</h3>
+<ul>
+<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
+a recursive descent algorithm parser without backtracking</strong>.</p>
+<ul>
+<li>When you make a decision that what you have is a <code>while</code>
+statement, you don&apos;t have to kind of retract your progress and find out
+a mistake.</li>
+</ul></li>
+<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
+at most k tokens before you know which rule you are dealing with.</p>
+<ul>
+<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
+have a particular token in hand like <code>let</code>, we immediately
+know which rule we have to invoke</strong>.</li>
+<li>There are also things that don&apos;t belong to LL1, like English. For
+example, when we meet a token word &quot;lift&quot;, we still have no idea what we
+should do with it. A verb? A noun? We have to look more tokens
+downstream to know which rule to use. In this process, we may need to
+backtrack and reconsider some of the rules we have to use...</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;Once we come up with these stream of tokens, we can <strong>hand it
-over to the compiler and completely forget the original input
-file</strong>.</p>
-<h3 id="2jack-tokenizer">2.Jack tokenizer</h3>
-<p>&#x2003;&#x2003;In Jack, we have 5 kinds of tokens:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-2.png"></p>
-<p>&#x2003;&#x2003;And our tokenizer will provide these useful service:</p>
-<ol type="1">
-<li><p>Handle the compiler&apos;s input: It allow us to view the input as a
-stream of tokens.</p></li>
-<li><p>Allow advancing the input: It allow us to know:</p>
-<ul>
-<li><strong>If there are more tokens to process</strong>.</li>
-<li><strong>What the next token is</strong>.</li>
-<li><strong>The value, type of this token</strong>.</li>
-</ul></li>
-<li><p>Supply the value, type of the current token.</p></li>
-</ol>
-<p>&#x2003;&#x2003;Here&apos;s an example of a program that use these services:</p>
-<p><img src="/2024/04/15/9-2-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/image-3.png"></p>
-<p>&#x2003;&#x2003;The <code>TokenizerTest</code> is a program that construct the
-tokenizer object. Here&apos;s what it does:</p>
-<ul>
-<li>It goes through the input, and for every token, it <strong>lists the
-token to be out of file</strong>.</li>
-<li>In the first line, <code>if</code> is surrounded by two
-<em>tags</em>, it <strong>describe the type of the token</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;And to conduct these functionalities, we can write this pseudo
-code: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tknzr = new JackTokenizer(&quot;Prog.jack&quot;)</span><br><span class="line">tknzr.advance();</span><br><span class="line">while tknzr.hasMoreTokens() {</span><br><span class="line">	tokenclassification=  current token classification</span><br><span class="line">	print &quot;&lt;&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print the current token value</span><br><span class="line">	print &quot;&lt;/&quot; + tokenclassification + &quot;&gt;&quot;</span><br><span class="line">	print newLine</span><br><span class="line">	tknzr.advance();</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<ol type="1">
-<li><p>We get the first token, and it becomes the current
-token.</p></li>
-<li><p>We enter a loop as long as we have more tokens to
-process.</p></li>
-<li><p>In each line of the program, we have to <strong>output the
-classification of the token</strong>, and we have to <strong>do it
-twice</strong>.</p></li>
-<li><p>We:</p>
-<ol type="1">
-<li>Print the <strong>opening tag</strong>, then</li>
-<li>Print the <strong>value of of the current token</strong>,</li>
-<li>Print the <strong>token itself</strong>,</li>
-<li>At last print <strong>end tag with token
-classification</strong>.</li>
-</ol></li>
-<li><p>We print a newline, and <code>advance()</code> to get the next
-token from the tokenizer, until we consume all the tokens from the input
-file.</p></li>
-</ol>
 
       
     </div>
@@ -368,7 +376,7 @@ file.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/122/">122</a><span class="page-number current">123</span><a class="page-number" href="/page/124/">124</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/122/">122</a><span class="page-number current">123</span><a class="page-number" href="/page/124/">124</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -393,14 +401,14 @@ file.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

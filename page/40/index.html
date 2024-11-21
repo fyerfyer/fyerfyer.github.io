@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-4-Accessing%20Information/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/16/3-7-Procedures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/14/3-4-Accessing%20Information/" class="post-title-link" itemprop="url">3.4.Accessing Information</a>
+          <a href="/2024/07/16/3-7-Procedures/" class="post-title-link" itemprop="url">3.7.Procedure</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 15:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T15:30:22+08:00">2024-07-14</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-16 16:30:22" itemprop="dateCreated datePublished" datetime="2024-07-16T16:30:22+08:00">2024-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:40:34" itemprop="dateModified" datetime="2024-07-15T10:40:34+08:00">2024-07-15</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-17 17:31:59" itemprop="dateModified" datetime="2024-07-17T17:31:59+08:00">2024-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>628</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>5 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,130 +272,146 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="34accessing-information"><span class="math inline">\(3.4.\)</span>Accessing Information</h1>
-<h3 id="1machine-code-properties">1.Machine code properties</h3>
+          <h1 id="37procedure"><span class="math inline">\(3.7.\)</span>Procedure</h1>
+<h3 id="1procedure-in-a-highprospective">1.Procedure in A High
+Prospective</h3>
 <ul>
-<li><p>x86-64 instructions can range in length from 1 to 15 bytes, it
-isn&apos;t fixed.</p></li>
-<li><p>The instruction format is designed to insure that <strong>there&apos;s
-a unique decoding of the bytes into machine instructions</strong>. For
-example, only <code>pushq %rbx</code> can start with <code>53</code>(can
-be analogied with opcode in RISC-V).</p></li>
-<li><p>The disassembler determines the assembly code based
-<strong>purely on the byte sequences in the machine-code
-file</strong>.</p></li>
+<li>Procedures are a key abstraction in software. They provide a way to
+<strong>package code that implements some functionality with a
+designated set of arguments and an optional return value</strong>.</li>
 </ul>
-<h3 id="2registers">2.Registers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-1.png"></p>
-<ul>
-<li><p>When we present instructions copying and generating 1-, 2-, 4-,
-8-byte values, we follow the two conventions:</p>
-<ul>
-<li><p>Those that generate 1- or 2-byte quantities <strong>leave the
-remaining bytes unchanged</strong>.</p></li>
-<li><p>Those that generate 4-byte quantities <strong>set the upper 4
-bytes of the register to zero</strong>.</p></li>
-</ul></li>
-<li><p>A function returns a value by <strong>storing it in register
-<code>%rax</code></strong>, or <strong>in one of the low-order portions
-of this register</strong>.</p></li>
-</ul>
-<h3 id="3operand-specifiers">3.Operand specifiers</h3>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-2.png"></p>
-<p>&#x2003;&#x2003;There are three types of operand possibilities:</p>
-<ul>
-<li><p><em>Immediate</em>: It refers to constant value. In ATT format
-assembly code, it is written with a <code>$</code> along with an
-integer.</p></li>
-<li><p><em>Register</em>: It denotes the content of a register. We use
-the notation <span class="math inline">\(r_a\)</span> to denote a
-register <span class="math inline">\(a\)</span> and indicate its value
-with <span class="math inline">\(R{[r_{a}]}\)</span>.</p></li>
-<li><p><em>Memory</em>: The most general form of it is <span class="math inline">\(Imm({r_b},{r_i},s)\)</span>, which is computed as
-<span class="math inline">\(Imm+R[{r_b}]+R[{r_s}] \cdot s\)</span>.</p>
-<ul>
-<li><span class="math inline">\(Imm\)</span> is the immediate offset,
-<span class="math inline">\(r_b\)</span> is the base register, <span class="math inline">\(r_i\)</span> is the index register.</li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-3.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-4.png"></p>
-<h3 id="4data-movement-instructions">4.Data Movement Instructions</h3>
-<h4 id="asimple-data-movement-instructions">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Simple data movement instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-5.png"></p>
-<ul>
-<li><p>The source operand designates a value that is <strong>immediate,
-stored in a register, or stored in memory</strong>.</p></li>
-<li><p>The destination operand designates a location that is
-<strong>either a register or a memory address</strong>.</p></li>
-<li><p>The value is first passed <strong>from source to a register, then
-from the register to the destination</strong>.</p></li>
-</ul>
-<blockquote>
-<p>The regular <code>movq</code> instruction can only have immediate
-source operands that can be represented as 32-bit two&#xFFFD;s-complement
-numbers. This value is then sign extended to produce the 64-bit value
-for the destination. The <code>movabsq</code> instruction can have an
-<strong>arbitrary 64-bit immediate value</strong> as its source operand
-and can only have a register as a destination.</p>
-</blockquote>
-<blockquote>
-<p>In x86-64, any instruction that generates a 32-bit value for a
-register also <strong>sets the high-order portion of the register to
-0</strong>.</p>
-</blockquote>
-<h4 id="bbit-extending-data-movementinstructions">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Bit-extending data movement
-instructions</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-6.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-7.png"></p>
-<ul>
-<li><p>Each instruction name has <strong>size designators</strong> as
-its final two characters&#xFFFD;the first specifying the source size, and the
-second specifying the destination size.</p></li>
-<li><p>The source can be either a register or stored in memory.</p></li>
-<li><p>The destination is a register.</p></li>
-</ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Suffix decision)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-8.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>There are several
-points to note:</p>
+<p>&#x2003;&#x2003;Well-designed software uses procedures as an abstraction mechanism,
+<strong>hiding the detailed implementation of some action</strong> while
+p<strong>roviding a clear and concise interface definition of what
+values will be computed and what effects the procedure will have on the
+program state</strong>.</p>
+<p>&#x2003;&#x2003;To provide machine-level support for procedures, we need to take
+the following aspect into consideration:</p>
 <ol type="1">
-<li><p>In x86-64, we always <strong>give quad word registers to memory
-reference</strong>, such as <code>%rax</code>.</p></li>
-<li><p>We <strong>first decide which suffix to use by the
-destination</strong>. For example, <code>movb $0xFF %bl</code>.</p></li>
-<li><p>If <strong>the destination is a memory address(such as
-<code>(%rax)</code>)</strong>, we <strong>decide which suffix to use by
-the source</strong>.</p></li>
+<li><p><em>Passing control</em>.</p></li>
+<li><p><em>Passing data</em>.</p></li>
+<li><p><em>Allocating and deallocating memory</em>.</p></li>
 </ol>
-<blockquote>
-<p>Note that if both the source and the destination are from memory,
-<strong>we can use all four suffix</strong>. The x86-64 imposes the
-restriction that <strong>a move instruction cannot have both operands
-refer to memory locations</strong>.</p>
-</blockquote>
-<h4 id="cdata-movement-example">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data movement example</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-9.png"></p>
+<h3 id="2the-run-time-stack">2.The Run-time Stack</h3>
 <ul>
-<li><p>Procedure parameters <code>xp</code> and <code>y</code> are
-stored in registers <code>%rdi</code> and <code>%rsi</code>.</p></li>
-<li><p>Dereferencing a pointer involves <strong>copying that pointer
-into a register</strong>, and then <strong>using this register in a
-memory reference</strong>.</p></li>
+<li><p>A program can manage the storage required by its procedures using
+a stack, where the stack and the program registers <strong>store the
+information required for passing control and data, and for allocating
+memory</strong>. As P calls Q, <strong>control and data information are
+added to the end of the stack</strong>. This information <strong>gets
+deallocated when P returns</strong>.</p></li>
+<li><p>When an x86-64 procedure requires storage beyond what it can hold
+in registers, it <strong>allocates space on the stack</strong>. This
+region is referred to as the procedure&apos;s <strong>stack
+frame</strong>.</p>
+<ul>
+<li>When procedure P calls procedure Q, it will <strong>push the return
+address onto the stack</strong>, indicating where <strong>within P the
+program should resume</strong> execution once Q returns. We consider the
+return address to be <strong>part of P&apos;s stack frame</strong>, since it
+holds state relevant to P.</li>
+</ul></li>
 </ul>
-<p>&#x2003;&#x2003;<span class="math inline">\(e.g.\)</span>(Casting)</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-10.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-11.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-12.png"></p>
-<p>&#x2003;&#x2003;<span class="math inline">\(solution:\)</span>The casting is in
-fact <strong>the extension of bits</strong>. For example, if we want to
-convert <code>char</code> to <code>int</code>, because <code>char</code>
-takes word bits while <code>int</code> takes 32 bits, we use
-<code>movsbl</code> to implement operations
-like<code>int x = (int) char_element</code>:</p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-13.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-14.png"></p>
-<h4 id="dstack-operation">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Stack operation</h4>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-15.png"></p>
-<p><img src="/2024/07/14/3-4-Accessing%20Information/image-16.png"> <img src="/2024/07/14/3-4-Accessing%20Information/image-17.png"></p>
+<p>&#x2003;&#x2003;The stack frames for most procedures are <strong>of fixed
+size</strong>, allocated at the beginning of the procedure. Some
+procedures, however, require variable-size frames.</p>
+<h3 id="3control-transfer">3.Control Transfer</h3>
+<ul>
+<li><p>Passing control from function P to function Q involves simply
+<strong>setting the program counter (PC) to the starting address of the
+code for Q</strong>. This information is recorded in x86-64 machines by
+invoking procedure Q with the instruction <code>call Q</code>.</p>
+<ul>
+<li>This instruction <strong>pushes an address A onto the stack</strong>
+and <strong>sets the PC to the beginning of Q</strong>. The pushed
+address A is referred to as <strong>the return address</strong> and is
+computed as <strong>the address of the instruction immediately following
+the call instruction</strong>.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;The general forms of the <code>call</code> and <code>ret</code>
+instructions are as below:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image.png"></p>
+<p><img src="/2024/07/16/3-7-Procedures/image-1.png"></p>
+<h3 id="4data-transfer">4.Data Transfer</h3>
+<p>&#x2003;&#x2003;In x86-64, data passing to and from a procedure takes place via
+registers.</p>
+<p>&#x2003;&#x2003;<strong>Up to six</strong> integral (i.e., integer and pointer)
+arguments can be passed via registers. The registers are used in a
+specified order:</p>
+<p><img src="/2024/07/16/3-7-Procedures/image-2.png"></p>
+<p>&#x2003;&#x2003;Arguments are allocated to these registers according to
+<strong>their ordering in the argument list</strong>, and arguments
+smaller than 64 bits can be accessed using the appropriate
+<strong>subsection of the 64-bit register</strong>.</p>
+<p>&#x2003;&#x2003;When a function has more than six integral arguments, the other
+ones are passed <strong>on the stack</strong>. When passing parameters
+on the stack, all data size <strong>are rounded up to be multiples of
+8</strong>.</p>
+<p>&#x2003;&#x2003;Let&apos;s take the following code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># void proc(a1, a1p, a2, a2p, a3, a3p, a4, a4p)</span><br><span class="line"># Arguments passed as follows:</span><br><span class="line"># a1 in %rdi (64 bits)</span><br><span class="line"># a1p in %rsi (64 bits)</span><br><span class="line"># a2 in %edx (32 bits)</span><br><span class="line"># a2p in %rcx (64 bits)</span><br><span class="line"># a3 in %r8w (16 bits)</span><br><span class="line"># a3p in %r9 (64 bits)</span><br><span class="line"># a4 at %rsp+8 ( 8 bits)</span><br><span class="line"># a4p at %rsp+16 (64 bits)</span><br><span class="line"></span><br><span class="line">proc:</span><br><span class="line">    movq 16(%rsp), %rax # Fetch a4p (64 bits)</span><br><span class="line">    addq %rdi, (%rsi)   # *a1p += a1 (64 bits)</span><br><span class="line">    addl %edx, (%rcx)   # *a2p += a2 (32 bits)</span><br><span class="line">    addw %r8w, (%r9)    # *a3p += a3 (16 bits)</span><br><span class="line">    movl 8(%rsp), %edx  # Fetch a4 (8 bits)</span><br><span class="line">    addb %dl, (%rax)    # *a4p += a4 (8 bits)</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/16/3-7-Procedures/image-3.png"></p>
+<h3 id="5local-storage-on-the-stack">5.Local Storage on the Stack</h3>
+<p>&#x2003;&#x2003;In most cases, local data is stored in registers. However, there
+are cases that local data must be stored in memory:</p>
+<ol type="1">
+<li><p>There are not enough registers to hold all of the local
+data.</p></li>
+<li><p>The address operator &apos;&amp;&apos; is applied to a local variable, and
+hence we must be able to <strong>generate an address for it</strong>.
+However, data that is stored in register doesn&apos;t have unique
+address.</p></li>
+<li><p>Some of the local variables are arrays or structures and hence
+must be accessed by array or structure references.</p></li>
+</ol>
+<p>&#x2003;&#x2003;Take the following program as an example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp;</span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># long caller()</span><br><span class="line">caller:</span><br><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br><span class="line">call swap_add        # Call swap_add(&amp;arg1, &amp;arg2)</span><br><span class="line">movq (%rsp), %rdx    # Get arg1</span><br><span class="line">subq 8(%rsp), %rdx   # Compute diff = arg1 - arg2</span><br><span class="line">imulq %rdx, %rax     # Compute sum * diff</span><br><span class="line">addq $16, %rsp       # Deallocate stack frame</span><br><span class="line">ret                  # Return</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Because we need to use the address of <code>arg1</code> and
+<code>arg2</code>, we need to store them in memory. We do this by
+leaving enough place in the stack and push the arguments onto the
+stack:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subq $16, %rsp       # Allocate 16 bytes for stack frame</span><br><span class="line">movq $534, (%rsp)    # Store 534 in arg1</span><br><span class="line">movq $1057, 8(%rsp)  # Store 1057 in arg2</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;Once we need to use the value, we fetch it from the stacK:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq 8(%rsp), %rsi   # Compute &amp;arg2 as second argument</span><br><span class="line">movq %rsp, %rdi      # Compute &amp;arg1 as first argument</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The following program is a more complicated one. It includes the
+details of setting up the stack frame for the local variables and
+function parameters:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">call_proc:</span><br><span class="line"></span><br><span class="line">    # set up arguments to proc</span><br><span class="line">    subq $32, %rsp          # Allocate 32-byte stack frame</span><br><span class="line">    movq $1, 24(%rsp)       # Store 1 in &amp;x1</span><br><span class="line">    movl $2, 20(%rsp)       # Store 2 in &amp;x2</span><br><span class="line">    movw $3, 18(%rsp)       # Store 3 in &amp;x3</span><br><span class="line">    movb $4, 17(%rsp)       # Store 4 in &amp;x4</span><br><span class="line">    leaq 17(%rsp), %rax     # Create &amp;x4</span><br><span class="line">    movq %rax, 8(%rsp)      # Store &amp;x4 as argument 8</span><br><span class="line">    movl $4, (%rsp)         # Store 4 as argument 7</span><br><span class="line">    leaq 18(%rsp), %r9      # Pass &amp;x3 as argument 6</span><br><span class="line">    movl $3, %r8d           # Pass 3 as argument 5</span><br><span class="line">    leaq 20(%rsp), %rcx     # Pass &amp;x2 as argument 4</span><br><span class="line">    movl $2, %edx           # Pass 2 as argument 3</span><br><span class="line">    leaq 24(%rsp), %rsi     # Pass &amp;x1 as argument 2</span><br><span class="line">    movl $1, %edi           # Pass 1 as argument 1</span><br><span class="line"></span><br><span class="line">    # call proc</span><br><span class="line">    call proc               # Call proc</span><br><span class="line"></span><br><span class="line">    # retrieve changes to memory</span><br><span class="line">    movslq 20(%rsp), %rdx   # Get x2 and convert to long</span><br><span class="line">    addq 24(%rsp), %rdx     # Compute x1+x2</span><br><span class="line">    movswl 18(%rsp), %eax   # Get x3 and convert to int</span><br><span class="line">    movsbl 17(%rsp), %ecx   # Get x4 and convert to int</span><br><span class="line">    subl %ecx, %eax         # Compute x3-x4</span><br><span class="line">    cltq                    # Convert to long</span><br><span class="line">    imulq %rdx, %rax        # Compute (x1+x2) * (x3-x4)</span><br><span class="line">    addq $32, %rsp          # Deallocate stack frame</span><br><span class="line">    ret                     # Return</span><br></pre></td></tr></table></figure>
+<h3 id="6local-storage-in-registers">6.Local Storage in Registers</h3>
+<p>&#x2003;&#x2003;When calling another procedure, we must make sure that <strong>the
+callee does not overwrite some register value that the caller planned to
+use later</strong>.</p>
+<ul>
+<li><p>By convention, registers <code>%rbx</code>, <code>%rbp</code>,
+and <code>%r12&#xFFFD;C%r15</code> are classified as <strong>callee saved
+registers</strong>.</p>
+<ul>
+<li>When procedure P calls procedure Q, <strong>Q must preserve the
+values of these registers</strong>, ensuring that they have the same
+values when Q returns to P as they did when Q was called.</li>
+</ul></li>
+<li><p>Procedure Q can preserve a register value by either <strong>not
+changing it at all</strong> or by <strong>pushing the original value on
+the stack, altering it, and then popping the old value from the stack
+before returning</strong>.</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushq %rbp  # Save %rbp</span><br><span class="line">pushq %rbx  # Save %rbx</span><br><span class="line">...</span><br><span class="line">popq %rbx   # Restore %rbx</span><br><span class="line">popq %rbp   # Restore %rbp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Note how they are popped is <strong>in the reverse order
+from</strong> how they were pushed, to account for the last-in,
+first-out discipline of a stack.</p>
+</blockquote>
+<ul>
+<li>All other registers, except for the stack pointer <code>%rsp</code>,
+are classified as <strong>caller saved registers</strong>.</li>
+</ul>
+<h3 id="7recursive-procedures">7.Recursive Procedures</h3>
+<p>&#x2003;&#x2003;The stack discipline of allocation and deallocation naturally
+matches the call-return ordering of functions. So the recursive
+procedures is the same as other procedures:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = n * rfact(n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rfact:</span><br><span class="line">    pushq %rbx              # Save %rbx</span><br><span class="line">    movq %rdi, %rbx         # Store n in callee-saved register</span><br><span class="line">    movl $1, %eax           # Set return value = 1</span><br><span class="line">    cmpq $1, %rdi           # Compare n:1</span><br><span class="line">    jle .L35                # If &lt;=, goto done</span><br><span class="line">    leaq -1(%rdi), %rdi     # Compute n-1</span><br><span class="line">    call rfact              # Call rfact(n-1)</span><br><span class="line">    imulq %rbx, %rax        # Multiply result by n</span><br><span class="line">.L35: done:</span><br><span class="line">    popq %rbx               # Restore %rbx</span><br><span class="line">    ret                     # Return</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -418,7 +434,7 @@ like<code>int x = (int) char_element</code>:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/39/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/41/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/39/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/41/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -443,14 +459,14 @@ like<code>int x = (int) char_element</code>:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

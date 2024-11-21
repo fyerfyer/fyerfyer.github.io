@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/03/3-1-Translating-Starting-a-Program/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/03/3-1-Translating-Starting-a-Program/" class="post-title-link" itemprop="url">3.1.Translating &amp; Starting a Program</a>
+          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 22:15:12" itemprop="dateCreated datePublished" datetime="2024-06-03T22:15:12+08:00">2024-06-03</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 08:19:21" itemprop="dateModified" datetime="2024-06-04T08:19:21+08:00">2024-06-04</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1k</span>
+      <span>527</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,185 +272,120 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="31translating-amp-starting-aprogram"><span class="math inline">\(3.1.\)</span>Translating &amp; Starting a
-Program</h1>
-<h3 id="1a-complex-example">1.A complex example</h3>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image.png"></p>
-<p>&#x2003;&#x2003;When we are going to translate the program, we should follow the
-following process:</p>
-<ol type="1">
-<li><p>Need to decide on what variables go in what registers</p></li>
-<li><p>Need to determine which registers we need to save on function
-entry (the function preamble/prolog)</p>
-<ol type="1">
-<li>Decrement the stack</li>
-<li>Save all the callee saved registers we will use</li>
-<li>Save ra or any other caller saved registers we need to live across
-calls to other functions</li>
-</ol></li>
-<li><p>Translate the code itself</p></li>
-<li><p>Restore all the registers necessary (the function
-postamble/epilog)</p>
-<ol type="1">
-<li>Restore the callee saved registers we used</li>
-<li>Restore <code>ra</code></li>
-<li>Increment the stack</li>
-</ol></li>
-<li><p>Return using <code>jr</code></p></li>
-</ol>
-<p>&#x2003;&#x2003;There are some points in the process:</p>
+          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
+<h3 id="1basic-devices">1.Basic devices</h3>
 <ul>
-<li>Return <code>null</code>:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">li a0 0</span><br><span class="line">j postamble</span><br></pre></td></tr></table></figure>
+<li><p><em>Registers</em>: It contains:</p>
 <ul>
-<li>When calling function, we can <strong>use the <code>call</code>
-pseudo-instruction for <code>jal ra (location)</code></strong>. For
-example, <code>call malloc</code>.</li>
-</ul>
-<h3 id="2interpretation">2.Interpretation</h3>
-<ul>
-<li><p>Interpreter <strong>directly executes a program in the source
-language</strong>.</p></li>
-<li><p>Since interpreter <strong>is closer to high-level</strong>, it
-can give better error messages during interpreting.</p></li>
-<li><p>Because the interpreter executes intermediate representations
-rather than direct machine code, <strong>the same source code can be run
-from one machine to another without modification of the source
-code</strong>.</p></li>
-</ul>
-<h3 id="3calling-chain">3.Calling chain</h3>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-1.png"></p>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-2.png"></p>
-<h3 id="4compilation">4.Compilation</h3>
-<h4 id="aconcepts">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts</h4>
-<p>&#x2003;&#x2003;The compiler transforms the C program into <strong>an assembly
-language program</strong>, a symbolic form of what the machine
-understands. High-level language programs take many fewer lines of code
-than assembly language, so programmer productivity is much higher.</p>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-3.png"></p>
-<h4 id="bassembler">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Assembler</h4>
-<ul>
-<li><p>The assembler <strong>converts the assembly language instruction
-into machine language</strong>. It turns the assembly language program
-into an <strong>object file, which is a combination of machine language
-instructions, data, and information needed to place instructions
-properly in memory.</strong></p></li>
-<li><p>Assembler will also <strong>accept numbers in a variety of
-bases</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;To produce the binary version of each instruction in the assembly
-language program, the assembler must determine the address corresponding
-to all labels. This is done by a <strong>symbol table</strong>.</p>
-<ul>
-<li><p>The object file for UNIX mainly consists of:</p>
-<ul>
-<li><p>The object file header describes <strong>the size and position of
-the other pieces of the object file</strong>.</p></li>
-<li><p>The text segment contains <strong>the machine language
-code</strong>.</p></li>
-<li><p>The static data segment contains <strong>data allocated for the
-life of the program</strong>.</p></li>
-<li><p>The relocation information identifies instructions and data words
-that <strong>depend on absolute addresses when the program is loaded
-into memory</strong>.</p></li>
-<li><p>The symbol table contains <strong>the remaining labels that are
-not defined</strong>, such as external references.</p>
-<ul>
-<li>Use <strong>dummy &quot;placeholders&quot;</strong> for unresolved absolute
-and external references.</li>
-</ul></li>
-<li><p>The debugging information contains <strong>a concise description
-of how the modules were compiled</strong>.</p></li>
+<li><p>Two data words from the register file, and <strong>write one data
+word into the register file</strong> for each instruction.</p></li>
+<li><p>An input. It <strong>specifies the register number to be
+read</strong>.</p></li>
+<li><p>An output. It <strong>carries the value that has been read from
+the register</strong>.</p></li>
+<li><p>To write a data word, we need two more inputs: one to
+<strong>specify the register number to be written</strong> and one to
+<strong>supply the data to be written into the
+register</strong>.</p></li>
 </ul></li>
 </ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
+<ul>
+<li><em>ALU</em></li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<ul>
+<li><em>Immediate generation unit</em>: In operations like
+<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
+written in 12-bit offset in the instruction. So we need to
+<strong>sign-extend the number to a 64-bit signed value</strong>. The
+Imm-Gen does the job:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
+<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
+instruction execution</h3>
+<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
+parts:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
 <hr>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-4.png"></p>
-<blockquote>
-<p><span class="math inline">\(p.s.\)</span> The <code>auipc</code>
-instruction <strong>adds an immediate number to the current PC
-value</strong>. This means that the generated address <strong>is
-relative to the current instruction</strong>. It add an offset to the PC
-(upper 20 bits to the left of the instant number by 12 bits), and use
-<code>addi</code> to load the lower 12 bits.</p>
-<p><code>lui</code> instructions are used to generate absolute
-addresses, which are fixed addresses of data in memory. This approach
-works for memory addresses that do not move. It loads an instant number
-to the upper 20 bits of the register.</p>
-</blockquote>
-<h4 id="clinker">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Linker</h4>
-<p>&#x2003;&#x2003;Linker is used for <strong>compiling and assembling each procedure
-independently</strong>, so that a change to one line would require
-resolving only one procedure. It&apos;s a system that <strong>combines
-independently assembled machine language programs</strong> and
-<strong>resolves all undefined labels into an executable
-file</strong>.</p>
-<p>&#x2003;&#x2003;There are three steps for the linker:</p>
-<ol type="1">
-<li>Place code and data modules symbolically in memory.</li>
-<li>Determine the addresses of data and instruction labels.</li>
-<li>Patch both the internal and external references.</li>
-</ol>
-<p>&#x2003;&#x2003;The linker uses the relocation information and symbol table in each
-object module to <strong>resolve all undefined labels</strong>.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
+<h3 id="3implementation-ofdifferent-statement">3.Implementation of
+different statement</h3>
+<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
+instruction</h4>
+<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
+<code>DataA</code> and <code>DataB</code>, and calculate the result by
+ALU.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
+<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
+rather than <code>DataB</code>. The source of Imm-Gen is from
+<code>IMEM</code>, from which we can get the instruction, and
+<code>inst[31:20]</code> is the immediate we want:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
+<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
+<code>save</code> instruction</h4>
+<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
+read or write data.</p>
 <ul>
-<li>For each entry in the relocation table, it replaces it with
-<strong>the actual address for the symbol table of the item</strong> we
-are linking to.</li>
+<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
+<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
+address. Else, it writes the information into the address:</li>
 </ul>
-<p>&#x2003;&#x2003;If all external references are resolved, the linker next
-<strong>determines the memory locations each module will
-occupy</strong>. Since the files were assembled in isolation,
-<strong>the assembler couldn&apos;t know where a module&apos;s instructions and
-data would be placed relative to other modules</strong>. So when the
-linker places a module in memory, all <strong>absolute references, that
-is, memory addresses that are not relative to a register</strong>, must
-<strong>be relocated to reflect its true location</strong>.</p>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-7.png"></p>
-<h4 id="dtype-of-addressing">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Type of addressing</h4>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-5.png"></p>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-6.png"></p>
-<h4 id="eloader">&#x2003;&#x2003;<span class="math inline">\(e.\)</span>Loader</h4>
-<p><img src="/2024/06/03/3-1-Translating-Starting-a-Program/image-8.png"></p>
-<h3 id="5dynamically-linkedlibraries">5.Dynamically linked
-libraries</h3>
-<p>&#x2003;&#x2003;In tradition, before the program is run, the library has been
-linked. Although this static approach is the fastest way to call library
-routines,it has a few disadvantages:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
+<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
+<p>&#x2003;&#x2003;The basic form of branch instruction is
+<code>beq x1 x2 offset</code>. To implement this instruction, we must
+compute the branch target address by <strong>adding the sign- extended
+offset field of the instruction to the PC</strong>. There are two
+details in the definition of branch instructions to which we must pay
+attention:</p>
+<ul>
+<li><p>The instruction set architecture specifies that <strong>the base
+for the branch address calculation is the address of the branch
+instruction</strong>.</p></li>
+<li><p>The architecture also states that <strong>the offset field is
+shifted left 1 bit so that it is a half word offset</strong>; this shift
+<strong>increases the effective range of the offset field by a factor of
+2</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
+the new PC, and we say the branch is <strong>taken</strong>. Else, we
+say the branch is <strong>not taken</strong>.</p>
+<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
+this struction:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
+<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
+signal</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
+<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
+<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
+<code>jalr</code> instructions</h4>
+<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
 <ol type="1">
-<li><p>The library routines become <strong>part of the executable
-code</strong>. If a new version of the library is released, <strong>the
-statically linked program keeps using the old version</strong>.</p></li>
-<li><p>It loads <strong>all routines in the library that are called
-anywhere in the executable</strong>, even if those calls are not
-executed.</p></li>
+<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
+<ul>
+<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
+2 bytes!</strong></li>
+</ul></li>
+<li><p>Set <code>PC=PC+offset</code></p>
+<ul>
+<li>Since the offset is calculated by ALU, we <strong>connect the output
+of ALU with input of PC</strong>.</li>
+</ul></li>
 </ol>
-<p>&#x2003;&#x2003;A replacement of it is called <em>dynamically linked
-libraries</em>, where the library routines are not linked and loaded
-<strong>until the program is run</strong>.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
+<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
 <ol type="1">
-<li><p>The first time the library routine is called, the program
-<strong>calls the dummy entry and follows the indirect branch</strong>,
-which points to a piece of code.</p></li>
-<li><p>The code <strong>puts a number in a register</strong> to
-<strong>identify the desired library routine</strong>.</p></li>
-<li><p>Then it branches to the dynamic linker/loader.</p></li>
-<li><p>The linker/loader finds the wanted routine, <strong>remaps it
-into the memory</strong>, and <strong>changes the address in the
-indirect branch location to point to that routine</strong>. Then it
-branches to it.</p></li>
+<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
+<code>DataD</code>)</li>
+<li>Set <code>PC=PC+offset</code></li>
 </ol>
-<blockquote>
-<p>The dynamic linker loads the library function into memory on the
-first call and updates the indirect branch address. In this way, if the
-following call to the library function, the program can directly jump to
-the correct memory address, avoid repeated symbol parsing and address
-calculation, which improves the efficiency of the program.</p>
-</blockquote>
-<ol start="5" type="1">
-<li>When the routine completes, it <strong>returns to the original
-calling site</strong>.</li>
-</ol>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
+<h3 id="4datapath-control">4.Datapath control</h3>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
 
       
     </div>
@@ -473,7 +408,7 @@ calling site</strong>.</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/52/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/52/">52</a><span class="page-number current">53</span><a class="page-number" href="/page/54/">54</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/54/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/52/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/52/">52</a><span class="page-number current">53</span><a class="page-number" href="/page/54/">54</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/54/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -498,14 +433,14 @@ calling site</strong>.</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

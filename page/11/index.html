@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/16/8-4-Process-Control/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-1-9-3-VM-Address-Space/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/16/8-4-Process-Control/" class="post-title-link" itemprop="url">8.4.Process Control</a>
+          <a href="/2024/08/20/9-1-9-3-VM-Address-Space/" class="post-title-link" itemprop="url">9.1~9.3.VM Address Space</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-16 20:31:22" itemprop="dateCreated datePublished" datetime="2024-08-16T20:31:22+08:00">2024-08-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-18 10:41:24" itemprop="dateModified" datetime="2024-08-18T10:41:24+08:00">2024-08-18</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:47:02" itemprop="dateCreated datePublished" datetime="2024-08-20T09:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
+          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>2.1k</span>
+      <span>370</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>8 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,300 +266,91 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="84process-control"><span class="math inline">\(8.4.\)</span>Process Control</h1>
-<h3 id="1obtaining-process-ids">1.Obtaining Process IDs</h3>
+          <h1 id="91-sim93vm-address-spaces"><span class="math inline">\(9.1 \sim
+9.3\)</span>VM Address Spaces</h1>
+<h3 id="1terminologies">1.Terminologies</h3>
 <ul>
-<li><p>Each process has a unique positive <em>process
-ID(PID)</em>.</p></li>
-<li><p>The <code>getpid</code> function returns the PID of the calling
-process.</p></li>
-<li><p>The <code>getppid</code> function returns the PID of its
-parent(i.e., the process that created the calling process).</p></li>
+<li><p>Each byte has a unique <em>physical address(PA)</em>.</p></li>
+<li><p><em>VA</em>: Virtual Address.</p></li>
+<li><p>The activity of <strong>transferring a page between disk and
+memory</strong> is known as <em>swapping</em> or
+<em>paging</em>.</p></li>
+<li><p>Pages are <em>swapped in(paged in)</em> from disk to DRAM, and
+<em>swapped out(paged out)</em> from DRAM to disk.</p></li>
+<li><p>The strategy of <strong>waiting until the last moment to swap in
+a page</strong>, when a miss occurs, is known as <em>demand
+paging</em>.</p></li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getppid</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of either the caller or the parent */</span></span><br></pre></td></tr></table></figure>
-<h3 id="2terminating-processes">2.Terminating Processes</h3>
-<p>&#x2003;&#x2003;We can think of a process as being in one of three states:</p>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image.png"></p>
 <ul>
-<li><p><em>Running</em>: The process is either executing on the CPU or
-waiting to be executed and will eventually be scheduled by the
-kernel.</p></li>
-<li><p><em>Stopped</em>: The execution of the process is suspended and
-<strong>will not be scheduled</strong>.</p></li>
-<li><p><em>Terminated</em>: The process is stopped
-<strong>permanently</strong>. This is due to the following reasons:</p>
-<ol type="1">
-<li><p>Receiving a signal whose default action is to terminate the
-process.</p></li>
-<li><p>Returning from the main routine.</p></li>
-<li><p>Calling the <code>exit</code> function.</p></li>
-</ol></li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* This function does not return */</span></span><br></pre></td></tr></table></figure>
+<li><p>An <em>address space</em> is an ordered set of nonnegative
+integer addresses:</p>
 <ul>
-<li>The <code>exit</code> function terminates the process with an
-<em>exit status</em> of status.</li>
-</ul>
-<blockquote>
-<p>The other way to set the exit status is to <strong>return an integer
-value from the main routine</strong>.</p>
-</blockquote>
-<h3 id="3creating-processes">3.Creating Processes</h3>
-<p>&#x2003;&#x2003;A parent process <strong>creates a new running child
-process</strong> by calling the <code>fork</code> function.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 to child, PID of child to parent, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The newly created child process is almost, identical to the
-parent:</p>
-<ul>
-<li><p>The child gets an identical(but <strong>separate</strong>) copy
-of the parent&#x2019;s user-level virtual address space.</p></li>
-<li><p>The child also gets identical copies of any of the parent&#x2019;s open
-file descriptors, which means the child <strong>can read and write any
-files that were open in the parent when it called
-fork</strong>.</p></li>
-<li><p>However, they share different PIDs.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The <code>fork</code> function <strong>is called once but it
-returns twice</strong>.</p>
-<blockquote>
-<p>Since the PID of the child is always nonzero, the return value
-provides an unambiguous way to <strong>tell whether the program is
-executing in the parent or the child</strong>.</p>
-</blockquote>
-<p>&#x2003;&#x2003;Take the following program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    pid = Fork();</span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>) { <span class="comment">/* Child */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child : x=%d\n&quot;</span>, ++x);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parent */</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;parent: x=%d\n&quot;</span>, --x);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When we run the program on the Unix system, we get the following
-result:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./fork</span><br><span class="line">parent: x=0</span><br><span class="line">child : x=2</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The parent and the child are separate processes that run
-<strong>concurrently</strong>, and whether we get the
-<code>parent: x=0</code> first or <code>child: x=2</code>first depends
-on <strong>whether the parent process completes faster than the child
-process</strong>.</p></li>
-<li><p>Since the parent and the child are separate processes, they each
-have their own private address spaces, so that any subsequent changes
-that a parent or child makes to <code>x</code> <strong>are private and
-are not reflected in the memory of the other process</strong>.</p></li>
-</ul>
-<hr>
-<p>&#x2003;&#x2003;We can use a <em>process graph</em> to describe the process:</p>
-<p><img src="/2024/08/16/8-4-Process-Control/image.png"></p>
-<p>&#x2003;&#x2003;Let&apos;s take a look at a more complicate example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    Fork();</span><br><span class="line">    Fork();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The process graph of the process is as below:</p>
-<p><img src="/2024/08/16/8-4-Process-Control/image-1.png"></p>
-<ul>
-<li>For a program running on a single processor, any <strong>topological
-sort of the vertices</strong> in the corresponding process graph
-represents <strong>a feasible total ordering of the statements in the
-program</strong>.</li>
-</ul>
-<h3 id="4reaping-child-processes">4.Reaping Child Processes</h3>
-<h4 id="abasicconcept">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Basic
-concept</h4>
-<p>&#x2003;&#x2003;When a process terminates for any reason, the kernel does not
-remove it from the system immediately. Instead, the process <strong>is
-kept around in a terminated state</strong> until <strong>it is reaped by
-its parent</strong>.</p>
-<p>&#x2003;&#x2003;When the parent reaps the terminated child, the kernel
-<strong>passes the child&apos;s exit status to the parent</strong> and then
-<strong>discards the terminated process</strong>.</p>
-<ul>
-<li><p>A terminated process that has not yet been reaped is called a
-<em>zombie</em>.</p></li>
-<li><p>Even though zombies are not running, they still consume system
-memory resources.</p></li>
-</ul>
-<hr>
-<p>&#x2003;&#x2003;When a parent process terminates, the kernel <strong>arranges for
-the <code>init</code> process to become the adopted parent of any
-orphaned children</strong>. The <code>init</code> process:</p>
-<ul>
-<li><p>has a PID of 1,</p></li>
-<li><p>is created by the kernel <strong>during system
-start-up</strong>,</p></li>
-<li><p>never terminates</p></li>
-<li><p>is <strong>the ancestor of every process</strong>.</p></li>
-</ul>
-<h4 id="breaping-operations">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Reaping operations</h4>
-<h5 id="ithe-waitpid-function">&#x2003;&#x2003;<span class="math inline">\(i.\)</span>The <code>waitpid</code> function</h5>
-<p>&#x2003;&#x2003;A process waits for its children to terminate or stop by calling
-the <code>waitpid</code> function:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">waitpid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *statusp, <span class="type">int</span> options)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK, 0 (if WNOHANG), or &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>By default(when options = 0), <code>waitpid</code>
-<strong>suspends execution of the calling process</strong> until
-<strong>a child process in its wait set terminates</strong>.</p></li>
-<li><p>If a process in the wait set has already terminated at the time
-of the call, then <code>waitpid</code> returns immediately.</p></li>
-<li><p>Else, <code>waitpid</code> returns the PID of the terminated
-child that caused <code>waitpid</code> to return.</p></li>
-</ul>
-<hr>
-<ul>
-<li><p>If <code>pid &gt; 0</code>, then the wait set is <strong>the
-singleton child process</strong> whose process ID is equal to
-<code>pid</code>.</p></li>
-<li><p>If <code>pid = -1</code>, then the wait set consists of
-<strong>all of the parent&apos;s child processes</strong>.</p></li>
-</ul>
-<h5 id="iimodifying-the-default-behavior">&#x2003;&#x2003;<span class="math inline">\(ii.\)</span>Modifying the default behavior</h5>
-<p>&#x2003;&#x2003;The default behavior can be modified by <strong>setting
-<code>options</code> to</strong> various combinations of the
-<code>WNOHANG</code>, <code>WUNTRACED</code>, and
-<code>WCONTINUED</code> constants:</p>
-<ul>
-<li><p><code>WNOHANG</code>: <strong>Return immediately</strong>(with a
-return value of 0) if <strong>none of the child processes in the wait
-set has terminated yet</strong>.</p>
-<ul>
-<li>The default behavior suspends the calling process until a child
-terminates, this option, however, allows us to <strong>do useful work
-while waiting for a child to terminate</strong>.</li>
-</ul></li>
-<li><p><code>WUNTRACED</code>: Suspend execution of the calling process
-until a process in the wait set becomes either terminated or stopped.
-<strong>Return the PID of the terminated or stopped child</strong> that
-caused the return.</p>
-<ul>
-<li>The default behavior returns only for terminated children; this
-option is useful when you want to <strong>check for both terminated and
-stopped children</strong>.</li>
+<li>If the integers in the address space are
+<strong>consecutive</strong>, then we say that it is a <em>linear
+address space</em>.</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;The options can be combined by <code>ORING</code>, for example:</p>
+<p><span class="math display">\[
+\lbrace 0,1,2, \cdots \rbrace
+\]</span></p>
 <ul>
-<li><code>WNOHANG | WUNTRACED</code>: Return immediately, with a return
-value of 0, if none of the children in the wait set has stopped or
-terminated, or with a return value equal to the PID of one of the
-stopped or terminated children.</li>
-</ul>
-<h5 id="iiichecking-the-exit-status-of-a-reapedchild">&#x2003;&#x2003;<span class="math inline">\(iii.\)</span>Checking the exit status of a reaped
-child</h5>
-<p>&#x2003;&#x2003;If the <code>statusp</code> argument is non-NULL, then
-<code>waitpid</code> encodes status information about the child that
-caused the return in <code>status</code>, which is the value
-<strong>pointed to by <code>statusp</code></strong>.</p>
-<p>&#x2003;&#x2003;The <code>wait.h</code> include file defines several macros for
-interpreting the status argument:</p>
+<li><p>A virtual address space with <span class="math inline">\(N =
+2^n\)</span> addresses is called an <strong>n-bit address
+space</strong>.</p></li>
+<li><p>At any point in time, the set of virtual pages is partitioned
+into three disjoint subsets:</p>
 <ul>
-<li><p><code>WIFEXITED(status)</code>: Returns true if the child
-<strong>terminated normally</strong>, via a call to <code>exit</code> or
-a <code>return</code>.</p></li>
-<li><p><code>WEXITSTATUS(status)</code>: Returns <strong>the exit
-status</strong> of a normally terminated child. This status is only
-defined if <code>WIFEXITED()</code> returned true.</p></li>
-<li><p><code>WTERMSIG(status)</code>: Returns <strong>the number of the
-signal</strong> that caused the child process to terminate. This status
-is only defined if <code>WIFSIGNALED()</code> returned true.</p></li>
-<li><p><code>WIFSTOPPED(status)</code>: Returns true if the child that
-caused the return is currently stopped.</p></li>
-<li><p><code>WSTOPSIG(status)</code>: Returns <strong>the number of the
-signal</strong> that caused the child to stop. This status is only
-defined if <code>WIFSTOPPED()</code> returned true.</p></li>
-</ul>
-<h5 id="iverror-conditions">&#x2003;&#x2003;<span class="math inline">\(iv.\)</span>Error conditions</h5>
-<ul>
-<li><p>If the calling process has no children, then <code>waitpid</code>
-returns &#x2212;1 and sets <code>errno</code> to <code>ECHILD</code>.</p></li>
-<li><p>If the <code>waitpid</code> function was interrupted by a signal,
-then it returns &#x2212;1 and sets errno to <code>EINTR</code>.</p></li>
-</ul>
-<h5 id="vthe-wait-function">&#x2003;&#x2003;<span class="math inline">\(v.\)</span>The <code>wait</code> function</h5>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span> *statusp)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: PID of child if OK or &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Calling <code>wait(&amp;status)</code> is equivalent to calling
-<code>waitpid(-1, &amp;status, 0)</code>.</p>
-<h3 id="5putting-processes-to-sleep">5.Putting Processes to Sleep</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">sleep</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> secs)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: seconds left to sleep */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;Another function that we will find useful is the <code>pause</code>
-function, which <strong>puts the calling function to sleep</strong>
-until <strong>a signal is received by the process</strong>.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">pause</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Always returns &#x2212;1 */</span></span><br></pre></td></tr></table></figure>
-<h3 id="6loading-and-runningprograms">6.Loading and Running
-Programs</h3>
-<h4 id="athe-execve-function-ampexecuting-process">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>The <code>execve</code> function &amp;
-executing process</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">execve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename, <span class="type">const</span> <span class="type">char</span> *argv[], <span class="type">const</span> <span class="type">char</span> *envp[])</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Does not return if OK; returns &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The data structure of argument list and the list of environment
-variables are as below:</p>
-<p><img src="/2024/08/16/8-4-Process-Control/image-2.png"></p>
-<ul>
-<li>By convention, <code>argv[0]</code> is the name of the executable
-object file.</li>
-</ul>
-<p>&#x2003;&#x2003;After <code>execve</code> loads <code>filename</code>, it
-<strong>calls the start-up code</strong>. The start-up code <strong>sets
-up the stack</strong> and <strong>passes control to the
-<code>main</code> routine</strong> of the new program, which has a
-prototype of the form:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv, <span class="type">char</span> **envp)</span>;</span><br><span class="line"><span class="comment">/* int main(int argc, char *argv[], char *envp[]); */</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><code>argc</code>:It gives <strong>the number of non-null
-pointers</strong> in the <code>argv[]</code> array.</p></li>
-<li><p><code>argv</code>:It <strong>points to the first entry</strong>
-in the <code>argv[]</code> array.</p></li>
-<li><p><code>envp</code>:It <strong>points to the first entry</strong>
-in the <code>envp[]</code> array.</p></li>
-</ul>
-<p>&#x2003;&#x2003;The stack has the organization as below:</p>
-<p><img src="/2024/08/16/8-4-Process-Control/image-3.png"></p>
-<h4 id="bmanipulating-the-environment-array">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Manipulating the environment array</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">getenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to name if it exists, NULL if no match */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The getenv function searches the environment array for a string
-<code>name=value</code>. If found, it returns a pointer to value;
-otherwise, it returns <code>NULL</code>.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">setenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, <span class="type">const</span> <span class="type">char</span> *newvalue, <span class="type">int</span> overwrite)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 on success, &#x2212;1 on error */</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unsetenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: nothing */</span></span><br></pre></td></tr></table></figure>
-<h3 id="7using-forkand-execve-to-run-programs">7.Using <code>fork</code>
-and <code>execve</code> to Run Programs</h3>
-<ul>
-<li>A <em>shell</em> is an interactive application-level program that
-<strong>runs other programs on behalf of the user</strong>. <strong>The
-original shell was the <code>sh</code> program</strong>, which was
-followed by variants such as <code>csh</code>, <code>tcsh</code>,
-<code>ksh</code>, and <code>bash</code>.</li>
-</ul>
-<p>&#x2003;&#x2003;A shell performs a sequence of <em>read/evaluate</em> steps and
-then terminates.</p>
-<ul>
-<li><p>The read step reads a command line from the user.</p></li>
-<li><p>The evaluate step <strong>parses the command line</strong> and
-runs programs on behalf of the user.</p></li>
-</ul>
-<h4 id="athe-main-routine-of-asimple-shell">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>The <code>main</code> routine of a
-simple shell</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXARGS 128</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Function prototypes */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> cmdline[MAXLINE]; <span class="comment">/* Command line */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) {</span><br><span class="line">        <span class="comment">/* Read */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&gt; &quot;</span>);</span><br><span class="line">        Fgets(cmdline, MAXLINE, <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="keyword">if</span> (feof(<span class="built_in">stdin</span>))</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Evaluate */</span></span><br><span class="line">        eval(cmdline);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bthe-evaluating-routine">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>The evaluating routine</h4>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* eval - Evaluate a command line */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">eval</span><span class="params">(<span class="type">char</span> *cmdline)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *argv[MAXARGS]; <span class="comment">/* Argument list execve() */</span></span><br><span class="line">    <span class="type">char</span> buf[MAXLINE]; <span class="comment">/* Holds modified command line */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Should the job run in bg or fg? */</span></span><br><span class="line">    <span class="type">pid_t</span> pid; <span class="comment">/* Process id */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    bg = parseline(buf, argv);</span><br><span class="line">    <span class="keyword">if</span> (argv[<span class="number">0</span>] == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">/* Ignore empty lines */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!builtin_command(argv)) {</span><br><span class="line">        <span class="keyword">if</span> ((pid = Fork()) == <span class="number">0</span>) { <span class="comment">/* Child runs user job */</span></span><br><span class="line">            <span class="keyword">if</span> (execve(argv[<span class="number">0</span>], argv, environ) &lt; <span class="number">0</span>) {</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s: Command not found.\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Parent waits for foreground job to terminate */</span></span><br><span class="line">        <span class="keyword">if</span> (!bg) {</span><br><span class="line">            <span class="type">int</span> status;</span><br><span class="line">            <span class="keyword">if</span> (waitpid(pid, &amp;status, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">                unix_error(<span class="string">&quot;waitfg: waitpid error&quot;</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d %s&quot;</span>, pid, cmdline);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* If first arg is a builtin command, run it and return true */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">builtin_command</span><span class="params">(<span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;quit&quot;</span>)) <span class="comment">/* quit command */</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;&amp;&quot;</span>)) <span class="comment">/* Ignore singleton &amp; */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">/* Not a builtin command */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* parseline - Parse the command line and build the argv array */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">parseline</span><span class="params">(<span class="type">char</span> *buf, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *delim; <span class="comment">/* Points to first space delimiter */</span></span><br><span class="line">    <span class="type">int</span> argc; <span class="comment">/* Number of args */</span></span><br><span class="line">    <span class="type">int</span> bg; <span class="comment">/* Background job? */</span></span><br><span class="line"></span><br><span class="line">    buf[<span class="built_in">strlen</span>(buf)<span class="number">-1</span>] = <span class="string">&apos; &apos;</span>; <span class="comment">/* Replace trailing &apos;\n&apos; with space */</span></span><br><span class="line">    <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&apos; &apos;</span>)) <span class="comment">/* Ignore leading spaces */</span></span><br><span class="line">        buf++;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Build the argv list */</span></span><br><span class="line">    argc = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ((delim = <span class="built_in">strchr</span>(buf, <span class="string">&apos; &apos;</span>))) {</span><br><span class="line">        argv[argc++] = buf;</span><br><span class="line">        *delim = <span class="string">&apos;\0&apos;</span>;</span><br><span class="line">        buf = delim + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&apos; &apos;</span>)) <span class="comment">/* Ignore spaces */</span></span><br><span class="line">            buf++;</span><br><span class="line">    }</span><br><span class="line">    argv[argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">0</span>) <span class="comment">/* Ignore blank line */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Should the job run in the background? */</span></span><br><span class="line">    <span class="keyword">if</span> ((bg = (*argv[argc<span class="number">-1</span>] == <span class="string">&apos;&amp;&apos;</span>)) != <span class="number">0</span>)</span><br><span class="line">        argv[--argc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bg;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The <code>phaseline</code> function parses the space-separated
-command-line arguments and builds the <code>argv</code> vector that will
-eventually be passed to <code>execve</code>.</p>
-<ul>
-<li><p>If the last argument is an &apos;&amp;&apos; character, then parseline
-returns 1, indicating that the program should be executed in the
-<em>background</em>(the shell <strong>does not wait for it to
-complete</strong>).</p></li>
-<li><p>Otherwise, it returns 0, indicating that the program should be
-run in the <em>foreground</em>(the shell <strong>waits for it to
-complete</strong>).</p></li>
+<li><p><em>Unallocated</em></p></li>
+<li><p><em>Cached</em></p></li>
+<li><p><em>Uncached</em></p></li>
 </ul></li>
-<li><p>After parsing the command line, the <code>eval</code> function
-calls the <code>builtin_command</code> function, which <strong>checks
-whether the first command-line argument is a built-in shell
-command</strong>. If so, it interprets the command immediately and
-returns 1. Otherwise, it returns 0.</p></li>
-<li><p>If <code>builtin_command</code> returns 0, then the shell
-<strong>creates a child process</strong> and <strong>executes the
-requested program inside the child</strong>.</p>
+</ul>
+<h3 id="2dram-cache-organization">2.DRAM Cache Organization</h3>
+<h4 id="apagetables">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Page
+tables</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-1.png"></p>
 <ul>
-<li><p>If the user has asked for the program to run in the background,
-then the shell <strong>returns to the top of the loop and waits for the
-next command line</strong>.</p></li>
-<li><p>Otherwise the shell uses the <code>waitpid</code> function to
-<strong>wait for the job to terminate</strong>. When the job terminates,
-the shell goes on to the next iteration.</p></li>
+<li><p>A page table is an array of <em>page table entries(PTEs)</em>.
+Each page in the virtual address space has a PTE at a fixed offset in
+the page table.</p></li>
+<li><p>The valid bit indicates <strong>whether the virtual page is
+currently cached in DRAM</strong>.</p>
+<ul>
+<li>If the valid bit is set, the address field indicates the start of
+the corresponding physical page in DRAM where the virtual page is
+cached.</li>
 </ul></li>
+</ul>
+<h4 id="bpagehits">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Page
+hits</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-2.png"></p>
+<ul>
+<li>The address translation hardware <strong>uses the virtual address as
+an index</strong> to locate PTE 2.</li>
+</ul>
+<h4 id="cpagefaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Page
+faults</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-3.png"></p>
+<ul>
+<li><p>The page fault exception invokes a page fault exception handler
+in the kernel, and it <strong>selects a victim page</strong>. In this
+case, it&apos;s VP4 in PP3.</p></li>
+<li><p>If VP 4 has been modified, then the kernel copies it back to
+disk.</p></li>
+<li><p>The kernel <strong>modifies the page table entry for VP
+4</strong> to reflect the fact that VP 4 is no longer cached in main
+memory.</p></li>
+<li><p>Next, the kernel copies VP 3 from disk to PP 3 in memory, updates
+PTE 3, and then returns.</p></li>
+</ul>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-4.png"></p>
+<ul>
+<li>When the handler returns, it <strong>restarts the faulting
+instruction</strong>, which resends the faulting virtual address to the
+address translation hardware. But now, VP 3 is cached in main memory,
+and <strong>the page hit is handled normally</strong> by the address
+translation hardware.</li>
 </ul>
 
       
@@ -589,7 +374,7 @@ the shell goes on to the next iteration.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -614,14 +399,14 @@ the shell goes on to the next iteration.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

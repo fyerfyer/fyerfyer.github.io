@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-4-General-Principles-of-pipelining/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/" class="post-title-link" itemprop="url">4.1.Y86-64 Instruction Set Architecture</a>
+          <a href="/2024/07/26/4-4-General-Principles-of-pipelining/" class="post-title-link" itemprop="url">4.4.General Principles of Pipelining</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-24 09:31:22" itemprop="dateCreated datePublished" datetime="2024-07-24T09:31:22+08:00">2024-07-24</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T14:31:22+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 11:32:30" itemprop="dateModified" datetime="2024-07-26T11:32:30+08:00">2024-07-26</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-30 08:15:23" itemprop="dateModified" datetime="2024-07-30T08:15:23+08:00">2024-07-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.1k</span>
+      <span>296</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,159 +272,67 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="41y86-64-instruction-setarchitecture"><span class="math inline">\(4.1.\)</span>Y86-64 Instruction Set
-Architecture</h1>
-<h3 id="1programmer-visible-state">1.Programmer-Visible State</h3>
-<p>&#x2003;&#x2003;The programmer-visible state is where the programmer can generate
-machine-level code.</p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image.png"></p>
+          <h1 id="44general-principles-of-pipelining"><span class="math inline">\(4.4.\)</span>General Principles of Pipelining</h1>
+<h3 id="1computational-pipelines">1.Computational Pipelines</h3>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image.png"></p>
+<p>&#x2003;&#x2003;The detail at the timing and operation of this process are shown as
+below:</p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-2.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-1.png"></p>
 <ul>
-<li>The <code>Stat</code> indicates the overall state of program
-execution. It will indicate either normal operation or that some sort of
-exception has occurred.</li>
+<li>Slowing down the clock would not change the pipeline behavior. The
+signals propagate to the pipeline register inputs, but <strong>no change
+in the register states will occur until the clock rises</strong>.</li>
 </ul>
-<h3 id="2y86-64-instruction-set">2.Y86-64 Instruction Set</h3>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
+<h3 id="2limitations-of-pipelining">2.Limitations of Pipelining</h3>
+<h4 id="athroughput">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Throughput</h4>
+<p>&#x2003;&#x2003;Suppose the maximum delay of a process is <span class="math inline">\(x\)</span> ps, then we can calculate the
+<em>throughput</em> as:</p>
+<p><span class="math display">\[
+throughput={ {1\;instruction}\over{x\;ps} } \cdot { {1000\;ps} \over
+{1\;ns}}={1000\over x}GIPS
+\]</span></p>
+<p>&#x2003;&#x2003;And the <em>latency</em> is the <strong>overall time the process
+takes</strong>.</p>
+<h4 id="bnonuniform-partition">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Nonuniform partition</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-3.png"></p>
 <ul>
-<li><p>The integer operation instructions operate only on register data.
-This instructions set the three condition codes <code>ZF</code>,
-<code>SF</code>, and <code>OF</code> (zero, sign, and
-overflow).</p></li>
-<li><p>The <code>call</code> instruction <strong>pushes the return
-address on the stack</strong> and <strong>jumps to the destination
-address</strong>. The <code>ret</code> instruction returns from such a
-call.</p></li>
-<li><p>The <code>halt</code> instruction stops instruction execution,
-and the status code is set to <code>HLT</code>.</p></li>
-</ul>
-<h3 id="3instruction-encoding">3.Instruction Encoding</h3>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-1.png"></p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-2.png"></p>
+<li><p>The latency of piplining is decided by <strong>the slowest clock
+rate</strong>.</p>
 <ul>
-<li>Every instruction has an <strong>initial byte identifying the
-instruction type</strong>. This byte is split into two 4-bit parts: the
-high-order, or code, part, and the low-order, or function, part.</li>
-</ul>
-<p>&#x2003;&#x2003;Instructions that need operands have longer encodings:</p>
-<ul>
-<li><p>There can be an additional register specifier byte
-<strong>specifying either one or two registers</strong>. These register
-fields are called <code>rA</code> and <code>rB</code> in figure
-above.</p>
-<ul>
-<li><p>Instructions that have no register operands do not have a
-register specifier byte.</p></li>
-<li><p>Those that require just one register operand have the other
-register specifier set to 0xF.</p></li>
-</ul></li>
-<li><p>Some instructions require an additional 8-byte constant word.
-This word can serve as the immediate data for <code>irmovq</code>, the
-displacement for <code>rmmovq</code> and <code>mrmovq</code> address
-specifiers, and the destination of branches and calls.</p>
-<ul>
-<li>Note that branch and call destinations are given as <strong>absolute
-addresses</strong>, rather than using the PC-relative addressing seen in
-x86-64.</li>
+<li>For the process above, delays of A and C are 50ps and 100+20 = 120
+ps, while delay of B is 150+20 = 170ps, so we have to <strong>set the
+clock cycle to 170ps</strong>.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-3.png"></p>
+<blockquote>
+<p>Note that the delay of pipeline register is included in
+<strong>register that fetch data from it</strong>. So in the process
+above, B and C should add the 20ps delay.</p>
+</blockquote>
+<h4 id="cdiminishing-returns-of-deeppipelining">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Diminishing returns of deep
+pipelining</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-4.png"></p>
+<h3 id="3piplining-a-system-withfeedback">3.Piplining a System with
+Feedback</h3>
+<p>&#x2003;&#x2003;For a system that executes machine programs such as Y86-64, there
+are <strong>potential dependencies between successive
+instructions</strong>.</p>
 <ul>
-<li>The program registers are stored within the CPU in a register file,
-a small random access memory where <strong>the register IDs serve as
-addresses</strong>.</li>
+<li>The following codes describe what is called <em>data
+dependency</em>. The <code>irmovq</code> instruction stores its result
+in <code>%rax</code>, which then must be read by the <code>addq</code>
+instruction.</li>
 </ul>
-<p>&#x2003;&#x2003;Let&apos;s take the instruction
-<code>rmmovq %rsp, 0x123456789abcd(%rdx)</code> as an example:</p>
-<ol type="1">
-<li><p><code>rmmovq</code> has initial byte <code>40</code>.</p></li>
-<li><p>The source register <code>%rsp</code> is encoded in
-<code>rA</code> field, and base register <code>%rdx</code> is encoded in
-<code>rB</code> field. So we get the register specifier byte of
-<code>42</code>.</p></li>
-<li><p>The displacement is encoded in the 8-byte constant word:
-<code>00 01 23 45 67 89 ab cd</code>, and we write it in byte-reversed
-order.</p></li>
-</ol>
-<p>&#x2003;&#x2003;So the final result is <code>4042cdab896745230100</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">irmovq $50, %rax</span><br><span class="line">addq %rax, %rbx</span><br><span class="line">mrmovq 100(%rbx), %rdx</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>One important property of any instruction set is that <strong>the
-byte encodings must have a unique interpretation</strong>. An arbitrary
-sequence of bytes either encodes a unique instruction sequence or is not
-a legal byte sequence</p>
-<ul>
-<li>This property ensures that a processor can execute an object-code
-program without any ambiguity about the meaning of the code. However, if
-we do not know the starting position of a code sequence, we cannot
-reliably determine how to split the sequence into individual
-instructions.</li>
-</ul></li>
+<li>The following codes describe what is called <em>control
+dependency</em>. The outcome of the conditional test determines whether
+the next instruction to execute:</li>
 </ul>
-<h3 id="4exceptions">4.Exceptions</h3>
-<p>&#x2003;&#x2003;The programmer-visible state includes a status code
-<code>Stat</code> describing the overall state of the executing program.
-The possible values for this code are as below:</p>
-<p><img src="/2024/07/24/4.1.Y86-64-Instruction-Set-Architecture/image-4.png"></p>
-<ul>
-<li><p>The <code>ADR</code>indicates that the processor attempted to
-read from or write to an invalid memory address, either while fetching
-an instruction or while reading or writing data.</p>
-<ul>
-<li>We limit the maximum address, and <strong>any access to an address
-beyond this limit will trigger an ADR exception</strong>.</li>
-</ul></li>
-</ul>
-<h3 id="5y86-64-programs">5.Y86-64 Programs</h3>
-<p>&#x2003;&#x2003;Take the following C program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">sum</span><span class="params">(<span class="type">long</span> *start, <span class="type">long</span> count)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (count)</span><br><span class="line">    {</span><br><span class="line">        sum += *start;</span><br><span class="line">        start++;</span><br><span class="line">        count--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;the x86-64 and Y86-64 assembly code are as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># x86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    movl $0, %eax        # sum = 0</span><br><span class="line">    jmp .L2              # Goto test</span><br><span class="line">.L3:                     # loop:</span><br><span class="line">    addq (%rdi), %rax    # Add *start to sum</span><br><span class="line">    addq $8, %rdi        # start++</span><br><span class="line">    subq $1, %rsi        # count--</span><br><span class="line">.L2:                     # test:</span><br><span class="line">    testq %rsi, %rsi     # Test sum</span><br><span class="line">    jne .L3              # If !=0, goto loop</span><br><span class="line">    rep; ret             # Return</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Y86-64 ver</span><br><span class="line"># long sum(long *start, long count)</span><br><span class="line"># start in %rdi, count in %rsi</span><br><span class="line">sum:</span><br><span class="line">    irmovq $8,%r8       # Constant 8</span><br><span class="line">    irmovq $1,%r9       # Constant 1</span><br><span class="line">    xorq %rax,%rax      # sum = 0</span><br><span class="line">    andq %rsi,%rsi      # Set CC</span><br><span class="line">    jmp test            # Goto test</span><br><span class="line">loop:</span><br><span class="line">    mrmovq (%rdi),%r10  # Get *start</span><br><span class="line">    addq %r10,%rax      # Add to sum</span><br><span class="line">    addq %r8,%rdi       # start++</span><br><span class="line">    subq %r9,%rsi       # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">    jne loop            # Stop when 0</span><br><span class="line">    ret                 # Return</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The Y86-64 codes have the following differences:</p>
-<ol type="1">
-<li><p>The Y86-64 code <strong>loads constants into registers</strong>
-(lines 2&#xFFFD;C3), since it cannot use immediate data in arithmetic
-instructions.</p></li>
-<li><p>The Y86-64 code requires two instructions (lines 8&#xFFFD;C9) to
-<strong>read a value from memory and add it to a
-register</strong>.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The following shows a complete program file written in Y86-64
-assembly code:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">.pos 0                                      # Execution begins at address 0</span><br><span class="line">irmovq stack, %rsp                          # Set up stack pointer</span><br><span class="line">call main                                   # Execute main program</span><br><span class="line">halt                                        # Terminate program</span><br><span class="line"></span><br><span class="line">.align 8                                    # Array of 4 elements</span><br><span class="line">array:</span><br><span class="line">.quad 0x000d000d000d</span><br><span class="line">.quad 0x00c000c000c0</span><br><span class="line">.quad 0x0b000b000b00</span><br><span class="line">.quad 0xa000a000a000</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">irmovq array, %rdi</span><br><span class="line">irmovq $4, %rsi</span><br><span class="line">call sum                                    # sum(array, 4)</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">sum:                                        # long sum(long *start, long count)</span><br><span class="line">irmovq $8, %r8                              # Constant 8</span><br><span class="line">irmovq $1, %r9                              # Constant 1</span><br><span class="line">xorq %rax, %rax                             # sum = 0</span><br><span class="line">andq %rsi, %rsi                             # Set CC</span><br><span class="line">jmp test                                    # Goto test</span><br><span class="line">loop:</span><br><span class="line">mrmovq (%rdi), %r10                         # Get *start</span><br><span class="line">addq %r10, %rax                             # Add to sum</span><br><span class="line">addq %r8, %rdi                              # start++</span><br><span class="line">subq %r9, %rsi                              # count--. Set CC</span><br><span class="line">test:</span><br><span class="line">jne loop                                    # Stop when 0</span><br><span class="line">ret                                         # Return</span><br><span class="line"></span><br><span class="line">.pos 0x200                                  # Stack starts here and grows to lower addresses</span><br><span class="line">stack:</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>Words beginning with &apos;.&apos; are assembler directives telling the
-assembler to <strong>adjust the address at which it is generating code
-or to insert some words of data</strong>.</p>
-<ul>
-<li><p>The directive <code>.pos 0</code> indicates that <strong>the
-assembler should begin generating code starting at address
-0</strong>.</p></li>
-<li><p>The next instruction <code>irmovq stack, %rsp</code> initializes
-the stack pointer.</p>
-<ul>
-<li>The label <code>stack</code> is declared at the end of the program,
-to indicate address 0x200 using a .pos directive. Our stack will
-therefore <strong>start at this address and grow toward lower
-addresses</strong>.</li>
-</ul></li>
-<li><p>The label <code>array</code> denotes the start of this array, and
-is aligned on an 8-byte boundary using the <code>.align</code>
-directive. The array stores 4 words.</p></li>
-</ul></li>
-</ul>
-<p>&#x2003;&#x2003;Since our only tool for creating Y86-64 code is an assembler, the
-programmer must perform tasks we ordinarily delegate to the compiler,
-linker, and run-time system.</p>
-<p>&#x2003;&#x2003;The <code>YIS</code> tools is used to simulate the execution of the
-Y86-64 machine-code program. If we run our object code on
-<code>YIS</code>, we will get the following output:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Stopped in 34 steps at PC = 0x13. Status &apos;HLT&apos;, CC Z=1 S=0 O=0</span><br><span class="line">Changes to registers:</span><br><span class="line">%rax:   0x0000000000000000 0x0000abcdabcdabcd</span><br><span class="line">%rsp:   0x0000000000000000 0x0000000000000200</span><br><span class="line">%rdi:   0x0000000000000000 0x0000000000000038</span><br><span class="line">%r8:    0x0000000000000000 0x0000000000000008</span><br><span class="line">%r9:    0x0000000000000000 0x0000000000000001</span><br><span class="line">%r10:   0x0000000000000000 0x0000a000a000a000</span><br><span class="line"></span><br><span class="line">Changes to memory:</span><br><span class="line">0x01f0: 0x0000000000000000 0x0000000000000055</span><br><span class="line">0x01f8: 0x0000000000000000 0x0000000000000013</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>The first line of the simulation output summarizes the execution
-and the resulting values of the PC and program status.</p></li>
-<li><p>The original values of the register are shown on the
-left.</p></li>
-</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    subq %rdx,%rbx</span><br><span class="line">    jne targ</span><br><span class="line">    irmovq $10,%rdx</span><br><span class="line">    jmp loop</span><br><span class="line">targ:</span><br><span class="line">    halt</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-5.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-6.png"></p>
 
       
     </div>
@@ -447,7 +355,7 @@ left.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/31/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -472,14 +380,14 @@ left.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

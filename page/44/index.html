@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/14/3-2-Program-Encoding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/" class="post-title-link" itemprop="url">5.4.Multicore and Other Shared Memory Multiprocessors</a>
+          <a href="/2024/07/14/3-2-Program-Encoding/" class="post-title-link" itemprop="url">3.2.Program Encoding</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,9 +223,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
-      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 11:22:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:53:17" itemprop="dateCreated datePublished" datetime="2024-06-29T11:22:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-14 09:30:22" itemprop="dateCreated datePublished" datetime="2024-07-14T09:30:22+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-15 10:29:41" itemprop="dateModified" datetime="2024-07-15T10:29:41+08:00">2024-07-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/" itemprop="url" rel="index"><span itemprop="name">CS61C Great Ideas in Computer Architecture</span></a>
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CS61C-Great-Ideas-in-Computer-Architecture/Module-5-Parallelism/" itemprop="url" rel="index"><span itemprop="name">Module 5.Parallelism</span></a>
+          <a href="/categories/CSAPP/Chapter-3-Machine-level-Representation-of-Program/" itemprop="url" rel="index"><span itemprop="name">Chapter 3.Machine-level Representation of Program</span></a>
         </span>
     </span>
 
@@ -248,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>155</span>
+      <span>265</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,29 +272,55 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="54multicoreand-other-shared-memory-multiprocessors">5.4.Multicore
-and Other Shared Memory Multiprocessors</h1>
-<h3 id="1amdarls-law">1.Amdarl&apos;s Law</h3>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-6.png"></p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-7.png"></p>
-<h3 id="2multiprocessor-design">2.Multiprocessor design</h3>
-<p>&#x2003;&#x2003;There are two kinds of multiprocessor designs: one is to
-<strong>provide a single physical address space that all processors can
-share</strong>, another is to <strong>have a separate address space per
-processor that requires that sharing must be explicit</strong>.</p>
-<p>&#x2003;&#x2003;A <em>Shared memory multiprocessor(SMP)</em> is one that offers the
-programmer <strong>a single physical address space across all
-processors</strong>:</p>
-<p><img src="/2024/06/29/5-4-Multicore-and-Other-Shared-Memory-Multiprocessors/image-8.png"></p>
-<p>&#x2003;&#x2003;In this multiprocessor, Processors communicate through shared
-variables in memory, with all processors capable of accessing any memory
-location via loads and stores.</p>
-<h3 id="3multiprocessor-operations">3.Multiprocessor operations</h3>
-<p>&#x2003;&#x2003;Processors need to coordinate when operating on shared data, which
-is called <em>synchronization</em>. One way is to <strong>use a lock for
-a shared variable</strong>: <strong>Only one processor r at a time can
-acquire the lock, and other processors interested in shared data must
-wait until the original processor unlocks the variable.</strong></p>
+          <h1 id="32program-encoding"><span class="math inline">\(3.2.\)</span>Program Encoding</h1>
+<h3 id="1program-execution-process">1.Program execution process</h3>
+<p>&#x2003;&#x2003;Say we want to compile two C program <code>p1.c</code> and
+<code>p2.c</code>, we input the command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; gcc -0g -o p p1.c p2.c</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>The C preprocessor expands the source code to <strong>include any
+files specified with <code>#include</code> commands and with
+<code>#define</code> declarations</strong>.</p></li>
+<li><p>Compiler generates assembly code having name <code>p1.s</code>
+and <code>p2.s</code>.</p></li>
+<li><p>Assembler converts the assembly code into <em>binary
+object-code</em> files <code>p1.o</code> and <code>p2.o</code>.</p></li>
+</ol>
+<blockquote>
+<p>The object code contains binary representations of all instructions,
+but doesn&apos;t include the address of the global value.</p>
+</blockquote>
+<ol start="4" type="1">
+<li>Linker merges these two object-code files along with <em>code
+implementing library functions</em> (e.g., <code>printf</code>) and
+generates the final executable code file <code>p</code>(specified by
+<code>-o p</code>).</li>
+</ol>
+<h3 id="2machine-code">2.Machine code</h3>
+<h4 id="aprogram-memory">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Program memory</h4>
+<p>&#x2003;&#x2003;The program memory contains:</p>
+<ul>
+<li><p>the executable machine code for the program</p></li>
+<li><p>some information required by the operating system</p></li>
+<li><p>a run-time stack for managing procedure calls and
+returns</p></li>
+<li><p>blocks of memory allocated by the user (e.g., by using the
+<code>malloc</code> library function).</p></li>
+</ul>
+<h4 id="bsomecommand">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Some
+command</h4>
+<p>&#x2003;&#x2003;We use <code>-S</code> to see the assembly code generated by the
+compiler:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -S mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;We use <code>-c</code> to both compile and assemble the code:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -0g -c mstore.c</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;This will generate an object-code file <code>mstore.o</code>.</p>
+<p>&#x2003;&#x2003;To inspect the contents of machine-code, we can use the
+<em>disassembler</em>. The program <code>objdump</code> can serve the
+role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d mstore.o</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The result is as below:</p>
+<p><img src="/2024/07/14/3-2-Program-Encoding/image.png"></p>
 
       
     </div>
@@ -311,7 +343,7 @@ wait until the original processor unlocks the variable.</strong></p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/43/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/43/">43</a><span class="page-number current">44</span><a class="page-number" href="/page/45/">45</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/45/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -336,14 +368,14 @@ wait until the original processor unlocks the variable.</strong></p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

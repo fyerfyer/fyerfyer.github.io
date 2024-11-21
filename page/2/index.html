@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/23/9-10-Simple-Allocator-Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/11/21/3-1-%E7%AE%A1%E9%81%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/23/9-10-Simple-Allocator-Implementation/" class="post-title-link" itemprop="url">9.10.Simple Allocator Implementation</a>
+          <a href="/2024/11/21/3-1-%E7%AE%A1%E9%81%93/" class="post-title-link" itemprop="url">3.1.&#x7BA1;&#x9053;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-23 18:31:22" itemprop="dateCreated datePublished" datetime="2024-08-23T18:31:22+08:00">2024-08-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-24 23:00:48" itemprop="dateModified" datetime="2024-08-24T23:00:48+08:00">2024-08-24</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-11-21 08:23:21 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;09:39:42" itemprop="dateCreated datePublished" datetime="2024-11-21T08:23:21+08:00">2024-11-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,11 +233,11 @@
       </span>
       <span class="post-meta-item-text">&#x5206;&#x7C7B;&#x4E8E;</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+          <a href="/categories/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">go&#x5E76;&#x53D1;&#x7F16;&#x7A0B;</span></a>
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
+          <a href="/categories/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Chapter-3-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%BB%BC%E8%BF%B0/" itemprop="url" rel="index"><span itemprop="name">Chapter 3:&#x5E76;&#x53D1;&#x7F16;&#x7A0B;&#x7EFC;&#x8FF0;</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1k</span>
+      <span>785</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,81 +266,61 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="910simple-allocator-implementation"><span class="math inline">\(9.10.\)</span>Simple Allocator Implementation</h1>
-<h3 id="1general-allocator-design">1.General Allocator Design</h3>
-<p>&#x2003;&#x2003;The allocator exports three functions to application programs:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> *<span class="title function_">mm_malloc</span> <span class="params">(<span class="type">size_t</span> size)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">mm_free</span> <span class="params">(<span class="type">void</span> *ptr)</span>;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The allocator uses the block format as below:</p>
-<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image.png"></p>
-<p>&#x2003;&#x2003;The minimum block size is 16 bytes. The free list is organized as
-an implicit free list, with the invariant form shown as below:</p>
-<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image-1.png"></p>
+          <h1 id="31&#x7BA1;&#x9053;"><span class="math inline">\(3.1.\)</span>&#x7BA1;&#x9053;</h1>
+<h3 id="1&#x7CFB;&#x7EDF;&#x547D;&#x4EE4;&#x521B;&#x5EFA;">1.&#x7CFB;&#x7EDF;&#x547D;&#x4EE4;&#x521B;&#x5EFA;</h3>
 <ul>
-<li><p>The first word is an unused padding word aligned to a double-word
-boundary.</p></li>
-<li><p>The padding is followed by a special prologue block, which is an
-8-byte allocated block <strong>consisting of only a header and a
-footer</strong>. The prologue block <strong>is created during
-initialization and is never freed</strong>.</p></li>
-<li><p>The heap always ends with a special epilogue block, which is a
-zero-size allocated block that <strong>consists of only a
-header</strong>.</p></li>
-<li><p>The allocator uses a single private(<code>static</code>) global
-variable(<code>heap_listp</code>) that <strong>always points to the
-prologue block</strong>.</p></li>
+<li>&#x521B;&#x5EFA;&#x547D;&#x4EE4;&#xFF1A;</li>
 </ul>
-<h3 id="2basicconstants-and-macros-for-manipulating-the-free-list">2.Basic
-Constants and Macros for Manipulating the Free List</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> WSIZE 4 <span class="comment">/* Word and header/footer size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DSIZE 8 <span class="comment">/* Double word size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CHUNKSIZE (1&lt;&lt;12) <span class="comment">/* Extend heap by this amount (bytes) */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(x, y) ((x) &gt; (y)? (x) : (y))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Pack a size and allocated bit into a word */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PACK(size, alloc) ((size) | (alloc))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read and write a word at address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET(p) (*(unsigned int *)(p)) <span class="comment">// The pointer points to p is dereferenced</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PUT(p, val) (*(unsigned int *)(p) = (val))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read the size and allocated fields from address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_SIZE(p) (GET(p) &amp; ~0x7)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_ALLOC(p) (GET(p) &amp; 0x1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of its header and footer */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HDRP(bp) ((char *)(bp) - WSIZE)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE) <span class="comment">// Why DSIZE? Because both header and footer need to decline WSIZE, and 2*WSIZE=DSIZE</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of next and previous blocks */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))</span></span><br></pre></td></tr></table></figure>
-<h3 id="3creating-the-initial-freelist">3.Creating the Initial Free
-List</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Create the initial empty heap */</span></span><br><span class="line">    <span class="keyword">if</span> ((heap_listp = mem_sbrk(<span class="number">4</span> * WSIZE)) == (<span class="type">void</span> *)<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    PUT(heap_listp, <span class="number">0</span>); <span class="comment">/* Alignment padding */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">1</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue header */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">2</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue footer */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">3</span> * WSIZE), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* Epilogue header */</span></span><br><span class="line">    heap_listp += (<span class="number">2</span> * WSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Extend the empty heap with a free block of CHUNKSIZE bytes */</span></span><br><span class="line">    <span class="keyword">if</span> (extend_heap(CHUNKSIZE / WSIZE) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The extend_heap function is invoked in two different
-circumstances:</p>
-<ol type="1">
-<li><p>When the heap is initialized and</p></li>
-<li><p>When <code>mm_malloc</code> is unable to find a suitable
-fit.</p></li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">extend_heap</span><span class="params">(<span class="type">size_t</span> words)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Allocate an even number of words to maintain alignment */</span></span><br><span class="line">    size = (words % <span class="number">2</span>) ? (words + <span class="number">1</span>) * WSIZE : words * WSIZE;</span><br><span class="line">    <span class="keyword">if</span> ((<span class="type">long</span>)(bp = mem_sbrk(size)) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize free block header/footer and the epilogue header */</span></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block header */</span></span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block footer */</span></span><br><span class="line">    PUT(HDRP(NEXT_BLKP(bp)), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* New epilogue header */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Coalesce if the previous block was free */</span></span><br><span class="line">    <span class="keyword">return</span> coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li><p>Place enough space by invoking <code>mem_sbrk</code>.</p></li>
-<li><p>Set the new space free by setting the allocate bit
-<code>0</code>.</p></li>
-<li><p>Set the block next to <code>bp</code> as the new epilogue
-header.</p></li>
-<li><p>Finally, in the likely case that <strong>the previous heap was
-terminated by a free block</strong>, we call the <code>coalesce</code>
-function to <strong>merge the two free blocks and return the block
-pointer of the merged blocks</strong>.</p></li>
-</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd0 := exec.Command(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">&quot;My first command comes from golang. &quot;</span>)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>To maintain alignment, extend_heap <strong>rounds up the requested
-size to the nearest multiple of 2 words</strong>(8 bytes).</li>
+<li>&#x542F;&#x52A8;&#x547D;&#x4EE4;&#xFF1A;</li>
 </ul>
-<h3 id="4freeing-and-coalescingblocks">4.Freeing and Coalescing
-Blocks</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">mm_free</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err := cmd0.Start(); err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="2&#x8BFB;&#x53D6;&#x6570;&#x636E;">2.&#x8BFB;&#x53D6;&#x6570;&#x636E;</h3>
+<p>&#x2003;&#x2003;
+<code>StdoutPipe()</code>&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x7684;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;&#x4E3A;<code>io.ReadCloser</code>&#xFF0C;&#x8FD9;&#x662F;&#x62D3;&#x5C55;&#x4E86;<code>io.Reader</code>&#x63A5;&#x53E3;&#x7684;&#x63A5;&#x53E3;&#x7C7B;&#x578B;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x5B83;&#x7684;<code>Read</code>&#x65B9;&#x6CD5;&#x83B7;&#x53D6;&#x547D;&#x4EE4;&#x8F93;&#x51FA;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x7528;&#x4E8E;&#x5B58;&#x653E;&#x6570;&#x636E;&#x7684;&#x5B57;&#x8282;&#x5207;&#x7247;</span></span><br><span class="line">output0 := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">30</span>)</span><br><span class="line">n, err := stdout0.Read(output0)</span><br><span class="line"><span class="keyword">if</span> err := <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, output0[:n])</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x8F93;&#x51FA;&#x7BA1;&#x9053;&#x6CA1;&#x6709;&#x53EF;&#x4EE5;&#x8BFB;&#x53D6;&#x7684;&#x6570;&#x636E;&#xFF0C;<code>Read</code>&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x7684;<code>err</code>&#x5C31;&#x4F1A;&#x662F;<code>io.EOF</code>&#x3002;</p>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x5207;&#x7247;&#x7684;&#x957F;&#x5EA6;&#x8FC7;&#x5C0F;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<code>for</code>&#x5FAA;&#x73AF;&#x8FED;&#x4EE3;&#x8BFB;&#x53D6;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> outputBuf0 bytes.Buffer</span><br><span class="line"><span class="keyword">for</span> {</span><br><span class="line">    tempOutput := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">5</span>)</span><br><span class="line">    n, err := stdout0.Read(tempOutput)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">        <span class="keyword">if</span> err == io.EOF {</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            ...</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> n &gt; <span class="number">0</span> {</span><br><span class="line">        outputBuf0.Write(tempOutput[:n])</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8FD8;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<strong>&#x5E26;&#x7F13;&#x51B2;&#x7684;&#x8BFB;&#x53D6;&#x5668;</strong>&#x6765;&#x8BFB;&#x53D6;&#x8F93;&#x51FA;&#x7BA1;&#x9053;&#x4E2D;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x8FD9;&#x6837;&#x66F4;&#x52A0;&#x7B80;&#x4FBF;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">outputBuf0 := bufio.NewReader(stdout0)</span><br><span class="line">output0, _, err := outputBuf0.ReadLine()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, <span class="type">string</span>(output0))</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x7531;&#x4E8E;<code>stdout0</code>&#x4E5F;&#x5177;&#x6709;<code>io.Reader</code>&#x63A5;&#x53E3;&#x7C7B;&#x578B;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x4F5C;&#x4E3A;<code>bufio.NewReader</code>&#x7684;&#x53C2;&#x6570;&#x3002;</p>
+<h3 id="3&#x521B;&#x5EFA;&#x7BA1;&#x9053;">3.&#x521B;&#x5EFA;&#x7BA1;&#x9053;</h3>
+<h4 id="a&#x533F;&#x540D;&#x7BA1;&#x9053;"><span class="math inline">\(a.\)</span>&#x533F;&#x540D;&#x7BA1;&#x9053;</h4>
 <ul>
-<li>The <code>mm_free</code> set the allocate bit of the current block
-to <code>0</code>.</li>
+<li>&#x521B;&#x5EFA;&#x83B7;&#x53D6;&#x6B64;&#x547D;&#x4EE4;&#x7684;&#x7BA1;&#x9053;&#xFF1A;</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">coalesce</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> prev_alloc = GET_ALLOC(FTRP(PREV_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 1 */</span></span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (prev_alloc &amp;&amp; !next_alloc) { <span class="comment">/* Case 2 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 3 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp)));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> { <span class="comment">/* Case 4 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp))) + </span><br><span class="line">        GET_SIZE(FTRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="5allocating-blocks">5.Allocating Blocks</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">mm_malloc</span><span class="params">(<span class="type">size_t</span> size)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> asize; <span class="comment">/* Adjusted block size */</span></span><br><span class="line">    <span class="type">size_t</span> extendsize; <span class="comment">/* Amount to extend heap if no fit */</span></span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Ignore spurious requests */</span></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Adjust block size to include overhead and alignment reqs. */</span></span><br><span class="line">    <span class="keyword">if</span> (size &lt;= DSIZE)</span><br><span class="line">        asize = <span class="number">2</span>*DSIZE;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        asize = DSIZE * ((size + (DSIZE) + (DSIZE<span class="number">-1</span>)) / DSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Search the free list for a fit */</span></span><br><span class="line">    <span class="keyword">if</span> ((bp = find_fit(asize)) != <span class="literal">NULL</span>) {</span><br><span class="line">        place(bp, asize);</span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* No fit found. Get more memory and place the block */</span></span><br><span class="line">    extendsize = MAX(asize, CHUNKSIZE);</span><br><span class="line">    <span class="keyword">if</span> ((bp = extend_heap(extendsize/WSIZE)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    place(bp, asize);</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stdout0, err := cmd0.StdoutPipe()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">} </span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x7BA1;&#x9053;&#x53EF;&#x4EE5;&#x628A;&#x4E00;&#x4E2A;&#x547D;&#x4EE4;&#x7684;&#x8F93;&#x51FA;&#x4F5C;&#x4E3A;&#x53E6;&#x4E00;&#x4E2A;&#x547D;&#x4EE4;&#x7684;&#x8F93;&#x5165;&#xFF0C;&#x5728;go&#x4E2D;&#x7684;&#x4F8B;&#x5B50;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cmd1 := exec.Command(<span class="string">&quot;ps&quot;</span>, <span class="string">&quot;aux&quot;</span>)</span><br><span class="line">cmd2 := exec.Command(<span class="string">&quot;grep&quot;</span>, <span class="string">&quot;apipe&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> outputBuf1 bytes.Buffer</span><br><span class="line"></span><br><span class="line">cmd1.Stdout = &amp;outputBuf1</span><br><span class="line"><span class="keyword">if</span> err := cmd1.Start(); err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err := cmd1.wait(); err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">cmd2.Stdin = &amp;outputBuf1</span><br><span class="line"><span class="keyword">var</span> outputBuf2 bytes.Buffer</span><br><span class="line">cmd2.Stdout = &amp;outputBuf2</span><br><span class="line"><span class="keyword">if</span> err := cmd2.Start(); err != <span class="literal">nil</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>&#x7531;&#x4E8E;<code>bytes.Buffer</code>&#x5B9E;&#x73B0;&#x4E86;<code>io.Writer</code>&#x548C;<code>io.Reader</code>&#x63A5;&#x53E3;&#xFF0C;&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x5C06;&#x5B83;&#x8D4B;&#x503C;&#x7ED9;<code>.Stdout</code>&#x548C;<code>.Stdin</code>&#x3002;</p>
+</blockquote>
+<blockquote>
+<p><code>cmd1.wait</code>&#x4F1A;&#x4E00;&#x76F4;&#x963B;&#x585E;&#xFF0C;&#x76F4;&#x5230;<code>cmd1</code>&#x5B8C;&#x5168;&#x8FD0;&#x884C;&#x7ED3;&#x675F;&#x3002;</p>
+</blockquote>
 <ul>
-<li>The <code>DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);</code>
-assures that the result is rounded <strong>up to the nearest multiple of
-<code>DSIZE</code></strong>.</li>
+<li>&#x533F;&#x540D;&#x7BA1;&#x9053;&#x4F1A;&#x5728;&#x7BA1;&#x9053;&#x7F13;&#x51B2;&#x533A;&#x88AB;&#x5199;&#x6EE1;&#x4E4B;&#x540E;&#x4F7F;&#x5199;&#x6570;&#x636E;&#x7684;&#x8FDB;&#x7A0B;&#x963B;&#x585E;</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">find_fit</span><span class="params">(<span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* First-fit search */</span></span><br><span class="line">    <span class="type">void</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (bp = heap_listp; GET_SIZE(HDRP(bp)) &gt; <span class="number">0</span>; bp = NEXT_BLKP(bp)) {</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; (asize &lt;= GET_SIZE(HDRP(bp)))) {</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">/* No fit */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">place</span><span class="params">(<span class="type">void</span> *bp, <span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> csize = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((csize - asize) &gt;= (<span class="number">2</span>*DSIZE)) {</span><br><span class="line">        PUT(HDRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        bp = NEXT_BLKP(bp);</span><br><span class="line">        PUT(HDRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        PUT(HDRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h4 id="b&#x547D;&#x540D;&#x7BA1;&#x9053;"><span class="math inline">\(b.\)</span>&#x547D;&#x540D;&#x7BA1;&#x9053;</h4>
+<p>&#x2003;&#x2003;&#x4E0E;&#x533F;&#x540D;&#x7BA1;&#x9053;&#x4E0D;&#x540C;&#xFF0C;<strong>&#x4EFB;&#x4F55;&#x8FDB;&#x7A0B;&#x90FD;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x547D;&#x540D;&#x7BA1;&#x9053;&#x4EA4;&#x6362;&#x6570;&#x636E;</strong>&#x3002;</p>
+<blockquote>
+<p>&#x5B9E;&#x9645;&#x4E0A;&#xFF0C;&#x547D;&#x540D;&#x7BA1;&#x9053;<strong>&#x4EE5;&#x6587;&#x4EF6;&#x7684;&#x5F62;&#x5F0F;&#x5B58;&#x5728;&#x4E8E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E2D;</strong>&#xFF0C;&#x4F7F;&#x7528;&#x5B83;&#x7684;&#x65B9;&#x6CD5;&#x4E0E;&#x4F7F;&#x7528;&#x6587;&#x4EF6;&#x5F88;&#x7C7B;&#x4F3C;&#x3002;</p>
+</blockquote>
+<p>&#x2003;&#x2003;go&#x4E2D;&#x521B;&#x5EFA;&#x8FD9;&#x6837;&#x7684;&#x7BA1;&#x9053;&#x7684;API&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reader, writer, err := os.Pipe()</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x8FD9;&#x91CC;&#x8FD4;&#x56DE;&#x7684;<code>reader</code>&#x3001;<code>writer</code>&#x5206;&#x522B;&#x4E3A;&#x7BA1;&#x9053;&#x8F93;&#x5165;&#x7AEF;&#x3001;&#x8F93;&#x51FA;&#x7AEF;&#x7684;<code>*os.File</code>&#x7C7B;&#x578B;&#x503C;&#x3002;&#x5E76;&#x53D1;&#x8FD0;&#x884C;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8BA9;<code>reader</code>&#x8BFB;&#x53D6;<code>writer</code>&#x5199;&#x5165;&#x7684;&#x6570;&#x636E;&#x4E86;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> {</span><br><span class="line">    n, err := writer.Write(input)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">}()</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> {</span><br><span class="line">    output := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">100</span>)</span><br><span class="line">    n, err := reader.Read(output)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">}()</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5E76;&#x53D1;&#x8FD0;&#x884C;&#x5462;&#xFF1F;&#x56E0;&#x4E3A;<strong>&#x7BA1;&#x9053;&#x7684;&#x4E24;&#x7AEF;&#xFF08;&#x8BFB;&#x53D6;&#x7AEF;&#x548C;&#x5199;&#x5165;&#x7AEF;&#xFF09;&#x5728;&#x67D0;&#x4E00;&#x7AEF;&#x672A;&#x51C6;&#x5907;&#x5C31;&#x7EEA;&#x65F6;&#x4F1A;&#x963B;&#x585E;</strong>&#xFF1A;</p>
 <ul>
-<li>Since the allocated space may not take up the whole block, we may
-need to <strong>split the block</strong> by <strong>setting the
-allocated space to <code>1</code> and the other
-<code>0</code></strong>.</li>
+<li><p>&#x5982;&#x679C;&#x5199;&#x5165;&#x7AEF;&#x8BD5;&#x56FE;&#x5199;&#x5165;&#x7BA1;&#x9053;&#xFF0C;&#x4F46;&#x7BA1;&#x9053;&#x7684;&#x7F13;&#x51B2;&#x533A;&#x5DF2;&#x6EE1;&#xFF0C;&#x5219;&#x5199;&#x5165;&#x64CD;&#x4F5C;&#x4F1A;&#x963B;&#x585E;&#xFF0C;&#x76F4;&#x5230;&#x8BFB;&#x53D6;&#x7AEF;&#x8BFB;&#x53D6;&#x4E86;&#x8DB3;&#x591F;&#x7684;&#x6570;&#x636E;&#x3002;</p></li>
+<li><p>&#x5982;&#x679C;&#x8BFB;&#x53D6;&#x7AEF;&#x8BD5;&#x56FE;&#x4ECE;&#x7BA1;&#x9053;&#x8BFB;&#x53D6;&#xFF0C;&#x4F46;&#x7BA1;&#x9053;&#x4E2D;&#x6CA1;&#x6709;&#x6570;&#x636E;&#xFF0C;&#x5219;&#x8BFB;&#x53D6;&#x64CD;&#x4F5C;&#x4F1A;&#x963B;&#x585E;&#xFF0C;&#x76F4;&#x5230;&#x5199;&#x5165;&#x7AEF;&#x5199;&#x5165;&#x4E86;&#x6570;&#x636E;&#x3002;</p></li>
 </ul>
+<p>&#x2003;&#x2003;&#x5982;&#x679C;&#x987A;&#x5E8F;&#x6267;&#x884C;&#x7684;&#x8BDD;&#xFF0C;&#x7A0B;&#x5E8F;&#x5C31;&#x4F1A;&#x4E00;&#x76F4;&#x88AB;&#x963B;&#x585E;&#x4E86;&#x3002;</p>
+<p>&#x2003;&#x2003;&#x547D;&#x540D;&#x7BA1;&#x9053;&#x53EF;&#x4EE5;&#x88AB;&#x591A;&#x8DEF;&#x590D;&#x7528;&#xFF0C;&#x8FD9;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8003;&#x8651;&#x64CD;&#x4F5C;&#x539F;&#x5B50;&#x6027;&#x3002;go&#x7684;<code>io</code>&#x5305;&#x91CC;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;&#x4FDD;&#x8BC1;&#x539F;&#x5B50;&#x6027;&#x7684;&#x7BA1;&#x9053;&#xFF1A;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reader, writer := io.Pipe()</span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;<code>reader</code>&#x3001;<code>writer</code>&#x5206;&#x522B;&#x4E3A;<code>*io.PipeReader</code>&#x548C;<code>*io.PipeWriter</code>&#x7C7B;&#x578B;&#x53D8;&#x91CF;&#x3002;</p>
 
       
     </div>
@@ -369,7 +343,7 @@ allocated space to <code>1</code> and the other
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -394,14 +368,14 @@ allocated space to <code>1</code> and the other
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

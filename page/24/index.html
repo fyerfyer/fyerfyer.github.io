@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/03/5-8-Loop-Unrolling/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/05/5-12-Understanding-Memory-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/03/5-8-Loop-Unrolling/" class="post-title-link" itemprop="url">5.8.Loop Unrolling</a>
+          <a href="/2024/08/05/5-12-Understanding-Memory-Performance/" class="post-title-link" itemprop="url">5.12.Understanding Memory Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-03 13:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:21:40" itemprop="dateCreated datePublished" datetime="2024-08-03T13:31:22+08:00">2024-08-03</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-05 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;16:34:53" itemprop="dateCreated datePublished" datetime="2024-08-05T09:31:22+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>272</span>
+      <span>521</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,29 +266,77 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="58loopunrolling"><span class="math inline">\(5.8.\)</span>Loop
-Unrolling</h1>
-<p>&#x2003;&#x2003;Loop unrolling can improve performance in two ways.</p>
-<ol type="1">
-<li><p>It reduces the number of operations that do not contribute
-directly to the program result, such as loop indexing and conditional
-branching.</p></li>
-<li><p>It exposes ways in which we can further transform the code to
-reduce the number of operations in the critical paths of the overall
-computation.</p></li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 2 x 1 loop unrolling */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">combine5</span><span class="params">(vec_ptr v, <span class="type">data_t</span> *dest)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">long</span> length = vec_length(v);</span><br><span class="line">    <span class="type">long</span> limit = length - <span class="number">1</span>;</span><br><span class="line">    <span class="type">data_t</span> *data = get_vec_start(v);</span><br><span class="line">    <span class="type">data_t</span> acc = IDENT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Combine 2 elements at a time */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>) {</span><br><span class="line">        acc = (acc OP data[i]) OP data[i + <span class="number">1</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Finish any remaining elements */</span></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) {</span><br><span class="line">        acc = acc OP data[i];</span><br><span class="line">    }</span><br><span class="line">    *dest = acc;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The performance of different unrolling is as below:</p>
-<p><img src="/2024/08/03/5-8-Loop-Unrolling/image.png"></p>
-<p>&#x2003;&#x2003;We see that the CPE improves little when <span class="math inline">\(k \geq 2\)</span>. To understand this, consider
-the case when <span class="math inline">\(k=2\)</span>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of combine5. data_t = double, OP = *</span><br><span class="line"># i in %rdx, data %rax, limit in %rbx, acc in %xmm0</span><br><span class="line">.L35: loop:</span><br><span class="line">    vmulsd   (%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i]</span><br><span class="line">    vmulsd  8(%rax,%rdx,8), %xmm0, %xmm0    # Multiply acc by data[i+1]</span><br><span class="line">    addq     $2, %rdx                       # Increment i by 2</span><br><span class="line">    cmpq     %rdx, %rbp                     # Compare to limit: i</span><br><span class="line">    jg      .L35                            # If &gt;, goto loop</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The <code>vmulsd</code> instructions each get translated into two
-operations: one to load an array element from memory and one to multiply
-this value by the accumulated value. The data-flow representation of the
-program is as below:</p>
-<p><img src="/2024/08/03/5-8-Loop-Unrolling/image-1.png"></p>
-<p>&#x2003;&#x2003;There&apos;s still a critical path of <span class="math inline">\(n\)</span></p>
+          <h1 id="512understanding-memoryperformance"><span class="math inline">\(5.12.\)</span>Understanding Memory
+Performance</h1>
+<h3 id="1store-performance">1.Store Performance</h3>
+<p>&#x2003;&#x2003;A series of store operations cannot create a data dependency. Only
+a load operation is affected by the result of a store operation, since
+<strong>only a load can read back the memory value that has been written
+by the store</strong>.</p>
+<p>&#x2003;&#x2003;The store unit includes a <em>store buffer</em> containing
+<strong>the addresses and data of the store operations</strong> that
+have been issued to the store unit, but <strong>have not yet been
+completed</strong>, where completion involves updating the data
+cache.</p>
+<p>&#x2003;&#x2003;This buffer is provided so that a series of store operations can be
+executed <strong>without having to wait for each one to update the
+cache</strong>.</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-2.png"></p>
+<h3 id="2load-and-store-operations">2.Load and Store Operations</h3>
+<h4 id="adifferent-types-of-load-ampstore">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Different types of load &amp;
+store</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Write to dest, read from src */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_read</span><span class="params">(<span class="type">long</span> *src, <span class="type">long</span> *dst, <span class="type">long</span> n)</span> {</span><br><span class="line">    <span class="type">long</span> cnt = n;</span><br><span class="line">    <span class="type">long</span> val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (cnt) {</span><br><span class="line">        *dst = val;</span><br><span class="line">        val = (*src) + <span class="number">1</span>;</span><br><span class="line">        cnt--;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-1.png"></p>
+<ul>
+<li><p>In Example A, the result of the read from <code>src</code>
+<strong>is not affected by the write to <code>dest</code></strong>, and
+the iterations gives a CPE of 1.3.</p></li>
+<li><p>In Example B, each load by the pointer reference
+<code>*src</code> will yield the value stored by the previous execution
+of the pointer reference <code>*dest</code>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;This example illustrates a phenomenon we will call a <em>write/read
+dependency</em>&#x2014;<strong>the outcome of a memory read depends on a recent
+memory write</strong>.</p>
+<p>&#x2003;&#x2003;The CPE of Example B is 7.3, The write/read dependency causes a
+slowdown in the process.</p>
+<p>&#x2003;&#x2003;The reason of the slowdown can be illustrated in the following
+data-flow representation:</p>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image-3.png"></p>
+<p>&#x2003;&#x2003;For the case of Example A, <strong>with differing source and
+destination addresses</strong>, the load and store operations
+<strong>can proceed independently</strong>, and hence the only critical
+path is formed by the decrementing of variable cnt, resulting in a CPE
+bound of 1.0.</p>
+<h4 id="bload-performance">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Load performance</h4>
+<p>&#x2003;&#x2003; When a load operation occurs, it must <strong>check the entries in
+the store buffer</strong> for matching addresses. If it finds a match,
+it <strong>retrieves the corresponding data entry</strong> as the result
+of the load operation.</p>
+<p>&#x2003;&#x2003;Take the following assembly code as an example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Inner loop of write_read</span><br><span class="line"># src in %rdi, dst in %rsi, val in %rax</span><br><span class="line">.L3:                    # loop:</span><br><span class="line">    movq %rax, (%rsi)     # Write val to dst</span><br><span class="line">    movq (%rdi), %rax     # t = *src</span><br><span class="line">    addq $1, %rax         # val = t + 1</span><br><span class="line">    subq $1, %rdx         # cnt--</span><br><span class="line">    jne .L3               # If != 0, goto loop</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/05/5-12-Understanding-Memory-Performance/image.png"></p>
+<ul>
+<li><p>The <code>s_addr</code> instruction computes the address for the
+store operation, <strong>creates an entry in the store buffer</strong>,
+and <strong>sets the address field for that entry</strong>.</p></li>
+<li><p>The <code>s_data</code> operation <strong>sets the data field for
+the entry</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;The arcs on the right of the operators denote a set of implicit
+dependencies for these operations:</p>
+<ul>
+<li><p>For instruction <code>movq (%rdi), %rax</code>, the load
+operation must <strong>check the addresses of any pending store
+operations</strong>, creating a data dependency between it and the
+<code>s_addr</code> operation.</p>
+<ul>
+<li>If the two addresses match, the load operation must <strong>wait
+until the s_data has deposited its result into the store
+buffer</strong>, but if the two addresses differ, the two operations
+<strong>can proceed independently</strong>.</li>
+</ul></li>
+</ul>
 
       
     </div>
@@ -311,7 +359,7 @@ program is as below:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/23/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/25/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -336,14 +384,14 @@ program is as below:</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

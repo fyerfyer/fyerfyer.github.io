@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">6.5.Hack&#x6C47;&#x7F16;&#x5668;&#x5F00;&#x53D1;</a>
+          <a href="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">7.2.VM&#x7ED3;&#x6784;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-07 18:24:54" itemprop="dateCreated datePublished" datetime="2024-04-07T18:24:54+08:00">2024-04-07</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-08 15:54:36" itemprop="dateCreated datePublished" datetime="2024-04-08T15:54:36+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 00:05:51" itemprop="dateModified" datetime="2024-06-03T00:05:51+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 07:57:13" itemprop="dateModified" datetime="2024-06-03T07:57:13+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-6-Assembler/" itemprop="url" rel="index"><span itemprop="name">Module 6.Assembler</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-7-VM-Machine/" itemprop="url" rel="index"><span itemprop="name">Module 7.VM Machine</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>417</span>
+      <span>250</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,90 +272,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="65developing-a-hack-assembler"><span class="math inline">\(6.5.\)</span>Developing a Hack Assembler</h1>
-<h3 id="1start-reding-a-file">1.Start reding a file</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+          <h1 id="72vm-abstractionthe-stack"><span class="math inline">\(7.2.\)</span>VM Abstraction&#x2014;&#x2014;the Stack</h1>
+<h3 id="1-the-stack-machine">1. The stack machine</h3>
 <ul>
-<li>Need to be able to read the input and break it into parts.</li>
-<li>Doesn&apos;t need to understand what the command means or how it will be
-translated into machine language.</li>
-<li>Need to understand the format of the input language and how it
-breaks into different components.</li>
+<li>The stack machine is an <em>abstraction</em> that consists of
+<strong>an architecture, a stack and a set of operation which we can
+apply to the architecture</strong>.</li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we may divide it into several parts:</p>
-<ol type="1">
-<li><p>Read a file with a given name.</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image.png"></p>
 <ul>
-<li>You may want a constructor to be able to accept the file name and
-then open the file for reading.</li>
-</ul></li>
-<li><p>Move to next command in the file:</p>
-<ol type="1">
-<li>Are we finished? <code>boolean hasMoreCommands()</code></li>
-<li>Get the next command: <code>void advance()</code></li>
-<li>Read into one line into some kind of string.</li>
-<li>Skip white space including comments.</li>
-</ol></li>
-<li><p>Get the fields of the current command</p>
+<li>It can be considered an <em>array</em> which offers direct access to
+every element in the memory, as oppose to the traditional stack which
+only offers a stack pointer.</li>
+<li>When we do <code>push x</code>, <strong>the address of
+<code>x</code></strong> will be push into the stack:</li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-1.png"></p>
 <ul>
-<li>Type of command (A, C, or label)</li>
-</ul></li>
-</ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image.png"></p>
-<h3 id="2translating-mnemonic-tocode">2.Translating mnemonic to
-code</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+<li><p>When we do <code>pop y</code>:</p>
 <ul>
-<li><p>Don&apos;t need to worry about how the mnemonic fields were
-obtained.</p>
-<ul>
-<li>No need to know what part of input line it is, etc.</li>
+<li>the <strong>current top value in the stack</strong> will be
+removed,</li>
+<li>the <strong>popped value</strong> will override <code>y</code> (in
+this example, when 7 is popped, 3 becomes the new top value).</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-2.png"></p>
+<h3 id="2stack-arithmetic">2.Stack arithmetic</h3>
+<p>&#x2003;&#x2003;If we want to apply a certain function on the stack, we have to do
+three different things:</p>
 <ol type="1">
-<li>Ask the parser to give us the string that corresponds to each part
-of the field.</li>
-<li>Once we get the three string, we go to the code object to translate
-each one of them separately according to the known table.</li>
-<li>Concatenate the output together.</li>
+<li>Pop as many required operands in the stack as possible.</li>
+<li>Apply the function to these operands in a separate process and get
+the result.</li>
+<li>Push the result back into the stack.</li>
 </ol>
-<p><img src="/2024/04/07/6-5-Hack%E6%B1%87%E7%BC%96%E5%99%A8%E5%BC%80%E5%8F%91/image-1.png"></p>
-<h3 id="3the-symbol-table">3.The symbol table</h3>
-<p>&#x2003;&#x2003;In general, this part:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-3.png"></p>
+<p>&#x2003;&#x2003;The obstruction supports all these operations inherently, all we
+have to do it to call <code>add</code> or <code>neg</code>, and these
+things will take place.</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-4.png"></p>
+<h3 id="3vm-commands">3.VM commands</h3>
 <ul>
-<li>Don&apos;t need to know what the symbols mean.</li>
-<li>Need to maintain the association between a symbol and a memory
-address.</li>
+<li>Arithmetic commands:</li>
 </ul>
-<p>&#x2003;&#x2003;In detail, we need to be able to:</p>
-<ol type="1">
-<li>Create an new empty table</li>
-<li>Add a (symbol, address) pair to the table</li>
-<li>Does the table contain a given symbol?</li>
-<li>What is the address associated with a given symbol?</li>
-</ol>
-<p>&#x2003;&#x2003;And do the following things:</p>
-<ol type="1">
-<li><p>Create a new empty table</p></li>
-<li><p>Add all the pre-defined symbols to the table</p></li>
-<li><p>While reading the input, add labels and new variables to the
-table</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// d = (2 - x) + (y + 9)</span><br><span class="line">push 2</span><br><span class="line">push x</span><br><span class="line">sub</span><br><span class="line">push y</span><br><span class="line">push 9</span><br><span class="line">add</span><br><span class="line">add </span><br><span class="line">pop d</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-5.png"></p>
 <ul>
-<li><p>Labels: when you see a <code>&quot;(xxx)&quot;</code> command,add
-<code>&quot;xxx&quot;</code> and the address of the next machine language
-command</p>
-<ul>
-<li>Comment 1: this requires maintaining this running address (line
-number).</li>
-<li>Comment 2: this may need to be done in a first pass</li>
-</ul></li>
-<li><p>Variables: when you see an <code>&quot;@xxx&quot;</code> command, where
-<code>&quot;xxx&quot;</code> is not a number and not already in the table, add
-<code>&quot;xxx&quot;</code> and the next free address for variable
-allocation</p></li>
-</ul></li>
-</ol>
+<li>Logic commands: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// (x &lt; 7) or (y == 8)</span><br><span class="line">push x </span><br><span class="line">push 7</span><br><span class="line">lt</span><br><span class="line">push y</span><br><span class="line">push 8</span><br><span class="line">eq </span><br><span class="line">or</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-6.png"></p>
+<p>&#x2003;&#x2003;Where do these commands come from? It&apos;s compiled from the
+high-level language:</p>
+<p><img src="/2024/04/08/7-2-VM%E7%BB%93%E6%9E%84/image-7.png"></p>
 
       
     </div>
@@ -378,7 +347,7 @@ allocation</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/137/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><span class="page-number current">138</span><a class="page-number" href="/page/139/">139</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/139/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/137/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/137/">137</a><span class="page-number current">138</span><a class="page-number" href="/page/139/">139</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/139/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -403,14 +372,14 @@ allocation</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

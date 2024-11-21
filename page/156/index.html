@@ -151,13 +151,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">&#x5206;&#x7C7B;</span></a>
       </div>
   </nav>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">3.1.&#x65F6;&#x5E8F;&#x903B;&#x8F91;</a>
+          <a href="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/" class="post-title-link" itemprop="url">3.2.&#x89E6;&#x53D1;&#x5668;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 15:23:21" itemprop="dateCreated datePublished" datetime="2024-04-04T15:23:21+08:00">2024-04-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-04 17:29:11" itemprop="dateCreated datePublished" datetime="2024-04-04T17:29:11+08:00">2024-04-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>573</span>
+      <span>475</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -272,88 +272,69 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="31sequential-logic"><span class="math inline">\(3.1.\)</span>Sequential Logic</h1>
-<h3 id="1background">1.Background</h3>
-<p>&#x2003;&#x2003;In the previous chapter, we&apos;ve completely ignored the issue of
-time:</p>
+          <h1 id="32flipflops"><span class="math inline">\(3.2.\)</span>Flip
+Flops</h1>
+<h3 id="1clocked-data-flip-flops">1.Clocked Data Flip Flops</h3>
+<p>&#x2003;&#x2003;To implement the sequential logic, we need an element that
+<em>remember one bit of information from <span class="math inline">\(t-1\)</span> so that it can be used at time <span class="math inline">\(t\)</span></em>. It remembers by &quot;flipping&quot;
+between the possible states. Such gates that can flip between two states
+are called <em>Flip Flop</em>:</p>
+<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image.png"></p>
+<p>&#x2003;&#x2003;Take the clock below as example:</p>
+<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-1.png"></p>
 <ul>
-<li><p><strong>Everything happened immediately</strong>, there were
-inputs and&#xA0;immediately the outputs were some function of them.</p></li>
-<li><p><strong>The inputs never change</strong>, we didn&apos;t have any
-notion of change.</p></li>
-<li><p>We didn&apos;t have any notion of things <strong>happening one thing
-after another</strong>. Just was some kind of logical mapping from
-inputs to outputs.</p></li>
+<li>At time 1, we don&apos;t exactly know what our output will be because we
+haven&apos;t&#xA0;specified what happened in the previous time unit. So we just
+don&apos;t know what the output is.</li>
+<li>At time 2, the output is exactly what the input was in time 1,
+<code>1</code>.</li>
+<li>......</li>
 </ul>
-<p>&#x2003;&#x2003;So, there are two things that we want to complement:</p>
-<ol type="1">
-<li><p>Be able to&#xA0;use the same hardware to <strong>compute many things
-one time after another</strong>. We need to be able to reuse our
-hardware.</p>
+<h3 id="2sequential-logicimplementation">2.Sequential logic
+implementation</h3>
+<p>&#x2003;&#x2003;Here is a generic paradigm of how we&apos;re going to build&#xA0;all our
+logic in the computer, and it&apos;s going to be a combination
+of&#xA0;<em>remembering information via this basic D flip flops</em> and then
+<em>manipulating them using combinatorial logics</em>:</p>
+<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-2.png"></p>
 <ul>
-<li>For example, if we take some kind of loop in a hard,&#xA0;in a, in some
-kind of software program, that the loop calls for doing the same&#xA0;thing
-many times, we want to be able to use a same hardware to do that.</li>
-</ul></li>
-<li><p><strong>Remember things from the past</strong>.When we need to
-remember intermediate results,we need to remember where we are in a
-computation.</p></li>
-</ol>
-<h3 id="2the-clock">2.The clock</h3>
-<p>&#x2003;&#x2003;What we&apos;re going to do is to <strong>convert the continuous
-physical time into discrete time</strong>.</p>
-<p>&#x2003;&#x2003;To do this, we&apos;re going to have a <em>clock</em>:</p>
-<ul>
-<li>It is some kind of <em>oscillator going up and down at a certain
-fixed rate</em>.</li>
-<li>Each cycle of the clock is treated as one <em>digital integer time
-unit</em>.</li>
+<li>We have an array of D flip flops&#xA0;which basically compromise all of
+our memory in the system.</li>
+<li>Their output is going to be fed into some combinatorial
+logic&#xA0;together with the new input that you get in this time unit.</li>
+<li>All of this is going to change the state that we have in the D flip
+flop for&#xA0;the next time unit.</li>
 </ul>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image.png"></p>
+<h3 id="31-bit-register">3.1-bit Register</h3>
+<p>&#x2003;&#x2003;The 1-bit Register has these functionalities:</p>
 <ul>
-<li><p>With each time unit, we are going to deal it as a indivisible
-thing. <em>Nothing changes in a time unit</em>.</p></li>
-<li><p>In a time unit, it will compute the output from the input <em>in
-an instantaneous manner</em>.</p></li>
+<li>Once we take the load bit and&#xA0;put the 1 into it, we want it
+<strong>remember the input bit at that time</strong>.</li>
+<li>When the load bit goes down to 0 we want it <strong>keep remembering
+the last input that was loaded into it for&#xA0;infinity, until a new load
+operation is performed</strong>.</li>
 </ul>
-<h3 id="3delay">3.Delay</h3>
-<p>&#x2003;&#x2003;However, for a physical signal, it doesn&apos;t change instantaneously
-in a number time between time as we suppose. In reality, the little
-course current builds slowly, and the voltage may change slowly. That is
-to say, the actual analog signal takes time to reach its final stage,
-both input and output.</p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-1.png"></p>
-<p>&#x2003;&#x2003;Therefore, we will give ourselves enough time between consecutive
-time units. For example, we will give the logical operations <em>at the
-end of the grey area</em> to make sure that <em>all the hardware there
-really stabilizes:</em></p>
-<p><img src="/2024/04/04/3-1-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91/image-2.png"></p>
-<p>&#x2003;&#x2003;And then,we can simply ignore these inconsistencies because
-now,whatever happened before the gray area,we don&apos;t need to worry about
-it because we know it&apos;s gone by the end of the clock cycle.</p>
-<h3 id="4combinatorial-logic">4.Combinatorial logic</h3>
+<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-3.png"></p>
+<p>&#x2003;&#x2003;Notice that there are two source into the DFF: one is the output
+from the previous stage, the other is the new input. Whether source to
+be chosen is decided by <code>load</code>, so we may use a
+<code>Mux</code> to solve this:</p>
+<p><img src="/2024/04/04/3-2-%E8%A7%A6%E5%8F%91%E5%99%A8/image-4.png"></p>
 <ul>
-<li>Combinatorial logic: It&apos;s a stateless logic, where <em>the output
-depends solely on the current input state:</em><span class="math inline">\(out(t)=f(in(t))\)</span>. Our ALU and bool chips
-take this logic.</li>
-<li>Sequential logic: <span class="math inline">\(out(t)=f(in(t-1))\)</span>.</li>
-</ul>
-<h3 id="5state-feedback">5.State feedback</h3>
-<ul>
-<li><p>The sequential logic points out a new way of thinking, which is
-to <strong>consider inputs and outputs as the same bits, capable of
-being transmitted on the same bus and occupying the same hardware
-location</strong>. This design allows us to <strong>feed output values
-back to the input</strong>, creating a <strong>state</strong> rather
-than simply passing data. Thus, we can use a particular bit in the
-circuit to store state information rather than solely transmitting
-data.</p></li>
-<li><p>This new way of thinking alters our understanding of time.
-Instead of viewing time as continuous, we now divide it into discrete
-integer time steps and observe the events happening sequentially at each
-time step. This approach enables us to <strong>change the state
-incrementally</strong>, remembering the result from the previous time
-step at each subsequent step and building upon it.</p></li>
+<li>The DFF serves the purpose of storing and maintaining the previous
+input value in this process. When the load bit is set to 1, the DFF
+<strong>stores the input value and holds it unchanged until the next
+load operation</strong>. When the load bit is 0, the DFF
+<strong>maintains the value from the previous load and continues to
+output this value in the next time</strong> unit until a new load
+operation occurs. Therefore, the DFF is essentially used to remember and
+sustain the state of the input value.</li>
+<li><strong>The final output is determined by the multiplexer
+(Mux)</strong>. The DFF is responsible for storing the previously loaded
+value and sending it to the multiplexer based on the state of the load
+bit. The multiplexer <strong>selects whether to accept the new input
+value or the previously loaded value based on the load bit&apos;s
+status</strong>, and then outputs the selected value.</li>
 </ul>
 
       
@@ -377,7 +358,7 @@ step at each subsequent step and building upon it.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/155/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/155/">155</a><span class="page-number current">156</span><a class="page-number" href="/page/157/">157</a><span class="space">&#x2026;</span><a class="page-number" href="/page/161/">161</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/157/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/155/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/155/">155</a><span class="page-number current">156</span><a class="page-number" href="/page/157/">157</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/157/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -402,14 +383,14 @@ step at each subsequent step and building upon it.</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;&#xFF1A;</span>
-    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">129k</span>
+    <span title="&#x7AD9;&#x70B9;&#x603B;&#x5B57;&#x6570;">130k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:50</span>
+    <span title="&#x7AD9;&#x70B9;&#x9605;&#x8BFB;&#x65F6;&#x957F;">7:54</span>
   </span>
 </div>
 <div class="busuanzi-count">
