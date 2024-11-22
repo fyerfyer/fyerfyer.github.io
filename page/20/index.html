@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/09/6-2-Locality/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/09/6-2-Locality/" class="post-title-link" itemprop="url">6.2.Locality</a>
+          <a href="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/" class="post-title-link" itemprop="url">6.6.The Impact of Caches on Program Performance</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-09 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;09:44:25" itemprop="dateCreated datePublished" datetime="2024-08-09T09:31:22+08:00">2024-08-09</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-12 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;08:25:31" itemprop="dateCreated datePublished" datetime="2024-08-12T09:31:22+08:00">2024-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>93</span>
+      <span>404</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
@@ -266,23 +266,65 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="62locality"><span class="math inline">\(6.2.\)</span>Locality</h1>
-<h3 id="1basic-idea-amp-example">1.Basic Idea &amp; Example</h3>
-<p><img src="/2024/08/09/6-2-Locality/image.png"></p>
-<p><img src="/2024/08/09/6-2-Locality/image-1.png"></p>
-<p><img src="/2024/08/09/6-2-Locality/image-2.png"></p>
-<h3 id="2locality-of-instructionfetch">2.Locality of Instruction
-Fetch</h3>
-<p>&#x2003;&#x2003;In Figure 6.17 the instructions in the body of the <code>for</code>
-loop are executed in sequential memory order, and thus the loop enjoys
-good spatial locality. Since the loop body is executed multiple times,
-it also enjoys good temporal locality.</p>
-<blockquote>
-<p>An important property of code that distinguishes it from program data
-is that it is rarely modified at run time. While a program is executing,
-the CPU reads its instructions from memory. The CPU <strong>rarely
-overwrites or modifies these instructions</strong>.</p>
-</blockquote>
+          <h1 id="66the-impact-of-caches-on-programperformance"><span class="math inline">\(6.6.\)</span>The Impact of Caches on Program
+Performance</h1>
+<h3 id="1rearrangingloops-to-increase-spatial-locality">1.Rearranging
+Loops to Increase Spatial Locality</h3>
+<p>&#x2003;&#x2003;Consider the problem of multiplying a pair of <span class="math inline">\(2 \times 2\)</span> matrices: <span class="math inline">\(C = AB\)</span>:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+c_{11} &amp; c_{12} \\
+c_{21} &amp; c_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22}
+\end{bmatrix}
+\]</span></p>
+<p>&#x2003;&#x2003;and we make the following assumptions:</p>
+<ul>
+<li><p>Each array is an <span class="math inline">\(n \times n\)</span>
+array of double, with <code>sizeof(double) = 8</code>.</p></li>
+<li><p>There is a single cache with a 32-byte block size(B =
+32).</p></li>
+<li><p>The array size n is so large that a single matrix row does not
+fit in the L1 cache.</p></li>
+<li><p>The compiler stores local variables in registers, and thus
+references to local variables inside loops do not require any load or
+store instructions.</p></li>
+</ul>
+<p>&#x2003;&#x2003;We can write three different versions:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) {</span><br><span class="line">        sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">            sum += A[i][k]*B[k][j];</span><br><span class="line">        C[i][j] += sum;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++) {</span><br><span class="line">        r = B[k][j];</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        C[i][j] += A[i][k]*r;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; n; k++)</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">        r = A[i][k];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">            C[i][j] += r * B[k][j];</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image.png"></p>
+<p>&#x2003;&#x2003;The third routine present an interesting trade-off: With two loads
+and a store, they <strong>require one more memory operation than the
+first routines</strong>. On the other hand, since the inner loop scans
+both B and C row-wise with a stride-1 access pattern, the miss rate on
+each array is only 0.25 misses per iteration, for a total of 0.50 misses
+per iteration.</p>
+<p>&#x2003;&#x2003;The performance result is as below:</p>
+<p><img src="/2024/08/12/6-6-The-Impact-of-Caches-on-Program-Performance/image-1.png"></p>
+<p>&#x2003;&#x2003;We can see that in this case, <strong>miss rate is a better
+predictor of performance</strong> than the total number of memory
+accesses.</p>
+<h3 id="2exploiting-locality">2.Exploiting Locality</h3>
+<ul>
+<li><p>Focus your attention on the inner loops.</p></li>
+<li><p>Try to maximize the spatial locality in your programs by reading
+data objects sequentially, <strong>with stride 1</strong>, <strong>in
+the order they are stored in memory</strong>.</p></li>
+<li><p>Try to maximize the temporal locality in your programs by
+<strong>using a data object as often as possible once it has been read
+from memory</strong>.</p></li>
+</ul>
 
       
     </div>
@@ -305,7 +347,7 @@ overwrites or modifies these instructions</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/21/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/04/3-2-Introduction-to-Digital-System/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/05/3-4-Building-a-Datapath/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/04/3-2-Introduction-to-Digital-System/" class="post-title-link" itemprop="url">3.2.Introduction to Digital System</a>
+          <a href="/2024/06/05/3-4-Building-a-Datapath/" class="post-title-link" itemprop="url">3.4.Building a Datapath</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-04 23:03:11" itemprop="dateCreated datePublished" datetime="2024-06-04T23:03:11+08:00">2024-06-04</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 10:26:12" itemprop="dateCreated datePublished" datetime="2024-06-05T10:26:12+08:00">2024-06-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-05 08:19:08" itemprop="dateModified" datetime="2024-06-05T08:19:08+08:00">2024-06-05</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-06 17:52:05" itemprop="dateModified" datetime="2024-06-06T17:52:05+08:00">2024-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>208</span>
+      <span>527</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,63 +272,120 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="32introduction-to-digital-system"><span class="math inline">\(3.2.\)</span>Introduction to Digital System</h1>
-<h3 id="1logic-gate-representation">1.Logic gate representation</h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-1.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-2.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-3.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-4.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-5.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-6.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-7.png"></p>
-<h3 id="2using-booleanalgebra-to-simplify-circuits">2.Using boolean
-algebra to simplify circuits</h3>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-8.png"></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-9.png"></p>
-<h3 id="3build-an-adder">3.Build an Adder</h3>
-<h4 id="ahalfadder">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Half
-adder</h4>
-<p>&#x2003;&#x2003;A half adder&apos;s output consists of:</p>
+          <h1 id="34building-a-datapath"><span class="math inline">\(3.4.\)</span>Building a Datapath</h1>
+<h3 id="1basic-devices">1.Basic devices</h3>
 <ul>
-<li>The <em>sum</em>. It can be computed by <code>xor</code>
-method.</li>
-<li>The <em>carry</em>. It can be computed by <code>and</code>
-method.</li>
+<li><p><em>Registers</em>: It contains:</p>
+<ul>
+<li><p>Two data words from the register file, and <strong>write one data
+word into the register file</strong> for each instruction.</p></li>
+<li><p>An input. It <strong>specifies the register number to be
+read</strong>.</p></li>
+<li><p>An output. It <strong>carries the value that has been read from
+the register</strong>.</p></li>
+<li><p>To write a data word, we need two more inputs: one to
+<strong>specify the register number to be written</strong> and one to
+<strong>supply the data to be written into the
+register</strong>.</p></li>
+</ul></li>
 </ul>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-10.png"></p>
-<h4 id="bfulladder">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Full
-adder</h4>
-<p>&#x2003;&#x2003;To implement full adder, we just need to add <code>A</code>,
-<code>B</code> and the carry at the position <span class="math inline">\(C_i\)</span>.</p>
-<p>&#x2003;&#x2003;The output of a full adder is the same as the half adder. Then how
-can we calculate each of them?</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image.png"></p>
 <ul>
-<li><p>For <span class="math inline">\(C_0\)</span>, it&apos;s decided by the
-sum of <code>A</code> and <code>B</code> &amp; the current carry in the
-position. There are two cases that make the carry 1:</p>
+<li><em>ALU</em></li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-1.png"></p>
+<ul>
+<li><em>Immediate generation unit</em>: In operations like
+<code>addi x1 x2 10</code>, the immediate number <code>10</code> is
+written in 12-bit offset in the instruction. So we need to
+<strong>sign-extend the number to a 64-bit signed value</strong>. The
+Imm-Gen does the job:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-4.png"></p>
+<h3 id="2basic-phases-ofinstruction-execution">2.Basic phases of
+instruction execution</h3>
+<p>&#x2003;&#x2003;The phases of instruction execution can be divided into 5
+parts:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-2.png"></p>
+<hr>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-3.png"></p>
+<h3 id="3implementation-ofdifferent-statement">3.Implementation of
+different statement</h3>
+<h4 id="aaddinstruction">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Add
+instruction</h4>
+<p>&#x2003;&#x2003;The <code>add</code> is simple, we just get value from
+<code>DataA</code> and <code>DataB</code>, and calculate the result by
+ALU.</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-7.png"></p>
+<p>&#x2003;&#x2003;To perform <code>addi</code>, we get one of out input from Imm-Gen
+rather than <code>DataB</code>. The source of Imm-Gen is from
+<code>IMEM</code>, from which we can get the instruction, and
+<code>inst[31:20]</code> is the immediate we want:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-8.png"></p>
+<h4 id="bload-ampsave-instruction">&#x2003;&#x2003;<span class="math inline">\(b.\)</span><code>load</code> &amp;
+<code>save</code> instruction</h4>
+<p>&#x2003;&#x2003;To implement the instructions, we can add a <code>DMEM</code> to
+read or write data.</p>
+<ul>
+<li><code>DMEM</code>: It&apos;s input is <code>Addr</code> and outputs
+<code>DataR</code>. When in &quot;read&quot; mode, it gets information from the
+address. Else, it writes the information into the address:</li>
+</ul>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-10.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-11.png"></p>
+<h4 id="cbranch-instruction">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Branch instruction</h4>
+<p>&#x2003;&#x2003;The basic form of branch instruction is
+<code>beq x1 x2 offset</code>. To implement this instruction, we must
+compute the branch target address by <strong>adding the sign- extended
+offset field of the instruction to the PC</strong>. There are two
+details in the definition of branch instructions to which we must pay
+attention:</p>
+<ul>
+<li><p>The instruction set architecture specifies that <strong>the base
+for the branch address calculation is the address of the branch
+instruction</strong>.</p></li>
+<li><p>The architecture also states that <strong>the offset field is
+shifted left 1 bit so that it is a half word offset</strong>; this shift
+<strong>increases the effective range of the offset field by a factor of
+2</strong>.</p></li>
+</ul>
+<p>&#x2003;&#x2003;If the branch condtion is true, the branch target address becomes
+the new PC, and we say the branch is <strong>taken</strong>. Else, we
+say the branch is <strong>not taken</strong>.</p>
+<p>&#x2003;&#x2003;We first get the address of <code>PC+4</code> and branch through
+this struction:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-5.png"></p>
+<p>&#x2003;&#x2003;To select from multiple address, we use a multiplexor and control
+signal</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-6.png"></p>
+<p>&#x2003;&#x2003;Combined with the previous struction, we get this design:</p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-9.png"></p>
+<h4 id="djal-ampjalr-instructions">&#x2003;&#x2003;<span class="math inline">\(d.\)</span><code>jal</code> &amp;
+<code>jalr</code> instructions</h4>
+<p>&#x2003;&#x2003;<code>jalr</code> does the following things:</p>
 <ol type="1">
-<li><code>A + B</code> is 1, and current carry is 1.</li>
-<li><code>A + B</code> is 2, and current carry can be 0 or 1.</li>
-</ol></li>
-</ul>
-<p>&#x2003;&#x2003;So we can compute <span class="math inline">\(C_0\)</span> by this
-expression:</p>
-<p><span class="math display">\[
-C_0 = C_i(A+B) + AB
-\]</span></p>
+<li><p>Set <code>PC=Reg[rs1]+immediate</code></p>
 <ul>
-<li>The sum is easy, it becomes 1 when 1 or 3 of <code>A</code>,
-<code>B</code> and current carry is 1:</li>
-</ul>
-<p><span class="math display">\[
-S = A \; xor B \; xor C_i
-\]</span></p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-11.png"></p>
-<h4 id="c4-bit-adder">&#x2003;&#x2003;{{c.}}4-bit Adder</h4>
-<p>&#x2003;&#x2003;To make a multi-bit Adder, we simply <strong>connect full adder
-together</strong>:</p>
-<p><img src="/2024/06/04/3-2-Introduction-to-Digital-System/image-12.png"></p>
+<li>Uses same immediate as arithmetic and loads. <strong>No multiple by
+2 bytes!</strong></li>
+</ul></li>
+<li><p>Set <code>PC=PC+offset</code></p>
+<ul>
+<li>Since the offset is calculated by ALU, we <strong>connect the output
+of ALU with input of PC</strong>.</li>
+</ul></li>
+</ol>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-12.png"></p>
+<p>&#x2003;&#x2003;<code>jal</code> does the following things:</p>
+<ol type="1">
+<li>Save <code>PC+4</code> in <code>Reg[rd]</code>(namely
+<code>DataD</code>)</li>
+<li>Set <code>PC=PC+offset</code></li>
+</ol>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-13.png"></p>
+<h3 id="4datapath-control">4.Datapath control</h3>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-14.png"></p>
+<p><img src="/2024/06/05/3-4-Building-a-Datapath/image-15.png"></p>
 
       
     </div>
@@ -351,7 +408,7 @@ together</strong>:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/54/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/54/">54</a><span class="page-number current">55</span><a class="page-number" href="/page/56/">56</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/56/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/54/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/54/">54</a><span class="page-number current">55</span><a class="page-number" href="/page/56/">56</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/56/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

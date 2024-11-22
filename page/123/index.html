@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">9.5.&#x89E3;&#x6790;&#x5668;&#x903B;&#x8F91;</a>
+          <a href="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">10.2.&#x5BF9;&#x53D8;&#x91CF;&#x7684;&#x5904;&#x7406;</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-16 17:17:43" itemprop="dateCreated datePublished" datetime="2024-04-16T17:17:43+08:00">2024-04-16</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-04-20 09:15:43" itemprop="dateCreated datePublished" datetime="2024-04-20T09:15:43+08:00">2024-04-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:27:03" itemprop="dateModified" datetime="2024-06-03T15:27:03+08:00">2024-06-03</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-06-03 15:36:13" itemprop="dateModified" datetime="2024-06-03T15:36:13+08:00">2024-06-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +243,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/The-Elements-of-Computer-System/Module-9-Syntax-Analyze/" itemprop="url" rel="index"><span itemprop="name">Module 9.Syntax Analyze</span></a>
+          <a href="/categories/The-Elements-of-Computer-System/Module-10-Code-Generator/" itemprop="url" rel="index"><span itemprop="name">Module 10.Code Generator</span></a>
         </span>
     </span>
 
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>482</span>
+      <span>756</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>3 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,88 +272,134 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="95parserlogic"><span class="math inline">\(9.5.\)</span>Parser
-Logic</h1>
-<h3 id="1parsing-logic">1.Parsing logic</h3>
-<p>&#x2003;&#x2003;In order to carry out parsing, we are going to build a
-<code>CompilationEngine</code> class which consist of <strong>a set of
-methods, one method for every non-terminal rule</strong>.</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image.png"></p>
+          <h1 id="112handling-variables"><span class="math inline">\(11.2\)</span>Handling Variables</h1>
+<h3 id="1program-compilation">1.Program compilation</h3>
+<p>&#x2003;&#x2003;Remember that the VM language doesn&apos;t have symbolic variables, it
+only has <code>local</code>, <code>this</code> and so on. In order to
+resolve this pseudocode into final executable VM code, we have to
+<strong>map these symbolic variables on what is called <em>virtual
+memory segments</em></strong>. And to do this, we:</p>
 <ul>
-<li>The code of each <code>compilexxx</code> method follows the
-right-hand side of the rule xxx</li>
-<li>Each <code>compilexxx</code> method is responsible for
-<strong>advancing</strong> and <strong>handling its own part of the
-input</strong>.</li>
+<li>need the <strong>variable properties</strong>.</li>
+<li>also have to know <strong>the index of the variable of its
+kind</strong>(first, second, etc.).</li>
 </ul>
-<p>&#x2003;&#x2003;To illustrate this, let&apos;s focus on one of these methods
-<code>compileWhileStatement</code>:</p>
-<p><img src="/2024/04/16/9-5-%E8%A7%A3%E6%9E%90%E5%99%A8%E9%80%BB%E8%BE%91/image-1.png"></p>
-<ol type="1">
-<li><p>We <strong>follow the right-hand side of the rule</strong>, and
-parse the input it dictates.</p>
+<p>&#x2003;&#x2003;And the properties of variables include:</p>
 <ul>
-<li>In <code>whileStatement</code>, it says we should expect to see the
-token <code>while</code>. If we find it in the input, we record the
-fact. Then the left parenthesis, and so on and so forth,</li>
-<li>At some point we will get a non-terminal rule like
-<code>expression</code>, then we go to next step:</li>
+<li><p><em>name</em>: It&apos;s an identifier.</p></li>
+<li><p><em>type</em>: <code>int</code>, <code>char</code>,
+<code>boolean</code> and <strong>all class name</strong>.</p></li>
+<li><p><em>kind</em>: There are two kinds of variables, and we view them
+separately:</p>
+<ul>
+<li><em>class level</em>: <code>field</code>, <code>static</code>
+variables.</li>
+<li><em>subroutine level</em>: <code>argument</code> and
+<code>local</code> variables.</li>
 </ul></li>
-<li><p>If the right-hand side specifies a non-terminal rule
-<code>xxx</code>, we call the corresponding method
-<code>compilexxx</code></p></li>
-<li><p>We do this recursively untile we exhaust the input.</p></li>
-</ol>
-<p>&#x2003;&#x2003;And to initialize this process, we:</p>
-<ol type="1">
-<li>Advance the tokenizer.</li>
-<li>Call <code>compileWhileStatement</code>.</li>
-</ol>
-<h3 id="2parser-design">2.Parser design</h3>
-<p>&#x2003;&#x2003;We also take the <code>compileWhileStatement</code> as an
+<li><p><em>scope</em>, which is the region of the code in which it is
+recognized.</p></li>
+</ul>
+<h3 id="2symbol-table">2.Symbol table</h3>
+<p>&#x2003;&#x2003;We handle the property of variables using a <em>symbol
+table</em>:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image.png"></p>
+<ul>
+<li>A method is always designed to operate on the current object which
+is called <code>this</code>. Therefore, the symbol table of method
+<strong>always begins with <code>this</code> entry</strong>, which
+represents the properties of current object.</li>
+<li><code>this</code> is always treated as <code>argument 0</code></li>
+<li>The type of current object is <strong>the name of the class to which
+this subroutine belongs</strong>.</li>
+</ul>
+<p>&#x2003;&#x2003;The class level symbol table can be reset each time we begin to
+compile a new class, for <strong>classes are standalone compilation
+unity</strong>. Something similar happens when we compile
+subroutines.</p>
+<p>&#x2003;&#x2003;The code writer is going to encounter all sorts of variable
+declaration commands, of which in Jack we have three:
+<code>local</code>, <code>field</code> and <code>static</code>.</p>
+<p>&#x2003;&#x2003;Then it&apos;s going to elucidate all important properties of the
+declared variables, and <strong>add the information to the respective
+symbol table</strong>. It generates no code whatsoever beyond updating
+the symbol tables.</p>
+<ul>
+<li>If we are defining a <code>field</code> or a <code>static</code>
+variable, the code writer will add a new row to the end of the class
+level symbol table.</li>
+<li>If we are defining <code>local</code> or <code>argument</code>, the
+code writer will update the symbol table of the subroutine which is
+currently being compiled.</li>
+<li>Arguments are being defined as <strong>part of the parameter list of
+the method&apos;s signature</strong>. When the code writer goes through the
+parameter list, it adds the respective lines to the subroutine&apos;s symbol
+table.</li>
+</ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-1.png"></p>
+<p>&#x2003;&#x2003;What about using variables within the context of expressions or
+statements. Take <code>let dx = x - other.getX();</code> as an
 example:</p>
+<ul>
+<li><p>For each variable in the code, we <strong>look up this variable
+in the subroutine level symbol table</strong>.</p>
+<ul>
+<li>If we find it there, we know which property we have to use.</li>
+<li>If don&apos;t, we revert to <strong>looking it up in the class level
+symbol table</strong>.</li>
+<li>If don&apos;t either, we can conclude that the variable is undefined and
+throw an error message.</li>
+</ul></li>
+</ul>
+<p>&#x2003;&#x2003;How can the statements be translated into VM code? Take
+<code>let y = y +dy</code> for example:</p>
 <ol type="1">
-<li>If we look at the grammar, we first see that you should see a
-<code>while</code> , so we <strong>call a method
-<code>eat(&apos;while&apos;)</code></strong>, which means you should expect now to
-eat the <code>while</code> token.</li>
-<li>We do the same thing <code>eat(&apos;(&apos;)</code>.</li>
-<li>We meet a non-terminal rule <code>expression</code>, so we call
-<code>compileExpression();</code></li>
-<li>And so on and so forth...</li>
+<li>In the process of generating code, the code generator will look up
+the respective table.</li>
+<li>It finds out that <strong><code>y</code> stands for the second
+<code>field</code> of the current object</strong>, so it will be
+translated into <code>this 1</code></li>
+<li><code>dy</code> stands for the second <code>local</code> variable,
+so it will be translated into <code>local 1</code></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CompilationEngine { </span><br><span class="line">	</span><br><span class="line">	compileWhileStatement() { </span><br><span class="line">		eat(&apos;while&#x2019;);</span><br><span class="line">		eat(&apos;(&apos;);  </span><br><span class="line">		compileExpression(); </span><br><span class="line">		eat(&apos;)&apos;);</span><br><span class="line">		...</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When it comes to <code>eat</code> method:</p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-2.png"></p>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-3.png"></p>
+<h3 id="3handling-variables-ingeneral">3.Handling variables in
+general</h3>
+<p>&#x2003;&#x2003;High level of programming languages vary in terms of:</p>
 <ul>
-<li>It&apos;s a private method.</li>
-<li>It says <strong>you should expect to see the given string</strong>,
-if not, you should <strong>throw an error</strong>.</li>
-<li>Otherwise, simply <strong>advance the input</strong>.</li>
+<li>variable types</li>
+<li>variable kinds</li>
+<li>nested scoping rules</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eat(string) {</span><br><span class="line">	if (currentToken &lt;&gt; string) </span><br><span class="line">		error...</span><br><span class="line">	else</span><br><span class="line">		advance...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="3some-observationabout-grammars-and-parsing">3.Some observation
-about grammars and parsing</h3>
+<p>&#x2003;&#x2003;And the symbol table generation and usage we discussed right now
+can be easily entended to handle any number of possible variables types
+and kinds.</p>
+<p>&#x2003;&#x2003;Some languages, like Java, feature <em>unlimited scoping</em>. this
+means that whenever you define a block of code with a pair of curly
+brackets, you can define variables within this code which are recognized
+only within that block. <code>x</code> in this scope doesn&apos;t mean the
+same as <code>x</code> in that block.</p>
+<p>&#x2003;&#x2003;To represent the information in our symbol table mechanism, we use
+<strong>a linked list of symbol tables</strong>:</p>
 <ul>
-<li><p><em>LL grammar</em>: It&apos;s a grammar that <strong>can be parsed by
-a recursive descent algorithm parser without backtracking</strong>.</p>
-<ul>
-<li>When you make a decision that what you have is a <code>while</code>
-statement, you don&apos;t have to kind of retract your progress and find out
-a mistake.</li>
-</ul></li>
-<li><p><em>LL(k) parser</em>: It&apos;s an LL parser that needs to look ahead
-at most k tokens before you know which rule you are dealing with.</p>
-<ul>
-<li>The grammar we saw so far is <em>LL1</em>, because <strong>once we
-have a particular token in hand like <code>let</code>, we immediately
-know which rule we have to invoke</strong>.</li>
-<li>There are also things that don&apos;t belong to LL1, like English. For
-example, when we meet a token word &quot;lift&quot;, we still have no idea what we
-should do with it. A verb? A noun? We have to look more tokens
-downstream to know which rule to use. In this process, we may need to
-backtrack and reconsider some of the rules we have to use...</li>
-</ul></li>
+<li>When start compiling the class, we first create an linked list.</li>
+<li>The first symbol table we add to the list is the class level symbol
+table.</li>
+<li>When we start compiling a method, we create the method symbol table
+like before.</li>
+<li>Whenever we have another scoping region, we <strong>add another
+symbol table to the linked list</strong>.</li>
 </ul>
+<p><img src="/2024/04/20/10-2-%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%84%E7%90%86/image-4.png"></p>
+<p>&#x2003;&#x2003;When you encounter some variable <code>x</code> in the code we:</p>
+<ol type="1">
+<li>Look up <code>x</code> in the current scope, which is also the first
+table.</li>
+<li>If fail, we move to the next symbol table.</li>
+<li>We simply go on downstream until we get to the class level symbol
+table.</li>
+</ol>
 
       
     </div>
@@ -376,7 +422,7 @@ backtrack and reconsider some of the rules we have to use...</li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/122/">122</a><span class="page-number current">123</span><a class="page-number" href="/page/124/">124</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/122/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/122/">122</a><span class="page-number current">123</span><a class="page-number" href="/page/124/">124</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/124/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

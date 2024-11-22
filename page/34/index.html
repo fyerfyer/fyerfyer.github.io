@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/24/4-2-Logical-Design-and-the-HCL/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/07/26/4-4-General-Principles-of-pipelining/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/24/4-2-Logical-Design-and-the-HCL/" class="post-title-link" itemprop="url">4.2.Logical Design and the HCL</a>
+          <a href="/2024/07/26/4-4-General-Principles-of-pipelining/" class="post-title-link" itemprop="url">4.4.General Principles of Pipelining</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-24 09:31:22" itemprop="dateCreated datePublished" datetime="2024-07-24T09:31:22+08:00">2024-07-24</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-07-26 14:31:22" itemprop="dateCreated datePublished" datetime="2024-07-26T14:31:22+08:00">2024-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-25 14:48:06" itemprop="dateModified" datetime="2024-07-25T14:48:06+08:00">2024-07-25</time>
+      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-07-30 08:15:23" itemprop="dateModified" datetime="2024-07-30T08:15:23+08:00">2024-07-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.1k</span>
+      <span>296</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,176 +272,67 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="42logical-design-and-the-hcl"><span class="math inline">\(4.2.\)</span>Logical Design and the HCL</h1>
-<h3 id="1combinationalcircuits-amp-hcl-boolean-expressions">1.Combinational
-Circuits &amp; HCL Boolean Expressions</h3>
-<p>&#x2003;&#x2003;By assembling a number of logic gates into a network, we can
-construct computational blocks known as <em>combinational circuits</em>.
-There are several restrictions:</p>
-<ol type="1">
-<li><p>Every logic gate input must be connected to exactly one of the
-following:</p>
-<ol type="1">
-<li><p>one of the system inputs (known as a <em>primary
-input</em>)</p></li>
-<li><p>the output connection of some memory element</p></li>
-<li><p>the output of some logic gate.</p></li>
-</ol></li>
-<li><p>The outputs of two or more logic gates cannot be connected
-together. <strong>Otherwise, the two could try to drive the wire toward
-different voltages</strong>, possibly causing an invalid voltage or a
-circuit malfunction.</p></li>
-<li><p>The network must be acyclic. That is, there cannot be a path
-through a series of gates that forms a loop in the network.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The following shows an example of a combinational circuit:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image.png"></p>
-<p>&#x2003;&#x2003;The network is written in HCL as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool eq = (a &amp;&amp; b) || (!a &amp;&amp; !b)</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The HCL uses C-sytle syntax. However, we don&apos;t view the code as
-performing a computation and assigning the result to some memory
-location. Instead, it is simply a way to <strong>give a name to an
-expression</strong>.</p>
-<p>&#x2003;&#x2003;There are some other differences that are worth noting:</p>
+          <h1 id="44general-principles-of-pipelining"><span class="math inline">\(4.4.\)</span>General Principles of Pipelining</h1>
+<h3 id="1computational-pipelines">1.Computational Pipelines</h3>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image.png"></p>
+<p>&#x2003;&#x2003;The detail at the timing and operation of this process are shown as
+below:</p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-2.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-1.png"></p>
 <ul>
-<li><p>The combinational circuit has the property that the outputs
-continually respond to changes in the inputs. By contrast, a C
-expression <strong>is only evaluated when it is encountered</strong>
-during the execution of a program.</p></li>
-<li><p>The combinational circuit only operates over the bit value 0 and
-1.</p></li>
-<li><p>Logical expressions in C have the property that <strong>they
-might only be partially evaluated</strong>. If the outcome of an and or
-or operation can be determined by just evaluating the first argument,
-then the second argument will not be evaluated. In contrast,
-combinational logic <strong>doesn&apos;t have any partial evaluation
-rules</strong>.</p></li>
+<li>Slowing down the clock would not change the pipeline behavior. The
+signals propagate to the pipeline register inputs, but <strong>no change
+in the register states will occur until the clock rises</strong>.</li>
 </ul>
-<h3 id="2word-levelcombinational-circuits-and-hcl-integer-expression">2.Word-Level
-Combinational Circuits and HCL Integer Expression</h3>
-<p>&#x2003;&#x2003;Combinational circuits that perform word-level computations are
-constructed using logic gates to compute the individual bits of the
-output word, based on the individual bits of the input words. The
-following circuit tests if two words A and B are equal:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-1.png"></p>
-<p>&#x2003;&#x2003;HCL allows words to be compared for equality. So we can express the
-circuit as <code>bool Eq = (A == B)</code></p>
-<hr>
-<p>&#x2003;&#x2003;Multiplexing functions are described in HCL using <em>casing
-expressions</em>. A case expressions has the following general form:</p>
+<h3 id="2limitations-of-pipelining">2.Limitations of Pipelining</h3>
+<h4 id="athroughput">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Throughput</h4>
+<p>&#x2003;&#x2003;Suppose the maximum delay of a process is <span class="math inline">\(x\)</span> ps, then we can calculate the
+<em>throughput</em> as:</p>
 <p><span class="math display">\[
-\begin{bmatrix}
-\text{select}_1 : \text{expr}_1; \\
-\text{select}_2 : \text{expr}_2; \\
-\vdots \\
-\text{select}_k : \text{expr}_k;
-\end{bmatrix}
+throughput={ {1\;instruction}\over{x\;ps} } \cdot { {1000\;ps} \over
+{1\;ns}}={1000\over x}GIPS
 \]</span></p>
+<p>&#x2003;&#x2003;And the <em>latency</em> is the <strong>overall time the process
+takes</strong>.</p>
+<h4 id="bnonuniform-partition">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Nonuniform partition</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-3.png"></p>
 <ul>
-<li><p><span class="math inline">\(select_i\)</span> indicates when this
-case should be selected.</p></li>
-<li><p>The integer expression <span class="math inline">\(expr_i\)</span> indicates the resulting
-value.</p></li>
-<li><p>The selection expressions can be <strong>arbitrary Boolean
-expressions</strong>, and there can be <strong>an arbitrary number of
-cases</strong>.</p></li>
-</ul>
-<p>&#x2003;&#x2003;Logically, the selection expressions are evaluated in sequence, and
-the case <strong>for the first one yielding 1 is selected</strong>.</p>
-<p>&#x2003;&#x2003;For example, the figure below shows the circuit of the word-level
-multiplexor:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-2.png"></p>
-<p>&#x2003;&#x2003;it can be expressed in HCL as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">word Out = [</span><br><span class="line">    s: A;</span><br><span class="line">    1: B;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;And a 4-way multiplexor can be expressed in HCL as:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">word Out4 = [</span><br><span class="line">    !s1 &amp;&amp; !s0: A; </span><br><span class="line">    !s1       : B;</span><br><span class="line">    !s0       : C;</span><br><span class="line">    1         : D; </span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;If we want to design a logic circuit that finds the minimum value
-among a set of words A, B and C, we can write the following HCL
-program:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">word MIN3 = [</span><br><span class="line">    A &lt;= B &amp;&amp; A &lt;= C: A;</span><br><span class="line">    B &lt;= A &amp;&amp; B &lt;= C: B;</span><br><span class="line">    1               : C;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-<h3 id="3set-membership">3.Set Membership</h3>
-<p>&#x2003;&#x2003;The general form of a set membership test is:</p>
-<p><span class="math display">\[
-\text{iexpr} \in \{\text{iexpr}_1, \text{iexpr}_2, \ldots,
-\text{iexpr}_k\}
-\]</span></p>
-<p>&#x2003;&#x2003;where the value being tested(<span class="math inline">\(iexpr\)</span>) and the candidate matches(<span class="math inline">\(iexpr_1\)</span> through <span class="math inline">\(iexpr_k\)</span>) are <strong>all integer
-expressions</strong>.</p>
-<h3 id="4memory-and-clock">4.Memory and Clock</h3>
-<h4 id="asummary">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Summary</h4>
-<p>&#x2003;&#x2003;Combinational circuits don&apos;t store any information, they simply
-react to the signals at their inputs. So we must introduce devices that
-<strong>store information represented as bits</strong>.</p>
-<p>&#x2003;&#x2003;Our storage devices are all controlled by a single clock, a
-periodic signal that <strong>determines when new values are to be loaded
-into the devices</strong>.</p>
-<p>&#x2003;&#x2003;We consider two classes of memory devices:</p>
+<li><p>The latency of piplining is decided by <strong>the slowest clock
+rate</strong>.</p>
 <ul>
-<li><p><em>Clocked registers(simple registers)</em>: It stores
-individual bits or words. <strong>The clock signal controls the loading
-of the register with the value at its input</strong>.</p>
-<ul>
-<li>Our Y86-64 processors will use clocked registers to hold the program
-counter(PC), the condition codes(CC), and the program status(Stat).</li>
-</ul></li>
-<li><p><em>Random access memories</em>(<em>simply memories</em>):It
-store multiple words, <strong>using an address to select which word
-should be read or written</strong>.</p>
-<ul>
-<li><p>Examples of random access memories include</p>
-<ul>
-<li><p>the virtual memory system of a processor, where a combination of
-hardware and operating system software make it appear to a processor
-that it can access any word within a large address space;</p></li>
-<li><p>the register file, where register identifiers serve as the
-addresses.</p></li>
-</ul></li>
-<li><p>In a Y86-64 processor, <strong>the register file holds the 15
-program registers</strong>(<code>%rax</code> through
-<code>%r14</code>).</p></li>
+<li>For the process above, delays of A and C are 50ps and 100+20 = 120
+ps, while delay of B is 150+20 = 170ps, so we have to <strong>set the
+clock cycle to 170ps</strong>.</li>
 </ul></li>
 </ul>
 <blockquote>
-<p>In hardware, a register <strong>is directly connected to the rest of
-the circuit by its input and output wires</strong>. In machine-level
-programming, the registers <strong>represent a small collection of
-addressable words in the CPU</strong>, where <strong>the addresses
-consist of register IDs</strong>.</p>
+<p>Note that the delay of pipeline register is included in
+<strong>register that fetch data from it</strong>. So in the process
+above, B and C should add the 20ps delay.</p>
 </blockquote>
-<p>&#x2003;&#x2003;The following figure shows the detailed register operation:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-3.png"></p>
-<p>&#x2003;&#x2003;In the figure, the register serves as <strong>barriers between the
-combinational logic</strong> in different parts of the circuit.</p>
-<h4 id="bregister-file">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Register file</h4>
-<p>&#x2003;&#x2003;The following g diagram shows a typical register file:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-4.png"></p>
+<h4 id="cdiminishing-returns-of-deeppipelining">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Diminishing returns of deep
+pipelining</h4>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-4.png"></p>
+<h3 id="3piplining-a-system-withfeedback">3.Piplining a System with
+Feedback</h3>
+<p>&#x2003;&#x2003;For a system that executes machine programs such as Y86-64, there
+are <strong>potential dependencies between successive
+instructions</strong>.</p>
 <ul>
-<li><p>The <em>multiported</em> RAM allows <strong>multiple read and
-write operations to take place simultaneously</strong>.</p></li>
-<li><p>Each port has an <em>address input</em>, indicating <strong>which
-program register should be selected</strong>, and a <em>data output or
-input</em> <strong>giving a value for that program
-register</strong>.</p></li>
-<li><p>Every time the clock rises, the value on input <code>valW</code>
-is written to the program register indicated by the register ID on input
-<code>dstW</code>.</p>
-<ul>
-<li>When <code>dstW</code> is set to <code>0xF</code>, no program
-register is written.</li>
-</ul></li>
+<li>The following codes describe what is called <em>data
+dependency</em>. The <code>irmovq</code> instruction stores its result
+in <code>%rax</code>, which then must be read by the <code>addq</code>
+instruction.</li>
 </ul>
-<h4 id="cdatamemory">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Data
-memory</h4>
-<p>&#x2003;&#x2003;The Data memory is used to store program data:</p>
-<p><img src="/2024/07/24/4-2-Logical-Design-and-the-HCL/image-5.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">irmovq $50, %rax</span><br><span class="line">addq %rax, %rbx</span><br><span class="line">mrmovq 100(%rbx), %rdx</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>This memory has a single address input, a data input for writing,
-and a data output for reading.</p></li>
-<li><p>We set <code>address</code> to the desired address,
-<code>data in</code> to the desired value.</p></li>
-<li><p>The <code>error</code> signal will be set to 1 if the
-<code>address</code> is out of range.</p></li>
+<li>The following codes describe what is called <em>control
+dependency</em>. The outcome of the conditional test determines whether
+the next instruction to execute:</li>
 </ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    subq %rdx,%rbx</span><br><span class="line">    jne targ</span><br><span class="line">    irmovq $10,%rdx</span><br><span class="line">    jmp loop</span><br><span class="line">targ:</span><br><span class="line">    halt</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-5.png"></p>
+<p><img src="/2024/07/26/4-4-General-Principles-of-pipelining/image-6.png"></p>
 
       
     </div>
@@ -464,7 +355,7 @@ and a data output for reading.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/33/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/35/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

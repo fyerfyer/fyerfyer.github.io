@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/23/9-10-Simple-Allocator-Implementation/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/28/11-2-Networks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/23/9-10-Simple-Allocator-Implementation/" class="post-title-link" itemprop="url">9.10.Simple Allocator Implementation</a>
+          <a href="/2024/08/28/11-2-Networks/" class="post-title-link" itemprop="url">11.2.Networks</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-23 18:31:22" itemprop="dateCreated datePublished" datetime="2024-08-23T18:31:22+08:00">2024-08-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-24 23:00:48" itemprop="dateModified" datetime="2024-08-24T23:00:48+08:00">2024-08-24</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-28 21:39:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;22:35:00" itemprop="dateCreated datePublished" datetime="2024-08-28T21:39:22+08:00">2024-08-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
+          <a href="/categories/CSAPP/Chapter-11-Network-Programming/" itemprop="url" rel="index"><span itemprop="name">Chapter 11.Network Programming</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1k</span>
+      <span>242</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>4 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,81 +266,58 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="910simple-allocator-implementation"><span class="math inline">\(9.10.\)</span>Simple Allocator Implementation</h1>
-<h3 id="1general-allocator-design">1.General Allocator Design</h3>
-<p>&#x2003;&#x2003;The allocator exports three functions to application programs:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> *<span class="title function_">mm_malloc</span> <span class="params">(<span class="type">size_t</span> size)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">mm_free</span> <span class="params">(<span class="type">void</span> *ptr)</span>;</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The allocator uses the block format as below:</p>
-<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image.png"></p>
-<p>&#x2003;&#x2003;The minimum block size is 16 bytes. The free list is organized as
-an implicit free list, with the invariant form shown as below:</p>
-<p><img src="/2024/08/23/9-10-Simple-Allocator-Implementation/image-1.png"></p>
+          <h1 id="112networks"><span class="math inline">\(11.2.\)</span>Networks</h1>
+<h3 id="1the-physical-interface">1.The Physical Interface</h3>
+<p><img src="/2024/08/28/11-2-Networks/image.png"></p>
 <ul>
-<li><p>The first word is an unused padding word aligned to a double-word
-boundary.</p></li>
-<li><p>The padding is followed by a special prologue block, which is an
-8-byte allocated block <strong>consisting of only a header and a
-footer</strong>. The prologue block <strong>is created during
-initialization and is never freed</strong>.</p></li>
-<li><p>The heap always ends with a special epilogue block, which is a
-zero-size allocated block that <strong>consists of only a
-header</strong>.</p></li>
-<li><p>The allocator uses a single private(<code>static</code>) global
-variable(<code>heap_listp</code>) that <strong>always points to the
-prologue block</strong>.</p></li>
+<li><p>The <em>adapter</em> provides <strong>the physical
+interface</strong> to the network.</p></li>
+<li><p>Data received from the network are copied from the adapter
+typically by a <em>DMA transfer</em>.</p></li>
 </ul>
-<h3 id="2basicconstants-and-macros-for-manipulating-the-free-list">2.Basic
-Constants and Macros for Manipulating the Free List</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> WSIZE 4 <span class="comment">/* Word and header/footer size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DSIZE 8 <span class="comment">/* Double word size (bytes) */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CHUNKSIZE (1&lt;&lt;12) <span class="comment">/* Extend heap by this amount (bytes) */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(x, y) ((x) &gt; (y)? (x) : (y))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Pack a size and allocated bit into a word */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PACK(size, alloc) ((size) | (alloc))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read and write a word at address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET(p) (*(unsigned int *)(p)) <span class="comment">// The pointer points to p is dereferenced</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PUT(p, val) (*(unsigned int *)(p) = (val))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Read the size and allocated fields from address p */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_SIZE(p) (GET(p) &amp; ~0x7)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GET_ALLOC(p) (GET(p) &amp; 0x1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of its header and footer */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HDRP(bp) ((char *)(bp) - WSIZE)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE) <span class="comment">// Why DSIZE? Because both header and footer need to decline WSIZE, and 2*WSIZE=DSIZE</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given block ptr bp, compute address of next and previous blocks */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))</span></span><br></pre></td></tr></table></figure>
-<h3 id="3creating-the-initial-freelist">3.Creating the Initial Free
-List</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mm_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* Create the initial empty heap */</span></span><br><span class="line">    <span class="keyword">if</span> ((heap_listp = mem_sbrk(<span class="number">4</span> * WSIZE)) == (<span class="type">void</span> *)<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    PUT(heap_listp, <span class="number">0</span>); <span class="comment">/* Alignment padding */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">1</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue header */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">2</span> * WSIZE), PACK(DSIZE, <span class="number">1</span>)); <span class="comment">/* Prologue footer */</span></span><br><span class="line">    PUT(heap_listp + (<span class="number">3</span> * WSIZE), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* Epilogue header */</span></span><br><span class="line">    heap_listp += (<span class="number">2</span> * WSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Extend the empty heap with a free block of CHUNKSIZE bytes */</span></span><br><span class="line">    <span class="keyword">if</span> (extend_heap(CHUNKSIZE / WSIZE) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The extend_heap function is invoked in two different
-circumstances:</p>
+<h3 id="2ethernet-segment">2.Ethernet Segment</h3>
+<p><img src="/2024/08/28/11-2-Networks/image-1.png"></p>
+<ul>
+<li><p>One end is attached to <strong>an adapter on a host</strong>, and
+the other end is attached to <strong>a port on the
+hub</strong>.</p></li>
+<li><p>A host can send <strong>a chunk of bits</strong> called a
+<em>frame</em> to any other <strong>host on the
+segment</strong>.</p></li>
+<li><p><strong>Every host adapter sees the frame</strong>, but
+<strong>only the destination host actually reads it</strong>.</p></li>
+</ul>
+<h3 id="3lan">3.LAN</h3>
+<p><img src="/2024/08/28/11-2-Networks/image-2.png"></p>
+<ul>
+<li><p>Multiple Ethernet segments can be connected into larger
+LANs(Local Area Network), called <em>bridged Ethernets</em>, using a set
+of wires and small boxes called <em>bridges</em>.</p></li>
+<li><p>Bridges automatically learn over time which hosts are reachable
+from which ports and only copy frames from one port to another
+<strong>when necessary</strong>.</p></li>
+</ul>
+<h3 id="4internet">4.Internet</h3>
+<p><img src="/2024/08/28/11-2-Networks/image-3.png"></p>
+<ul>
+<li><p>Multiple incompatible LANs can be connected by specialized
+computers called <em>routers</em> to form an internet.</p></li>
+<li><p>Each router has an <em>adapter</em>(port) for each network it
+connected to.</p></li>
+</ul>
+<h3 id="5protocol-software-layer">5.Protocol Software Layer</h3>
+<p>&#x2003;&#x2003;A layer of protocol software smoothes out the differences between
+the different networks. This software implements a protocol that
+<strong>governs how hosts and routers cooperate in order to transfer
+data</strong>.</p>
+<p>&#x2003;&#x2003;The following figure shows an example of using protocol software
+layer for data transferring:</p>
+<p><img src="/2024/08/28/11-2-Networks/image-4.png"></p>
 <ol type="1">
-<li><p>When the heap is initialized and</p></li>
-<li><p>When <code>mm_malloc</code> is unable to find a suitable
-fit.</p></li>
+<li>The client on host A <strong>invokes a system call</strong> that
+copies the data from the client&apos;s virtual address space <strong>into a
+kernel buffer</strong>.</li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">extend_heap</span><span class="params">(<span class="type">size_t</span> words)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Allocate an even number of words to maintain alignment */</span></span><br><span class="line">    size = (words % <span class="number">2</span>) ? (words + <span class="number">1</span>) * WSIZE : words * WSIZE;</span><br><span class="line">    <span class="keyword">if</span> ((<span class="type">long</span>)(bp = mem_sbrk(size)) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize free block header/footer and the epilogue header */</span></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block header */</span></span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>)); <span class="comment">/* Free block footer */</span></span><br><span class="line">    PUT(HDRP(NEXT_BLKP(bp)), PACK(<span class="number">0</span>, <span class="number">1</span>)); <span class="comment">/* New epilogue header */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Coalesce if the previous block was free */</span></span><br><span class="line">    <span class="keyword">return</span> coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li><p>Place enough space by invoking <code>mem_sbrk</code>.</p></li>
-<li><p>Set the new space free by setting the allocate bit
-<code>0</code>.</p></li>
-<li><p>Set the block next to <code>bp</code> as the new epilogue
-header.</p></li>
-<li><p>Finally, in the likely case that <strong>the previous heap was
-terminated by a free block</strong>, we call the <code>coalesce</code>
-function to <strong>merge the two free blocks and return the block
-pointer of the merged blocks</strong>.</p></li>
-</ol>
-<ul>
-<li>To maintain alignment, extend_heap <strong>rounds up the requested
-size to the nearest multiple of 2 words</strong>(8 bytes).</li>
-</ul>
-<h3 id="4freeing-and-coalescingblocks">4.Freeing and Coalescing
-Blocks</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">mm_free</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    coalesce(bp);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The <code>mm_free</code> set the allocate bit of the current block
-to <code>0</code>.</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">coalesce</span><span class="params">(<span class="type">void</span> *bp)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> prev_alloc = GET_ALLOC(FTRP(PREV_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">    <span class="type">size_t</span> size = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 1 */</span></span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (prev_alloc &amp;&amp; !next_alloc) { <span class="comment">/* Case 2 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!prev_alloc &amp;&amp; next_alloc) { <span class="comment">/* Case 3 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp)));</span><br><span class="line">        PUT(FTRP(bp), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> { <span class="comment">/* Case 4 */</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(bp))) + </span><br><span class="line">        GET_SIZE(FTRP(NEXT_BLKP(bp)));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(bp)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        bp = PREV_BLKP(bp);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="5allocating-blocks">5.Allocating Blocks</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">mm_malloc</span><span class="params">(<span class="type">size_t</span> size)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> asize; <span class="comment">/* Adjusted block size */</span></span><br><span class="line">    <span class="type">size_t</span> extendsize; <span class="comment">/* Amount to extend heap if no fit */</span></span><br><span class="line">    <span class="type">char</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Ignore spurious requests */</span></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Adjust block size to include overhead and alignment reqs. */</span></span><br><span class="line">    <span class="keyword">if</span> (size &lt;= DSIZE)</span><br><span class="line">        asize = <span class="number">2</span>*DSIZE;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        asize = DSIZE * ((size + (DSIZE) + (DSIZE<span class="number">-1</span>)) / DSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Search the free list for a fit */</span></span><br><span class="line">    <span class="keyword">if</span> ((bp = find_fit(asize)) != <span class="literal">NULL</span>) {</span><br><span class="line">        place(bp, asize);</span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* No fit found. Get more memory and place the block */</span></span><br><span class="line">    extendsize = MAX(asize, CHUNKSIZE);</span><br><span class="line">    <span class="keyword">if</span> ((bp = extend_heap(extendsize/WSIZE)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    place(bp, asize);</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ul>
-<li>The <code>DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);</code>
-assures that the result is rounded <strong>up to the nearest multiple of
-<code>DSIZE</code></strong>.</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> *<span class="title function_">find_fit</span><span class="params">(<span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">/* First-fit search */</span></span><br><span class="line">    <span class="type">void</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (bp = heap_listp; GET_SIZE(HDRP(bp)) &gt; <span class="number">0</span>; bp = NEXT_BLKP(bp)) {</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; (asize &lt;= GET_SIZE(HDRP(bp)))) {</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">/* No fit */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">place</span><span class="params">(<span class="type">void</span> *bp, <span class="type">size_t</span> asize)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">size_t</span> csize = GET_SIZE(HDRP(bp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((csize - asize) &gt;= (<span class="number">2</span>*DSIZE)) {</span><br><span class="line">        PUT(HDRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        bp = NEXT_BLKP(bp);</span><br><span class="line">        PUT(HDRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize-asize, <span class="number">0</span>));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        PUT(HDRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(csize, <span class="number">1</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Since the allocated space may not take up the whole block, we may
-need to <strong>split the block</strong> by <strong>setting the
-allocated space to <code>1</code> and the other
-<code>0</code></strong>.</li>
-</ul>
 
       
     </div>
@@ -369,7 +340,7 @@ allocated space to <code>1</code> and the other
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

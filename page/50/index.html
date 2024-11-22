@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/06/29/5-3-Hardware-Multithreading/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/" class="post-title-link" itemprop="url">5.2.SIMD, MIMD, SIMD, SPMD and Vector</a>
+          <a href="/2024/06/29/5-3-Hardware-Multithreading/" class="post-title-link" itemprop="url">5.3.Hardware Multithreading</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 09:16:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;10:32:25" itemprop="dateCreated datePublished" datetime="2024-06-29T09:16:22+08:00">2024-06-29</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-06-29 10:38:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;15:30:21" itemprop="dateCreated datePublished" datetime="2024-06-29T10:38:22+08:00">2024-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>473</span>
+      <span>259</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>2 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,96 +266,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="52simd-mimd-simd-spmd-andvector"><span class="math inline">\(5.2.\)</span>SIMD, MIMD, SIMD, SPMD and
-Vector</h1>
-<h3 id="1basic-concepts">1.Basic concepts</h3>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image.png"></p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-1.png"></p>
+          <h1 id="53hardware-multithreading">5.3.Hardware Multithreading</h1>
+<h3 id="1basic-concepts-of-threads">1.Basic concepts of threads</h3>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image.png"></p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-1.png"></p>
+<h3 id="2multithreading-intro">2.Multithreading intro</h3>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-2.png"></p>
+<p>&#x2003;&#x2003;Hardware multithreading allows multiple threads to <strong>share
+the functional units of a single processor in an overlapping
+fashion</strong> to try to utilize the hardware resources
+efficiently.</p>
+<p>&#x2003;&#x2003;To permit this sharing, the processor must <strong>duplicate the
+independent state of each thread</strong>.</p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-3.png"></p>
+<hr>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-4.png"></p>
+<h3 id="3types-of-hardwaremultithreading">3.Types of hardware
+multithreading</h3>
+<p>&#x2003;&#x2003;There are 3 types of hardware multithreading approaches:</p>
 <ul>
-<li><p>In SIMD, all the parallel execution units are
-<strong>synchronized</strong>, and they all respond to a single
-instruction <strong>that emanates from a single program
-counter</strong>.</p></li>
-<li><p>Each execution unit <strong>has its own address register, and so
-have different data address</strong>.</p></li>
+<li><p><em>Fine-grained multithreading</em>: It <strong>switches between
+threads on each instruction</strong>, resulting in interleaved execution
+of multiple threads.</p>
+<ul>
+<li><p>It&apos;s advantage is that it can hide the throughput losses that
+arise from both short and long stalls, since instructions from other
+threads can be executed when one thread stalls. Also, since it switches
+threads frequently, it doesn&apos;t need to clear the pipeline
+everytime.</p></li>
+<li><p>However, it slows down the execution of the individual
+threads.</p></li>
+</ul></li>
+<li><p><em>Coarse-grained multithreading</em>: It switch threads
+<strong>only on expensive stalls</strong>, such as last-level cache
+misses.</p>
+<ul>
+<li><p>It&apos;s much less likely to slow down individual execution.</p></li>
+<li><p>However, it is limited from overcoming throughput losses for
+pipeline start-up time.</p></li>
+</ul></li>
+<li><p><em>Simultaneous multithreading</em>: It uses a multiple-issue,
+dynamically scheduled <em>pipelined processor</em> to <strong>exploit
+thread-level parallelism while exploiting ILP</strong>.</p></li>
 </ul>
 <blockquote>
-<p>The original motivation behind SIMD was to <strong>amortize the cost
-of the control unit over execution units</strong>. The SIMD can also
-save instrustion bandwidth and space: SIMD needs <strong>only one copy
-of the code that is being simultaneously executed</strong>.</p>
+<p>With register renaming and dynamic scheduling, multiple instructions
+from independent threads can be issued without regard to the dependences
+among them; <strong>the resolution of the dependences can be handled by
+the dynamic scheduling capability</strong>.</p>
 </blockquote>
-<blockquote>
-<p>Since the instruction is single, SIMD works best when dealing with
-<strong>identically structured data</strong>, which is called
-<em>data-level parallelism</em>, e.g., for loop.</p>
-</blockquote>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-2.png"></p>
-<ul>
-<li><p>SPMD: The programmer write a single program that runs on all
-processors of a <em>MIMD computer</em>, relying on conditional
-statements when different processors should execute distinct section of
-code.</p></li>
-<li><p>The SIMD computers operate on <strong>vectors of
-data</strong>.</p></li>
-</ul>
-<h3 id="2vector">2.Vector</h3>
-<h4 id="aconcepts-and-characteristics">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Concepts and characteristics</h4>
-<p>&#x2003;&#x2003;The basic philosophy of vector architecture is to <strong>collect
-data elements from memory, put them in order into a large set of
-registers</strong>, and operate on them sequentially in registers using
-<em>pipelined execution units</em>.</p>
-<ul>
-<li>A key feature of vector architectures is <strong>a set of vector
-registers</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;Take the following expression as an example(it&apos;s called DAXPY
-loop):</p>
-<p><span class="math display">\[
-Y = a \times X + Y
-\]</span></p>
-<p>&#x2003;&#x2003;In conventional RISC-V, it&apos;s written as below:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-3.png"></p>
-<p>&#x2003;&#x2003;By using vector, we can write it in a more concise way:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-4.png"></p>
-<p>&#x2003;&#x2003;No only does the code reduce the dynamic instruction bandwidth, but
-also the pipeline stalls are required only <strong>once per vector
-operation</strong>, rather than once per vector element.</p>
-<p>&#x2003;&#x2003;Vector also holds the following characteristic:</p>
-<ol type="1">
-<li><p>The compiler indicates that <strong>the computation of each
-result in the vector is independent</strong>. So compiler doesn&apos;t have
-to check for data hazards within an instruction.</p></li>
-<li><p>Since the element in a vector is adjacent, <strong>the cost of
-the latency to main memory is seen only once for the entire
-vector</strong>.</p></li>
-<li><p>Because a complete loop is replaced by a vector instruction whose
-<strong>behaviour is predetermined</strong>, control hazards are
-nonexistent.</p></li>
-</ol>
-<h4 id="brelated-architecture">&#x2003;&#x2003; <span class="math inline">\(b.\)</span>Related architecture</h4>
-<ul>
-<li>Unlike multimedia extensions, the number of elements in a vector
-operation isn&apos;t in the opcode but in <strong>a separate
-register</strong>.</li>
-</ul>
-<blockquote>
-<p>This means different versions of the vector architecture can simply
-be implemented by changing the contents of the register, thus retain
-binary compatibility.</p>
-</blockquote>
-<ul>
-<li>The parallel semantics of a vector instruction allows using a
-<em>deeply pipelined functional unit</em> to execute vector
-operations:</li>
-</ul>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-5.png"></p>
-<p>&#x2003;&#x2003;Vector arithmetic instructions only allow element N of one vector
-register to take part in operations with element N from other vector
-registers, and the structure is called <em>vector lanes</em>:</p>
-<p><img src="/2024/06/29/5-2-SIMD-MIMD-SIMD-SPMD-and-Vector/image-6.png"></p>
-<p>&#x2003;&#x2003;As with a traffic highway, we can increase the peak throughput of a
-vector unit by <strong>adding more lanes</strong>.</p>
+<p>&#x2003;&#x2003;SMT is always executing instructions from multiple threads, leaving
+it up to the hardware to associate instruction slots and renamed
+registers with their proper threads.</p>
+<p><img src="/2024/06/29/5-3-Hardware-Multithreading/image-5.png"></p>
 
       
     </div>
@@ -378,7 +341,7 @@ vector unit by <strong>adding more lanes</strong>.</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/49/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/51/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/49/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/51/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

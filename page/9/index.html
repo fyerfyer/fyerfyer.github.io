@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-5-Memory-Protection/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/21/9-8-Memory-Mapping/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/20/9-5-Memory-Protection/" class="post-title-link" itemprop="url">9.5.Memory Protection</a>
+          <a href="/2024/08/21/9-8-Memory-Mapping/" class="post-title-link" itemprop="url">9.8.Memory Mapping</a>
         </h2>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
       
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 19:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;20:34:26" itemprop="dateCreated datePublished" datetime="2024-08-20T19:31:22+08:00">2024-08-20</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-21 16:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;19:21:55" itemprop="dateCreated datePublished" datetime="2024-08-21T16:31:22+08:00">2024-08-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>129</span>
+      <span>666</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>1 &#x5206;&#x949F;</span>
+      <span>2 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -266,30 +266,106 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="95memory-protection"><span class="math inline">\(9.5.\)</span>Memory Protection</h1>
+          <h1 id="98memorymapping"><span class="math inline">\(9.8.\)</span>Memory
+Mapping</h1>
+<p>&#x2003;&#x2003;Linux initializes the contents of a virtual memory area by
+<strong>associating it with an object on disk</strong>. Areas can be
+mapped to one of two types of objects:</p>
+<ol type="1">
+<li><p>Regular file in the Linux file system: The file section
+<strong>is divided into page-size pieces</strong>, with each piece
+containing the initial contents of a virtual page.</p></li>
+<li><p>Anonymous file: The first time the CPU touches a virtual page in
+such an area, the kernel&#xFF1A;</p>
 <ul>
-<li><p>A user process shouldn&apos;t be allowed to modify any virtual pages
-that are shared with other processes, <strong>unless all parties
-explicitly allow it</strong>(via <strong>calls to explicit interprocess
-communication system calls</strong>).</p></li>
-<li><p>It is straightforward to control access to the contents of a
-virtual page by <strong>adding some additional permission bits to the
-PTE</strong>.</p></li>
-</ul>
-<p><img src="/2024/08/20/9-5-Memory-Protection/image.png"></p>
+<li><p>finds an appropriate victim page in physical memory&#xFF0C;</p></li>
+<li><p>swaps out the victim page if it is dirty, overwrites the victim
+page with binary zeros,</p></li>
+<li><p>updates the page table to mark the page as resident.</p></li>
+</ul></li>
+</ol>
 <ul>
-<li><p>The <code>SUP</code> bit indicates <strong>whether processes must
-be running in kernel(supervisor) mode</strong> to access the
-page.</p></li>
-<li><p>The <code>READ</code> and <code>WRITE</code> bits control read
-and write access to the page.</p></li>
-<li><p>If an instruction violates these permissions, then the CPU
-<strong>triggers a general protection fault</strong> that transfers
-control to an exception handler in the kernel, which sends a
-<code>SIGSEGV</code> signal to the offending process. Linux shells
-typically report this exception as a <strong>&quot;segmentation
-fault&quot;</strong>.</p></li>
+<li>Once a virtual page is initialized, it is swapped back and forth
+between <strong>a special swap file</strong> maintained by the kernel.
+It&apos;s known as the <em>swap space</em>.</li>
 </ul>
+<h3 id="1sharred-objects-revisited">1.Sharred Objects Revisited</h3>
+<ul>
+<li><p>An object can be mapped into an area of virtual memory as either
+a <em>shared object</em> or a <em>private object</em>.</p></li>
+<li><p>If a process maps a shared object into an area of its virtual
+address space, then any writes that the process makes to that area
+<strong>are visible to any other processes</strong> that <strong>have
+also mapped the shared object into their virtual memory</strong>.
+Further, the changes <strong>are also reflected in the original object
+on disk</strong>.</p></li>
+<li><p>Changes made to an area mapped to a <em>private object</em> are
+not visible to other processes, and any writes that the process makes to
+the area <strong>are not reflected back to the object on
+disk</strong>.</p></li>
+</ul>
+<p><img src="/2024/08/21/9-8-Memory-Mapping/image.png"></p>
+<ul>
+<li><p>The kernel can quickly determine that process 1 has already
+mapped this object and can <strong>point the page table entries in
+process 2 to the appropriate physical pages</strong>.</p></li>
+<li><p>The key point is that <strong>only a single copy of the shared
+object</strong> needs to be stored in physical memory.</p></li>
+</ul>
+<p>&#x2003;&#x2003;Private objects are mapped into virtual memory using a technique
+known as <em>copy-on-write</em>:</p>
+<p><img src="/2024/08/21/9-8-Memory-Mapping/image-1.png"></p>
+<ul>
+<li><p>Two processes have mapped a private object into different areas
+of their virtual memories but <strong>share the same physical copy of
+the object</strong>.</p></li>
+<li><p>For each process that maps the private object, the page table
+entries for the corresponding private area <strong>are flagged as
+read-only</strong>, and the area struct is flagged as <strong>private
+copy-on-write</strong>.</p></li>
+<li><p>As soon as a process attempts to write to some page in the
+private area, the write <strong>triggers a protection
+fault</strong>:</p>
+<ul>
+<li><p>The fault handler <strong>creates a new copy of the page in
+physical memory</strong>, <strong>updates the page table entry to point
+to the new copy</strong>, and then <strong>restores write permissions to
+the page</strong>.</p></li>
+<li><p>When the fault handler returns, the CPU re-executes the write,
+which now proceeds normally on the newly created page.</p></li>
+</ul></li>
+</ul>
+<h3 id="2the-execvefunction-revisited">2.The <code>execve</code>
+Function Revisited</h3>
+<p>&#x2003;&#x2003;Suppose that we make the following call:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execve(<span class="string">&quot;a.out&quot;</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>Delete existing user areas</p></li>
+<li><p>Map private areas: Create new area structs for the code, data,
+bss, and stack areas of the new program:</p></li>
+</ol>
+<p><img src="/2024/08/21/9-8-Memory-Mapping/image-2.png"></p>
+<ol start="3" type="1">
+<li><p>Map shared areas: If the <code>a.out</code> program was linked
+with shared objects, then these objects <strong>are dynamically linked
+into the program</strong>, and then mapped into the shared region of the
+user&#x2019;s virtual address space.</p></li>
+<li><p>Set the PC. The last thing is to set the program counter in the
+current process&apos;s context to <strong>point to the entry point in the
+code area</strong>.</p></li>
+</ol>
+<h3 id="3user-levelmemory-mapping-with-the-mmap-function">3.User-Level
+Memory Mapping with the <code>mmap</code> Function</h3>
+<p>&#x2003;&#x2003;<code>mmap</code> function is used to create new areas of virtual
+memory and to map objects into these areas:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *start, <span class="type">size_t</span> length, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fd, <span class="type">off_t</span> offset)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to mapped area if OK, MAP_FAILED (&#x2212;1) on error */</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/21/9-8-Memory-Mapping/image-3.png"></p>
+<p>&#x2003;&#x2003;The <code>munmap</code> function is used to delete regions of
+virtual memory:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *start, <span class="type">size_t</span> length)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 if OK, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<p>&#x2003;&#x2003;The munmap function deletes the area starting at virtual address
+<code>start</code> and consisting of the next <code>length</code>
+bytes.</p>
 
       
     </div>
@@ -312,7 +388,7 @@ fault&quot;</strong>.</p></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

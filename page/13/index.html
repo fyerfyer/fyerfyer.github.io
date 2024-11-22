@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">&#x65E5;&#x5FD7;</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang>
-    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/18/8-5-Signal/">
+    <link itemprop="mainEntityOfPage" href="https://fyerfyer.github.io.com/2024/08/20/9-1-9-3-VM-Address-Space/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head.png">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/08/18/8-5-Signal/" class="post-title-link" itemprop="url">8.5.Signal</a>
+          <a href="/2024/08/20/9-1-9-3-VM-Address-Space/" class="post-title-link" itemprop="url">9.1~9.3.VM Address Space</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,15 +223,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">&#x53D1;&#x8868;&#x4E8E;</span>
+      
 
-      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-18 10:31:22" itemprop="dateCreated datePublished" datetime="2024-08-18T10:31:22+08:00">2024-08-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">&#x66F4;&#x65B0;&#x4E8E;</span>
-      <time title="&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;2024-08-19 18:32:42" itemprop="dateModified" datetime="2024-08-19T18:32:42+08:00">2024-08-19</time>
+      <time title="&#x521B;&#x5EFA;&#x65F6;&#x95F4;&#xFF1A;2024-08-20 09:31:22 / &#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;11:47:02" itemprop="dateCreated datePublished" datetime="2024-08-20T09:31:22+08:00">2024-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,7 +237,7 @@
         </span>
           &#xFF0C;
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/Chapter-8-Exceptional-Control-Flow/" itemprop="url" rel="index"><span itemprop="name">Chapter 8.Exceptional Control Flow</span></a>
+          <a href="/categories/CSAPP/Chapter-9-Virtual-Memory/" itemprop="url" rel="index"><span itemprop="name">Chapter 9.Virtual Memory</span></a>
         </span>
     </span>
 
@@ -254,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">&#x672C;&#x6587;&#x5B57;&#x6570;&#xFF1A;</span>
-      <span>1.9k</span>
+      <span>370</span>
     </span>
     <span class="post-meta-item" title="&#x9605;&#x8BFB;&#x65F6;&#x957F;">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">&#x9605;&#x8BFB;&#x65F6;&#x957F; &#x2248;</span>
-      <span>7 &#x5206;&#x949F;</span>
+      <span>1 &#x5206;&#x949F;</span>
     </span>
 </div>
 
@@ -272,248 +266,92 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="85signal"><span class="math inline">\(8.5.\)</span>Signal</h1>
-<h3 id="1signal-terminology">1.Signal Terminology</h3>
-<p>&#x2003;&#x2003;A signal is a small message that <strong>notifies a
-process</strong> that <strong>an event of some type has occurred in the
-system</strong>.</p>
-<p>&#x2003;&#x2003;The transfer of a signal to a destination process contains two
-distinct steps:</p>
+          <h1 id="91-sim93vm-address-spaces"><span class="math inline">\(9.1 \sim
+9.3\)</span>VM Address Spaces</h1>
+<h3 id="1terminologies">1.Terminologies</h3>
 <ul>
-<li><em>Sending a signal</em>: The kernel <em>sends</em> a signal to a
-destination process by <strong>updating some state in the
-context</strong> of the destination process.</li>
+<li><p>Each byte has a unique <em>physical address(PA)</em>.</p></li>
+<li><p><em>VA</em>: Virtual Address.</p></li>
+<li><p>The activity of <strong>transferring a page between disk and
+memory</strong> is known as <em>swapping</em> or
+<em>paging</em>.</p></li>
+<li><p>Pages are <em>swapped in(paged in)</em> from disk to DRAM, and
+<em>swapped out(paged out)</em> from DRAM to disk.</p></li>
+<li><p>The strategy of <strong>waiting until the last moment to swap in
+a page</strong>, when a miss occurs, is known as <em>demand
+paging</em>.</p></li>
 </ul>
-<p>&#x2003;&#x2003;The signal is delivered for one of two reasons:</p>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image.png"></p>
 <ul>
-<li><p>The kernel has <strong>detected a system event</strong> such as a
-divide-by-zero error or <strong>the termination of a child
-process</strong>.</p></li>
-<li><p>A process has <strong>invoked the <code>kill</code>
-function</strong>.</p></li>
-<li><p><em>Receiving a signal</em>: A destination process
-<em>receives</em> a signal when it <strong>is forced by the kernel to
-react in some way</strong> to the delivery of the signal.</p>
+<li><p>An <em>address space</em> is an ordered set of nonnegative
+integer addresses:</p>
 <ul>
-<li>The process can either <strong>ignore the signal, terminate, or
-catch the signal</strong> by executing a user-level function called a
-<em>signal handler</em>.</li>
+<li>If the integers in the address space are
+<strong>consecutive</strong>, then we say that it is a <em>linear
+address space</em>.</li>
 </ul></li>
 </ul>
-<p><img src="/2024/08/18/8-5-Signal/image.png"></p>
+<p><span class="math display">\[
+\lbrace 0,1,2, \cdots \rbrace
+\]</span></p>
 <ul>
-<li><p>A signal that has been sent but not yet received is called a
-<strong>pending signal</strong>.</p></li>
-<li><p>At any point in time, there can be <strong>at most one pending
-signal of a particular type</strong>. If a process has a pending signal
-of type <span class="math inline">\(k\)</span>, then any subsequent
-signals of type <span class="math inline">\(k\)</span> sent to that
-process <strong>will be ignored and simply discarded</strong>.</p></li>
-<li><p>A process can selectively <em>block</em> the receipt of certain
-signals. When a signal is blocked, it <strong>can be delivered</strong>,
-but <strong>the resulting pending signal will not be received until the
-process unblocks the signal</strong>.</p></li>
-<li><p>For each process, the kernel maintains the set of pending signals
-in the <strong>pending bit vector</strong>, and the set of blocked
-signals in the <strong>blocked bit vector</strong>.</p>
+<li><p>A virtual address space with <span class="math inline">\(N =
+2^n\)</span> addresses is called an <strong>n-bit address
+space</strong>.</p></li>
+<li><p>At any point in time, the set of virtual pages is partitioned
+into three disjoint subsets:</p>
 <ul>
-<li>The kernel <strong>sets bit <span class="math inline">\(k\)</span></strong> in pending whenever a signal
-of type <span class="math inline">\(k\)</span> is delivered and
-<strong>clears bit <span class="math inline">\(k\)</span></strong> in
-pending whenever a signal of type <span class="math inline">\(k\)</span>
-is received.</li>
+<li><p><em>Unallocated</em></p></li>
+<li><p><em>Cached</em></p></li>
+<li><p><em>Uncached</em></p></li>
 </ul></li>
 </ul>
-<h3 id="2sending-signals">2.Sending Signals</h3>
-<h4 id="aprocess-groups">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Process groups</h4>
-<p>&#x2003;&#x2003;Every process belongs to <strong>exactly one <em>process
-group</em></strong>, which is identified by a <strong>positive integer
-process group ID</strong>.</p>
-<p>&#x2003;&#x2003;The getpgrp function returns <strong>the process group ID</strong>
-of the current process.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpgrp</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: process group ID of calling process */</span></span><br></pre></td></tr></table></figure>
+<h3 id="2dram-cache-organization">2.DRAM Cache Organization</h3>
+<h4 id="apagetables">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Page
+tables</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-1.png"></p>
 <ul>
-<li>By default, a child process belongs to <strong>the same process
-group as its parent</strong>.</li>
-</ul>
-<p>&#x2003;&#x2003;We can change the process group of a process buyt using the
-<code>setpgid</code> function:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">setpgid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">pid_t</span> pgid)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 on success, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
+<li><p>A page table is an array of <em>page table entries(PTEs)</em>.
+Each page in the virtual address space has a PTE at a fixed offset in
+the page table.</p></li>
+<li><p>The valid bit indicates <strong>whether the virtual page is
+currently cached in DRAM</strong>.</p>
 <ul>
-<li><p>If <code>pid</code> is zero, the PID of the current process is
-used.</p></li>
-<li><p>If <code>pgid</code> is zero, the PID of the process
-<strong>specified by <code>pid</code> is used for the process group
-ID</strong>.</p></li>
-</ul>
-<h4 id="bsending-signals-from-the-keyboard">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Sending signals from the keyboard</h4>
-<ul>
-<li><p>Unix shells use the abstraction of a <strong>job</strong> to
-represent the <strong>processes</strong> that are created <strong>as a
-result of evaluating a single command line</strong>.</p></li>
-<li><p>At any point in time, there is at most <strong>one foreground
-job</strong> and zero or more background jobs.</p></li>
-</ul>
-<p><img src="/2024/08/18/8-5-Signal/image-1.png"></p>
-<h4 id="csending-signals-with-thekill-function">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Sending signals with the
-<code>kill</code> function</h4>
-<p>&#x2003;&#x2003;Processes <strong>send signals to other processes(including
-themselves)</strong> by calling the <code>kill</code> function:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">kill</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> sig)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 if OK, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>If <code>pid</code> is greater than zero, then the
-<code>kill</code> function sends signal number <code>sig</code> to
-process <code>pid</code>.</p></li>
-<li><p>If <code>pid</code> is equal to zero, then <code>kill</code>
-sends signal <code>sig</code> to <strong>every process in the process
-group of the calling process</strong>, including the calling process
-itself.</p></li>
-<li><p>If <code>pid</code> is less than zero, then <code>kill</code>
-sends signal <code>sig</code> to <strong>every process in process group
-<code>|pid|</code>(the absolute value of
-<code>pid</code>)</strong>.</p></li>
-</ul>
-<h4 id="dsending-signals-with-thealarm-function">&#x2003;&#x2003;<span class="math inline">\(d.\)</span>Sending signals with the
-<code>alarm</code> function</h4>
-<p>&#x2003;&#x2003;A process can <strong>send <code>SIGALRM</code> signals to
-itself</strong> by calling the <code>alarm</code> function:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">alarm</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> secs)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: remaining seconds of previous alarm, or 0 if no previous alarm */</span></span><br></pre></td></tr></table></figure>
-<h3 id="3receiving-signals">3.Receiving Signals</h3>
-<p>&#x2003;&#x2003;When the kernel <strong>switches a process <span class="math inline">\(p\)</span> from kernel mode to user mode</strong>,
-it checks <strong>the set of unblocked pending
-signals</strong>(<code>pending &amp; ~blocked</code>) for <span class="math inline">\(p\)</span>.</p>
-<ul>
-<li><p>If this set is empty, the kernel <strong>passes control to the
-next instruction</strong> in the logical control flow of <span class="math inline">\(p\)</span>.</p></li>
-<li><p>If the set is nonempty, the kernel <strong>chooses some signal
-<span class="math inline">\(k\)</span> in the set(typically the smallest
-<span class="math inline">\(k\)</span>) and forces <span class="math inline">\(p\)</span> to receive signal <span class="math inline">\(k\)</span></strong>.</p>
-<ul>
-<li>Once the process completes the action, control passes back to the
-next instruction.</li>
+<li>If the valid bit is set, the address field indicates the start of
+the corresponding physical page in DRAM where the virtual page is
+cached.</li>
 </ul></li>
 </ul>
-<p>&#x2003;&#x2003;A process can modify <strong>the default action associated with a
-signal</strong> by using the <code>signal</code> function:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*<span class="type">sighandler_t</span>)</span><span class="params">(<span class="type">int</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">sighandler_t</span> <span class="title function_">signal</span><span class="params">(<span class="type">int</span> signum, <span class="type">sighandler_t</span> handler)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: pointer to previous handler if OK, SIG_ERR on error (does not set errno)*/</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The <code>signal</code> function can change the action associated
-with a signal <code>signum</code> in one of three ways:</p>
+<h4 id="bpagehits">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Page
+hits</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-2.png"></p>
 <ul>
-<li><p>If <code>handler</code> is <code>SIG_IGN</code>, then signals of
-type <code>signum</code> <strong>are ignored</strong>.</p></li>
-<li><p>If <code>handler</code> is <code>SIG_DFL</code>, then the action
-for signals of type signum <strong>reverts to the default
-action</strong>.</p></li>
-<li><p>Otherwise, <code>handler</code> is <strong>the address of a
-user-defined function</strong>, called a <em>signal handler</em>, that
-will be called whenever the process receives a signal of type
-<code>signum</code>.</p></li>
+<li>The address translation hardware <strong>uses the virtual address as
+an index</strong> to locate PTE 2.</li>
 </ul>
-<p>&#x2003;&#x2003;Signal handlers can be interrupted by other handlers:</p>
-<p><img src="/2024/08/18/8-5-Signal/image-2.png"></p>
-<h3 id="4blocking-and-unblockingsignals">4.Blocking and Unblocking
-Signals</h3>
+<h4 id="cpagefaults">&#x2003;&#x2003;<span class="math inline">\(c.\)</span>Page
+faults</h4>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-3.png"></p>
 <ul>
-<li><p><em>Implicit blocking mechanism</em>: By default, the kernel
-blocks any pending signals of the type <strong>currently being processed
-by a handler</strong>.</p></li>
-<li><p><em>Explicit blocking mechanism</em>: It can be done by
-<strong>using the <code>sigprocmask</code> function and its
-helpers</strong>:</p></li>
+<li><p>The page fault exception invokes a page fault exception handler
+in the kernel, and it <strong>selects a victim page</strong>. In this
+case, it&apos;s VP4 in PP3.</p></li>
+<li><p>If VP 4 has been modified, then the kernel copies it back to
+disk.</p></li>
+<li><p>The kernel <strong>modifies the page table entry for VP
+4</strong> to reflect the fact that VP 4 is no longer cached in main
+memory.</p></li>
+<li><p>Next, the kernel copies VP 3 from disk to PP 3 in memory, updates
+PTE 3, and then returns.</p></li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">sigprocmask</span><span class="params">(<span class="type">int</span> how, <span class="type">const</span> <span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">sigset_t</span> *oldset)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">sigemptyset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">sigfillset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">sigaddset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">sigdelset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 if OK, &#x2212;1 on error */</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">sigismember</span><span class="params">(<span class="type">const</span> <span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 1 if member, 0 if not, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The <code>sigprocmask</code> function changes <strong>the set of
-currently blocked signals</strong>. The specific behavior depends on the
-value of <code>how</code>:</p>
+<p><img src="/2024/08/20/9-1-9-3-VM-Address-Space/image-4.png"></p>
 <ul>
-<li><p><code>SIG_BLOCK</code>: Add the signals in set to blocked
-(<code>blocked = blocked | set</code>).</p></li>
-<li><p><code>SIG_UNBLOCK</code>: Remove the signals in set from blocked
-(<code>blocked = blocked &amp; ~set</code>).</p></li>
-<li><p><code>SIG_SETMASK</code>: <code>blocked = set</code>.</p></li>
+<li>When the handler returns, it <strong>restarts the faulting
+instruction</strong>, which resends the faulting virtual address to the
+address translation hardware. But now, VP 3 is cached in main memory,
+and <strong>the page hit is handled normally</strong> by the address
+translation hardware.</li>
 </ul>
-<h4 id="acorrect-signal-handling">&#x2003;&#x2003;<span class="math inline">\(a.\)</span>Correct signal handling</h4>
-<p>&#x2003;&#x2003;Because the pending bit vector contains exactly one bit for each
-type of signal, <strong>there can be at most one pending signal of any
-particular type</strong>. Thus, if two signals of type <span class="math inline">\(k\)</span> are sent to a destination process while
-signal <span class="math inline">\(k\)</span> is blocked because the
-destination process is currently executing a handler for signal <span class="math inline">\(k\)</span>, then <strong>the second signal is
-simply discarded</strong>.</p>
-<p>&#x2003;&#x2003;This characteristic of signal handling may lead to some mistakes.
-Consider the following program, for example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* WARNING: This code is buggy! */</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">handler1</span><span class="params">(<span class="type">int</span> sig)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> olderrno = errno;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((waitpid(<span class="number">-1</span>, <span class="literal">NULL</span>, <span class="number">0</span>)) &lt; <span class="number">0</span>)</span><br><span class="line">        sio_error(<span class="string">&quot;waitpid error&quot;</span>);</span><br><span class="line">    Sio_puts(<span class="string">&quot;Handler reaped child\n&quot;</span>);</span><br><span class="line">    Sleep(<span class="number">1</span>);</span><br><span class="line">    errno = olderrno;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> i, n;</span><br><span class="line">    <span class="type">char</span> buf[MAXBUF];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (signal(SIGCHLD, handler1) == SIG_ERR)</span><br><span class="line">        unix_error(<span class="string">&quot;signal error&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parent creates children */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) {</span><br><span class="line">        <span class="keyword">if</span> (Fork() == <span class="number">0</span>) {</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Hello from child %d\n&quot;</span>, (<span class="type">int</span>)getpid());</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parent waits for terminal input and then processes it */</span></span><br><span class="line">    <span class="keyword">if</span> ((n = read(STDIN_FILENO, buf, <span class="keyword">sizeof</span>(buf))) &lt; <span class="number">0</span>)</span><br><span class="line">        unix_error(<span class="string">&quot;read&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Parent processing input\n&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">        ;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;When executing, we get the following result:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; ./signal1</span><br><span class="line">Hello from child 14073</span><br><span class="line">Hello from child 14074</span><br><span class="line">Hello from child 14075</span><br><span class="line">Handler reaped child</span><br><span class="line">Handler reaped child</span><br><span class="line">CR</span><br><span class="line">Parent processing input</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;We first do some analysis for the program:</p>
-<ol type="1">
-<li><p>The parent process first create three child processes through
-invoking <code>Fork()</code>.</p></li>
-<li><p>For each child, they will do the conditional
-<code>exit(0)</code>, terminate and send the signal.</p></li>
-<li><p>The handler fetch the signal, reap the corresponding child
-process, and send the message.</p></li>
-</ol>
-<p>&#x2003;&#x2003;The result, however, shows that only two child processes are
-reaped. The reason is that:</p>
-<ol type="1">
-<li><p>Our handler handle one signal per time.</p></li>
-<li><p>While the handler is <strong>still processing the first
-signal</strong>, <strong>the second signal is delivered and added to the
-set of pending signals</strong>.</p></li>
-<li><p>Since the first <code>SIGCHLD</code> signals are blocked by the
-handler, the second signals are not received.</p></li>
-<li><p>While the handler is still processing the first signal, the third
-signal arrives. <strong>Since there is already a pending
-<code>SIGCHLD</code>, this third <code>SIGCHLD</code> signal is
-discarded</strong>, and the information of the third signal has been
-lost.</p></li>
-</ol>
-<p>&#x2003;&#x2003;To fix the problem, we must modify the <code>SIGCHLD</code> handler
-to reap as many zombie children as possible each time it is invoked. We
-do this by using the <code>while</code> loop:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">handler2</span><span class="params">(<span class="type">int</span> sig)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> olderrno = errno;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (waitpid(<span class="number">-1</span>, <span class="literal">NULL</span>, <span class="number">0</span>) &gt; <span class="number">0</span>) {</span><br><span class="line">        Sio_puts(<span class="string">&quot;Handler reaped child\n&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (errno != ECHILD)</span><br><span class="line">        Sio_error(<span class="string">&quot;waitpid error&quot;</span>);</span><br><span class="line">    Sleep(<span class="number">1</span>);</span><br><span class="line">    errno = olderrno;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h4 id="bportable-signal-handling">&#x2003;&#x2003;<span class="math inline">\(b.\)</span>Portable signal handling</h4>
-<p>&#x2003;&#x2003;The standard <code>sigaction</code> function for specifying the
-signal-handling semantics they want when they install a handler is as
-below:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sigaction</span><span class="params">(<span class="type">int</span> signum, <span class="keyword">struct</span> sigaction *act,</span></span><br><span class="line"><span class="params"><span class="keyword">struct</span> sigaction *oldact)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: 0 if OK, &#x2212;1 on error */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The <code>Signal</code> wrapper is as below:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">handler_t</span> *<span class="title function_">Signal</span><span class="params">(<span class="type">int</span> signum, <span class="type">handler_t</span> *handler)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">action</span>, <span class="title">old_action</span>;</span></span><br><span class="line"></span><br><span class="line">    action.sa_handler = handler;</span><br><span class="line">    sigemptyset(&amp;action.sa_mask); <span class="comment">/* Block sigs of type being handled */</span></span><br><span class="line">    action.sa_flags = SA_RESTART; <span class="comment">/* Restart syscalls if possible */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sigaction(signum, &amp;action, &amp;old_action) &lt; <span class="number">0</span>)</span><br><span class="line">        unix_error(<span class="string">&quot;Signal error&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> (old_action.sa_handler);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="5blocking-signalsto-avoid-concurrency-bugs">5.Blocking Signals
-to Avoid Concurrency Bugs</h3>
-<p>&#x2003;&#x2003;Take the following program as an example:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* WARNING: This code is buggy! */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">handler</span><span class="params">(<span class="type">int</span> sig)</span> {</span><br><span class="line">    <span class="type">int</span> olderrno = errno;</span><br><span class="line">    <span class="type">sigset_t</span> mask_all, prev_all;</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    Sigfillset(&amp;mask_all);</span><br><span class="line">    <span class="keyword">while</span> ((pid = waitpid(<span class="number">-1</span>, <span class="literal">NULL</span>, <span class="number">0</span>)) &gt; <span class="number">0</span>) { <span class="comment">/* Reap a zombie child */</span></span><br><span class="line">        Sigprocmask(SIG_BLOCK, &amp;mask_all, &amp;prev_all);</span><br><span class="line">        deletejob(pid); <span class="comment">/* Delete the child from the job list */</span></span><br><span class="line">        Sigprocmask(SIG_SETMASK, &amp;prev_all, <span class="literal">NULL</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (errno != ECHILD)</span><br><span class="line">        Sio_error(<span class="string">&quot;waitpid error&quot;</span>);</span><br><span class="line">    errno = olderrno;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> {</span><br><span class="line">    <span class="type">int</span> pid;</span><br><span class="line">    <span class="type">sigset_t</span> mask_all, prev_all;</span><br><span class="line"></span><br><span class="line">    Sigfillset(&amp;mask_all);</span><br><span class="line">    Signal(SIGCHLD, handler);</span><br><span class="line">    initjobs(); <span class="comment">/* Initialize the job list */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> ((pid = Fork()) == <span class="number">0</span>) { <span class="comment">/* Child process */</span></span><br><span class="line">            Execve(<span class="string">&quot;/bin/date&quot;</span>, argv, <span class="literal">NULL</span>);</span><br><span class="line">        }</span><br><span class="line">        Sigprocmask(SIG_BLOCK, &amp;mask_all, &amp;prev_all); <span class="comment">/* Parent process */</span></span><br><span class="line">        addjob(pid); <span class="comment">/* Add the child to the job list */</span></span><br><span class="line">        Sigprocmask(SIG_SETMASK, &amp;prev_all, <span class="literal">NULL</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;There consists two concurrent procedure:</p>
-<ol type="1">
-<li><p>The <code>addjob</code> and <code>deletejob</code> of the Unix
-shell job list.</p></li>
-<li><p>The reaping of the child process.</p></li>
-</ol>
-<p>&#x2003;&#x2003;and we may meet the situation that the child process has been
-reaped, and the <code>deletejob</code> function tries to delete it,
-which is nonexisted.</p>
-<p>&#x2003;&#x2003;To prevent this, we <strong>blocking <code>SIGCHLD</code> signals
-before the call to <code>fork</code></strong> and then unblocking them
-<strong>only after we have called <code>addjob</code></strong>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) {</span><br><span class="line">    Sigprocmask(SIG_BLOCK, &amp;mask_one, &amp;prev_one); <span class="comment">/* Block SIGCHLD */</span></span><br><span class="line">    <span class="keyword">if</span> ((pid = Fork()) == <span class="number">0</span>) { <span class="comment">/* Child process */</span></span><br><span class="line">        Sigprocmask(SIG_SETMASK, &amp;prev_one, <span class="literal">NULL</span>); <span class="comment">/* Unblock SIGCHLD */</span></span><br><span class="line">        Execve(<span class="string">&quot;/bin/date&quot;</span>, argv, <span class="literal">NULL</span>);</span><br><span class="line">    }</span><br><span class="line">    Sigprocmask(SIG_BLOCK, &amp;mask_all, <span class="literal">NULL</span>); <span class="comment">/* Parent process */</span></span><br><span class="line">    addjob(pid); <span class="comment">/* Add the child to the job list */</span></span><br><span class="line">    Sigprocmask(SIG_SETMASK, &amp;prev_one, <span class="literal">NULL</span>); <span class="comment">/* Unblock SIGCHLD */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Notice that <strong>children inherit the blocked set of their
-parents</strong>, so we must be careful to unblock the SIGCHLD signal in
-the child.</p>
-</blockquote>
-<h3 id="6explicitly-waiting-forsignals">6.Explicitly Waiting for
-Signals</h3>
-<p>&#x2003;&#x2003;In the previous code, we use <code>while(1)</code> loop to stall
-the process. This is wasteful of processor resourses. We can use
-<code>sigsuspend</code> instead:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">sigsuspend</span><span class="params">(<span class="type">const</span> <span class="type">sigset_t</span> *mask)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Returns: &#x2212;1 */</span></span><br></pre></td></tr></table></figure>
-<p>&#x2003;&#x2003;The sigsuspend function temporarily <strong>replaces the current
-blocked set with mask</strong> and then suspends the process
-<strong>until the receipt of a signal</strong> whose action is either to
-run a handler or to terminate the process.</p>
-<p>&#x2003;&#x2003;This code is equal to the <em>atomic</em> version of the
-following:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sigprocmask(SIG_BLOCK, &amp;mask, &amp;prev);</span><br><span class="line">pause();</span><br><span class="line">sigprocmask(SIG_SETMASK, &amp;prev, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -536,7 +374,7 @@ following:</p>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/164/">164</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="&#x4E0A;&#x4E00;&#x9875;" aria-label="&#x4E0A;&#x4E00;&#x9875;" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&#x2026;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&#x2026;</span><a class="page-number" href="/page/166/">166</a><a class="extend next" rel="next" title="&#x4E0B;&#x4E00;&#x9875;" aria-label="&#x4E0B;&#x4E00;&#x9875;" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
